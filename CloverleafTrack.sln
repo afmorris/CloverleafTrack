@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.Web", "CloverleafTrack.Web\CloverleafTrack.Web.csproj", "{5934FF83-F1AB-4DB4-A490-0FD2684AA5DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{976D0925-3584-485B-A31F-9168DAED66F5}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.Models", "CloverleafTrack.Models\CloverleafTrack.Models.csproj", "{609006FB-A953-4996-B0CA-C9E423516BCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.Data", "CloverleafTrack.Data\CloverleafTrack.Data.csproj", "{5B94D935-2ECB-4B8F-9527-75E4E270BFEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.Services", "CloverleafTrack.Services\CloverleafTrack.Services.csproj", "{5AD014A3-BE2E-4FCF-B95D-346E519BE0C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.Infrastructure", "CloverleafTrack.Infrastructure\CloverleafTrack.Infrastructure.csproj", "{CC125345-1D98-480C-AEC8-B70327AE3FD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.Tests", "CloverleafTrack.Tests\CloverleafTrack.Tests.csproj", "{04B9ED85-9FEF-4DFE-BFA5-48A040651C19}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5934FF83-F1AB-4DB4-A490-0FD2684AA5DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5934FF83-F1AB-4DB4-A490-0FD2684AA5DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5934FF83-F1AB-4DB4-A490-0FD2684AA5DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5934FF83-F1AB-4DB4-A490-0FD2684AA5DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{609006FB-A953-4996-B0CA-C9E423516BCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{609006FB-A953-4996-B0CA-C9E423516BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{609006FB-A953-4996-B0CA-C9E423516BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{609006FB-A953-4996-B0CA-C9E423516BCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B94D935-2ECB-4B8F-9527-75E4E270BFEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B94D935-2ECB-4B8F-9527-75E4E270BFEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B94D935-2ECB-4B8F-9527-75E4E270BFEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B94D935-2ECB-4B8F-9527-75E4E270BFEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AD014A3-BE2E-4FCF-B95D-346E519BE0C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD014A3-BE2E-4FCF-B95D-346E519BE0C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD014A3-BE2E-4FCF-B95D-346E519BE0C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AD014A3-BE2E-4FCF-B95D-346E519BE0C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC125345-1D98-480C-AEC8-B70327AE3FD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC125345-1D98-480C-AEC8-B70327AE3FD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC125345-1D98-480C-AEC8-B70327AE3FD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC125345-1D98-480C-AEC8-B70327AE3FD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04B9ED85-9FEF-4DFE-BFA5-48A040651C19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04B9ED85-9FEF-4DFE-BFA5-48A040651C19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04B9ED85-9FEF-4DFE-BFA5-48A040651C19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04B9ED85-9FEF-4DFE-BFA5-48A040651C19}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
