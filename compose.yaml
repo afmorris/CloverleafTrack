@@ -1,0 +1,7 @@
+﻿services:
+  cloverleaftrack.web:
+    image: cloverleaftrack.web
+    build:
+      context: .
+      dockerfile: CloverleafTrack.Web/Dockerfile
+
