@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.Models", "CloverleafTrack.Models\CloverleafTrack.Models.csproj", "{609006FB-A953-4996-B0CA-C9E423516BCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.Data", "CloverleafTrack.Data\CloverleafTrack.Data.csproj", "{5B94D935-2ECB-4B8F-9527-75E4E270BFEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.DataAccess", "CloverleafTrack.DataAccess\CloverleafTrack.DataAccess.csproj", "{5B94D935-2ECB-4B8F-9527-75E4E270BFEA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.Services", "CloverleafTrack.Services\CloverleafTrack.Services.csproj", "{5AD014A3-BE2E-4FCF-B95D-346E519BE0C0}"
 EndProject
