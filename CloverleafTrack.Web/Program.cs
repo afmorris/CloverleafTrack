@@ -1,7 +1,11 @@
+using CloverleafTrack.DataAccess.Interfaces;
+using CloverleafTrack.DataAccess.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IAthleteRepository, AthleteRepository>();
 
 var app = builder.Build();
 
