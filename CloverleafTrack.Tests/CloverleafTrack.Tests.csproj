@@ -4,11 +4,28 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Integration\" />
-      <Folder Include="Unit\" />
+        <PackageReference Include="coverlet.collector" Version="6.0.2"/>
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.0-preview1.25120.4" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
+        <PackageReference Include="Moq" Version="4.20.72" />
+        <PackageReference Include="xunit" Version="2.9.2"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CloverleafTrack.DataAccess\CloverleafTrack.DataAccess.csproj" />
+      <ProjectReference Include="..\CloverleafTrack.Infrastructure\CloverleafTrack.Infrastructure.csproj" />
+      <ProjectReference Include="..\CloverleafTrack.Models\CloverleafTrack.Models.csproj" />
+      <ProjectReference Include="..\CloverleafTrack.Services\CloverleafTrack.Services.csproj" />
+      <ProjectReference Include="..\CloverleafTrack.Web\CloverleafTrack.Web.csproj" />
     </ItemGroup>
 
 </Project>

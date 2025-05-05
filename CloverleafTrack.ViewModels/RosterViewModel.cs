@@ -1,4 +1,4 @@
-﻿namespace CloverleafTrack.Web.ViewModels;
+﻿namespace CloverleafTrack.ViewModels;
 
 public class RosterViewModel
 {

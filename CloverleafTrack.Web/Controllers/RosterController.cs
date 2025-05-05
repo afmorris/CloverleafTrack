@@ -1,19 +1,13 @@
-﻿using CloverleafTrack.DataAccess.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using CloverleafTrack.Services.Interfaces;
 
 namespace CloverleafTrack.Web.Controllers;
 
-public class RosterController : Controller
+public class RosterController(IRosterService rosterService, ISeasonService seasonService) : Controller
 {
-    private readonly IAthleteRepository athleteRepository;
-
-    public RosterController(IAthleteRepository athleteRepository)
+    public async Task<IActionResult> Index()
     {
-        this.athleteRepository = athleteRepository;
-    }
-
-    public IActionResult Index()
-    {
-        return View();
+        var viewModel = await rosterService.GetRosterAsync(await seasonService.GetCurrentSeasonAsync());
+        return View(viewModel);
     }
 }

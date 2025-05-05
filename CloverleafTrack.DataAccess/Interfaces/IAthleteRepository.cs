@@ -4,9 +4,7 @@ namespace CloverleafTrack.DataAccess.Interfaces;
 
 public interface IAthleteRepository
 {
-    Task<List<Athlete>> GetActiveAthletesAsync(int currentYear);
-    Task<List<Athlete>> GetGraduatedAthletesAsync(int currentYear);
-    
+    Task<List<Athlete>> GetAllAsync();
     Task<Athlete?> GetByIdAsync(int id);
     Task<int> CreateAsync(Athlete athlete);
     Task<bool> UpdateAsync(Athlete athlete);
