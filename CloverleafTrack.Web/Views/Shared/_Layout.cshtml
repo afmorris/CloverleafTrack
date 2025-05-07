@@ -1,50 +1,72 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - CloverleafTrack.Web</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <title>@ViewData["Title"] - Cloverleaf Track</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/CloverleafTrack.Web.styles.css" asp-append-version="true"/>
-</head>
-<body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CloverleafTrack.Web</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-<div class="container">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggle = document.getElementById('darkModeToggle');
+            const html = document.documentElement;
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2025 - CloverleafTrack.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            // Initialize toggle state on load
+            const storedTheme = localStorage.theme;
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = storedTheme === 'dark' || (!storedTheme && systemPrefersDark);
+            if (isDark) {
+                html.classList.add('dark');
+                toggle.checked = true;
+            }
+
+            toggle.addEventListener('change', function () {
+                if (this.checked) {
+                    html.classList.add('dark');
+                    localStorage.theme = 'dark';
+                } else {
+                    html.classList.remove('dark');
+                    localStorage.theme = 'light';
+                }
+            });
+        });
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300 page-background">
+
+<!-- Navigation -->
+<header class="bg-ctf-nav shadow text-white nav-background">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-4">
+            <a href="/" class="font-heading text-xl font-extrabold text-white tracking-tight">
+                Cloverleaf Track
+            </a>
+        </div>
+        <nav class="font-heading text-sm uppercase tracking-wide font-semibold text-gray-100 space-x-6">
+            <a href="/Leaderboard" class="hover:underline">Leaderboard</a>
+            <a href="/Seasons" class="hover:underline">Seasons</a>
+            <a href="/Roster" class="hover:underline">Roster</a>
+            <a href="/Meets" class="hover:underline">Meets</a>
+        </nav>
+        @await Html.PartialAsync("_DarkModeToggle")
+    </div>
+</header>
+
+<!-- Hero Section (optional content injected from page) -->
+@RenderSection("Hero", required: false)
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 py-8 font-body text-base text-gray-800 dark:text-gray-200">
+    @RenderBody()
+</main>
+
+<!-- Footer -->
+<footer class="bg-ctf-footer dark:bg-gray-800 mt-12 shadow-inner">
+    <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-600 dark:text-gray-400">
+        Made with ♥ by Coach Tony
     </div>
 </footer>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

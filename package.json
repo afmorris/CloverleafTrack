@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "pnpm dlx tailwindcss@3.4.17 -i ./CloverleafTrack.Web/wwwroot/css/input.css -o ./CloverleafTrack.Web/wwwroot/css/site.css",
+    "prod": "pnpm dlx tailwindcss@3.4.17 -i ./CloverleafTrack.Web/wwwroot/css/input.css -o ./CloverleafTrack.Web/wwwroot/css/site.css --minify"
   },
   "keywords": [],
   "author": "",

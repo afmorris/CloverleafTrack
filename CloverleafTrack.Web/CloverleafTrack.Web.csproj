@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <PackageReference Include="Dapper" Version="2.1.66" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.3.0" />
     </ItemGroup>
 
 </Project>

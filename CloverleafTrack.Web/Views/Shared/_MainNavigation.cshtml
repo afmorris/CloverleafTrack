@@ -1,0 +1,34 @@
+﻿@{
+    var currentPath = Context.Request.Path;
+}
+
+<nav class="font-heading text-sm uppercase tracking-wide font-semibold text-gray-100 space-x-6">
+        @{
+            var links = new[]
+            {
+                new { Href = "/Leaderboard", Text = "Leaderboard" },
+                new { Href = "/Seasons", Text = "Seasons" },
+                new { Href = "/Roster", Text = "Roster" },
+                new { Href = "/Meets", Text = "Meets" }
+            };
+
+            foreach (var link in links)
+            {
+                var isActive = currentPath.StartsWithSegments(link.Href, StringComparison.OrdinalIgnoreCase);
+                var activeClass = isActive ? "text-ctf-accent underline underline-offset-4" : "hover:text-ctf-accent";
+            }
+        }
+
+        @foreach (var link in links)
+        {
+            var isActive = currentPath.StartsWithSegments(link.Href, StringComparison.OrdinalIgnoreCase);
+            var activeClass = isActive ? "text-ctf-accent underline underline-offset-4" : "hover:text-ctf-accent";
+
+            <a href="@link.Href" class="@($"transition-colors duration-200 {activeClass}")">
+                @link.Text
+            </a>
+        }
+
+    <!-- Dark Mode Toggle -->
+    @await Html.PartialAsync("_DarkModeToggle")
+</nav>
