@@ -21,6 +21,50 @@ public class AthleteRepository(IDbConnectionFactory connectionFactory) : IAthlet
         return await connection.QuerySingleOrDefaultAsync<Athlete>(sql, new { Id = id });
     }
 
+    public async Task<List<Athlete>> GetAllWithPerformancesAsync()
+    {
+        using var connection = connectionFactory.CreateConnection();
+
+        var sql = @"
+SELECT
+    a.Id, a.FirstName, a.LastName, a.GraduationYear, a.Gender,
+    e.Id AS EventId, e.Name AS EventName, e.EventCategory
+FROM
+    Athletes a
+    INNER JOIN PerformanceAthletes pa ON pa.AthleteId = a.Id
+    INNER JOIN Performances p ON p.Id = pa.PerformanceId
+    INNER JOIN Events e ON e.Id = p.EventId
+ORDER BY
+    a.LastName,
+    a.FirstName;
+";
+        
+        var athleteDict = new Dictionary<int, Athlete>();
+
+        var result = await connection.QueryAsync<Athlete, Event, Athlete>(
+            sql,
+            (athlete, eventInfo) =>
+            {
+                if (!athleteDict.TryGetValue(athlete.Id, out var currentAthlete))
+                {
+                    currentAthlete = athlete;
+                    currentAthlete.EventParticipations = new List<Event>();
+                    athleteDict.Add(currentAthlete.Id, currentAthlete);
+                }
+
+                if (eventInfo != null && !currentAthlete.EventParticipations.Any(e => e.Id == eventInfo.Id))
+                {
+                    currentAthlete.EventParticipations.Add(eventInfo);
+                }
+
+                return currentAthlete;
+            },
+            splitOn: "EventId"
+        );
+
+        return athleteDict.Values.ToList();
+    }
+
     public async Task<int> CreateAsync(Athlete athlete)
     {
         using var connection = connectionFactory.CreateConnection();

@@ -1,8 +1,67 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@section Hero {
+    <div class="relative h-[20vh] bg-cover bg-center bg-no-repeat" style="background-image: url('img/hero-home.jpg');">
+    
+        <!-- overlay -->
+        <div class="absolute inset-0 bg-black dark:bg-opacity-75 bg-opacity-25"></div>
+
+        <!-- content -->
+        <div class="absolute inset-0 flex flex-col justify-center items-center text-center text-white px-4 z-10">
+            <h1 class="text-4xl md:text-5xl font-heading font-extrabold mb-2">Cloverleaf Track & Field</h1>
+            <p class="text-lg md:text-xl text-ctf-accent">Your journey. Our history. One team.</p>
+        </div>
+    </div>
+}
+
+<div class="space-y-12">
+    <!-- Quick Stats -->
+    <section>
+        <h2 class="text-2xl font-heading mb-4">Season Highlights</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="p-4 bg-white dark:bg-gray-800 shadow rounded">
+                <h3 class="text-lg font-semibold mb-1">Longest Throw</h3>
+                <p class="text-xl font-bold text-ctf-accent">149' 6"</p>
+                <p class="text-sm text-gray-500">Micah Morris, Discus</p>
+            </div>
+            <div class="p-4 bg-white dark:bg-gray-800 shadow rounded">
+                <h3 class="text-lg font-semibold mb-1">Fastest 100m</h3>
+                <p class="text-xl font-bold text-ctf-accent">10.84s</p>
+                <p class="text-sm text-gray-500">Mattie Johnson</p>
+            </div>
+            <div class="p-4 bg-white dark:bg-gray-800 shadow rounded">
+                <h3 class="text-lg font-semibold mb-1">Top Relay Total</h3>
+                <p class="text-xl font-bold text-ctf-accent">534 ft</p>
+                <p class="text-sm text-gray-500">Girls Shot Relay</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Meets -->
+    <section>
+        <h2 class="text-2xl font-heading mb-4">Upcoming Meets</h2>
+        <ul class="space-y-2">
+            <li class="bg-white dark:bg-gray-800 p-4 rounded shadow flex justify-between items-center">
+                <span>Suburban League Championship</span>
+                <span class="text-sm text-gray-500">May 15</span>
+            </li>
+            <li class="bg-white dark:bg-gray-800 p-4 rounded shadow flex justify-between items-center">
+                <span>District Finals</span>
+                <span class="text-sm text-gray-500">May 22</span>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Explore Section -->
+    <section>
+        <h2 class="text-2xl font-heading mb-4">Explore the Site</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a href="/Leaderboard" class="bg-ctf-accent text-white py-4 px-4 rounded text-center font-semibold shadow hover:brightness-110 transition">Leaderboard</a>
+            <a href="/Seasons" class="bg-ctf-accent text-white py-4 px-4 rounded text-center font-semibold shadow hover:brightness-110 transition">Seasons</a>
+            <a href="/Roster" class="bg-ctf-accent text-white py-4 px-4 rounded text-center font-semibold shadow hover:brightness-110 transition">Roster</a>
+            <a href="/Meets" class="bg-ctf-accent text-white py-4 px-4 rounded text-center font-semibold shadow hover:brightness-110 transition">Meets</a>
+        </div>
+    </section>
 </div>

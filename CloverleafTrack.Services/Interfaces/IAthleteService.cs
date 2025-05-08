@@ -1,3 +1,4 @@
+using CloverleafTrack.Models.Enums;
 using CloverleafTrack.ViewModels;
 
 namespace CloverleafTrack.Services.Interfaces
@@ -7,6 +8,7 @@ namespace CloverleafTrack.Services.Interfaces
         Task<List<AthleteViewModel>> GetActiveAthletesAsync(int currentSeason);
         Task<List<AthleteViewModel>> GetGraduatedAthletesAsync();
         Task<AthleteViewModel?> GetByIdAsync(int id);
+        Task<Dictionary<EventCategory, List<AthleteViewModel>>> GetAthletesGroupedByEventCategoryAsync(int currentSeason);
         Task<int> CreateAsync(AthleteViewModel athlete);
         Task<bool> UpdateAsync(AthleteViewModel athlete);
         Task<bool> DeleteAsync(int id);

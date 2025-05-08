@@ -10,4 +10,7 @@ public class AthleteViewModel
     public string FullName => $"{FirstName} {LastName}";
     public int GraduationYear { get; set; }
     public Gender Gender { get; set; }
+
+    public string Class { get; set; } = string.Empty;
+    public List<EventParticipationViewModel> EventsInCategory { get; set; } = new();
 }

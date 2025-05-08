@@ -1,5 +1,6 @@
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
+using CloverleafTrack.Models.Enums;
 using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.ViewModels;
 
@@ -31,6 +32,44 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
         var athlete = await repository.GetByIdAsync(id);
         return athlete is null ? null : MapToViewModel(athlete);
     }
+
+    public async Task<Dictionary<EventCategory, List<AthleteViewModel>>> GetAthletesGroupedByEventCategoryAsync(int currentSeason)
+    {
+        var rawAthletes = await repository.GetAllWithPerformancesAsync();
+    
+        var result = new Dictionary<EventCategory, List<AthleteViewModel>>();
+
+        foreach (var athlete in rawAthletes)
+        {
+            var eventGroups = athlete.EventParticipations
+                .GroupBy(e => e.EventCategory);
+
+            foreach (var group in eventGroups)
+            {
+                var category = group.Key;
+                if (category != null)
+                {
+                    if (!result.ContainsKey(category.Value))
+                        result[category.Value] = new List<AthleteViewModel>();
+
+                    result[category.Value].Add(new AthleteViewModel
+                    {
+                        FirstName = athlete.FirstName,
+                        LastName = athlete.LastName,
+                        Class = GraduationYearToClass(athlete.GraduationYear, currentSeason),
+                        EventsInCategory = group.Select(e => new EventParticipationViewModel
+                        {
+                            Name = e.Name,
+                            PersonalRecord = "N/A" // Placeholder unless we hydrate it
+                        }).ToList()
+                    });
+                }
+            }
+        }
+
+        return result;
+    }
+
 
     public async Task<int> CreateAsync(AthleteViewModel viewModel)
     {
@@ -68,4 +107,18 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
         GraduationYear = vm.GraduationYear,
         Gender = vm.Gender
     };
+    
+    private string GraduationYearToClass(int gradYear, int currentSeason)
+    {
+        var diff = gradYear - currentSeason;
+
+        return diff switch
+        {
+            >= 3 => "Freshman",
+            2 => "Sophomore",
+            1 => "Junior",
+            0 => "Senior",
+            _ => "Graduate"
+        };
+    }
 }
