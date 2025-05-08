@@ -15,6 +15,6 @@ public class SeasonService(ISeasonRepository seasonRepository) : ISeasonService
             throw new InvalidOperationException("No current season found.");
         }
 
-        return currentSeason.Id;
+        return currentSeason.EndDate.Year;
     }
 }

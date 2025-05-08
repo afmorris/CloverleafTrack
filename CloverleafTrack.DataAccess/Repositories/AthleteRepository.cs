@@ -26,17 +26,13 @@ public class AthleteRepository(IDbConnectionFactory connectionFactory) : IAthlet
         using var connection = connectionFactory.CreateConnection();
 
         var sql = @"
-SELECT
+SELECT 
     a.Id, a.FirstName, a.LastName, a.GraduationYear, a.Gender,
     e.Id AS EventId, e.Name AS EventName, e.EventCategory
-FROM
-    Athletes a
-    INNER JOIN PerformanceAthletes pa ON pa.AthleteId = a.Id
-    INNER JOIN Performances p ON p.Id = pa.PerformanceId
-    INNER JOIN Events e ON e.Id = p.EventId
-ORDER BY
-    a.LastName,
-    a.FirstName;
+FROM Athletes a
+INNER JOIN Performances p ON p.AthleteId = a.Id
+INNER JOIN Events e ON e.Id = p.EventId
+ORDER BY a.LastName, a.FirstName;
 ";
         
         var athleteDict = new Dictionary<int, Athlete>();
