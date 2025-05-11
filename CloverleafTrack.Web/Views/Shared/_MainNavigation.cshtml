@@ -15,17 +15,15 @@
             foreach (var link in links)
             {
                 var isActive = currentPath.StartsWithSegments(link.Href, StringComparison.OrdinalIgnoreCase);
-                var activeClass = isActive ? "text-ctf-accent underline underline-offset-4" : "hover:text-ctf-accent";
+                var activeClass = isActive ? "dark:text-ctf-accent text-ctf-darkaccent underline underline-offset-4" : "hover:text-ctf-accent";
             }
         }
 
         @foreach (var link in links)
         {
             var isActive = currentPath.StartsWithSegments(link.Href, StringComparison.OrdinalIgnoreCase);
-            var activeClass = isActive ? "text-ctf-accent underline underline-offset-4" : "hover:text-ctf-accent";
+            var activeClass = isActive ? "dark:text-ctf-accent text-ctf-darkaccent underline underline-offset-4" : "hover:text-ctf-accent";
 
-            <a href="@link.Href" class="@($"transition-colors duration-200 {activeClass}")">
-                @link.Text
-            </a>
+            <a href="@link.Href" class="@($"transition-colors duration-200 {activeClass}")">@link.Text</a>
         }
 </nav>

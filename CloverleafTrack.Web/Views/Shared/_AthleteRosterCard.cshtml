@@ -1,0 +1,31 @@
+@using Environment = CloverleafTrack.Models.Enums.Environment
+@model AthleteViewModel
+
+<div class="bg-white dark:bg-gray-800 p-4 rounded shadow-md hover:shadow-green-900 transition-shadow">
+    <h3 class="text-lg font-bold">@Model.FullName</h3>
+    <p class="text-sm text-gray-500 mb-2">@Model.Class</p>
+
+    <ul class="text-sm space-y-1">
+        @foreach (var e in Model.EventsInCategory.OrderBy(x => x.SortOrder))
+        {
+            <li class="flex items-center space-x-2">
+                @if (e.Environment == Environment.Indoor)
+                {
+                    <!-- Indoor Icon: building-storefront (Heroicons solid) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" viewBox="0 0 24 24" fill="currentColor" aria-label="Indoor">
+                        <path fill-rule="evenodd" d="M2.25 8.25a.75.75 0 01.75-.75h.75V6A3.75 3.75 0 017.5 2.25h9A3.75 3.75 0 0120.25 6v1.5h.75a.75.75 0 01.75.75V11a.75.75 0 01-.75.75h-.75V20a.75.75 0 01-.75.75H4.5A.75.75 0 013.75 20v-8.25H3a.75.75 0 01-.75-.75V8.25zM6 6a1.5 1.5 0 011.5-1.5h9A1.5 1.5 0 0118 6v1.5H6V6zM7.5 17.25a.75.75 0 01-.75-.75v-3A.75.75 0 017.5 12.75h3a.75.75 0 01.75.75v3a.75.75 0 01-.75.75h-3z" clip-rule="evenodd" />
+                    </svg>
+                }
+                else if (e.Environment == Environment.Outdoor)
+                {
+                    <!-- Outdoor Icon: sun (Heroicons solid) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" viewBox="0 0 24 24" fill="currentColor" aria-label="Outdoor">
+                        <path fill-rule="evenodd" d="M12 2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V3A.75.75 0 0112 2.25zM17.47 4.53a.75.75 0 011.06 1.06l-1.06 1.06a.75.75 0 11-1.06-1.06l1.06-1.06zM21.75 12a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.47 19.47a.75.75 0 00-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM12 20.25a.75.75 0 01-.75-.75v-1.5a.75.75 0 011.5 0v1.5a.75.75 0 01-.75.75zM6.53 19.47a.75.75 0 001.06-1.06L6.53 17.35a.75.75 0 00-1.06 1.06l1.06 1.06zM2.25 12a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5H3a.75.75 0 01-.75-.75zM6.53 4.53a.75.75 0 00-1.06 1.06L6.53 6.65a.75.75 0 001.06-1.06L6.53 4.53zM12 6.75a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5z" clip-rule="evenodd" />
+                    </svg>
+                }
+                <span class="font-medium">@e.Name</span>
+                <span class="ml-2 text-xs text-gray-400">(PR: @e.PersonalRecord)</span>
+            </li>
+        }
+    </ul>
+</div>

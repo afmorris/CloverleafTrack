@@ -8,27 +8,5 @@
 
 @foreach (var category in Model)
 {
-    <section class="mb-12">
-        <h2 class="text-2xl font-heading text-ctf-accent mb-4">@category.Key</h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach (var athlete in category.Value.OrderBy(a => a.FullName))
-            {
-                <div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
-                    <h3 class="text-lg font-bold">@athlete.FullName</h3>
-                    <p class="text-sm text-gray-500 mb-2">@athlete.Class</p>
-
-                    <ul class="text-sm space-y-1">
-                        @foreach (var e in athlete.EventsInCategory)
-                        {
-                            <li>
-                                <span class="font-medium">@e.Name</span>
-                                <span class="ml-2 text-xs text-gray-400">(PR: @e.PersonalRecord)</span>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            }
-        </div>
-    </section>
+    @await Html.PartialAsync("_EventCategoryRosterSection", category)
 }

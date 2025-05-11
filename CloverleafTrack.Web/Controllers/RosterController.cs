@@ -7,7 +7,7 @@ public class RosterController(IAthleteService athleteService, IRosterService ros
 {
     public async Task<IActionResult> Index()
     {
-        var viewModel = await athleteService.GetAthletesGroupedByEventCategoryAsync(await seasonService.GetCurrentSeasonAsync());
+        var viewModel = await athleteService.GetActiveAthletesGroupedByEventCategoryAsync(await seasonService.GetCurrentSeasonAsync());
         return View(viewModel);
     }
 }

@@ -8,7 +8,7 @@ public class RosterService(IAthleteService athleteService) : IRosterService
     public async Task<RosterViewModel> GetRosterAsync(int currentSeason)
     {
         var active = await athleteService.GetActiveAthletesAsync(currentSeason);
-        var graduated = await athleteService.GetGraduatedAthletesAsync();
+        var graduated = await athleteService.GetGraduatedAthletesAsync(currentSeason);
 
         return new RosterViewModel
         {

@@ -17,12 +17,11 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             .ToList();
     }
 
-    public async Task<List<AthleteViewModel>> GetGraduatedAthletesAsync()
+    public async Task<List<AthleteViewModel>> GetGraduatedAthletesAsync(int currentSeason)
     {
         var all = await repository.GetAllAsync();
-        var currentYear = DateTime.Now.Year;
         return all
-            .Where(a => a.GraduationYear < currentYear)
+            .Where(a => a.GraduationYear < currentSeason)
             .Select(MapToViewModel)
             .ToList();
     }
@@ -33,38 +32,41 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
         return athlete is null ? null : MapToViewModel(athlete);
     }
 
-    public async Task<Dictionary<EventCategory, List<AthleteViewModel>>> GetAthletesGroupedByEventCategoryAsync(int currentSeason)
+    public async Task<Dictionary<EventCategory, List<AthleteViewModel>>> GetActiveAthletesGroupedByEventCategoryAsync(int currentSeason)
     {
-        var rawAthletes = await repository.GetAllWithPerformancesAsync();
-    
+        var participations = await repository.GetAllWithPerformancesAsync();
         var result = new Dictionary<EventCategory, List<AthleteViewModel>>();
 
-        foreach (var athlete in rawAthletes)
+        var groupedByCategory = participations.GroupBy(x => x.Event.EventCategory);
+        foreach (var categoryGroup in groupedByCategory)
         {
-            var eventGroups = athlete.EventParticipations
-                .GroupBy(e => e.EventCategory);
-
-            foreach (var group in eventGroups)
-            {
-                var category = group.Key;
-                if (category != null)
+            var eventCategory = categoryGroup.Key;
+            var athletesInCategory = categoryGroup
+                .Where(x => x.Athlete.GraduationYear >= currentSeason)
+                .GroupBy(x => x.Athlete.Id)
+                .Select(x =>
                 {
-                    if (!result.ContainsKey(category.Value))
-                        result[category.Value] = new List<AthleteViewModel>();
-
-                    result[category.Value].Add(new AthleteViewModel
+                    var first = x.First();
+                    return new AthleteViewModel
                     {
-                        FirstName = athlete.FirstName,
-                        LastName = athlete.LastName,
-                        Class = GraduationYearToClass(athlete.GraduationYear, currentSeason),
-                        EventsInCategory = group.Select(e => new EventParticipationViewModel
+                        FirstName = first.Athlete.FirstName,
+                        LastName = first.Athlete.LastName,
+                        Class = GraduationYearToClass(first.Athlete.GraduationYear, currentSeason),
+                        EventsInCategory = x.Select(z => new EventParticipationViewModel
                         {
-                            Name = e.Name,
-                            PersonalRecord = "N/A" // Placeholder unless we hydrate it
-                        }).ToList()
-                    });
-                }
-            }
+                            Id = z.Event.Id,
+                            Name = z.Event.Name,
+                            PersonalRecord = "N/A",
+                            Environment = z.Event.Environment,
+                            SortOrder = z.Event.SortOrder
+                        }).DistinctBy(e => e.Id)
+                            .ToList()
+                    };
+                })
+                .OrderBy(x => x.FullName)
+                .ToList();
+            
+            result[eventCategory.Value] = athletesInCategory;
         }
 
         return result;
