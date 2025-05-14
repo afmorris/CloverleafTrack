@@ -1,6 +1,7 @@
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
+using CloverleafTrack.Models.Helpers;
 using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.ViewModels;
 
@@ -41,6 +42,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
         var prLookup = participations
             .GroupBy(p => (p.Athlete.Id, p.Event.Id))
             .ToDictionary(
+                g => g.Key,
                 g =>
                 {
                     var first = g.First();
@@ -87,7 +89,9 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                         .Select(g =>
                         {
                             var ev = g.First().Event;
-                            var pr = prLookup.TryGetValue((first.Athlete.Id, ev.Id), out var value)
+                            var key = (first.Athlete.Id, ev.Id);
+                            
+                            var pr = prLookup.TryGetValue(key, out var value)
                                 ? value
                                 : "N/A";
 
