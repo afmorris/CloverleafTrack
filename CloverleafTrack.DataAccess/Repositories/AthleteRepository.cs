@@ -28,7 +28,7 @@ public class AthleteRepository(IDbConnectionFactory connectionFactory) : IAthlet
 
         var sql = @"
 SELECT 
-    a.Id, a.FirstName, a.LastName, a.GraduationYear, a.Gender,
+    a.Id, a.FirstName, a.LastName, a.GraduationYear, a.Gender, a.IsActive,
     e.Id AS EventId, e.Id, e.Name, e.EventCategory, e.Environment, e.SortOrder,
     p.Id AS PerformanceId, p.Id, p.DistanceInches, p.TimeSeconds
 FROM Athletes a

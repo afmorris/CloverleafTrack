@@ -10,10 +10,6 @@ public class RosterService(IAthleteService athleteService) : IRosterService
         var active = await athleteService.GetActiveAthletesAsync(currentSeason);
         var graduated = await athleteService.GetGraduatedAthletesAsync(currentSeason);
 
-        return new RosterViewModel
-        {
-            ActiveAthletes = active,
-            GraduatedAthletes = graduated
-        };
+        return null;
     }
 }

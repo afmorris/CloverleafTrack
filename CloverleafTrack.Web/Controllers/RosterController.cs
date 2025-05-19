@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CloverleafTrack.Services.Interfaces;
+using CloverleafTrack.ViewModels;
 
 namespace CloverleafTrack.Web.Controllers;
 
@@ -7,7 +8,12 @@ public class RosterController(IAthleteService athleteService, IRosterService ros
 {
     public async Task<IActionResult> Index()
     {
-        var viewModel = await athleteService.GetActiveAthletesGroupedByEventCategoryAsync(await seasonService.GetCurrentSeasonAsync());
-        return View(viewModel);
+        var vm = new RosterViewModel
+        {
+            ActiveAthletes = await athleteService.GetActiveAthletesGroupedByEventCategoryAsync(await seasonService.GetCurrentSeasonAsync()),
+            FormerAthletes = await athleteService.GetFormerAthletesGroupedByEventCategoryAsync(await seasonService.GetCurrentSeasonAsync())
+        };
+        
+        return View(vm);
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace CloverleafTrack.ViewModels;
+﻿using CloverleafTrack.Models.Enums;
+
+namespace CloverleafTrack.ViewModels;
 
 public class RosterViewModel
 {
-    public List<AthleteViewModel> ActiveAthletes { get; set; } = new();
-    public List<AthleteViewModel> GraduatedAthletes { get; set; } = new();
+    public Dictionary<EventCategory, List<AthleteViewModel>> ActiveAthletes { get; set; } = new();
+    public Dictionary<EventCategory, List<AthleteViewModel>> FormerAthletes { get; set; } = new();
 }
