@@ -15,7 +15,6 @@ builder.Services.AddScoped<ISeasonRepository, SeasonRepository>();
 
 builder.Services.AddScoped<IAthleteService, AthleteService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();
-builder.Services.AddScoped<IRosterService, RosterService>();
 
 var app = builder.Build();
 

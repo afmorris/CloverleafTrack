@@ -34,11 +34,11 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
 
     public async Task<Dictionary<EventCategory, List<AthleteViewModel>>> GetActiveAthletesGroupedByEventCategoryAsync(int currentSeason)
     {
-        var participations = await repository.GetAllWithPerformancesAsync();
+        var athletesWithPerformances = await repository.GetAllWithPerformancesAsync();
         var result = new Dictionary<EventCategory, List<AthleteViewModel>>();
         
         // Step 1: Build PR lookup using updated POCO
-        var prLookup = participations
+        var prLookup = athletesWithPerformances
             .GroupBy(p => (p.Athlete.Id, p.Event.Id))
             .ToDictionary(
                 g => g.Key,
@@ -54,7 +54,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                             .FirstOrDefault();
 
                         return best != null
-                            ? FormatDistance(best.Performance.DistanceInches.Value)
+                            ? FormatDistance(best.Performance.DistanceInches!.Value)
                             : "N/A";
                     }
                     else
@@ -65,13 +65,13 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                             .FirstOrDefault();
 
                         return best != null
-                            ? FormatTime(best.Performance.TimeSeconds.Value)
+                            ? FormatTime(best.Performance.TimeSeconds!.Value)
                             : "N/A";
                     }
                 });
 
         // Step 2: Group by EventCategory
-        var groupedByCategory = participations.GroupBy(x => x.Event.EventCategory);
+        var groupedByCategory = athletesWithPerformances.GroupBy(x => x.Event.EventCategory);
         foreach (var categoryGroup in groupedByCategory)
         {
             var eventCategory = categoryGroup.Key;
@@ -90,9 +90,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                             var ev = g.First().Event;
                             var key = (first.Athlete.Id, ev.Id);
                             
-                            var pr = prLookup.TryGetValue(key, out var value)
-                                ? value
-                                : "N/A";
+                            var pr = prLookup.GetValueOrDefault(key, "N/A");
 
                             return new EventParticipationViewModel
                             {
@@ -116,102 +114,93 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                 })
                 .OrderBy(x => x.FullName)
                 .ToList();
-            
-            result[eventCategory.Value] = athletesInCategory;
+
+            if (athletesInCategory.Any())
+            {
+                result[eventCategory!.Value] = athletesInCategory;
+            }
         }
 
         return result;
     }
     
-    public async Task<Dictionary<EventCategory, List<AthleteViewModel>>> GetFormerAthletesGroupedByEventCategoryAsync(int currentSeason)
+    public async Task<Dictionary<int, List<AthleteViewModel>>> GetFormerAthletesGroupedByGraduationYearAsync()
     {
-        var participations = await repository.GetAllWithPerformancesAsync();
-        var result = new Dictionary<EventCategory, List<AthleteViewModel>>();
+        var athletesWithPerformances = await repository.GetAllWithPerformancesAsync();
         
-        // Step 1: Build PR lookup using updated POCO
-        var prLookup = participations
-            .GroupBy(p => (p.Athlete.Id, p.Event.Id))
+        var inactiveAthletes = athletesWithPerformances.Where(x => !x.Athlete.IsActive).ToList();
+
+        var prLookup = inactiveAthletes
+            .GroupBy(x => (x.Athlete.Id, x.Event.Id))
             .ToDictionary(
-                g => g.Key,
-                g =>
+                x => x.Key,
+                x =>
                 {
-                    var first = g.First();
+                    var first = x.First();
 
                     if (first.Event.EventCategory is EventCategory.Throws or EventCategory.Jumps)
                     {
-                        var best = g
+                        var bestDistance = x
                             .Where(p => p.Performance.DistanceInches.HasValue)
                             .OrderByDescending(p => p.Performance.DistanceInches)
                             .FirstOrDefault();
 
-                        return best != null
-                            ? FormatDistance(best.Performance.DistanceInches.Value)
+                        return bestDistance != null
+                            ? FormatDistance(bestDistance.Performance.DistanceInches!.Value)
                             : "N/A";
                     }
-                    else
-                    {
-                        var best = g
-                            .Where(p => p.Performance.TimeSeconds.HasValue)
-                            .OrderBy(p => p.Performance.TimeSeconds)
-                            .FirstOrDefault();
 
-                        return best != null
-                            ? FormatTime(best.Performance.TimeSeconds.Value)
-                            : "N/A";
-                    }
+                    var bestTime = x
+                        .Where(p => p.Performance.TimeSeconds.HasValue)
+                        .OrderBy(p => p.Performance.TimeSeconds)
+                        .FirstOrDefault();
+
+                    return bestTime != null ? FormatTime(bestTime.Performance.TimeSeconds!.Value) : "N/A";
                 });
 
-        // Step 2: Group by EventCategory
-        var groupedByCategory = participations.GroupBy(x => x.Event.EventCategory);
-        foreach (var categoryGroup in groupedByCategory)
-        {
-            var eventCategory = categoryGroup.Key;
-
-            var athletesInCategory = categoryGroup
-                .Where(x => !x.Athlete.IsActive)
-                .GroupBy(x => x.Athlete.Id)
-                .Select(x =>
-                {
-                    var first = x.First();
-
-                    var events = x
-                        .GroupBy(e => e.Event.Id)
-                        .Select(g =>
-                        {
-                            var ev = g.First().Event;
-                            var key = (first.Athlete.Id, ev.Id);
-                            
-                            var pr = prLookup.TryGetValue(key, out var value)
-                                ? value
-                                : "N/A";
-
-                            return new EventParticipationViewModel
-                            {
-                                Id = ev.Id,
-                                Name = ev.Name,
-                                Environment = ev.Environment,
-                                SortOrder = ev.SortOrder,
-                                PersonalRecord = pr
-                            };
-                        })
-                        .OrderBy(e => e.SortOrder)
-                        .ToList();
-
-                    return new AthleteViewModel
+        var groupedByGradYear = inactiveAthletes
+            .GroupBy(x => x.Athlete.GraduationYear)
+            .OrderByDescending(x => x.Key)
+            .ToDictionary(
+                x => x.Key,
+                x => x
+                    .GroupBy(p => p.Athlete.Id)
+                    .Select(athleteGroup =>
                     {
-                        FirstName = first.Athlete.FirstName,
-                        LastName = first.Athlete.LastName,
-                        Class = first.Athlete.GraduationYear.ToString(),
-                        EventsInCategory = events
-                    };
-                })
-                .OrderBy(x => x.FullName)
-                .ToList();
-            
-            result[eventCategory.Value] = athletesInCategory;
-        }
+                        var first = athleteGroup.First();
+                        var eventGroups = athleteGroup
+                            .GroupBy(e => e.Event.Id)
+                            .Select(eventGroup =>
+                            {
+                                var ev = eventGroup.First().Event;
+                                var key = (first.Athlete.Id, ev.Id);
+                                var pr = prLookup.GetValueOrDefault(key, "N/A");
 
-        return result;
+                                return new EventParticipationViewModel
+                                {
+                                    Id = ev.Id,
+                                    Name = ev.Name,
+                                    Environment = ev.Environment,
+                                    SortOrder = ev.SortOrder,
+                                    PersonalRecord = pr
+                                };
+                            })
+                            .OrderBy(e => e.SortOrder)
+                            .ToList();
+
+                        return new AthleteViewModel
+                        {
+                            FirstName = first.Athlete.FirstName,
+                            LastName = first.Athlete.LastName,
+                            Class = $"Class of {first.Athlete.GraduationYear}",
+                            EventsInCategory = eventGroups
+                        };
+                    })
+                    .OrderBy(a => a.FullName)
+                    .ToList()
+            );
+
+        return groupedByGradYear;
     }
 
 
