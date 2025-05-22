@@ -1,0 +1,64 @@
+@model SeasonCardViewModel
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6 border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row gap-6">
+
+    <!-- Left Panel: Season Info -->
+    <div class="md:w-1/3 flex flex-col gap-2">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">@Model.Name</h2>
+        <div class="mt-2">
+            <span class="inline-block px-2 py-1 text-xs font-medium rounded bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                @Model.StatusBadge
+            </span>
+        </div>
+
+        <div class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+            Meets Entered: @Model.MeetsEntered / @Model.TotalMeets
+        </div>
+
+        @if (Model.HasSchoolRecords && Model.SchoolRecords?.Any() == true)
+        {
+            <div class="text-xs text-green-700 dark:text-green-300 mt-2">
+                📈 @Model.SchoolRecords.Count SRs: @string.Join(", ", Model.SchoolRecords)
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <div class="text-xs italic text-yellow-700 dark:text-yellow-300 mt-2">
+                📝 @Model.Notes
+            </div>
+        }
+    </div>
+
+    <!-- Right Panel: Horizontal Timeline -->
+    <div class="md:w-2/3">
+        <div class="relative mt-4">
+            <!-- Progress Bar Line -->
+            <div class="absolute top-1/2 left-0 right-0 h-1 bg-gray-300 dark:bg-gray-700 z-0 transform -translate-y-1/2"></div>
+
+            <div class="relative flex justify-between items-center z-10">
+                @foreach (var meet in Model.Meets.OrderBy(m => m.Date))
+                {
+                    var statusColor = meet.EntryStatus switch
+                    {
+                        MeetEntryStatus.Entered => "bg-green-500",
+                        MeetEntryStatus.Scanned => "bg-yellow-400",
+                        MeetEntryStatus.Placeholder => "bg-blue-400",
+                        _ => "bg-gray-400"
+                    };
+
+                    <div class="relative group flex flex-col items-center">
+                        <!-- Circle Marker -->
+                        <div class="@($"{statusColor} w-4 h-4 rounded-full border-2 border-white dark:border-gray-800 z-10")"></div>
+
+                        <!-- Tooltip Label -->
+                        <div class="absolute bottom-full mb-2 px-2 py-1 rounded bg-gray-800 text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            @meet.Name<br />
+                            <span class="text-gray-300">@meet.Date.ToString("MMM d")</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

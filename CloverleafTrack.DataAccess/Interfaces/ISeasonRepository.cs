@@ -9,4 +9,5 @@ public interface ISeasonRepository
     Task<int> CreateAsync(Season season);
     Task<bool> UpdateAsync(Season season);
     Task<bool> DeleteAsync(Season season);
+    Task<List<Season>> GetSeasonsWithMeetsAsync();
 }

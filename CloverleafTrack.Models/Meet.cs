@@ -1,4 +1,5 @@
-﻿using Environment = CloverleafTrack.Models.Enums.Environment;
+﻿using CloverleafTrack.Models.Enums;
+using Environment = CloverleafTrack.Models.Enums.Environment;
 
 namespace CloverleafTrack.Models;
 
@@ -12,4 +13,7 @@ public class Meet
     
     public int LocationId { get; set; }
     public int SeasonId { get; set; }
+    public MeetEntryStatus EntryStatus { get; set; }
+    
+    public List<Performance> Performances { get; set; } = new();
 }

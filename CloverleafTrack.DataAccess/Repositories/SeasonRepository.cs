@@ -14,6 +14,57 @@ public class SeasonRepository(IDbConnectionFactory connectionFactory) : ISeasonR
         return result.ToList();
     }
 
+    public async Task<List<Season>> GetSeasonsWithMeetsAsync()
+    {
+        using var connection = connectionFactory.CreateConnection();
+
+        var sql = @"
+            SELECT 
+                s.*, 
+                m.*, 
+                p.*, 
+                e.*
+            FROM Seasons s
+            LEFT JOIN Meets m ON m.SeasonId = s.Id
+            LEFT JOIN Performances p ON p.MeetId = m.Id
+            LEFT JOIN Events e ON e.Id = p.EventId
+            ORDER BY s.StartDate DESC, m.Date";
+
+        var seasonMap = new Dictionary<int, Season>();
+        var meetMap = new Dictionary<int, Meet>();
+
+        var result = await connection.QueryAsync<Season, Meet, Performance, Event, Season>(
+            sql,
+            (season, meet, performance, evt) =>
+            {
+                if (!seasonMap.TryGetValue(season.Id, out var currentSeason))
+                {
+                    currentSeason = season;
+                    currentSeason.Meets = new List<Meet>();
+                    seasonMap[season.Id] = currentSeason;
+                }
+
+                if (meet != null)
+                {
+                    if (!meetMap.TryGetValue(meet.Id, out var currentMeet))
+                    {
+                        currentMeet = meet;
+                        currentMeet.Performances = new List<Performance>();
+                        currentSeason.Meets.Add(currentMeet);
+                        meetMap[meet.Id] = currentMeet;
+                    }
+                    
+                    performance.Event = evt;
+                    meetMap[meet.Id].Performances.Add(performance);
+                }
+
+                return currentSeason;
+            },
+            splitOn: "Id,Id,Id");
+
+        return seasonMap.Values.ToList();
+    }
+
     public async Task<Season?> GetByIdAsync(int id)
     {
         using var connection = connectionFactory.CreateConnection();

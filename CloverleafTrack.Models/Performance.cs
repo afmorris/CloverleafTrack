@@ -13,4 +13,8 @@ public class Performance
     public int? AthleteId { get; set; }
     public int EventId { get; set; }
     public int MeetId { get; set; }
+
+    public Athlete Athlete { get; set; } = new();
+    public Event Event { get; set; } = new();
+    public Meet Meet { get; set; } = new();
 }
