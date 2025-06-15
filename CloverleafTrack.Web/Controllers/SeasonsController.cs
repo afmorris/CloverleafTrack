@@ -5,8 +5,6 @@ namespace CloverleafTrack.Web.Controllers;
 
 public class SeasonsController(ISeasonService seasonService) : Controller
 {
-    private readonly ISeasonService seasonService = seasonService;
-
     public async Task<IActionResult> Index()
     {
         var model = await seasonService.GetSeasonCardsAsync();

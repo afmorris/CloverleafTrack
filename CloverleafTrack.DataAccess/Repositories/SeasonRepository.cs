@@ -23,19 +23,21 @@ public class SeasonRepository(IDbConnectionFactory connectionFactory) : ISeasonR
                 s.*, 
                 m.*, 
                 p.*, 
-                e.*
+                e.*,
+                a.*
             FROM Seasons s
             LEFT JOIN Meets m ON m.SeasonId = s.Id
             LEFT JOIN Performances p ON p.MeetId = m.Id
             LEFT JOIN Events e ON e.Id = p.EventId
+            LEFT JOIN Athletes a ON a.Id = p.AthleteId
             ORDER BY s.StartDate DESC, m.Date";
 
         var seasonMap = new Dictionary<int, Season>();
         var meetMap = new Dictionary<int, Meet>();
 
-        var result = await connection.QueryAsync<Season, Meet, Performance, Event, Season>(
+        var result = await connection.QueryAsync<Season, Meet, Performance, Event, Athlete, Season>(
             sql,
-            (season, meet, performance, evt) =>
+            (season, meet, performance, evt, athlete) =>
             {
                 if (!seasonMap.TryGetValue(season.Id, out var currentSeason))
                 {
@@ -55,12 +57,13 @@ public class SeasonRepository(IDbConnectionFactory connectionFactory) : ISeasonR
                     }
                     
                     performance.Event = evt;
+                    performance.Athlete = athlete;
                     meetMap[meet.Id].Performances.Add(performance);
                 }
 
                 return currentSeason;
             },
-            splitOn: "Id,Id,Id");
+            splitOn: "Id,Id,Id,Id");
 
         return seasonMap.Values.ToList();
     }

@@ -2,6 +2,7 @@ using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models.Enums;
 using CloverleafTrack.ViewModels;
+using Environment = CloverleafTrack.Models.Enums.Environment;
 
 namespace CloverleafTrack.Services;
 
@@ -32,11 +33,32 @@ public class SeasonService(ISeasonRepository seasonRepository) : ISeasonService
             Notes = season.Notes,
             TotalMeets = season.Meets.Count,
             MeetsEntered = season.Meets.Count(m => m.EntryStatus == MeetEntryStatus.Entered),
-            HasSchoolRecords = season.Meets.Any(m => m.Performances.Any(p => p.SchoolRecord)),
-            SchoolRecords = season.Meets
+            IndoorSchoolRecords = season.Meets
+                .Where(m => m.Environment == Environment.Indoor)
                 .SelectMany(m => m.Performances)
                 .Where(p => p.SchoolRecord)
-                .Select(p => p.Event.Name)
+                .Select(p => new SchoolRecordViewModel
+                {
+                    EventName = p.Event.Name,
+                    RecordHolder = "test",//p.Athlete.FirstName + " " + p.Athlete.LastName,
+                    Performance = p.DistanceInches.HasValue 
+                        ? $"{Math.Floor(p.DistanceInches.Value / 12):0}' {p.DistanceInches.Value % 12:0.##}\""
+                        : $"{p.TimeSeconds.Value:0.00}s"
+                })
+                .Distinct()
+                .ToList(),
+            OutdoorSchoolRecords = season.Meets
+                .Where(m => m.Environment == Environment.Outdoor)
+                .SelectMany(m => m.Performances)
+                .Where(p => p.SchoolRecord)
+                .Select(p => new SchoolRecordViewModel
+                {
+                    EventName = p.Event.Name,
+                    RecordHolder = "test",//p.Athlete.FirstName + " " + p.Athlete.LastName,
+                    Performance = p.DistanceInches.HasValue 
+                        ? $"{Math.Floor(p.DistanceInches.Value / 12):0}' {p.DistanceInches.Value % 12:0.##}\""
+                        : $"{p.TimeSeconds.Value:0.00}s"
+                })
                 .Distinct()
                 .ToList(),
             Meets = season.Meets.OrderBy(m => m.Date).Select(m => new MeetSummaryViewModel
