@@ -1,5 +1,6 @@
 using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.DataAccess.Interfaces;
+using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
 using CloverleafTrack.ViewModels;
 using Environment = CloverleafTrack.Models.Enums.Environment;
@@ -40,10 +41,9 @@ public class SeasonService(ISeasonRepository seasonRepository) : ISeasonService
                 .Select(p => new SchoolRecordViewModel
                 {
                     EventName = p.Event.Name,
-                    RecordHolder = "test",//p.Athlete.FirstName + " " + p.Athlete.LastName,
-                    Performance = p.DistanceInches.HasValue 
-                        ? $"{Math.Floor(p.DistanceInches.Value / 12):0}' {p.DistanceInches.Value % 12:0.##}\""
-                        : $"{p.TimeSeconds.Value:0.00}s"
+                    RecordHolder = p.Athlete?.FirstName + " " + p.Athlete?.LastName,
+                    Performance = FormatPerformance(p),
+                    Gender = p.Event.Gender ?? Gender.Male,
                 })
                 .Distinct()
                 .ToList(),
@@ -54,10 +54,9 @@ public class SeasonService(ISeasonRepository seasonRepository) : ISeasonService
                 .Select(p => new SchoolRecordViewModel
                 {
                     EventName = p.Event.Name,
-                    RecordHolder = "test",//p.Athlete.FirstName + " " + p.Athlete.LastName,
-                    Performance = p.DistanceInches.HasValue 
-                        ? $"{Math.Floor(p.DistanceInches.Value / 12):0}' {p.DistanceInches.Value % 12:0.##}\""
-                        : $"{p.TimeSeconds.Value:0.00}s"
+                    RecordHolder = p.Athlete?.FirstName + " " + p.Athlete?.LastName,
+                    Performance = FormatPerformance(p),
+                    Gender = p.Event.Gender ?? Gender.Male,
                 })
                 .Distinct()
                 .ToList(),
@@ -71,5 +70,34 @@ public class SeasonService(ISeasonRepository seasonRepository) : ISeasonService
         }).ToList();
 
         return viewModels;
+    }
+    
+    private string FormatPerformance(Performance p)
+    {
+        if (p.Event.EventType is EventType.Field or EventType.FieldRelay)
+        {
+            return p.DistanceInches.HasValue
+                ? FormatDistance(p.DistanceInches.Value)
+                : "N/A";
+        }
+
+        return p.TimeSeconds.HasValue
+            ? FormatTime(p.TimeSeconds.Value)
+            : "N/A";
+    }
+
+    private static string FormatDistance(double inches)
+    {
+        var feet = Math.Floor(inches / 12);
+        var remaining = inches % 12;
+        return $"{feet:0}' {remaining:0.##}\"";
+    }
+
+    private static string FormatTime(double seconds)
+    {
+        var timeSpan = TimeSpan.FromSeconds(seconds);
+        return timeSpan.TotalMinutes >= 1
+            ? timeSpan.ToString(@"m\:ss\.ff")
+            : timeSpan.ToString(@"s\.ff");
     }
 }

@@ -2,6 +2,7 @@
 
 public enum Gender : short
 {
-    Male = 0,
-    Female = 1
+    Male = 1,
+    Female = 2,
+    Mixed = 3
 }
