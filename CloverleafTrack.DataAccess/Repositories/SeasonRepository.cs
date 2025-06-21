@@ -9,7 +9,7 @@ public class SeasonRepository(IDbConnectionFactory connectionFactory) : ISeasonR
     public async Task<List<Season>> GetAllAsync()
     {
         using var connection = connectionFactory.CreateConnection();
-        var sql = "SELECT * FROM Seasons";
+        const string sql = "SELECT * FROM Seasons";
         var result = await connection.QueryAsync<Season>(sql);
         return result.ToList();
     }
@@ -18,19 +18,20 @@ public class SeasonRepository(IDbConnectionFactory connectionFactory) : ISeasonR
     {
         using var connection = connectionFactory.CreateConnection();
 
-        var sql = @"
-            SELECT 
-                s.*, 
-                m.*, 
-                p.*, 
-                e.*,
-                a.*
-            FROM Seasons s
-            LEFT JOIN Meets m ON m.SeasonId = s.Id
-            LEFT JOIN Performances p ON p.MeetId = m.Id
-            LEFT JOIN Events e ON e.Id = p.EventId
-            LEFT JOIN Athletes a ON a.Id = p.AthleteId
-            ORDER BY s.StartDate DESC, m.Date";
+        const string sql = """
+                           SELECT 
+                               s.*, 
+                               m.*, 
+                               p.*, 
+                               e.*,
+                               a.*
+                           FROM Seasons s
+                           LEFT JOIN Meets m ON m.SeasonId = s.Id
+                           LEFT JOIN Performances p ON p.MeetId = m.Id
+                           LEFT JOIN Events e ON e.Id = p.EventId
+                           LEFT JOIN Athletes a ON a.Id = p.AthleteId
+                           ORDER BY s.StartDate DESC, m.Date
+                           """;
 
         var seasonMap = new Dictionary<int, Season>();
         var meetMap = new Dictionary<int, Meet>();
@@ -73,6 +74,13 @@ public class SeasonRepository(IDbConnectionFactory connectionFactory) : ISeasonR
         using var connection = connectionFactory.CreateConnection();
         var sql = "SELECT * FROM Seasons WHERE Id = @Id";
         return await connection.QueryFirstOrDefaultAsync<Season>(sql, new { Id = id });
+    }
+
+    public async Task<Season?> GetByNameAsync(string name)
+    {
+        using var connection = connectionFactory.CreateConnection();
+        var sql = "SELECT * FROM Seasons WHERE Name = @Name";
+        return await connection.QueryFirstOrDefaultAsync<Season>(sql, new { Name = name });
     }
 
     public async Task<int> CreateAsync(Season season)

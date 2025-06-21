@@ -1,6 +1,6 @@
 using CloverleafTrack.Models.Enums;
 
-namespace CloverleafTrack.ViewModels;
+namespace CloverleafTrack.ViewModels.Seasons;
 
 public class SeasonCardViewModel
 {

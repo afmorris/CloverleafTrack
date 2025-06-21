@@ -10,4 +10,16 @@ public class SeasonsController(ISeasonService seasonService) : Controller
         var model = await seasonService.GetSeasonCardsAsync();
         return View(model);
     }
+    
+    [HttpGet("/seasons/{name}")]
+    public async Task<IActionResult> Details(string name)
+    {
+        var vm = await seasonService.GetSeasonDetailsAsync(name);
+        if (vm == null)
+        {
+            return NotFound();
+        }
+        
+        return View(vm);
+    }
 }

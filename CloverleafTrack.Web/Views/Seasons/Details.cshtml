@@ -1,0 +1,101 @@
+@model SeasonDetailsViewModel
+
+@{
+    ViewBag.Title = $"{Model.Name} Season";
+}
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Season Header -->
+    <h1 class="text-3xl font-bold mb-4">
+        @Model.Name Season
+    </h1>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded shadow p-4 text-center">
+            <div class="text-2xl font-bold">@Model.TotalPRs</div>
+            <div class="text-sm text-gray-600">Total PRs</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded shadow p-4 text-center">
+            <div class="text-2xl font-bold">@Model.TotalAthletesWithPRs</div>
+            <div class="text-sm text-gray-600">Athletes with PRs</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded shadow p-4 text-center">
+            <div class="text-2xl font-bold">@Model.TotalSchoolRecordsBroken</div>
+            <div class="text-sm text-gray-600">School Records Broken</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded shadow p-4 text-center">
+            <div class="text-2xl font-bold">@Model.TotalMeets</div>
+            <div class="text-sm text-gray-600">Meets</div>
+        </div>
+    </div>
+
+    <!-- Top Performances -->
+    <h2 class="text-2xl font-semibold mb-2">Top 10 Performances This Season</h2>
+    <p class="text-sm text-gray-500 mb-4">Performances entering or improving a Top 10 All-Time List</p>
+
+    @if (Model.TopPerformances.Any())
+    {
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200">
+                <thead class="bg-gray-100 dark:bg-gray-700 text-left text-sm font-semibold">
+                    <tr>
+                        <th class="px-4 py-2">Event</th>
+                        <th class="px-4 py-2">Athlete</th>
+                        <th class="px-4 py-2">Mark</th>
+                        <th class="px-4 py-2">All-Time Rank</th>
+                        <th class="px-4 py-2">Meet</th>
+                        <th class="px-4 py-2">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var perf in Model.TopPerformances)
+                    {
+                        <tr class="border-t border-gray-200">
+                            <td class="px-4 py-2">@perf.EventName</td>
+                            <td class="px-4 py-2">@perf.AthleteName</td>
+                            <td class="px-4 py-2">@perf.Performance</td>
+                            <td class="px-4 py-2">@perf.AllTimeRank</td>
+                            <td class="px-4 py-2">@perf.MeetName</td>
+                            <td class="px-4 py-2">@perf.MeetDate.ToString("MMM d")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="mb-8 text-gray-500">No Top 10 All-Time Performances yet this season.</p>
+    }
+
+    <!-- Meet List -->
+    <h2 class="text-2xl font-semibold mb-2">Meets</h2>
+
+    <div class="space-y-4">
+        @foreach (var meet in Model.Meets.OrderBy(m => m.MeetDate))
+        {
+            <div class="flex flex-col sm:flex-row justify-between items-center border rounded p-4 bg-white dark:bg-gray-800">
+                <div>
+                    <div class="text-lg font-semibold">@meet.MeetName</div>
+                    <div class="text-sm text-gray-500">@meet.MeetDate.ToString("MMM d") @if (!string.IsNullOrEmpty(meet.Location)) { <span> • @meet.Location</span> }</div>
+                    <div class="text-sm text-gray-500">
+                        @if (meet.PRCount > 0)
+                        {
+                            <span>@meet.PRCount PR@(meet.PRCount > 1 ? "s" : "")</span>
+                        }
+                        @if (meet.SchoolRecordCount > 0)
+                        {
+                            <span class="ml-2">@meet.SchoolRecordCount School Record@(meet.SchoolRecordCount > 1 ? "s" : "")</span>
+                        }
+                    </div>
+                </div>
+                <div class="mt-2 sm:mt-0">
+                    <a href="@meet.ResultsUrl" class="inline-block text-blue-600 hover:underline text-sm">View Results</a>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

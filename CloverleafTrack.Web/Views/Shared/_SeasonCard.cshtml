@@ -1,4 +1,4 @@
-@model SeasonCardViewModel
+@model CloverleafTrack.ViewModels.Seasons.SeasonCardViewModel
 
 @functions {
     string GetGenderLabel(Gender gender) => gender switch
@@ -96,9 +96,9 @@
     </div>
 
     <div class="-mx-6 -mb-6 mt-4 bg-gray-100 dark:bg-gray-900 px-6 py-3 rounded-b-lg text-center">
-        <a href="@Url.Action("Overview", "Seasons", new { id = Model.Id })"
+        <a href="@Url.Action("Details", "Seasons", new { name = Model.Name })"
            class="inline-block text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium">
-            View Season Overview →
+            View Season Details →
         </a>
     </div>
 </div>

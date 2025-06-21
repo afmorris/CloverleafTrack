@@ -3,11 +3,13 @@ using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
 using CloverleafTrack.ViewModels;
+using CloverleafTrack.ViewModels.Performances;
+using CloverleafTrack.ViewModels.Seasons;
 using Environment = CloverleafTrack.Models.Enums.Environment;
 
 namespace CloverleafTrack.Services;
 
-public class SeasonService(ISeasonRepository seasonRepository) : ISeasonService
+public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepository performanceRepository, IMeetRepository meetRepository) : ISeasonService
 {
     public async Task<int> GetCurrentSeasonAsync()
     {
@@ -70,6 +72,51 @@ public class SeasonService(ISeasonRepository seasonRepository) : ISeasonService
         }).ToList();
 
         return viewModels;
+    }
+
+    public async Task<SeasonDetailsViewModel?> GetSeasonDetailsAsync(string name)
+    {
+        var season = await seasonRepository.GetByNameAsync(name);
+        if (season == null)
+        {
+            return null;
+        }
+
+        var totalPRs = await performanceRepository.CountPRsForSeasonAsync(season.Id);
+        var totalAthletesWithPRs = await performanceRepository.CountAthletesWithPRsForSeasonAsync(season.Id);
+        var totalSchoolRecordsBroken = await performanceRepository.CountSchoolRecordsBrokenForSeasonAsync(season.Id);
+        var meets = await meetRepository.GetMeetsForSeasonAsync(season.Id);
+
+        var topPerformances = await performanceRepository.GetTopPerformancesForSeasonAsync(season.Id);
+
+        return new SeasonDetailsViewModel
+        {
+            Name = season.Name,
+            TotalPRs = totalPRs,
+            TotalAthletesWithPRs = totalAthletesWithPRs,
+            TotalSchoolRecordsBroken = totalSchoolRecordsBroken,
+            TotalMeets = meets.Count,
+            
+            Meets = meets.Select(m => new SeasonMeetViewModel
+            {
+                MeetDate = m.Date,
+                MeetName = m.Name,
+                Location = m.Location.Name,
+                PRCount = m.PRCount,
+                SchoolRecordCount = m.SchoolRecordCount,
+                ResultsUrl = m.ResultsUrl
+            }).ToList(),
+            
+            TopPerformances = topPerformances.Select(x => new TopPerformanceViewModel
+            {
+                EventName = x.EventName,
+                AthleteName = x.AthleteName,
+                Performance = x.FormattedPerformance,
+                AllTimeRank = $"#{x.AllTimeRank} All-Time",
+                MeetName = x.MeetName,
+                MeetDate = x.MeetDate
+            }).ToList()
+        };
     }
     
     private string FormatPerformance(Performance p)

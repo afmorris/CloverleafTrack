@@ -10,15 +10,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88a4614f-d251-4906-9412-05eeb0a1bb4c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/CloverleafTrack.DataAccess/Dtos/TopPerformanceDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CloverleafTrack.DataAccess/Interfaces/IMeetRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CloverleafTrack.DataAccess/Interfaces/IPerformanceRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CloverleafTrack.DataAccess/Repositories/MeetRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CloverleafTrack.DataAccess/Repositories/PerformanceRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CloverleafTrack.ViewModels/Performances/TopPerformanceViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CloverleafTrack.ViewModels/Seasons/SeasonDetailsViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CloverleafTrack.ViewModels/Seasons/SeasonMeetViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CloverleafTrack.Web/Views/Seasons/Details.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.CloverleafTrack/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CloverleafTrack/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CloverleafTrack.Models/Enums/Gender.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Models/Enums/Gender.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CloverleafTrack.DataAccess/Interfaces/ISeasonRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.DataAccess/Interfaces/ISeasonRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CloverleafTrack.DataAccess/Repositories/SeasonRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.DataAccess/Repositories/SeasonRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CloverleafTrack.Models/CloverleafTrack.Models.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Models/CloverleafTrack.Models.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CloverleafTrack.Models/Meet.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Models/Meet.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CloverleafTrack.Services/Interfaces/ISeasonService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Services/Interfaces/ISeasonService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CloverleafTrack.Services/SeasonService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Services/SeasonService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CloverleafTrack.ViewModels/SchoolRecordViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.ViewModels/SchoolRecordViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CloverleafTrack.ViewModels/SeasonCardViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.ViewModels/Seasons/SeasonCardViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CloverleafTrack.Web/Controllers/RosterController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Web/Controllers/RosterController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CloverleafTrack.Web/Controllers/SeasonsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Web/Controllers/SeasonsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CloverleafTrack.Web/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Web/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CloverleafTrack.Web/Views/Seasons/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Web/Views/Seasons/Index.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CloverleafTrack.Web/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Web/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CloverleafTrack.Web/Views/Shared/_AllSeasons.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Web/Views/Shared/_AllSeasons.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CloverleafTrack.Web/Views/Shared/_SeasonCard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Web/Views/Shared/_SeasonCard.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CloverleafTrack.Web/Views/_ViewImports.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Web/Views/_ViewImports.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CloverleafTrack.Web/wwwroot/css/site.css" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.Web/wwwroot/css/site.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CloverleafTrack.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/CloverleafTrack.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,12 +53,12 @@
     &quot;assignee&quot;: &quot;afmorris&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/afmorris/CloverleafTrack.git",
-    "accountId": "699577a8-9776-418f-9a56-e4fede23f238"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/afmorris/CloverleafTrack.git&quot;,
+    &quot;accountId&quot;: &quot;699577a8-9776-418f-9a56-e4fede23f238&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -63,29 +79,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.CloverleafTrack.Web: http.executor": "Debug",
-    "Attach to Process.2582:CloverleafTrack.executor": "Debug",
-    "Attach to Process.4166:CloverleafTrack.executor": "Debug",
-    "Docker.CloverleafTrack.Web/Dockerfile.executor": "Debug",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "js.buildTools.gulp.gulp_package_dir": "",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "C:/Users/user/AppData/Roaming/fnm/node-versions/v22.15.0/installation/node",
-    "nodejs_package_manager_path": "pnpm",
-    "npm.Tailwind Dev.executor": "Run",
-    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.CloverleafTrack.Web: http.executor&quot;: &quot;Debug&quot;,
+    &quot;Attach to Process.2582:CloverleafTrack.executor&quot;: &quot;Debug&quot;,
+    &quot;Attach to Process.4166:CloverleafTrack.executor&quot;: &quot;Debug&quot;,
+    &quot;Docker.CloverleafTrack.Web/Dockerfile.executor&quot;: &quot;Debug&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;js.buildTools.gulp.gulp_package_dir&quot;: &quot;&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;C:/Users/user/AppData/Roaming/fnm/node-versions/v22.15.0/installation/node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;npm.Tailwind Dev.executor&quot;: &quot;Run&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.CloverleafTrack.Web: http">
     <configuration name="CloverleafTrack.Web: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/CloverleafTrack.Web/CloverleafTrack.Web.csproj" />
@@ -164,8 +180,18 @@
       <workItem from="1749952518692" duration="776000" />
       <workItem from="1749953348070" duration="309000" />
       <workItem from="1749954105550" duration="14000" />
-      <workItem from="1750093900948" duration="8515000" />
+      <workItem from="1750093900948" duration="11156000" />
+      <workItem from="1750449008693" duration="5152000" />
     </task>
+    <task id="LOCAL-00001" summary="Updates to the season card and related info">
+      <option name="closed" value="true" />
+      <created>1750104080041</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1750104080041</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,6 +201,8 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Updates to the season card and related info" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates to the season card and related info" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
