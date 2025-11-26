@@ -17,6 +17,7 @@ builder.Services.AddScoped<IMeetRepository, MeetRepository>();
 
 builder.Services.AddScoped<IAthleteService, AthleteService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();
+builder.Services.AddScoped<IMeetService, MeetService>();
 
 var app = builder.Build();
 
