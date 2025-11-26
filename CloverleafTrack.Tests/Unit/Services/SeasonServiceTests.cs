@@ -9,12 +9,15 @@ namespace CloverleafTrack.Tests.Unit.Services;
 public class SeasonServiceTests
 {
     private readonly Mock<ISeasonRepository> repository;
+    private readonly Mock<IPerformanceRepository> performanceRepository;
+    private readonly Mock<IMeetRepository> meetRepository;
+
     private readonly ISeasonService service;
 
     public SeasonServiceTests()
     {
         repository = new Mock<ISeasonRepository>();
-        service = new SeasonService(repository.Object);
+        service = new SeasonService(repository.Object, performanceRepository.Object, meetRepository.Object);
     }
 
     [Fact]

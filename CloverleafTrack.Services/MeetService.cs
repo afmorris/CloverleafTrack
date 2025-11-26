@@ -4,10 +4,10 @@ using CloverleafTrack.ViewModels;
 
 namespace CloverleafTrack.Services;
 
-public class MeetService(ILogger<MeetService> logger, IMeetRepository meetRepository) : IMeetService
+public class MeetService(IMeetRepository meetRepository) : IMeetService
 {
     public async Task<MeetDetailsViewModel?> GetMeetDetailsAsync(string name)
     {
-        
+        return null;
     }
 }
