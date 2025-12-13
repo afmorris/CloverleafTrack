@@ -58,36 +58,35 @@ public class PerformanceRepository(IDbConnectionFactory connectionFactory) : IPe
     }
 
     public async Task<List<TopPerformanceDto>> GetTopPerformancesForSeasonAsync(int seasonId)
-    {
-         using var connection = connectionFactory.CreateConnection();
-         const string sql = """
-                            SELECT
-                                 l.Rank AS AllTimeRank,
-                                 e.Name as EventName,
-                                 a.FirstName + ' ' + a.LastName as AthleteName,
-                                 p.DistanceInches,
-                                 p.TimeSeconds,
-                                 m.Name as MeetName,
-                                 m.Date as MeetDate
-                            FROM
-                                 Leaderboards l,
-                                 Performances p,
-                                 Athletes a,
-                                 Meets m,
-                                 Events e
-                            WHERE
-                                 p.Id = l.PerformanceId AND
-                                 e.Id = p.AthleteId AND
-                                 m.Id = p.MeetId AND
-                                 e.Id = p.EventId AND
-                                 l.SeasonId = @SeasonId
-                            ORDER BY
-                                 e.Name,
-                                 l.Rank
-                            """;
-         
-         var topPerformances = await connection.QueryAsync<TopPerformanceDto>(sql, new { SeasonId = seasonId });
-
-         return topPerformances.ToList();
-    }
+     {
+          using var connection = connectionFactory.CreateConnection();
+          const string sql = """
+                              SELECT
+                                   l.Rank AS AllTimeRank,
+                                   e.Name as EventName,
+                                   e.Environment,
+                                   a.FirstName + ' ' + a.LastName as AthleteName,
+                                   p.DistanceInches,
+                                   p.TimeSeconds,
+                                   m.Name as MeetName,
+                                   m.Date as MeetDate,
+                                   e.Gender
+                              FROM
+                                   Performances p
+                                   INNER JOIN Meets m ON m.Id = p.MeetId
+                                   INNER JOIN Athletes a ON a.Id = p.AthleteId
+                                   INNER JOIN Events e ON e.Id = p.EventId
+                                   INNER JOIN Leaderboards l ON l.PerformanceId = p.Id
+                              WHERE
+                                   m.SeasonId = @SeasonId
+                                   AND l.Rank <= 10
+                              ORDER BY
+                                   e.Environment,
+                                   e.Name,
+                                   l.Rank
+                              """;
+          
+          var topPerformances = await connection.QueryAsync<TopPerformanceDto>(sql, new { SeasonId = seasonId });
+          return topPerformances.ToList();
+     }
 }

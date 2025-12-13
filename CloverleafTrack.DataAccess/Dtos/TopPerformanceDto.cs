@@ -1,3 +1,6 @@
+using CloverleafTrack.Models.Enums;
+using Environment = CloverleafTrack.Models.Enums.Environment;
+
 namespace CloverleafTrack.DataAccess.Dtos;
 
 public class TopPerformanceDto
@@ -9,10 +12,6 @@ public class TopPerformanceDto
     public double? TimeSeconds { get; set; }
     public string MeetName { get; set; } = "";
     public DateTime MeetDate { get; set; }
-
-    // Optional helper:
-    public string FormattedPerformance =>
-        DistanceInches.HasValue
-            ? $"{DistanceInches.Value:F2}\""
-            : $"{TimeSeconds.Value:F2} s";
+    public Environment Environment { get; set; }
+    public Gender Gender {get; set;}
 }

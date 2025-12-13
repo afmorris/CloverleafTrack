@@ -1,3 +1,5 @@
+using CloverleafTrack.Models.Enums;
+
 namespace CloverleafTrack.ViewModels.Performances;
 
 public class TopPerformanceViewModel
@@ -8,4 +10,5 @@ public class TopPerformanceViewModel
     public string AllTimeRank { get; set; } = string.Empty;
     public string MeetName { get; set; } = string.Empty;
     public DateTime MeetDate { get; set; }
+    public Gender Gender { get; set; }
 }

@@ -40,6 +40,7 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
                 .Where(m => m.Environment == Environment.Indoor)
                 .SelectMany(m => m.Performances)
                 .Where(p => p.SchoolRecord)
+                .DistinctBy(p => p.EventId)
                 .Select(p => new SchoolRecordViewModel
                 {
                     EventName = p.Event.Name,
@@ -47,12 +48,12 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
                     Performance = FormatPerformance(p),
                     Gender = p.Event.Gender ?? Gender.Male,
                 })
-                .Distinct()
                 .ToList(),
             OutdoorSchoolRecords = season.Meets
                 .Where(m => m.Environment == Environment.Outdoor)
                 .SelectMany(m => m.Performances)
                 .Where(p => p.SchoolRecord)
+                .DistinctBy(p => p.EventId)
                 .Select(p => new SchoolRecordViewModel
                 {
                     EventName = p.Event.Name,
@@ -60,7 +61,6 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
                     Performance = FormatPerformance(p),
                     Gender = p.Event.Gender ?? Gender.Male,
                 })
-                .Distinct()
                 .ToList(),
             Meets = season.Meets.OrderBy(m => m.Date).Select(m => new MeetSummaryViewModel
             {
@@ -107,15 +107,39 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
                 ResultsUrl = m.ResultsUrl
             }).ToList(),
             
-            TopPerformances = topPerformances.Select(x => new TopPerformanceViewModel
-            {
-                EventName = x.EventName,
-                AthleteName = x.AthleteName,
-                Performance = x.FormattedPerformance,
-                AllTimeRank = $"#{x.AllTimeRank} All-Time",
-                MeetName = x.MeetName,
-                MeetDate = x.MeetDate
-            }).ToList()
+            IndoorTopPerformances = topPerformances
+                .Where(x => x.Environment == Environment.Indoor)
+                .Select(x => new TopPerformanceViewModel
+                {
+                    EventName = x.EventName,
+                    AthleteName = x.AthleteName,
+                    Performance = x.DistanceInches.HasValue
+                        ? FormatDistance(x.DistanceInches.Value)
+                        : x.TimeSeconds.HasValue
+                            ? FormatTime(x.TimeSeconds.Value)
+                            : "N/A",
+                    AllTimeRank = $"#{x.AllTimeRank}",
+                    MeetName = x.MeetName,
+                    MeetDate = x.MeetDate,
+                    Gender = x.Gender
+                }).ToList(),
+
+            OutdoorTopPerformances = topPerformances
+                .Where(x => x.Environment == Environment.Outdoor)
+                .Select(x => new TopPerformanceViewModel
+                {
+                    EventName = x.EventName,
+                    AthleteName = x.AthleteName,
+                    Performance = x.DistanceInches.HasValue
+                        ? FormatDistance(x.DistanceInches.Value)
+                        : x.TimeSeconds.HasValue
+                            ? FormatTime(x.TimeSeconds.Value)
+                            : "N/A",
+                    AllTimeRank = $"#{x.AllTimeRank}",
+                    MeetName = x.MeetName,
+                    MeetDate = x.MeetDate,
+                    Gender = x.Gender
+                }).ToList()
         };
     }
     

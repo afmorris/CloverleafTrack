@@ -10,6 +10,7 @@ public class SeasonDetailsViewModel
     public int TotalSchoolRecordsBroken { get; set; }
     public int TotalMeets { get; set; }
 
-    public List<TopPerformanceViewModel> TopPerformances { get; set; } = new();
+    public List<TopPerformanceViewModel> IndoorTopPerformances { get; set; } = new();
+    public List<TopPerformanceViewModel> OutdoorTopPerformances { get; set; } = new();
     public List<SeasonMeetViewModel> Meets { get; set; } = new();
 }

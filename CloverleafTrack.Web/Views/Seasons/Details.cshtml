@@ -4,7 +4,7 @@
     ViewBag.Title = $"{Model.Name} Season";
 }
 
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
     <!-- Season Header -->
     <h1 class="text-3xl font-bold mb-4">
@@ -15,59 +15,191 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div class="bg-white dark:bg-gray-800 rounded shadow p-4 text-center">
             <div class="text-2xl font-bold">@Model.TotalPRs</div>
-            <div class="text-sm text-gray-600">Total PRs</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Total PRs</div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded shadow p-4 text-center">
             <div class="text-2xl font-bold">@Model.TotalAthletesWithPRs</div>
-            <div class="text-sm text-gray-600">Athletes with PRs</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Athletes with PRs</div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded shadow p-4 text-center">
             <div class="text-2xl font-bold">@Model.TotalSchoolRecordsBroken</div>
-            <div class="text-sm text-gray-600">School Records Broken</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">School Records Broken</div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded shadow p-4 text-center">
             <div class="text-2xl font-bold">@Model.TotalMeets</div>
-            <div class="text-sm text-gray-600">Meets</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Meets</div>
         </div>
     </div>
 
     <!-- Top Performances -->
     <h2 class="text-2xl font-semibold mb-2">Top 10 Performances This Season</h2>
-    <p class="text-sm text-gray-500 mb-4">Performances entering or improving a Top 10 All-Time List</p>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Performances entering or improving a Top 10 All-Time List</p>
 
-    @if (Model.TopPerformances.Any())
+    @{
+        var maleIndoor = Model.IndoorTopPerformances.Where(p => p.Gender == Gender.Male).ToList();
+        var femaleIndoor = Model.IndoorTopPerformances.Where(p => p.Gender == Gender.Female).ToList();
+        var maleOutdoor = Model.OutdoorTopPerformances.Where(p => p.Gender == Gender.Male).ToList();
+        var femaleOutdoor = Model.OutdoorTopPerformances.Where(p => p.Gender == Gender.Female).ToList();
+        
+        var hasIndoor = maleIndoor.Any() || femaleIndoor.Any();
+        var hasOutdoor = maleOutdoor.Any() || femaleOutdoor.Any();
+    }
+
+    @if (hasIndoor || hasOutdoor)
     {
-        <div class="overflow-x-auto mb-8">
-            <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200">
-                <thead class="bg-gray-100 dark:bg-gray-700 text-left text-sm font-semibold">
-                    <tr>
-                        <th class="px-4 py-2">Event</th>
-                        <th class="px-4 py-2">Athlete</th>
-                        <th class="px-4 py-2">Mark</th>
-                        <th class="px-4 py-2">All-Time Rank</th>
-                        <th class="px-4 py-2">Meet</th>
-                        <th class="px-4 py-2">Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var perf in Model.TopPerformances)
-                    {
-                        <tr class="border-t border-gray-200">
-                            <td class="px-4 py-2">@perf.EventName</td>
-                            <td class="px-4 py-2">@perf.AthleteName</td>
-                            <td class="px-4 py-2">@perf.Performance</td>
-                            <td class="px-4 py-2">@perf.AllTimeRank</td>
-                            <td class="px-4 py-2">@perf.MeetName</td>
-                            <td class="px-4 py-2">@perf.MeetDate.ToString("MMM d")</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Boys Column -->
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-blue-600 dark:text-blue-400">♂ Boys</h3>
+                
+                @if (maleIndoor.Any())
+                {
+                    <h4 class="text-lg font-semibold mb-2">🏟️ Indoor</h4>
+                    <div class="overflow-x-auto mb-6">
+                        <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm">
+                            <thead class="bg-gray-100 dark:bg-gray-700 text-left text-xs font-semibold">
+                                <tr>
+                                    <th class="px-3 py-2">Event</th>
+                                    <th class="px-3 py-2">Athlete</th>
+                                    <th class="px-3 py-2">Mark</th>
+                                    <th class="px-3 py-2">Rank</th>
+                                    <th class="px-3 py-2">Meet</th>
+                                    <th class="px-3 py-2">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var perf in maleIndoor)
+                                {
+                                    <tr class="border-t border-gray-200 dark:border-gray-700">
+                                        <td class="px-3 py-2">@perf.EventName</td>
+                                        <td class="px-3 py-2">@perf.AthleteName</td>
+                                        <td class="px-3 py-2 font-semibold">@perf.Performance</td>
+                                        <td class="px-3 py-2">@perf.AllTimeRank</td>
+                                        <td class="px-3 py-2 text-xs">@perf.MeetName</td>
+                                        <td class="px-3 py-2 text-xs">@perf.MeetDate.ToString("MMM d, yyyy")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+                @if (maleOutdoor.Any())
+                {
+                    <h4 class="text-lg font-semibold mb-2">🌤️ Outdoor</h4>
+                    <div class="overflow-x-auto mb-6">
+                        <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm">
+                            <thead class="bg-gray-100 dark:bg-gray-700 text-left text-xs font-semibold">
+                                <tr>
+                                    <th class="px-3 py-2">Event</th>
+                                    <th class="px-3 py-2">Athlete</th>
+                                    <th class="px-3 py-2">Mark</th>
+                                    <th class="px-3 py-2">Rank</th>
+                                    <th class="px-3 py-2">Meet</th>
+                                    <th class="px-3 py-2">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var perf in maleOutdoor)
+                                {
+                                    <tr class="border-t border-gray-200 dark:border-gray-700">
+                                        <td class="px-3 py-2">@perf.EventName</td>
+                                        <td class="px-3 py-2">@perf.AthleteName</td>
+                                        <td class="px-3 py-2 font-semibold">@perf.Performance</td>
+                                        <td class="px-3 py-2">@perf.AllTimeRank</td>
+                                        <td class="px-3 py-2 text-xs">@perf.MeetName</td>
+                                        <td class="px-3 py-2 text-xs">@perf.MeetDate.ToString("MMM d, yyyy")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                
+                @if (!maleIndoor.Any() && !maleOutdoor.Any())
+                {
+                    <p class="text-gray-500 dark:text-gray-400 text-sm italic">No boys' top 10 performances this season.</p>
+                }
+            </div>
+
+            <!-- Girls Column -->
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-pink-600 dark:text-pink-400">♀ Girls</h3>
+                
+                @if (femaleIndoor.Any())
+                {
+                    <h4 class="text-lg font-semibold mb-2">🏟️ Indoor</h4>
+                    <div class="overflow-x-auto mb-6">
+                        <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm">
+                            <thead class="bg-gray-100 dark:bg-gray-700 text-left text-xs font-semibold">
+                                <tr>
+                                    <th class="px-3 py-2">Event</th>
+                                    <th class="px-3 py-2">Athlete</th>
+                                    <th class="px-3 py-2">Mark</th>
+                                    <th class="px-3 py-2">Rank</th>
+                                    <th class="px-3 py-2">Meet</th>
+                                    <th class="px-3 py-2">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var perf in femaleIndoor)
+                                {
+                                    <tr class="border-t border-gray-200 dark:border-gray-700">
+                                        <td class="px-3 py-2">@perf.EventName</td>
+                                        <td class="px-3 py-2">@perf.AthleteName</td>
+                                        <td class="px-3 py-2 font-semibold">@perf.Performance</td>
+                                        <td class="px-3 py-2">@perf.AllTimeRank</td>
+                                        <td class="px-3 py-2 text-xs">@perf.MeetName</td>
+                                        <td class="px-3 py-2 text-xs">@perf.MeetDate.ToString("MMM d, yyyy")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+                @if (femaleOutdoor.Any())
+                {
+                    <h4 class="text-lg font-semibold mb-2">🌤️ Outdoor</h4>
+                    <div class="overflow-x-auto mb-6">
+                        <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm">
+                            <thead class="bg-gray-100 dark:bg-gray-700 text-left text-xs font-semibold">
+                                <tr>
+                                    <th class="px-3 py-2">Event</th>
+                                    <th class="px-3 py-2">Athlete</th>
+                                    <th class="px-3 py-2">Mark</th>
+                                    <th class="px-3 py-2">Rank</th>
+                                    <th class="px-3 py-2">Meet</th>
+                                    <th class="px-3 py-2">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var perf in femaleOutdoor)
+                                {
+                                    <tr class="border-t border-gray-200 dark:border-gray-700">
+                                        <td class="px-3 py-2">@perf.EventName</td>
+                                        <td class="px-3 py-2">@perf.AthleteName</td>
+                                        <td class="px-3 py-2 font-semibold">@perf.Performance</td>
+                                        <td class="px-3 py-2">@perf.AllTimeRank</td>
+                                        <td class="px-3 py-2 text-xs">@perf.MeetName</td>
+                                        <td class="px-3 py-2 text-xs">@perf.MeetDate.ToString("MMM d, yyyy")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                
+                @if (!femaleIndoor.Any() && !femaleOutdoor.Any())
+                {
+                    <p class="text-gray-500 dark:text-gray-400 text-sm italic">No girls' top 10 performances this season.</p>
+                }
+            </div>
         </div>
     }
     else
     {
-        <p class="mb-8 text-gray-500">No Top 10 All-Time Performances yet this season.</p>
+        <p class="mb-8 text-gray-500 dark:text-gray-400">No Top 10 All-Time Performances yet this season.</p>
     }
 
     <!-- Meet List -->
@@ -93,9 +225,9 @@
                         <div class="text-lg font-semibold">@meet.MeetName</div>
                         @if (!string.IsNullOrEmpty(meet.Location))
                         {
-                            <div class="text-sm text-gray-500">@meet.Location</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">@meet.Location</div>
                         }
-                        <div class="text-sm text-gray-500">
+                        <div class="text-sm text-gray-500 dark:text-gray-400">
                             @if (meet.PRCount > 0)
                             {
                                 <span>@meet.PRCount PR@(meet.PRCount > 1 ? "s" : "")</span>
@@ -110,7 +242,7 @@
 
                 <!-- View Results Button -->
                 <div class="mt-2 sm:mt-0 sm:ml-4">
-                    <a href="@meet.ResultsUrl" class="inline-block text-blue-600 hover:underline text-sm">View Results</a>
+                    <a href="@meet.ResultsUrl" class="inline-block text-blue-600 dark:text-blue-400 hover:underline text-sm">View Results</a>
                 </div>
             </div>
         }
