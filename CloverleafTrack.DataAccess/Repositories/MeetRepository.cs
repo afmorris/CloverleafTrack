@@ -1,6 +1,8 @@
+using CloverleafTrack.DataAccess.Dtos;
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
 using Dapper;
+using Slugify;
 
 namespace CloverleafTrack.DataAccess.Repositories;
 
@@ -53,4 +55,72 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
         
         return result.ToList();
     }
+
+    public async Task<Meet?> GetMeetBasicInfoBySlugAsync(string slug)
+     {
+          using var connection = connectionFactory.CreateConnection();
+          
+          const string sql = """
+                              SELECT
+                                   m.*,
+                                   l.*,
+                                   s.*
+                              FROM
+                                   Meets m
+                                   INNER JOIN Locations l ON m.LocationId = l.Id
+                                   INNER JOIN Seasons s ON s.Id = m.SeasonId
+                              """;
+          
+          var meets = await connection.QueryAsync<Meet, Location, Season, Meet>(
+               sql,
+               (meet, location, season) =>
+               {
+                    meet.Location = location;
+                    meet.Season = season;
+                    return meet;
+               },
+               splitOn: "Id,Id");
+          
+          // Filter by slug
+          var slugHelper = new SlugHelper();
+          return meets.FirstOrDefault(m => slugHelper.GenerateSlug(m.Name) == slug);
+     }
+
+     public async Task<List<MeetPerformanceDto>> GetPerformancesForMeetAsync(int meetId)
+     {
+          using var connection = connectionFactory.CreateConnection();
+          
+          const string sql = """
+                              SELECT
+                                   p.Id as PerformanceId,
+                                   e.Id as EventId,
+                                   e.Name as EventName,
+                                   e.SortOrder as EventSortOrder,
+                                   e.EventCategory,
+                                   e.Gender as EventGender,
+                                   a.Id as AthleteId,
+                                   a.FirstName + ' ' + a.LastName as AthleteName,
+                                   p.TimeSeconds,
+                                   p.DistanceInches,
+                                   p.PersonalBest,
+                                   p.SchoolRecord,
+                                   p.SeasonBest,
+                                   lb.Rank as AllTimeRank
+                              FROM
+                                   Performances p
+                                   INNER JOIN Events e ON e.Id = p.EventId
+                                   LEFT JOIN Athletes a ON a.Id = p.AthleteId
+                                   LEFT JOIN Leaderboards lb ON lb.PerformanceId = p.Id
+                              WHERE
+                                   p.MeetId = @MeetId
+                              ORDER BY
+                                   e.Gender,
+                                   e.SortOrder,
+                                   CASE WHEN p.TimeSeconds IS NOT NULL THEN p.TimeSeconds ELSE 999999 END ASC,
+                                   p.DistanceInches DESC
+                              """;
+          
+          var performances = await connection.QueryAsync<MeetPerformanceDto>(sql, new { MeetId = meetId });
+          return performances.ToList();
+     }
 }

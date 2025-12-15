@@ -1,4 +1,4 @@
-using CloverleafTrack.ViewModels;
+using CloverleafTrack.ViewModels.Meets;
 
 namespace CloverleafTrack.Services.Interfaces;
 
