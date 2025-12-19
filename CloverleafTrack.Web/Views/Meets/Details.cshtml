@@ -3,7 +3,17 @@
 @{
     ViewBag.Title = Model.Name;
 }
+@functions {
+    bool IsRelay(string athleteName)
+    {
+        return athleteName?.Contains("|~|") ?? false;
+    }
 
+    string[] GetRelayAthletes(string athleteName)
+    {
+        return athleteName?.Split("|~|") ?? Array.Empty<string>();
+    }
+}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
     <!-- Meet Header -->
@@ -92,7 +102,21 @@
                                     @foreach (var perf in eventGroup.Performances)
                                     {
                                         <tr class="border-t border-gray-200 dark:border-gray-700">
-                                            <td class="px-3 py-2">@perf.AthleteName</td>
+                                            <td class="px-3 py-2">
+                                                @if (IsRelay(perf.AthleteName))
+                                                {
+                                                    <ul class="list-disc list-inside text-sm">
+                                                        @foreach (var athlete in GetRelayAthletes(perf.AthleteName))
+                                                        {
+                                                            <li>@athlete</li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    @perf.AthleteName
+                                                }
+                                            </td>
                                             <td class="px-3 py-2 font-mono font-semibold">@perf.Performance</td>
                                             <td class="px-3 py-2 text-center">
                                                 <div class="flex justify-center gap-1 flex-wrap">
@@ -162,7 +186,21 @@
                                     @foreach (var perf in eventGroup.Performances)
                                     {
                                         <tr class="border-t border-gray-200 dark:border-gray-700">
-                                            <td class="px-3 py-2">@perf.AthleteName</td>
+                                            <td class="px-3 py-2">
+                                                @if (IsRelay(perf.AthleteName))
+                                                {
+                                                    <ul class="list-disc list-inside text-sm">
+                                                        @foreach (var athlete in GetRelayAthletes(perf.AthleteName))
+                                                        {
+                                                            <li>@athlete</li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    @perf.AthleteName
+                                                }
+                                            </td>
                                             <td class="px-3 py-2 font-mono font-semibold">@perf.Performance</td>
                                             <td class="px-3 py-2 text-center">
                                                 <div class="flex justify-center gap-1 flex-wrap">

@@ -43,8 +43,8 @@ public class MeetService(IMeetRepository meetRepository) : IMeetService
             
             // Boys events
             BoysEvents = boysPerformances
-                .GroupBy(p => new { p.EventId, p.EventName, p.EventCategory, p.EventSortOrder })
-                .OrderBy(g => g.Key.EventSortOrder)
+                .GroupBy(p => new { p.EventId, p.EventName, p.EventCategory, p.EventCategorySortOrder, p.EventSortOrder })
+                .OrderBy(g => g.Key.EventCategorySortOrder).ThenBy(g => g.Key.EventSortOrder)
                 .Select(g => new MeetEventGroupViewModel
                 {
                     EventId = g.Key.EventId,
@@ -63,8 +63,8 @@ public class MeetService(IMeetRepository meetRepository) : IMeetService
             
             // Girls events
             GirlsEvents = girlsPerformances
-                .GroupBy(p => new { p.EventId, p.EventName, p.EventCategory, p.EventSortOrder })
-                .OrderBy(g => g.Key.EventSortOrder)
+                .GroupBy(p => new { p.EventId, p.EventName, p.EventCategory, p.EventCategorySortOrder, p.EventSortOrder })
+                .OrderBy(g => g.Key.EventCategorySortOrder).ThenBy(g => g.Key.EventSortOrder)
                 .Select(g => new MeetEventGroupViewModel
                 {
                     EventId = g.Key.EventId,

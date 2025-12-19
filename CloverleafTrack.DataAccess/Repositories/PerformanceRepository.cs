@@ -82,7 +82,8 @@ public class PerformanceRepository(IDbConnectionFactory connectionFactory) : IPe
                                    AND l.Rank <= 10
                               ORDER BY
                                    e.Environment,
-                                   e.Name,
+                                   e.EventCategorySortOrder,
+                                   e.SortOrder,
                                    l.Rank
                               """;
           

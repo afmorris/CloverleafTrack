@@ -19,4 +19,5 @@ public class MeetPerformanceDto
     public bool SchoolRecord { get; set; }
     public bool SeasonBest { get; set; }
     public int? AllTimeRank { get; set; }
+    public int EventCategorySortOrder { get; set; }
 }

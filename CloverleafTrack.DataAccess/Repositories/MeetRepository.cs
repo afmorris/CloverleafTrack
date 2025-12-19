@@ -103,7 +103,7 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    CASE 
                                         WHEN p.AthleteId IS NULL THEN 
                                              -- For relays, concatenate all athlete names
-                                             (SELECT STRING_AGG(a2.FirstName + ' ' + a2.LastName, ', ')
+                                             (SELECT STRING_AGG(a2.FirstName + ' ' + a2.LastName, '|~|')
                                              FROM PerformanceAthletes pa
                                              INNER JOIN Athletes a2 ON a2.Id = pa.AthleteId
                                              WHERE pa.PerformanceId = p.Id)
@@ -115,9 +115,12 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    p.PersonalBest,
                                    p.SchoolRecord,
                                    p.SeasonBest,
-                                   (SELECT MIN(lb.Rank) 
-                                   FROM Leaderboards lb 
-                                   WHERE lb.PerformanceId = p.Id) as AllTimeRank
+                                   (
+                                    SELECT MIN(lb.Rank) 
+                                    FROM Leaderboards lb 
+                                    WHERE lb.PerformanceId = p.Id
+                                   ) as AllTimeRank,
+                                   e.EventCategorySortOrder
                               FROM
                                    Performances p
                                    INNER JOIN Events e ON e.Id = p.EventId
@@ -126,6 +129,7 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    p.MeetId = @MeetId
                               ORDER BY
                                    e.Gender,
+                                   e.EventCategorySortOrder,
                                    e.SortOrder,
                                    CASE WHEN p.TimeSeconds IS NOT NULL THEN p.TimeSeconds ELSE 999999 END ASC,
                                    p.DistanceInches DESC
