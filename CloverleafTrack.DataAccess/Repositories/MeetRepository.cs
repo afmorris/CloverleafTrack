@@ -98,19 +98,30 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    e.SortOrder as EventSortOrder,
                                    e.EventCategory,
                                    e.Gender as EventGender,
+                                   e.EventType,
                                    a.Id as AthleteId,
-                                   a.FirstName + ' ' + a.LastName as AthleteName,
+                                   CASE 
+                                        WHEN p.AthleteId IS NULL THEN 
+                                             -- For relays, concatenate all athlete names
+                                             (SELECT STRING_AGG(a2.FirstName + ' ' + a2.LastName, ', ')
+                                             FROM PerformanceAthletes pa
+                                             INNER JOIN Athletes a2 ON a2.Id = pa.AthleteId
+                                             WHERE pa.PerformanceId = p.Id)
+                                        ELSE 
+                                             a.FirstName + ' ' + a.LastName
+                                   END as AthleteName,
                                    p.TimeSeconds,
                                    p.DistanceInches,
                                    p.PersonalBest,
                                    p.SchoolRecord,
                                    p.SeasonBest,
-                                   lb.Rank as AllTimeRank
+                                   (SELECT MIN(lb.Rank) 
+                                   FROM Leaderboards lb 
+                                   WHERE lb.PerformanceId = p.Id) as AllTimeRank
                               FROM
                                    Performances p
                                    INNER JOIN Events e ON e.Id = p.EventId
                                    LEFT JOIN Athletes a ON a.Id = p.AthleteId
-                                   LEFT JOIN Leaderboards lb ON lb.PerformanceId = p.Id
                               WHERE
                                    p.MeetId = @MeetId
                               ORDER BY

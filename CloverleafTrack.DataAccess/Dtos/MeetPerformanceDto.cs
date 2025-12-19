@@ -10,6 +10,7 @@ public class MeetPerformanceDto
     public int EventSortOrder { get; set; }
     public EventCategory EventCategory { get; set; }
     public Gender EventGender { get; set; }
+    public EventType EventType { get; set; }
     public int? AthleteId { get; set; }
     public string AthleteName { get; set; } = string.Empty;
     public double? TimeSeconds { get; set; }
