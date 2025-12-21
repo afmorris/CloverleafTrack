@@ -1,7 +1,9 @@
-﻿using CloverleafTrack.DataAccess.Interfaces;
+﻿using CloverleafTrack.DataAccess.Dtos;
+using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
 using CloverleafTrack.Models.Helpers;
 using Dapper;
+using Slugify;
 
 namespace CloverleafTrack.DataAccess.Repositories;
 
@@ -72,5 +74,56 @@ ORDER BY a.LastName, a.FirstName;
         var sql = "DELETE FROM Athletes WHERE Id = @Id";
         var rowsAffected = await connection.ExecuteAsync(sql, new { athlete.Id });
         return rowsAffected > 0;
+    }
+
+    public async Task<Athlete?> GetBySlugWithBasicInfoAsync(string slug)
+    {
+        using var connection = connectionFactory.CreateConnection();
+
+        const string sql = "SELECT * FROM Athletes";
+        var athletes = await connection.QueryAsync<Athlete>(sql);
+        
+        var slugHelper = new SlugHelper();
+        return athletes.FirstOrDefault(a => slugHelper.GenerateSlug($"{a.FirstName}-{a.LastName}") == slug);
+    }
+
+    public async Task<List<AthletePerformanceDto>> GetAllPerformancesForAthleteAsync(int athleteId)
+    {
+        using var connection = connectionFactory.CreateConnection();
+        
+        const string sql = """
+                        SELECT
+                                p.Id as PerformanceId,
+                                e.Id as EventId,
+                                e.Name as EventName,
+                                e.EventCategorySortOrder,
+                                e.EventType,
+                                e.Environment,
+                                p.TimeSeconds,
+                                p.DistanceInches,
+                                p.PersonalBest,
+                                p.SchoolRecord,
+                                p.SeasonBest,
+                                (SELECT MIN(lb.Rank) 
+                                FROM Leaderboards lb 
+                                WHERE lb.PerformanceId = p.Id) as AllTimeRank,
+                                m.Date as MeetDate,
+                                m.Name as MeetName,
+                                s.Name as SeasonName
+                        FROM
+                                Performances p
+                                INNER JOIN Events e ON e.Id = p.EventId
+                                INNER JOIN Meets m ON m.Id = p.MeetId
+                                INNER JOIN Seasons s ON s.Id = m.SeasonId
+                        WHERE
+                                p.AthleteId = @AthleteId
+                        ORDER BY
+                                s.StartDate DESC,
+                                e.EventCategorySortOrder,
+                                m.Date DESC
+                        """;
+        
+        var performances = await connection.QueryAsync<AthletePerformanceDto>(sql, new { AthleteId = athleteId });
+        return performances.ToList();
     }
 }

@@ -1,5 +1,6 @@
 using CloverleafTrack.Models.Enums;
 using CloverleafTrack.ViewModels;
+using CloverleafTrack.ViewModels.Athletes;
 
 namespace CloverleafTrack.Services.Interfaces
 {
@@ -13,5 +14,6 @@ namespace CloverleafTrack.Services.Interfaces
         Task<int> CreateAsync(AthleteViewModel athlete);
         Task<bool> UpdateAsync(AthleteViewModel athlete);
         Task<bool> DeleteAsync(int id);
+        Task<AthleteDetailsViewModel?> GetAthleteDetailsAsync(string slug, int currentSeason);
     }
 }

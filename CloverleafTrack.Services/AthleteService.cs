@@ -3,6 +3,7 @@ using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
 using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.ViewModels;
+using CloverleafTrack.ViewModels.Athletes;
 
 namespace CloverleafTrack.Services;
 
@@ -223,6 +224,154 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
         return await repository.DeleteAsync(athlete);
     }
 
+    public async Task<AthleteDetailsViewModel?> GetAthleteDetailsAsync(string slug, int currentSeason)
+    {
+        // Get athlete basic info
+        var athlete = await repository.GetBySlugWithBasicInfoAsync(slug);
+        if (athlete == null)
+        {
+            return null;
+        }
+        
+        // Get all performances
+        var performances = await repository.GetAllPerformancesForAthleteAsync(athlete.Id);
+        
+        if (!performances.Any())
+        {
+            // Return athlete with no performances
+            return new AthleteDetailsViewModel
+            {
+                AthleteId = athlete.Id,
+                FirstName = athlete.FirstName,
+                LastName = athlete.LastName,
+                GraduationYear = athlete.GraduationYear,
+                Gender = athlete.Gender,
+                Class = GraduationYearToClass(athlete.GraduationYear, currentSeason)
+            };
+        }
+        
+        // Get personal records (best performance per event)
+        var personalRecords = performances
+            .Where(p => p.PersonalBest)
+            .GroupBy(p => p.EventId)
+            .Select(g => g.OrderByDescending(p => p.MeetDate).First())
+            .Select(p => new PersonalRecordViewModel
+            {
+                EventId = p.EventId,
+                EventName = p.EventName,
+                Performance = FormatPerformance(p.TimeSeconds, p.DistanceInches),
+                Date = p.MeetDate,
+                MeetName = p.MeetName,
+                AllTimeRank = p.AllTimeRank,
+                EventCategorySortOrder = p.EventCategorySortOrder
+            })
+            .OrderBy(pr => pr.EventCategorySortOrder)
+            .ToList();
+        
+        // Get top events for hero section
+        var topSprintEvent = personalRecords
+            .Where(pr => pr.EventCategorySortOrder <= 30) // Sprints, Distance, Hurdles
+            .OrderBy(pr => pr.AllTimeRank ?? 999)
+            .FirstOrDefault();
+        
+        var topFieldEvent = personalRecords
+            .Where(pr => pr.EventCategorySortOrder >= 40) // Jumps, Throws
+            .OrderBy(pr => pr.AllTimeRank ?? 999)
+            .FirstOrDefault();
+        
+        // Group by season
+        var seasons = performances
+            .GroupBy(p => p.SeasonName)
+            .Select(seasonGroup => new SeasonPerformanceViewModel
+            {
+                SeasonName = seasonGroup.Key,
+                PRCount = seasonGroup.Count(p => p.PersonalBest),
+                SchoolRecordCount = seasonGroup.Count(p => p.SchoolRecord),
+                EventGroups = seasonGroup
+                    .GroupBy(p => new { p.EventId, p.EventName, p.EventCategorySortOrder, p.Environment })
+                    .Select(eventGroup =>
+                    {
+                        var prPerformance = eventGroup
+                            .Where(p => p.PersonalBest)
+                            .OrderByDescending(p => p.MeetDate)
+                            .FirstOrDefault();
+                        
+                        return new EventPerformanceGroupViewModel
+                        {
+                            EventId = eventGroup.Key.EventId,
+                            EventName = eventGroup.Key.EventName,
+                            Environment = eventGroup.Key.Environment,
+                            EventCategorySortOrder = eventGroup.Key.EventCategorySortOrder,
+                            PersonalRecordPerformance = prPerformance != null 
+                                ? FormatPerformance(prPerformance.TimeSeconds, prPerformance.DistanceInches)
+                                : "",
+                            PersonalRecordDate = prPerformance?.MeetDate ?? DateTime.MinValue,
+                            Performances = eventGroup
+                                .OrderByDescending(p => p.MeetDate)
+                                .Select(p => new IndividualPerformanceViewModel
+                                {
+                                    Performance = FormatPerformance(p.TimeSeconds, p.DistanceInches),
+                                    Date = p.MeetDate,
+                                    MeetName = p.MeetName,
+                                    IsPersonalBest = p.PersonalBest,
+                                    IsSchoolRecord = p.SchoolRecord,
+                                    IsSeasonBest = p.SeasonBest,
+                                    AllTimeRank = p.AllTimeRank
+                                })
+                                .ToList()
+                        };
+                    })
+                    .OrderBy(eg => eg.EventCategorySortOrder)
+                    .ToList()
+            })
+            .ToList();
+        
+        return new AthleteDetailsViewModel
+        {
+            AthleteId = athlete.Id,
+            FirstName = athlete.FirstName,
+            LastName = athlete.LastName,
+            GraduationYear = athlete.GraduationYear,
+            Gender = athlete.Gender,
+            Class = GraduationYearToClass(athlete.GraduationYear, currentSeason),
+            
+            // Hero stats
+            TopSprintEvent = topSprintEvent != null ? new AthleteTopEventViewModel
+            {
+                EventName = topSprintEvent.EventName,
+                Performance = topSprintEvent.Performance,
+                AllTimeRank = topSprintEvent.AllTimeRank
+            } : null,
+            TopFieldEvent = topFieldEvent != null ? new AthleteTopEventViewModel
+            {
+                EventName = topFieldEvent.EventName,
+                Performance = topFieldEvent.Performance,
+                AllTimeRank = topFieldEvent.AllTimeRank
+            } : null,
+            TotalPRs = performances.Count(p => p.PersonalBest),
+            TotalSchoolRecords = performances.Count(p => p.SchoolRecord),
+            
+            PersonalRecords = personalRecords,
+            Seasons = seasons
+        };
+    }
+
+    private string FormatPerformance(double? timeSeconds, double? distanceInches)
+    {
+        if (timeSeconds.HasValue)
+        {
+            return FormatTime(timeSeconds.Value);
+        }
+        else if (distanceInches.HasValue)
+        {
+            return FormatDistance(distanceInches.Value);
+        }
+        else
+        {
+            return "N/A";
+        }
+    }
+
     private AthleteViewModel MapToViewModel(Athlete a) => new()
     {
         Id = a.Id,
@@ -251,7 +400,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             2 => "Sophomore",
             1 => "Junior",
             0 => "Senior",
-            _ => "Graduate"
+            _ => $"{gradYear} Graduate"
         };
     }
     
