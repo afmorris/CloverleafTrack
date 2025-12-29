@@ -1,9 +1,9 @@
 @using Environment = CloverleafTrack.Models.Enums.Environment
 @model AthleteViewModel
 
-<div class="bg-white dark:bg-gray-800 p-4 rounded shadow-md hover:shadow-green-900 transition-shadow">
-    <h3 class="text-lg font-bold">@Model.FullName</h3>
-    <p class="text-sm text-gray-500 mb-2">@Model.Class</p>
+<a href="/roster/@Model.AthleteSlug" class="block bg-white dark:bg-gray-800 p-4 rounded shadow-md hover:shadow-lg hover:shadow-green-900 dark:hover:shadow-green-700 transition-all transform hover:-translate-y-1">
+    <h3 class="text-lg font-bold text-gray-900 dark:text-white">@Model.FullName</h3>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">@Model.Class</p>
 
     <ul class="text-sm space-y-1">
         @foreach (var e in Model.EventsInCategory.OrderBy(x => x.SortOrder))
@@ -23,9 +23,9 @@
                         <path fill-rule="evenodd" d="M12 2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V3A.75.75 0 0112 2.25zM17.47 4.53a.75.75 0 011.06 1.06l-1.06 1.06a.75.75 0 11-1.06-1.06l1.06-1.06zM21.75 12a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.47 19.47a.75.75 0 00-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM12 20.25a.75.75 0 01-.75-.75v-1.5a.75.75 0 011.5 0v1.5a.75.75 0 01-.75.75zM6.53 19.47a.75.75 0 001.06-1.06L6.53 17.35a.75.75 0 00-1.06 1.06l1.06 1.06zM2.25 12a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5H3a.75.75 0 01-.75-.75zM6.53 4.53a.75.75 0 00-1.06 1.06L6.53 6.65a.75.75 0 001.06-1.06L6.53 4.53zM12 6.75a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5z" clip-rule="evenodd" />
                     </svg>
                 }
-                <span class="font-medium">@e.Name</span>
+                <span class="font-medium text-gray-900 dark:text-white">@e.Name</span>
                 <span class="ml-2 text-xs text-gray-400">(PR: @e.PersonalRecord)</span>
             </li>
         }
     </ul>
-</div>
+</a>

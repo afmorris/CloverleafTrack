@@ -18,5 +18,17 @@ public class RosterController(IAthleteService athleteService, ISeasonService sea
         return View(vm);
     }
 
-    
+    [HttpGet("/roster/{slug}")]
+    public async Task<IActionResult> Details(string slug)
+    {
+        var currentSeason = await seasonService.GetCurrentSeasonAsync();
+        var vm = await athleteService.GetAthleteDetailsAsync(slug, currentSeason);
+
+        if (vm == null)
+        {
+            return NotFound();
+        }
+
+        return View(vm);
+    }
 }

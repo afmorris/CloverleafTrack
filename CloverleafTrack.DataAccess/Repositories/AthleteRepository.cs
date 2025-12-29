@@ -97,6 +97,7 @@ ORDER BY a.LastName, a.FirstName;
                                 e.Id as EventId,
                                 e.Name as EventName,
                                 e.EventCategorySortOrder,
+                                e.SortOrder as EventSortOrder,
                                 e.EventType,
                                 e.Environment,
                                 p.TimeSeconds,

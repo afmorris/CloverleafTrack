@@ -260,12 +260,16 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                 EventId = p.EventId,
                 EventName = p.EventName,
                 Performance = FormatPerformance(p.TimeSeconds, p.DistanceInches),
+                Environment = p.Environment,
                 Date = p.MeetDate,
                 MeetName = p.MeetName,
                 AllTimeRank = p.AllTimeRank,
-                EventCategorySortOrder = p.EventCategorySortOrder
+                EventCategorySortOrder = p.EventCategorySortOrder,
+                EventSortOrder = p.EventSortOrder
             })
-            .OrderBy(pr => pr.EventCategorySortOrder)
+            .OrderBy(pr => pr.Environment)
+            .ThenBy(pr => pr.EventCategorySortOrder)
+            .ThenBy(pr => pr.EventSortOrder)
             .ToList();
         
         // Get top events for hero section
