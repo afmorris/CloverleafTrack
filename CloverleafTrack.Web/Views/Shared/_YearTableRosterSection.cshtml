@@ -1,4 +1,5 @@
-﻿@model KeyValuePair<int, List<AthleteViewModel>>
+﻿@using Slugify
+@model KeyValuePair<int, List<AthleteViewModel>>
 
 @{
     var year = Model.Key;
@@ -41,7 +42,15 @@
                         x-transition
                         :data-name="fullName"
                     >
-                        <td class="py-1 pr-4">@athlete.FullName</td>
+                        <td class="py-1 pr-4">
+                            @{
+                                var helper = new SlugHelper();
+                                var slug = helper.GenerateSlug($"{athlete.FirstName}-{athlete.LastName}");
+                            }
+                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@slug" class="underline">
+                                @athlete.FullName
+                            </a>
+                        </td>
                         <td class="py-1 pr-4">@string.Join(", ", athlete.EventsInCategory.Select(e => e.Name))</td>
                         <td class="py-1">@string.Join(", ", athlete.EventsInCategory.Select(e => e.PersonalRecord))</td>
                     </tr>

@@ -37,7 +37,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
     {
         var athletesWithPerformances = await repository.GetAllWithPerformancesAsync();
         var result = new Dictionary<EventCategory, List<AthleteViewModel>>();
-        
+
         // Step 1: Build PR lookup using updated POCO
         var prLookup = athletesWithPerformances
             .GroupBy(p => (p.Athlete.Id, p.Event.Id))
@@ -90,7 +90,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                         {
                             var ev = g.First().Event;
                             var key = (first.Athlete.Id, ev.Id);
-                            
+
                             var pr = prLookup.GetValueOrDefault(key, "N/A");
 
                             return new EventParticipationViewModel
@@ -124,11 +124,11 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
 
         return result;
     }
-    
+
     public async Task<Dictionary<int, List<AthleteViewModel>>> GetFormerAthletesGroupedByGraduationYearAsync()
     {
         var athletesWithPerformances = await repository.GetAllWithPerformancesAsync();
-        
+
         var inactiveAthletes = athletesWithPerformances.Where(x => !x.Athlete.IsActive).ToList();
 
         var prLookup = inactiveAthletes
@@ -232,10 +232,10 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
         {
             return null;
         }
-        
+
         // Get all performances
         var performances = await repository.GetAllPerformancesForAthleteAsync(athlete.Id);
-        
+
         if (!performances.Any())
         {
             // Return athlete with no performances
@@ -249,7 +249,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                 Class = GraduationYearToClass(athlete.GraduationYear, currentSeason)
             };
         }
-        
+
         // Get personal records (best performance per event)
         var personalRecords = performances
             .Where(p => p.PersonalBest)
@@ -271,18 +271,18 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             .ThenBy(pr => pr.EventCategorySortOrder)
             .ThenBy(pr => pr.EventSortOrder)
             .ToList();
-        
+
         // Get top events for hero section
         var topSprintEvent = personalRecords
             .Where(pr => pr.EventCategorySortOrder <= 30) // Sprints, Distance, Hurdles
             .OrderBy(pr => pr.AllTimeRank ?? 999)
             .FirstOrDefault();
-        
+
         var topFieldEvent = personalRecords
             .Where(pr => pr.EventCategorySortOrder >= 40) // Jumps, Throws
             .OrderBy(pr => pr.AllTimeRank ?? 999)
             .FirstOrDefault();
-        
+
         // Group by season
         var seasons = performances
             .GroupBy(p => p.SeasonName)
@@ -292,21 +292,21 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                 PRCount = seasonGroup.Count(p => p.PersonalBest),
                 SchoolRecordCount = seasonGroup.Count(p => p.SchoolRecord),
                 EventGroups = seasonGroup
-                    .GroupBy(p => new { p.EventId, p.EventName, p.EventCategorySortOrder, p.Environment })
+                    .GroupBy(p => new { p.EventId, p.EventName, p.EventCategorySortOrder, p.EventSortOrder, p.Environment })
+                    .OrderBy(eg => eg.Key.EventCategorySortOrder)
+                    .ThenBy(eg => eg.Key.EventSortOrder)
                     .Select(eventGroup =>
                     {
                         var prPerformance = eventGroup
                             .Where(p => p.PersonalBest)
                             .OrderByDescending(p => p.MeetDate)
                             .FirstOrDefault();
-                        
+
                         return new EventPerformanceGroupViewModel
                         {
-                            EventId = eventGroup.Key.EventId,
                             EventName = eventGroup.Key.EventName,
                             Environment = eventGroup.Key.Environment,
-                            EventCategorySortOrder = eventGroup.Key.EventCategorySortOrder,
-                            PersonalRecordPerformance = prPerformance != null 
+                            PersonalRecordPerformance = prPerformance != null
                                 ? FormatPerformance(prPerformance.TimeSeconds, prPerformance.DistanceInches)
                                 : "",
                             PersonalRecordDate = prPerformance?.MeetDate ?? DateTime.MinValue,
@@ -325,11 +325,10 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                                 .ToList()
                         };
                     })
-                    .OrderBy(eg => eg.EventCategorySortOrder)
                     .ToList()
             })
             .ToList();
-        
+
         return new AthleteDetailsViewModel
         {
             AthleteId = athlete.Id,
@@ -338,7 +337,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             GraduationYear = athlete.GraduationYear,
             Gender = athlete.Gender,
             Class = GraduationYearToClass(athlete.GraduationYear, currentSeason),
-            
+
             // Hero stats
             TopSprintEvent = topSprintEvent != null ? new AthleteTopEventViewModel
             {
@@ -354,7 +353,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             } : null,
             TotalPRs = performances.Count(p => p.PersonalBest),
             TotalSchoolRecords = performances.Count(p => p.SchoolRecord),
-            
+
             PersonalRecords = personalRecords,
             Seasons = seasons
         };
@@ -393,7 +392,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
         GraduationYear = vm.GraduationYear,
         Gender = vm.Gender
     };
-    
+
     private string GraduationYearToClass(int gradYear, int currentSeason)
     {
         var diff = gradYear - currentSeason;
@@ -407,7 +406,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             _ => $"{gradYear} Graduate"
         };
     }
-    
+
     private string FormatDistance(double inches)
     {
         var feet = Math.Floor(inches / 12);

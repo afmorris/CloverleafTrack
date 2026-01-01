@@ -1,3 +1,4 @@
+@using Slugify
 @model MeetDetailsViewModel
 
 @{
@@ -108,13 +109,31 @@
                                                     <ul class="list-disc list-inside text-sm">
                                                         @foreach (var athlete in GetRelayAthletes(perf.AthleteName))
                                                         {
-                                                            <li>@athlete</li>
+                                                            var split = athlete.Split(' ');
+                                                            var firstName = split[0];
+                                                            var lastName = split[1];
+                                                            var helper = new SlugHelper();
+                                                            var slug = helper.GenerateSlug($"{firstName}-{lastName}");
+                            
+                                                            <li>
+                                                                <a asp-controller="Roster" asp-action="Details" asp-route-slug="@slug" class="underline">
+                                                                    @athlete
+                                                                </a>
+                                                            </li>
                                                         }
                                                     </ul>
                                                 }
                                                 else
                                                 {
-                                                    @perf.AthleteName
+                                                    var split = perf.AthleteName.Split(' ');
+                                                    var firstName = split[0];
+                                                    var lastName = split[1];
+                                                    var helper = new SlugHelper();
+                                                    var slug = helper.GenerateSlug($"{firstName}-{lastName}");
+
+                                                    <a asp-controller="Roster" asp-action="Details" asp-route-slug="@slug" class="underline">
+                                                        @perf.AthleteName
+                                                    </a>
                                                 }
                                             </td>
                                             <td class="px-3 py-2 font-mono font-semibold">@perf.Performance</td>
@@ -192,13 +211,31 @@
                                                     <ul class="list-disc list-inside text-sm">
                                                         @foreach (var athlete in GetRelayAthletes(perf.AthleteName))
                                                         {
-                                                            <li>@athlete</li>
+                                                            var split = athlete.Split(' ');
+                                                            var firstName = split[0];
+                                                            var lastName = split[1];
+                                                            var helper = new SlugHelper();
+                                                            var slug = helper.GenerateSlug($"{firstName}-{lastName}");
+
+                                                            <li>
+                                                                <a asp-controller="Roster" asp-action="Details" asp-route-slug="@slug" class="underline">
+                                                                    @athlete
+                                                                </a>
+                                                            </li>
                                                         }
                                                     </ul>
                                                 }
                                                 else
                                                 {
-                                                    @perf.AthleteName
+                                                    var split = perf.AthleteName.Split(' ');
+                                                    var firstName = split[0];
+                                                    var lastName = split[1];
+                                                    var helper = new SlugHelper();
+                                                    var slug = helper.GenerateSlug($"{firstName}-{lastName}");
+
+                                                    <a asp-controller="Roster" asp-action="Details" asp-route-slug="@slug" class="underline">
+                                                        @perf.AthleteName
+                                                    </a>
                                                 }
                                             </td>
                                             <td class="px-3 py-2 font-mono font-semibold">@perf.Performance</td>
