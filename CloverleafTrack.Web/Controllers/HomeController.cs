@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using CloverleafTrack.Services.Interfaces;
 
 namespace CloverleafTrack.Web.Controllers;
 
-public class HomeController(ILogger<HomeController> logger) : Controller
+public class HomeController(IHomeService homeService) : Controller
 {
-    private readonly ILogger<HomeController> logger = logger;
-
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var viewModel = await homeService.GetHomePageDataAsync();
+        return View(viewModel);
     }
 }
