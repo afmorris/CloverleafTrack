@@ -8,11 +8,6 @@ public class MeetsController(ILogger<MeetsController> logger, IMeetService meetS
     private readonly ILogger<MeetsController> logger = logger;
     private readonly IMeetService meetService = meetService;
     
-    public IActionResult Index()
-    {
-        return View();
-    }
-
     [HttpGet("/meets/{name}")]
     public async Task<IActionResult> Details(string name)
     {

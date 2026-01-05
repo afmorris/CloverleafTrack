@@ -1,3 +1,5 @@
+using Environment = CloverleafTrack.Models.Enums.Environment;
+
 namespace CloverleafTrack.DataAccess.Dtos;
 
 public class ImprovementDto
@@ -10,4 +12,5 @@ public class ImprovementDto
     public double? PreviousDistanceInches { get; set; }
     public double? CurrentTimeSeconds { get; set; }
     public double? CurrentDistanceInches { get; set; }
+    public Environment Environment { get; set; }
 }

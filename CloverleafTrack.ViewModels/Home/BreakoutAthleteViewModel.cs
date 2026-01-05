@@ -1,3 +1,5 @@
+using Environment = CloverleafTrack.Models.Enums.Environment;
+
 namespace CloverleafTrack.ViewModels.Home;
 
 public class BreakoutAthleteViewModel
@@ -8,4 +10,5 @@ public class BreakoutAthleteViewModel
     public string Slug { get; set; } = string.Empty;
     public int PRCount { get; set; }
     public string Class { get; set; } = string.Empty;
+    public Environment Environment { get; set; }
 }

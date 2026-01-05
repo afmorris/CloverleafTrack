@@ -34,8 +34,12 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
             Name = season.Name,
             Status = season.Status,
             Notes = season.Notes,
+            IsCurrentSeason = season.IsCurrentSeason,
             TotalMeets = season.Meets.Count,
             MeetsEntered = season.Meets.Count(m => m.EntryStatus == MeetEntryStatus.Entered),
+            TotalPRs = season.Meets
+                .SelectMany(m => m.Performances)
+                .Count(p => p.PersonalBest),
             IndoorSchoolRecords = season.Meets
                 .Where(m => m.Environment == Environment.Indoor)
                 .SelectMany(m => m.Performances)
@@ -96,7 +100,7 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
             TotalAthletesWithPRs = totalAthletesWithPRs,
             TotalSchoolRecordsBroken = totalSchoolRecordsBroken,
             TotalMeets = meets.Count,
-            
+
             Meets = meets.Select(m => new SeasonMeetViewModel
             {
                 MeetDate = m.Date,
@@ -106,7 +110,7 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
                 SchoolRecordCount = m.SchoolRecordCount,
                 ResultsUrl = m.ResultsUrl
             }).ToList(),
-            
+
             IndoorTopPerformances = topPerformances
                 .Where(x => x.Environment == Environment.Indoor)
                 .Select(x => new TopPerformanceViewModel
@@ -142,10 +146,10 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
                 }).ToList()
         };
     }
-    
+
     private string FormatPerformance(Performance p)
     {
-        if (p.Event.EventType is EventType.Field or EventType.FieldRelay)
+        if (p.Event.EventType is EventType.Field or EventType.FieldRelay or EventType.JumpRelay or EventType.ThrowsRelay)
         {
             return p.DistanceInches.HasValue
                 ? FormatDistance(p.DistanceInches.Value)

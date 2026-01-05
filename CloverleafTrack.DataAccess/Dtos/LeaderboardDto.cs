@@ -12,6 +12,7 @@ public class LeaderboardDto
     public EventCategory EventCategory { get; set; }
     public int EventCategorySortOrder { get; set; }
     public int EventSortOrder { get; set; }
+    public EventType EventType { get; set; }
     public Gender Gender { get; set; }
     public Environment Environment { get; set; }
 

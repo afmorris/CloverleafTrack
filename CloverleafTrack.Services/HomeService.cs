@@ -17,7 +17,7 @@ public class HomeService(
         // Get current season
         var allSeasons = await seasonRepository.GetAllAsync();
         var currentSeason = allSeasons.FirstOrDefault(s => s.IsCurrentSeason);
-        
+
         if (currentSeason == null)
         {
             throw new InvalidOperationException("No current season found.");
@@ -52,61 +52,119 @@ public class HomeService(
             };
         }
 
-        // Get recent top performance
-        var topPerf = await homeRepository.GetRecentTopPerformanceAsync(currentSeason.Id);
-        if (topPerf != null)
+        // Get recent top performance - Outdoor
+        var outdoorTopPerf = await homeRepository.GetRecentTopPerformanceAsync(currentSeason.Id, CloverleafTrack.Models.Enums.Environment.Outdoor);
+        if (outdoorTopPerf != null)
         {
-            viewModel.TopPerformance = new RecentHighlightViewModel
+            viewModel.OutdoorTopPerformance = new RecentHighlightViewModel
             {
-                Performance = FormatPerformance(topPerf.TimeSeconds, topPerf.DistanceInches),
-                EventName = topPerf.EventName,
-                AthleteFirstName = topPerf.AthleteFirstName,
-                AthleteLastName = topPerf.AthleteLastName,
-                AthleteSlug = _slugHelper.GenerateSlug($"{topPerf.AthleteFirstName}-{topPerf.AthleteLastName}"),
-                MeetName = topPerf.MeetName,
-                Date = topPerf.Date,
-                IsPersonalBest = topPerf.IsPersonalBest,
-                IsSchoolRecord = topPerf.IsSchoolRecord
+                Performance = FormatPerformance(outdoorTopPerf.TimeSeconds, outdoorTopPerf.DistanceInches),
+                EventName = outdoorTopPerf.EventName,
+                AthleteFirstName = outdoorTopPerf.AthleteFirstName,
+                AthleteLastName = outdoorTopPerf.AthleteLastName,
+                AthleteSlug = _slugHelper.GenerateSlug($"{outdoorTopPerf.AthleteFirstName}-{outdoorTopPerf.AthleteLastName}"),
+                MeetName = outdoorTopPerf.MeetName,
+                Date = outdoorTopPerf.Date,
+                IsPersonalBest = outdoorTopPerf.IsPersonalBest,
+                IsSchoolRecord = outdoorTopPerf.IsSchoolRecord,
+                Environment = outdoorTopPerf.Environment
             };
         }
 
-        // Get biggest improvement
-        var improvement = await homeRepository.GetBiggestImprovementThisSeasonAsync(currentSeason.Id);
-        if (improvement != null)
+        // Get recent top performance - Indoor
+        var indoorTopPerf = await homeRepository.GetRecentTopPerformanceAsync(currentSeason.Id, CloverleafTrack.Models.Enums.Environment.Indoor);
+        if (indoorTopPerf != null)
+        {
+            viewModel.IndoorTopPerformance = new RecentHighlightViewModel
+            {
+                Performance = FormatPerformance(indoorTopPerf.TimeSeconds, indoorTopPerf.DistanceInches),
+                EventName = indoorTopPerf.EventName,
+                AthleteFirstName = indoorTopPerf.AthleteFirstName,
+                AthleteLastName = indoorTopPerf.AthleteLastName,
+                AthleteSlug = _slugHelper.GenerateSlug($"{indoorTopPerf.AthleteFirstName}-{indoorTopPerf.AthleteLastName}"),
+                MeetName = indoorTopPerf.MeetName,
+                Date = indoorTopPerf.Date,
+                IsPersonalBest = indoorTopPerf.IsPersonalBest,
+                IsSchoolRecord = indoorTopPerf.IsSchoolRecord,
+                Environment = indoorTopPerf.Environment
+            };
+        }
+
+        // Get biggest improvement - Outdoor
+        var outdoorImprovement = await homeRepository.GetBiggestImprovementThisSeasonAsync(currentSeason.Id, CloverleafTrack.Models.Enums.Environment.Outdoor);
+        if (outdoorImprovement != null)
         {
             var currentYear = await GetCurrentSeasonYearAsync();
-            
-            viewModel.BiggestImprovement = new ImprovementViewModel
+
+            viewModel.OutdoorBiggestImprovement = new ImprovementViewModel
             {
-                EventName = improvement.EventName,
-                AthleteFirstName = improvement.AthleteFirstName,
-                AthleteLastName = improvement.AthleteLastName,
-                AthleteSlug = _slugHelper.GenerateSlug($"{improvement.AthleteFirstName}-{improvement.AthleteLastName}"),
-                ImprovementDisplay = FormatImprovement(improvement.ImprovementAmount),
-                PreviousPerformance = FormatPerformance(improvement.PreviousTimeSeconds, improvement.PreviousDistanceInches),
-                CurrentPerformance = FormatPerformance(improvement.CurrentTimeSeconds, improvement.CurrentDistanceInches)
+                EventName = outdoorImprovement.EventName,
+                AthleteFirstName = outdoorImprovement.AthleteFirstName,
+                AthleteLastName = outdoorImprovement.AthleteLastName,
+                AthleteSlug = _slugHelper.GenerateSlug($"{outdoorImprovement.AthleteFirstName}-{outdoorImprovement.AthleteLastName}"),
+                ImprovementDisplay = FormatImprovement(outdoorImprovement.ImprovementAmount),
+                PreviousPerformance = FormatPerformance(outdoorImprovement.PreviousTimeSeconds, outdoorImprovement.PreviousDistanceInches),
+                CurrentPerformance = FormatPerformance(outdoorImprovement.CurrentTimeSeconds, outdoorImprovement.CurrentDistanceInches),
+                Environment = outdoorImprovement.Environment
             };
         }
 
-        // Get breakout athlete
-        var breakout = await homeRepository.GetBreakoutAthleteAsync(currentSeason.Id);
-        if (breakout != null)
+        // Get biggest improvement - Indoor
+        var indoorImprovement = await homeRepository.GetBiggestImprovementThisSeasonAsync(currentSeason.Id, CloverleafTrack.Models.Enums.Environment.Indoor);
+        if (indoorImprovement != null)
         {
             var currentYear = await GetCurrentSeasonYearAsync();
-            
-            viewModel.BreakoutAthlete = new BreakoutAthleteViewModel
+
+            viewModel.IndoorBiggestImprovement = new ImprovementViewModel
             {
-                FirstName = breakout.FirstName,
-                LastName = breakout.LastName,
-                Slug = _slugHelper.GenerateSlug($"{breakout.FirstName}-{breakout.LastName}"),
-                PRCount = breakout.PRCount,
-                Class = GraduationYearToClass(breakout.GraduationYear, currentYear)
+                EventName = indoorImprovement.EventName,
+                AthleteFirstName = indoorImprovement.AthleteFirstName,
+                AthleteLastName = indoorImprovement.AthleteLastName,
+                AthleteSlug = _slugHelper.GenerateSlug($"{indoorImprovement.AthleteFirstName}-{indoorImprovement.AthleteLastName}"),
+                ImprovementDisplay = FormatImprovement(indoorImprovement.ImprovementAmount),
+                PreviousPerformance = FormatPerformance(indoorImprovement.PreviousTimeSeconds, indoorImprovement.PreviousDistanceInches),
+                CurrentPerformance = FormatPerformance(indoorImprovement.CurrentTimeSeconds, indoorImprovement.CurrentDistanceInches),
+                Environment = indoorImprovement.Environment
             };
         }
 
-        // Get season leaders for boys
-        var boysLeaders = await homeRepository.GetSeasonLeadersAsync(Gender.Male, currentSeason.Id);
-        viewModel.BoysLeaders = boysLeaders.Select(l => new SeasonLeaderViewModel
+        // Get breakout athlete - Outdoor
+        var outdoorBreakout = await homeRepository.GetBreakoutAthleteAsync(currentSeason.Id, CloverleafTrack.Models.Enums.Environment.Outdoor);
+        if (outdoorBreakout != null)
+        {
+            var currentYear = await GetCurrentSeasonYearAsync();
+
+            viewModel.OutdoorBreakoutAthlete = new BreakoutAthleteViewModel
+            {
+                FirstName = outdoorBreakout.FirstName,
+                LastName = outdoorBreakout.LastName,
+                Slug = _slugHelper.GenerateSlug($"{outdoorBreakout.FirstName}-{outdoorBreakout.LastName}"),
+                PRCount = outdoorBreakout.PRCount,
+                Class = GraduationYearToClass(outdoorBreakout.GraduationYear, currentYear),
+                Environment = outdoorBreakout.Environment
+            };
+        }
+
+        // Get breakout athlete - Indoor
+        var indoorBreakout = await homeRepository.GetBreakoutAthleteAsync(currentSeason.Id, CloverleafTrack.Models.Enums.Environment.Indoor);
+        if (indoorBreakout != null)
+        {
+            var currentYear = await GetCurrentSeasonYearAsync();
+
+            viewModel.IndoorBreakoutAthlete = new BreakoutAthleteViewModel
+            {
+                FirstName = indoorBreakout.FirstName,
+                LastName = indoorBreakout.LastName,
+                Slug = _slugHelper.GenerateSlug($"{indoorBreakout.FirstName}-{indoorBreakout.LastName}"),
+                PRCount = indoorBreakout.PRCount,
+                Class = GraduationYearToClass(indoorBreakout.GraduationYear, currentYear),
+                Environment = indoorBreakout.Environment
+            };
+        }
+
+        // Get season leaders - Boys Outdoor
+        var boysOutdoorLeaders = await homeRepository.GetSeasonLeadersAsync(Gender.Male, currentSeason.Id, CloverleafTrack.Models.Enums.Environment.Outdoor);
+        viewModel.BoysOutdoorLeaders = boysOutdoorLeaders.Select(l => new SeasonLeaderViewModel
         {
             EventName = l.EventName,
             Performance = FormatPerformance(l.TimeSeconds, l.DistanceInches),
@@ -116,9 +174,33 @@ public class HomeService(
             AllTimeRank = l.AllTimeRank
         }).ToList();
 
-        // Get season leaders for girls
-        var girlsLeaders = await homeRepository.GetSeasonLeadersAsync(Gender.Female, currentSeason.Id);
-        viewModel.GirlsLeaders = girlsLeaders.Select(l => new SeasonLeaderViewModel
+        // Get season leaders - Boys Indoor
+        var boysIndoorLeaders = await homeRepository.GetSeasonLeadersAsync(Gender.Male, currentSeason.Id, CloverleafTrack.Models.Enums.Environment.Indoor);
+        viewModel.BoysIndoorLeaders = boysIndoorLeaders.Select(l => new SeasonLeaderViewModel
+        {
+            EventName = l.EventName,
+            Performance = FormatPerformance(l.TimeSeconds, l.DistanceInches),
+            AthleteFirstName = l.AthleteFirstName,
+            AthleteLastName = l.AthleteLastName,
+            AthleteSlug = _slugHelper.GenerateSlug($"{l.AthleteFirstName}-{l.AthleteLastName}"),
+            AllTimeRank = l.AllTimeRank
+        }).ToList();
+
+        // Get season leaders - Girls Outdoor
+        var girlsOutdoorLeaders = await homeRepository.GetSeasonLeadersAsync(Gender.Female, currentSeason.Id, CloverleafTrack.Models.Enums.Environment.Outdoor);
+        viewModel.GirlsOutdoorLeaders = girlsOutdoorLeaders.Select(l => new SeasonLeaderViewModel
+        {
+            EventName = l.EventName,
+            Performance = FormatPerformance(l.TimeSeconds, l.DistanceInches),
+            AthleteFirstName = l.AthleteFirstName,
+            AthleteLastName = l.AthleteLastName,
+            AthleteSlug = _slugHelper.GenerateSlug($"{l.AthleteFirstName}-{l.AthleteLastName}"),
+            AllTimeRank = l.AllTimeRank
+        }).ToList();
+
+        // Get season leaders - Girls Indoor
+        var girlsIndoorLeaders = await homeRepository.GetSeasonLeadersAsync(Gender.Female, currentSeason.Id, CloverleafTrack.Models.Enums.Environment.Indoor);
+        viewModel.GirlsIndoorLeaders = girlsIndoorLeaders.Select(l => new SeasonLeaderViewModel
         {
             EventName = l.EventName,
             Performance = FormatPerformance(l.TimeSeconds, l.DistanceInches),

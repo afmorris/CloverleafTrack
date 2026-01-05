@@ -12,6 +12,8 @@ public class SeasonCardViewModel
 
     public int TotalMeets { get; set; }
     public int MeetsEntered { get; set; }
+    public int TotalPRs { get; set; }  // NEW - for stats cards
+    public bool IsCurrentSeason { get; set; }  // NEW - to highlight current season
 
     public List<MeetSummaryViewModel> Meets { get; set; } = new();
 
@@ -20,4 +22,8 @@ public class SeasonCardViewModel
     public List<SchoolRecordViewModel>? OutdoorSchoolRecords { get; set; }
 
     public string StatusBadge => Status.ToString();
+
+    // Computed properties for display
+    public int IndoorSchoolRecordCount => IndoorSchoolRecords?.Count ?? 0;
+    public int OutdoorSchoolRecordCount => OutdoorSchoolRecords?.Count ?? 0;
 }

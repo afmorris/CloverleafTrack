@@ -1,3 +1,5 @@
+using Environment = CloverleafTrack.Models.Enums.Environment;
+
 namespace CloverleafTrack.DataAccess.Dtos;
 
 public class RecentHighlightDto
@@ -11,4 +13,5 @@ public class RecentHighlightDto
     public DateTime Date { get; set; }
     public bool IsPersonalBest { get; set; }
     public bool IsSchoolRecord { get; set; }
+    public Environment Environment { get; set; }
 }

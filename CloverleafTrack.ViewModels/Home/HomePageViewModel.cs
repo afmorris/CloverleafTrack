@@ -11,19 +11,28 @@ public class HomePageViewModel
     public int ActiveAthletes { get; set; }
     public int MeetsCompleted { get; set; }
     public int TotalMeetsThisSeason { get; set; }
-    
+
     // On This Day
     public OnThisDayViewModel? OnThisDay { get; set; }
-    
-    // Recent Highlights
-    public RecentHighlightViewModel? TopPerformance { get; set; }
-    public ImprovementViewModel? BiggestImprovement { get; set; }
-    public BreakoutAthleteViewModel? BreakoutAthlete { get; set; }
-    
-    // Season Leaders
-    public List<SeasonLeaderViewModel> BoysLeaders { get; set; } = new();
-    public List<SeasonLeaderViewModel> GirlsLeaders { get; set; } = new();
-    
+
+    // Recent Highlights - Outdoor
+    public RecentHighlightViewModel? OutdoorTopPerformance { get; set; }
+    public ImprovementViewModel? OutdoorBiggestImprovement { get; set; }
+    public BreakoutAthleteViewModel? OutdoorBreakoutAthlete { get; set; }
+
+    // Recent Highlights - Indoor
+    public RecentHighlightViewModel? IndoorTopPerformance { get; set; }
+    public ImprovementViewModel? IndoorBiggestImprovement { get; set; }
+    public BreakoutAthleteViewModel? IndoorBreakoutAthlete { get; set; }
+
+    // Season Leaders - Outdoor
+    public List<SeasonLeaderViewModel> BoysOutdoorLeaders { get; set; } = new();
+    public List<SeasonLeaderViewModel> GirlsOutdoorLeaders { get; set; } = new();
+
+    // Season Leaders - Indoor
+    public List<SeasonLeaderViewModel> BoysIndoorLeaders { get; set; } = new();
+    public List<SeasonLeaderViewModel> GirlsIndoorLeaders { get; set; } = new();
+
     // Upcoming Meets
     public List<UpcomingMeetViewModel> UpcomingMeets { get; set; } = new();
 }

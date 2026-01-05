@@ -1,3 +1,5 @@
+using Environment = CloverleafTrack.Models.Enums.Environment;
+
 namespace CloverleafTrack.ViewModels.Home;
 
 public class ImprovementViewModel
@@ -10,4 +12,5 @@ public class ImprovementViewModel
     public string ImprovementDisplay { get; set; } = string.Empty;
     public string PreviousPerformance { get; set; } = string.Empty;
     public string CurrentPerformance { get; set; } = string.Empty;
+    public Environment Environment { get; set; }
 }

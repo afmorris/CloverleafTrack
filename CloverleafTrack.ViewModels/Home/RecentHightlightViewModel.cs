@@ -1,3 +1,5 @@
+using Environment = CloverleafTrack.Models.Enums.Environment;
+
 namespace CloverleafTrack.ViewModels.Home;
 
 public class RecentHighlightViewModel
@@ -12,4 +14,5 @@ public class RecentHighlightViewModel
     public DateTime Date { get; set; }
     public bool IsPersonalBest { get; set; }
     public bool IsSchoolRecord { get; set; }
+    public Environment Environment { get; set; }
 }

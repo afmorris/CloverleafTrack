@@ -1,3 +1,5 @@
+using Environment = CloverleafTrack.Models.Enums.Environment;
+
 namespace CloverleafTrack.DataAccess.Dtos;
 
 public class BreakoutAthleteDto
@@ -6,4 +8,6 @@ public class BreakoutAthleteDto
     public string LastName { get; set; } = string.Empty;
     public int PRCount { get; set; }
     public int GraduationYear { get; set; }
+    public Environment Environment { get; set; }
 }
+

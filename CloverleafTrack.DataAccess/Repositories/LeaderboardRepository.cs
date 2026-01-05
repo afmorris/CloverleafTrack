@@ -17,6 +17,7 @@ public class LeaderboardRepository(IDbConnectionFactory connectionFactory) : ILe
                                e.EventKey,
                                e.EventCategory,
                                e.EventCategorySortOrder,
+                               e.EventType,
                                e.SortOrder as EventSortOrder,
                                e.Gender,
                                e.Environment,

@@ -1,4 +1,3 @@
-
 namespace CloverleafTrack.ViewModels.Home;
 
 public class OnThisDayViewModel
