@@ -138,4 +138,31 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
           var performances = await connection.QueryAsync<MeetPerformanceDto>(sql, new { MeetId = meetId });
           return performances.ToList();
      }
+
+     public async Task<int> GetUniqueAthleteCountForMeetAsync(int meetId)
+     {
+          using var connection = connectionFactory.CreateConnection();
+          
+          const string sql = """
+                              WITH AllAthletes AS (
+                                   -- Individual performances
+                                   SELECT DISTINCT a.Id as AthleteId
+                                   FROM Performances p
+                                   INNER JOIN Athletes a ON a.Id = p.AthleteId
+                                   WHERE p.MeetId = @MeetId
+                                        AND p.AthleteId IS NOT NULL
+                                   
+                                   UNION
+                                   
+                                   -- Relay performances
+                                   SELECT DISTINCT pa.AthleteId
+                                   FROM Performances p
+                                   INNER JOIN PerformanceAthletes pa ON pa.PerformanceId = p.Id
+                                   WHERE p.MeetId = @MeetId
+                              )
+                              SELECT COUNT(*) FROM AllAthletes
+                              """;
+          
+          return await connection.ExecuteScalarAsync<int>(sql, new { MeetId = meetId });
+     }
 }

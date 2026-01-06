@@ -8,4 +8,5 @@ public interface IMeetRepository
     public Task<List<Meet>> GetMeetsForSeasonAsync(int seasonId);
     Task<Meet?> GetMeetBasicInfoBySlugAsync(string slug);
     Task<List<MeetPerformanceDto>> GetPerformancesForMeetAsync(int meetId);
+    Task<int> GetUniqueAthleteCountForMeetAsync(int meetId);
 }
