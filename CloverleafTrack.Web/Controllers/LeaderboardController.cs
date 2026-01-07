@@ -10,4 +10,17 @@ public class LeaderboardController(ILeaderboardService leaderboardService) : Con
         var viewModel = await leaderboardService.GetLeaderboardAsync();
         return View(viewModel);
     }
+
+    [HttpGet("/leaderboard/{eventKey}")]
+    public async Task<IActionResult> Details(string eventKey)
+    {
+        var viewModel = await leaderboardService.GetLeaderboardDetailsAsync(eventKey);
+        
+        if (viewModel == null)
+        {
+            return NotFound();
+        }
+
+        return View(viewModel);
+    }
 }

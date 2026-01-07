@@ -1,0 +1,259 @@
+@model LeaderboardDetailsViewModel
+
+@{
+    ViewBag.Title = $"{Model.EventName} - Leaderboard";
+    var genderLabel = Model.Gender == CloverleafTrack.Models.Enums.Gender.Male ? "Boys" : "Girls";
+    var environmentLabel = Model.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor ? "Outdoor" : "Indoor";
+}
+
+@functions {
+    string GetClassYear(int? gradYear)
+    {
+        if (!gradYear.HasValue) return "";
+        
+        var currentYear = DateTime.Now.Year;
+        var currentMonth = DateTime.Now.Month;
+        
+        // Adjust current year based on whether we're past graduation (typically June)
+        var adjustedCurrentYear = currentMonth >= 6 ? currentYear + 1 : currentYear;
+        
+        var diff = gradYear.Value - adjustedCurrentYear;
+        
+        return diff switch
+        {
+            >= 3 => "Freshman",
+            2 => "Sophomore",
+            1 => "Junior",
+            0 => "Senior",
+            _ => $"'{gradYear.Value.ToString().Substring(2)}"
+        };
+    }
+}
+
+<style>
+    .topographic-bg {
+        background-image: 
+            repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.02) 10px, rgba(255,255,255,.02) 20px),
+            repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.02) 10px, rgba(255,255,255,.02) 20px);
+    }
+    .perf-row {
+        transition: all 0.2s ease-in-out;
+    }
+    .perf-row:hover {
+        background: rgba(59, 130, 246, 0.1);
+    }
+</style>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-6">
+
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="mb-4">
+            <a href="@Url.Action("Index", "Leaderboard")" class="text-gray-400 hover:text-white text-sm inline-block">
+                ← Back to All Leaderboards
+            </a>
+        </div>
+        
+        <div class="flex items-center gap-4 mb-3">
+            <h1 class="text-4xl font-bold text-white">@Model.EventName</h1>
+            @if (Model.Environment == CloverleafTrack.Models.Enums.Environment.Indoor)
+            {
+                <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30 text-sm font-medium">
+                    🏢 Indoor
+                </span>
+            }
+            else
+            {
+                <span class="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-lg border border-amber-500/30 text-sm font-medium">
+                    ☀️ Outdoor
+                </span>
+            }
+        </div>
+        
+        <p class="text-gray-400 text-lg">
+            @genderLabel @environmentLabel All-Time Rankings
+        </p>
+    </div>
+
+    <!-- View Toggle Tabs -->
+    <div class="mb-8 flex gap-3">
+        <button onclick="showView('all')" id="all-tab" 
+                class="view-tab px-6 py-3 bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30 font-medium transition-all hover:bg-blue-500/30">
+            All Performances (@Model.AllPerformances.Count)
+        </button>
+        <button onclick="showView('prs')" id="prs-tab"
+                class="view-tab px-6 py-3 bg-gray-800 text-gray-400 rounded-lg border border-gray-700 font-medium transition-all hover:bg-gray-750">
+            PRs Only (@Model.PersonalRecordsOnly.Count)
+        </button>
+    </div>
+
+    <!-- All Performances View -->
+    <div id="all-content" class="view-content">
+        <div class="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead class="bg-gray-900/50 border-b border-gray-700">
+                        <tr class="text-gray-400 text-sm">
+                            <th class="px-6 py-4 text-left font-semibold">Rank</th>
+                            <th class="px-6 py-4 text-left font-semibold">Athlete</th>
+                            <th class="px-6 py-4 text-left font-semibold">Class</th>
+                            <th class="px-6 py-4 text-left font-semibold">Mark</th>
+                            <th class="px-6 py-4 text-left font-semibold">Meet</th>
+                            <th class="px-6 py-4 text-left font-semibold">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var perf in Model.AllPerformances)
+                        {
+                            <tr class="perf-row border-t border-gray-700/50">
+                                <td class="px-6 py-4">
+                                    <span class="text-2xl font-bold @(perf.Rank <= 3 ? "text-amber-400" : "text-gray-400")">
+                                        @perf.Rank
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if (!string.IsNullOrEmpty(perf.AthleteSlug))
+                                    {
+                                        <a href="@Url.Action("Details", "Roster", new { slug = perf.AthleteSlug })" 
+                                           class="text-white font-medium hover:text-blue-400 transition-colors">
+                                            @perf.AthleteName
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-white font-medium">@perf.AthleteName</span>
+                                    }
+                                    @if (perf.IsSchoolRecord)
+                                    {
+                                        <span class="ml-2 inline-block px-2 py-0.5 text-xs font-semibold rounded bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
+                                            SR
+                                        </span>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 text-gray-400 text-sm">
+                                    @GetClassYear(perf.GraduationYear)
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-xl font-mono font-bold text-white">
+                                        @perf.Performance
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="@Url.Action("Details", "Meets", new { name = perf.MeetSlug })" 
+                                       class="text-gray-300 hover:text-blue-400 transition-colors text-sm">
+                                        @perf.MeetName
+                                    </a>
+                                </td>
+                                <td class="px-6 py-4 text-gray-400 text-sm">
+                                    @perf.MeetDate.ToString("MMM d, yyyy")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        @if (!Model.AllPerformances.Any())
+        {
+            <div class="p-8 bg-gray-800/50 border border-gray-700 rounded-xl text-center">
+                <p class="text-gray-400">No performances recorded for this event yet.</p>
+            </div>
+        }
+    </div>
+
+    <!-- PRs Only View -->
+    <div id="prs-content" class="view-content hidden">
+        <div class="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead class="bg-gray-900/50 border-b border-gray-700">
+                        <tr class="text-gray-400 text-sm">
+                            <th class="px-6 py-4 text-left font-semibold">Rank</th>
+                            <th class="px-6 py-4 text-left font-semibold">Athlete</th>
+                            <th class="px-6 py-4 text-left font-semibold">Class</th>
+                            <th class="px-6 py-4 text-left font-semibold">PR</th>
+                            <th class="px-6 py-4 text-left font-semibold">Meet</th>
+                            <th class="px-6 py-4 text-left font-semibold">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var perf in Model.PersonalRecordsOnly)
+                        {
+                            <tr class="perf-row border-t border-gray-700/50">
+                                <td class="px-6 py-4">
+                                    <span class="text-2xl font-bold @(perf.Rank <= 3 ? "text-amber-400" : "text-gray-400")">
+                                        @perf.Rank
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="@Url.Action("Details", "Roster", new { slug = perf.AthleteSlug })" 
+                                       class="text-white font-medium hover:text-blue-400 transition-colors">
+                                        @perf.AthleteName
+                                    </a>
+                                    @if (perf.IsSchoolRecord)
+                                    {
+                                        <span class="ml-2 inline-block px-2 py-0.5 text-xs font-semibold rounded bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
+                                            SR
+                                        </span>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 text-gray-400 text-sm">
+                                    @GetClassYear(perf.GraduationYear)
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-xl font-mono font-bold text-white">
+                                        @perf.Performance
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="@Url.Action("Details", "Meets", new { name = perf.MeetSlug })" 
+                                       class="text-gray-300 hover:text-blue-400 transition-colors text-sm">
+                                        @perf.MeetName
+                                    </a>
+                                </td>
+                                <td class="px-6 py-4 text-gray-400 text-sm">
+                                    @perf.MeetDate.ToString("MMM d, yyyy")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        @if (!Model.PersonalRecordsOnly.Any())
+        {
+            <div class="p-8 bg-gray-800/50 border border-gray-700 rounded-xl text-center">
+                <p class="text-gray-400">No personal records for this event yet.</p>
+            </div>
+        }
+    </div>
+
+</div>
+
+<script>
+    function showView(view) {
+        // Hide all content
+        document.querySelectorAll('.view-content').forEach(el => el.classList.add('hidden'));
+        
+        // Show selected content
+        document.getElementById(view + '-content').classList.remove('hidden');
+        
+        // Update tab styling
+        document.querySelectorAll('.view-tab').forEach(tab => {
+            tab.classList.remove('bg-blue-500/20', 'text-blue-400', 'border-blue-500/30');
+            tab.classList.add('bg-gray-800', 'text-gray-400', 'border-gray-700');
+        });
+        
+        const activeTab = document.getElementById(view + '-tab');
+        activeTab.classList.remove('bg-gray-800', 'text-gray-400', 'border-gray-700');
+        activeTab.classList.add('bg-blue-500/20', 'text-blue-400', 'border-blue-500/30');
+    }
+    
+    // Set "all" as default on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        showView('all');
+    });
+</script>

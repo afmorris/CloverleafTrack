@@ -35,6 +35,67 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
         return viewModel;
     }
 
+    public async Task<LeaderboardDetailsViewModel?> GetLeaderboardDetailsAsync(string eventKey)
+    {
+        var allPerformances = await leaderboardRepository.GetAllPerformancesForEventAsync(eventKey);
+        
+        if (!allPerformances.Any())
+        {
+            return null;
+        }
+
+        // Get event info from first performance
+        var firstPerf = allPerformances.First();
+        
+        // Build all performances list with rankings
+        var allPerfsList = allPerformances.Select((perf, index) => new LeaderboardPerformanceViewModel
+        {
+            Rank = index + 1,
+            AthleteName = perf.AthleteId.HasValue 
+                ? $"{perf.AthleteFirstName} {perf.AthleteLastName}"
+                : perf.RelayName,
+            AthleteSlug = perf.AthleteId.HasValue 
+                ? _slugHelper.GenerateSlug($"{perf.AthleteFirstName}-{perf.AthleteLastName}")
+                : "",
+            Performance = FormatPerformance(perf.TimeSeconds, perf.DistanceInches),
+            MeetName = perf.MeetName,
+            MeetSlug = _slugHelper.GenerateSlug(perf.MeetName),
+            MeetDate = perf.MeetDate,
+            GraduationYear = perf.GraduationYear,
+            IsSchoolRecord = perf.SchoolRecord
+        }).ToList();
+        
+        // Build PRs only list (best performance per athlete)
+        var prsOnly = allPerformances
+            .Where(p => p.AthleteId.HasValue) // Only individual athletes (not relays)
+            .GroupBy(p => p.AthleteId)
+            .Select(g => g.First()) // First is already the best due to ORDER BY in query
+            .Select((perf, index) => new LeaderboardPerformanceViewModel
+            {
+                Rank = index + 1,
+                AthleteName = $"{perf.AthleteFirstName} {perf.AthleteLastName}",
+                AthleteSlug = _slugHelper.GenerateSlug($"{perf.AthleteFirstName}-{perf.AthleteLastName}"),
+                Performance = FormatPerformance(perf.TimeSeconds, perf.DistanceInches),
+                MeetName = perf.MeetName,
+                MeetSlug = _slugHelper.GenerateSlug(perf.MeetName),
+                MeetDate = perf.MeetDate,
+                GraduationYear = perf.GraduationYear,
+                IsSchoolRecord = perf.SchoolRecord
+            })
+            .ToList();
+
+        return new LeaderboardDetailsViewModel
+        {
+            EventId = firstPerf.EventId,
+            EventName = firstPerf.EventName,
+            EventKey = firstPerf.EventKey,
+            Gender = firstPerf.Gender,
+            Environment = firstPerf.Environment,
+            AllPerformances = allPerfsList,
+            PersonalRecordsOnly = prsOnly
+        };
+    }
+
     private List<LeaderboardCategoryViewModel> BuildCategoryViewModels(List<LeaderboardDto> performances)
     {
         // Separate relays from non-relays

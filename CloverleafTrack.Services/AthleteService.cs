@@ -110,7 +110,9 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                         FirstName = first.Athlete.FirstName,
                         LastName = first.Athlete.LastName,
                         Class = GraduationYearToClass(first.Athlete.GraduationYear, currentSeason),
-                        EventsInCategory = events
+                        EventsInCategory = events,
+                        Gender = first.Athlete.Gender,
+                        GraduationYear = first.Athlete.GraduationYear
                     };
                 })
                 .OrderBy(x => x.FullName)
@@ -194,7 +196,9 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                             FirstName = first.Athlete.FirstName,
                             LastName = first.Athlete.LastName,
                             Class = $"Class of {first.Athlete.GraduationYear}",
-                            EventsInCategory = eventGroups
+                            EventsInCategory = eventGroups,
+                            Gender = first.Athlete.Gender,
+                            GraduationYear = first.Athlete.GraduationYear
                         };
                     })
                     .OrderBy(a => a.FullName)
