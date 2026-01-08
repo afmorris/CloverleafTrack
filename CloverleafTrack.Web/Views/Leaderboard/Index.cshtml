@@ -22,20 +22,21 @@
 
     <!-- Environment Tabs -->
     <div class="mb-8">
-        <div class="flex gap-3">
-            <button onclick="showEnvironment('outdoor')" id="outdoor-tab" 
-                    class="env-tab px-6 py-3 bg-amber-500/20 text-amber-400 rounded-lg border border-amber-500/30 font-medium transition-all hover:bg-amber-500/30">
-                ☀️ OUTDOOR
-            </button>
-            <button onclick="showEnvironment('indoor')" id="indoor-tab"
-                    class="env-tab px-6 py-3 bg-gray-800 text-gray-400 rounded-lg border border-gray-700 font-medium transition-all hover:bg-gray-750">
-                🏢 INDOOR
-            </button>
-        </div>
-    </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
+            <!-- Tab Headers -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700">
+                <button class="env-tab flex-1 py-4 px-6 font-bold text-lg transition-all flex items-center justify-center gap-3" data-tab="outdoor">
+                    ☀️ OUTDOOR
+                </button>
+                <button class="env-tab flex-1 py-4 px-6 font-bold text-lg transition-all flex items-center justify-center gap-3" data-tab="indoor">
+                    🏢 INDOOR
+                </button>
+            </div>
 
-    <!-- Outdoor Content -->
-    <div id="outdoor-content" class="env-content">
+            <!-- Tab Content Wrapper -->
+            <div class="p-8">
+                <!-- Outdoor Content -->
+                <div id="env-outdoor" class="env-content">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             
             <!-- Boys Outdoor -->
@@ -156,10 +157,10 @@
                 }
             </div>
         </div>
-    </div>
+                </div>
 
-    <!-- Indoor Content -->
-    <div id="indoor-content" class="env-content hidden">
+                <!-- Indoor Content -->
+                <div id="env-indoor" class="env-content hidden">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             
             <!-- Boys Indoor -->
@@ -280,37 +281,50 @@
                 }
             </div>
         </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
 
 <script>
-    function showEnvironment(env) {
-        // Hide all content
-        document.querySelectorAll('.env-content').forEach(el => el.classList.add('hidden'));
-        
-        // Show selected content
-        document.getElementById(env + '-content').classList.remove('hidden');
-        
-        // Update tab styling
-        document.querySelectorAll('.env-tab').forEach(tab => {
-            tab.classList.remove('bg-amber-500/20', 'text-amber-400', 'border-amber-500/30');
-            tab.classList.remove('bg-blue-500/20', 'text-blue-400', 'border-blue-500/30');
-            tab.classList.add('bg-gray-800', 'text-gray-400', 'border-gray-700');
-        });
-        
-        const activeTab = document.getElementById(env + '-tab');
-        activeTab.classList.remove('bg-gray-800', 'text-gray-400', 'border-gray-700');
-        
-        if (env === 'outdoor') {
-            activeTab.classList.add('bg-amber-500/20', 'text-amber-400', 'border-amber-500/30');
-        } else {
-            activeTab.classList.add('bg-blue-500/20', 'text-blue-400', 'border-blue-500/30');
-        }
-    }
-    
-    // Set outdoor as default on page load
     document.addEventListener('DOMContentLoaded', function() {
-        showEnvironment('outdoor');
+        const envTabs = document.querySelectorAll('.env-tab');
+        const envContents = document.querySelectorAll('.env-content');
+
+        envTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const targetTab = this.dataset.tab;
+
+                // Update tab styles
+                envTabs.forEach(t => {
+                    if (t.dataset.tab === targetTab) {
+                        if (targetTab === 'outdoor') {
+                            t.classList.add('bg-gradient-to-r', 'from-amber-600', 'to-yellow-500', 'text-white');
+                            t.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
+                        } else {
+                            t.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-blue-500', 'text-white');
+                            t.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
+                        }
+                    } else {
+                        t.classList.remove('bg-gradient-to-r', 'from-amber-600', 'to-yellow-500', 'from-blue-600', 'to-blue-500', 'text-white');
+                        t.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
+                    }
+                });
+
+                // Show/hide content
+                envContents.forEach(content => {
+                    if (content.id === `env-${targetTab}`) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        // Set Outdoor as default active tab
+        document.querySelector('.env-tab[data-tab="outdoor"]')?.click();
     });
 </script>
