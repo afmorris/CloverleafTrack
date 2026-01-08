@@ -1,318 +1,318 @@
 ﻿@model List<CloverleafTrack.ViewModels.Seasons.SeasonCardViewModel>
 
 @{
-    ViewData["Title"] = "Seasons";
-    var currentSeason = Model.FirstOrDefault(s => s.IsCurrentSeason);
-    var pastSeasons = Model.Where(s => !s.IsCurrentSeason).ToList();
+	ViewData["Title"] = "Seasons";
+	var currentSeason = Model.FirstOrDefault(s => s.IsCurrentSeason);
+	var pastSeasons = Model.Where(s => !s.IsCurrentSeason).ToList();
 
-    // Calculate all-time stats
-    var totalSeasons = Model.Count;
-    var totalOutdoorSRs = Model.Sum(s => s.OutdoorSchoolRecordCount);
-    var totalIndoorSRs = Model.Sum(s => s.IndoorSchoolRecordCount);
-    var totalMeets = Model.Sum(s => s.TotalMeets);
+	// Calculate all-time stats
+	var totalSeasons = Model.Count;
+	var totalOutdoorSRs = Model.Sum(s => s.OutdoorSchoolRecordCount);
+	var totalIndoorSRs = Model.Sum(s => s.IndoorSchoolRecordCount);
+	var totalMeets = Model.Sum(s => s.TotalMeets);
 }
 
 @functions {
-    string GetGenderIcon(CloverleafTrack.Models.Enums.Gender gender) => gender switch
-    {
-        CloverleafTrack.Models.Enums.Gender.Male => "♂",
-        CloverleafTrack.Models.Enums.Gender.Female => "♀",
-        CloverleafTrack.Models.Enums.Gender.Mixed => "⚥",
-        _ => ""
-    };
+	string GetGenderIcon(CloverleafTrack.Models.Enums.Gender gender) => gender switch
+	{
+		CloverleafTrack.Models.Enums.Gender.Male => "♂",
+		CloverleafTrack.Models.Enums.Gender.Female => "♀",
+		CloverleafTrack.Models.Enums.Gender.Mixed => "⚥",
+		_ => ""
+	};
 
-    string GetGenderClass(CloverleafTrack.Models.Enums.Gender gender) => gender switch
-    {
-        CloverleafTrack.Models.Enums.Gender.Male => "text-blue-400",
-        CloverleafTrack.Models.Enums.Gender.Female => "text-pink-400",
-        CloverleafTrack.Models.Enums.Gender.Mixed => "text-purple-400",
-        _ => "text-gray-400"
-    };
+	string GetGenderClass(CloverleafTrack.Models.Enums.Gender gender) => gender switch
+	{
+		CloverleafTrack.Models.Enums.Gender.Male => "text-blue-400",
+		CloverleafTrack.Models.Enums.Gender.Female => "text-pink-400",
+		CloverleafTrack.Models.Enums.Gender.Mixed => "text-purple-400",
+		_ => "text-gray-400"
+	};
 }
 
 <style>
-    .topographic-bg {
-        background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.02) 10px, rgba(255,255,255,.02) 20px), repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.02) 10px, rgba(255,255,255,.02) 20px);
-    }
+	.topographic-bg {
+		background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.02) 10px, rgba(255,255,255,.02) 20px), repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.02) 10px, rgba(255,255,255,.02) 20px);
+	}
 
-    .season-card {
-        transition: all 0.3s ease-in-out;
-    }
+	.season-card {
+		transition: all 0.3s ease-in-out;
+	}
 
-        .season-card:hover {
-            transform: translateY(-4px);
-        }
+		.season-card:hover {
+			transform: translateY(-4px);
+		}
 
-    .record-item {
-        transition: all 0.2s ease;
-    }
+	.record-item {
+		transition: all 0.2s ease;
+	}
 
-        .record-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
+		.record-item:hover {
+			background: rgba(255, 255, 255, 0.05);
+		}
 </style>
 
 
 <!-- Main Content -->
 <div class="max-w-7xl mx-auto px-6">
 
-    <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Seasons</h1>
-        <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Track our journey through the years</p>
-    </div>
+	<!-- Header -->
+	<div class="mb-8">
+		<h1 class="text-4xl font-bold text-gray-900 dark:text-white">Seasons</h1>
+		<p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Track our journey through the years</p>
+	</div>
 
-    <!-- Overall Stats Summary -->
-    <div class="mb-12">
-        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">All-Time Program Stats</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/40 dark:to-purple-800/40 rounded-xl p-6 border border-purple-200 dark:border-purple-700/30 shadow-sm">
-                <div class="text-sm text-purple-700 dark:text-purple-300 mb-2 font-semibold uppercase tracking-wide">Total Seasons</div>
-                <div class="text-4xl font-bold text-purple-900 dark:text-purple-100">@totalSeasons</div>
-            </div>
-            <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40 rounded-xl p-6 border border-blue-200 dark:border-blue-700/30 shadow-sm">
-                <div class="text-sm text-blue-700 dark:text-blue-300 mb-2 font-semibold uppercase tracking-wide">Indoor SRs</div>
-                <div class="text-4xl font-bold text-blue-900 dark:text-blue-100">@totalIndoorSRs</div>
-            </div>
-            <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/40 dark:to-yellow-800/40 rounded-xl p-6 border border-yellow-200 dark:border-yellow-700/30 shadow-sm">
-                <div class="text-sm text-yellow-700 dark:text-yellow-300 mb-2 font-semibold uppercase tracking-wide">Outdoor SRs</div>
-                <div class="text-4xl font-bold text-yellow-900 dark:text-yellow-100">@totalOutdoorSRs</div>
-            </div>
-            <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/40 dark:to-green-800/40 rounded-xl p-6 border border-green-200 dark:border-green-700/30 shadow-sm">
-                <div class="text-sm text-green-700 dark:text-green-300 mb-2 font-semibold uppercase tracking-wide">Total Meets</div>
-                <div class="text-4xl font-bold text-green-900 dark:text-green-100">@totalMeets</div>
-            </div>
-        </div>
-    </div>
+	<!-- Overall Stats Summary -->
+	<div class="mb-12">
+		<h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">All-Time Program Stats</h2>
+		<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+			<div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/40 dark:to-purple-800/40 rounded-xl p-6 border border-purple-200 dark:border-purple-700/30 shadow-sm">
+				<div class="text-sm text-purple-700 dark:text-purple-300 mb-2 font-semibold uppercase tracking-wide">Total Seasons</div>
+				<div class="text-4xl font-bold text-purple-900 dark:text-purple-100">@totalSeasons</div>
+			</div>
+			<div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40 rounded-xl p-6 border border-blue-200 dark:border-blue-700/30 shadow-sm">
+				<div class="text-sm text-blue-700 dark:text-blue-300 mb-2 font-semibold uppercase tracking-wide">Indoor SRs</div>
+				<div class="text-4xl font-bold text-blue-900 dark:text-blue-100">@totalIndoorSRs</div>
+			</div>
+			<div class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/40 dark:to-yellow-800/40 rounded-xl p-6 border border-yellow-200 dark:border-yellow-700/30 shadow-sm">
+				<div class="text-sm text-yellow-700 dark:text-yellow-300 mb-2 font-semibold uppercase tracking-wide">Outdoor SRs</div>
+				<div class="text-4xl font-bold text-yellow-900 dark:text-yellow-100">@totalOutdoorSRs</div>
+			</div>
+			<div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/40 dark:to-green-800/40 rounded-xl p-6 border border-green-200 dark:border-green-700/30 shadow-sm">
+				<div class="text-sm text-green-700 dark:text-green-300 mb-2 font-semibold uppercase tracking-wide">Total Meets</div>
+				<div class="text-4xl font-bold text-green-900 dark:text-green-100">@totalMeets</div>
+			</div>
+		</div>
+	</div>
 
-    @if (currentSeason != null)
-    {
-        <!-- Current Season Highlight -->
-        <div class="mb-12">
-            <div class="flex items-center gap-3 mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Current Season</h2>
-                <div class="px-3 py-1 dark:bg-green-500/20 dark:text-green-400 bg-green-100 text-green-700 text-sm font-medium rounded-full border border-green-500/30">
-                    ● Active
-                </div>
-            </div>
+	@if (currentSeason != null)
+	{
+		<!-- Current Season Highlight -->
+		<div class="mb-12">
+			<div class="flex items-center gap-3 mb-6">
+				<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Current Season</h2>
+				<div class="px-3 py-1 dark:bg-green-500/20 dark:text-green-400 bg-green-100 text-green-700 text-sm font-medium rounded-full border border-green-500/30">
+					● Active
+				</div>
+			</div>
 
-            <div class="season-card bg-gradient-to-br from-gray-200/75 to-gray-300/75 dark:from-gray-800/75 dark:to-gray-900/75 border-2 border-green-800/50 dark:border-green-500/50 rounded-2xl p-8 shadow-2xl">
-                <div class="flex items-start justify-between mb-6">
-                    <div>
-                        <h3 class="text-4xl font-bold mb-2 text-gray-900 dark:text-white">@currentSeason.Name</h3>
-                    </div>
-                    <a href="@Url.Action("Details", "Seasons", new { name = currentSeason.Name })"
-                       class="px-6 py-3 dark:bg-green-500/20 dark:text-green-400 bg-green-100 text-green-700 font-medium rounded-lg transition-colors">
-                        View Season Details →
-                    </a>
-                </div>
+			<div class="season-card bg-gradient-to-br from-gray-200/75 to-gray-300/75 dark:from-gray-800/75 dark:to-gray-900/75 border-2 border-green-800/50 dark:border-green-500/50 rounded-2xl p-8 shadow-2xl">
+				<div class="flex items-start justify-between mb-6">
+					<div>
+						<h3 class="text-4xl font-bold mb-2 text-gray-900 dark:text-white">@currentSeason.Name</h3>
+					</div>
+					<a href="@Url.Action("Details", "Seasons", new { name = currentSeason.Name })"
+					   class="px-6 py-3 dark:bg-green-500/20 dark:text-green-400 bg-green-100 text-green-700 font-medium rounded-lg transition-colors">
+						View Season Details →
+					</a>
+				</div>
 
-                <!-- Season Stats Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                    <div class="bg-gray-400/50 border-gray-200 dark:bg-gray-900/50 dark:border-gray-700 rounded-lg p-4 border">
-                        <div class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-1">@currentSeason.TotalMeets</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">Meets</div>
-                    </div>
-                    <div class="bg-gray-400/50 border-gray-200 dark:bg-gray-900/50 rounded-lg p-4 border dark:border-gray-700">
-                        <div class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-1">@currentSeason.IndoorSchoolRecordCount</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">Indoor SRs</div>
-                    </div>
-                    <div class="bg-gray-400/50 border-gray-200 dark:bg-gray-900/50 rounded-lg p-4 border dark:border-gray-700">
-                        <div class="text-2xl font-bold text-yellow-700 dark:text-yellow-300 mb-1">@currentSeason.OutdoorSchoolRecordCount</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">Outdoor SRs</div>
-                    </div>
-                    <div class="bg-gray-400/50 border-gray-200 dark:bg-gray-900/50 rounded-lg p-4 border dark:border-gray-700">
-                        <div class="text-2xl font-bold text-green-700 dark:text-green-300 mb-1">@currentSeason.TotalPRs</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">Season PRs</div>
-                    </div>
-                </div>
+				<!-- Season Stats Grid -->
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+					<div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/40 dark:to-purple-800/40 border-gray-200 dark:border-gray-700 rounded-lg p-4 border">
+						<div class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-1">@currentSeason.TotalMeets</div>
+						<div class="text-sm text-gray-600 dark:text-gray-400">Meets</div>
+					</div>
+					<div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40 border-gray-200 dark:border-gray-700 rounded-lg p-4 border">
+						<div class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-1">@currentSeason.IndoorSchoolRecordCount</div>
+						<div class="text-sm text-gray-600 dark:text-gray-400">Indoor SRs</div>
+					</div>
+					<div class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/40 dark:to-yellow-800/40 border-gray-200 dark:border-gray-700 rounded-lg p-4 border">
+						<div class="text-2xl font-bold text-yellow-700 dark:text-yellow-300 mb-1">@currentSeason.OutdoorSchoolRecordCount</div>
+						<div class="text-sm text-gray-600 dark:text-gray-400">Outdoor SRs</div>
+					</div>
+					<div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/40 dark:to-green-800/40 border-gray-200 dark:border-gray-700 rounded-lg p-4 border">
+						<div class="text-2xl font-bold text-green-700 dark:text-green-300 mb-1">@currentSeason.TotalPRs</div>
+						<div class="text-sm text-gray-600 dark:text-gray-400">Season PRs</div>
+					</div>
+				</div>
 
-                <!-- School Records Split -->
-                <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Indoor Records -->
-                    @if (currentSeason.IndoorSchoolRecords?.Any() == true)
-                    {
-                        <div class="bg-gray-300/50 dark:bg-gray-900/50 rounded-xl p-6 border border-blue-500/30">
-                            <div class="flex items-center gap-2 mb-4">
-                                <div class="text-2xl">🏢</div>
-                                <h4 class="text-lg font-bold text-blue-700 dark:text-blue-300">Indoor School Records (@currentSeason.IndoorSchoolRecordCount)</h4>
-                            </div>
-                            <div class="space-y-2 max-h-64 overflow-y-auto">
-                                @foreach (var record in currentSeason.IndoorSchoolRecords)
-                                {
-                                    <div class="record-item flex items-start gap-3 p-3 rounded-lg">
-                                        <div class="@GetGenderClass(record.Gender) text-lg mt-0.5">
-                                            @GetGenderIcon(record.Gender)
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="text-gray-900 dark:text-white font-medium">@record.EventName - @record.RecordHolder</div>
-                                            <div class="text-sm text-gray-600 dark:text-gray-400">@record.Performance</div>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    }
+				<!-- School Records Split -->
+				<div class="grid md:grid-cols-2 gap-6">
+					<!-- Indoor Records -->
+					@if (currentSeason.IndoorSchoolRecords?.Any() == true)
+					{
+						<div class="bg-gray-400/50 dark:bg-gray-900/50 rounded-xl p-6 border border-blue-500/30">
+							<div class="flex items-center gap-2 mb-4">
+								<div class="text-2xl">🏢</div>
+								<h4 class="text-lg font-bold text-blue-700 dark:text-blue-300">Indoor School Records (@currentSeason.IndoorSchoolRecordCount)</h4>
+							</div>
+							<div class="space-y-2 max-h-64 overflow-y-auto">
+								@foreach (var record in currentSeason.IndoorSchoolRecords)
+								{
+									<div class="record-item flex items-start gap-3 p-3 rounded-lg">
+										<div class="@GetGenderClass(record.Gender) text-lg mt-0.5">
+											@GetGenderIcon(record.Gender)
+										</div>
+										<div class="flex-1">
+											<div class="text-gray-900 dark:text-white font-medium">@record.EventName - @record.RecordHolder</div>
+											<div class="text-sm text-gray-600 dark:text-gray-400">@record.Performance</div>
+										</div>
+									</div>
+								}
+							</div>
+						</div>
+					}
 
-                    <!-- Outdoor Records -->
-                    @if (currentSeason.OutdoorSchoolRecords?.Any() == true)
-                    {
-                        <div class="bg-gray-300/50 dark:bg-gray-900/50 rounded-xl p-6 border border-amber-500/30">
-                            <div class="flex items-center gap-2 mb-4">
-                                <div class="text-2xl">☀️</div>
-                                <h4 class="text-lg font-bold text-yellow-700 dark:text-yellow-300">Outdoor School Records (@currentSeason.OutdoorSchoolRecordCount)</h4>
-                            </div>
-                            <div class="space-y-2 max-h-64 overflow-y-auto">
-                                @foreach (var record in currentSeason.OutdoorSchoolRecords)
-                                {
-                                    <div class="record-item flex items-start gap-3 p-3 rounded-lg">
-                                        <div class="@GetGenderClass(record.Gender) text-lg mt-0.5">
-                                            @GetGenderIcon(record.Gender)
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="text-gray-900 dark:text-white font-medium">@record.EventName - @record.RecordHolder</div>
-                                            <div class="text-sm text-gray-600 dark:text-gray-400">@record.Performance</div>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    }
-                </div>
+					<!-- Outdoor Records -->
+					@if (currentSeason.OutdoorSchoolRecords?.Any() == true)
+					{
+						<div class="bg-gray-400/50 dark:bg-gray-900/50 rounded-xl p-6 border border-amber-500/30">
+							<div class="flex items-center gap-2 mb-4">
+								<div class="text-2xl">☀️</div>
+								<h4 class="text-lg font-bold text-yellow-700 dark:text-yellow-300">Outdoor School Records (@currentSeason.OutdoorSchoolRecordCount)</h4>
+							</div>
+							<div class="space-y-2 max-h-64 overflow-y-auto">
+								@foreach (var record in currentSeason.OutdoorSchoolRecords)
+								{
+									<div class="record-item flex items-start gap-3 p-3 rounded-lg">
+										<div class="@GetGenderClass(record.Gender) text-lg mt-0.5">
+											@GetGenderIcon(record.Gender)
+										</div>
+										<div class="flex-1">
+											<div class="text-gray-900 dark:text-white font-medium">@record.EventName - @record.RecordHolder</div>
+											<div class="text-sm text-gray-600 dark:text-gray-400">@record.Performance</div>
+										</div>
+									</div>
+								}
+							</div>
+						</div>
+					}
+				</div>
 
-                <!-- Season Highlight Note -->
-                @if (!string.IsNullOrEmpty(currentSeason.Notes))
-                {
-                    <div class="mt-6 p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/40 dark:to-purple-800/40 rounded-lg border border-purple-200 dark:border-purple-700/30 shadow-sm">
-                        <div class="flex items-start gap-3">
-                            <div class="text-2xl">✨</div>
-                            <div>
-                                <div class="font-medium text-purple-700 dark:text-purple-300 mb-1">Season Notes</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400 italic">@currentSeason.Notes</div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-    }
+				<!-- Season Highlight Note -->
+				@if (!string.IsNullOrEmpty(currentSeason.Notes))
+				{
+					<div class="mt-6 p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/40 dark:to-purple-800/40 rounded-lg border border-purple-200 dark:border-purple-700/30 shadow-sm">
+						<div class="flex items-start gap-3">
+							<div class="text-2xl">✨</div>
+							<div>
+								<div class="font-medium text-purple-700 dark:text-purple-300 mb-1">Season Notes</div>
+								<div class="text-sm text-gray-600 dark:text-gray-400 italic">@currentSeason.Notes</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	}
 
-    <!-- Past Seasons -->
-    @if (pastSeasons.Any())
-    {
-        <div class="mb-12">
-            <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Past Seasons</h2>
+	<!-- Past Seasons -->
+	@if (pastSeasons.Any())
+	{
+		<div class="mb-12">
+			<h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Past Seasons</h2>
 
-            @foreach (var season in pastSeasons.Take(3))
-            {
-                <div class="season-card bg-gray-800/50 border border-gray-700 rounded-xl p-6 mb-4 hover:shadow-xl">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="text-2xl font-bold mb-1 text-gray-900 dark:text-white">@season.Name</h3>
-                        </div>
-                        <a href="@Url.Action("Details", "Seasons", new { name = season.Name })"
-                           class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors text-sm">
-                            View Details →
-                        </a>
-                    </div>
+			@foreach (var season in pastSeasons.Take(3))
+			{
+				<div class="season-card bg-gradient-to-br from-gray-200/75 to-gray-300/75 dark:from-gray-800/75 dark:to-gray-900/75 border-2 border-gray-500 dark:border-gray-700 rounded-2xl p-8 shadow-2xl mb-4">
+					<div class="flex items-start justify-between mb-4">
+						<div>
+							<h3 class="text-2xl font-bold mb-1 text-gray-900 dark:text-white">@season.Name</h3>
+						</div>
+						<a href="@Url.Action("Details", "Seasons", new { name = season.Name })"
+						   class="px-4 py-2 bg-gray-400/50 hover:bg-gray-500/50 text-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white font-medium rounded-lg transition-colors text-sm">
+							View Season Details →
+						</a>
+					</div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                        <div class="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
-                            <div class="text-xl font-bold text-white">@season.TotalMeets</div>
-                            <div class="text-xs text-gray-400">Meets</div>
-                        </div>
-                        <div class="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
-                            <div class="text-xl font-bold text-green-400">@season.TotalPRs</div>
-                            <div class="text-xs text-gray-400">PRs</div>
-                        </div>
-                        <div class="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
-                            <div class="text-xl font-bold text-amber-400">@season.OutdoorSchoolRecordCount</div>
-                            <div class="text-xs text-gray-400">Outdoor SRs</div>
-                        </div>
-                        <div class="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
-                            <div class="text-xl font-bold text-blue-400">@season.IndoorSchoolRecordCount</div>
-                            <div class="text-xs text-gray-400">Indoor SRs</div>
-                        </div>
-                    </div>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+						<div class="bg-gray-400/50 border-gray-200 dark:bg-gray-900/50 dark:border-gray-700 rounded-lg p-4 border">
+							<div class="text-xl font-bold text-purple-700 dark:text-purple-300 mb-1">@season.TotalMeets</div>
+							<div class="text-xs text-gray-600 dark:text-gray-400">Meets</div>
+						</div>
+						<div class="bg-gray-400/50 border-gray-200 dark:bg-gray-900/50 rounded-lg p-4 border dark:border-gray-700">
+							<div class="text-xl font-bold text-blue-700 dark:text-blue-300 mb-1">@season.IndoorSchoolRecordCount</div>
+							<div class="text-xs text-gray-600 dark:text-gray-400">Indoor SRs</div>
+						</div>
+						<div class="bg-gray-400/50 border-gray-200 dark:bg-gray-900/50 rounded-lg p-4 border dark:border-gray-700">
+							<div class="text-xl font-bold text-yellow-700 dark:text-yellow-300 mb-1">@season.OutdoorSchoolRecordCount</div>
+							<div class="text-xs text-gray-600 dark:text-gray-400">Outdoor SRs</div>
+						</div>
+						<div class="bg-gray-400/50 border-gray-200 dark:bg-gray-900/50 rounded-lg p-4 border dark:border-gray-700">
+							<div class="text-xl font-bold text-green-700 dark:text-green-300 mb-1">@season.TotalPRs</div>
+							<div class="text-xs text-gray-600 dark:text-gray-400">Season PRs</div>
+						</div>
+					</div>
 
-                    <div class="grid md:grid-cols-2 gap-4">
-                        @if (season.IndoorSchoolRecords?.Any() == true)
-                        {
-                            <div class="bg-gray-900/30 rounded-lg p-4 border border-blue-500/20">
-                                <div class="text-sm font-medium text-blue-400 mb-2">🏢 Indoor SRs (@season.IndoorSchoolRecordCount)</div>
-                                <div class="text-xs text-gray-400 space-y-1">
-                                    @foreach (var record in season.IndoorSchoolRecords.Take(4))
-                                    {
-                                        <div>
-                                            <span class="@GetGenderClass(record.Gender)">@GetGenderIcon(record.Gender)</span>
-                                            @record.EventName - @record.RecordHolder (@record.Performance)
-                                        </div>
-                                    }
-                                    @if (season.IndoorSchoolRecords.Count > 4)
-                                    {
-                                        <div class="text-gray-500">+ @(season.IndoorSchoolRecords.Count - 4) more</div>
-                                    }
-                                </div>
-                            </div>
-                        }
-                        @if (season.OutdoorSchoolRecords?.Any() == true)
-                        {
-                            <div class="bg-gray-900/30 rounded-lg p-4 border border-amber-500/20">
-                                <div class="text-sm font-medium text-amber-400 mb-2">☀️ Outdoor SRs (@season.OutdoorSchoolRecordCount)</div>
-                                <div class="text-xs text-gray-400 space-y-1">
-                                    @foreach (var record in season.OutdoorSchoolRecords.Take(4))
-                                    {
-                                        <div>
-                                            <span class="@GetGenderClass(record.Gender)">@GetGenderIcon(record.Gender)</span>
-                                            @record.EventName - @record.RecordHolder (@record.Performance)
-                                        </div>
-                                    }
-                                    @if (season.OutdoorSchoolRecords.Count > 4)
-                                    {
-                                        <div class="text-gray-500">+ @(season.OutdoorSchoolRecords.Count - 4) more</div>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    </div>
+					<div class="grid md:grid-cols-2 gap-4">
+						@if (season.IndoorSchoolRecords?.Any() == true)
+						{
+							<div class="bg-gray-300/50 dark:bg-gray-900/50 rounded-lg p-4 border border-blue-500/30">
+								<div class="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">🏢 Indoor SRs (@season.IndoorSchoolRecordCount)</div>
+								<div class="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+									@foreach (var record in season.IndoorSchoolRecords.Take(4))
+									{
+										<div>
+											<span class="@GetGenderClass(record.Gender)">@GetGenderIcon(record.Gender)</span>
+											@record.EventName - @record.RecordHolder (@record.Performance)
+										</div>
+									}
+									@if (season.IndoorSchoolRecords.Count > 4)
+									{
+										<div class="text-gray-600 dark:text-gray-400">+ @(season.IndoorSchoolRecords.Count - 4) more</div>
+									}
+								</div>
+							</div>
+						}
+						@if (season.OutdoorSchoolRecords?.Any() == true)
+						{
+							<div class="bg-gray-300/50 dark:bg-gray-900/50 rounded-lg p-4 border border-amber-500/30">
+								<div class="text-sm font-medium text-yellow-700 dark:text-yellow-300 mb-2">☀️ Outdoor SRs (@season.OutdoorSchoolRecordCount)</div>
+								<div class="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+									@foreach (var record in season.OutdoorSchoolRecords.Take(4))
+									{
+										<div>
+											<span class="@GetGenderClass(record.Gender)">@GetGenderIcon(record.Gender)</span>
+											@record.EventName - @record.RecordHolder (@record.Performance)
+										</div>
+									}
+									@if (season.OutdoorSchoolRecords.Count > 4)
+									{
+										<div class="text-gray-600 dark:text-gray-400">+ @(season.OutdoorSchoolRecords.Count - 4) more</div>
+									}
+								</div>
+							</div>
+						}
+					</div>
 
-                    @if (!string.IsNullOrEmpty(season.Notes))
-                    {
-                        <div class="mt-4 text-sm text-purple-300 italic">
-                            ✨ @season.Notes
-                        </div>
-                    }
-                </div>
-            }
+					@if (!string.IsNullOrEmpty(season.Notes))
+					{
+						<div class="mt-4 text-sm text-purple-700 dark:text-purple-300 italic">
+							✨ @season.Notes
+						</div>
+					}
+				</div>
+			}
 
-            <!-- Collapsed Older Seasons -->
-            @if (pastSeasons.Count > 3)
-            {
-                <details class="season-card bg-gray-800/30 border border-gray-700 rounded-xl overflow-hidden">
-                    <summary class="p-6 cursor-pointer hover:bg-gray-800/50 transition-colors flex items-center justify-between">
-                        <div>
-                            <h3 class="text-xl font-bold mb-1 text-gray-900 dark:text-white">Earlier Seasons</h3>
-                            <p class="text-sm text-gray-400">@(pastSeasons.Count - 3) more seasons</p>
-                        </div>
-                        <svg class="w-6 h-6 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </summary>
-                    <div class="px-6 pb-6 pt-2 space-y-3">
-                        @foreach (var season in pastSeasons.Skip(3))
-                        {
-                            <a href="@Url.Action("Details", "Seasons", new { name = season.Name })"
-                               class="block p-4 bg-gray-900/30 rounded-lg hover:bg-gray-900/50 transition-colors">
-                                <div class="font-medium mb-1 text-white">@season.Name</div>
-                                <div class="text-sm text-gray-400">
-                                    @season.TotalMeets meets • @season.IndoorSchoolRecordCount Indoor SRs • @season.OutdoorSchoolRecordCount Outdoor SRs
-                                </div>
-                            </a>
-                        }
-                    </div>
-                </details>
-            }
-        </div>
-    }
+			<!-- Collapsed Older Seasons -->
+			@if (pastSeasons.Count > 3)
+			{
+				<details class= "season-card bg-gradient-to-br from-gray-200/75 to-gray-300/75 dark:from-gray-800/75 dark:to-gray-900/75 border border-gray-500 dark:border-gray-700 rounded-xl overflow-hidden">
+					<summary class="p-6 cursor-pointer hover:bg-gray-400/50 dark:hover:bg-gray-800/50 transition-colors flex items-center justify-between">
+						<div>
+							<h3 class="text-xl font-bold mb-1 text-gray-900 dark:text-white">Earlier Seasons</h3>
+							<p class="text-sm text-gray-400">@(pastSeasons.Count - 3) more seasons</p>
+						</div>
+						<svg class="w-6 h-6 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+						</svg>
+					</summary>
+					<div class="px-6 pb-6 pt-2 space-y-3">
+						@foreach (var season in pastSeasons.Skip(3))
+						{
+							<a href="@Url.Action("Details", "Seasons", new { name = season.Name })"
+							   class="block p-4 bg-gray-900/30 rounded-lg hover:bg-gray-900/50 transition-colors">
+								<div class="font-medium mb-1 text-white">@season.Name</div>
+								<div class="text-sm text-gray-400">
+									@season.TotalMeets meets • @season.IndoorSchoolRecordCount Indoor SRs • @season.OutdoorSchoolRecordCount Outdoor SRs
+								</div>
+							</a>
+						}
+					</div>
+				</details>
+			}
+		</div>
+	}
 
 </div>
