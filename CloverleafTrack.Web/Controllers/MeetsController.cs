@@ -7,6 +7,11 @@ public class MeetsController(ILogger<MeetsController> logger, IMeetService meetS
 {
     private readonly ILogger<MeetsController> logger = logger;
     private readonly IMeetService meetService = meetService;
+
+    public async Task<IActionResult> Index()
+    {
+        return View();
+    }
     
     [HttpGet("/meets/{slug}")]
     public async Task<IActionResult> Details(string slug)
