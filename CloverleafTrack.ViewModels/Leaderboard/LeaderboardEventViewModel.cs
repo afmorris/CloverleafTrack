@@ -1,4 +1,5 @@
 ﻿using CloverleafTrack.Models.Enums;
+using Slugify;
 using Environment = CloverleafTrack.Models.Enums.Environment;
 
 namespace CloverleafTrack.ViewModels.Leaderboard;
@@ -15,10 +16,24 @@ public class LeaderboardEventViewModel
     public string AthleteLastName { get; set; } = string.Empty;
     public string RelayName { get; set; } = string.Empty;
     public string AthleteFullName => $"{AthleteFirstName} {AthleteLastName}";
-    public string AthleteSlug { get; set; } = string.Empty;
+    public string AthleteSlug
+    {
+        get
+        {
+            var helper = new SlugHelper();
+            return helper.GenerateSlug($"{AthleteFirstName}-{AthleteLastName}");
+        }
+    }
 
     public string Performance { get; set; } = string.Empty;
     public DateTime? MeetDate { get; set; }
     public string MeetName { get; set; } = string.Empty;
-    public string MeetSlug { get; set; } = string.Empty;
+    public string MeetSlug
+    {
+        get
+        {
+            var helper = new SlugHelper();
+            return helper.GenerateSlug(MeetName);
+        }
+    }
 }

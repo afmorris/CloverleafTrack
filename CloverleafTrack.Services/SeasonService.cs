@@ -116,7 +116,8 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
                 .Select(x => new TopPerformanceViewModel
                 {
                     EventName = x.EventName,
-                    AthleteName = x.AthleteName,
+                    AthleteFirstName = x.AthleteFirstName,
+                    AthleteLastName = x.AthleteLastName,
                     Performance = x.DistanceInches.HasValue
                         ? FormatDistance(x.DistanceInches.Value)
                         : x.TimeSeconds.HasValue
@@ -133,7 +134,8 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
                 .Select(x => new TopPerformanceViewModel
                 {
                     EventName = x.EventName,
-                    AthleteName = x.AthleteName,
+                    AthleteFirstName = x.AthleteFirstName,
+                    AthleteLastName = x.AthleteLastName,
                     Performance = x.DistanceInches.HasValue
                         ? FormatDistance(x.DistanceInches.Value)
                         : x.TimeSeconds.HasValue

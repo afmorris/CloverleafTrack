@@ -196,11 +196,9 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
                 AthleteFirstName = p.AthleteFirstName ?? "",
                 AthleteLastName = p.AthleteLastName ?? "",
                 RelayName = p.RelayName ?? "",
-                AthleteSlug = p.AthleteSlug ?? "",
                 Performance = FormatPerformance(p.TimeSeconds, p.DistanceInches),
                 MeetDate = p.PerformanceId > 0 ? p.MeetDate : null,
-                MeetName = p.MeetName ?? "",
-                MeetSlug = p.MeetSlug ?? ""
+                MeetName = p.MeetName ?? ""
             })
             .ToList();
     }

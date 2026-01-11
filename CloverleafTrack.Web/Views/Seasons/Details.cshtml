@@ -12,50 +12,36 @@
     var hasOutdoor = maleOutdoor.Any() || femaleOutdoor.Any();
 }
 
-<style>
-    .topographic-bg {
-        background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.02) 10px, rgba(255,255,255,.02) 20px), repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.02) 10px, rgba(255,255,255,.02) 20px);
-    }
-
-    .meet-card {
-        transition: all 0.2s ease-in-out;
-    }
-
-        .meet-card:hover {
-            transform: translateX(4px);
-        }
-</style>
-
 <!-- Main Content -->
 <div class="max-w-7xl mx-auto px-6">
 
     <!-- Header -->
     <div class="mb-8">
-        <a href="@Url.Action("Index", "Seasons")" class="text-gray-400 hover:text-white text-sm mb-2 inline-block">
+        <a asp-controller="Seasons" asp-action="Index" class="text-gray-600 dark:text-gray-400 hover:text-white text-sm mb-2 inline-block">
             ← Back to All Seasons
         </a>
-        <h1 class="text-4xl font-bold text-white">@Model.Name Season</h1>
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">@Model.Name Season</h1>
     </div>
 
     <!-- Summary Stats -->
     <div class="mb-12">
-        <h2 class="text-2xl font-bold mb-6 text-white">Season Overview</h2>
+        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Season Overview</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-gradient-to-br from-green-900/30 to-gray-800/50 border border-green-700/30 rounded-xl p-6">
-                <div class="text-3xl font-bold text-green-400 mb-1">@Model.TotalPRs</div>
-                <div class="text-sm text-gray-400">Total PRs</div>
+            <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/40 dark:to-purple-800/40 rounded-xl p-6 border border-purple-200 dark:border-purple-700/30 shadow-sm">
+                <div class="text-sm text-purple-700 dark:text-purple-300 mb-2 font-semibold uppercase tracking-wide">Total PRs</div>
+                <div class="text-4xl font-bold text-purple-900 dark:text-purple-100">@Model.TotalPRs</div>
             </div>
-            <div class="bg-gradient-to-br from-blue-900/30 to-gray-800/50 border border-blue-700/30 rounded-xl p-6">
-                <div class="text-3xl font-bold text-blue-400 mb-1">@Model.TotalAthletesWithPRs</div>
-                <div class="text-sm text-gray-400">Athletes with PRs</div>
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40 rounded-xl p-6 border border-blue-200 dark:border-blue-700/30 shadow-sm">
+                <div class="text-sm text-blue-700 dark:text-blue-300 mb-2 font-semibold uppercase tracking-wide">Athletes with PRs</div>
+                <div class="text-4xl font-bold text-blue-900 dark:text-blue-100">@Model.TotalAthletesWithPRs</div>
             </div>
-            <div class="bg-gradient-to-br from-yellow-900/30 to-gray-800/50 border border-yellow-700/30 rounded-xl p-6">
-                <div class="text-3xl font-bold text-yellow-400 mb-1">@Model.TotalSchoolRecordsBroken</div>
-                <div class="text-sm text-gray-400">School Records</div>
+            <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/40 dark:to-yellow-800/40 rounded-xl p-6 border border-yellow-200 dark:border-yellow-700/30 shadow-sm">
+                <div class="text-sm text-yellow-700 dark:text-yellow-300 mb-2 font-semibold uppercase tracking-wide">School Records</div>
+                <div class="text-4xl font-bold text-yellow-900 dark:text-yellow-100">@Model.TotalSchoolRecordsBroken</div>
             </div>
-            <div class="bg-gradient-to-br from-purple-900/30 to-gray-800/50 border border-purple-700/30 rounded-xl p-6">
-                <div class="text-3xl font-bold text-purple-400 mb-1">@Model.TotalMeets</div>
-                <div class="text-sm text-gray-400">Meets</div>
+            <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/40 dark:to-green-800/40 rounded-xl p-6 border border-green-200 dark:border-green-700/30 shadow-sm">
+                <div class="text-sm text-green-700 dark:text-green-300 mb-2 font-semibold uppercase tracking-wide">Meets</div>
+                <div class="text-4xl font-bold text-green-900 dark:text-green-100">@Model.TotalMeets</div>
             </div>
         </div>
     </div>
@@ -63,210 +49,245 @@
     <!-- Top Performances Section -->
     @if (hasIndoor || hasOutdoor)
     {
-        <div class="mb-12">
+        <section class="mb-16">
+
             <div class="mb-6">
-                <h2 class="text-2xl font-bold text-white">Top 10 All-Time Performances</h2>
-                <p class="text-gray-400">Performances entering or improving a Top 10 All-Time List this season</p>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Top 10 All-Time Performances</h2>
+                <p class="text-gray-600 dark:text-gray-400">Performances entering or improving a Top 10 All-Time List this season</p>
             </div>
 
-            <!-- Environment Tabs -->
-            <div class="mb-6 flex gap-3">
-                <button onclick="showEnvironment('outdoor')" id="outdoor-tab"
-                        class="env-tab px-6 py-3 bg-amber-500/20 text-amber-400 rounded-lg border border-amber-500/30 font-medium transition-all hover:bg-amber-500/30">
-                    ☀️ Outdoor
-                </button>
-                <button onclick="showEnvironment('indoor')" id="indoor-tab"
-                        class="env-tab px-6 py-3 bg-gray-800 text-gray-400 rounded-lg border border-gray-700 font-medium transition-all hover:bg-gray-750">
-                    🏢 Indoor
-                </button>
-            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
+                <!-- Environment Tabs -->
+                <div class="flex border-b border-gray-200 dark:border-gray-700">
+                    <button class="all-time-tab flex-1 py-4 px-6 font-bold text-lg transition-all flex items-center justify-center gap-3" data-tab="indoor">
+                        🏢 INDOOR
+                    </button>
+                    <button class="all-time-tab flex-1 py-4 px-6 font-bold text-lg transition-all flex items-center justify-center gap-3" data-tab="outdoor">
+                        ☀️ OUTDOOR
+                    </button>
+                </div>
 
-            <!-- Outdoor Content -->
-            <div id="outdoor-content" class="env-content">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Boys Outdoor -->
-                    <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6">
-                        <h3 class="text-xl font-bold text-blue-400 mb-4 flex items-center gap-2">
-                            <span>♂</span>
-                            <span>Boys Outdoor</span>
-                        </h3>
+                <!-- Indoor Content -->
+                <div id="all-time-indoor" class="all-time-content env-content p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Boys Indoor -->
+                        <div class="bg-gray-100 dark:bg-gray-800 border border-gray-500 dark:border-gray-700 rounded-xl p-6">
+                            <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
+                                <span>♂</span>
+                                <span>Boys Indoor</span>
+                            </h3>
 
-                        @if (maleOutdoor.Any())
-                        {
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full text-sm">
-                                    <thead class="text-left border-b border-gray-700">
-                                        <tr class="text-gray-400 text-xs">
-                                            <th class="pb-3 pr-4 font-medium">Event</th>
-                                            <th class="pb-3 pr-4 font-medium">Athlete</th>
-                                            <th class="pb-3 pr-4 font-medium">Mark</th>
-                                            <th class="pb-3 pr-4 font-medium">Rank</th>
-                                            <th class="pb-3 font-medium">Meet</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var perf in maleOutdoor)
-                                        {
-                                            <tr class="border-t border-gray-700/50 hover:bg-gray-700/30 transition-colors">
-                                                <td class="py-3 pr-4 text-white">@perf.EventName</td>
-                                                <td class="py-3 pr-4 text-gray-300">@perf.AthleteName</td>
-                                                <td class="py-3 pr-4 font-semibold text-amber-400">@perf.Performance</td>
-                                                <td class="py-3 pr-4 text-gray-400">@perf.AllTimeRank</td>
-                                                <td class="py-3 text-xs text-gray-400">
-                                                    <div>@perf.MeetName</div>
-                                                    <div class="text-gray-500">@perf.MeetDate.ToString("MMM d, yyyy")</div>
-                                                </td>
+                            @if (maleIndoor.Any())
+                            {
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full text-sm">
+                                        <thead class="text-left border-b border-gray-700">
+                                            <tr class="text-gray-600 dark:text-gray-400 text-xs">
+                                                <th class="pb-3 pr-4 font-medium">Event</th>
+                                                <th class="pb-3 pr-4 font-medium">Athlete</th>
+                                                <th class="pb-3 pr-4 font-medium">Mark</th>
+                                                <th class="pb-3 pr-4 font-medium">Rank</th>
+                                                <th class="pb-3 font-medium">Meet</th>
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                        else
-                        {
-                            <p class="text-gray-400 text-sm italic">No boys outdoor top 10 performances this season.</p>
-                        }
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var perf in maleIndoor)
+                                            {
+                                                <tr class="border-t border-gray-700/50 hover:bg-gray-700/30 transition-colors">
+                                                    <td class="py-3 pr-4 text-gray-900 dark:text-white">@perf.EventName</td>
+                                                    <td class="py-3 pr-4 text-gray-600 dark:text-gray-300">
+                                                        <a class="underline" asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug">
+                                                            @perf.AthleteName
+                                                        </a>
+                                                    </td>
+                                                    <td class="py-3 pr-4 font-semibold text-blue-600 dark:text-blue-400">@perf.Performance</td>
+                                                    <td class="py-3 pr-4 text-gray-600 dark:text-gray-400">@perf.AllTimeRank</td>
+                                                    <td class="py-3 text-xs text-gray-600 dark:text-gray-400">
+                                                        <div>
+                                                            <a class="underline" asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug">
+                                                                @perf.MeetName
+                                                            </a>
+                                                        </div>
+                                                        <div class="text-gray-500">@perf.MeetDate.ToString("MMM d, yyyy")</div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-gray-400 text-sm italic">No boys indoor top 10 performances this season.</p>
+                            }
+                        </div>
+
+                        <!-- Girls Indoor -->
+                        <div class="bg-gray-100 dark:bg-gray-800 border border-gray-500 dark:border-gray-700 rounded-xl p-6">
+                            <h3 class="text-xl font-bold text-pink-600 dark:text-pink-400 mb-4 flex items-center gap-2">
+                                <span>♀</span>
+                                <span>Girls Indoor</span>
+                            </h3>
+
+                            @if (femaleIndoor.Any())
+                            {
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full text-sm">
+                                        <thead class="text-left border-b border-gray-700">
+                                            <tr class="text-gray-600 dark:text-gray-400 text-xs">
+                                                <th class="pb-3 pr-4 font-medium">Event</th>
+                                                <th class="pb-3 pr-4 font-medium">Athlete</th>
+                                                <th class="pb-3 pr-4 font-medium">Mark</th>
+                                                <th class="pb-3 pr-4 font-medium">Rank</th>
+                                                <th class="pb-3 font-medium">Meet</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var perf in femaleIndoor)
+                                            {
+                                                <tr class="border-t border-gray-700/50 hover:bg-gray-700/30 transition-colors">
+                                                    <td class="py-3 pr-4 text-gray-900 dark:text-white">@perf.EventName</td>
+                                                    <td class="py-3 pr-4 text-gray-600 dark:text-gray-300">
+                                                        <a class="underline" asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug">
+                                                            @perf.AthleteName
+                                                        </a>
+                                                    </td>
+                                                    <td class="py-3 pr-4 font-semibold text-blue-600 dark:text-blue-400">@perf.Performance</td>
+                                                    <td class="py-3 pr-4 text-gray-600 dark:text-gray-400">@perf.AllTimeRank</td>
+                                                    <td class="py-3 text-xs text-gray-600 dark:text-gray-400">
+                                                        <div>
+                                                            <a class="underline" asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug">
+                                                                @perf.MeetName
+                                                            </a>
+                                                        </div>
+                                                        <div class="text-gray-500">@perf.MeetDate.ToString("MMM d, yyyy")</div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-gray-400 text-sm italic">No girls indoor top 10 performances this season.</p>
+                            }
+                        </div>
                     </div>
+                </div>
 
-                    <!-- Girls Outdoor -->
-                    <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6">
-                        <h3 class="text-xl font-bold text-pink-400 mb-4 flex items-center gap-2">
-                            <span>♀</span>
-                            <span>Girls Outdoor</span>
-                        </h3>
+                <!-- Outdoor Content -->
+                <div id="all-time-outdoor" class="all-time-content hidden env-content p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Boys Outdoor -->
+                        <div class="bg-gray-100 dark:bg-gray-800 border border-gray-500 dark:border-gray-700 rounded-xl p-6">
+                            <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
+                                <span>♂</span>
+                                <span>Boys Outdoor</span>
+                            </h3>
 
-                        @if (femaleOutdoor.Any())
-                        {
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full text-sm">
-                                    <thead class="text-left border-b border-gray-700">
-                                        <tr class="text-gray-400 text-xs">
-                                            <th class="pb-3 pr-4 font-medium">Event</th>
-                                            <th class="pb-3 pr-4 font-medium">Athlete</th>
-                                            <th class="pb-3 pr-4 font-medium">Mark</th>
-                                            <th class="pb-3 pr-4 font-medium">Rank</th>
-                                            <th class="pb-3 font-medium">Meet</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var perf in femaleOutdoor)
-                                        {
-                                            <tr class="border-t border-gray-700/50 hover:bg-gray-700/30 transition-colors">
-                                                <td class="py-3 pr-4 text-white">@perf.EventName</td>
-                                                <td class="py-3 pr-4 text-gray-300">@perf.AthleteName</td>
-                                                <td class="py-3 pr-4 font-semibold text-amber-400">@perf.Performance</td>
-                                                <td class="py-3 pr-4 text-gray-400">@perf.AllTimeRank</td>
-                                                <td class="py-3 text-xs text-gray-400">
-                                                    <div>@perf.MeetName</div>
-                                                    <div class="text-gray-500">@perf.MeetDate.ToString("MMM d, yyyy")</div>
-                                                </td>
+                            @if (maleOutdoor.Any())
+                            {
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full text-sm">
+                                        <thead class="text-left border-b border-gray-700">
+                                            <tr class="text-gray-600 dark:text-gray-400 text-xs">
+                                                <th class="pb-3 pr-4 font-medium">Event</th>
+                                                <th class="pb-3 pr-4 font-medium">Athlete</th>
+                                                <th class="pb-3 pr-4 font-medium">Mark</th>
+                                                <th class="pb-3 pr-4 font-medium">Rank</th>
+                                                <th class="pb-3 font-medium">Meet</th>
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                        else
-                        {
-                            <p class="text-gray-400 text-sm italic">No girls outdoor top 10 performances this season.</p>
-                        }
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var perf in maleOutdoor)
+                                            {
+                                                <tr class="border-t border-gray-700/50 hover:bg-gray-700/30 transition-colors">
+                                                    <td class="py-3 pr-4 text-gray-900 dark:text-white">@perf.EventName</td>
+                                                    <td class="py-3 pr-4 text-gray-600 dark:text-gray-300">
+                                                        <a class="underline" asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug">
+                                                            @perf.AthleteName
+                                                        </a>
+                                                    </td>
+                                                    <td class="py-3 pr-4 font-semibold text-yellow-900 dark:text-yellow-100">@perf.Performance</td>
+                                                    <td class="py-3 pr-4 text-gray-600 dark:text-gray-400">@perf.AllTimeRank</td>
+                                                    <td class="py-3 text-xs text-gray-600 dark:text-gray-400">
+                                                        <div>
+                                                            <a class="underline" asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug">
+                                                                @perf.MeetName
+                                                            </a>
+                                                        </div>
+                                                        <div class="text-gray-500">@perf.MeetDate.ToString("MMM d, yyyy")</div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-gray-400 text-sm italic">No boys outdoor top 10 performances this season.</p>
+                            }
+                        </div>
+
+                        <!-- Girls Outdoor -->
+                        <div class="bg-gray-100 dark:bg-gray-800 border border-gray-500 dark:border-gray-700 rounded-xl p-6">
+                            <h3 class="text-xl font-bold text-pink-600 dark:text-pink-400 mb-4 flex items-center gap-2">
+                                <span>♀</span>
+                                <span>Girls Outdoor</span>
+                            </h3>
+
+                            @if (femaleOutdoor.Any())
+                            {
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full text-sm">
+                                        <thead class="text-left border-b border-gray-700">
+                                            <tr class="text-gray-600 dark:text-gray-400 text-xs">
+                                                <th class="pb-3 pr-4 font-medium">Event</th>
+                                                <th class="pb-3 pr-4 font-medium">Athlete</th>
+                                                <th class="pb-3 pr-4 font-medium">Mark</th>
+                                                <th class="pb-3 pr-4 font-medium">Rank</th>
+                                                <th class="pb-3 font-medium">Meet</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var perf in femaleOutdoor)
+                                            {
+                                                <tr class="border-t border-gray-700/50 hover:bg-gray-700/30 transition-colors">
+                                                    <td class="py-3 pr-4 text-gray-900 dark:text-white">@perf.EventName</td>
+                                                    <td class="py-3 pr-4 text-gray-600 dark:text-gray-300">
+                                                        <a class="underline" asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug">
+                                                            @perf.AthleteName
+                                                        </a>
+                                                    </td>
+                                                    <td class="py-3 pr-4 font-semibold text-yellow-900 dark:text-yellow-100">@perf.Performance</td>
+                                                    <td class="py-3 pr-4 text-gray-600 dark:text-gray-400">@perf.AllTimeRank</td>
+                                                    <td class="py-3 text-xs text-gray-600 dark:text-gray-400">
+                                                        <div>
+                                                            <a class="underline" asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug">
+                                                                @perf.MeetName
+                                                            </a>
+                                                        </div>
+                                                        <div class="text-gray-500">@perf.MeetDate.ToString("MMM d, yyyy")</div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-gray-400 text-sm italic">No girls outdoor top 10 performances this season.</p>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Indoor Content -->
-            <div id="indoor-content" class="env-content hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Boys Indoor -->
-                    <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6">
-                        <h3 class="text-xl font-bold text-blue-400 mb-4 flex items-center gap-2">
-                            <span>♂</span>
-                            <span>Boys Indoor</span>
-                        </h3>
-
-                        @if (maleIndoor.Any())
-                        {
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full text-sm">
-                                    <thead class="text-left border-b border-gray-700">
-                                        <tr class="text-gray-400 text-xs">
-                                            <th class="pb-3 pr-4 font-medium">Event</th>
-                                            <th class="pb-3 pr-4 font-medium">Athlete</th>
-                                            <th class="pb-3 pr-4 font-medium">Mark</th>
-                                            <th class="pb-3 pr-4 font-medium">Rank</th>
-                                            <th class="pb-3 font-medium">Meet</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var perf in maleIndoor)
-                                        {
-                                            <tr class="border-t border-gray-700/50 hover:bg-gray-700/30 transition-colors">
-                                                <td class="py-3 pr-4 text-white">@perf.EventName</td>
-                                                <td class="py-3 pr-4 text-gray-300">@perf.AthleteName</td>
-                                                <td class="py-3 pr-4 font-semibold text-blue-400">@perf.Performance</td>
-                                                <td class="py-3 pr-4 text-gray-400">@perf.AllTimeRank</td>
-                                                <td class="py-3 text-xs text-gray-400">
-                                                    <div>@perf.MeetName</div>
-                                                    <div class="text-gray-500">@perf.MeetDate.ToString("MMM d, yyyy")</div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                        else
-                        {
-                            <p class="text-gray-400 text-sm italic">No boys indoor top 10 performances this season.</p>
-                        }
-                    </div>
-
-                    <!-- Girls Indoor -->
-                    <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6">
-                        <h3 class="text-xl font-bold text-pink-400 mb-4 flex items-center gap-2">
-                            <span>♀</span>
-                            <span>Girls Indoor</span>
-                        </h3>
-
-                        @if (femaleIndoor.Any())
-                        {
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full text-sm">
-                                    <thead class="text-left border-b border-gray-700">
-                                        <tr class="text-gray-400 text-xs">
-                                            <th class="pb-3 pr-4 font-medium">Event</th>
-                                            <th class="pb-3 pr-4 font-medium">Athlete</th>
-                                            <th class="pb-3 pr-4 font-medium">Mark</th>
-                                            <th class="pb-3 pr-4 font-medium">Rank</th>
-                                            <th class="pb-3 font-medium">Meet</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var perf in femaleIndoor)
-                                        {
-                                            <tr class="border-t border-gray-700/50 hover:bg-gray-700/30 transition-colors">
-                                                <td class="py-3 pr-4 text-white">@perf.EventName</td>
-                                                <td class="py-3 pr-4 text-gray-300">@perf.AthleteName</td>
-                                                <td class="py-3 pr-4 font-semibold text-blue-400">@perf.Performance</td>
-                                                <td class="py-3 pr-4 text-gray-400">@perf.AllTimeRank</td>
-                                                <td class="py-3 text-xs text-gray-400">
-                                                    <div>@perf.MeetName</div>
-                                                    <div class="text-gray-500">@perf.MeetDate.ToString("MMM d, yyyy")</div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                        else
-                        {
-                            <p class="text-gray-400 text-sm italic">No girls indoor top 10 performances this season.</p>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
+            
+        </section>
     }
     else
     {
@@ -277,39 +298,43 @@
 
     <!-- Meets Section -->
     <div class="mb-12">
-        <h2 class="text-2xl font-bold mb-6 text-white">Season Meets</h2>
+        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Season Meets</h2>
         <div class="space-y-3">
             @foreach (var meet in Model.Meets.OrderByDescending(m => m.MeetDate))
             {
-                <div class="meet-card bg-gray-800/50 border border-gray-700 rounded-xl p-5 hover:border-gray-600">
+                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
                     <div class="flex items-center gap-4">
                         <!-- Calendar Badge -->
-                        <div class="flex flex-col items-center bg-gradient-to-br from-blue-900/40 to-gray-800/50 border border-blue-700/30 rounded-lg px-3 py-2 min-w-[60px] text-center">
-                            <div class="text-xs font-semibold text-blue-400 uppercase">
+                        <div class="flex flex-col items-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40 border border-blue-200 dark:border-blue-700/30 rounded-lg px-3 py-2 min-w-[60px] text-center">
+                            <div class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase">
                                 @meet.MeetDate.ToString("MMM")
                             </div>
-                            <div class="text-2xl font-bold text-white leading-tight">
+                            <div class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
                                 @meet.MeetDate.Day
                             </div>
                         </div>
 
                         <!-- Meet Info -->
                         <div class="flex-1">
-                            <div class="text-lg font-semibold text-white mb-1">@meet.MeetName</div>
+                            <div class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                                <a class="underline" asp-controller="Meets" asp-action="Details" asp-route-slug="@meet.Slug">
+                                    @meet.MeetName
+                                </a>
+                            </div>
                             @if (!string.IsNullOrEmpty(meet.Location))
                             {
-                                <div class="text-sm text-gray-400 mb-2">📍 @meet.Location</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">📍 @meet.Location</div>
                             }
                             <div class="flex gap-4 text-sm">
                                 @if (meet.PRCount > 0)
                                 {
-                                    <span class="text-green-400">
+                                    <span class="text-green-900 dark:text-green-100">
                                         ● @meet.PRCount PR@(meet.PRCount > 1 ? "s" : "")
                                     </span>
                                 }
                                 @if (meet.SchoolRecordCount > 0)
                                 {
-                                    <span class="text-yellow-400">
+                                    <span class="text-yellow-700 dark:text-yellow-300">
                                         ● @meet.SchoolRecordCount SR@(meet.SchoolRecordCount > 1 ? "s" : "")
                                     </span>
                                 }
@@ -320,8 +345,8 @@
                         @if (!string.IsNullOrEmpty(meet.ResultsUrl))
                         {
                             <div>
-                                <a href="@meet.ResultsUrl"
-                                   class="px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30 hover:bg-blue-500/30 transition-colors text-sm font-medium">
+                                <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meet.Slug"
+                                   class="px-4 py-2 dark:bg-blue-500/20 dark:text-blue-400 bg-blue-100 text-blue-700 rounded-lg border border-blue-500/30 text-sm font-medium">
                                     View Results →
                                 </a>
                             </div>
@@ -334,33 +359,44 @@
 
 </div>
 
-<script>
-    function showEnvironment(env) {
-        // Hide all content
-        document.querySelectorAll('.env-content').forEach(el => el.classList.add('hidden'));
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const allTimeTabs = document.querySelectorAll('.all-time-tab');
+            const allTimeContent = document.querySelectorAll('.all-time-content');
 
-        // Show selected content
-        document.getElementById(env + '-content').classList.remove('hidden');
+            allTimeTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTab = this.dataset.tab;
 
-        // Update tab styling
-        document.querySelectorAll('.env-tab').forEach(tab => {
-            tab.classList.remove('bg-amber-500/20', 'text-amber-400', 'border-amber-500/30');
-            tab.classList.remove('bg-blue-500/20', 'text-blue-400', 'border-blue-500/30');
-            tab.classList.add('bg-gray-800', 'text-gray-400', 'border-gray-700');
+                    // Update tab styles
+                    allTimeTabs.forEach(t => {
+                        if (t.dataset.tab === targetTab) {
+                            if (targetTab === 'outdoor') {
+                                t.classList.add('bg-gradient-to-r', 'from-amber-600', 'to-yellow-500', 'text-white');
+                                t.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
+                            } else {
+                                t.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-blue-500', 'text-white');
+                                t.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
+                            }
+                        } else {
+                            t.classList.remove('bg-gradient-to-r', 'from-amber-600', 'to-yellow-500', 'from-blue-600', 'to-blue-500', 'text-white');
+                            t.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
+                        }
+                    });
+
+                    // Show/hide content
+                    allTimeContent.forEach(content => {
+                        if (content.id === `all-time-${targetTab}`) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            document.querySelector('.all-time-tab[data-tab="indoor"]')?.click();
         });
-
-        const activeTab = document.getElementById(env + '-tab');
-        activeTab.classList.remove('bg-gray-800', 'text-gray-400', 'border-gray-700');
-
-        if (env === 'outdoor') {
-            activeTab.classList.add('bg-amber-500/20', 'text-amber-400', 'border-amber-500/30');
-        } else {
-            activeTab.classList.add('bg-blue-500/20', 'text-blue-400', 'border-blue-500/30');
-        }
-    }
-
-    // Set outdoor as default on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        showEnvironment('outdoor');
-    });
-</script>
+    </script>
+}

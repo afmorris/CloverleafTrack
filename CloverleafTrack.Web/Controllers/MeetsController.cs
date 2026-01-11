@@ -8,10 +8,10 @@ public class MeetsController(ILogger<MeetsController> logger, IMeetService meetS
     private readonly ILogger<MeetsController> logger = logger;
     private readonly IMeetService meetService = meetService;
     
-    [HttpGet("/meets/{name}")]
-    public async Task<IActionResult> Details(string name)
+    [HttpGet("/meets/{slug}")]
+    public async Task<IActionResult> Details(string slug)
     {
-        var vm = await meetService.GetMeetDetailsAsync(name);
+        var vm = await meetService.GetMeetDetailsAsync(slug);
         if (vm == null)
         {
             return NotFound();

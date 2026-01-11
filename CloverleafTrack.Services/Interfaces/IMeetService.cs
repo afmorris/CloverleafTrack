@@ -4,5 +4,5 @@ namespace CloverleafTrack.Services.Interfaces;
 
 public interface IMeetService
 {
-    public Task<MeetDetailsViewModel?> GetMeetDetailsAsync(string name);
+    public Task<MeetDetailsViewModel?> GetMeetDetailsAsync(string slug);
 }
