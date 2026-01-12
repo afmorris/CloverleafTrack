@@ -1,0 +1,46 @@
+@model KeyValuePair<EventCategory, List<AthleteViewModel>>
+
+@functions {
+    string GetCategoryName(CloverleafTrack.Models.Enums.EventCategory category)
+    {
+        return category switch
+        {
+            CloverleafTrack.Models.Enums.EventCategory.Sprints => "Sprints",
+            CloverleafTrack.Models.Enums.EventCategory.Distance => "Distance",
+            CloverleafTrack.Models.Enums.EventCategory.Hurdles => "Hurdles",
+            CloverleafTrack.Models.Enums.EventCategory.Jumps => "Jumps",
+            CloverleafTrack.Models.Enums.EventCategory.Throws => "Throws",
+            CloverleafTrack.Models.Enums.EventCategory.Relays => "Relays",
+            _ => "Other"
+        };
+    }
+    
+    string GetCategoryIcon(CloverleafTrack.Models.Enums.EventCategory category)
+    {
+        return category switch
+        {
+            CloverleafTrack.Models.Enums.EventCategory.Sprints => "⚡",
+            CloverleafTrack.Models.Enums.EventCategory.Distance => "🏃",
+            CloverleafTrack.Models.Enums.EventCategory.Hurdles => "🚧",
+            CloverleafTrack.Models.Enums.EventCategory.Jumps => "🦘",
+            CloverleafTrack.Models.Enums.EventCategory.Throws => "🥏",
+            CloverleafTrack.Models.Enums.EventCategory.Relays => "🤝",
+            _ => "📊"
+        };
+    }
+}
+
+<div class="mb-12">
+    <div class="flex items-center gap-3 mb-6">
+        <span class="text-3xl">@GetCategoryIcon(Model.Key)</span>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">@GetCategoryName(Model.Key)</h3>
+        <span class="text-gray-600 dark:text-gray-400 text-sm">(@Model.Value.Count athletes)</span>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @foreach (var athlete in Model.Value)
+        {
+            @await Html.PartialAsync("_AthleteCard", athlete)
+        }
+    </div>
+</div>

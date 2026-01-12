@@ -1,0 +1,11 @@
+@using CloverleafTrack.ViewModels.Seasons;
+
+@model SeasonCardViewModel
+
+<a asp-controller="Seasons" asp-action="Details" asp-route-name="@Model.Name"
+    class="block p-4 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-900 transition-colors">
+    <div class="font-medium mb-1 text-gray-900 dark:text-white">@Model.Name</div>
+    <div class="text-sm text-gray-600 dark:text-gray-400">
+        @Model.TotalMeets meets • @Model.IndoorSchoolRecordCount Indoor SRs • @Model.OutdoorSchoolRecordCount Outdoor SRs
+    </div>
+</a>

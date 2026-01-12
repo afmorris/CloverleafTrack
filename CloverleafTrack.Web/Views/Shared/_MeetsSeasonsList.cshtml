@@ -1,0 +1,6 @@
+@model List<SeasonMeetsViewModel>
+
+@foreach (var season in Model)
+{
+    @await Html.PartialAsync("_MeetsCard", season)
+}

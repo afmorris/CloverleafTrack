@@ -48,7 +48,8 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
                 .Select(p => new SchoolRecordViewModel
                 {
                     EventName = p.Event.Name,
-                    RecordHolder = p.Athlete?.FirstName + " " + p.Athlete?.LastName,
+                    RecordHolderFirstName = p.Athlete?.FirstName ?? string.Empty,
+                    RecordHolderLastName = p.Athlete?.LastName ?? string.Empty,
                     Performance = FormatPerformance(p),
                     Gender = p.Event.Gender ?? Gender.Male,
                 })
@@ -61,7 +62,8 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
                 .Select(p => new SchoolRecordViewModel
                 {
                     EventName = p.Event.Name,
-                    RecordHolder = p.Athlete?.FirstName + " " + p.Athlete?.LastName,
+                    RecordHolderFirstName = p.Athlete?.FirstName ?? string.Empty,
+                    RecordHolderLastName = p.Athlete?.LastName ?? string.Empty,
                     Performance = FormatPerformance(p),
                     Gender = p.Event.Gender ?? Gender.Male,
                 })

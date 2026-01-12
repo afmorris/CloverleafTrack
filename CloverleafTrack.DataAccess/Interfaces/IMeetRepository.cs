@@ -5,8 +5,10 @@ namespace CloverleafTrack.DataAccess.Interfaces;
 
 public interface IMeetRepository
 {
-    public Task<List<Meet>> GetMeetsForSeasonAsync(int seasonId);
+    Task<List<Meet>> GetMeetsForSeasonAsync(int seasonId);
     Task<Meet?> GetMeetBasicInfoBySlugAsync(string slug);
     Task<List<MeetPerformanceDto>> GetPerformancesForMeetAsync(int meetId);
+    Task<List<Meet>> GetAllMeetsWithStatsAsync();
     Task<int> GetUniqueAthleteCountForMeetAsync(int meetId);
+    Task<int> GetPerformanceCountForMeetAsync(int meetId);
 }

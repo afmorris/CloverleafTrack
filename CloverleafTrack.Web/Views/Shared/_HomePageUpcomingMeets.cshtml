@@ -1,0 +1,41 @@
+@model HomePageViewModel
+
+@if (Model.UpcomingMeets.Any())
+{
+    <section class="mb-16">
+        <h2 class="text-4xl font-bold mb-8 text-gray-900 dark:text-white">Upcoming Meets</h2>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm">
+            <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var meet in Model.UpcomingMeets)
+                {
+                    <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meet.Slug" class="block px-6 py-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-6">
+                                <div class="text-center bg-green-50 dark:bg-green-900/30 rounded-lg px-4 py-3 border border-green-200 dark:border-green-700/30 min-w-[80px]">
+                                    <div class="text-sm text-green-700 dark:text-green-300 font-semibold uppercase tracking-wide">@meet.Date.ToString("MMM")</div>
+                                    <div class="text-3xl font-bold text-green-900 dark:text-green-100">@meet.Date.Day</div>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-1 text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">@meet.Name</h3>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                                        @meet.Environment.ToString()
+                                        @if (!string.IsNullOrEmpty(meet.Location))
+                                        {
+                                            <span> • @meet.Location</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-gray-400 dark:text-gray-500 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+}

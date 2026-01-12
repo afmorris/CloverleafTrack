@@ -15,6 +15,18 @@ public class LeaderboardEventViewModel
     public string AthleteFirstName { get; set; } = string.Empty;
     public string AthleteLastName { get; set; } = string.Empty;
     public string RelayName { get; set; } = string.Empty;
+    public List<string> RelayMembers
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(RelayName))
+            {
+                return new List<string>();
+            }
+
+            return RelayName.Split("|~|").ToList();
+        }
+    }
     public string AthleteFullName => $"{AthleteFirstName} {AthleteLastName}";
     public string AthleteSlug
     {

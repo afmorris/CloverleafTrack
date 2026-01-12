@@ -98,7 +98,7 @@
                                             var helper = new SlugHelper();
                                             var meetName = helper.GenerateSlug(pr.MeetName);
                                         }
-                                        <a asp-controller="Meets" asp-action="Details" asp-route-name="@meetName" class="underline">@pr.MeetName</a>
+                                        <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meetName" class="underline">@pr.MeetName</a>
                                     </td>
                                     @if (hasTopTenRanks)
                                     {
@@ -154,7 +154,7 @@
                                             var helper = new SlugHelper();
                                             var meetName = helper.GenerateSlug(pr.MeetName);
                                         }
-                                        <a asp-controller="Meets" asp-action="Details" asp-route-name="@meetName" class="underline">@pr.MeetName</a>
+                                        <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meetName" class="underline">@pr.MeetName</a>
                                     </td>
                                     @if (hasTopTenRanks)
                                     {
@@ -260,7 +260,7 @@
                                                         var helper = new SlugHelper();
                                                         var meetName = helper.GenerateSlug(perf.MeetName);
                                                     }
-                                                    <a asp-controller="Meets" asp-action="Details" asp-route-name="@meetName" class="underline">@perf.MeetName</a>
+                                                    <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meetName" class="underline">@perf.MeetName</a>
                                                 </div>
                                                 <div class="flex gap-1">
                                                     @if (perf.IsSchoolRecord)
@@ -324,7 +324,7 @@
                                                         var helper = new SlugHelper();
                                                         var meetName = helper.GenerateSlug(perf.MeetName);
                                                     }
-                                                    <a asp-controller="Meets" asp-action="Details" asp-route-name="@meetName" class="underline">@perf.MeetName</a>
+                                                    <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meetName" class="underline">@perf.MeetName</a>
                                                 </div>
                                                 <div class="flex gap-1">
                                                     @if (perf.IsSchoolRecord)

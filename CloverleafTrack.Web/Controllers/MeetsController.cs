@@ -10,7 +10,8 @@ public class MeetsController(ILogger<MeetsController> logger, IMeetService meetS
 
     public async Task<IActionResult> Index()
     {
-        return View();
+        var vm = await meetService.GetMeetsIndexAsync();
+        return View(vm);
     }
     
     [HttpGet("/meets/{slug}")]

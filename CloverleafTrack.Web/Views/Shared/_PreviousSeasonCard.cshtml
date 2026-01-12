@@ -1,0 +1,100 @@
+@using CloverleafTrack.ViewModels.Seasons;
+
+@model SeasonCardViewModel
+
+@functions {
+	string GetGenderIcon(CloverleafTrack.Models.Enums.Gender gender) => gender switch
+	{
+		CloverleafTrack.Models.Enums.Gender.Male => "♂",
+		CloverleafTrack.Models.Enums.Gender.Female => "♀",
+		CloverleafTrack.Models.Enums.Gender.Mixed => "⚥",
+		_ => ""
+	};
+
+	string GetGenderClass(CloverleafTrack.Models.Enums.Gender gender) => gender switch
+	{
+		CloverleafTrack.Models.Enums.Gender.Male => "text-blue-600 dark:text-blue-400",
+		CloverleafTrack.Models.Enums.Gender.Female => "text-pink-600 dark:text-pink-400",
+		CloverleafTrack.Models.Enums.Gender.Mixed => "text-purple-600 dark:text-purple-400",
+		_ => "text-gray-600 dark:text-gray-400"
+	};
+}
+
+<div class="bg-white dark:bg-gray-800 border-2 border-gray-800/50 dark:border-gray-500/50 rounded-2xl p-8 shadow-2xl mb-4">
+    <div class="flex items-start justify-between mb-4">
+        <div>
+            <h3 class="text-2xl font-bold mb-1 text-gray-900 dark:text-white">@Model.Name</h3>
+        </div>
+        <a href="@Url.Action("Details", "Seasons", new { name = Model.Name })"
+            class="px-4 py-2 bg-gray-100 dark:bg-gray-500 hover:bg-gray-700 dark:hover:bg-gray-800 text-gray-900 dark:text-white font-medium rounded-lg text-sm">
+            View Season Details →
+        </a>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/40 dark:to-purple-800/40 border-purple-200 dark:border-purple-700 rounded-lg p-4 border">
+            <div class="text-xl font-bold text-purple-700 dark:text-purple-300 mb-1">@Model.TotalPRs</div>
+            <div class="text-xs text-purple-900 dark:text-purple-100">Season PRs</div>
+        </div>
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40 border-blue-200 dark:border-blue-700 rounded-lg p-4 border">
+            <div class="text-xl font-bold text-blue-700 dark:text-blue-300 mb-1">@Model.IndoorSchoolRecordCount</div>
+            <div class="text-xs text-blue-900 dark:text-blue-100">Indoor SRs</div>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/40 dark:to-yellow-800/40 border-yellow-200 dark:border-yellow-700 rounded-lg p-4 border">
+            <div class="text-xl font-bold text-yellow-700 dark:text-yellow-300 mb-1">@Model.OutdoorSchoolRecordCount</div>
+            <div class="text-xs text-yellow-900 dark:text-yellow-100">Outdoor SRs</div>
+        </div>
+        <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/40 dark:to-green-800/40 border-green-200 dark:border-green-700 rounded-lg p-4 border">
+            <div class="text-xl font-bold text-green-700 dark:text-green-300 mb-1">@Model.TotalMeets</div>
+            <div class="text-xs text-green-900 dark:text-green-100">Meets</div>
+        </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-4">
+        @if (Model.IndoorSchoolRecords?.Any() == true)
+        {
+            <div class="bg-gray-300/50 dark:bg-gray-900/50 rounded-lg p-4 border border-blue-500/30">
+                <div class="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">🏢 Indoor SRs (@Model.IndoorSchoolRecordCount)</div>
+                <div class="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+                    @foreach (var record in Model.IndoorSchoolRecords.Take(4))
+                    {
+                        <div>
+                            <span class="@GetGenderClass(record.Gender)">@GetGenderIcon(record.Gender)</span>
+                            @record.EventName - <a asp-controller="Roster" asp-action="Details" asp-route-slug="@record.RecordHolderSlug" class="underline">@record.RecordHolder</a> (@record.Performance)
+                        </div>
+                    }
+                    @if (Model.IndoorSchoolRecords.Count > 4)
+                    {
+                        <div class="text-gray-600 dark:text-gray-400">+ @(Model.IndoorSchoolRecords.Count - 4) more</div>
+                    }
+                </div>
+            </div>
+        }
+        @if (Model.OutdoorSchoolRecords?.Any() == true)
+        {
+            <div class="bg-gray-300/50 dark:bg-gray-900/50 rounded-lg p-4 border border-amber-500/30">
+                <div class="text-sm font-medium text-yellow-700 dark:text-yellow-300 mb-2">☀️ Outdoor SRs (@Model.OutdoorSchoolRecordCount)</div>
+                <div class="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+                    @foreach (var record in Model.OutdoorSchoolRecords.Take(4))
+                    {
+                        <div>
+                            <span class="@GetGenderClass(record.Gender)">@GetGenderIcon(record.Gender)</span>
+                            @record.EventName - <a asp-controller="Roster" asp-action="Details" asp-route-slug="@record.RecordHolderSlug" class="underline">@record.RecordHolder</a> (@record.Performance)
+                        </div>
+                    }
+                    @if (Model.OutdoorSchoolRecords.Count > 4)
+                    {
+                        <div class="text-gray-600 dark:text-gray-400">+ @(Model.OutdoorSchoolRecords.Count - 4) more</div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Notes))
+    {
+        <div class="mt-4 text-sm text-purple-700 dark:text-purple-300 italic">
+            ✨ @Model.Notes
+        </div>
+    }
+</div>

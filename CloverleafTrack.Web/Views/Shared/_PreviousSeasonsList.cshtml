@@ -1,7 +1,9 @@
-﻿@model List<CloverleafTrack.ViewModels.Seasons.SeasonCardViewModel>
+@using CloverleafTrack.ViewModels.Seasons;
+
+@model List<SeasonCardViewModel>
 
 @{
-	ViewData["Title"] = "Seasons";
+    var pastSeasons = Model.Where(s => !s.IsCurrentSeason).ToList();
 }
 
 @functions {
@@ -22,17 +24,17 @@
 	};
 }
 
-<!-- Main Content -->
-<div class="max-w-7xl mx-auto px-6">
+<!-- Past Seasons -->
+@if (pastSeasons.Any())
+{
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Past Seasons</h2>
 
-	<!-- Header -->
-	<div class="mb-8">
-		<h1 class="text-4xl font-bold text-gray-900 dark:text-white">Seasons</h1>
-		<p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Track our journey through the years</p>
-	</div>
-
-	@await Html.PartialAsync("_OverallSeasonStats", Model)
-	@await Html.PartialAsync("_CurrentSeasonCard", Model)
-	@await Html.PartialAsync("_PreviousSeasonsList", Model)
-
-</div>
+        @foreach (var season in pastSeasons.Take(3))
+        {
+            @await Html.PartialAsync("_PreviousSeasonCard", season)
+        }
+        
+        @await Html.PartialAsync("_OldSeasonsList", Model)
+    </div>
+}

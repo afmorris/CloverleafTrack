@@ -44,8 +44,8 @@ public class HomeService(
                 Performance = FormatPerformance(onThisDay.TimeSeconds, onThisDay.DistanceInches),
                 AthleteFirstName = onThisDay.AthleteFirstName,
                 AthleteLastName = onThisDay.AthleteLastName,
-                AthleteSlug = _slugHelper.GenerateSlug($"{onThisDay.AthleteFirstName}-{onThisDay.AthleteLastName}"),
                 MeetName = onThisDay.MeetName,
+                MeetEnvironment = onThisDay.MeetEnvironment,
                 Date = onThisDay.Date,
                 IsSchoolRecord = onThisDay.IsSchoolRecord,
                 AllTimeRank = onThisDay.AllTimeRank

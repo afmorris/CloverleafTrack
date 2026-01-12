@@ -44,6 +44,7 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                                a.FirstName AS AthleteFirstName,
                                a.LastName AS AthleteLastName,
                                m.Name AS MeetName,
+                               m.Environment AS MeetEnvironment,
                                m.Date,
                                p.SchoolRecord AS IsSchoolRecord,
                                (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) AS AllTimeRank

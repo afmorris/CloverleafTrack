@@ -1,0 +1,22 @@
+@model KeyValuePair<int, List<AthleteViewModel>>
+
+<details class="mb-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+    <summary class="p-6 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors flex items-center justify-between">
+        <div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Class of @Model.Key</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400">@Model.Value.Count athletes</p>
+        </div>
+        <svg class="w-6 h-6 text-gray-600 dark:text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </summary>
+    
+    <div class="p-6 pt-2 bg-white dark:bg-gray-800">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach (var athlete in Model.Value)
+            {
+                @await Html.PartialAsync("_FormerAthleteCard", athlete)
+            }
+        </div>
+    </div>
+</details>

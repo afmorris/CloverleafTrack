@@ -1,0 +1,19 @@
+@model Dictionary<int, List<AthleteViewModel>>
+
+<div class="mb-12">
+    <h2 class="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Former Athletes</h2>
+    
+    @if (Model.Any())
+    {
+        @foreach (var yearGroup in Model.OrderByDescending(g => g.Key))
+        {
+            @await Html.PartialAsync("_FormerAthleteYearGroupSection", yearGroup)
+        }
+    }
+    else
+    {
+        <div class="p-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-center">
+            <p class="text-gray-600 dark:text-gray-400">No former athletes found.</p>
+        </div>
+    }
+</div>

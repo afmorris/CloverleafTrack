@@ -1,0 +1,95 @@
+@model MeetListItemViewModel
+
+@{
+    var borderColor = Model.IsUpcoming ? "border-gray-600 dark:border-gray-500 border-l-green-600 dark:border-l-green-500" : 
+                      Model.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor ? "border-gray-600 dark:border-gray-500 border-l-yellow-600 dark:border-l-yellow-500" : 
+                      Model.Environment == CloverleafTrack.Models.Enums.Environment.Indoor ? "border-gray-600 dark:border-gray-500 border-l-blue-600 dark:border-l-blue-500" : 
+                      "border-l-gray-600 dark:border-l-gray-500";
+    
+    var bgGradient = Model.IsUpcoming ? "bg-gradient-to-r from-green-900/30 to-gray-900" : "bg-white dark:bg-gray-800";
+    
+    var envBadgeColor = Model.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor ? 
+                        "bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/40 dark:to-yellow-800/40" : 
+                        "bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40";
+    
+    var envIcon = Model.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor ? "☀️" : "🏢";
+    var envText = Model.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor ? "OUTDOOR" : "INDOOR";
+}
+
+<a asp-controller="Meets" asp-action="Details" asp-route-slug="@Model.Slug" class="block @bgGradient rounded-lg border border-l-4 @borderColor p-4 hover:bg-gray-850 transition-colors">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-6 flex-1">
+            <!-- Date Badge -->
+            <div class="flex flex-col items-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40 border border-blue-200 dark:border-blue-700/30 rounded-lg px-3 py-2 min-w-[60px] text-center">
+                <div class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase">
+                    @Model.Date.ToString("MMM")
+                </div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
+                    @Model.Date.Day
+                </div>
+            </div>
+            
+            <!-- Meet Info -->
+            <div class="flex-1">
+                <div class="flex items-center gap-3 mb-1">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">@Model.Name</h3>
+                    <span class="px-2 py-1 @envBadgeColor rounded text-xs font-semibold">@envIcon @envText</span>
+                    @if (Model.IsUpcoming)
+                    {
+                        <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs font-bold">UPCOMING</span>
+                    }
+                </div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                    📍 @Model.LocationName
+                    @if (!string.IsNullOrEmpty(Model.LocationCity) && !string.IsNullOrEmpty(Model.LocationState))
+                    {
+                        <span> • @Model.LocationCity, @Model.LocationState</span>
+                    }
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            @if (!Model.IsUpcoming)
+            {
+                <div class="flex gap-4 text-sm">
+                    <div class="text-center">
+                        <div class="text-lg font-bold text-gray-800 dark:text-white">@Model.AthleteCount</div>
+                        <div class="text-xs text-gray-400 dark:text-gray-500">Athletes</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-lg font-bold text-gray-800 dark:text-white">@Model.PerformanceCount</div>
+                        <div class="text-xs text-gray-400 dark:text-gray-500">Performances</div>
+                    </div>
+                    @if (Model.PRCount > 0)
+                    {
+                        <div class="text-center">
+                            <div class="text-lg font-bold text-green-800 dark:text-green-400">@Model.PRCount</div>
+                            <div class="text-xs text-gray-400 dark:text-gray-500">PRs</div>
+                        </div>
+                    }
+                    @if (Model.SchoolRecordCount > 0)
+                    {
+                        <div class="text-center">
+                            <div class="text-lg font-bold text-yellow-800 dark:text-yellow-400">@Model.SchoolRecordCount</div>
+                            <div class="text-xs text-gray-400 dark:text-gray-500">SRs</div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="flex gap-4 text-sm">
+                    <div class="text-center">
+                        <div class="text-lg font-bold text-gray-800 dark:text-white">@Model.AthleteCount</div>
+                        <div class="text-xs text-gray-400 dark:text-gray-500">Athletes</div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <!-- Arrow -->
+        <svg class="w-5 h-5 text-gray-600 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+    </div>
+</a>

@@ -1,0 +1,42 @@
+@model HomePageViewModel
+
+@if (Model.OnThisDay != null)
+{
+    <section class="mb-16">
+        <h2 class="text-4xl font-bold mb-8 text-gray-900 dark:text-white">On This Day in Cloverleaf History</h2>
+        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/40 dark:to-purple-900/40 rounded-xl p-8 border border-indigo-200 dark:border-indigo-700/30 shadow-sm">
+            <div class="flex items-start gap-6">
+                <div class="text-7xl flex-shrink-0">🏆</div>
+                <div class="flex-1">
+                    <div class="text-sm text-indigo-700 dark:text-indigo-300 mb-3 font-semibold uppercase tracking-wide">@Model.OnThisDay.Date.ToString("MMMM d, yyyy")</div>
+                    <h3 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
+                        <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.OnThisDay.AthleteSlug" class="underline">@Model.OnThisDay.AthleteFullName</a>
+                        @if (Model.OnThisDay.IsSchoolRecord)
+                        {
+                            <span>set the school record in the @Model.OnThisDay.EventName</span>
+                        }
+                        else if (Model.OnThisDay.AllTimeRank.HasValue && Model.OnThisDay.AllTimeRank <= 3)
+                        {
+                            <span>posted a top-3 all-time mark in the @Model.OnThisDay.MeetEnvironment @Model.OnThisDay.EventName</span>
+                        }
+                        else
+                        {
+                            <span>competed in the @Model.OnThisDay.EventName</span>
+                        }
+                    </h3>
+                    <div class="flex flex-wrap items-center gap-4 mb-4">
+                        <div>
+                            <span class="text-green-600 dark:text-green-400 font-mono font-bold text-4xl">@Model.OnThisDay.Performance</span>
+                        </div>
+                        <div class="text-gray-400 dark:text-gray-500 text-2xl">•</div>
+                        <div class="text-gray-700 dark:text-gray-300 text-lg">
+                            <a asp-controller="Meets" asp-action="Details" asp-route-slug="@Model.OnThisDay.MeetSlug" class="underline">
+                                @Model.OnThisDay.MeetName
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}

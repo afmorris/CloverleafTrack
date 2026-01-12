@@ -1,3 +1,19 @@
+@model MeetsIndexViewModel
+
 @{
-    ViewBag.Title = "Meets";
+    ViewData["Title"] = "Meets";
 }
+
+<div class="max-w-7xl mx-auto px-6">
+
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Meets</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Complete meet history across all seasons</p>
+    </div>
+
+    @await Html.PartialAsync("_MeetsOverallStats", Model)
+    @await Html.PartialAsync("_MeetsSeasonsList", Model.Seasons)
+
+    
+</div>

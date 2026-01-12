@@ -139,6 +139,74 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
           return performances.ToList();
      }
 
+     public async Task<List<Meet>> GetAllMeetsWithStatsAsync()
+     {
+          using var connection = connectionFactory.CreateConnection();
+          
+          const string sql = """
+                              SELECT
+                                   m.Id,
+                                   m.Name,
+                                   m.Date,
+                                   m.Environment,
+                                   m.HandTimed,
+                                   m.LocationId,
+                                   m.SeasonId,
+                                   m.EntryStatus,
+                                   COUNT(CASE WHEN p.PersonalBest = 1 THEN 1 END) AS PRCount,
+                                   COUNT(CASE WHEN p.SchoolRecord = 1 THEN 1 END) AS SchoolRecordCount,
+                                   l.Id,
+                                   l.Name,
+                                   l.City,
+                                   l.State,
+                                   l.ZipCode,
+                                   l.Country,
+                                   s.Id,
+                                   s.Name,
+                                   s.StartDate,
+                                   s.EndDate
+                              FROM
+                                   Meets m
+                                   INNER JOIN Locations l ON m.LocationId = l.Id
+                                   INNER JOIN Seasons s ON s.Id = m.SeasonId
+                                   LEFT JOIN Performances p ON p.MeetId = m.Id
+                              GROUP BY
+                                   m.Id,
+                                   m.Name,
+                                   m.Date,
+                                   m.Environment,
+                                   m.HandTimed,
+                                   m.LocationId,
+                                   m.SeasonId,
+                                   m.EntryStatus,
+                                   l.Id,
+                                   l.Name,
+                                   l.City,
+                                   l.State,
+                                   l.ZipCode,
+                                   l.Country,
+                                   s.Id,
+                                   s.Name,
+                                   s.StartDate,
+                                   s.EndDate
+                              ORDER BY
+                                   s.StartDate DESC,
+                                   m.Date DESC
+                              """;
+          
+          var meets = await connection.QueryAsync<Meet, Location, Season, Meet>(
+               sql,
+               (meet, location, season) =>
+               {
+                    meet.Location = location;
+                    meet.Season = season;
+                    return meet;
+               },
+               splitOn: "Id,Id");
+          
+          return meets.ToList();
+     }
+
      public async Task<int> GetUniqueAthleteCountForMeetAsync(int meetId)
      {
           using var connection = connectionFactory.CreateConnection();
@@ -149,8 +217,7 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    SELECT DISTINCT a.Id as AthleteId
                                    FROM Performances p
                                    INNER JOIN Athletes a ON a.Id = p.AthleteId
-                                   WHERE p.MeetId = @MeetId
-                                        AND p.AthleteId IS NOT NULL
+                                   WHERE p.MeetId = @MeetId AND p.AthleteId IS NOT NULL
                                    
                                    UNION
                                    
@@ -161,6 +228,19 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    WHERE p.MeetId = @MeetId
                               )
                               SELECT COUNT(*) FROM AllAthletes
+                              """;
+          
+          return await connection.ExecuteScalarAsync<int>(sql, new { MeetId = meetId });
+     }
+
+     public async Task<int> GetPerformanceCountForMeetAsync(int meetId)
+     {
+          using var connection = connectionFactory.CreateConnection();
+          
+          const string sql = """
+                              SELECT COUNT(*)
+                              FROM Performances p
+                              WHERE p.MeetId = @MeetId
                               """;
           
           return await connection.ExecuteScalarAsync<int>(sql, new { MeetId = meetId });

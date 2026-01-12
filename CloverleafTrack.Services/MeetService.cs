@@ -9,6 +9,71 @@ namespace CloverleafTrack.Services;
 
 public class MeetService(IMeetRepository meetRepository) : IMeetService
 {
+    public async Task<MeetsIndexViewModel> GetMeetsIndexAsync()
+    {
+        var allMeets = await meetRepository.GetAllMeetsWithStatsAsync();
+        
+        // Group by season
+        var seasonGroups = allMeets
+            .GroupBy(m => new { m.SeasonId, m.Season.Name, m.Season.StartDate })
+            .OrderByDescending(g => g.Key.StartDate)
+            .ToList();
+        
+        var seasons = new List<SeasonMeetsViewModel>();
+        
+        foreach (var seasonGroup in seasonGroups)
+        {
+            var meets = seasonGroup.OrderByDescending(m => m.Date).ToList();
+            var completedMeets = meets.Where(m => m.Date <= DateTime.Now).ToList();
+            
+            var seasonMeets = new SeasonMeetsViewModel
+            {
+                SeasonName = seasonGroup.Key.Name,
+                TotalMeets = meets.Count,
+                CompletedMeets = completedMeets.Count,
+                TotalPRs = meets.Sum(m => m.PRCount),
+                TotalSchoolRecords = meets.Sum(m => m.SchoolRecordCount),
+                IsCurrentSeason = DateTime.Now >= seasonGroup.First().Season.StartDate && 
+                                 DateTime.Now <= seasonGroup.First().Season.EndDate,
+                Meets = new List<MeetListItemViewModel>()
+            };
+            
+            // Get athlete counts for each meet
+            foreach (var meet in meets)
+            {
+                var athleteCount = await meetRepository.GetUniqueAthleteCountForMeetAsync(meet.Id);
+                var performanceCount = await meetRepository.GetPerformanceCountForMeetAsync(meet.Id);
+                
+                seasonMeets.Meets.Add(new MeetListItemViewModel
+                {
+                    Id = meet.Id,
+                    Name = meet.Name,
+                    Slug = meet.Slug,
+                    Date = meet.Date,
+                    Environment = meet.Environment,
+                    LocationName = meet.Location.Name,
+                    LocationCity = meet.Location.City ?? "",
+                    LocationState = meet.Location.State ?? "",
+                    AthleteCount = athleteCount,
+                    PerformanceCount = performanceCount,
+                    PRCount = meet.PRCount,
+                    SchoolRecordCount = meet.SchoolRecordCount
+                });
+            }
+
+            seasons.Add(seasonMeets);
+        }
+
+        return new MeetsIndexViewModel
+        {
+            TotalMeets = allMeets.Count,
+            TotalPRs = allMeets.Sum(m => m.PRCount),
+            TotalSchoolRecords = allMeets.Sum(m => m.SchoolRecordCount),
+            TotalSeasons = seasonGroups.Count,
+            Seasons = seasons
+        };
+    }
+
     public async Task<MeetDetailsViewModel?> GetMeetDetailsAsync(string slug)
     {
         // Get basic meet info

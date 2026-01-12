@@ -1,5 +1,4 @@
-﻿@using Slugify
-@model LeaderboardViewModel
+﻿@model LeaderboardViewModel
 
 @{
     ViewBag.Title = "Leaderboard";
@@ -25,262 +24,62 @@
         <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
             <!-- Tab Headers -->
             <div class="flex border-b border-gray-200 dark:border-gray-700">
-                <button class="env-tab flex-1 py-4 px-6 font-bold text-lg transition-all flex items-center justify-center gap-3" data-tab="outdoor">
-                    ☀️ OUTDOOR
-                </button>
                 <button class="env-tab flex-1 py-4 px-6 font-bold text-lg transition-all flex items-center justify-center gap-3" data-tab="indoor">
                     🏢 INDOOR
+                </button>
+                <button class="env-tab flex-1 py-4 px-6 font-bold text-lg transition-all flex items-center justify-center gap-3" data-tab="outdoor">
+                    ☀️ OUTDOOR
                 </button>
             </div>
 
             <!-- Tab Content Wrapper -->
             <div class="p-8">
-                <!-- Outdoor Content -->
-                <div id="env-outdoor" class="env-content">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <!-- Boys Outdoor -->
-            <div>
-                <h2 class="text-2xl font-bold text-blue-400 mb-6">♂ Boys</h2>
-                
-                @foreach (var category in Model.BoysOutdoorCategories)
-                {
-                    <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-white mb-4">@category.CategoryName</h3>
+                <!-- Indoor Content -->
+                <div id="env-indoor" class="env-content">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         
-                        <div class="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
-                            <table class="min-w-full text-sm">
-                                <tbody>
-                                    @foreach (var evt in category.Events)
-                                    {
-                                        <tr class="event-row border-t border-gray-700/50 first:border-t-0">
-                                            <td class="px-5 py-4">
-                                                <a href="@Url.Action("Details", "Leaderboard", new { eventKey = evt.EventKey })" 
-                                                   class="text-white hover:text-blue-400 transition-colors font-medium">
-                                                    @evt.EventName
-                                                </a>
-                                            </td>
-                                            <td class="px-5 py-4 text-right">
-                                                @if (!string.IsNullOrEmpty(evt.AthleteFirstName) && !string.IsNullOrEmpty(evt.AthleteLastName))
-                                                {
-                                                    <div class="text-gray-300 text-sm mb-1">
-                                                        @evt.AthleteFirstName @evt.AthleteLastName
-                                                    </div>
-                                                }
-                                                else if (!string.IsNullOrEmpty(evt.RelayName))
-                                                {
-                                                    <div class="text-gray-300 text-sm mb-1">Relay Team</div>
-                                                }
-                                                
-                                                @if (!string.IsNullOrEmpty(evt.Performance))
-                                                {
-                                                    <div class="font-mono font-bold text-amber-400">@evt.Performance</div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="text-gray-500 italic text-xs">No performances yet</div>
-                                                }
-                                                
-                                                @if (evt.MeetDate.HasValue && !string.IsNullOrEmpty(evt.MeetName))
-                                                {
-                                                    <div class="text-gray-500 text-xs mt-1">
-                                                        @evt.MeetName<br />
-                                                        @evt.MeetDate.Value.ToString("MMM d, yyyy")
-                                                    </div>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                        <!-- Boys Indoor -->
+                        <div>
+                            <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6 flex items-center gap-2">
+                                <span>♂</span> Boys
+                            </h2>
+                            
+                            @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(true, true, Model.BoysIndoorCategories))
                         </div>
-                    </div>
-                }
-            </div>
 
-            <!-- Girls Outdoor -->
-            <div>
-                <h2 class="text-2xl font-bold text-pink-400 mb-6">♀ Girls</h2>
-                
-                @foreach (var category in Model.GirlsOutdoorCategories)
-                {
-                    <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-white mb-4">@category.CategoryName</h3>
-                        
-                        <div class="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
-                            <table class="min-w-full text-sm">
-                                <tbody>
-                                    @foreach (var evt in category.Events)
-                                    {
-                                        <tr class="event-row border-t border-gray-700/50 first:border-t-0">
-                                            <td class="px-5 py-4">
-                                                <a href="@Url.Action("Details", "Leaderboard", new { eventKey = evt.EventKey })" 
-                                                   class="text-white hover:text-pink-400 transition-colors font-medium">
-                                                    @evt.EventName
-                                                </a>
-                                            </td>
-                                            <td class="px-5 py-4 text-right">
-                                                @if (!string.IsNullOrEmpty(evt.AthleteFirstName) && !string.IsNullOrEmpty(evt.AthleteLastName))
-                                                {
-                                                    <div class="text-gray-300 text-sm mb-1">
-                                                        @evt.AthleteFirstName @evt.AthleteLastName
-                                                    </div>
-                                                }
-                                                else if (!string.IsNullOrEmpty(evt.RelayName))
-                                                {
-                                                    <div class="text-gray-300 text-sm mb-1">Relay Team</div>
-                                                }
-                                                
-                                                @if (!string.IsNullOrEmpty(evt.Performance))
-                                                {
-                                                    <div class="font-mono font-bold text-amber-400">@evt.Performance</div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="text-gray-500 italic text-xs">No performances yet</div>
-                                                }
-                                                
-                                                @if (evt.MeetDate.HasValue && !string.IsNullOrEmpty(evt.MeetName))
-                                                {
-                                                    <div class="text-gray-500 text-xs mt-1">
-                                                        @evt.MeetName<br />
-                                                        @evt.MeetDate.Value.ToString("MMM d, yyyy")
-                                                    </div>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                        <!-- Girls Indoor -->
+                        <div>
+                            <h2 class="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-6 flex items-center gap-2">
+                                <span>♀</span> Girls
+                            </h2>
+                            
+                            @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(false, true, Model.GirlsIndoorCategories))
                         </div>
                     </div>
-                }
-            </div>
-        </div>
                 </div>
 
-                <!-- Indoor Content -->
-                <div id="env-indoor" class="env-content hidden">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <!-- Boys Indoor -->
-            <div>
-                <h2 class="text-2xl font-bold text-blue-400 mb-6">♂ Boys</h2>
-                
-                @foreach (var category in Model.BoysIndoorCategories)
-                {
-                    <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-white mb-4">@category.CategoryName</h3>
+                <!-- Outdoor Content -->
+                <div id="env-outdoor" class="env-content hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         
-                        <div class="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
-                            <table class="min-w-full text-sm">
-                                <tbody>
-                                    @foreach (var evt in category.Events)
-                                    {
-                                        <tr class="event-row border-t border-gray-700/50 first:border-t-0">
-                                            <td class="px-5 py-4">
-                                                <a href="@Url.Action("Details", "Leaderboard", new { eventKey = evt.EventKey })" 
-                                                   class="text-white hover:text-blue-400 transition-colors font-medium">
-                                                    @evt.EventName
-                                                </a>
-                                            </td>
-                                            <td class="px-5 py-4 text-right">
-                                                @if (!string.IsNullOrEmpty(evt.AthleteFirstName) && !string.IsNullOrEmpty(evt.AthleteLastName))
-                                                {
-                                                    <div class="text-gray-300 text-sm mb-1">
-                                                        @evt.AthleteFirstName @evt.AthleteLastName
-                                                    </div>
-                                                }
-                                                else if (!string.IsNullOrEmpty(evt.RelayName))
-                                                {
-                                                    <div class="text-gray-300 text-sm mb-1">Relay Team</div>
-                                                }
-                                                
-                                                @if (!string.IsNullOrEmpty(evt.Performance))
-                                                {
-                                                    <div class="font-mono font-bold text-blue-400">@evt.Performance</div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="text-gray-500 italic text-xs">No performances yet</div>
-                                                }
-                                                
-                                                @if (evt.MeetDate.HasValue && !string.IsNullOrEmpty(evt.MeetName))
-                                                {
-                                                    <div class="text-gray-500 text-xs mt-1">
-                                                        @evt.MeetName<br />
-                                                        @evt.MeetDate.Value.ToString("MMM d, yyyy")
-                                                    </div>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                        <!-- Boys Outdoor -->
+                        <div>
+                            <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6 flex items-center gap-2">
+                                <span>♂</span> Boys
+                            </h2>
+                            
+                            @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(true, false, Model.BoysOutdoorCategories))
                         </div>
-                    </div>
-                }
-            </div>
 
-            <!-- Girls Indoor -->
-            <div>
-                <h2 class="text-2xl font-bold text-pink-400 mb-6">♀ Girls</h2>
-                
-                @foreach (var category in Model.GirlsIndoorCategories)
-                {
-                    <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-white mb-4">@category.CategoryName</h3>
-                        
-                        <div class="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
-                            <table class="min-w-full text-sm">
-                                <tbody>
-                                    @foreach (var evt in category.Events)
-                                    {
-                                        <tr class="event-row border-t border-gray-700/50 first:border-t-0">
-                                            <td class="px-5 py-4">
-                                                <a href="@Url.Action("Details", "Leaderboard", new { eventKey = evt.EventKey })" 
-                                                   class="text-white hover:text-pink-400 transition-colors font-medium">
-                                                    @evt.EventName
-                                                </a>
-                                            </td>
-                                            <td class="px-5 py-4 text-right">
-                                                @if (!string.IsNullOrEmpty(evt.AthleteFirstName) && !string.IsNullOrEmpty(evt.AthleteLastName))
-                                                {
-                                                    <div class="text-gray-300 text-sm mb-1">
-                                                        @evt.AthleteFirstName @evt.AthleteLastName
-                                                    </div>
-                                                }
-                                                else if (!string.IsNullOrEmpty(evt.RelayName))
-                                                {
-                                                    <div class="text-gray-300 text-sm mb-1">Relay Team</div>
-                                                }
-                                                
-                                                @if (!string.IsNullOrEmpty(evt.Performance))
-                                                {
-                                                    <div class="font-mono font-bold text-blue-400">@evt.Performance</div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="text-gray-500 italic text-xs">No performances yet</div>
-                                                }
-                                                
-                                                @if (evt.MeetDate.HasValue && !string.IsNullOrEmpty(evt.MeetName))
-                                                {
-                                                    <div class="text-gray-500 text-xs mt-1">
-                                                        @evt.MeetName<br />
-                                                        @evt.MeetDate.Value.ToString("MMM d, yyyy")
-                                                    </div>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                        <!-- Girls Outdoor -->
+                        <div>
+                            <h2 class="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-6 flex items-center gap-2">
+                                <span>♀</span> Girls
+                            </h2>
+                            
+                            @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(false, false, Model.GirlsOutdoorCategories))
                         </div>
                     </div>
-                }
-            </div>
-        </div>
                 </div>
             </div>
         </div>
@@ -324,7 +123,7 @@
             });
         });
 
-        // Set Outdoor as default active tab
-        document.querySelector('.env-tab[data-tab="outdoor"]')?.click();
+        // Set Indoor as default active tab
+        document.querySelector('.env-tab[data-tab="indoor"]')?.click();
     });
 </script>

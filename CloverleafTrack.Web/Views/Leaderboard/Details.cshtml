@@ -31,11 +31,6 @@
 }
 
 <style>
-    .topographic-bg {
-        background-image: 
-            repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.02) 10px, rgba(255,255,255,.02) 20px),
-            repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.02) 10px, rgba(255,255,255,.02) 20px);
-    }
     .perf-row {
         transition: all 0.2s ease-in-out;
     }
@@ -49,29 +44,21 @@
 
     <!-- Header -->
     <div class="mb-8">
-        <div class="mb-4">
-            <a href="@Url.Action("Index", "Leaderboard")" class="text-gray-400 hover:text-white text-sm inline-block">
-                ← Back to All Leaderboards
-            </a>
-        </div>
-        
-        <div class="flex items-center gap-4 mb-3">
-            <h1 class="text-4xl font-bold text-white">@Model.EventName</h1>
+        <a asp-controller="Leaderboard" asp-action="Index" class="text-gray-600 dark:text-gray-400 text-sm mb-2 inline-block">
+            ← Back to Leaderboard
+        </a>
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">
             @if (Model.Environment == CloverleafTrack.Models.Enums.Environment.Indoor)
             {
-                <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30 text-sm font-medium">
-                    🏢 Indoor
-                </span>
+                <span>Indoor</span>
             }
             else
             {
-                <span class="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-lg border border-amber-500/30 text-sm font-medium">
-                    ☀️ Outdoor
-                </span>
-            }
-        </div>
+                <span>Outdoor</span>
+            } @Model.EventName
+        </h1>
         
-        <p class="text-gray-400 text-lg">
+        <p class="text-gray-600 dark:text-gray-400 text-lg">
             @genderLabel @environmentLabel All-Time Rankings
         </p>
     </div>
@@ -79,22 +66,22 @@
     <!-- View Toggle Tabs -->
     <div class="mb-8 flex gap-3">
         <button onclick="showView('all')" id="all-tab" 
-                class="view-tab px-6 py-3 bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30 font-medium transition-all hover:bg-blue-500/30">
+                class="view-tab px-6 py-3 bg-blue-100 dark:bg-blue-500 text-gray-900 dark:text-white rounded-lg border border-blue-300 dark:border-blue-800 font-medium transition-all">
             All Performances (@Model.AllPerformances.Count)
         </button>
         <button onclick="showView('prs')" id="prs-tab"
-                class="view-tab px-6 py-3 bg-gray-800 text-gray-400 rounded-lg border border-gray-700 font-medium transition-all hover:bg-gray-750">
+                class="view-tab px-6 py-3 bg-gray-100 dark:bg-gray-500 text-gray-900 dark:text-white rounded-lg border border-gray-300 dark:border-gray-800 font-medium transition-all">
             PRs Only (@Model.PersonalRecordsOnly.Count)
         </button>
     </div>
 
     <!-- All Performances View -->
     <div id="all-content" class="view-content">
-        <div class="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full">
-                    <thead class="bg-gray-900/50 border-b border-gray-700">
-                        <tr class="text-gray-400 text-sm">
+                    <thead class="bg-gray-100 dark:bg-gray-900 border-b">
+                        <tr class="text-gray-600 dark:text-gray-400 text-sm">
                             <th class="px-6 py-4 text-left font-semibold">Rank</th>
                             <th class="px-6 py-4 text-left font-semibold">Athlete</th>
                             <th class="px-6 py-4 text-left font-semibold">Class</th>
@@ -115,37 +102,31 @@
                                 <td class="px-6 py-4">
                                     @if (!string.IsNullOrEmpty(perf.AthleteSlug))
                                     {
-                                        <a href="@Url.Action("Details", "Roster", new { slug = perf.AthleteSlug })" 
-                                           class="text-white font-medium hover:text-blue-400 transition-colors">
+                                        <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
+                                           class="text-gray-900 dark:text-white font-medium underline">
                                             @perf.AthleteName
                                         </a>
                                     }
                                     else
                                     {
-                                        <span class="text-white font-medium">@perf.AthleteName</span>
-                                    }
-                                    @if (perf.IsSchoolRecord)
-                                    {
-                                        <span class="ml-2 inline-block px-2 py-0.5 text-xs font-semibold rounded bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                                            SR
-                                        </span>
+                                        <span class="text-gray-900 dark:text-white font-medium">@perf.AthleteName</span>
                                     }
                                 </td>
-                                <td class="px-6 py-4 text-gray-400 text-sm">
+                                <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
                                     @GetClassYear(perf.GraduationYear)
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-xl font-mono font-bold text-white">
+                                    <span class="text-xl font-mono font-bold text-gray-900 dark:text-white">
                                         @perf.Performance
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="@Url.Action("Details", "Meets", new { name = perf.MeetSlug })" 
-                                       class="text-gray-300 hover:text-blue-400 transition-colors text-sm">
+                                    <a asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug"
+                                       class="text-gray-600 dark:text-gray-400 underline text-sm">
                                         @perf.MeetName
                                     </a>
                                 </td>
-                                <td class="px-6 py-4 text-gray-400 text-sm">
+                                <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
                                     @perf.MeetDate.ToString("MMM d, yyyy")
                                 </td>
                             </tr>
@@ -165,15 +146,15 @@
 
     <!-- PRs Only View -->
     <div id="prs-content" class="view-content hidden">
-        <div class="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full">
-                    <thead class="bg-gray-900/50 border-b border-gray-700">
-                        <tr class="text-gray-400 text-sm">
+                    <thead class="bg-gray-100 dark:bg-gray-900 border-b">
+                        <tr class="text-gray-600 dark:text-gray-400 text-sm">
                             <th class="px-6 py-4 text-left font-semibold">Rank</th>
                             <th class="px-6 py-4 text-left font-semibold">Athlete</th>
                             <th class="px-6 py-4 text-left font-semibold">Class</th>
-                            <th class="px-6 py-4 text-left font-semibold">PR</th>
+                            <th class="px-6 py-4 text-left font-semibold">Mark</th>
                             <th class="px-6 py-4 text-left font-semibold">Meet</th>
                             <th class="px-6 py-4 text-left font-semibold">Date</th>
                         </tr>
@@ -188,32 +169,33 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="@Url.Action("Details", "Roster", new { slug = perf.AthleteSlug })" 
-                                       class="text-white font-medium hover:text-blue-400 transition-colors">
-                                        @perf.AthleteName
-                                    </a>
-                                    @if (perf.IsSchoolRecord)
+                                    @if (!string.IsNullOrEmpty(perf.AthleteSlug))
                                     {
-                                        <span class="ml-2 inline-block px-2 py-0.5 text-xs font-semibold rounded bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                                            SR
-                                        </span>
+                                        <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
+                                           class="text-gray-900 dark:text-white font-medium underline">
+                                            @perf.AthleteName
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-gray-900 dark:text-white font-medium">@perf.AthleteName</span>
                                     }
                                 </td>
-                                <td class="px-6 py-4 text-gray-400 text-sm">
+                                <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
                                     @GetClassYear(perf.GraduationYear)
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-xl font-mono font-bold text-white">
+                                    <span class="text-xl font-mono font-bold text-gray-900 dark:text-white">
                                         @perf.Performance
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="@Url.Action("Details", "Meets", new { name = perf.MeetSlug })" 
-                                       class="text-gray-300 hover:text-blue-400 transition-colors text-sm">
+                                    <a asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug"
+                                       class="text-gray-600 dark:text-gray-400 underline text-sm">
                                         @perf.MeetName
                                     </a>
                                 </td>
-                                <td class="px-6 py-4 text-gray-400 text-sm">
+                                <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
                                     @perf.MeetDate.ToString("MMM d, yyyy")
                                 </td>
                             </tr>
@@ -243,13 +225,13 @@
         
         // Update tab styling
         document.querySelectorAll('.view-tab').forEach(tab => {
-            tab.classList.remove('bg-blue-500/20', 'text-blue-400', 'border-blue-500/30');
-            tab.classList.add('bg-gray-800', 'text-gray-400', 'border-gray-700');
+            tab.classList.remove('bg-blue-100', 'dark:bg-blue-500', 'border-blue-300', 'dark:border-blue-800');
+            tab.classList.add('bg-gray-100', 'dark:bg-gray-500', 'border-gray-300', 'dark:border-gray-800');
         });
         
         const activeTab = document.getElementById(view + '-tab');
-        activeTab.classList.remove('bg-gray-800', 'text-gray-400', 'border-gray-700');
-        activeTab.classList.add('bg-blue-500/20', 'text-blue-400', 'border-blue-500/30');
+        activeTab.classList.remove('bg-gray-100', 'dark:bg-gray-500', 'border-gray-300', 'dark:border-gray-800');
+        activeTab.classList.add('bg-blue-100', 'dark:bg-blue-500', 'border-blue-300', 'dark:border-blue-800');
     }
     
     // Set "all" as default on page load
