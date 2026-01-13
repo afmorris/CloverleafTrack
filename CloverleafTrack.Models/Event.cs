@@ -14,4 +14,5 @@ public class Event
     public Environment Environment { get; set; }
     public int AthleteCount { get; set; }
     public int SortOrder { get; set; }
+    public int EventCategorySortOrder { get; set; }
 }

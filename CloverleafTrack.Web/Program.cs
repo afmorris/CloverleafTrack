@@ -7,6 +7,13 @@ using CloverleafTrack.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IDbConnectionFactory>(_ => new SqlConnectionFactory(connectionString ?? string.Empty));
@@ -22,6 +29,13 @@ builder.Services.AddScoped<ISeasonService, SeasonService>();
 builder.Services.AddScoped<IMeetService, MeetService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
+
+builder.Services.AddScoped<IAdminAthleteRepository, AdminAthleteRepository>();
+builder.Services.AddScoped<IAdminMeetRepository, AdminMeetRepository>();
+builder.Services.AddScoped<IAdminPerformanceRepository, AdminPerformanceRepository>();
+builder.Services.AddScoped<IAdminLocationRepository, AdminLocationRepository>();
+builder.Services.AddScoped<IAdminEventRepository, AdminEventRepository>();
+builder.Services.AddScoped<IAdminSeasonRepository, AdminSeasonRepository>();
 
 var app = builder.Build();
 
@@ -39,6 +53,10 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: "admin",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
         name: "default",

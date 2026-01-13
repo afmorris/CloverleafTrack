@@ -23,6 +23,7 @@ public class Meet
     
     public int PRCount { get; set; }
     public int SchoolRecordCount { get; set; }
+    public string? EntryNotes { get; set; } = string.Empty;
 
     public string Slug
     {
