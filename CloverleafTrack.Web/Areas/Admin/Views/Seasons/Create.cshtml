@@ -1,0 +1,88 @@
+@model CloverleafTrack.Models.Season
+@{
+    ViewData["Title"] = Model.Id > 0 ? "Edit Season" : "Add Season";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header h1 { font-size: 24px; margin-bottom: 5px; }
+    .breadcrumb { font-size: 13px; color: #666; }
+    .breadcrumb a { color: #0066cc; text-decoration: none; }
+    
+    .form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; color: #333; margin-bottom: 8px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    .form-group textarea { min-height: 80px; resize: vertical; }
+    .text-danger { color: #dc3545; font-size: 13px; }
+    
+    .button-group { display: flex; gap: 10px; margin-top: 30px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn-primary { background: #0066cc; color: white; }
+    .btn-secondary { background: white; color: #666; border: 1px solid #ddd; }
+    
+    .checkbox-group { display: flex; align-items: center; gap: 8px; }
+    .checkbox-group input[type="checkbox"] { width: auto; height: 18px; }
+</style>
+
+<div class="header">
+    <h1>@ViewData["Title"]</h1>
+    <div class="breadcrumb">
+        <a asp-action="Index">Seasons</a> / @(Model.Id > 0 ? "Edit" : "Add New")
+    </div>
+</div>
+
+<div class="form-container">
+    <form asp-action="@(Model.Id > 0 ? "Edit" : "Create")" method="post">
+        <input type="hidden" asp-for="Id" />
+        
+        <div class="form-group">
+            <label asp-for="Name">Season Name <span style="color: #dc3545;">*</span></label>
+            <input asp-for="Name" placeholder="e.g., 2024-2025" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="StartDate">Start Date <span style="color: #dc3545;">*</span></label>
+            <input asp-for="StartDate" type="date" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="EndDate">End Date <span style="color: #dc3545;">*</span></label>
+            <input asp-for="EndDate" type="date" />
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Status">Status</label>
+            <select asp-for="Status" asp-items="Html.GetEnumSelectList<CloverleafTrack.Models.Enums.SeasonStatus>()">
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <div class="checkbox-group">
+                <input asp-for="IsCurrentSeason" type="checkbox" />
+                <label asp-for="IsCurrentSeason" style="margin: 0;">Set as Current Season</label>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Notes">Notes</label>
+            <textarea asp-for="Notes" placeholder="Optional notes about this season..."></textarea>
+        </div>
+        
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+            @if (Model.IsCurrentSeason)
+            {
+                <button type="submit" name="setAsCurrent" value="true" class="btn btn-primary">Save & Set as Current</button>
+            }
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

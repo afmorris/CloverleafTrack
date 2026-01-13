@@ -92,7 +92,8 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
             Gender = firstPerf.Gender,
             Environment = firstPerf.Environment,
             AllPerformances = allPerfsList,
-            PersonalRecordsOnly = prsOnly
+            PersonalRecordsOnly = prsOnly,
+            IsRelayEvent = allPerformances.Any(p => p.AthleteId == null)
         };
     }
 

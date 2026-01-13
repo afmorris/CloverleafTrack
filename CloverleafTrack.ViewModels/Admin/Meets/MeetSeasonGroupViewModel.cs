@@ -1,6 +1,6 @@
 ﻿using Environment = CloverleafTrack.Models.Enums.Environment;
 
-namespace CloverleafTrack.ViewModels.Admin;
+namespace CloverleafTrack.ViewModels.Admin.Meets;
 
 public class MeetSeasonGroupViewModel
 {

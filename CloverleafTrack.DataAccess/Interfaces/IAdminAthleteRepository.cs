@@ -1,16 +1,17 @@
 ﻿using CloverleafTrack.Models;
+using CloverleafTrack.Models.Enums;
 
 namespace CloverleafTrack.DataAccess.Interfaces;
 
 public interface IAdminAthleteRepository
 {
-    Task<List<Athlete>> GetAllAthletesAsync();
-    Task<List<Athlete>> GetAthletesByFiltersAsync(string? searchTerm, short? gender, bool? isActive, int? graduationYear);
-    Task<List<Athlete>> GetAthletesEligibleForMeetAsync(DateTime meetDate, short? eventGender);
-    Task<Athlete?> GetAthleteByIdAsync(int id);
-    Task<int> CreateAthleteAsync(Athlete athlete);
-    Task<bool> UpdateAthleteAsync(Athlete athlete);
-    Task<bool> DeleteAthleteAsync(int id);
-    Task<List<Athlete>> FindSimilarAthletesAsync(string firstName, string lastName);
-    Task<int> GetPerformanceCountForAthleteAsync(int athleteId);
+    Task<List<Athlete>> GetAllAsync();
+    Task<List<Athlete>> GetFilteredAsync(string? searchName, Gender? gender, bool? isActive, int? graduationYear);
+    Task<Athlete?> GetByIdAsync(int id);
+    Task<int> CreateAsync(Athlete athlete);
+    Task<bool> UpdateAsync(Athlete athlete);
+    Task<bool> DeleteAsync(int id);
+    Task<List<Athlete>> GetSimilarAthletesAsync(string firstName, string lastName);
+    Task<int> GetPerformanceCountAsync(int athleteId);
+    Task<List<Athlete>> GetAthletesForMeetAsync(int meetId, Gender? gender);
 }

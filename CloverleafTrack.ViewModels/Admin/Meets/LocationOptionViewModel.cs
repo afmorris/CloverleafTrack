@@ -1,4 +1,4 @@
-﻿namespace CloverleafTrack.ViewModels.Admin;
+﻿namespace CloverleafTrack.ViewModels.Admin.Meets;
 
 public class LocationOptionViewModel
 {
@@ -6,7 +6,7 @@ public class LocationOptionViewModel
     public string Name { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
     public string State { get; set; } = string.Empty;
-
+    
     public string DisplayText => !string.IsNullOrEmpty(City) && !string.IsNullOrEmpty(State)
         ? $"{Name} ({City}, {State})"
         : Name;

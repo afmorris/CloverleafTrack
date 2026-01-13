@@ -6,7 +6,7 @@ namespace CloverleafTrack.DataAccess.Repositories;
 
 public class AdminSeasonRepository(IDbConnectionFactory connectionFactory) : IAdminSeasonRepository
 {
-    public async Task<List<Season>> GetAllSeasonsAsync()
+    public async Task<List<Season>> GetAllAsync()
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = "SELECT * FROM Seasons ORDER BY StartDate DESC";
@@ -14,14 +14,21 @@ public class AdminSeasonRepository(IDbConnectionFactory connectionFactory) : IAd
         return seasons.ToList();
     }
 
-    public async Task<Season?> GetSeasonByIdAsync(int id)
+    public async Task<Season?> GetByIdAsync(int id)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = "SELECT * FROM Seasons WHERE Id = @Id";
         return await connection.QuerySingleOrDefaultAsync<Season>(sql, new { Id = id });
     }
 
-    public async Task<int> CreateSeasonAsync(Season season)
+    public async Task<Season?> GetCurrentSeasonAsync()
+    {
+        using var connection = connectionFactory.CreateConnection();
+        const string sql = "SELECT TOP 1 * FROM Seasons WHERE IsCurrentSeason = 1";
+        return await connection.QuerySingleOrDefaultAsync<Season>(sql);
+    }
+
+    public async Task<int> CreateAsync(Season season)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
@@ -31,11 +38,11 @@ public class AdminSeasonRepository(IDbConnectionFactory connectionFactory) : IAd
         return await connection.ExecuteScalarAsync<int>(sql, season);
     }
 
-    public async Task<bool> UpdateSeasonAsync(Season season)
+    public async Task<bool> UpdateAsync(Season season)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
-            UPDATE Seasons 
+            UPDATE Seasons
             SET Name = @Name,
                 StartDate = @StartDate,
                 EndDate = @EndDate,
@@ -47,7 +54,7 @@ public class AdminSeasonRepository(IDbConnectionFactory connectionFactory) : IAd
         return rowsAffected > 0;
     }
 
-    public async Task<bool> DeleteSeasonAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = "DELETE FROM Seasons WHERE Id = @Id";
@@ -55,18 +62,11 @@ public class AdminSeasonRepository(IDbConnectionFactory connectionFactory) : IAd
         return rowsAffected > 0;
     }
 
-    public async Task<Season?> GetCurrentSeasonAsync()
-    {
-        using var connection = connectionFactory.CreateConnection();
-        const string sql = "SELECT TOP 1 * FROM Seasons WHERE IsCurrentSeason = 1";
-        return await connection.QuerySingleOrDefaultAsync<Season>(sql);
-    }
-
-    public async Task<Season?> DetectSeasonFromDateAsync(DateTime date)
+    public async Task<Season?> GetSeasonForDateAsync(DateTime date)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
-            SELECT TOP 1 * FROM Seasons 
+            SELECT TOP 1 * FROM Seasons
             WHERE @Date BETWEEN StartDate AND EndDate
             ORDER BY StartDate DESC";
         return await connection.QuerySingleOrDefaultAsync<Season>(sql, new { Date = date });

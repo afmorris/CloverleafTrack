@@ -4,11 +4,11 @@ namespace CloverleafTrack.DataAccess.Interfaces;
 
 public interface IAdminSeasonRepository
 {
-    Task<List<Season>> GetAllSeasonsAsync();
-    Task<Season?> GetSeasonByIdAsync(int id);
-    Task<int> CreateSeasonAsync(Season season);
-    Task<bool> UpdateSeasonAsync(Season season);
-    Task<bool> DeleteSeasonAsync(int id);
+    Task<List<Season>> GetAllAsync();
+    Task<Season?> GetByIdAsync(int id);
     Task<Season?> GetCurrentSeasonAsync();
-    Task<Season?> DetectSeasonFromDateAsync(DateTime date);
+    Task<int> CreateAsync(Season season);
+    Task<bool> UpdateAsync(Season season);
+    Task<bool> DeleteAsync(int id);
+    Task<Season?> GetSeasonForDateAsync(DateTime date);
 }

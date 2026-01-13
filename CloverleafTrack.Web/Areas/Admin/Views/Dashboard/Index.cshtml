@@ -1,0 +1,108 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<style>
+    .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+    .action-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s; border: 2px solid transparent; text-decoration: none; color: inherit; display: block; }
+    .action-card:hover { border-color: #0066cc; transform: translateY(-2px); }
+    .action-card h3 { font-size: 16px; margin-bottom: 5px; color: #0066cc; }
+    .action-card p { font-size: 13px; color: #666; }
+    
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 30px; }
+    .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .stat-card .label { font-size: 13px; color: #666; margin-bottom: 5px; }
+    .stat-card .value { font-size: 32px; font-weight: bold; color: #333; }
+    .stat-card .value.warning { color: #ffc107; }
+    
+    .section-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .section-card h2 { font-size: 18px; margin-bottom: 15px; }
+    
+    .season-item { margin-bottom: 15px; }
+    .season-item .name { font-size: 14px; margin-bottom: 5px; display: flex; justify-content: space-between; }
+    .season-item .progress-bar { height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden; }
+    .season-item .progress-fill { height: 100%; background: #28a745; transition: width 0.3s; }
+    
+    .quality-item { padding: 12px; margin-bottom: 10px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px; }
+    .quality-item.error { background: #f8d7da; border-left-color: #dc3545; }
+    .quality-item .count { font-weight: bold; color: #333; }
+    .quality-item .description { font-size: 14px; color: #666; }
+</style>
+
+<div class="quick-actions">
+    <a asp-controller="Performances" asp-action="Create" class="action-card">
+        <h3>⚡ Enter Performance</h3>
+        <p>Quick entry for meet results</p>
+    </a>
+    
+    <a asp-controller="Athletes" asp-action="Create" class="action-card">
+        <h3>👤 Add Athlete</h3>
+        <p>Register new athlete</p>
+    </a>
+    
+    <a asp-controller="Meets" asp-action="Create" class="action-card">
+        <h3>📅 Create Meet</h3>
+        <p>Schedule new competition</p>
+    </a>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="label">Total Athletes</div>
+        <div class="value">@Model.TotalAthletes</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="label">Total Meets</div>
+        <div class="value">@Model.TotalMeets</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="label">Performances Entered</div>
+        <div class="value">@Model.TotalPerformances</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="label">Incomplete Meets</div>
+        <div class="value warning">@Model.IncompleteMeets</div>
+    </div>
+</div>
+
+@if (Model.SeasonProgress.Any())
+{
+    <div class="section-card">
+        <h2>Season Completion Progress</h2>
+        
+        @foreach (var season in Model.SeasonProgress)
+        {
+            <div class="season-item">
+                <div class="name">
+                    <span><strong>@season.SeasonName</strong> @(season.IsCurrentSeason ? "(Current)" : "")</span>
+                    <span>@season.EnteredMeets of @season.TotalMeets meets entered (@season.PercentComplete%)</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: @season.PercentComplete%;"></div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@if (Model.DataQualityIssues.Any())
+{
+    <div class="section-card">
+        <h2>Data Quality Alerts</h2>
+        
+        @foreach (var issue in Model.DataQualityIssues)
+        {
+            <div class="quality-item @(issue.Type == "error" ? "error" : "")">
+                <div class="count">@issue.Count @issue.Description</div>
+                @if (issue.ActionLink != null)
+                {
+                    <a href="@issue.ActionLink" style="font-size: 12px; color: #0066cc;">View →</a>
+                }
+            </div>
+        }
+    </div>
+}

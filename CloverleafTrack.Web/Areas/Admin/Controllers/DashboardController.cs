@@ -1,4 +1,4 @@
-﻿using CloverleafTrack.ViewModels.Admin;
+﻿using CloverleafTrack.ViewModels.Admin.Dashboard;
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -15,31 +15,31 @@ public class DashboardController(
     public async Task<IActionResult> Index()
     {
         var viewModel = new DashboardViewModel();
-
+        
         // Get basic stats
-        var allAthletes = await athleteRepository.GetAllAthletesAsync();
+        var allAthletes = await athleteRepository.GetAllAsync();
         viewModel.TotalAthletes = allAthletes.Count;
-
-        var allMeets = await meetRepository.GetAllMeetsAsync();
+        
+        var allMeets = await meetRepository.GetAllAsync();
         viewModel.TotalMeets = allMeets.Count;
-
+        
         // Count incomplete meets (not entered)
         viewModel.IncompleteMeets = allMeets.Count(m => m.EntryStatus != MeetEntryStatus.Entered);
-
+        
         // Calculate total performances (approximate - sum performance counts)
         viewModel.TotalPerformances = 0;
         foreach (var meet in allMeets)
         {
             viewModel.TotalPerformances += await meetRepository.GetPerformanceCountAsync(meet.Id);
         }
-
+        
         // Get season progress
-        var seasons = await seasonRepository.GetAllSeasonsAsync();
+        var seasons = await seasonRepository.GetAllAsync();
         foreach (var season in seasons.OrderByDescending(s => s.StartDate).Take(3))
         {
             var seasonMeets = allMeets.Where(m => m.SeasonId == season.Id).ToList();
             var enteredMeets = seasonMeets.Count(m => m.EntryStatus == MeetEntryStatus.Entered);
-
+            
             viewModel.SeasonProgress.Add(new SeasonProgressViewModel
             {
                 SeasonName = season.Name,
@@ -48,7 +48,7 @@ public class DashboardController(
                 IsCurrentSeason = season.IsCurrentSeason
             });
         }
-
+        
         // Generate data quality issues
         var meetsWithoutPerformances = 0;
         foreach (var meet in allMeets.Where(m => m.EntryStatus == MeetEntryStatus.Entered))
@@ -59,7 +59,7 @@ public class DashboardController(
                 meetsWithoutPerformances++;
             }
         }
-
+        
         if (meetsWithoutPerformances > 0)
         {
             viewModel.DataQualityIssues.Add(new DataQualityIssueViewModel
@@ -70,7 +70,7 @@ public class DashboardController(
                 ActionLink = "/Admin/Meets"
             });
         }
-
+        
         var notAvailableMeets = allMeets.Count(m => m.EntryStatus == MeetEntryStatus.NotAvailable);
         if (notAvailableMeets > 0)
         {
@@ -82,7 +82,7 @@ public class DashboardController(
                 ActionLink = "/Admin/Meets"
             });
         }
-
+        
         return View(viewModel);
     }
 }

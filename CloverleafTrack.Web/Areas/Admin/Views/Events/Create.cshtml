@@ -1,0 +1,106 @@
+@model CloverleafTrack.Models.Event
+@{
+    ViewData["Title"] = Model.Id > 0 ? "Edit Event" : "Add Event";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header h1 { font-size: 24px; margin-bottom: 5px; }
+    .breadcrumb { font-size: 13px; color: #666; }
+    .breadcrumb a { color: #0066cc; text-decoration: none; }
+    
+    .form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; color: #333; margin-bottom: 8px; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    .form-group .hint { font-size: 12px; color: #666; margin-top: 5px; }
+    .text-danger { color: #dc3545; font-size: 13px; }
+    
+    .button-group { display: flex; gap: 10px; margin-top: 30px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn-primary { background: #0066cc; color: white; }
+    .btn-secondary { background: white; color: #666; border: 1px solid #ddd; }
+</style>
+
+<div class="header">
+    <h1>@ViewData["Title"]</h1>
+    <div class="breadcrumb">
+        <a asp-action="Index">Events</a> / @(Model.Id > 0 ? "Edit" : "Add New")
+    </div>
+</div>
+
+<div class="form-container">
+    <form asp-action="@(Model.Id > 0 ? "Edit" : "Create")" method="post">
+        <input type="hidden" asp-for="Id" />
+        
+        <div class="form-group">
+            <label asp-for="Name">Event Name <span style="color: #dc3545;">*</span></label>
+            <input asp-for="Name" placeholder="e.g., 100 Meter Dash" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="EventKey">Event Key <span style="color: #dc3545;">*</span></label>
+            <input asp-for="EventKey" placeholder="e.g., 100m" />
+            <div class="hint">Unique identifier for this event (used in URLs)</div>
+            <span asp-validation-for="EventKey" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="EventType">Event Type <span style="color: #dc3545;">*</span></label>
+            <select asp-for="EventType" asp-items="Html.GetEnumSelectList<CloverleafTrack.Models.Enums.EventType>()">
+                <option value="">Select type...</option>
+            </select>
+            <span asp-validation-for="EventType" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="EventCategory">Category</label>
+            <select asp-for="EventCategory" asp-items="Html.GetEnumSelectList<CloverleafTrack.Models.Enums.EventCategory>()">
+                <option value="">Select category...</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Gender">Gender</label>
+            <select asp-for="Gender" asp-items="Html.GetEnumSelectList<CloverleafTrack.Models.Enums.Gender>()">
+                <option value="">All Genders</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Environment">Environment <span style="color: #dc3545;">*</span></label>
+            <select asp-for="Environment" asp-items="Html.GetEnumSelectList<CloverleafTrack.Models.Enums.Environment>()">
+                <option value="">Select environment...</option>
+            </select>
+            <span asp-validation-for="Environment" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="AthleteCount">Athlete Count <span style="color: #dc3545;">*</span></label>
+            <input asp-for="AthleteCount" type="number" min="1" max="4" value="1" />
+            <div class="hint">1 for individual events, 2-4 for relays</div>
+            <span asp-validation-for="AthleteCount" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="SortOrder">Sort Order</label>
+            <input asp-for="SortOrder" type="number" />
+            <div class="hint">Lower numbers appear first in lists</div>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="EventCategorySortOrder">Category Sort Order</label>
+            <input asp-for="EventCategorySortOrder" type="number" />
+        </div>
+        
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

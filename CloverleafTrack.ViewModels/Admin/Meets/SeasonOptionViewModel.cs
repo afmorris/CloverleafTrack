@@ -1,4 +1,4 @@
-﻿namespace CloverleafTrack.ViewModels.Admin;
+namespace CloverleafTrack.ViewModels.Admin.Meets;
 
 public class SeasonOptionViewModel
 {

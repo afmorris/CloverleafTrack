@@ -11,16 +11,16 @@ public class LocationsController(IAdminLocationRepository locationRepository) : 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var locations = await locationRepository.GetAllLocationsAsync();
+        var locations = await locationRepository.GetAllAsync();
         return View(locations);
     }
-
+    
     [HttpGet]
     public IActionResult Create()
     {
         return View(new Location { Country = "USA" });
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Location location)
@@ -29,24 +29,24 @@ public class LocationsController(IAdminLocationRepository locationRepository) : 
         {
             return View(location);
         }
-
-        await locationRepository.CreateLocationAsync(location);
+        
+        await locationRepository.CreateAsync(location);
         TempData["SuccessMessage"] = $"Location '{location.Name}' created successfully!";
         return RedirectToAction(nameof(Index));
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var location = await locationRepository.GetLocationByIdAsync(id);
+        var location = await locationRepository.GetByIdAsync(id);
         if (location == null)
         {
             return NotFound();
         }
-
+        
         return View(location);
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Location location)
@@ -55,21 +55,21 @@ public class LocationsController(IAdminLocationRepository locationRepository) : 
         {
             return View(location);
         }
-
-        await locationRepository.UpdateLocationAsync(location);
+        
+        await locationRepository.UpdateAsync(location);
         TempData["SuccessMessage"] = "Location updated successfully!";
         return RedirectToAction(nameof(Index));
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)
     {
-        await locationRepository.DeleteLocationAsync(id);
+        await locationRepository.DeleteAsync(id);
         TempData["SuccessMessage"] = "Location deleted successfully!";
         return RedirectToAction(nameof(Index));
     }
-
+    
     // API endpoint for quick-add from other forms
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -79,7 +79,7 @@ public class LocationsController(IAdminLocationRepository locationRepository) : 
         {
             return BadRequest("Location name is required");
         }
-
+        
         var location = new Location
         {
             Name = model.Name,
@@ -87,9 +87,9 @@ public class LocationsController(IAdminLocationRepository locationRepository) : 
             State = model.State,
             Country = "USA"
         };
-
-        var id = await locationRepository.CreateLocationAsync(location);
-
+        
+        var id = await locationRepository.CreateAsync(location);
+        
         return Json(new
         {
             id,

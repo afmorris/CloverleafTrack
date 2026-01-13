@@ -1,0 +1,93 @@
+@model MeetsIndexViewModel
+@{
+    ViewData["Title"] = "Meets";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+    .btn-primary { background: #0066cc; color: white; border: none; padding: 10px 20px; border-radius: 6px; text-decoration: none; display: inline-block; }
+    
+    .season-section { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; overflow: hidden; }
+    .season-header { padding: 15px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .season-header.outdoor { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+    .season-header.indoor { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .season-header h2 { font-size: 18px; }
+    
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #f8f9fa; }
+    th { padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; color: #666; text-transform: uppercase; border-bottom: 2px solid #e0e0e0; }
+    td { padding: 12px 15px; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+    tr:hover { background: #f8f9fa; }
+    
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .badge-outdoor { background: #fff3e0; color: #e65100; }
+    .badge-indoor { background: #e1f5fe; color: #01579b; }
+    .badge-entered { background: #e8f5e9; color: #388e3c; }
+    .badge-partial { background: #fff3cd; color: #856404; }
+    .badge-notavailable { background: #f5f5f5; color: #757575; }
+    
+    .action-links { display: flex; gap: 10px; }
+    .action-links a { color: #0066cc; text-decoration: none; font-size: 13px; }
+</style>
+
+<div class="header">
+    <h1>Meets</h1>
+    <a asp-action="Create" class="btn-primary">+ Add Meet</a>
+</div>
+
+@foreach (var group in Model.SeasonGroups)
+{
+    <div class="season-section">
+        <div class="season-header @(group.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor ? "outdoor" : "indoor")">
+            <div>
+                <h2>@group.SeasonName - @group.Environment</h2>
+            </div>
+            <div style="font-size: 13px; opacity: 0.95;">
+                @group.TotalMeets meets | @group.EnteredMeets entered
+            </div>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Meet Name</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var meet in group.Meets)
+                {
+                    <tr>
+                        <td>@meet.Date.ToString("MMM d, yyyy")</td>
+                        <td><strong>@meet.Name</strong></td>
+                        <td>@meet.LocationName@(string.IsNullOrEmpty(meet.LocationCity) ? "" : $", {meet.LocationCity}")</td>
+                        <td>
+                            @{
+                                var badgeClass = meet.EntryStatus switch
+                                {
+                                    CloverleafTrack.Models.Enums.MeetEntryStatus.Entered => "badge-entered",
+                                    CloverleafTrack.Models.Enums.MeetEntryStatus.Scanned => "badge-partial",
+                                    _ => "badge-notavailable"
+                                };
+                            }
+                            <span class="badge @badgeClass">@meet.EntryStatus</span>
+                        </td>
+                        <td>
+                            <div class="action-links">
+                                <a asp-action="Edit" asp-route-id="@meet.Id">Edit</a>
+                                <a asp-controller="Performances" asp-action="Create" asp-route-meetId="@meet.Id">+ Add Performances</a>
+                                <form asp-action="Delete" asp-route-id="@meet.Id" method="post" style="display: inline;" 
+                                      onsubmit="return confirm('Delete @meet.Name?');">
+                                    <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer; font-size: 13px; padding: 0;">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

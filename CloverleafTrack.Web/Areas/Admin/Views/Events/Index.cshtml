@@ -1,0 +1,81 @@
+@model Dictionary<string, List<CloverleafTrack.Models.Event>>
+@{
+    ViewData["Title"] = "Events";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+    .btn-primary { background: #0066cc; color: white; border: none; padding: 10px 20px; border-radius: 6px; text-decoration: none; display: inline-block; }
+    
+    .event-group { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; overflow: hidden; }
+    .group-header { padding: 15px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 16px; font-weight: 600; }
+    
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #f8f9fa; }
+    th { padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; color: #666; text-transform: uppercase; border-bottom: 2px solid #e0e0e0; }
+    td { padding: 12px 15px; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+    tr:hover { background: #f8f9fa; }
+    
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .badge-field { background: #e3f2fd; color: #1976d2; }
+    .badge-running { background: #e8f5e9; color: #388e3c; }
+    .badge-relay { background: #fff3e0; color: #e65100; }
+    
+    .action-links { display: flex; gap: 10px; }
+    .action-links a { color: #0066cc; text-decoration: none; font-size: 13px; }
+</style>
+
+<div class="header">
+    <h1>Events</h1>
+    <a asp-action="Create" class="btn-primary">+ Add Event</a>
+</div>
+
+@foreach (var group in Model)
+{
+    <div class="event-group">
+        <div class="group-header">@group.Key</div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Category</th>
+                        <th>Athletes</th>
+                        <th>Sort Order</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var evt in group.Value)
+                    {
+                        <tr>
+                            <td><strong>@evt.Name</strong></td>
+                            <td>
+                                @{
+                                    var badgeClass = evt.EventType.ToString().Contains("Relay") ? "badge-relay" : 
+                                                    (evt.EventType.ToString().Contains("Running") || evt.EventType.ToString().Contains("Hurdles")) ? "badge-running" : "badge-field";
+                                }
+                                <span class="badge @badgeClass">@evt.EventType</span>
+                            </td>
+                            <td>@(evt.EventCategory?.ToString() ?? "-")</td>
+                            <td>@evt.AthleteCount</td>
+                            <td>@evt.SortOrder</td>
+                            <td>
+                                <div class="action-links">
+                                    <a asp-action="Edit" asp-route-id="@evt.Id">Edit</a>
+                                    <form asp-action="Delete" asp-route-id="@evt.Id" method="post" style="display: inline;" 
+                                          onsubmit="return confirm('Delete @evt.Name?');">
+                                        <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer; font-size: 13px; padding: 0;">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

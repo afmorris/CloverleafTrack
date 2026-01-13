@@ -1,4 +1,4 @@
-﻿using CloverleafTrack.ViewModels.Admin;
+﻿using CloverleafTrack.ViewModels.Admin.Meets;
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
@@ -16,9 +16,9 @@ public class MeetsController(
     [HttpGet]
     public async Task<IActionResult> Index(string? searchName, int? seasonId, Environment? environment, MeetEntryStatus? entryStatus)
     {
-        var meets = await meetRepository.GetMeetsByFiltersAsync(searchName, seasonId, environment, entryStatus);
-        var seasons = await seasonRepository.GetAllSeasonsAsync();
-
+        var meets = await meetRepository.GetFilteredAsync(searchName, seasonId, environment, entryStatus);
+        var seasons = await seasonRepository.GetAllAsync();
+        
         // Group by season and environment
         var seasonGroups = meets
             .GroupBy(m => new { m.SeasonId, m.Season.Name, m.Environment })
@@ -46,7 +46,7 @@ public class MeetsController(
             .OrderByDescending(g => g.SeasonName)
             .ThenByDescending(g => g.Environment)
             .ToList();
-
+        
         var viewModel = new MeetsIndexViewModel
         {
             SeasonGroups = seasonGroups,
@@ -61,10 +61,10 @@ public class MeetsController(
                 IsCurrentSeason = s.IsCurrentSeason
             }).ToList()
         };
-
+        
         return View(viewModel);
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -72,11 +72,11 @@ public class MeetsController(
         {
             Date = DateTime.Today
         };
-
+        
         await LoadFormData(viewModel);
         return View(viewModel);
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(MeetFormViewModel model, bool saveAndAddPerformances = false)
@@ -86,7 +86,7 @@ public class MeetsController(
             await LoadFormData(model);
             return View(model);
         }
-
+        
         var meet = new Meet
         {
             Name = model.Name,
@@ -98,27 +98,28 @@ public class MeetsController(
             EntryStatus = model.EntryStatus,
             EntryNotes = model.EntryNotes
         };
-
-        var id = await meetRepository.CreateMeetAsync(meet);
+        
+        var id = await meetRepository.CreateAsync(meet);
+        
         TempData["SuccessMessage"] = $"Meet '{model.Name}' created successfully!";
-
+        
         if (saveAndAddPerformances)
         {
             return RedirectToAction("Create", "Performances", new { meetId = id });
         }
-
+        
         return RedirectToAction(nameof(Index));
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var meet = await meetRepository.GetMeetByIdAsync(id);
+        var meet = await meetRepository.GetByIdWithDetailsAsync(id);
         if (meet == null)
         {
             return NotFound();
         }
-
+        
         var viewModel = new MeetFormViewModel
         {
             Id = meet.Id,
@@ -131,11 +132,11 @@ public class MeetsController(
             EntryStatus = meet.EntryStatus,
             EntryNotes = meet.EntryNotes
         };
-
+        
         await LoadFormData(viewModel);
         return View(viewModel);
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(MeetFormViewModel model)
@@ -145,7 +146,7 @@ public class MeetsController(
             await LoadFormData(model);
             return View(model);
         }
-
+        
         var meet = new Meet
         {
             Id = model.Id,
@@ -158,13 +159,13 @@ public class MeetsController(
             EntryStatus = model.EntryStatus,
             EntryNotes = model.EntryNotes
         };
-
-        await meetRepository.UpdateMeetAsync(meet);
-
+        
+        await meetRepository.UpdateAsync(meet);
+        
         TempData["SuccessMessage"] = "Meet updated successfully!";
         return RedirectToAction(nameof(Index));
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)
@@ -176,22 +177,22 @@ public class MeetsController(
             TempData["ErrorMessage"] = $"Cannot delete meet with {performanceCount} performances. Delete performances first.";
             return RedirectToAction(nameof(Index));
         }
-
-        await meetRepository.DeleteMeetAsync(id);
+        
+        await meetRepository.DeleteAsync(id);
         TempData["SuccessMessage"] = "Meet deleted successfully!";
         return RedirectToAction(nameof(Index));
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Clone(int id)
     {
-        var meet = await meetRepository.GetMeetWithDetailsAsync(id);
+        var meet = await meetRepository.GetByIdWithDetailsAsync(id);
         if (meet == null)
         {
             return NotFound();
         }
-
+        
         var viewModel = new MeetFormViewModel
         {
             Name = meet.Name + " (Copy)",
@@ -202,24 +203,24 @@ public class MeetsController(
             SeasonId = meet.SeasonId,
             EntryStatus = MeetEntryStatus.NotAvailable
         };
-
+        
         await LoadFormData(viewModel);
         return View("Create", viewModel);
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> AutoDetectSeason(DateTime date)
     {
         var season = await seasonRepository.GetSeasonForDateAsync(date);
-
+        
         if (season != null)
         {
             // Auto-detect environment based on date
             var month = date.Month;
-            var suggestedEnvironment = (month >= 3 && month <= 10)
-                ? Environment.Outdoor
+            var suggestedEnvironment = (month >= 3 && month <= 10) 
+                ? Environment.Outdoor 
                 : Environment.Indoor;
-
+            
             return Json(new
             {
                 seasonId = season.Id,
@@ -227,13 +228,13 @@ public class MeetsController(
                 suggestedEnvironment = suggestedEnvironment.ToString()
             });
         }
-
+        
         return Json(new { seasonId = (int?)null });
     }
-
+    
     private async Task LoadFormData(MeetFormViewModel viewModel)
     {
-        var locations = await locationRepository.GetAllLocationsAsync();
+        var locations = await locationRepository.GetAllAsync();
         viewModel.Locations = locations.Select(l => new LocationOptionViewModel
         {
             Id = l.Id,
@@ -241,8 +242,8 @@ public class MeetsController(
             City = l.City ?? string.Empty,
             State = l.State ?? string.Empty
         }).ToList();
-
-        var recentLocations = await locationRepository.GetRecentLocationsAsync(5);
+        
+        var recentLocations = await locationRepository.GetRecentlyUsedAsync(5);
         viewModel.RecentLocations = recentLocations.Select(l => new LocationOptionViewModel
         {
             Id = l.Id,
@@ -250,8 +251,8 @@ public class MeetsController(
             City = l.City ?? string.Empty,
             State = l.State ?? string.Empty
         }).ToList();
-
-        var seasons = await seasonRepository.GetAllSeasonsAsync();
+        
+        var seasons = await seasonRepository.GetAllAsync();
         viewModel.Seasons = seasons.Select(s => new SeasonOptionViewModel
         {
             Id = s.Id,

@@ -1,0 +1,277 @@
+@model PerformanceEntryViewModel
+@{
+    ViewData["Title"] = "Enter Performance";
+}
+
+<style>
+    .context-bar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .context-bar .context-info strong { font-size: 16px; display: block; margin-bottom: 3px; }
+    .context-bar .change-btn { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+    
+    .form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 800px; }
+    .form-section { margin-bottom: 30px; padding-bottom: 30px; border-bottom: 2px solid #f0f0f0; }
+    .form-section:last-child { border-bottom: none; }
+    .form-section h3 { font-size: 16px; margin-bottom: 15px; color: #333; }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; color: #333; margin-bottom: 8px; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    .form-group .hint { font-size: 12px; color: #666; margin-top: 5px; }
+    
+    .relay-athletes { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 2px dashed #ddd; }
+    .relay-athletes h4 { font-size: 14px; margin-bottom: 12px; color: #666; }
+    .relay-athlete-slot { margin-bottom: 10px; }
+    
+    .alert-info { background: #e3f2fd; border: 1px solid #2196f3; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 13px; }
+    .alert-warning { background: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 13px; }
+    .alert-success { background: #e8f5e9; border: 1px solid #4caf50; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 13px; }
+    
+    .button-group { display: flex; gap: 10px; margin-top: 30px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; }
+    .btn-primary { background: #0066cc; color: white; }
+    .btn-success { background: #28a745; color: white; }
+    .btn-secondary { background: white; color: #666; border: 1px solid #ddd; }
+</style>
+
+@if (Model.MeetId > 0)
+{
+    <div class="context-bar">
+        <div class="context-info">
+            <strong>📍 @Model.MeetName - @Model.MeetDate.ToString("MMM d, yyyy")</strong>
+            <div>@Model.PerformanceCount performances entered</div>
+        </div>
+        <button type="button" class="change-btn" onclick="location.href='@Url.Action("Create", new { meetId = (int?)null })'">Change Meet</button>
+    </div>
+}
+
+<div class="form-container">
+    @if (Model.LastEntry != null)
+    {
+        <div class="alert-info">
+            <strong>Last Entry:</strong> @Model.LastEntry.AthleteName • @Model.LastEntry.EventName • @Model.LastEntry.PerformanceDisplay
+            @if (Model.LastEntry.IsPersonalBest) { <span style="color: #28a745;">PR!</span> }
+        </div>
+    }
+    
+    <form asp-action="Create" method="post" id="performanceForm">
+        <div class="form-section">
+            <h3>1. Select Meet & Event</h3>
+            
+            <div class="form-group">
+                <label asp-for="MeetId">Meet</label>
+                <select asp-for="MeetId" class="form-control" id="meetSelect">
+                    <option value="">Select meet...</option>
+                    @foreach (var meet in Model.Meets)
+                    {
+                        <option value="@meet.Id" selected="@(meet.Id == Model.MeetId)">@meet.DisplayText</option>
+                    }
+                </select>
+            </div>
+            
+            <div class="form-group" id="eventGroup" style="@(Model.MeetId > 0 ? "" : "display: none;")">
+                <label asp-for="EventId">Event</label>
+                <select asp-for="EventId" class="form-control" id="eventSelect">
+                    <option value="">Select event...</option>
+                    @foreach (var evt in Model.Events)
+                    {
+                        <option value="@evt.Id" 
+                                data-type="@evt.EventType" 
+                                data-gender="@evt.Gender" 
+                                data-athletecount="@evt.AthleteCount"
+                                selected="@(evt.Id == Model.EventId)">@evt.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-section" id="athleteSection" style="@(Model.EventId > 0 ? "" : "display: none;")">
+            <h3>2. Select Athlete(s)</h3>
+            
+            <div id="relaySection" style="@(Model.EventAthleteCount > 1 ? "" : "display: none;")">
+                <div class="relay-athletes">
+                    <h4 id="relayTitle">Select <span id="athleteCount">@Model.EventAthleteCount</span> Athletes for Relay</h4>
+                    
+                    <div id="relayAthleteSlots">
+                        @for (int i = 0; i < 4; i++)
+                        {
+                            <div class="relay-athlete-slot" id="relaySlot@(i)" style="@(i < Model.EventAthleteCount ? "" : "display: none;")">
+                                <label>Athlete @(i + 1)</label>
+                                <select name="RelayAthleteIds[@i]" class="form-control athlete-select">
+                                    <option value="">Select athlete...</option>
+                                    @foreach (var athlete in Model.Athletes)
+                                    {
+                                        <option value="@athlete.Id">@athlete.DisplayText</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <div id="individualSection" style="@(Model.EventAthleteCount == 1 ? "" : "display: none;")">
+                <div class="form-group">
+                    <label asp-for="AthleteId">Athlete</label>
+                    <select asp-for="AthleteId" class="form-control athlete-select" id="athleteSelect">
+                        <option value="">Select athlete...</option>
+                        @foreach (var athlete in Model.Athletes)
+                        {
+                            <option value="@athlete.Id" selected="@(athlete.Id == Model.AthleteId)">@athlete.DisplayText</option>
+                        }
+                    </select>
+                    <div class="hint">Filtered by meet date and event gender</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section" id="performanceSection" style="@(Model.EventId > 0 ? "" : "display: none;")">
+            <h3>3. Enter Performance</h3>
+            
+            @{
+                var isFieldEvent = Model.EventType.ToString().Contains("Field") || 
+                                   Model.EventType.ToString().Contains("Jump") || 
+                                   Model.EventType.ToString().Contains("Throw");
+            }
+            
+            <div class="form-group" id="distanceGroup" style="@(isFieldEvent ? "" : "display: none;")">
+                <label asp-for="DistanceInput">Distance</label>
+                <input asp-for="DistanceInput" type="text" class="form-control" placeholder="e.g., 19'4, 19-04, 234.5" />
+                <div class="hint">Accepts: 19'4, 19'4", 19-04, 234.5 inches</div>
+                <span asp-validation-for="DistanceInput" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group" id="timeGroup" style="@(!isFieldEvent ? "" : "display: none;")">
+                <label asp-for="TimeInput">Time</label>
+                <input asp-for="TimeInput" type="text" class="form-control" placeholder="e.g., 11.24, 1:23.45" />
+                <div class="hint">Accepts: 11.24, 11.24s, 1:23.45, 1m23.45s</div>
+                <span asp-validation-for="TimeInput" class="text-danger"></span>
+            </div>
+        </div>
+        
+        <div class="button-group" id="buttonGroup" style="@(Model.EventId > 0 ? "" : "display: none;")">
+            <button type="submit" name="saveAndAddAnother" value="true" class="btn btn-success">
+                Save & Add Another
+            </button>
+            <button type="submit" class="btn btn-primary">
+                Save & Done
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Meet selection changes - load events via AJAX
+            $('#meetSelect').change(function() {
+                var meetId = $(this).val();
+                if (meetId) {
+                    $.get('@Url.Action("GetEventsForMeet", "Performances")', { meetId: meetId }, function(data) {
+                        var eventSelect = $('#eventSelect');
+                        eventSelect.empty();
+                        eventSelect.append('<option value="">Select event...</option>');
+                        $.each(data, function(i, event) {
+                            eventSelect.append($('<option></option>')
+                                .attr('value', event.id)
+                                .attr('data-type', event.eventType)
+                                .attr('data-gender', event.gender)
+                                .attr('data-athletecount', event.athleteCount)
+                                .text(event.name));
+                        });
+                        $('#eventGroup').show();
+                        $('#athleteSection').hide();
+                        $('#performanceSection').hide();
+                        $('#buttonGroup').hide();
+                    });
+                } else {
+                    $('#eventGroup').hide();
+                    $('#athleteSection').hide();
+                    $('#performanceSection').hide();
+                    $('#buttonGroup').hide();
+                }
+            });
+            
+            // Event selection changes - load athletes and show performance input via AJAX
+            $('#eventSelect').change(function() {
+                var eventId = $(this).val();
+                var meetId = $('#meetSelect').val();
+                
+                if (eventId && meetId) {
+                    var selectedOption = $(this).find('option:selected');
+                    var eventType = selectedOption.data('type');
+                    var gender = selectedOption.data('gender');
+                    var athleteCount = parseInt(selectedOption.data('athletecount'));
+                    
+                    // Show/hide appropriate performance input
+                    var eventTypeStr = eventType ? eventType.toString() : '';
+                    var isFieldEvent = eventTypeStr.indexOf('Field') >= 0 || 
+                                       eventTypeStr.indexOf('Jump') >= 0 || 
+                                       eventTypeStr.indexOf('Throw') >= 0;
+                    if (isFieldEvent) {
+                        $('#distanceGroup').show();
+                        $('#timeGroup').hide();
+                    } else {
+                        $('#timeGroup').show();
+                        $('#distanceGroup').hide();
+                    }
+                    
+                    // Load athletes filtered by meet date and event gender via AJAX
+                    $.get('@Url.Action("GetAthletesForMeetAndEvent", "Performances")', 
+                        { meetId: meetId, eventId: eventId }, 
+                        function(data) {
+                            // Update individual select
+                            var athleteSelect = $('#athleteSelect');
+                            athleteSelect.empty();
+                            athleteSelect.append('<option value="">Select athlete...</option>');
+                            
+                            // Update relay selects
+                            $('.athlete-select').each(function() {
+                                if ($(this).attr('id') !== 'athleteSelect') {
+                                    $(this).empty();
+                                    $(this).append('<option value="">Select athlete...</option>');
+                                }
+                            });
+                            
+                            // Populate all selects
+                            $.each(data, function(i, athlete) {
+                                var option = $('<option></option>')
+                                    .attr('value', athlete.id)
+                                    .text(athlete.displayText);
+                                $('.athlete-select').append(option.clone());
+                            });
+                            
+                            // Show/hide sections based on athlete count
+                            if (athleteCount > 1) {
+                                $('#individualSection').hide();
+                                $('#relaySection').show();
+                                $('#athleteCount').text(athleteCount);
+                                
+                                // Show/hide relay slots based on count
+                                for (var i = 0; i < 4; i++) {
+                                    if (i < athleteCount) {
+                                        $('#relaySlot' + i).show();
+                                    } else {
+                                        $('#relaySlot' + i).hide();
+                                    }
+                                }
+                            } else {
+                                $('#relaySection').hide();
+                                $('#individualSection').show();
+                            }
+                            
+                            $('#athleteSection').show();
+                            $('#performanceSection').show();
+                            $('#buttonGroup').show();
+                        });
+                } else {
+                    $('#athleteSection').hide();
+                    $('#performanceSection').hide();
+                    $('#buttonGroup').hide();
+                }
+            });
+        });
+    </script>
+}

@@ -8,6 +8,7 @@ public class LeaderboardDetailsViewModel
     public int EventId { get; set; }
     public string EventName { get; set; } = string.Empty;
     public string EventKey { get; set; } = string.Empty;
+    public bool IsRelayEvent { get; set;}
     public Gender Gender { get; set; }
     public Environment Environment { get; set; }
     

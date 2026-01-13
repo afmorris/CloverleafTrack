@@ -1,0 +1,105 @@
+@model AthleteFormViewModel
+@{
+    ViewData["Title"] = Model.Id > 0 ? "Edit Athlete" : "Add Athlete";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header h1 { font-size: 24px; margin-bottom: 5px; }
+    .breadcrumb { font-size: 13px; color: #666; }
+    .breadcrumb a { color: #0066cc; text-decoration: none; }
+    
+    .form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; color: #333; margin-bottom: 8px; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    .form-group .hint { font-size: 12px; color: #666; margin-top: 5px; }
+    .text-danger { color: #dc3545; font-size: 13px; }
+    
+    .duplicate-warning { background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; padding: 12px; margin-bottom: 20px; }
+    .duplicate-warning strong { color: #856404; display: block; margin-bottom: 5px; }
+    .duplicate-warning ul { margin-left: 20px; font-size: 13px; color: #856404; }
+    
+    .button-group { display: flex; gap: 10px; margin-top: 30px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; }
+    .btn-primary { background: #0066cc; color: white; }
+    .btn-success { background: #28a745; color: white; }
+    .btn-secondary { background: white; color: #666; border: 1px solid #ddd; }
+    
+    .checkbox-group { display: flex; align-items: center; gap: 8px; }
+    .checkbox-group input[type="checkbox"] { width: auto; height: 18px; }
+</style>
+
+<div class="header">
+    <h1>@ViewData["Title"]</h1>
+    <div class="breadcrumb">
+        <a asp-action="Index">Athletes</a> / @(Model.Id > 0 ? "Edit" : "Add New")
+    </div>
+</div>
+
+<div class="form-container">
+    <form asp-action="@(Model.Id > 0 ? "Edit" : "Create")" method="post">
+        <input type="hidden" asp-for="Id" />
+        
+        <div class="form-group">
+            <label asp-for="FirstName">First Name <span style="color: #dc3545;">*</span></label>
+            <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="LastName">Last Name <span style="color: #dc3545;">*</span></label>
+            <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        
+        @if (Model.SimilarAthletes.Any())
+        {
+            <div class="duplicate-warning">
+                <strong>⚠️ Similar Athletes Found</strong>
+                <ul>
+                    @foreach (var similar in Model.SimilarAthletes)
+                    {
+                        <li>@similar.LastName, @similar.FirstName (@similar.GraduationYear, @similar.Gender)</li>
+                    }
+                </ul>
+                <div style="margin-top: 8px; font-size: 12px;">Please verify this is a new athlete before continuing.</div>
+            </div>
+        }
+        
+        <div class="form-group">
+            <label asp-for="Gender">Gender <span style="color: #dc3545;">*</span></label>
+            <select asp-for="Gender" asp-items="Html.GetEnumSelectList<CloverleafTrack.Models.Enums.Gender>()" class="form-control">
+                <option value="">Select gender...</option>
+            </select>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="GraduationYear">Graduation Year <span style="color: #dc3545;">*</span></label>
+            <input asp-for="GraduationYear" type="number" class="form-control" placeholder="e.g., 2027" min="1980" max="2035" />
+            <div class="hint">Enter the year this athlete will graduate from high school</div>
+            <span asp-validation-for="GraduationYear" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <div class="checkbox-group">
+                <input asp-for="IsActive" type="checkbox" />
+                <label asp-for="IsActive" style="margin: 0;">Active (shows in performance entry)</label>
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+            @if (Model.Id == 0)
+            {
+                <button type="submit" name="saveAndAddAnother" value="true" class="btn btn-success">Save & Add Another</button>
+            }
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

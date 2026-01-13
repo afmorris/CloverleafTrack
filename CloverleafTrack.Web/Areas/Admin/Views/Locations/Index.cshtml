@@ -1,0 +1,58 @@
+@model List<CloverleafTrack.Models.Location>
+@{
+    ViewData["Title"] = "Locations";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+    .btn-primary { background: #0066cc; color: white; border: none; padding: 10px 20px; border-radius: 6px; text-decoration: none; display: inline-block; }
+    
+    .table-container { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #f8f9fa; }
+    th { padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; color: #666; text-transform: uppercase; border-bottom: 2px solid #e0e0e0; }
+    td { padding: 12px 15px; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+    tr:hover { background: #f8f9fa; }
+    
+    .action-links { display: flex; gap: 10px; }
+    .action-links a { color: #0066cc; text-decoration: none; font-size: 13px; }
+</style>
+
+<div class="header">
+    <h1>Locations</h1>
+    <a asp-action="Create" class="btn-primary">+ Add Location</a>
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Country</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var location in Model)
+            {
+                <tr>
+                    <td><strong>@location.Name</strong></td>
+                    <td>@location.City</td>
+                    <td>@location.State</td>
+                    <td>@(location.Country ?? "USA")</td>
+                    <td>
+                        <div class="action-links">
+                            <a asp-action="Edit" asp-route-id="@location.Id">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@location.Id" method="post" style="display: inline;" 
+                                  onsubmit="return confirm('Delete @location.Name?');">
+                                <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer; font-size: 13px; padding: 0;">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

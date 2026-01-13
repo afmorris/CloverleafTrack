@@ -4,13 +4,6 @@
     ViewBag.Title = "Leaderboard";
 }
 
-@functions {
-    string[] GetRelayAthletes(string athleteName)
-    {
-        return athleteName?.Split("|~|") ?? Array.Empty<string>();
-    }
-}
-
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
     <!-- Header -->

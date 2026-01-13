@@ -29,6 +29,13 @@
     }
 }
 
+@functions {
+    string[] GetRelayAthletes(string athleteName)
+    {
+        return athleteName?.Split("|~|") ?? Array.Empty<string>();
+    }
+}
+
 @foreach (var category in Model.Item3)
 {
     <div class="mb-8">

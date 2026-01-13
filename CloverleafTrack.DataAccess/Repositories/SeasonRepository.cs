@@ -57,9 +57,12 @@ public class SeasonRepository(IDbConnectionFactory connectionFactory) : ISeasonR
                         meetMap[meet.Id] = currentMeet;
                     }
                     
-                    performance.Event = evt;
-                    performance.Athlete = athlete;
-                    meetMap[meet.Id].Performances.Add(performance);
+                    if (performance != null)
+                    {
+                        performance.Event = evt;
+                        performance.Athlete = athlete;
+                        meetMap[meet.Id].Performances.Add(performance);
+                    }
                 }
 
                 return currentSeason;

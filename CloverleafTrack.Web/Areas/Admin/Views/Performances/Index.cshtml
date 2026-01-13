@@ -1,0 +1,115 @@
+@model List<CloverleafTrack.Models.Performance>
+@{
+    ViewData["Title"] = "Performances";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+    .btn-primary { background: #0066cc; color: white; border: none; padding: 10px 20px; border-radius: 6px; text-decoration: none; display: inline-block; }
+    
+    .filters { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .filter-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+    .filter-group label { font-size: 13px; color: #666; margin-bottom: 5px; display: block; }
+    .filter-group input, .filter-group select { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    
+    .table-container { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #f8f9fa; }
+    th { padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; color: #666; text-transform: uppercase; border-bottom: 2px solid #e0e0e0; }
+    td { padding: 12px 15px; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+    tr:hover { background: #f8f9fa; }
+    
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-right: 4px; }
+    .badge-pr { background: #28a745; color: white; }
+    .badge-sr { background: #dc3545; color: white; }
+    .badge-sb { background: #ffc107; color: #333; }
+    
+    .action-links { display: flex; gap: 10px; }
+    .action-links a { color: #0066cc; text-decoration: none; font-size: 13px; }
+</style>
+
+<div class="header">
+    <h1>Performances</h1>
+    <a asp-action="Create" class="btn-primary">+ Add Performance</a>
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Meet</th>
+                <th>Athlete(s)</th>
+                <th>Event</th>
+                <th>Performance</th>
+                <th>Marks</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                        No performances found. <a asp-action="Create">Add your first performance</a>
+                    </td>
+                </tr>
+            }
+            @foreach (var perf in Model)
+            {
+                <tr>
+                    <td>@perf.Meet.Date.ToString("MMM d, yyyy")</td>
+                    <td>@perf.Meet.Name</td>
+                    <td>
+                        @if (perf.AthleteId.HasValue && !string.IsNullOrEmpty(perf.Athlete.FirstName))
+                        {
+                            <span>@perf.Athlete.LastName, @perf.Athlete.FirstName</span>
+                        }
+                        else if (!string.IsNullOrEmpty(perf.Athlete.LastName))
+                        {
+                            <span style="font-style: italic;">@perf.Athlete.LastName</span>
+                        }
+                        else
+                        {
+                            <span style="color: #666; font-style: italic;">Relay Team</span>
+                        }
+                    </td>
+                    <td>@perf.Event.Name</td>
+                    <td>
+                        @if (perf.TimeSeconds.HasValue)
+                        {
+                            @CloverleafTrack.Web.Utilities.PerformanceFormatHelper.FormatTime(perf.TimeSeconds.Value)
+                        }
+                        else if (perf.DistanceInches.HasValue)
+                        {
+                            @CloverleafTrack.Web.Utilities.PerformanceFormatHelper.FormatDistance(perf.DistanceInches.Value)
+                        }
+                    </td>
+                    <td>
+                        @if (perf.SchoolRecord)
+                        {
+                            <span class="badge badge-sr">SR</span>
+                        }
+                        @if (perf.PersonalBest)
+                        {
+                            <span class="badge badge-pr">PR</span>
+                        }
+                        @if (perf.SeasonBest)
+                        {
+                            <span class="badge badge-sb">SB</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="action-links">
+                            <a asp-action="Edit" asp-route-id="@perf.Id">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@perf.Id" method="post" style="display: inline;" 
+                                  onsubmit="return confirm('Delete this performance?');">
+                                <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer; font-size: 13px; padding: 0;">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

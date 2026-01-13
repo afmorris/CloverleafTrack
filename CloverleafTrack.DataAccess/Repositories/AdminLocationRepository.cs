@@ -6,7 +6,7 @@ namespace CloverleafTrack.DataAccess.Repositories;
 
 public class AdminLocationRepository(IDbConnectionFactory connectionFactory) : IAdminLocationRepository
 {
-    public async Task<List<Location>> GetAllLocationsAsync()
+    public async Task<List<Location>> GetAllAsync()
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = "SELECT * FROM Locations ORDER BY Name";
@@ -14,14 +14,14 @@ public class AdminLocationRepository(IDbConnectionFactory connectionFactory) : I
         return locations.ToList();
     }
 
-    public async Task<Location?> GetLocationByIdAsync(int id)
+    public async Task<Location?> GetByIdAsync(int id)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = "SELECT * FROM Locations WHERE Id = @Id";
         return await connection.QuerySingleOrDefaultAsync<Location>(sql, new { Id = id });
     }
 
-    public async Task<int> CreateLocationAsync(Location location)
+    public async Task<int> CreateAsync(Location location)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
@@ -31,22 +31,22 @@ public class AdminLocationRepository(IDbConnectionFactory connectionFactory) : I
         return await connection.ExecuteScalarAsync<int>(sql, location);
     }
 
-    public async Task<bool> UpdateLocationAsync(Location location)
+    public async Task<bool> UpdateAsync(Location location)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
-            UPDATE Locations 
-            SET Name = @Name, 
-                City = @City, 
-                State = @State, 
-                ZipCode = @ZipCode, 
+            UPDATE Locations
+            SET Name = @Name,
+                City = @City,
+                State = @State,
+                ZipCode = @ZipCode,
                 Country = @Country
             WHERE Id = @Id";
         var rowsAffected = await connection.ExecuteAsync(sql, location);
         return rowsAffected > 0;
     }
 
-    public async Task<bool> DeleteLocationAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = "DELETE FROM Locations WHERE Id = @Id";
@@ -54,22 +54,22 @@ public class AdminLocationRepository(IDbConnectionFactory connectionFactory) : I
         return rowsAffected > 0;
     }
 
-    public async Task<List<Location>> GetRecentLocationsAsync(int count = 5)
+    public async Task<List<Location>> GetRecentlyUsedAsync(int count = 5)
     {
         using var connection = connectionFactory.CreateConnection();
-
-        // Get locations used most recently in meets
-        var sql = @"
-            SELECT TOP (@Count) l.*
+        var sql = $@"
+            SELECT TOP {count} l.*
             FROM Locations l
-            INNER JOIN (
-                SELECT LocationId, MAX(Date) AS LastUsed
-                FROM Meets
-                GROUP BY LocationId
-            ) m ON l.Id = m.LocationId
-            ORDER BY m.LastUsed DESC";
-
-        var locations = await connection.QueryAsync<Location>(sql, new { Count = count });
+            WHERE l.Id IN (
+                SELECT TOP {count} LocationId
+                FROM (
+                    SELECT DISTINCT LocationId, MAX(Date) as MaxDate
+                    FROM Meets
+                    GROUP BY LocationId
+                ) AS RecentLocations
+                ORDER BY MaxDate DESC
+            )";
+        var locations = await connection.QueryAsync<Location>(sql);
         return locations.ToList();
     }
 }

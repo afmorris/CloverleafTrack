@@ -1,0 +1,133 @@
+@model MeetFormViewModel
+@{
+    ViewData["Title"] = Model.Id > 0 ? "Edit Meet" : "Add Meet";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header h1 { font-size: 24px; margin-bottom: 5px; }
+    .breadcrumb { font-size: 13px; color: #666; }
+    .breadcrumb a { color: #0066cc; text-decoration: none; }
+    
+    .form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 700px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; color: #333; margin-bottom: 8px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    .form-group textarea { min-height: 80px; resize: vertical; }
+    .text-danger { color: #dc3545; font-size: 13px; }
+    
+    .recent-locations { margin-top: 15px; }
+    .recent-locations .title { font-size: 12px; color: #666; margin-bottom: 8px; }
+    .recent-locations .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { background: #f0f0f0; padding: 6px 12px; border-radius: 16px; font-size: 13px; cursor: pointer; border: 1px solid transparent; }
+    .chip:hover { border-color: #0066cc; background: #e3f2fd; }
+    
+    .button-group { display: flex; gap: 10px; margin-top: 30px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn-primary { background: #0066cc; color: white; }
+    .btn-success { background: #28a745; color: white; }
+    .btn-secondary { background: white; color: #666; border: 1px solid #ddd; }
+    
+    .checkbox-group { display: flex; align-items: center; gap: 8px; }
+    .checkbox-group input[type="checkbox"] { width: auto; height: 18px; }
+    
+    .auto-detect { background: #e3f2fd; padding: 10px; border-radius: 4px; margin-top: 10px; font-size: 13px; }
+</style>
+
+<div class="header">
+    <h1>@ViewData["Title"]</h1>
+    <div class="breadcrumb">
+        <a asp-action="Index">Meets</a> / @(Model.Id > 0 ? "Edit" : "Add New")
+    </div>
+</div>
+
+<div class="form-container">
+    <form asp-action="@(Model.Id > 0 ? "Edit" : "Create")" method="post">
+        <input type="hidden" asp-for="Id" />
+        
+        <div class="form-group">
+            <label asp-for="Name">Meet Name <span style="color: #dc3545;">*</span></label>
+            <input asp-for="Name" class="form-control" placeholder="e.g., County Championships" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Date">Date <span style="color: #dc3545;">*</span></label>
+            <input asp-for="Date" type="date" class="form-control" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="LocationId">Location <span style="color: #dc3545;">*</span></label>
+            <select asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "DisplayText"))" class="form-control">
+                <option value="">Select location...</option>
+            </select>
+            <span asp-validation-for="LocationId" class="text-danger"></span>
+            
+            @if (Model.RecentLocations.Any())
+            {
+                <div class="recent-locations">
+                    <div class="title">Recently Used:</div>
+                    <div class="chips">
+                        @foreach (var loc in Model.RecentLocations)
+                        {
+                            <span class="chip" onclick="document.getElementById('LocationId').value='@loc.Id'">
+                                @loc.DisplayText
+                            </span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="SeasonId">Season <span style="color: #dc3545;">*</span></label>
+            <select asp-for="SeasonId" asp-items="@(new SelectList(Model.Seasons, "Id", "Name"))" class="form-control">
+                <option value="">Select season...</option>
+            </select>
+            <span asp-validation-for="SeasonId" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Environment">Environment <span style="color: #dc3545;">*</span></label>
+            <select asp-for="Environment" asp-items="Html.GetEnumSelectList<CloverleafTrack.Models.Enums.Environment>()" class="form-control">
+                <option value="">Select environment...</option>
+            </select>
+            <span asp-validation-for="Environment" class="text-danger"></span>
+            <div class="auto-detect">
+                💡 Indoor (Nov-Feb) | Outdoor (Mar-Oct)
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="EntryStatus">Entry Status</label>
+            <select asp-for="EntryStatus" asp-items="Html.GetEnumSelectList<CloverleafTrack.Models.Enums.MeetEntryStatus>()" class="form-control">
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <div class="checkbox-group">
+                <input asp-for="HandTimed" type="checkbox" />
+                <label asp-for="HandTimed" style="margin: 0;">Hand Timed (not FAT)</label>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="EntryNotes">Entry Notes</label>
+            <textarea asp-for="EntryNotes" class="form-control" placeholder="Optional notes about this meet..."></textarea>
+        </div>
+        
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Save Meet</button>
+            @if (Model.Id == 0)
+            {
+                <button type="submit" name="saveAndAddPerformances" value="true" class="btn btn-success">Save & Add Performances</button>
+            }
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

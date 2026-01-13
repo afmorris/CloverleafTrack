@@ -12,8 +12,8 @@ public class EventsController(IAdminEventRepository eventRepository) : Controlle
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var events = await eventRepository.GetAllEventsAsync();
-
+        var events = await eventRepository.GetAllAsync();
+        
         // Group by gender and environment for better display
         var viewModel = events.GroupBy(e => new { e.Gender, e.Environment })
             .OrderBy(g => g.Key.Gender)
@@ -22,16 +22,16 @@ public class EventsController(IAdminEventRepository eventRepository) : Controlle
                 g => $"{g.Key.Gender} {g.Key.Environment}",
                 g => g.OrderBy(e => e.EventCategorySortOrder).ThenBy(e => e.SortOrder).ToList()
             );
-
+        
         return View(viewModel);
     }
-
+    
     [HttpGet]
     public IActionResult Create()
     {
         return View(new Event());
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Event evt)
@@ -40,32 +40,32 @@ public class EventsController(IAdminEventRepository eventRepository) : Controlle
         {
             return View(evt);
         }
-
+        
         // Validate EventKey uniqueness
-        var existing = await eventRepository.GetAllEventsAsync();
+        var existing = await eventRepository.GetAllAsync();
         if (existing.Any(e => e.EventKey == evt.EventKey))
         {
             ModelState.AddModelError(nameof(evt.EventKey), "EventKey must be unique");
             return View(evt);
         }
-
-        await eventRepository.CreateEventAsync(evt);
+        
+        await eventRepository.CreateAsync(evt);
         TempData["SuccessMessage"] = $"Event '{evt.Name}' created successfully!";
         return RedirectToAction(nameof(Index));
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var evt = await eventRepository.GetEventByIdAsync(id);
+        var evt = await eventRepository.GetByIdAsync(id);
         if (evt == null)
         {
             return NotFound();
         }
-
+        
         return View(evt);
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Event evt)
@@ -74,26 +74,26 @@ public class EventsController(IAdminEventRepository eventRepository) : Controlle
         {
             return View(evt);
         }
-
-        await eventRepository.UpdateEventAsync(evt);
+        
+        await eventRepository.UpdateAsync(evt);
         TempData["SuccessMessage"] = "Event updated successfully!";
         return RedirectToAction(nameof(Index));
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)
     {
-        await eventRepository.DeleteEventAsync(id);
+        await eventRepository.DeleteAsync(id);
         TempData["SuccessMessage"] = "Event deleted successfully!";
         return RedirectToAction(nameof(Index));
     }
-
+    
     [HttpGet]
-    public async Task<IActionResult> GetByEnvironmentAndGender(Environment environment, Gender? gender)
+    public async Task<IActionResult> GetByGenderAndEnvironment(Gender? gender, Environment environment)
     {
-        var events = await eventRepository.GetEventsByEnvironmentAndGenderAsync(environment, gender);
-
+        var events = await eventRepository.GetByGenderAndEnvironmentAsync(gender, environment);
+        
         var result = events
             .OrderBy(e => e.EventCategorySortOrder)
             .ThenBy(e => e.SortOrder)
@@ -105,7 +105,7 @@ public class EventsController(IAdminEventRepository eventRepository) : Controlle
                 athleteCount = e.AthleteCount,
                 category = e.EventCategory?.ToString() ?? "Other"
             });
-
+        
         return Json(result);
     }
 }

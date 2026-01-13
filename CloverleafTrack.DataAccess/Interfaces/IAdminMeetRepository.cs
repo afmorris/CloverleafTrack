@@ -6,12 +6,13 @@ namespace CloverleafTrack.DataAccess.Interfaces;
 
 public interface IAdminMeetRepository
 {
-    Task<List<Meet>> GetAllMeetsAsync();
-    Task<List<Meet>> GetMeetsByFiltersAsync(string? searchTerm, int? seasonId, Environment? environment, MeetEntryStatus? entryStatus);
-    Task<Meet?> GetMeetByIdAsync(int id);
-    Task<Meet?> GetMeetWithDetailsAsync(int id);
-    Task<int> CreateMeetAsync(Meet meet);
-    Task<bool> UpdateMeetAsync(Meet meet);
-    Task<bool> DeleteMeetAsync(int id);
+    Task<List<Meet>> GetAllAsync();
+    Task<List<Meet>> GetFilteredAsync(string? searchName, int? seasonId, Environment? environment, MeetEntryStatus? entryStatus);
+    Task<Meet?> GetByIdAsync(int id);
+    Task<Meet?> GetByIdWithDetailsAsync(int id);
+    Task<int> CreateAsync(Meet meet);
+    Task<bool> UpdateAsync(Meet meet);
+    Task<bool> DeleteAsync(int id);
+    Task<int> GetPerformanceCountAsync(int meetId);
     Task<List<Meet>> GetRecentMeetsAsync(int count = 5);
 }

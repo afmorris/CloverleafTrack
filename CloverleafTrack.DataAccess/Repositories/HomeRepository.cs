@@ -24,7 +24,7 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                                
                                (SELECT COUNT(*) FROM Athletes WHERE IsActive = 1) AS ActiveAthletes,
                                
-                               (SELECT COUNT(*) FROM Meets WHERE SeasonId = @SeasonId) AS MeetsCompleted,
+                               (SELECT COUNT(*) FROM Meets WHERE SeasonId = @SeasonId AND EntryStatus = 3) AS MeetsCompleted,
                                
                                (SELECT COUNT(*) FROM Meets WHERE SeasonId = @SeasonId) AS TotalMeetsThisSeason
                            """;

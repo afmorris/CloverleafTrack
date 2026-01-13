@@ -1,6 +1,6 @@
 ﻿using Environment = CloverleafTrack.Models.Enums.Environment;
 
-namespace CloverleafTrack.ViewModels.Admin;
+namespace CloverleafTrack.ViewModels.Admin.Performances;
 
 public class MeetOptionViewModel
 {
@@ -9,6 +9,6 @@ public class MeetOptionViewModel
     public DateTime Date { get; set; }
     public Environment Environment { get; set; }
     public string SeasonName { get; set; } = string.Empty;
-
+    
     public string DisplayText => $"{Name} - {Date:MMM d, yyyy} ({Environment})";
 }

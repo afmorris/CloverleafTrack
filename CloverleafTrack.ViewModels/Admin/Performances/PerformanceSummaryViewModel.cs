@@ -1,4 +1,5 @@
-﻿namespace CloverleafTrack.ViewModels.Admin;
+﻿namespace CloverleafTrack.ViewModels.Admin.Performances;
+
 public class PerformanceSummaryViewModel
 {
     public int Id { get; set; }

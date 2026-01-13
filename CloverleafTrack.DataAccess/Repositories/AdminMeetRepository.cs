@@ -20,7 +20,7 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
             INNER JOIN Locations l ON m.LocationId = l.Id
             INNER JOIN Seasons s ON s.Id = m.SeasonId
             ORDER BY m.Date DESC";
-
+        
         var meets = await connection.QueryAsync<Meet, Location, Season, Meet>(
             sql,
             (meet, location, season) =>
@@ -30,14 +30,14 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
                 return meet;
             },
             splitOn: "Id,Id");
-
+        
         return meets.ToList();
     }
 
     public async Task<List<Meet>> GetFilteredAsync(string? searchName, int? seasonId, Environment? environment, MeetEntryStatus? entryStatus)
     {
         using var connection = connectionFactory.CreateConnection();
-
+        
         var sql = @"
             SELECT 
                 m.*,
@@ -47,35 +47,35 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
             INNER JOIN Locations l ON m.LocationId = l.Id
             INNER JOIN Seasons s ON s.Id = m.SeasonId
             WHERE 1=1";
-
+        
         var parameters = new DynamicParameters();
-
+        
         if (!string.IsNullOrWhiteSpace(searchName))
         {
             sql += " AND m.Name LIKE @SearchName";
             parameters.Add("SearchName", $"%{searchName}%");
         }
-
+        
         if (seasonId.HasValue)
         {
             sql += " AND m.SeasonId = @SeasonId";
             parameters.Add("SeasonId", seasonId.Value);
         }
-
+        
         if (environment.HasValue)
         {
             sql += " AND m.Environment = @Environment";
             parameters.Add("Environment", environment.Value);
         }
-
+        
         if (entryStatus.HasValue)
         {
             sql += " AND m.EntryStatus = @EntryStatus";
             parameters.Add("EntryStatus", entryStatus.Value);
         }
-
+        
         sql += " ORDER BY m.Date DESC";
-
+        
         var meets = await connection.QueryAsync<Meet, Location, Season, Meet>(
             sql,
             (meet, location, season) =>
@@ -86,7 +86,7 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
             },
             parameters,
             splitOn: "Id,Id");
-
+        
         return meets.ToList();
     }
 
@@ -109,7 +109,7 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
             INNER JOIN Locations l ON m.LocationId = l.Id
             INNER JOIN Seasons s ON s.Id = m.SeasonId
             WHERE m.Id = @Id";
-
+        
         var meets = await connection.QueryAsync<Meet, Location, Season, Meet>(
             sql,
             (meet, location, season) =>
@@ -120,7 +120,7 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
             },
             new { Id = id },
             splitOn: "Id,Id");
-
+        
         return meets.FirstOrDefault();
     }
 
@@ -179,7 +179,7 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
             INNER JOIN Locations l ON m.LocationId = l.Id
             INNER JOIN Seasons s ON s.Id = m.SeasonId
             ORDER BY m.Date DESC";
-
+        
         var meets = await connection.QueryAsync<Meet, Location, Season, Meet>(
             sql,
             (meet, location, season) =>
@@ -189,7 +189,7 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
                 return meet;
             },
             splitOn: "Id,Id");
-
+        
         return meets.ToList();
     }
 }

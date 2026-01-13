@@ -6,10 +6,10 @@ namespace CloverleafTrack.DataAccess.Interfaces;
 
 public interface IAdminEventRepository
 {
-    Task<List<Event>> GetAllEventsAsync();
-    Task<List<Event>> GetEventsByEnvironmentAndGenderAsync(Environment environment, Gender? gender);
-    Task<Event?> GetEventByIdAsync(int id);
-    Task<int> CreateEventAsync(Event eventItem);
-    Task<bool> UpdateEventAsync(Event eventItem);
-    Task<bool> DeleteEventAsync(int id);
+    Task<List<Event>> GetAllAsync();
+    Task<Event?> GetByIdAsync(int id);
+    Task<int> CreateAsync(Event evt);
+    Task<bool> UpdateAsync(Event evt);
+    Task<bool> DeleteAsync(int id);
+    Task<List<Event>> GetByGenderAndEnvironmentAsync(Gender? gender, Environment environment);
 }

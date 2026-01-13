@@ -1,12 +1,13 @@
 ﻿using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
+using CloverleafTrack.Models.Enums;
 using Dapper;
 
 namespace CloverleafTrack.DataAccess.Repositories;
 
 public class AdminAthleteRepository(IDbConnectionFactory connectionFactory) : IAdminAthleteRepository
 {
-    public async Task<List<Athlete>> GetAllAthletesAsync()
+    public async Task<List<Athlete>> GetAllAsync()
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = "SELECT * FROM Athletes ORDER BY LastName, FirstName";
@@ -14,50 +15,51 @@ public class AdminAthleteRepository(IDbConnectionFactory connectionFactory) : IA
         return athletes.ToList();
     }
 
-    public async Task<List<Athlete>> GetAthletesByFiltersAsync(string? searchTerm, short? gender, bool? isActive, int? graduationYear)
+    public async Task<List<Athlete>> GetFilteredAsync(string? searchName, Gender? gender, bool? isActive, int? graduationYear)
     {
         using var connection = connectionFactory.CreateConnection();
-
-        var sql = @"
-            SELECT * FROM Athletes 
-            WHERE 1=1
-                AND (@SearchTerm IS NULL OR FirstName LIKE '%' + @SearchTerm + '%' OR LastName LIKE '%' + @SearchTerm + '%')
-                AND (@Gender IS NULL OR Gender = @Gender)
-                AND (@IsActive IS NULL OR IsActive = @IsActive)
-                AND (@GraduationYear IS NULL OR GraduationYear = @GraduationYear)
-            ORDER BY LastName, FirstName";
-
-        var athletes = await connection.QueryAsync<Athlete>(sql, new { SearchTerm = searchTerm, Gender = gender, IsActive = isActive, GraduationYear = graduationYear });
+        
+        var sql = "SELECT * FROM Athletes WHERE 1=1";
+        var parameters = new DynamicParameters();
+        
+        if (!string.IsNullOrWhiteSpace(searchName))
+        {
+            sql += " AND (FirstName LIKE @SearchName OR LastName LIKE @SearchName)";
+            parameters.Add("SearchName", $"%{searchName}%");
+        }
+        
+        if (gender.HasValue)
+        {
+            sql += " AND Gender = @Gender";
+            parameters.Add("Gender", gender.Value);
+        }
+        
+        if (isActive.HasValue)
+        {
+            sql += " AND IsActive = @IsActive";
+            parameters.Add("IsActive", isActive.Value);
+        }
+        
+        if (graduationYear.HasValue)
+        {
+            sql += " AND GraduationYear = @GraduationYear";
+            parameters.Add("GraduationYear", graduationYear.Value);
+        }
+        
+        sql += " ORDER BY LastName, FirstName";
+        
+        var athletes = await connection.QueryAsync<Athlete>(sql, parameters);
         return athletes.ToList();
     }
 
-    public async Task<List<Athlete>> GetAthletesEligibleForMeetAsync(DateTime meetDate, short? eventGender)
-    {
-        using var connection = connectionFactory.CreateConnection();
-
-        // Athletes are eligible if they graduated 0-3 years after the meet year
-        var meetYear = meetDate.Year;
-        var minGradYear = meetYear;
-        var maxGradYear = meetYear + 3;
-
-        var sql = @"
-            SELECT * FROM Athletes 
-            WHERE GraduationYear BETWEEN @MinGradYear AND @MaxGradYear
-                AND (@EventGender IS NULL OR Gender = @EventGender)
-            ORDER BY LastName, FirstName";
-
-        var athletes = await connection.QueryAsync<Athlete>(sql, new { MinGradYear = minGradYear, MaxGradYear = maxGradYear, EventGender = eventGender });
-        return athletes.ToList();
-    }
-
-    public async Task<Athlete?> GetAthleteByIdAsync(int id)
+    public async Task<Athlete?> GetByIdAsync(int id)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = "SELECT * FROM Athletes WHERE Id = @Id";
         return await connection.QuerySingleOrDefaultAsync<Athlete>(sql, new { Id = id });
     }
 
-    public async Task<int> CreateAthleteAsync(Athlete athlete)
+    public async Task<int> CreateAsync(Athlete athlete)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
@@ -67,22 +69,22 @@ public class AdminAthleteRepository(IDbConnectionFactory connectionFactory) : IA
         return await connection.ExecuteScalarAsync<int>(sql, athlete);
     }
 
-    public async Task<bool> UpdateAthleteAsync(Athlete athlete)
+    public async Task<bool> UpdateAsync(Athlete athlete)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
-            UPDATE Athletes 
-            SET FirstName = @FirstName, 
-                LastName = @LastName, 
-                Gender = @Gender, 
-                GraduationYear = @GraduationYear, 
+            UPDATE Athletes
+            SET FirstName = @FirstName,
+                LastName = @LastName,
+                Gender = @Gender,
+                GraduationYear = @GraduationYear,
                 IsActive = @IsActive
             WHERE Id = @Id";
         var rowsAffected = await connection.ExecuteAsync(sql, athlete);
         return rowsAffected > 0;
     }
 
-    public async Task<bool> DeleteAthleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = "DELETE FROM Athletes WHERE Id = @Id";
@@ -90,29 +92,62 @@ public class AdminAthleteRepository(IDbConnectionFactory connectionFactory) : IA
         return rowsAffected > 0;
     }
 
-    public async Task<List<Athlete>> FindSimilarAthletesAsync(string firstName, string lastName)
+    public async Task<List<Athlete>> GetSimilarAthletesAsync(string firstName, string lastName)
     {
         using var connection = connectionFactory.CreateConnection();
-
         const string sql = @"
-            SELECT * FROM Athletes 
-            WHERE (FirstName LIKE '%' + @FirstName + '%' OR @FirstName LIKE '%' + FirstName + '%')
-                AND (LastName LIKE '%' + @LastName + '%' OR @LastName LIKE '%' + LastName + '%')
+            SELECT * FROM Athletes
+            WHERE (FirstName LIKE @FirstName OR LastName LIKE @LastName)
             ORDER BY LastName, FirstName";
-
-        var athletes = await connection.QueryAsync<Athlete>(sql, new { FirstName = firstName, LastName = lastName });
+        
+        var athletes = await connection.QueryAsync<Athlete>(sql, new 
+        { 
+            FirstName = $"%{firstName}%", 
+            LastName = $"%{lastName}%" 
+        });
         return athletes.ToList();
     }
 
-    public async Task<int> GetPerformanceCountForAthleteAsync(int athleteId)
+    public async Task<int> GetPerformanceCountAsync(int athleteId)
     {
         using var connection = connectionFactory.CreateConnection();
-
         const string sql = @"
-            SELECT COUNT(*) 
-            FROM Performances 
+            SELECT COUNT(*)
+            FROM Performances
             WHERE AthleteId = @AthleteId";
-
         return await connection.ExecuteScalarAsync<int>(sql, new { AthleteId = athleteId });
+    }
+
+    public async Task<List<Athlete>> GetAthletesForMeetAsync(int meetId, Gender? gender)
+    {
+        using var connection = connectionFactory.CreateConnection();
+        
+        // Get meet date to filter by graduation year
+        const string meetSql = "SELECT Date FROM Meets WHERE Id = @MeetId";
+        var meetDate = await connection.QuerySingleAsync<DateTime>(meetSql, new { MeetId = meetId });
+        
+        var meetYear = meetDate.Year;
+        var minGradYear = meetYear - 3; // Athletes who graduated up to 3 years before the meet
+        var maxGradYear = meetYear + 4; // Athletes who will graduate up to 4 years after the meet
+        
+        // Remove IsActive filter - show ALL athletes eligible based on graduation year
+        var sql = @"
+            SELECT * FROM Athletes
+            WHERE GraduationYear BETWEEN @MinGradYear AND @MaxGradYear";
+        
+        var parameters = new DynamicParameters();
+        parameters.Add("MinGradYear", minGradYear);
+        parameters.Add("MaxGradYear", maxGradYear);
+        
+        if (gender.HasValue)
+        {
+            sql += " AND Gender = @Gender";
+            parameters.Add("Gender", gender.Value);
+        }
+        
+        sql += " ORDER BY LastName, FirstName";
+        
+        var athletes = await connection.QueryAsync<Athlete>(sql, parameters);
+        return athletes.ToList();
     }
 }

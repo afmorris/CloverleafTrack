@@ -1,3 +1,4 @@
+@using Slugify
 @model LeaderboardDetailsViewModel
 
 @{
@@ -27,6 +28,11 @@
             0 => "Senior",
             _ => $"'{gradYear.Value.ToString().Substring(2)}"
         };
+    }
+
+    string[] GetRelayAthletes(string athleteName)
+    {
+        return athleteName?.Split("|~|") ?? Array.Empty<string>();
     }
 }
 
@@ -69,10 +75,13 @@
                 class="view-tab px-6 py-3 bg-blue-100 dark:bg-blue-500 text-gray-900 dark:text-white rounded-lg border border-blue-300 dark:border-blue-800 font-medium transition-all">
             All Performances (@Model.AllPerformances.Count)
         </button>
-        <button onclick="showView('prs')" id="prs-tab"
-                class="view-tab px-6 py-3 bg-gray-100 dark:bg-gray-500 text-gray-900 dark:text-white rounded-lg border border-gray-300 dark:border-gray-800 font-medium transition-all">
-            PRs Only (@Model.PersonalRecordsOnly.Count)
-        </button>
+        @if (!Model.IsRelayEvent)
+        {
+            <button onclick="showView('prs')" id="prs-tab"
+                    class="view-tab px-6 py-3 bg-gray-100 dark:bg-gray-500 text-gray-900 dark:text-white rounded-lg border border-gray-300 dark:border-gray-800 font-medium transition-all">
+                PRs Only (@Model.PersonalRecordsOnly.Count)
+            </button>
+        }
     </div>
 
     <!-- All Performances View -->
@@ -100,16 +109,43 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    @if (!string.IsNullOrEmpty(perf.AthleteSlug))
+                                    @if (perf.AthleteName.Contains("|~|"))
                                     {
-                                        <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
-                                           class="text-gray-900 dark:text-white font-medium underline">
-                                            @perf.AthleteName
-                                        </a>
+                                        var relayMembers = GetRelayAthletes(perf.AthleteName);
+                                        <ul class="list-disc list-inside mt-1">
+                                            @foreach (var athlete in relayMembers)
+                                            {
+                                                var split = athlete.Split(' ');
+                                                if (split.Length >= 2)
+                                                {
+                                                    var firstName = split[0];
+                                                    var lastName = split[1];
+                                                    var helper = new SlugHelper();
+                                                    var slug = helper.GenerateSlug($"{firstName}-{lastName}");
+
+                                                    <div class="text-gray-900 dark:text-white">
+                                                        <span class="mr-2">•</span>
+                                                        <a asp-controller="Roster" asp-action="Details" asp-route-slug="@slug" class="underline">
+                                                            @athlete
+                                                        </a>
+                                                    </div>
+                                                }
+                                            }
+                                        </ul>
                                     }
                                     else
                                     {
-                                        <span class="text-gray-900 dark:text-white font-medium">@perf.AthleteName</span>
+                                        @if (!string.IsNullOrEmpty(perf.AthleteSlug))
+                                        {
+                                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
+                                            class="text-gray-900 dark:text-white font-medium underline">
+                                                @perf.AthleteName
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-gray-900 dark:text-white font-medium">@perf.AthleteName</span>
+                                        }
                                     }
                                 </td>
                                 <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
