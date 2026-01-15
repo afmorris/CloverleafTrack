@@ -16,25 +16,25 @@ public class PerformancesController(
 {
     private const string SessionKeyMeetId = "PerformanceEntry_MeetId";
     private const string SessionKeyEventId = "PerformanceEntry_EventId";
-    
+
     [HttpGet]
     public async Task<IActionResult> Index()
     {
         var performances = await performanceRepository.GetAllWithDetailsAsync();
         return View(performances);
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> Create(int? meetId, int? eventId)
     {
         // Use provided meetId or get from session
         var selectedMeetId = meetId ?? HttpContext.Session.GetInt32(SessionKeyMeetId);
         var selectedEventId = eventId ?? HttpContext.Session.GetInt32(SessionKeyEventId);
-        
+
         var viewModel = new PerformanceEntryViewModel();
-        
+
         // Load all meets for dropdown
-        var meets = await meetRepository.GetAllAsync();
+        var meets = await meetRepository.GetRecentMeetsAsync(50);
         viewModel.Meets = meets.Select(m => new MeetOptionViewModel
         {
             Id = m.Id,
@@ -43,7 +43,7 @@ public class PerformancesController(
             Environment = m.Environment,
             SeasonName = m.Season.Name
         }).ToList();
-        
+
         // If meet is selected, load context
         if (selectedMeetId.HasValue)
         {
@@ -53,10 +53,10 @@ public class PerformancesController(
                 viewModel.MeetId = meet.Id;
                 viewModel.MeetName = meet.Name;
                 viewModel.MeetDate = meet.Date;
-                
+
                 // Get performance count for this meet
                 viewModel.PerformanceCount = await meetRepository.GetPerformanceCountAsync(meet.Id);
-                
+
                 // Load events for this meet's environment
                 var events = await eventRepository.GetByGenderAndEnvironmentAsync(null, meet.Environment);
                 viewModel.Events = events.Select(e => new EventOptionViewModel
@@ -68,12 +68,12 @@ public class PerformancesController(
                     Gender = e.Gender,
                     AthleteCount = e.AthleteCount
                 }).ToList();
-                
+
                 // Store in session for persistence
                 HttpContext.Session.SetInt32(SessionKeyMeetId, meet.Id);
             }
         }
-        
+
         // If event is selected, load athletes
         if (selectedEventId.HasValue && selectedMeetId.HasValue)
         {
@@ -85,7 +85,7 @@ public class PerformancesController(
                 viewModel.EventType = evt.EventType;
                 viewModel.EventAthleteCount = evt.AthleteCount;
                 viewModel.EventGender = evt.Gender;
-                
+
                 // Load eligible athletes
                 var athletes = await athleteRepository.GetAthletesForMeetAsync(selectedMeetId.Value, evt.Gender);
                 viewModel.Athletes = athletes.Select(a => new AthleteOptionViewModel
@@ -96,30 +96,46 @@ public class PerformancesController(
                     Gender = a.Gender,
                     GraduationYear = a.GraduationYear
                 }).ToList();
-                
+
                 // Store in session
                 HttpContext.Session.SetInt32(SessionKeyEventId, evt.Id);
             }
         }
-        
+
         return View(viewModel);
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(PerformanceEntryViewModel model, bool saveAndAddAnother = false)
     {
+        // Get event to check if it's a relay
+        var evt = await eventRepository.GetByIdAsync(model.EventId);
+
+        // If it's an individual event (not a relay), clear RelayAthleteIds validation errors
+        if (evt != null && evt.AthleteCount == 1)
+        {
+            ModelState.Remove("RelayAthleteIds[0]");
+            ModelState.Remove("RelayAthleteIds");
+            // Clear all RelayAthleteIds entries from ModelState
+            var keysToRemove = ModelState.Keys.Where(k => k.StartsWith("RelayAthleteIds")).ToList();
+            foreach (var key in keysToRemove)
+            {
+                ModelState.Remove(key);
+            }
+        }
+
         if (!ModelState.IsValid)
         {
             // Reload dropdowns
             await ReloadDropdowns(model);
             return View(model);
         }
-        
+
         // Parse time or distance
         double? timeSeconds = null;
         double? distanceInches = null;
-        
+
         if (!string.IsNullOrWhiteSpace(model.TimeInput))
         {
             timeSeconds = ParseTime(model.TimeInput);
@@ -130,7 +146,7 @@ public class PerformancesController(
                 return View(model);
             }
         }
-        
+
         if (!string.IsNullOrWhiteSpace(model.DistanceInput))
         {
             distanceInches = ParseDistance(model.DistanceInput);
@@ -141,11 +157,10 @@ public class PerformancesController(
                 return View(model);
             }
         }
-        
+
         // Check if this is a relay
-        var evt = await eventRepository.GetByIdAsync(model.EventId);
         var isRelay = evt?.AthleteCount > 1;
-        
+
         // Create performance
         var performance = new Performance
         {
@@ -158,9 +173,9 @@ public class PerformancesController(
             SeasonBest = false, // TODO: Calculate
             PersonalBest = false // TODO: Calculate
         };
-        
+
         var performanceId = await performanceRepository.CreateAsync(performance);
-        
+
         // If relay, add relay athletes
         if (isRelay && model.RelayAthleteIds.Any())
         {
@@ -169,22 +184,22 @@ public class PerformancesController(
                 await performanceRepository.CreatePerformanceAthleteAsync(performanceId, athleteId);
             }
         }
-        
+
         TempData["SuccessMessage"] = "Performance added successfully!";
-        
+
         if (saveAndAddAnother)
         {
             // Keep same meet and event
             return RedirectToAction(nameof(Create), new { meetId = model.MeetId, eventId = model.EventId });
         }
-        
+
         // Clear session
         HttpContext.Session.Remove(SessionKeyMeetId);
         HttpContext.Session.Remove(SessionKeyEventId);
-        
+
         return RedirectToAction("Index", "Dashboard");
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
@@ -193,11 +208,11 @@ public class PerformancesController(
         {
             return NotFound();
         }
-        
+
         // Get meet and event to populate context info
         var meet = await meetRepository.GetByIdAsync(performance.MeetId);
         var evt = await eventRepository.GetByIdAsync(performance.EventId);
-        
+
         var viewModel = new PerformanceEntryViewModel
         {
             Id = performance.Id,
@@ -211,7 +226,7 @@ public class PerformancesController(
             EventAthleteCount = evt?.AthleteCount ?? 1,
             AthleteId = performance.AthleteId
         };
-        
+
         // Format the current value for display
         if (performance.TimeSeconds.HasValue)
         {
@@ -221,9 +236,9 @@ public class PerformancesController(
         {
             viewModel.DistanceInput = CloverleafTrack.Web.Utilities.PerformanceFormatHelper.FormatDistance(performance.DistanceInches.Value);
         }
-        
+
         // Load ALL recent meets for the dropdown
-        var allMeets = await meetRepository.GetAllAsync();
+        var allMeets = await meetRepository.GetRecentMeetsAsync(50);
         viewModel.Meets = allMeets.Select(m => new MeetOptionViewModel
         {
             Id = m.Id,
@@ -232,7 +247,7 @@ public class PerformancesController(
             Environment = m.Environment,
             SeasonName = m.Season.Name
         }).ToList();
-        
+
         // Load events for the current meet's environment
         if (meet != null)
         {
@@ -247,7 +262,7 @@ public class PerformancesController(
                 AthleteCount = e.AthleteCount
             }).ToList();
         }
-        
+
         // Load athletes dropdown (filtered by event and meet date)
         var athletes = await athleteRepository.GetAthletesForMeetAsync(performance.MeetId, evt?.Gender);
         viewModel.Athletes = athletes.Select(a => new AthleteOptionViewModel
@@ -258,33 +273,49 @@ public class PerformancesController(
             Gender = a.Gender,
             GraduationYear = a.GraduationYear
         }).ToList();
-        
+
         // If relay, load relay athletes
         if (!performance.AthleteId.HasValue && evt?.AthleteCount > 1)
         {
             viewModel.RelayAthleteIds = await performanceRepository.GetAthleteIdsForPerformanceAsync(id);
         }
-        
+
         return View(viewModel);
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(PerformanceEntryViewModel model)
     {
+        // Get event to check if it's a relay
+        var evt = await eventRepository.GetByIdAsync(model.EventId);
+
+        // If it's an individual event (not a relay), clear RelayAthleteIds validation errors
+        if (evt != null && evt.AthleteCount == 1)
+        {
+            ModelState.Remove("RelayAthleteIds[0]");
+            ModelState.Remove("RelayAthleteIds");
+            // Clear all RelayAthleteIds entries from ModelState
+            var keysToRemove = ModelState.Keys.Where(k => k.StartsWith("RelayAthleteIds")).ToList();
+            foreach (var key in keysToRemove)
+            {
+                ModelState.Remove(key);
+            }
+        }
+
         if (!ModelState.IsValid)
         {
             // Reload meet and event details
             var meet = await meetRepository.GetByIdAsync(model.MeetId);
             var eventDetails = await eventRepository.GetByIdAsync(model.EventId);
-            
+
             model.MeetName = meet?.Name ?? "";
             model.MeetDate = meet?.Date ?? DateTime.Now;
             model.EventName = eventDetails?.Name ?? "";
             model.EventType = eventDetails?.EventType ?? CloverleafTrack.Models.Enums.EventType.Running;
             model.EventGender = eventDetails?.Gender;
             model.EventAthleteCount = eventDetails?.AthleteCount ?? 1;
-            
+
             // Reload athletes
             var athletes = await athleteRepository.GetAthletesForMeetAsync(model.MeetId, eventDetails?.Gender);
             model.Athletes = athletes.Select(a => new AthleteOptionViewModel
@@ -295,24 +326,24 @@ public class PerformancesController(
                 Gender = a.Gender,
                 GraduationYear = a.GraduationYear
             }).ToList();
-            
+
             return View(model);
         }
-        
+
         // Parse time or distance
         double? timeSeconds = null;
         double? distanceInches = null;
-        
+
         if (!string.IsNullOrWhiteSpace(model.TimeInput))
         {
             timeSeconds = CloverleafTrack.Web.Utilities.PerformanceFormatHelper.ParseTime(model.TimeInput);
         }
-        
+
         if (!string.IsNullOrWhiteSpace(model.DistanceInput))
         {
             distanceInches = CloverleafTrack.Web.Utilities.PerformanceFormatHelper.ParseDistance(model.DistanceInput);
         }
-        
+
         var performance = new Performance
         {
             Id = model.Id,
@@ -325,11 +356,10 @@ public class PerformancesController(
             SeasonBest = false,
             PersonalBest = false
         };
-        
+
         await performanceRepository.UpdateAsync(performance);
-        
+
         // Update relay athletes if needed
-        var evt = await eventRepository.GetByIdAsync(model.EventId);
         if (evt?.AthleteCount > 1)
         {
             await performanceRepository.DeletePerformanceAthletesAsync(model.Id);
@@ -338,11 +368,11 @@ public class PerformancesController(
                 await performanceRepository.CreatePerformanceAthleteAsync(model.Id, athleteId);
             }
         }
-        
+
         TempData["SuccessMessage"] = "Performance updated successfully!";
         return RedirectToAction("Index");
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)
@@ -351,12 +381,12 @@ public class PerformancesController(
         TempData["SuccessMessage"] = "Performance deleted successfully!";
         return RedirectToAction("Index");
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> CheckDuplicate(int meetId, int eventId, int? athleteId)
     {
         var similar = await performanceRepository.GetSimilarPerformanceAsync(meetId, eventId, athleteId);
-        
+
         if (similar != null)
         {
             return Json(new
@@ -367,15 +397,15 @@ public class PerformancesController(
                 distanceInches = similar.DistanceInches
             });
         }
-        
+
         return Json(new { exists = false });
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> GetCurrentPR(int athleteId, int eventId)
     {
         var pr = await performanceRepository.GetBestPerformanceForAthleteEventAsync(athleteId, eventId);
-        
+
         if (pr != null)
         {
             return Json(new
@@ -385,10 +415,10 @@ public class PerformancesController(
                 distanceInches = pr.DistanceInches
             });
         }
-        
+
         return Json(new { exists = false });
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> GetEventsForMeet(int meetId)
     {
@@ -397,7 +427,7 @@ public class PerformancesController(
         {
             return Json(new List<object>());
         }
-        
+
         var events = await eventRepository.GetByGenderAndEnvironmentAsync(null, meet.Environment);
         return Json(events.Select(e => new
         {
@@ -408,7 +438,7 @@ public class PerformancesController(
             athleteCount = e.AthleteCount
         }));
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> GetAthletesForMeetAndEvent(int meetId, int eventId)
     {
@@ -417,7 +447,7 @@ public class PerformancesController(
         {
             return Json(new List<object>());
         }
-        
+
         var athletes = await athleteRepository.GetAthletesForMeetAsync(meetId, evt.Gender);
         return Json(athletes.Select(a => new
         {
@@ -425,7 +455,7 @@ public class PerformancesController(
             displayText = $"{a.LastName}, {a.FirstName} ({a.GraduationYear})"
         }));
     }
-    
+
     private async Task ReloadDropdowns(PerformanceEntryViewModel model)
     {
         var meets = await meetRepository.GetRecentMeetsAsync(50);
@@ -437,7 +467,7 @@ public class PerformancesController(
             Environment = m.Environment,
             SeasonName = m.Season.Name
         }).ToList();
-        
+
         if (model.MeetId > 0)
         {
             var meet = await meetRepository.GetByIdWithDetailsAsync(model.MeetId);
@@ -455,7 +485,7 @@ public class PerformancesController(
                 }).ToList();
             }
         }
-        
+
         if (model.EventId > 0)
         {
             var evt = await eventRepository.GetByIdAsync(model.EventId);
@@ -473,20 +503,20 @@ public class PerformancesController(
             }
         }
     }
-    
+
     private static double? ParseTime(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
             return null;
-        
+
         input = input.Trim().ToLower().Replace("s", "").Replace("m", ":");
-        
+
         // Try simple decimal first (e.g., "11.24")
         if (double.TryParse(input, out var seconds))
         {
             return seconds;
         }
-        
+
         // Try M:SS.ss format (e.g., "1:23.45")
         var colonMatch = Regex.Match(input, @"^(\d+):(\d+\.?\d*)$");
         if (colonMatch.Success)
@@ -495,22 +525,22 @@ public class PerformancesController(
             var secs = double.Parse(colonMatch.Groups[2].Value);
             return (minutes * 60) + secs;
         }
-        
+
         return null;
     }
-    
+
     private static double? ParseDistance(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
             return null;
-        
+
         input = input.Trim().ToLower();
-        
+
         // Remove common words
         input = input.Replace("feet", "'").Replace("foot", "'")
                      .Replace("inches", "\"").Replace("inch", "\"")
                      .Replace(" ", "");
-        
+
         // Try feet'inches" format (e.g., "19'4" or "19'4.5")
         var feetInchMatch = Regex.Match(input, @"^(\d+)'(\d+\.?\d*)");
         if (feetInchMatch.Success)
@@ -519,7 +549,7 @@ public class PerformancesController(
             var inches = double.Parse(feetInchMatch.Groups[2].Value);
             return (feet * 12) + inches;
         }
-        
+
         // Try feet-inches format (e.g., "19-04")
         var dashMatch = Regex.Match(input, @"^(\d+)-(\d+\.?\d*)$");
         if (dashMatch.Success)
@@ -528,16 +558,16 @@ public class PerformancesController(
             var inches = double.Parse(dashMatch.Groups[2].Value);
             return (feet * 12) + inches;
         }
-        
+
         // Try just inches (e.g., "234.5")
         if (double.TryParse(input.Replace("\"", ""), out var totalInches))
         {
             return totalInches;
         }
-        
+
         return null;
     }
-    
+
     private static string FormatDistance(double inches)
     {
         var feet = Math.Floor(inches / 12);

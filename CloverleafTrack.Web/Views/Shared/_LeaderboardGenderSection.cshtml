@@ -47,7 +47,7 @@
                 <div class="bg-gray-100 dark:bg-gray-800 border-l-4 @genderBorder rounded-r-lg hover:bg-gray-200 dark:hover:bg-gray-900 transition-colors">
                     <div class="p-4 flex items-center justify-between">
                         <div class="flex-1">
-                            <a asp-controller="Leaderboard" asp-action="Details" asp-route-eventKey="@evt.EventKey"
+                            <a asp-controller="Leaderboard" asp-action="Details" asp-route-eventKey="@evt.EventKey.ToLower()"
                             class="font-semibold text-gray-900 dark:text-white hover:text-blue-400 transition-colors underline">
                                 @evt.EventName
                             </a>
