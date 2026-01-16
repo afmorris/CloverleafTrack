@@ -34,7 +34,7 @@ public class PerformancesController(
         var viewModel = new PerformanceEntryViewModel();
 
         // Load all meets for dropdown
-        var meets = await meetRepository.GetRecentMeetsAsync(50);
+        var meets = await meetRepository.GetAllAsync();
         viewModel.Meets = meets.Select(m => new MeetOptionViewModel
         {
             Id = m.Id,
@@ -238,7 +238,7 @@ public class PerformancesController(
         }
 
         // Load ALL recent meets for the dropdown
-        var allMeets = await meetRepository.GetRecentMeetsAsync(50);
+        var allMeets = await meetRepository.GetAllAsync();
         viewModel.Meets = allMeets.Select(m => new MeetOptionViewModel
         {
             Id = m.Id,
@@ -458,7 +458,7 @@ public class PerformancesController(
 
     private async Task ReloadDropdowns(PerformanceEntryViewModel model)
     {
-        var meets = await meetRepository.GetRecentMeetsAsync(50);
+        var meets = await meetRepository.GetAllAsync();
         model.Meets = meets.Select(m => new MeetOptionViewModel
         {
             Id = m.Id,
