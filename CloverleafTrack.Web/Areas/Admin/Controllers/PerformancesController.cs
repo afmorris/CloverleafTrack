@@ -112,12 +112,10 @@ public class PerformancesController(
         // Get event to check if it's a relay
         var evt = await eventRepository.GetByIdAsync(model.EventId);
 
-        // If it's an individual event (not a relay), clear RelayAthleteIds validation errors
-        if (evt != null && evt.AthleteCount == 1)
+        // Clear RelayAthleteIds model state errors — for individual events because they are irrelevant,
+        // and for relay events because hidden slots (beyond AthleteCount) submit empty strings that
+        // fail int binding. Valid relay athlete IDs are filtered below before use.
         {
-            ModelState.Remove("RelayAthleteIds[0]");
-            ModelState.Remove("RelayAthleteIds");
-            // Clear all RelayAthleteIds entries from ModelState
             var keysToRemove = ModelState.Keys.Where(k => k.StartsWith("RelayAthleteIds")).ToList();
             foreach (var key in keysToRemove)
             {
@@ -131,6 +129,9 @@ public class PerformancesController(
             await ReloadDropdowns(model);
             return View(model);
         }
+
+        // Filter out unselected relay slots (hidden slots post as 0 when binding falls back to default)
+        model.RelayAthleteIds = model.RelayAthleteIds.Where(id => id > 0).ToList();
 
         // Parse time or distance
         double? timeSeconds = null;

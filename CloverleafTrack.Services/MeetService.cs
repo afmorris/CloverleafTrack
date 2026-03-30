@@ -23,7 +23,7 @@ public class MeetService(IMeetRepository meetRepository) : IMeetService
         
         foreach (var seasonGroup in seasonGroups)
         {
-            var meets = seasonGroup.OrderByDescending(m => m.Date).ToList();
+            var meets = seasonGroup.OrderBy(m => m.Date).ToList();
             var completedMeets = meets.Where(m => m.Date <= DateTime.Now).ToList();
             
             var seasonMeets = new SeasonMeetsViewModel
