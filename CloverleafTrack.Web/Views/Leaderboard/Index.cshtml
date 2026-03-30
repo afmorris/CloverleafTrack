@@ -17,50 +17,26 @@
         <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
             <!-- Tab Headers -->
             <div class="flex border-b border-gray-200 dark:border-gray-700">
-                <button class="env-tab flex-1 py-4 px-6 font-bold text-lg transition-all flex items-center justify-center gap-3" data-tab="indoor">
-                    🏢 INDOOR
-                </button>
                 <button class="env-tab flex-1 py-4 px-6 font-bold text-lg transition-all flex items-center justify-center gap-3" data-tab="outdoor">
                     ☀️ OUTDOOR
+                </button>
+                <button class="env-tab flex-1 py-4 px-6 font-bold text-lg transition-all flex items-center justify-center gap-3" data-tab="indoor">
+                    🏢 INDOOR
                 </button>
             </div>
 
             <!-- Tab Content Wrapper -->
             <div class="p-8">
-                <!-- Indoor Content -->
-                <div id="env-indoor" class="env-content">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        
-                        <!-- Boys Indoor -->
-                        <div>
-                            <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6 flex items-center gap-2">
-                                <span>♂</span> Boys
-                            </h2>
-                            
-                            @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(true, true, Model.BoysIndoorCategories))
-                        </div>
-
-                        <!-- Girls Indoor -->
-                        <div>
-                            <h2 class="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-6 flex items-center gap-2">
-                                <span>♀</span> Girls
-                            </h2>
-                            
-                            @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(false, true, Model.GirlsIndoorCategories))
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Outdoor Content -->
-                <div id="env-outdoor" class="env-content hidden">
+                <div id="env-outdoor" class="env-content">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        
+
                         <!-- Boys Outdoor -->
                         <div>
                             <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6 flex items-center gap-2">
                                 <span>♂</span> Boys
                             </h2>
-                            
+
                             @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(true, false, Model.BoysOutdoorCategories))
                         </div>
 
@@ -69,8 +45,32 @@
                             <h2 class="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-6 flex items-center gap-2">
                                 <span>♀</span> Girls
                             </h2>
-                            
+
                             @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(false, false, Model.GirlsOutdoorCategories))
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Indoor Content -->
+                <div id="env-indoor" class="env-content hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                        <!-- Boys Indoor -->
+                        <div>
+                            <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6 flex items-center gap-2">
+                                <span>♂</span> Boys
+                            </h2>
+
+                            @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(true, true, Model.BoysIndoorCategories))
+                        </div>
+
+                        <!-- Girls Indoor -->
+                        <div>
+                            <h2 class="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-6 flex items-center gap-2">
+                                <span>♀</span> Girls
+                            </h2>
+
+                            @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(false, true, Model.GirlsIndoorCategories))
                         </div>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
             });
         });
 
-        // Set Indoor as default active tab
-        document.querySelector('.env-tab[data-tab="indoor"]')?.click();
+        // Set Outdoor as default active tab
+        document.querySelector('.env-tab[data-tab="outdoor"]')?.click();
     });
 </script>
