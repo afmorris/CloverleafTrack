@@ -139,14 +139,14 @@ public class AdminAthleteRepository(IDbConnectionFactory connectionFactory) : IA
         parameters.Add("MinGradYear", minGradYear);
         parameters.Add("MaxGradYear", maxGradYear);
         
-        if (gender.HasValue)
+        if (gender.HasValue && gender.Value != Gender.Mixed)
         {
             sql += " AND Gender = @Gender";
             parameters.Add("Gender", gender.Value);
         }
-        
+
         sql += " ORDER BY LastName, FirstName";
-        
+
         var athletes = await connection.QueryAsync<Athlete>(sql, parameters);
         return athletes.ToList();
     }

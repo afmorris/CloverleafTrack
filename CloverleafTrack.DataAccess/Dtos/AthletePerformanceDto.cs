@@ -21,4 +21,6 @@ public class AthletePerformanceDto
     public DateTime MeetDate { get; set; }
     public string MeetName { get; set; } = string.Empty;
     public string SeasonName { get; set; } = string.Empty;
+    public DateTime SeasonStartDate { get; set; }
+    public string? RelayAthletes { get; set; }
 }

@@ -99,6 +99,10 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 
 **Relay performances** set `AthleteId = null` on `Performance` and link athletes via `PerformanceAthletes` table. `SortedAthleteHash` is a nullable string on `Performance` (no NOT NULL constraint enforced at app layer).
 
+**Important caveat about relay flags:** The `PersonalBest` and `SchoolRecord` flags on relay `Performance` rows are **not reliably set** by the admin entry flow. Do not depend on them. Instead:
+- Relay "PR" per event = best time (MIN TimeSeconds) or best distance (MAX DistanceInches) across all performances for that event
+- Relay "school record" per event = AllTimeRank == 1 on the Leaderboards table
+
 **Field vs. running determination:**
 ```csharp
 // Field events (higher distance is better):
@@ -120,7 +124,7 @@ Slug generation uses the `Slugify` NuGet package (`SlugHelper`). `Meet.Slug` is 
 | `SeasonsController` | `/seasons` | Season list + season detail page |
 | `MeetsController` | `/meets` | Meet list + meet detail page |
 | `RosterController` | `/roster` | Active + former athlete list |
-| `AthletesController` | `/athletes/{slug}` | Athlete career detail |
+| `AthletesController` | `/athletes/{slug}` | Athlete career detail — NOTE: route is `/roster/{slug}` via `RosterController`, not `AthletesController` |
 | `LeaderboardController` | `/leaderboard` | All-time top 10 lists |
 
 ### Admin area (Areas/Admin/)
@@ -156,12 +160,17 @@ Each entity has **two** repository interfaces/implementations:
 
 ### Key SQL patterns
 - Multi-table queries use Dapper multi-mapping (`splitOn: "Id,Id,Id"`).
-- Relay athlete names for display: `STRING_AGG(CONCAT(LastName, ', ', FirstName), '; ')` grouped by `PerformanceId`.
+- Relay athlete names for display: `STRING_AGG(a.FirstName + ' ' + a.LastName, '|~|')` — separator is `|~|`, format is `FirstName LastName`. Split on `|~|` in C# to get individual names.
 - After any Performance insert/update/delete: `EXEC sp_RebuildLeaderboards` is called to recalculate the `Leaderboards` table.
 - `GetMeetsForSeasonAsync` returns meets `ORDER BY m.Date ASC` (ascending) from SQL.
+- `AthleteRepository.GetAllPerformancesForAthleteAsync` uses a **UNION ALL** to combine individual performances (`WHERE p.AthleteId = @AthleteId`) with relay performances (`INNER JOIN PerformanceAthletes pa ON pa.PerformanceId = p.Id WHERE pa.AthleteId = @AthleteId AND p.AthleteId IS NULL`). The relay branch includes `STRING_AGG` of team members as `RelayAthletes`.
 
 ### DTOs (DataAccess/Dtos/)
-Dtos are used for complex query results that span multiple tables and don't map directly to a model. Examples: `MeetPerformanceDto`, `TopPerformanceDto`, `LeaderboardDto`, `HomePageStatsDto`.
+Dtos are used for complex query results that span multiple tables and don't map directly to a model. Examples: `MeetPerformanceDto`, `TopPerformanceDto`, `LeaderboardDto`, `HomePageStatsDto`, `AthletePerformanceDto`.
+
+`AthletePerformanceDto` includes:
+- `RelayAthletes` (nullable string, `|~|`-separated) — null for individual performances, populated for relay performances
+- `SeasonStartDate` — used for correct descending season ordering in the service layer
 
 ---
 
@@ -171,15 +180,38 @@ Dtos are used for complex query results that span multiple tables and don't map 
 |---|---|
 | `SeasonService` | `GetSeasonCardsAsync`, `GetSeasonDetailsAsync` |
 | `MeetService` | `GetMeetsIndexAsync`, `GetMeetDetailsAsync` |
-| `AthleteService` | Athlete career pages |
-| `LeaderboardService` | All-time top 10 queries |
+| `AthleteService` | `GetAthleteDetailsAsync` — athlete career/roster detail page |
+| `LeaderboardService` | `GetLeaderboardAsync`, `GetLeaderboardDetailsAsync` |
 | `HomeService` | Homepage aggregated data |
 
 `MeetService.GetMeetsIndexAsync` groups all meets by season (seasons ordered descending by start date), then orders meets within each season **ascending by date**.
 
-`MeetService.BuildOrderedEventGroups` orders meet results: Sprints → Distance → Hurdles → Running Relays → Jumps → Jump Relays → Throws → Throw Relays.
+`MeetService.BuildOrderedEventGroups` orders meet results: Sprints → Distance → Hurdles → Running Relays → Jumps → Jump Relays → Throws → Throw Relays. Mixed-gender relay performances (`EventGender == Gender.Mixed`) are split into `MixedEvents` on `MeetDetailsViewModel`.
 
-`SeasonService.GetSeasonDetailsAsync` maps top performances split by `Environment.Indoor` / `Environment.Outdoor`.
+`SeasonService.GetSeasonDetailsAsync` maps top performances split by `Environment.Indoor` / `Environment.Outdoor`. **Note:** relay performances do not appear in season top-10 sections because `GetTopPerformancesForSeasonAsync` uses `INNER JOIN Athletes a ON a.Id = p.AthleteId`, which excludes null-AthleteId relay rows.
+
+`LeaderboardService.GetLeaderboardAsync` splits performances into Boys/Girls/Mixed × Outdoor/Indoor, producing six category lists on `LeaderboardViewModel`.
+
+`AthleteService.GetAthleteDetailsAsync`:
+- **Personal Records table**: individual PRs use `PersonalBest = true` flag; relay PRs use best-per-event (min time / max distance) regardless of flag
+- **Hero TotalPRs**: individual performances only (`PersonalBest = true && RelayAthletes == null`)
+- **Hero TotalSchoolRecords**: individual school records (DB flag) + relay events where `AllTimeRank == 1` (distinct by EventId)
+- **Season grouping**: ordered by `SeasonStartDate DESC` using the DTO field, not season name string
+
+---
+
+## Mixed Relay Support
+
+Mixed relays (both boys and girls athletes on the same team) use `Gender.Mixed` (= 3) on the `Event` row.
+
+**Display surfaces:**
+- **Meet Details**: full-width "Mixed Relays" section below the Boys/Girls two-column grid, only rendered when `Model.MixedEvents.Any()`
+- **Leaderboard**: Mixed Relays section below Boys/Girls grid inside each environment tab, rendered via `_LeaderboardMixedSection.cshtml` partial (purple `border-purple-500` accent)
+- **Roster Details**: mixed relay appearances show in the athlete's season performance section and personal records table like any other relay
+
+**Admin entry**: `AdminAthleteRepository.GetAthletesForMeetAsync` skips the gender filter when `gender == Gender.Mixed`, so both boys and girls appear in the athlete dropdown for mixed relay events.
+
+**Database**: Mixed relay event rows go in the `RunningRelayEvents` table (UNIQUEIDENTIFIER Id, no EventKey column). The `Events` table (used by app repositories) must also have corresponding rows for mixed relay events to appear in performance entry and leaderboards.
 
 ---
 
@@ -201,6 +233,36 @@ class PerformanceEntryViewModel {
 }
 ```
 
+### Athlete detail ViewModels (key fields)
+```csharp
+class AthleteTopEventViewModel {
+    string EventName, Performance;
+    int? AllTimeRank;
+    Environment Environment;    // used to show ☀️ Outdoor / 🏢 Indoor badge in hero
+}
+
+class PersonalRecordViewModel {
+    // ...standard fields...
+    bool IsSchoolRecord;        // set by service: DB flag for individual, AllTimeRank==1 for relay
+    string? RelayAthletes;      // null for individual; |~|-separated names for relay
+    bool IsRelay;               // => RelayAthletes != null
+    string[] RelayMembers;      // => RelayAthletes.Split("|~|")
+}
+
+class IndividualPerformanceViewModel {
+    // ...standard fields...
+    string? RelayAthletes;      // null for individual; |~|-separated names for relay
+    bool IsRelay;               // => RelayAthletes != null
+    string[] RelayMembers;      // => RelayAthletes.Split("|~|")
+}
+```
+
+### Leaderboard ViewModels
+`LeaderboardViewModel` has six category lists:
+- `BoysOutdoorCategories`, `BoysIndoorCategories`
+- `GirlsOutdoorCategories`, `GirlsIndoorCategories`
+- `MixedOutdoorCategories`, `MixedIndoorCategories`
+
 ---
 
 ## Performance Entry Form — Important Behavior
@@ -220,7 +282,7 @@ var isFieldEvent = eventTypeStr.indexOf('Field') >= 0 ||
 ```
 Field events show a distance input; running events show a time input.
 
-**ModelState clearing for RelayAthleteIds:** The POST controller unconditionally removes all `RelayAthleteIds.*` model state keys before checking `ModelState.IsValid`, because hidden slots produce type-conversion errors (`"" → int`). Then non-positive IDs are filtered from the list before relay athlete insert.
+**ModelState clearing for RelayAthleteIds:** The POST controller **unconditionally** removes all `RelayAthleteIds.*` model state keys before checking `ModelState.IsValid`, because hidden slots produce type-conversion errors (`"" → int`) for all relay types (not just individual events). Non-positive IDs are then filtered from the list before relay athlete insert.
 
 ---
 
@@ -231,13 +293,14 @@ Field events show a distance input; running events show a time input.
 | `Seasons` | |
 | `Meets` | FK to Seasons, Locations |
 | `Locations` | |
-| `Events` | Includes SortOrder, EventCategorySortOrder, AthleteCount |
+| `Events` | Includes SortOrder, EventCategorySortOrder, AthleteCount, Gender (1/2/3), EventKey |
 | `Athletes` | |
 | `Performances` | AthleteId nullable (null = relay); SortedAthleteHash nullable |
 | `PerformanceAthletes` | Junction: PerformanceId, AthleteId |
 | `Leaderboards` | All-time rankings, rebuilt by `sp_RebuildLeaderboards` |
+| `RunningRelayEvents` | Separate table for running relay event definitions: Id (UNIQUEIDENTIFIER), Name, Gender (INT), SortOrder, Environment (INT), Deleted (BIT), DateCreated, DateUpdated, DateDeleted |
 
-`sp_RebuildLeaderboards` is a stored procedure that recalculates all leaderboard rankings. It is called after every performance insert, update, or delete.
+`sp_RebuildLeaderboards` is a stored procedure that recalculates all leaderboard rankings. It is called after every performance insert, update, or delete. It does **not** filter by gender, so Mixed relay performances are ranked alongside Boys/Girls relay performances within their own event.
 
 ---
 
@@ -245,8 +308,21 @@ Field events show a distance input; running events show a time input.
 
 - **Tailwind CSS v4** with dark mode support via `dark:` variants throughout.
 - Dark mode toggled by `_DarkModeToggle.cshtml` partial.
-- Season Details page uses tab UI (OUTDOOR tab first / active by default, INDOOR second) implemented with vanilla JS in the `@section Scripts` block. Tab IDs: `all-time-outdoor`, `all-time-indoor`. Active tab class: `bg-gradient-to-r from-amber-600 to-yellow-500` (outdoor) or `from-blue-600 to-blue-500` (indoor).
-- Meets are displayed oldest-first (ascending by date) on both the Season Details page and the Meets index page.
+- **Tab UI pattern (Outdoor/Indoor):** OUTDOOR tab is always first (leftmost) and active by default. INDOOR is second. This applies to: Season Details (`all-time-outdoor`/`all-time-indoor`), Home Page highlights, Home Page season leaders, and the Leaderboard (`env-outdoor`/`env-indoor`). Active tab class: `bg-gradient-to-r from-amber-600 to-yellow-500` (outdoor) or `from-blue-600 to-blue-500` (indoor). Default is triggered by `.click()` on the outdoor tab in `DOMContentLoaded`.
+- Meets are displayed **oldest-first (ascending by date)** on both the Season Details page and the Meets index page.
+- Relay athlete names are displayed separated by ` / ` (with spaces) in inline lists — not bullet points.
+
+---
+
+## Roster Details Page — Key Behaviors
+
+(`Views/Roster/Details.cshtml` + `AthleteService.GetAthleteDetailsAsync`)
+
+- **Hero stats**: TopSprintEvent and TopFieldEvent show an Indoor/Outdoor badge (`☀️ Outdoor` / `🏢 Indoor`) below the event name. These are individual events only (not relay).
+- **Personal Records table**: includes both individual PRs and relay bests. Individual PRs use `PersonalBest = true` flag. Relay entries show the best time/distance per relay event regardless of flag. Relay rows show the team members inline (` / ` separated, each linked to their roster page) below the event name.
+- **School Records column**: shows `SR` badge for individual events where `SchoolRecord = true`, and for relay events where `AllTimeRank == 1`. The Rank column is shown whenever any PR row has either a top-10 rank OR a school record.
+- **Performance by Season**: shows all events including relays. Relay performance rows show the team members below the mark/date/meet row.
+- **Season ordering**: most recent season first, using `SeasonStartDate` from the DTO (not string sort).
 
 ---
 
@@ -269,3 +345,5 @@ Field events show a distance input; running events show a time input.
 - Relay performances: always set `AthleteId = null` on the `Performance` row and insert athlete rows into `PerformanceAthletes`.
 - Always call `sp_RebuildLeaderboards` after any performance insert/update/delete.
 - Slugs are generated at runtime via `SlugHelper` — do not store them in the DB.
+- Do not rely on `PersonalBest` or `SchoolRecord` flags on relay performances — use best-per-event logic and `AllTimeRank == 1` respectively.
+- Relay athlete name display: always join with ` / ` separator in inline contexts, never individual bullet spans.

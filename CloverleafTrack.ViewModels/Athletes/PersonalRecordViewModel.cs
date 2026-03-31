@@ -13,4 +13,8 @@ public class PersonalRecordViewModel
     public int? AllTimeRank { get; set; }
     public int EventCategorySortOrder { get; set; }
     public int EventSortOrder { get; set; }
+    public bool IsSchoolRecord { get; set; }
+    public string? RelayAthletes { get; set; }
+    public bool IsRelay => RelayAthletes != null;
+    public string[] RelayMembers => RelayAthletes?.Split("|~|") ?? Array.Empty<string>();
 }

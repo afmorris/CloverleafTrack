@@ -10,7 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.dockerignore = .dockerignore
 		.gitignore = .gitignore
 		.node-version = .node-version
-		CLAUDE.md = CLAUDE.md
 		compose.yaml = compose.yaml
 		package-lock.json = package-lock.json
 		package.json = package.json
@@ -30,6 +29,17 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.Tests", "CloverleafTrack.Tests\CloverleafTrack.Tests.csproj", "{1B590108-8911-4FC1-9329-8B5EB8FF8461}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverleafTrack.ViewModels", "CloverleafTrack.ViewModels\CloverleafTrack.ViewModels.csproj", "{0A55811F-A36F-40AB-8D23-2DBA8543F812}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AI", "AI", "{C867F67D-84E2-45C8-AAA0-A15F7F9E93C3}"
+	ProjectSection(SolutionItems) = preProject
+		BRAIN.md = BRAIN.md
+		CLAUDE.md = CLAUDE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{67EB47E1-7C7D-44D7-80CB-46323C5298CB}"
+	ProjectSection(SolutionItems) = preProject
+		docs\schema.sql = docs\schema.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

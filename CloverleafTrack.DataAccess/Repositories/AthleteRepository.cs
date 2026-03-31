@@ -92,36 +92,78 @@ ORDER BY a.LastName, a.FirstName;
         using var connection = connectionFactory.CreateConnection();
         
         const string sql = """
-                        SELECT
-                                p.Id as PerformanceId,
-                                e.Id as EventId,
-                                e.Name as EventName,
-                                e.EventCategorySortOrder,
-                                e.SortOrder as EventSortOrder,
-                                e.EventType,
-                                e.Environment,
-                                p.TimeSeconds,
-                                p.DistanceInches,
-                                p.PersonalBest,
-                                p.SchoolRecord,
-                                p.SeasonBest,
-                                (SELECT MIN(lb.Rank) 
-                                FROM Leaderboards lb 
-                                WHERE lb.PerformanceId = p.Id) as AllTimeRank,
-                                m.Date as MeetDate,
-                                m.Name as MeetName,
-                                s.Name as SeasonName
-                        FROM
-                                Performances p
-                                INNER JOIN Events e ON e.Id = p.EventId
-                                INNER JOIN Meets m ON m.Id = p.MeetId
-                                INNER JOIN Seasons s ON s.Id = m.SeasonId
-                        WHERE
-                                p.AthleteId = @AthleteId
+                        SELECT * FROM (
+                            -- Individual performances
+                            SELECT
+                                    p.Id as PerformanceId,
+                                    e.Id as EventId,
+                                    e.Name as EventName,
+                                    e.EventCategorySortOrder,
+                                    e.SortOrder as EventSortOrder,
+                                    e.EventType,
+                                    e.Environment,
+                                    p.TimeSeconds,
+                                    p.DistanceInches,
+                                    p.PersonalBest,
+                                    p.SchoolRecord,
+                                    p.SeasonBest,
+                                    (SELECT MIN(lb.Rank)
+                                    FROM Leaderboards lb
+                                    WHERE lb.PerformanceId = p.Id) as AllTimeRank,
+                                    m.Date as MeetDate,
+                                    m.Name as MeetName,
+                                    s.Name as SeasonName,
+                                    s.StartDate as SeasonStartDate,
+                                    NULL as RelayAthletes
+                            FROM
+                                    Performances p
+                                    INNER JOIN Events e ON e.Id = p.EventId
+                                    INNER JOIN Meets m ON m.Id = p.MeetId
+                                    INNER JOIN Seasons s ON s.Id = m.SeasonId
+                            WHERE
+                                    p.AthleteId = @AthleteId
+
+                            UNION ALL
+
+                            -- Relay performances where this athlete was a team member
+                            SELECT
+                                    p.Id as PerformanceId,
+                                    e.Id as EventId,
+                                    e.Name as EventName,
+                                    e.EventCategorySortOrder,
+                                    e.SortOrder as EventSortOrder,
+                                    e.EventType,
+                                    e.Environment,
+                                    p.TimeSeconds,
+                                    p.DistanceInches,
+                                    p.PersonalBest,
+                                    p.SchoolRecord,
+                                    p.SeasonBest,
+                                    (SELECT MIN(lb.Rank)
+                                    FROM Leaderboards lb
+                                    WHERE lb.PerformanceId = p.Id) as AllTimeRank,
+                                    m.Date as MeetDate,
+                                    m.Name as MeetName,
+                                    s.Name as SeasonName,
+                                    s.StartDate as SeasonStartDate,
+                                    (SELECT STRING_AGG(a2.FirstName + ' ' + a2.LastName, '|~|')
+                                     FROM PerformanceAthletes pa2
+                                     INNER JOIN Athletes a2 ON a2.Id = pa2.AthleteId
+                                     WHERE pa2.PerformanceId = p.Id) as RelayAthletes
+                            FROM
+                                    Performances p
+                                    INNER JOIN PerformanceAthletes pa ON pa.PerformanceId = p.Id
+                                    INNER JOIN Events e ON e.Id = p.EventId
+                                    INNER JOIN Meets m ON m.Id = p.MeetId
+                                    INNER JOIN Seasons s ON s.Id = m.SeasonId
+                            WHERE
+                                    pa.AthleteId = @AthleteId
+                                    AND p.AthleteId IS NULL
+                        ) AS combined
                         ORDER BY
-                                s.StartDate DESC,
-                                e.EventCategorySortOrder,
-                                m.Date DESC
+                                SeasonStartDate DESC,
+                                EventCategorySortOrder,
+                                MeetDate DESC
                         """;
         
         var performances = await connection.QueryAsync<AthletePerformanceDto>(sql, new { AthleteId = athleteId });

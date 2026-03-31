@@ -49,6 +49,19 @@
                             @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(false, false, Model.GirlsOutdoorCategories))
                         </div>
                     </div>
+
+                    @if (Model.MixedOutdoorCategories.Any())
+                    {
+                        <!-- Mixed Outdoor Relays -->
+                        <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+                            <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-6 flex items-center gap-2">
+                                <span>⚥</span> Mixed Relays
+                            </h2>
+                            <div class="max-w-lg">
+                                @await Html.PartialAsync("_LeaderboardMixedSection", new Tuple<bool, List<LeaderboardCategoryViewModel>>(false, Model.MixedOutdoorCategories))
+                            </div>
+                        </div>
+                    }
                 </div>
 
                 <!-- Indoor Content -->
@@ -73,6 +86,19 @@
                             @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(false, true, Model.GirlsIndoorCategories))
                         </div>
                     </div>
+
+                    @if (Model.MixedIndoorCategories.Any())
+                    {
+                        <!-- Mixed Indoor Relays -->
+                        <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+                            <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-6 flex items-center gap-2">
+                                <span>⚥</span> Mixed Relays
+                            </h2>
+                            <div class="max-w-lg">
+                                @await Html.PartialAsync("_LeaderboardMixedSection", new Tuple<bool, List<LeaderboardCategoryViewModel>>(true, Model.MixedIndoorCategories))
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

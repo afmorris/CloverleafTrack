@@ -29,6 +29,12 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
             ),
             GirlsIndoorCategories = BuildCategoryViewModels(
                 allPerformances.Where(p => p.Gender == Gender.Female && p.Environment == Environment.Indoor).ToList()
+            ),
+            MixedOutdoorCategories = BuildCategoryViewModels(
+                allPerformances.Where(p => p.Gender == Gender.Mixed && p.Environment == Environment.Outdoor).ToList()
+            ),
+            MixedIndoorCategories = BuildCategoryViewModels(
+                allPerformances.Where(p => p.Gender == Gender.Mixed && p.Environment == Environment.Indoor).ToList()
             )
         };
 

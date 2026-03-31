@@ -20,4 +20,5 @@ public class MeetDetailsViewModel
     
     public List<MeetEventGroupViewModel> BoysEvents { get; set; } = new();
     public List<MeetEventGroupViewModel> GirlsEvents { get; set; } = new();
+    public List<MeetEventGroupViewModel> MixedEvents { get; set; } = new();
 }

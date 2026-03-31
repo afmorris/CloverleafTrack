@@ -254,11 +254,23 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             };
         }
 
-        // Get personal records (best performance per event)
-        var personalRecords = performances
-            .Where(p => p.PersonalBest)
+        // Individual PRs — rely on the PersonalBest flag
+        var individualPRs = performances
+            .Where(p => p.PersonalBest && p.RelayAthletes == null)
             .GroupBy(p => p.EventId)
-            .Select(g => g.OrderByDescending(p => p.MeetDate).First())
+            .Select(g => g.OrderByDescending(p => p.MeetDate).First());
+
+        // Relay bests — compute best per relay event (fastest time / farthest distance)
+        // since the PersonalBest flag is not reliably set on relay performances
+        var relayBests = performances
+            .Where(p => p.RelayAthletes != null)
+            .GroupBy(p => p.EventId)
+            .Select(g => g.First().TimeSeconds.HasValue
+                ? g.OrderBy(p => p.TimeSeconds).First()
+                : g.OrderByDescending(p => p.DistanceInches).First());
+
+        var personalRecords = individualPRs
+            .Concat(relayBests)
             .Select(p => new PersonalRecordViewModel
             {
                 EventId = p.EventId,
@@ -269,14 +281,16 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                 MeetName = p.MeetName,
                 AllTimeRank = p.AllTimeRank,
                 EventCategorySortOrder = p.EventCategorySortOrder,
-                EventSortOrder = p.EventSortOrder
+                EventSortOrder = p.EventSortOrder,
+                IsSchoolRecord = p.RelayAthletes == null ? p.SchoolRecord : p.AllTimeRank == 1,
+                RelayAthletes = p.RelayAthletes
             })
             .OrderBy(pr => pr.Environment)
             .ThenBy(pr => pr.EventCategorySortOrder)
             .ThenBy(pr => pr.EventSortOrder)
             .ToList();
 
-        // Get top events for hero section
+        // Get top events for hero section (individual events only)
         var topSprintEvent = personalRecords
             .Where(pr => pr.EventCategorySortOrder <= 30) // Sprints, Distance, Hurdles
             .OrderBy(pr => pr.AllTimeRank ?? 999)
@@ -287,12 +301,13 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             .OrderBy(pr => pr.AllTimeRank ?? 999)
             .FirstOrDefault();
 
-        // Group by season
+        // Group by season (ordered most recent first)
         var seasons = performances
-            .GroupBy(p => p.SeasonName)
+            .GroupBy(p => new { p.SeasonName, p.SeasonStartDate })
+            .OrderByDescending(g => g.Key.SeasonStartDate)
             .Select(seasonGroup => new SeasonPerformanceViewModel
             {
-                SeasonName = seasonGroup.Key,
+                SeasonName = seasonGroup.Key.SeasonName,
                 PRCount = seasonGroup.Count(p => p.PersonalBest),
                 SchoolRecordCount = seasonGroup.Count(p => p.SchoolRecord),
                 EventGroups = seasonGroup
@@ -324,7 +339,8 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                                     IsPersonalBest = p.PersonalBest,
                                     IsSchoolRecord = p.SchoolRecord,
                                     IsSeasonBest = p.SeasonBest,
-                                    AllTimeRank = p.AllTimeRank
+                                    AllTimeRank = p.AllTimeRank,
+                                    RelayAthletes = p.RelayAthletes
                                 })
                                 .ToList()
                         };
@@ -342,21 +358,28 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             Gender = athlete.Gender,
             Class = GraduationYearToClass(athlete.GraduationYear, currentSeason),
 
-            // Hero stats
+            // Hero stats (individual events only)
             TopSprintEvent = topSprintEvent != null ? new AthleteTopEventViewModel
             {
                 EventName = topSprintEvent.EventName,
                 Performance = topSprintEvent.Performance,
-                AllTimeRank = topSprintEvent.AllTimeRank
+                AllTimeRank = topSprintEvent.AllTimeRank,
+                Environment = topSprintEvent.Environment
             } : null,
             TopFieldEvent = topFieldEvent != null ? new AthleteTopEventViewModel
             {
                 EventName = topFieldEvent.EventName,
                 Performance = topFieldEvent.Performance,
-                AllTimeRank = topFieldEvent.AllTimeRank
+                AllTimeRank = topFieldEvent.AllTimeRank,
+                Environment = topFieldEvent.Environment
             } : null,
-            TotalPRs = performances.Count(p => p.PersonalBest),
-            TotalSchoolRecords = performances.Count(p => p.SchoolRecord),
+            TotalPRs = performances.Count(p => p.PersonalBest && p.RelayAthletes == null),
+            TotalSchoolRecords = performances.Count(p => p.SchoolRecord && p.RelayAthletes == null)
+                + performances
+                    .Where(p => p.RelayAthletes != null && p.AllTimeRank == 1)
+                    .Select(p => p.EventId)
+                    .Distinct()
+                    .Count(),
 
             PersonalRecords = personalRecords,
             Seasons = seasons
