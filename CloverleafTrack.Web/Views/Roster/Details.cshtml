@@ -1,8 +1,28 @@
 @using Slugify
+@using System.Text.Json
 @model AthleteDetailsViewModel
 
 @{
     ViewBag.Title = Model.FullName;
+    var hasAnyRank = Model.PersonalRecords.Any(pr => pr.AllTimeRank.HasValue || pr.IsSchoolRecord);
+
+    // Pre-compute career data: all individual (non-relay) events across all seasons, chronological
+    var careerEvents = Model.Seasons
+        .SelectMany(s => s.EventGroups)
+        .Where(eg => eg.Performances.Any(p => !p.IsRelay))
+        .GroupBy(eg => new { eg.EventId, eg.EventName, eg.IsFieldEvent })
+        .Select(g => new
+        {
+            EventId    = g.Key.EventId,
+            EventName  = g.Key.EventName,
+            IsField    = g.Key.IsFieldEvent,
+            Perfs      = g.SelectMany(eg => eg.Performances)
+                          .Where(p => !p.IsRelay && p.RawValue.HasValue)
+                          .OrderBy(p => p.Date)
+                          .ToList()
+        })
+        .Where(g => g.Perfs.Count > 3)
+        .ToList();
 }
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -14,7 +34,6 @@
             @Model.Class • @(Model.Gender == Gender.Male ? "Boys" : "Girls")
         </div>
 
-        <!-- Key Stats -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             @if (Model.TopSprintEvent != null)
             {
@@ -23,13 +42,9 @@
                     <div class="text-sm text-gray-600 dark:text-gray-400">@Model.TopSprintEvent.EventName PR</div>
                     <div class="text-xs text-gray-500 dark:text-gray-500">
                         @if (Model.TopSprintEvent.Environment == CloverleafTrack.Models.Enums.Environment.Indoor)
-                        {
-                            <span>🏢 Indoor</span>
-                        }
+                        { <span>🏢 Indoor</span> }
                         else
-                        {
-                            <span>☀️ Outdoor</span>
-                        }
+                        { <span>☀️ Outdoor</span> }
                     </div>
                     @if (Model.TopSprintEvent.AllTimeRank.HasValue)
                     {
@@ -45,13 +60,9 @@
                     <div class="text-sm text-gray-600 dark:text-gray-400">@Model.TopFieldEvent.EventName PR</div>
                     <div class="text-xs text-gray-500 dark:text-gray-500">
                         @if (Model.TopFieldEvent.Environment == CloverleafTrack.Models.Enums.Environment.Indoor)
-                        {
-                            <span>🏢 Indoor</span>
-                        }
+                        { <span>🏢 Indoor</span> }
                         else
-                        {
-                            <span>☀️ Outdoor</span>
-                        }
+                        { <span>☀️ Outdoor</span> }
                     </div>
                     @if (Model.TopFieldEvent.AllTimeRank.HasValue)
                     {
@@ -72,18 +83,127 @@
         </div>
     </div>
 
+    <!-- Career Progression -->
+    @if (careerEvents.Any())
+    {
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Career Progression</h2>
+
+            <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+
+                <!-- Event tabs -->
+                <div class="flex flex-wrap gap-2 p-4 border-b border-gray-200 dark:border-gray-700">
+                    @for (int ci = 0; ci < careerEvents.Count; ci++)
+                    {
+                        var ce = careerEvents[ci];
+                        var isFirst = ci == 0;
+                        <button type="button"
+                                class="career-tab px-3 py-1.5 rounded-full text-sm font-semibold border transition-all @(isFirst ? "bg-green-600 text-white border-green-700 shadow-md shadow-green-900/40 ring-2 ring-green-400/50" : "border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500")"
+                                data-target="career-panel-@ci">
+                            @ce.EventName
+                        </button>
+                    }
+                </div>
+
+                <!-- Event panels -->
+                @for (int ci = 0; ci < careerEvents.Count; ci++)
+                {
+                    var ce = careerEvents[ci];
+                    var isFirst = ci == 0;
+                    var cePerfs = ce.Perfs;
+
+                    @* Compute career stats *@
+                    var totalComps   = cePerfs.Count;
+                    var firstPerf    = cePerfs.First();
+                    var bestPerf     = ce.IsField
+                        ? cePerfs.OrderByDescending(p => p.RawValue).First()
+                        : cePerfs.OrderBy(p => p.RawValue).First();
+                    var bestRank     = cePerfs.Where(p => p.AllTimeRank.HasValue).OrderBy(p => p.AllTimeRank).FirstOrDefault();
+
+                    // Actual signed delta: positive = more distance, negative = faster time
+                    double delta = bestPerf.RawValue!.Value - firstPerf.RawValue!.Value;
+                    bool improved = ce.IsField ? delta > 0 : delta < 0;
+                    var improvStr = delta != 0
+                        ? $"{(delta > 0 ? "+" : "-")}{FormatImprovement(Math.Abs(delta), ce.IsField)}"
+                        : "—";
+
+                    var cChartLabels = JsonSerializer.Serialize(cePerfs.Select(p => p.Date.ToString("MMM d, yyyy")));
+                    var cChartValues = JsonSerializer.Serialize(cePerfs.Select(p => p.RawValue));
+                    var cChartPerfs  = JsonSerializer.Serialize(cePerfs.Select(p => p.Performance));
+                    var cChartTypes  = JsonSerializer.Serialize(cePerfs.Select(p =>
+                        p.IsPersonalBest ? "pr" : (p.IsSeasonBest ? "sb" : "normal")));
+                    var cChartRanks  = JsonSerializer.Serialize(cePerfs.Select(p =>
+                        p.AllTimeRank.HasValue ? $"#{p.AllTimeRank} all-time" : ""));
+                    var cIsField     = ce.IsField ? "true" : "false";
+
+                    <div id="career-panel-@ci" class="career-panel @(isFirst ? "" : "hidden") p-5">
+
+                        <!-- Stats row -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Career PR</div>
+                                <div class="font-bold text-gray-900 dark:text-white">@bestPerf.Performance</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">@bestPerf.Date.ToString("MMM d, yyyy")</div>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Competitions</div>
+                                <div class="font-bold text-gray-900 dark:text-white">@totalComps</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">@Model.Seasons.Count(s => s.EventGroups.Any(eg => eg.EventName == ce.EventName)) season(s)</div>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Career improvement</div>
+                                <div class="font-bold @(improved ? "text-green-600 dark:text-green-400" : "text-gray-900 dark:text-white")">@improvStr</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">first → best</div>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">All-time rank</div>
+                                @if (bestRank != null)
+                                {
+                                    <div class="font-bold text-purple-600 dark:text-purple-400">#@bestRank.AllTimeRank</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">@bestRank.Performance · @bestRank.Date.ToString("MMM d, yyyy")</div>
+                                }
+                                else
+                                {
+                                    <div class="font-bold text-gray-400">—</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">unranked</div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Career chart -->
+                        <div style="height:260px;">
+                            <canvas id="career-chart-@ci"
+                                    data-labels="@cChartLabels"
+                                    data-values="@cChartValues"
+                                    data-perfs="@cChartPerfs"
+                                    data-types="@cChartTypes"
+                                    data-ranks="@cChartRanks"
+                                    data-field="@cIsField"
+                                    class="career-chart">
+                            </canvas>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="flex gap-4 mt-3 text-sm text-gray-600 dark:text-gray-300">
+                            <span class="flex items-center gap-1"><span class="inline-block w-2 h-2 rounded-full bg-amber-400"></span> Personal Record</span>
+                            <span class="flex items-center gap-1"><span class="inline-block w-2 h-2 rounded-full bg-blue-400"></span> Season Best</span>
+                            <span class="flex items-center gap-1"><span class="inline-block w-2 h-2 rounded-full bg-green-500"></span> Other</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
     <!-- Personal Records Table -->
     @if (Model.PersonalRecords.Any())
     {
-        var hasTopTenRanks = Model.PersonalRecords.Any(pr => (pr.AllTimeRank.HasValue && pr.AllTimeRank <= 10) || pr.IsSchoolRecord);
-
         <div class="mb-8">
             <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Personal Records</h2>
             <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
 
                 @if (Model.PersonalRecords.Where(x => x.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor).Any())
                 {
-                    <!-- Outdoor Section -->
                     <div class="bg-gradient-to-r from-amber-500 to-yellow-400 dark:from-yellow-900/40 dark:to-yellow-900/10 border-b border-yellow-700/30 px-6 py-3">
                         <div class="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-amber-900 dark:text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
@@ -100,7 +220,7 @@
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">PR</th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Date</th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Meet</th>
-                                @if (hasTopTenRanks)
+                                @if (hasAnyRank)
                                 {
                                     <th class="px-4 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">Rank</th>
                                 }
@@ -130,13 +250,10 @@
                                     <td class="px-4 py-3 font-mono font-bold text-gray-900 dark:text-gray-100">@pr.Performance</td>
                                     <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">@pr.Date.ToString("MMM d, yyyy")</td>
                                     <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                                        @{
-                                            var helper = new SlugHelper();
-                                            var meetName = helper.GenerateSlug(pr.MeetName);
-                                        }
-                                        <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meetName" class="underline">@pr.MeetName</a>
+                                        @{ var helper = new SlugHelper(); var meetSlug = helper.GenerateSlug(pr.MeetName); }
+                                        <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meetSlug" class="underline">@pr.MeetName</a>
                                     </td>
-                                    @if (hasTopTenRanks)
+                                    @if (hasAnyRank)
                                     {
                                         <td class="px-4 py-3 text-center">
                                             <div class="flex justify-center gap-1 flex-wrap">
@@ -144,7 +261,7 @@
                                                 {
                                                     <span class="inline-block px-2 py-1 text-xs font-semibold rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">SR</span>
                                                 }
-                                                @if (pr.AllTimeRank.HasValue && pr.AllTimeRank <= 10)
+                                                @if (pr.AllTimeRank.HasValue)
                                                 {
                                                     <span class="inline-block px-2 py-1 text-xs font-semibold rounded bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
                                                         #@pr.AllTimeRank AT
@@ -161,7 +278,6 @@
 
                 @if (Model.PersonalRecords.Where(x => x.Environment == CloverleafTrack.Models.Enums.Environment.Indoor).Any())
                 {
-                    <!-- Indoor Section -->
                     <div class="bg-gradient-to-r from-blue-600 to-blue-500 dark:from-blue-900/40 dark:to-blue-900/10 border-y border-blue-700/30 px-6 py-3 @(Model.PersonalRecords.Where(x => x.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor).Any() ? "mt-2" : "")">
                         <div class="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-50 dark:text-blue-500" viewBox="0 0 24 24" fill="currentColor">
@@ -178,7 +294,7 @@
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">PR</th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Date</th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Meet</th>
-                                @if (hasTopTenRanks)
+                                @if (hasAnyRank)
                                 {
                                     <th class="px-4 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">Rank</th>
                                 }
@@ -208,13 +324,10 @@
                                     <td class="px-4 py-3 font-mono font-bold text-gray-900 dark:text-gray-100">@pr.Performance</td>
                                     <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">@pr.Date.ToString("MMM d, yyyy")</td>
                                     <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                                        @{
-                                            var helper = new SlugHelper();
-                                            var meetName = helper.GenerateSlug(pr.MeetName);
-                                        }
-                                        <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meetName" class="underline">@pr.MeetName</a>
+                                        @{ var helper2 = new SlugHelper(); var meetSlug2 = helper2.GenerateSlug(pr.MeetName); }
+                                        <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meetSlug2" class="underline">@pr.MeetName</a>
                                     </td>
-                                    @if (hasTopTenRanks)
+                                    @if (hasAnyRank)
                                     {
                                         <td class="px-4 py-3 text-center">
                                             <div class="flex justify-center gap-1 flex-wrap">
@@ -222,7 +335,7 @@
                                                 {
                                                     <span class="inline-block px-2 py-1 text-xs font-semibold rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">SR</span>
                                                 }
-                                                @if (pr.AllTimeRank.HasValue && pr.AllTimeRank <= 10)
+                                                @if (pr.AllTimeRank.HasValue)
                                                 {
                                                     <span class="inline-block px-2 py-1 text-xs font-semibold rounded bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
                                                         #@pr.AllTimeRank AT
@@ -242,7 +355,6 @@
     }
     else
     {
-        <!-- Empty State -->
         <div class="mb-8">
             <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Personal Records</h2>
             <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -257,7 +369,7 @@
         </div>
     }
 
-    <!-- Season by Season -->
+    <!-- Performance by Season -->
     @if (Model.Seasons.Any())
     {
         <div class="mb-8">
@@ -284,27 +396,50 @@
                         </div>
                     </button>
 
-                    <!-- Expanded Content -->
                     <div class="season-content hidden p-6">
 
-                        @if (season.EventGroups.Where(x => x.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor).Any())
+                        @foreach (var env in new[] { CloverleafTrack.Models.Enums.Environment.Outdoor, CloverleafTrack.Models.Enums.Environment.Indoor })
                         {
-                            <div class="bg-gradient-to-r from-amber-500 to-yellow-400 dark:from-yellow-900/40 dark:to-yellow-900/10 border-y border-yellow-700/30 -mx-6 px-6 py-3 mb-6 -mt-6">
+                            var envGroups = season.EventGroups.Where(x => x.Environment == env).ToList();
+                            if (!envGroups.Any()) continue;
+
+                            var isOutdoor = env == CloverleafTrack.Models.Enums.Environment.Outdoor;
+                            var envHeaderClass = isOutdoor
+                                ? "bg-gradient-to-r from-amber-500 to-yellow-400 dark:from-yellow-900/40 dark:to-yellow-900/10 border-y border-yellow-700/30"
+                                : "bg-gradient-to-r from-blue-600 to-blue-500 dark:from-blue-900/40 dark:to-blue-900/10 border-y border-blue-700/30 mt-8";
+
+                            <div class="@envHeaderClass -mx-6 px-6 py-3 mb-6 -mt-6">
                                 <div class="flex items-center gap-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-amber-900 dark:text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M12 2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V3A.75.75 0 0112 2.25zM17.47 4.53a.75.75 0 011.06 1.06l-1.06 1.06a.75.75 0 11-1.06-1.06l1.06-1.06zM21.75 12a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.47 19.47a.75.75 0 00-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM12 20.25a.75.75 0 01-.75-.75v-1.5a.75.75 0 011.5 0v1.5a.75.75 0 01-.75.75zM6.53 19.47a.75.75 0 001.06-1.06L6.53 17.35a.75.75 0 00-1.06 1.06l1.06 1.06zM2.25 12a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5H3a.75.75 0 01-.75-.75zM6.53 4.53a.75.75 0 00-1.06 1.06L6.53 6.65a.75.75 0 001.06-1.06L6.53 4.53zM12 6.75a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5z" clip-rule="evenodd" />
-                                    </svg>
-                                    <h3 class="font-bold text-2xl text-amber-900 dark:text-yellow-400 uppercase tracking-wider">Outdoor</h3>
+                                    @if (isOutdoor)
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-amber-900 dark:text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M12 2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V3A.75.75 0 0112 2.25zM17.47 4.53a.75.75 0 011.06 1.06l-1.06 1.06a.75.75 0 11-1.06-1.06l1.06-1.06zM21.75 12a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.47 19.47a.75.75 0 00-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM12 20.25a.75.75 0 01-.75-.75v-1.5a.75.75 0 011.5 0v1.5a.75.75 0 01-.75.75zM6.53 19.47a.75.75 0 001.06-1.06L6.53 17.35a.75.75 0 00-1.06 1.06l1.06 1.06zM2.25 12a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5H3a.75.75 0 01-.75-.75zM6.53 4.53a.75.75 0 00-1.06 1.06L6.53 6.65a.75.75 0 001.06-1.06L6.53 4.53zM12 6.75a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5z" clip-rule="evenodd" />
+                                        </svg>
+                                        <h3 class="font-bold text-2xl text-amber-900 dark:text-yellow-400 uppercase tracking-wider">Outdoor</h3>
+                                    }
+                                    else
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-50 dark:text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M2.25 8.25a.75.75 0 01.75-.75h.75V6A3.75 3.75 0 017.5 2.25h9A3.75 3.75 0 0120.25 6v1.5h.75a.75.75 0 01.75.75V11a.75.75 0 01-.75.75h-.75V20a.75.75 0 01-.75.75H4.5A.75.75 0 013.75 20v-8.25H3a.75.75 0 01-.75-.75V8.25zM6 6a1.5 1.5 0 011.5-1.5h9A1.5 1.5 0 0118 6v1.5H6V6zM7.5 17.25a.75.75 0 01-.75-.75v-3A.75.75 0 017.5 12.75h3a.75.75 0 01.75.75v3a.75.75 0 01-.75.75h-3z" clip-rule="evenodd" />
+                                        </svg>
+                                        <h3 class="font-bold text-2xl text-white dark:text-blue-400 uppercase tracking-wider">Indoor</h3>
+                                    }
                                 </div>
                             </div>
 
-                            @foreach (var eventGroup in season.EventGroups.Where(x => x.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor))
+                            @foreach (var eventGroup in envGroups)
                             {
+                                @* Performances in chronological order for the chart (rows stay newest-first) *@
+                                var chronoPerfs = eventGroup.Performances
+                                    .Where(p => !p.IsRelay && p.RawValue.HasValue)
+                                    .OrderBy(p => p.Date)
+                                    .ToList();
+                                var hasChart = chronoPerfs.Count > 3;
+                                var chartId = $"sc-{eventGroup.EventId}-{season.SeasonName.Replace(" ","").Replace("-","")}";
+
                                 <div class="mb-6 last:mb-0">
                                     <div class="flex items-baseline gap-3 mb-3">
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            @eventGroup.EventName
-                                        </h3>
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">@eventGroup.EventName</h3>
                                         @if (!string.IsNullOrEmpty(eventGroup.PersonalRecordPerformance))
                                         {
                                             <span class="text-sm text-gray-600 dark:text-gray-400">
@@ -313,135 +448,90 @@
                                         }
                                     </div>
 
-                                    <div class="space-y-2">
-                                        @foreach (var perf in eventGroup.Performances)
-                                        {
-                                            <div class="p-3 rounded transition-colors @(perf.IsPersonalBest ? "bg-gradient-to-r from-green-50 to-transparent dark:from-green-900/40 dark:to-transparent border-l-4 border-green-500 hover:from-green-100 dark:hover:from-green-900/60" : "bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600")">
-                                                <div class="flex items-center gap-4">
-                                                    <div class="font-mono font-bold w-24 text-gray-900 dark:text-gray-100">@perf.Performance</div>
-                                                    <div class="text-sm text-gray-600 dark:text-gray-400 w-24">@perf.Date.ToString("MMM d")</div>
-                                                    <div class="text-sm flex-1 text-gray-900 dark:text-gray-100">
-                                                        @{
-                                                            var helper = new SlugHelper();
-                                                            var meetName = helper.GenerateSlug(perf.MeetName);
-                                                        }
-                                                        <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meetName" class="underline">@perf.MeetName</a>
+                                    @* Split layout for individual events: rows left, chart right *@
+                                    <div class="@(hasChart ? "flex gap-4 items-start" : "")">
+
+                                        @* Performance rows *@
+                                        <div class="@(hasChart ? "flex-1 min-w-0" : "") space-y-2">
+                                            @foreach (var perf in eventGroup.Performances)
+                                            {
+                                                <div class="p-3 rounded transition-colors @(perf.IsPersonalBest ? "bg-gradient-to-r from-green-50 to-transparent dark:from-green-900/40 dark:to-transparent border-l-4 border-green-500 hover:from-green-100 dark:hover:from-green-900/60" : "bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600")">
+                                                    <div class="flex items-center gap-4">
+                                                        <div class="font-mono font-bold w-24 text-gray-900 dark:text-gray-100">@perf.Performance</div>
+                                                        <div class="text-sm text-gray-600 dark:text-gray-400 w-24">@perf.Date.ToString("MMM d")</div>
+                                                        <div class="text-sm flex-1 text-gray-900 dark:text-gray-100">
+                                                            @{ var h = new SlugHelper(); var ms = h.GenerateSlug(perf.MeetName); }
+                                                            <a asp-controller="Meets" asp-action="Details" asp-route-slug="@ms" class="underline">@perf.MeetName</a>
+                                                        </div>
+                                                        <div class="flex gap-1">
+                                                            @if (perf.IsSchoolRecord)
+                                                            {
+                                                                <span class="px-2 py-0.5 text-xs font-semibold rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">SR</span>
+                                                            }
+                                                            @if (perf.IsPersonalBest)
+                                                            {
+                                                                <span class="px-2 py-0.5 text-xs font-semibold rounded bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">PR</span>
+                                                            }
+                                                            else if (perf.IsSeasonBest)
+                                                            {
+                                                                <span class="px-2 py-0.5 text-xs font-semibold rounded bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">SB</span>
+                                                            }
+                                                            @if (perf.AllTimeRank.HasValue)
+                                                            {
+                                                                <span class="px-2 py-0.5 text-xs font-semibold rounded bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">#@perf.AllTimeRank AT</span>
+                                                            }
+                                                        </div>
                                                     </div>
-                                                    <div class="flex gap-1">
-                                                        @if (perf.IsSchoolRecord)
-                                                        {
-                                                            <span class="px-2 py-0.5 text-xs font-semibold rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">SR</span>
-                                                        }
-                                                        @if (perf.IsPersonalBest)
-                                                        {
-                                                            <span class="px-2 py-0.5 text-xs font-semibold rounded bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">PR</span>
-                                                        }
-                                                        @if (perf.IsSeasonBest)
-                                                        {
-                                                            <span class="px-2 py-0.5 text-xs font-semibold rounded bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">SB</span>
-                                                        }
-                                                        @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10)
-                                                        {
-                                                            <span class="px-2 py-0.5 text-xs font-semibold rounded bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">#@perf.AllTimeRank AT</span>
-                                                        }
+                                                    @if (perf.IsRelay)
+                                                    {
+                                                        <div class="mt-1.5 ml-28 text-xs text-gray-500 dark:text-gray-400">
+                                                            @for (int mi = 0; mi < perf.RelayMembers.Length; mi++)
+                                                            {
+                                                                var member = perf.RelayMembers[mi];
+                                                                var parts = member.Trim().Split(' ');
+                                                                var memberSlug = parts.Length >= 2
+                                                                    ? new SlugHelper().GenerateSlug($"{parts[0]}-{parts[1]}")
+                                                                    : new SlugHelper().GenerateSlug(member);
+                                                                <a asp-controller="Roster" asp-action="Details" asp-route-slug="@memberSlug" class="underline hover:text-gray-700 dark:hover:text-gray-200">@member</a>@if (mi < perf.RelayMembers.Length - 1){<span> / </span>}
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+
+                                        @* Chart panel (individual events only) *@
+                                        @if (hasChart)
+                                        {
+                                            var chartLabels  = JsonSerializer.Serialize(chronoPerfs.Select(p => p.Date.ToString("MMM d")));
+                                            var chartValues  = JsonSerializer.Serialize(chronoPerfs.Select(p => p.RawValue));
+                                            var chartPerfs   = JsonSerializer.Serialize(chronoPerfs.Select(p => p.Performance));
+                                            var chartTypes   = JsonSerializer.Serialize(chronoPerfs.Select(p =>
+                                                p.IsPersonalBest ? "pr" : (p.IsSeasonBest ? "sb" : "normal")));
+                                            var chartRanks   = JsonSerializer.Serialize(chronoPerfs.Select(p =>
+                                                p.AllTimeRank.HasValue ? $"#{p.AllTimeRank} all-time" : ""));
+                                            var isField      = eventGroup.IsFieldEvent ? "true" : "false";
+
+                                            <div class="w-72 flex-shrink-0">
+                                                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">Season trajectory</div>
+                                                    <div style="height:160px;">
+                                                        <canvas id="@chartId"
+                                                                data-labels="@chartLabels"
+                                                                data-values="@chartValues"
+                                                                data-perfs="@chartPerfs"
+                                                                data-types="@chartTypes"
+                                                                data-ranks="@chartRanks"
+                                                                data-field="@isField"
+                                                                class="season-chart">
+                                                        </canvas>
+                                                    </div>
+                                                    <div class="flex gap-3 mt-2">
+                                                        <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400"></span><span class="text-xs font-medium text-gray-600 dark:text-gray-300">PR</span></span>
+                                                        <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-400"></span><span class="text-xs font-medium text-gray-600 dark:text-gray-300">SB</span></span>
+                                                        <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span><span class="text-xs font-medium text-gray-600 dark:text-gray-300">Other</span></span>
                                                     </div>
                                                 </div>
-                                                @if (perf.IsRelay)
-                                                {
-                                                    <div class="mt-1.5 ml-28 text-xs text-gray-500 dark:text-gray-400">
-                                                        @for (int mi = 0; mi < perf.RelayMembers.Length; mi++)
-                                                        {
-                                                            var member = perf.RelayMembers[mi];
-                                                            var parts = member.Trim().Split(' ');
-                                                            var memberSlug = parts.Length >= 2
-                                                                ? new SlugHelper().GenerateSlug($"{parts[0]}-{parts[1]}")
-                                                                : new SlugHelper().GenerateSlug(member);
-                                                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@memberSlug" class="underline hover:text-gray-700 dark:hover:text-gray-200">@member</a>@if (mi < perf.RelayMembers.Length - 1){<span> / </span>}
-                                                        }
-                                                    </div>
-                                                }
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                        }
-
-                        @if (season.EventGroups.Where(x => x.Environment == CloverleafTrack.Models.Enums.Environment.Indoor).Any())
-                        {
-                            <div class="bg-gradient-to-r from-blue-600 to-blue-500 dark:from-blue-900/40 dark:to-blue-900/10 border-y border-blue-700/30 -mx-6 px-6 py-3 mb-6 mt-8">
-                                <div class="flex items-center gap-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-50 dark:text-blue-500" viewBox="0 0 24 24" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M2.25 8.25a.75.75 0 01.75-.75h.75V6A3.75 3.75 0 017.5 2.25h9A3.75 3.75 0 0120.25 6v1.5h.75a.75.75 0 01.75.75V11a.75.75 0 01-.75.75h-.75V20a.75.75 0 01-.75.75H4.5A.75.75 0 013.75 20v-8.25H3a.75.75 0 01-.75-.75V8.25zM6 6a1.5 1.5 0 011.5-1.5h9A1.5 1.5 0 0118 6v1.5H6V6zM7.5 17.25a.75.75 0 01-.75-.75v-3A.75.75 0 017.5 12.75h3a.75.75 0 01.75.75v3a.75.75 0 01-.75.75h-3z" clip-rule="evenodd" />
-                                    </svg>
-                                    <h3 class="font-bold text-2xl text-white dark:text-blue-400 uppercase tracking-wider">Indoor</h3>
-                                </div>
-                            </div>
-
-                            @foreach (var eventGroup in season.EventGroups.Where(x => x.Environment == CloverleafTrack.Models.Enums.Environment.Indoor))
-                            {
-                                <div class="mb-6 last:mb-0">
-                                    <div class="flex items-baseline gap-3 mb-3">
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            @eventGroup.EventName
-                                        </h3>
-                                        @if (!string.IsNullOrEmpty(eventGroup.PersonalRecordPerformance))
-                                        {
-                                            <span class="text-sm text-gray-600 dark:text-gray-400">
-                                                PR: @eventGroup.PersonalRecordPerformance (@eventGroup.PersonalRecordDate.ToString("MMM d, yyyy"))
-                                            </span>
-                                        }
-                                    </div>
-
-                                    <div class="space-y-2">
-                                        @foreach (var perf in eventGroup.Performances)
-                                        {
-                                            <div class="p-3 rounded transition-colors @(perf.IsPersonalBest ? "bg-gradient-to-r from-green-50 to-transparent dark:from-green-900/40 dark:to-transparent border-l-4 border-green-500 hover:from-green-100 dark:hover:from-green-900/60" : "bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600")">
-                                                <div class="flex items-center gap-4">
-                                                    <div class="font-mono font-bold w-24 text-gray-900 dark:text-gray-100">@perf.Performance</div>
-                                                    <div class="text-sm text-gray-600 dark:text-gray-400 w-24">@perf.Date.ToString("MMM d")</div>
-                                                    <div class="text-sm flex-1 text-gray-900 dark:text-gray-100">
-                                                        @{
-                                                            var helper = new SlugHelper();
-                                                            var meetName = helper.GenerateSlug(perf.MeetName);
-                                                        }
-                                                        <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meetName" class="underline">@perf.MeetName</a>
-                                                    </div>
-                                                    <div class="flex gap-1">
-                                                        @if (perf.IsSchoolRecord)
-                                                        {
-                                                            <span class="px-2 py-0.5 text-xs font-semibold rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">SR</span>
-                                                        }
-                                                        @if (perf.IsPersonalBest)
-                                                        {
-                                                            <span class="px-2 py-0.5 text-xs font-semibold rounded bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">PR</span>
-                                                        }
-                                                        @if (perf.IsSeasonBest)
-                                                        {
-                                                            <span class="px-2 py-0.5 text-xs font-semibold rounded bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">SB</span>
-                                                        }
-                                                        @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10)
-                                                        {
-                                                            <span class="px-2 py-0.5 text-xs font-semibold rounded bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">#@perf.AllTimeRank AT</span>
-                                                        }
-                                                    </div>
-                                                </div>
-                                                @if (perf.IsRelay)
-                                                {
-                                                    <div class="mt-1.5 ml-28 flex flex-wrap gap-x-3 gap-y-0.5">
-                                                        @foreach (var member in perf.RelayMembers)
-                                                        {
-                                                            var parts = member.Trim().Split(' ');
-                                                            var memberSlug = parts.Length >= 2
-                                                                ? new SlugHelper().GenerateSlug($"{parts[0]}-{parts[1]}")
-                                                                : new SlugHelper().GenerateSlug(member);
-                                                            
-                                                            <span class="text-xs text-gray-500 dark:text-gray-400">
-                                                                • <a asp-controller="Roster" asp-action="Details" asp-route-slug="@memberSlug" class="underline hover:text-gray-700 dark:hover:text-gray-200">@member</a>
-                                                            </span>
-                                                        }
-                                                    </div>
-                                                }
                                             </div>
                                         }
                                     </div>
@@ -452,29 +542,194 @@
                 </div>
             }
         </div>
+
     }
 
 </div>
 
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleButtons = document.querySelectorAll('.season-toggle');
+@functions {
+    static string FormatImprovement(double delta, bool isField)
+    {
+        if (isField)
+        {
+            int totalInches = (int)Math.Round(delta);
+            int feet = totalInches / 12;
+            int inches = totalInches % 12;
+            return feet > 0 ? $"{feet}' {inches}\"" : $"{inches}\"";
+        }
+        else
+        {
+            if (delta >= 60)
+            {
+                int mins = (int)(delta / 60);
+                double secs = delta % 60;
+                return $"{mins}:{secs:00.00}";
+            }
+            return delta.ToString("0.00") + "s";
+        }
+    }
+}
 
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        // ── Helpers ────────────────────────────────────────────────────────────
+        function pointColor(type) {
+            if (type === 'pr') return '#f59e0b'; // amber  — PR
+            if (type === 'sb') return '#60a5fa'; // blue   — Season Best
+            return '#22c55e';                    // green  — other
+        }
+
+        function fmtTick(val, isField) {
+            if (isField) {
+                const ft = Math.floor(val / 12);
+                const inch = Math.round(val % 12);
+                return `${ft}'`;
+            } else {
+                if (val >= 60) {
+                    const m = Math.floor(val / 60);
+                    const s = (val % 60).toFixed(0).padStart(2, '0');
+                    return `${m}:${s}`;
+                }
+                return val.toFixed(1);
+            }
+        }
+
+        function buildChart(canvas, height) {
+            const labels  = JSON.parse(canvas.dataset.labels);
+            const values  = JSON.parse(canvas.dataset.values);
+            const perfs   = JSON.parse(canvas.dataset.perfs);
+            const types   = JSON.parse(canvas.dataset.types);
+            const ranks   = JSON.parse(canvas.dataset.ranks);
+            const isField = canvas.dataset.field === 'true';
+
+            const colors  = types.map(pointColor);
+            const radii   = types.map(t => (t === 'pr' || t === 'sb') ? 7 : 4);
+
+            return new Chart(canvas, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        data: values,
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34,197,94,0.08)',
+                        pointBackgroundColor: colors,
+                        pointBorderColor: colors,
+                        pointRadius: radii,
+                        pointHoverRadius: 8,
+                        tension: 0.25,
+                        fill: true,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1f2937',
+                            borderColor: '#374151',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: ctx => {
+                                    const parts = [` ${perfs[ctx.dataIndex]}`];
+                                    if (types[ctx.dataIndex] === 'pr') parts.push(' ★ PR');
+                                    else if (types[ctx.dataIndex] === 'sb') parts.push(' ◆ Season Best');
+                                    return parts;
+                                },
+                                afterLabel: ctx => {
+                                    const r = ranks[ctx.dataIndex];
+                                    return r ? ` ${r}` : null;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(156,163,175,0.1)' },
+                            ticks: { color: '#6b7280', font: { size: 10 }, maxRotation: 30 }
+                        },
+                        y: {
+                            grid: { color: 'rgba(156,163,175,0.1)' },
+                            reverse: false,
+                            ticks: {
+                                color: '#6b7280',
+                                font: { size: 10 },
+                                maxTicksLimit: 5,
+                                callback: v => fmtTick(v, isField)
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ── Season charts ──────────────────────────────────────────────────────
+        function initSeasonCharts() {
+            document.querySelectorAll('canvas.season-chart').forEach(canvas => {
+                buildChart(canvas, 160);
+            });
+        }
+
+        // ── Career charts ──────────────────────────────────────────────────────
+        const careerCharts = {};
+
+        function initCareerChart(idx) {
+            if (careerCharts[idx]) return; // already initialised
+            const canvas = document.getElementById(`career-chart-${idx}`);
+            if (canvas) careerCharts[idx] = buildChart(canvas, 260);
+        }
+
+        // ── Season accordion ───────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleButtons = document.querySelectorAll('.season-toggle');
             toggleButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const content = this.nextElementSibling;
                     const arrow = this.querySelector('svg');
-
+                    const wasHidden = content.classList.contains('hidden');
                     content.classList.toggle('hidden');
                     arrow.classList.toggle('rotate-180');
+                    // Initialise charts when the section first opens
+                    if (wasHidden) {
+                        content.querySelectorAll('canvas.season-chart').forEach(canvas => {
+                            if (!canvas._chart) {
+                                canvas._chart = buildChart(canvas, 160);
+                            }
+                        });
+                    }
                 });
             });
 
-            // Open first season by default
+            // Open first season and init its charts
             if (toggleButtons.length > 0) {
                 toggleButtons[0].click();
             }
+
+            // Career tab switching
+            document.querySelectorAll('.career-tab').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const targetId = this.dataset.target;
+                    // Toggle tab styles
+                    document.querySelectorAll('.career-tab').forEach(t => {
+                        t.classList.remove('bg-green-600', 'text-white', 'border-green-700', 'shadow-md', 'shadow-green-900/40', 'ring-2', 'ring-green-400/50');
+                        t.classList.add('border-gray-300', 'dark:border-gray-600', 'text-gray-600', 'dark:text-gray-300');
+                    });
+                    this.classList.add('bg-green-600', 'text-white', 'border-green-700', 'shadow-md', 'shadow-green-900/40', 'ring-2', 'ring-green-400/50');
+                    this.classList.remove('border-gray-300', 'dark:border-gray-600', 'text-gray-600', 'dark:text-gray-300');
+                    // Toggle panels
+                    document.querySelectorAll('.career-panel').forEach(p => p.classList.add('hidden'));
+                    const panel = document.getElementById(targetId);
+                    if (panel) panel.classList.remove('hidden');
+                    // Init this panel's career chart
+                    const idx = targetId.replace('career-panel-', '');
+                    initCareerChart(idx);
+                });
+            });
+
+            // Init the first career chart immediately (panel is already visible)
+            initCareerChart(0);
         });
     </script>
 }
