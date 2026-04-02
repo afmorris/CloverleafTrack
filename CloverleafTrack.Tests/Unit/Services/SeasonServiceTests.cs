@@ -17,6 +17,8 @@ public class SeasonServiceTests
     public SeasonServiceTests()
     {
         repository = new Mock<ISeasonRepository>();
+        performanceRepository = new Mock<IPerformanceRepository>();
+        meetRepository = new Mock<IMeetRepository>();
         service = new SeasonService(repository.Object, performanceRepository.Object, meetRepository.Object);
     }
 
@@ -37,8 +39,8 @@ public class SeasonServiceTests
         // Act
         var result = await service.GetCurrentSeasonAsync();
 
-        // Assert
-        Assert.Equal(3, result);
+        // Assert — returns EndDate.Year of the current season, not the season Id
+        Assert.Equal(today.AddYears(2).Year, result);
     }
 
     [Fact]

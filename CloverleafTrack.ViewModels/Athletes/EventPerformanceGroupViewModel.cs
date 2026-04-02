@@ -10,5 +10,7 @@ public class EventPerformanceGroupViewModel
     public string PersonalRecordPerformance { get; set; } = string.Empty;
     public DateTime PersonalRecordDate { get; set; }
     public int EventCategorySortOrder { get; set; }
+    /// <summary>True for field/jump/throw events (higher RawValue = better). False for running events (lower = better).</summary>
+    public bool IsFieldEvent { get; set; }
     public List<IndividualPerformanceViewModel> Performances { get; set; } = new();
 }

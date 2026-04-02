@@ -4,6 +4,32 @@ CloverleafTrack is an ASP.NET Core MVC web application (.NET 8+) that tracks hig
 
 ---
 
+## AI Documentation Convention
+
+This repository uses two files to give AI assistants full context:
+
+| File | Purpose |
+|---|---|
+| `CLAUDE.md` *(this file)* | Current state of the codebase — architecture, conventions, patterns, and invariants. Describes what the code *is* right now. Keep this up to date when anything structural changes. |
+| `BRAIN.md` | Chronological log of every accepted, non-obvious change — what changed, why, which files, and what to watch out for. Describes how the code *got* to where it is. |
+
+### How to use these files
+
+**When starting a new session:** Read `CLAUDE.md` first for the full architectural picture, then read `BRAIN.md` to understand decisions and gotchas that are not obvious from reading the code alone.
+
+**When completing a change:** Every accepted change that is not self-evident from reading the current code **must** be logged in `BRAIN.md` before the session ends. This includes:
+- Bug fixes where the root cause was non-obvious
+- Behavior that deviates from what you would naively expect (e.g. a flag that is unreliable and must not be trusted)
+- Architectural decisions and the reasons behind them
+- Patterns established to avoid a class of bugs
+- Any "watch out" knowledge a future AI would need to avoid re-introducing a problem
+
+Each `BRAIN.md` entry must include: **what changed**, **why**, **key files**, and **watch out** notes. Entries are never deleted — the log is append-only and cumulative. If a later change supersedes an earlier one, add a new entry that references and overrides it rather than editing the old one.
+
+`CLAUDE.md` should always reflect the *current* state. `BRAIN.md` should always reflect the *full history* of how it got there.
+
+---
+
 ## Solution Structure
 
 ```
@@ -14,7 +40,7 @@ CloverleafTrack.sln
 ├── CloverleafTrack.Models/       # Domain model classes + all enums
 ├── CloverleafTrack.ViewModels/   # ViewModels scoped to each feature area
 ├── CloverleafTrack.Infrastructure/  # (placeholder, currently empty)
-└── CloverleafTrack.Tests/        # xUnit unit tests (Services/ subdirectory)
+└── CloverleafTrack.Tests/        # xUnit unit tests (Unit/Services/ and Unit/Utilities/)
 ```
 
 Frontend: **Tailwind CSS v4** (config at `tailwind.config.js` / `postcss.config.js`, npm/pnpm managed).
@@ -323,6 +349,49 @@ Field events show a distance input; running events show a time input.
 - **School Records column**: shows `SR` badge for individual events where `SchoolRecord = true`, and for relay events where `AllTimeRank == 1`. The Rank column is shown whenever any PR row has either a top-10 rank OR a school record.
 - **Performance by Season**: shows all events including relays. Relay performance rows show the team members below the mark/date/meet row.
 - **Season ordering**: most recent season first, using `SeasonStartDate` from the DTO (not string sort).
+
+---
+
+## Testing
+
+**Framework:** xUnit 2.x + Moq + FluentAssertions. Tests live in `CloverleafTrack.Tests/Unit/`.
+
+```
+CloverleafTrack.Tests/Unit/
+├── Models/
+│   └── MeetTests.cs                — Slug generation, ResultsUrl format
+├── Services/
+│   ├── AthleteServiceTests.cs      — GetAthleteDetailsAsync, roster grouping, PR/SR logic
+│   ├── LeaderboardServiceTests.cs  — gender/env partitioning, category grouping, details page
+│   ├── MeetServiceTests.cs         — meet details, event ordering, meets index grouping
+│   └── SeasonServiceTests.cs       — current season resolution, missing season exception
+├── Utilities/
+│   └── PerformanceFormatHelperTests.cs — ParseTime, FormatTime, ParseDistance, FormatDistance, round-trips
+└── ViewModels/
+    ├── Admin/
+    │   ├── AdminPerformanceOptionViewModelTests.cs — AthleteOptionViewModel, EventOptionViewModel, MeetOptionViewModel DisplayText/CategoryName
+    │   ├── LocationOptionViewModelTests.cs          — conditional DisplayText (city+state vs. name-only)
+    │   └── SeasonProgressViewModelTests.cs          — PercentComplete integer division + zero guard
+    ├── Athletes/
+    │   └── IndividualPerformanceViewModelTests.cs   — IsRelay, RelayMembers parsing (also covers PersonalRecordViewModel)
+    ├── Leaderboard/
+    │   └── LeaderboardEventViewModelTests.cs        — RelayMembers (IsNullOrEmpty guard), AthleteFullName
+    ├── Meets/
+    │   └── MeetListItemViewModelTests.cs            — IsUpcoming date comparison
+    └── Seasons/
+        └── SeasonCardViewModelTests.cs              — Indoor/OutdoorSchoolRecordCount null coalescing, StatusBadge
+```
+
+**Conventions:**
+- All service tests mock repository interfaces — no real DB.
+- `GetCurrentSeasonAsync()` returns `EndDate.Year`, not the season `Id` — assert accordingly.
+- Relay `PersonalBest` and `SchoolRecord` flags are unreliable — tests verify the service uses best-per-event and `AllTimeRank == 1` instead.
+- `FormatDistance` always outputs `"F' I\""` with a space after the apostrophe — round-trip test input uses compact format but the formatted output is canonical.
+- `SlugHelper` keeps periods but strips apostrophes — tests for slug behavior use apostrophes as the special-char example, not periods.
+- `SeasonProgressViewModel.PercentComplete` uses integer division (truncates, not rounds) — tests explicitly cover 1/3 and 2/3 cases.
+- Run with: `dotnet test CloverleafTrack.Tests/CloverleafTrack.Tests.csproj`
+
+See `docs/testing.md` for full test strategy and coverage details.
 
 ---
 
