@@ -1,3 +1,4 @@
+using CloverleafTrack.DataAccess.Dtos;
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
@@ -6,6 +7,7 @@ using CloverleafTrack.Services;
 using CloverleafTrack.ViewModels;
 using FluentAssertions;
 using Moq;
+using Environment = CloverleafTrack.Models.Enums.Environment;
 
 namespace CloverleafTrack.Tests.Unit.Services;
 
@@ -193,5 +195,224 @@ public class AthleteServiceTests
         var result = await service.DeleteAsync(1);
 
         result.Should().BeTrue();
+    }
+
+    // -------------------------------------------------------------------------
+    // GetAthleteDetailsAsync
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_ReturnsNull_WhenAthleteNotFound()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync(It.IsAny<string>()))
+            .ReturnsAsync((Athlete?)null);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("unknown-athlete", 2024);
+
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_ReturnsBasicInfo_WhenNoPerformances()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(new List<AthletePerformanceDto>());
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result.Should().NotBeNull();
+        result!.FirstName.Should().Be("Jane");
+        result.LastName.Should().Be("Doe");
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_IndividualPRs_UsePersonalBestFlag()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { EventId = 1, EventName = "100m", TimeSeconds = 11.5, PersonalBest = true,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            // Slower mark — PersonalBest = false — should NOT appear in PR table
+            new() { EventId = 1, EventName = "100m", TimeSeconds = 12.0, PersonalBest = false,
+                    MeetName = "Winter Meet", MeetDate = new DateTime(2024, 1, 15),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.PersonalRecords.Should().HaveCount(1);
+        result.PersonalRecords.First().Performance.Should().Be("11.50");
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_RelayPRs_UseBestPerEvent_NotPersonalBestFlag()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            // Best relay time — PersonalBest = false (unreliable flag) — MUST still appear
+            new() { EventId = 10, EventName = "4x400m Relay", TimeSeconds = 200.0, PersonalBest = false,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = "Jane Doe|~|Mary Smith|~|Lisa Jones|~|Sarah Brown" },
+            // Slower relay — PersonalBest = false
+            new() { EventId = 10, EventName = "4x400m Relay", TimeSeconds = 210.0, PersonalBest = false,
+                    MeetName = "Winter Meet", MeetDate = new DateTime(2024, 1, 15),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = "Jane Doe|~|Mary Smith|~|Lisa Jones|~|Sarah Brown" },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        var relayPR = result!.PersonalRecords.FirstOrDefault(pr => pr.IsRelay);
+        relayPR.Should().NotBeNull("relay PR should appear even when PersonalBest flag is false");
+        relayPR!.Performance.Should().Be("3:20.00"); // 200 seconds
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_TotalPRs_CountsOnlyIndividualPerformances()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { EventId = 1, EventName = "100m", TimeSeconds = 11.5, PersonalBest = true,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            // Relay with PersonalBest = true — must NOT count toward TotalPRs
+            new() { EventId = 10, EventName = "4x400m Relay", TimeSeconds = 200.0, PersonalBest = true,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = "Jane Doe|~|Mary Smith|~|Lisa Jones|~|Sarah Brown" },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.TotalPRs.Should().Be(1); // only the individual 100m
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_TotalSchoolRecords_IncludesRelayEventsWhereAllTimeRankIsOne()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            // Individual school record (reliable flag)
+            new() { EventId = 1, EventName = "100m", TimeSeconds = 11.5, PersonalBest = true,
+                    SchoolRecord = true,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            // Relay at #1 all-time — SchoolRecord flag = false (unreliable) but AllTimeRank = 1
+            new() { EventId = 10, EventName = "4x400m Relay", TimeSeconds = 200.0, PersonalBest = false,
+                    SchoolRecord = false, AllTimeRank = 1,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = "Jane Doe|~|Mary Smith|~|Lisa Jones|~|Sarah Brown" },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.TotalSchoolRecords.Should().Be(2); // 1 individual SR + 1 relay event at rank 1
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_RelayIsSchoolRecord_WhenAllTimeRankIsOne()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { EventId = 10, EventName = "4x400m Relay", TimeSeconds = 200.0, PersonalBest = false,
+                    SchoolRecord = false, AllTimeRank = 1,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = "Jane Doe|~|Mary Smith|~|Lisa Jones|~|Sarah Brown" },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        var relayPR = result!.PersonalRecords.First(pr => pr.IsRelay);
+        relayPR.IsSchoolRecord.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_Seasons_OrderedMostRecentFirst()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { EventId = 1, EventName = "100m", TimeSeconds = 11.5, PersonalBest = true,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2023, 3, 1),
+                    SeasonName = "2022-2023", SeasonStartDate = new DateTime(2023, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            new() { EventId = 1, EventName = "100m", TimeSeconds = 11.2, PersonalBest = true,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.Seasons.Should().HaveCount(2);
+        result.Seasons[0].SeasonName.Should().Be("2023-2024"); // most recent first
+        result.Seasons[1].SeasonName.Should().Be("2022-2023");
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_RelayMembers_ParsedFromPipeSeparatedString()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { EventId = 10, EventName = "4x400m Relay", TimeSeconds = 200.0, PersonalBest = false,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor,
+                    RelayAthletes = "Jane Doe|~|Mary Smith|~|Lisa Jones|~|Sarah Brown" },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        var relayPR = result!.PersonalRecords.First(pr => pr.IsRelay);
+        relayPR.RelayMembers.Should().HaveCount(4);
+        relayPR.RelayMembers.Should().Contain("Jane Doe");
+        relayPR.RelayMembers.Should().Contain("Sarah Brown");
     }
 }
