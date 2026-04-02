@@ -321,10 +321,13 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                             .OrderByDescending(p => p.MeetDate)
                             .FirstOrDefault();
 
+                        var isFieldEvent = eventGroup.First().DistanceInches.HasValue;
                         return new EventPerformanceGroupViewModel
                         {
+                            EventId = eventGroup.Key.EventId,
                             EventName = eventGroup.Key.EventName,
                             Environment = eventGroup.Key.Environment,
+                            IsFieldEvent = isFieldEvent,
                             PersonalRecordPerformance = prPerformance != null
                                 ? FormatPerformance(prPerformance.TimeSeconds, prPerformance.DistanceInches)
                                 : "",
@@ -340,6 +343,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                                     IsSchoolRecord = p.SchoolRecord,
                                     IsSeasonBest = p.SeasonBest,
                                     AllTimeRank = p.AllTimeRank,
+                                    RawValue = p.DistanceInches ?? p.TimeSeconds,
                                     RelayAthletes = p.RelayAthletes
                                 })
                                 .ToList()

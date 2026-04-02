@@ -369,6 +369,43 @@ This is the most important behavioral invariant to remember:
 
 ---
 
+### [C13] Unit Test Suite — Initial Build-Out
+
+**What changed:**
+A full xUnit unit test suite was written and made green across `CloverleafTrack.Tests/Unit/`:
+
+| File | Tests | What is covered |
+|---|---|---|
+| `Services/SeasonServiceTests.cs` | 2 | `GetCurrentSeasonAsync` returns `EndDate.Year` (not Id); throws `InvalidOperationException` when no current season |
+| `Services/MeetServiceTests.cs` | 13 | Null slug, meet info, PR/SR counts, Boys/Girls/Mixed splits, event category ordering, meets index grouping and season ordering |
+| `Services/LeaderboardServiceTests.cs` | 11 | Gender/environment partitioning, Mixed isolation, category grouping, relay-type separation, details null-when-empty, IsRelayEvent detection, PRs-only de-duplication |
+| `Services/AthleteServiceTests.cs` | 18 | Active/former roster grouping, PR formatting, null slug, relay PR via best-per-event (not flag), TotalPRs counts only individuals, TotalSchoolRecords includes relay AllTimeRank==1, relay member parsing |
+| `Utilities/PerformanceFormatHelperTests.cs` | 43 | `ParseTime` / `FormatTime` (sub-minute, colon, suffix, invalid), `ParseDistance` / `FormatDistance` (feet+inches, dash, total-inches, natural language, invalid), `FormatPerformance`, `FormatImprovement`, round-trip theories |
+
+**Why:**
+No automated test coverage existed. Tests were needed to lock in the relay flag workarounds (C8, C9) and the service-layer business logic that is not obvious from reading the code.
+
+**Bugs found and fixed during test authoring:**
+
+1. `SeasonServiceTests` constructor — `performanceRepository` and `meetRepository` were declared as fields but never initialized with `new Mock<...>()`, causing `NullReferenceException` on construction.
+
+2. `SeasonServiceTests.GetCurrentSeason_ReturnsCorrectSeasonId` — asserted `result == 3` (the season Id) but `GetCurrentSeasonAsync()` returns `EndDate.Year`. Fixed assertion to `today.AddYears(2).Year`.
+
+3. `PerformanceFormatHelperTests.ParseDistance_RoundTrip_WithFormatDistance` — theory assumed `FormatDistance` round-trips to the same compact input format (`"19'4"`) but the helper always produces `"19' 4\""` (canonical with space). Fixed by adding a third `InlineData` argument for the expected formatted string.
+
+**Key files:**
+- `CloverleafTrack.Tests/Unit/Services/SeasonServiceTests.cs`
+- `CloverleafTrack.Tests/Unit/Services/MeetServiceTests.cs`
+- `CloverleafTrack.Tests/Unit/Services/LeaderboardServiceTests.cs`
+- `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs`
+- `CloverleafTrack.Tests/Unit/Utilities/PerformanceFormatHelperTests.cs`
+
+**Watch out:**
+- `GetCurrentSeasonAsync()` returns `EndDate.Year` (an int representing the calendar year), not the season DB row Id. This is intentional — callers use the year as a display/filtering key.
+- `FormatDistance` canonical output always includes a space: `"F' I\""`. The `ParseDistance` input parser accepts multiple input formats (compact, dash, natural language) but `FormatDistance` output is always the spaced canonical form.
+
+---
+
 ## Relay Athlete Name Format
 
 - **Stored in DB:** `STRING_AGG(a.FirstName + ' ' + a.LastName, '|~|')`
@@ -376,5 +413,89 @@ This is the most important behavioral invariant to remember:
 - **Separator:** `|~|` (chosen to be unlikely to appear in real names)
 - **C# split:** `RelayAthletes?.Split("|~|") ?? Array.Empty<string>()`
 - **Display format:** Names joined by ` / ` inline, each linked to athlete's roster page
+
+---
+
+### [C14] Unit Test Suite — Models and ViewModels Layer
+
+**What changed:**
+Expanded the unit test suite to cover the Models and ViewModels layers. Added 66 new tests across 8 new test files, bringing the total to 153.
+
+| File | Tests | What is covered |
+|---|---|---|
+| `Unit/Models/MeetTests.cs` | 6 | `Meet.Slug` generation via SlugHelper, `Meet.ResultsUrl` format (`/meets/{slug}`) |
+| `Unit/ViewModels/Admin/SeasonProgressViewModelTests.cs` | 6 | `PercentComplete` integer division, zero-guard when `TotalMeets == 0`, truncation (not rounding) |
+| `Unit/ViewModels/Admin/LocationOptionViewModelTests.cs` | 4 | `DisplayText` conditional: full `"Name (City, State)"` when both present, falls back to `Name` when either is empty |
+| `Unit/ViewModels/Admin/AdminPerformanceOptionViewModelTests.cs` | 9 | `AthleteOptionViewModel.DisplayText` (`"Last, First (Year)"`); `EventOptionViewModel.DisplayText` + `CategoryName` for all categories including null; `MeetOptionViewModel.DisplayText` with date/env formatting |
+| `Unit/ViewModels/Athletes/IndividualPerformanceViewModelTests.cs` | 9 | `IsRelay` (null check) and `RelayMembers` (`|~|` split) on both `IndividualPerformanceViewModel` and `PersonalRecordViewModel` |
+| `Unit/ViewModels/Leaderboard/LeaderboardEventViewModelTests.cs` | 5 | `RelayMembers` (uses `IsNullOrEmpty` guard, not null check — different from athlete VMs), `AthleteFullName` concat |
+| `Unit/ViewModels/Meets/MeetListItemViewModelTests.cs` | 4 | `IsUpcoming` date comparison against `DateTime.Now` |
+| `Unit/ViewModels/Seasons/SeasonCardViewModelTests.cs` | 9 | `IndoorSchoolRecordCount` + `OutdoorSchoolRecordCount` null coalescing; `StatusBadge` for all `SeasonStatus` values |
+
+**Bug found during test authoring:**
+
+`MeetTests.Slug_StripsSpecialCharacters` initially asserted that `"St. Mary's Invitational"` would produce a slug without a period. **SlugHelper actually keeps periods** — it produces `"st.-marys-invitational"`. The apostrophe is stripped but the period is not. Fixed by removing the `.NotContain(".")` assertion.
+
+**Watch out:**
+
+- `SlugHelper` (Slugify NuGet package) **keeps periods** and **strips apostrophes**. Do not assume all special characters are removed.
+- `LeaderboardEventViewModel.RelayMembers` uses `string.IsNullOrEmpty(RelayName)` as its guard — it handles both null and empty-string `RelayName`. This differs from `IndividualPerformanceViewModel.RelayMembers` which uses a null check on `RelayAthletes`. These are intentionally different because `RelayName` defaults to `string.Empty`, while `RelayAthletes` is nullable.
+- `SeasonProgressViewModel.PercentComplete` uses **integer division** (`EnteredMeets * 100 / TotalMeets`), so 1/3 → 33 and 2/3 → 66 (truncates, not rounds). Do not change this to floating-point without understanding downstream display consequences.
+
+**Key files:**
+- `CloverleafTrack.Tests/Unit/Models/MeetTests.cs` (NEW)
+- `CloverleafTrack.Tests/Unit/ViewModels/Admin/SeasonProgressViewModelTests.cs` (NEW)
+- `CloverleafTrack.Tests/Unit/ViewModels/Admin/LocationOptionViewModelTests.cs` (NEW)
+- `CloverleafTrack.Tests/Unit/ViewModels/Admin/AdminPerformanceOptionViewModelTests.cs` (NEW)
+- `CloverleafTrack.Tests/Unit/ViewModels/Athletes/IndividualPerformanceViewModelTests.cs` (NEW)
+- `CloverleafTrack.Tests/Unit/ViewModels/Leaderboard/LeaderboardEventViewModelTests.cs` (NEW)
+- `CloverleafTrack.Tests/Unit/ViewModels/Meets/MeetListItemViewModelTests.cs` (NEW)
+- `CloverleafTrack.Tests/Unit/ViewModels/Seasons/SeasonCardViewModelTests.cs` (NEW)
+
+---
+
+### [C15] Athlete Progression Charts — ViewModel + Service + View
+
+**What changed:**
+
+Added per-event progression charts to the Roster Details page, building on two major design decisions:
+1. **Season view — Option 1**: table of performance rows on the left, Chart.js line chart on the right, side-by-side per event group.
+2. **Career Progression — Mockup B**: dedicated "Career Progression" section below the season accordion with a tabbed event selector and full career-arc chart per event.
+
+Three supporting changes were made before the view rewrite:
+
+- `IndividualPerformanceViewModel` — added `public double? RawValue { get; set; }` — raw numeric value (TimeSeconds for running, DistanceInches for field) needed for Chart.js data arrays. Formatted strings are human-readable but can't be plotted.
+- `EventPerformanceGroupViewModel` — added `public bool IsFieldEvent { get; set; }` — drives Chart.js `reverse` axis option (running events: lower = better so Y-axis is inverted; field events: higher = better, normal axis).
+- `AthleteService.GetAthleteDetailsAsync` — set `EventId`, `IsFieldEvent`, and `RawValue` in the performance mapping. `EventId` was always 0 before because the `GroupBy` key was used but `EventId` was never assigned.
+
+**Key behaviors in `Details.cshtml` rewrite:**
+
+- **AllTimeRank shown for all athletes**: removed the `<= 10` guard — every athlete sees their rank regardless of value.
+- **Chart.js lazy initialization**: charts in hidden accordion panels have zero size when initialized on `DOMContentLoaded`. Season charts are built when the accordion first opens (tracked via `canvas._chart`). Career charts are built when the career tab is first clicked (tracked via `careerCharts[idx]` object).
+- **Relay events excluded from charts**: relay team compositions change meet-to-meet, making a progression line meaningless. Chart panel is suppressed for relay event groups; only the existing performance row layout is shown.
+- **PR takes precedence over SB**: when a performance is both a PR and SB, the PR badge/color wins. Chart point types: `"pr"` (amber) → `"sb"` (blue) → `"normal"` (green).
+- **Data passing**: `data-*` attributes on `<canvas>` elements carry JSON arrays for labels, values, point types, formatted performances, and ranks. Avoids CSP issues with inline scripts holding data.
+- **`@functions` block**: `FormatImprovement(double delta, bool isField)` computes career improvement delta server-side for the stats row in the career section.
+
+**New / updated test files:**
+
+- `AthleteServiceTests.cs` — expanded with `GetAthleteDetailsAsync` tests covering: null athlete, no performances, individual PR uses PersonalBest flag, relay PR uses best-per-event regardless of flag, TotalPRs excludes relays, TotalSchoolRecords includes relay events at AllTimeRank==1, relay school record detection, season ordering by date, relay members parsed from `|~|` string.
+- `LeaderboardServiceTests.cs` (NEW) — covers `GetLeaderboardAsync` gender/environment partitioning, category grouping, relay category separation, ordering; covers `GetLeaderboardDetailsAsync` null handling, event info, all-performances count, PRs-only per-athlete deduplication, relay event detection.
+- `MeetServiceTests.cs` (NEW) — covers `GetMeetDetailsAsync` null slug, name/location, PR/SR counts, boys/girls/mixed split, unique athlete count, event ordering (Sprints→Distance→Hurdles→Running Relays→Jumps→Throws); covers `GetMeetsIndexAsync` total count, season grouping, season ordering descending, meets within season ascending.
+
+**Watch out:**
+
+- `EventPerformanceGroupViewModel.EventId` was always 0 before this change. Tests or code that relied on it being 0 would be wrong — it's now populated from the `GroupBy` key.
+- Chart.js with hidden panels: always lazy-initialize charts. Initializing in `DOMContentLoaded` while the container is `display:none` produces a 0×0 canvas and broken charts.
+- `RawValue` is `DistanceInches ?? TimeSeconds` — for relay field events this correctly picks distance; for all running events this picks time. Null when neither is set (shouldn't happen in practice but guard in JS with `!= null` filter).
+
+**Key files:**
+- `CloverleafTrack.ViewModels/Athletes/IndividualPerformanceViewModel.cs` (MODIFIED — added RawValue)
+- `CloverleafTrack.ViewModels/Athletes/EventPerformanceGroupViewModel.cs` (MODIFIED — added IsFieldEvent)
+- `CloverleafTrack.Services/AthleteService.cs` (MODIFIED — set EventId, IsFieldEvent, RawValue)
+- `CloverleafTrack.Web/Views/Roster/Details.cshtml` (REWRITTEN)
+- `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` (EXPANDED)
+- `CloverleafTrack.Tests/Unit/Services/LeaderboardServiceTests.cs` (NEW)
+- `CloverleafTrack.Tests/Unit/Services/MeetServiceTests.cs` (NEW)
 
 ---
