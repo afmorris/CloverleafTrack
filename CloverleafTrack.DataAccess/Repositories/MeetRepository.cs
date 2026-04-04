@@ -15,7 +15,7 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                            SELECT
                                 m.*,
                                 COUNT(CASE WHEN p.PersonalBest = 1 THEN 1 END) AS PRCount,
-                                COUNT(CASE WHEN p.SchoolRecord = 1 THEN 1 END) AS SchoolRecordCount,
+                                (SELECT COUNT(*) FROM Performances p2 INNER JOIN Leaderboards lb ON lb.PerformanceId = p2.Id AND lb.Rank = 1 WHERE p2.MeetId = m.Id) AS SchoolRecordCount,
                                 l.*
                            FROM
                                 Meets m
@@ -154,7 +154,7 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    m.SeasonId,
                                    m.EntryStatus,
                                    COUNT(CASE WHEN p.PersonalBest = 1 THEN 1 END) AS PRCount,
-                                   COUNT(CASE WHEN p.SchoolRecord = 1 THEN 1 END) AS SchoolRecordCount,
+                                   (SELECT COUNT(*) FROM Performances p2 INNER JOIN Leaderboards lb ON lb.PerformanceId = p2.Id AND lb.Rank = 1 WHERE p2.MeetId = m.Id) AS SchoolRecordCount,
                                    l.Id,
                                    l.Name,
                                    l.City,

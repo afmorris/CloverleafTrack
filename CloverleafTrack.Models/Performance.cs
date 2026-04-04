@@ -9,7 +9,9 @@ public class Performance
     public bool SchoolRecord { get; set; }
     public bool SeasonBest { get; set; }
     public bool PersonalBest { get; set; }
-    
+    /// <summary>Populated by queries that join Leaderboards. Null when not loaded.</summary>
+    public int? AllTimeRank { get; set; }
+
     public int? AthleteId { get; set; }
     public int EventId { get; set; }
     public int MeetId { get; set; }

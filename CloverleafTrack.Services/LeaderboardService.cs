@@ -68,7 +68,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
             MeetSlug = _slugHelper.GenerateSlug(perf.MeetName),
             MeetDate = perf.MeetDate,
             GraduationYear = perf.GraduationYear,
-            IsSchoolRecord = perf.SchoolRecord
+            IsSchoolRecord = perf.AllTimeRank == 1
         }).ToList();
         
         // Build PRs only list (best performance per athlete)
@@ -86,7 +86,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
                 MeetSlug = _slugHelper.GenerateSlug(perf.MeetName),
                 MeetDate = perf.MeetDate,
                 GraduationYear = perf.GraduationYear,
-                IsSchoolRecord = perf.SchoolRecord
+                IsSchoolRecord = perf.AllTimeRank == 1
             })
             .ToList();
 

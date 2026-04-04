@@ -477,6 +477,32 @@ Meet name link gets `min-w-0` on the flex-1 container and `block truncate` on th
 
 ---
 
+### [C21] Home Page "Season at a Glance" — SchoolRecordsBroken Uses Leaderboards
+
+**What changed:**
+`HomeRepository.GetHomePageStatsAsync` now counts school records for the season by joining to the `Leaderboards` table (`Rank = 1`) instead of filtering on `p.SchoolRecord = 1`.
+
+```sql
+-- Before
+(SELECT COUNT(*) FROM Performances p
+ INNER JOIN Meets m ON m.Id = p.MeetId
+ WHERE m.SeasonId = @SeasonId AND p.SchoolRecord = 1) AS SchoolRecordsBroken,
+
+-- After
+(SELECT COUNT(*) FROM Performances p
+ INNER JOIN Meets m ON m.Id = p.MeetId
+ INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id AND lb.Rank = 1
+ WHERE m.SeasonId = @SeasonId) AS SchoolRecordsBroken,
+```
+
+**Why:**
+Same stale flag issue as C17/C20. `p.SchoolRecord` is not cleared when a newer record supersedes it, so the count was stuck at 0 (or wrong) for the current season.
+
+**Key files:**
+- `CloverleafTrack.DataAccess/Repositories/HomeRepository.cs`
+
+---
+
 ### [C17] "On This Day" — SchoolRecord Flag Is Stale on Superseded Performances
 
 **What changed:**
@@ -644,5 +670,107 @@ Two new static helpers:
 - `CloverleafTrack.DataAccess/Repositories/AthleteRepository.cs`
 - `CloverleafTrack.Services/AthleteService.cs`
 - `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` (5 new tests)
+
+---
+
+### [C22] Season Index + Season Details — SchoolRecord Counts Use Leaderboards
+
+**What changed:**
+Four locations were still using the stale `p.SchoolRecord` flag to count school records for seasons. All updated to use `Leaderboards.Rank = 1` as the authoritative source.
+
+**1. `SeasonRepository.GetSeasonsWithMeetsAsync` SQL:**
+Added AllTimeRank subquery between `p.*` and `e.*` so Dapper's multi-mapping assigns it to the `Performance` type:
+```sql
+(SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) AS AllTimeRank,
+```
+
+**2. `SeasonService.GetSeasonCardsAsync`:**
+```csharp
+// Before
+.Where(p => p.SchoolRecord)
+
+// After
+.Where(p => p.AllTimeRank == 1)
+```
+Applied to both `IndoorSchoolRecords` and `OutdoorSchoolRecords` LINQ chains.
+
+**3. `PerformanceRepository.CountSchoolRecordsBrokenForSeasonAsync` SQL:**
+```sql
+-- Before
+WHERE m.SeasonId = @SeasonId AND p.SchoolRecord = 1
+
+-- After (uses INNER JOIN on Leaderboards Rank = 1)
+INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id AND lb.Rank = 1
+WHERE m.SeasonId = @SeasonId
+```
+
+**4. `MeetRepository.GetMeetsForSeasonAsync` SQL:**
+Replaced `COUNT(CASE WHEN p.SchoolRecord = 1 ...)` (which was in a GROUP BY query and couldn't easily join Leaderboards per-row) with a correlated subquery:
+```sql
+(SELECT COUNT(*) FROM Performances p2 INNER JOIN Leaderboards lb ON lb.PerformanceId = p2.Id AND lb.Rank = 1 WHERE p2.MeetId = m.Id) AS SchoolRecordCount,
+```
+
+**Why:**
+Season Index was showing 0 Indoor SRs and 0 Outdoor SRs for seasons where records were set. Season Details "Season Overview" SR count was also wrong. Root cause identical to C17/C19/C20: `p.SchoolRecord` is a stale snapshot.
+
+**Watch out:**
+- `Performance.AllTimeRank` (added in the previous session) is what allows the Dapper multi-mapping approach in `GetSeasonsWithMeetsAsync`. The subquery must stay between `p.*` and `e.*` in the SELECT column order — otherwise Dapper maps it to the wrong type.
+- `CountSchoolRecordsBrokenForSeasonAsync` now counts ALL performances at rank 1 for a season (not just those with the stale flag set), which is the correct behavior.
+
+**5. `MeetRepository.GetAllMeetsWithStatsAsync` SQL (Meet Index page SR counts):**
+Same correlated-subquery fix as `GetMeetsForSeasonAsync`:
+```sql
+(SELECT COUNT(*) FROM Performances p2 INNER JOIN Leaderboards lb ON lb.PerformanceId = p2.Id AND lb.Rank = 1 WHERE p2.MeetId = m.Id) AS SchoolRecordCount,
+```
+
+**Key files:**
+- `CloverleafTrack.DataAccess/Repositories/SeasonRepository.cs`
+- `CloverleafTrack.Services/SeasonService.cs`
+- `CloverleafTrack.DataAccess/Repositories/PerformanceRepository.cs`
+- `CloverleafTrack.DataAccess/Repositories/MeetRepository.cs` (both `GetMeetsForSeasonAsync` and `GetAllMeetsWithStatsAsync`)
+
+---
+
+### [C23] Full SchoolRecord Sweep — All Remaining Stale Flag Usages Eliminated
+
+**What changed:**
+A codebase-wide audit found the remaining places still using `p.SchoolRecord` (the DB flag) instead of `AllTimeRank == 1`. Every one was updated.
+
+**`AthleteService.cs`** — three locations:
+- `PersonalRecordViewModel.IsSchoolRecord`: was `p.RelayAthletes == null ? p.SchoolRecord : p.AllTimeRank == 1`; simplified to `p.AllTimeRank == 1` for both
+- `SeasonPerformanceViewModel.SchoolRecordCount`: `seasonGroup.Count(p => p.SchoolRecord)` → `seasonGroup.Count(p => p.AllTimeRank == 1)`
+- `IndividualPerformanceViewModel.IsSchoolRecord`: `p.SchoolRecord` → `p.AllTimeRank == 1`
+
+**`MeetService.cs`** — both event group builders (`AddEventGroupsForCategory` and `AddEventGroupsFromList`):
+- `MeetPerformanceViewModel.IsSchoolRecord`: `p.SchoolRecord` → `p.AllTimeRank == 1` (AllTimeRank already populated from `GetPerformancesForMeetAsync`)
+
+**`LeaderboardService.cs`** — both performance list projections:
+- `LeaderboardPerformanceViewModel.IsSchoolRecord`: `perf.SchoolRecord` → `perf.AllTimeRank == 1` (AllTimeRank already populated as `lb.Rank` from the leaderboard query's `LEFT JOIN Leaderboards`)
+
+**`HomeRepository.cs`** — `GetRecentTopPerformanceAsync`:
+- `recentSql`: replaced `p.SchoolRecord AS IsSchoolRecord` with Leaderboards subquery; updated `ORDER BY p.SchoolRecord DESC` to `ORDER BY CASE WHEN (SELECT MIN(lb.Rank) ...) = 1 THEN 0 ELSE 1 END`
+- `seasonBestSql`: replaced `p.SchoolRecord AS IsSchoolRecord` with `CAST(1 AS BIT)` (safe — this query already `INNER JOIN Leaderboards lb ... AND lb.Rank = 1`)
+
+**`AdminPerformanceRepository.cs`** — `GetAllWithDetailsAsync`:
+- Added `(SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) AS AllTimeRank` subquery (placed after `p.*`, before `a.*` for correct Dapper multi-mapping)
+
+**`Admin/Views/Performances/Index.cshtml`**:
+- `@if (perf.SchoolRecord)` → `@if (perf.AllTimeRank == 1)`
+
+**Why:**
+The `SchoolRecord` DB flag had been trusted in ~10 places across services, repositories, and a Razor view. Each one was either showing 0 SRs or displaying SR badges for performances that no longer hold the record. The universal fix is `AllTimeRank == 1` — this reads directly from the `Leaderboards` table which is always rebuilt fresh by `sp_RebuildLeaderboards`.
+
+**Watch out:**
+- `p.SchoolRecord` (the DB column) still exists on the `Performance` model and is still written by `sp_RebuildLeaderboards` for individual rows. It should be treated as a DB-level implementation detail only — never read in application code.
+- `Performance.AllTimeRank` is a C# property only (`int?`), not a DB column. It is `null` unless the query explicitly includes a Leaderboards subquery or join. Any new query that needs `IsSchoolRecord` must add the subquery — do not assume it will be populated by `p.*`.
+- The Dapper multi-mapping rule: when adding the AllTimeRank subquery to a multi-type SELECT, it must sit after `p.*` and before the next model's `Id` split column, otherwise Dapper assigns it to the wrong type.
+
+**Key files:**
+- `CloverleafTrack.Services/AthleteService.cs`
+- `CloverleafTrack.Services/MeetService.cs`
+- `CloverleafTrack.Services/LeaderboardService.cs`
+- `CloverleafTrack.DataAccess/Repositories/HomeRepository.cs`
+- `CloverleafTrack.DataAccess/Repositories/AdminPerformanceRepository.cs`
+- `CloverleafTrack.Web/Areas/Admin/Views/Performances/Index.cshtml`
 
 ---
