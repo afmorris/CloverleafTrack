@@ -184,7 +184,7 @@ public class MeetService(IMeetRepository meetRepository) : IMeetService
                     AthleteName = p.AthleteName,
                     Performance = FormatPerformance(p.TimeSeconds, p.DistanceInches),
                     IsPersonalBest = p.PersonalBest,
-                    IsSchoolRecord = p.SchoolRecord,
+                    IsSchoolRecord = p.AllTimeRank == 1,
                     IsSeasonBest = p.SeasonBest,
                     AllTimeRank = p.AllTimeRank
                 }).ToList()
@@ -212,7 +212,7 @@ public class MeetService(IMeetRepository meetRepository) : IMeetService
                     AthleteName = p.AthleteName,
                     Performance = FormatPerformance(p.TimeSeconds, p.DistanceInches),
                     IsPersonalBest = p.PersonalBest,
-                    IsSchoolRecord = p.SchoolRecord,
+                    IsSchoolRecord = p.AllTimeRank == 1,
                     IsSeasonBest = p.SeasonBest,
                     AllTimeRank = p.AllTimeRank
                 }).ToList()

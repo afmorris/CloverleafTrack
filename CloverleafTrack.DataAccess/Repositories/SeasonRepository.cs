@@ -19,10 +19,11 @@ public class SeasonRepository(IDbConnectionFactory connectionFactory) : ISeasonR
         using var connection = connectionFactory.CreateConnection();
 
         const string sql = """
-                           SELECT 
-                               s.*, 
-                               m.*, 
-                               p.*, 
+                           SELECT
+                               s.*,
+                               m.*,
+                               p.*,
+                               (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) AS AllTimeRank,
                                e.*,
                                a.*
                            FROM Seasons s

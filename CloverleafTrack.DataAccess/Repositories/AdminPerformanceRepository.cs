@@ -42,8 +42,9 @@ public class AdminPerformanceRepository(IDbConnectionFactory connectionFactory) 
         
         // First get all performances with their basic details
         const string sql = @"
-            SELECT 
+            SELECT
                 p.*,
+                (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) AS AllTimeRank,
                 a.*,
                 e.*,
                 m.*,
