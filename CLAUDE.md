@@ -218,6 +218,12 @@ Dtos are used for complex query results that span multiple tables and don't map 
 
 `LeaderboardService.GetLeaderboardAsync` splits performances into Boys/Girls/Mixed × Outdoor/Indoor, producing six category lists on `LeaderboardViewModel`.
 
+`LeaderboardService.GetLeaderboardDetailsAsync` fetches all performances for an event, then computes the school record progression entirely in C# (no extra SQL query):
+1. Sort all performances chronologically (same-day ties broken by best mark first)
+2. Walk through tracking the running best — each new best is a record-setting moment
+3. Collect into `SchoolRecordProgression`, sorted best-first for display (distance desc / time asc)
+4. Track record-setting `PerformanceId`s in a `HashSet<int>` to set `WasRecordAtTime` on each row in `AllPerformances` and `PersonalRecordsOnly`
+
 `AthleteService.GetAthleteDetailsAsync`:
 - **Personal Records table**: individual PRs use `PersonalBest = true` flag; relay PRs use best-per-event (min time / max distance) regardless of flag
 - **Hero TotalPRs**: individual performances only (`PersonalBest = true && RelayAthletes == null`)
@@ -294,6 +300,33 @@ class IndividualPerformanceViewModel {
 - `BoysOutdoorCategories`, `BoysIndoorCategories`
 - `GirlsOutdoorCategories`, `GirlsIndoorCategories`
 - `MixedOutdoorCategories`, `MixedIndoorCategories`
+
+`LeaderboardDetailsViewModel` (event detail page) key fields:
+```csharp
+bool IsFieldEvent;                                  // drives Y-axis direction and improvement formatting
+bool IsRelayEvent;
+List<LeaderboardPerformanceViewModel> AllPerformances;
+List<LeaderboardPerformanceViewModel> PersonalRecordsOnly;
+List<SchoolRecordMomentViewModel> SchoolRecordProgression; // sorted best-first; empty for relay events with no data
+```
+
+`LeaderboardPerformanceViewModel` key fields:
+```csharp
+bool IsSchoolRecord;     // AllTimeRank == 1 — is the current all-time school record
+bool WasRecordAtTime;    // was the school record at the moment it was performed (may no longer be #1)
+```
+
+`SchoolRecordMomentViewModel` — one entry in the record progression:
+```csharp
+string AthleteName, AthleteSlug;
+int? GraduationYear;
+string Performance;          // formatted display string
+double RawValue;             // TimeSeconds or DistanceInches — for Chart.js data arrays
+string MeetName, MeetSlug;
+DateTime MeetDate;
+string? ImprovementFormatted; // "+2' 6.25\"" or "-0.43s" delta from previous record; null for first record
+bool IsCurrentRecord;         // true only for the last (best) entry
+```
 
 ---
 

@@ -12,9 +12,14 @@ public class LeaderboardDetailsViewModel
     public Gender Gender { get; set; }
     public Environment Environment { get; set; }
     
+    public bool IsFieldEvent { get; set; }
+
     // All performances for this event
     public List<LeaderboardPerformanceViewModel> AllPerformances { get; set; } = new();
-    
+
     // Only PRs (best performance per athlete)
     public List<LeaderboardPerformanceViewModel> PersonalRecordsOnly { get; set; } = new();
+
+    // School record progression over time, sorted best-first (distance desc / time asc)
+    public List<SchoolRecordMomentViewModel> SchoolRecordProgression { get; set; } = new();
 }

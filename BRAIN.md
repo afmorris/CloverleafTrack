@@ -774,3 +774,65 @@ The `SchoolRecord` DB flag had been trusted in ~10 places across services, repos
 - `CloverleafTrack.Web/Areas/Admin/Views/Performances/Index.cshtml`
 
 ---
+
+### [C24] Leaderboard Details — School Record Progression Timeline + Chart
+
+**What changed:**
+Added a "School Record History" section to the leaderboard event detail page (`/leaderboard/{eventKey}`). It shows every time the school record was broken, who broke it, the improvement over the previous record, and a step-line chart of the progression over time. Record-setting rows in the all-performances and PRs-only tables are highlighted with an amber left border and a dimmed SR badge.
+
+**New ViewModel: `SchoolRecordMomentViewModel`**
+One entry in the progression (athlete, formatted performance, raw numeric value for Chart.js, improvement delta as formatted string, `IsCurrentRecord` flag).
+
+**Updated ViewModels:**
+- `LeaderboardPerformanceViewModel` — added `WasRecordAtTime` (bool): was the school record at the moment it was performed, regardless of whether it still is now
+- `LeaderboardDetailsViewModel` — added `IsFieldEvent` (bool) and `SchoolRecordProgression` (List)
+
+**`LeaderboardService.GetLeaderboardDetailsAsync` — C# progression computation:**
+
+No new SQL query. Uses the performances already fetched by `GetAllPerformancesForEventAsync`:
+```csharp
+// 1. Sort chronologically (same-day ties: best mark first)
+var chronological = allPerformances
+    .OrderBy(p => p.MeetDate)
+    .ThenBy(p => isFieldEvent ? -(p.DistanceInches ?? 0) : (p.TimeSeconds ?? double.MaxValue))
+    .ToList();
+
+// 2. Walk and track running best
+double? runningBest = null;
+foreach (var perf in chronological)
+{
+    var value = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds;
+    var isNewRecord = runningBest == null ||
+                      (isFieldEvent ? value > runningBest : value < runningBest);
+    if (isNewRecord) { /* add to progression, record PerformanceId */ }
+    runningBest = value;
+}
+
+// 3. Sort for display: best-first (distance desc / time asc)
+// 4. Set WasRecordAtTime on AllPerformances and PersonalRecordsOnly via HashSet<int>
+```
+
+**`FormatImprovement(double delta, bool isField)` helper** — formats the delta between consecutive records:
+- Field: `"+2' 6.25\""` (feet+inches)
+- Running: `"-0.43s"` or `"-1:02.50"` for multi-minute events
+
+**`Details.cshtml` — UI:**
+- Collapsible card above the toggle buttons; collapsed by default
+- Left column: vertical timeline of record holders with green improvement badge, "Current SR" callout for the latest, "First recorded school record" for the oldest
+- Right column: Chart.js step-line chart, lazy-initialized on first open (`srChartBuilt` guard). Y-axis is reversed for running events (lower = better); normal for field events. Data passed via `data-*` attributes on the `<canvas>` to avoid CSP issues.
+- Both performance tables: amber `border-l-2 border-l-amber-500 bg-amber-500/5` on `WasRecordAtTime` rows. SR badge shown at full opacity for current record, dimmed for former records.
+
+**Watch out:**
+- The progression is computed from `GetAllPerformancesForEventAsync` which already fetches all performances ordered best-first. Re-sorting chronologically in C# is intentional — do not add a new SQL query.
+- `RawValue` on `SchoolRecordMomentViewModel` is `DistanceInches` for field events and `TimeSeconds` for running events. The Chart.js Y-axis `reverse: !isField` handles direction — do not negate values.
+- Same-day tie-breaking: if two performances happen on the same date, the better mark is processed first (it's the one that "set the record"). The worse mark on the same day is skipped since it can't be a new best.
+- The panel is collapsed by default. The chart is not initialized until first open (`srChartBuilt` flag). This mirrors the athlete progression chart lazy-init pattern (C15).
+
+**Key files:**
+- `CloverleafTrack.ViewModels/Leaderboard/SchoolRecordMomentViewModel.cs` (NEW)
+- `CloverleafTrack.ViewModels/Leaderboard/LeaderboardPerformanceViewModel.cs`
+- `CloverleafTrack.ViewModels/Leaderboard/LeaderboardDetailsViewModel.cs`
+- `CloverleafTrack.Services/LeaderboardService.cs`
+- `CloverleafTrack.Web/Views/Leaderboard/Details.cshtml`
+
+---
