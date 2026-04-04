@@ -125,9 +125,9 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 
 **Relay performances** set `AthleteId = null` on `Performance` and link athletes via `PerformanceAthletes` table. `SortedAthleteHash` is a nullable string on `Performance` (no NOT NULL constraint enforced at app layer).
 
-**Important caveat about relay flags:** The `PersonalBest` and `SchoolRecord` flags on relay `Performance` rows are **not reliably set** by the admin entry flow. Do not depend on them. Instead:
+**Important caveat about performance flags:** The `PersonalBest` and `SchoolRecord` flags on relay `Performance` rows are **not reliably set** by the admin entry flow. Additionally, `SchoolRecord` on **any** Performance row (individual or relay) is a snapshot — it is **not cleared** when a newer performance supersedes the record. `sp_RebuildLeaderboards` keeps the `Leaderboards` table current but does NOT retroactively clear old `SchoolRecord` flags. Do not depend on `p.SchoolRecord` to mean "is currently the school record." Instead:
 - Relay "PR" per event = best time (MIN TimeSeconds) or best distance (MAX DistanceInches) across all performances for that event
-- Relay "school record" per event = AllTimeRank == 1 on the Leaderboards table
+- School record (individual or relay) = AllTimeRank == 1 on the Leaderboards table
 
 **Field vs. running determination:**
 ```csharp
@@ -221,7 +221,7 @@ Dtos are used for complex query results that span multiple tables and don't map 
 `AthleteService.GetAthleteDetailsAsync`:
 - **Personal Records table**: individual PRs use `PersonalBest = true` flag; relay PRs use best-per-event (min time / max distance) regardless of flag
 - **Hero TotalPRs**: individual performances only (`PersonalBest = true && RelayAthletes == null`)
-- **Hero TotalSchoolRecords**: individual school records (DB flag) + relay events where `AllTimeRank == 1` (distinct by EventId)
+- **Hero TotalSchoolRecords**: all performances (individual and relay) where `AllTimeRank == 1`, distinct by EventId. Does NOT use the `SchoolRecord` DB flag — it is a stale snapshot.
 - **Season grouping**: ordered by `SeasonStartDate DESC` using the DTO field, not season name string
 
 ---
@@ -326,7 +326,7 @@ Field events show a distance input; running events show a time input.
 | `Leaderboards` | All-time rankings, rebuilt by `sp_RebuildLeaderboards` |
 | `RunningRelayEvents` | Separate table for running relay event definitions: Id (UNIQUEIDENTIFIER), Name, Gender (INT), SortOrder, Environment (INT), Deleted (BIT), DateCreated, DateUpdated, DateDeleted |
 
-`sp_RebuildLeaderboards` is a stored procedure that recalculates all leaderboard rankings. It is called after every performance insert, update, or delete. It does **not** filter by gender, so Mixed relay performances are ranked alongside Boys/Girls relay performances within their own event.
+`sp_RebuildLeaderboards` is a stored procedure that recalculates all leaderboard rankings and resets/recalculates `PersonalBest`, `SeasonBest`, and `SchoolRecord` flags on `Performances`. It is called after every performance insert, update, or delete. It does **not** filter by gender, so Mixed relay performances are ranked alongside Boys/Girls relay performances within their own event. `SchoolRecord` and `PersonalBest`/`SeasonBest` flags are only set for individual performances (`AthleteId IS NOT NULL`); relay rows keep these flags at 0 and use `AllTimeRank = 1` as the SR proxy instead.
 
 ---
 
@@ -415,4 +415,5 @@ See `docs/testing.md` for full test strategy and coverage details.
 - Always call `sp_RebuildLeaderboards` after any performance insert/update/delete.
 - Slugs are generated at runtime via `SlugHelper` — do not store them in the DB.
 - Do not rely on `PersonalBest` or `SchoolRecord` flags on relay performances — use best-per-event logic and `AllTimeRank == 1` respectively.
+- Do not use `p.SchoolRecord` to determine whether a performance is *currently* the school record — it is a stale snapshot and is not cleared when a newer record supersedes it. Always use `AllTimeRank = 1` from the Leaderboards table for current school record status.
 - Relay athlete name display: always join with ` / ` separator in inline contexts, never individual bullet spans.

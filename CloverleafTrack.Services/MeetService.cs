@@ -108,7 +108,7 @@ public class MeetService(IMeetRepository meetRepository) : IMeetService
             // Stats
             TotalPerformances = performances.Count,
             TotalPRs = performances.Count(p => p.PersonalBest),
-            TotalSchoolRecords = performances.Count(p => p.SchoolRecord),
+            TotalSchoolRecords = performances.Count(p => p.AllTimeRank == 1),
             UniqueAthletes = uniqueAthletes,  // Now includes relay athletes!
 
             // Boys events - using relay-aware ordering

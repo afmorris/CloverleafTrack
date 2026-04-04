@@ -29,13 +29,25 @@ public class AthleteRepository(IDbConnectionFactory connectionFactory) : IAthlet
         using var connection = connectionFactory.CreateConnection();
 
         var sql = @"
-SELECT 
+SELECT
     a.Id, a.FirstName, a.LastName, a.GraduationYear, a.Gender, a.IsActive,
-    e.Id AS EventId, e.Id, e.Name, e.EventCategory, e.Environment, e.SortOrder,
+    e.Id AS EventId, e.Id, e.Name, e.EventCategory, e.EventType, e.Environment, e.SortOrder,
     p.Id AS PerformanceId, p.Id, p.DistanceInches, p.TimeSeconds
 FROM Athletes a
 INNER JOIN Performances p ON p.AthleteId = a.Id
 INNER JOIN Events e ON e.Id = p.EventId
+
+UNION ALL
+
+SELECT
+    a.Id, a.FirstName, a.LastName, a.GraduationYear, a.Gender, a.IsActive,
+    e.Id AS EventId, e.Id, e.Name, e.EventCategory, e.EventType, e.Environment, e.SortOrder,
+    p.Id AS PerformanceId, p.Id, p.DistanceInches, p.TimeSeconds
+FROM Athletes a
+INNER JOIN PerformanceAthletes pa ON pa.AthleteId = a.Id
+INNER JOIN Performances p ON p.Id = pa.PerformanceId AND p.AthleteId IS NULL
+INNER JOIN Events e ON e.Id = p.EventId
+
 ORDER BY a.LastName, a.FirstName;
 ";
         
