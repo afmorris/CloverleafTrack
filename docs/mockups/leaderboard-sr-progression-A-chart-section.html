@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup A — SR Progression Chart Section Above Table</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+  body { background: #111318; color: #e5e7eb; font-family: ui-sans-serif, system-ui, sans-serif; }
+  .card { background: #1a1d27; border: 1px solid #2a2d3a; border-radius: 0.5rem; }
+  .section-gradient { background: linear-gradient(to right, #d97706, #f59e0b); }
+  .sr-badge { background: rgba(245,158,11,0.15); color: #f59e0b; font-size: 0.65rem; font-weight: 800; padding: 2px 7px; border-radius: 9999px; border: 1px solid rgba(245,158,11,0.3); letter-spacing: 0.05em; }
+  .toggle-btn { padding: 0.4rem 1rem; border-radius: 0.375rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 1px solid #2a2d3a; }
+  .toggle-btn.active { background: linear-gradient(to right, #d97706, #f59e0b); color: #000; border-color: transparent; }
+  .toggle-btn:not(.active) { background: #1f2333; color: #9ca3af; }
+  .table-row { display: grid; grid-template-columns: 3rem 1fr 4rem 7rem 1fr 6rem; align-items: center; padding: 0.55rem 1rem; gap: 1rem; border-top: 1px solid #1f2333; font-size: 0.85rem; }
+  .table-header { display: grid; grid-template-columns: 3rem 1fr 4rem 7rem 1fr 6rem; padding: 0.5rem 1rem; gap: 1rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #6b7280; }
+  .rank-1 { color: #f59e0b; font-weight: 800; font-size: 1.1rem; }
+  .rank-2 { color: #9ca3af; font-weight: 700; }
+  .rank-3 { color: #cd7c3a; font-weight: 700; }
+  .mark { font-weight: 700; color: #f3f4f6; font-variant-numeric: tabular-nums; }
+  .athlete-link { color: #60a5fa; text-decoration: none; }
+  .athlete-link:hover { text-decoration: underline; }
+  .meet-link { color: #60a5fa; text-decoration: none; font-size: 0.8rem; }
+  .meet-link:hover { text-decoration: underline; }
+  .date-cell { color: #6b7280; font-size: 0.78rem; }
+  .class-cell { color: #9ca3af; font-size: 0.8rem; }
+  .record-dot { width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; display: inline-block; margin-right: 4px; vertical-align: middle; }
+</style>
+</head>
+<body class="p-8 max-w-5xl mx-auto">
+
+  <div class="mb-6">
+    <p class="text-xs text-amber-400 font-semibold uppercase tracking-wide mb-2">Mockup A — Concept</p>
+    <h1 class="text-xl font-bold text-white mb-1">SR Progression: Collapsible Chart Section Above the Table</h1>
+    <p class="text-sm text-gray-400 mb-1">A "School Record History" card sits between the toggle buttons and the performance table. It contains a step-line chart showing every time the record was broken, with the record-holder's name annotated at each step. Collapsed by default — one click to expand. The table below is unchanged.</p>
+  </div>
+
+  <!-- Page Header (as-is) -->
+  <div class="mb-5">
+    <a href="#" class="text-sm text-gray-500 hover:text-gray-300 mb-2 block">← Back to Leaderboard</a>
+    <h2 class="text-3xl font-bold text-white">Outdoor Shot Put</h2>
+    <p class="text-gray-400 text-sm mt-1">Boys Outdoor All-Time Rankings</p>
+  </div>
+
+  <!-- Toggle Buttons (as-is) -->
+  <div class="flex gap-3 mb-5">
+    <button class="toggle-btn active">All Performances (634)</button>
+    <button class="toggle-btn">PRs Only (91)</button>
+  </div>
+
+  <!-- NEW: School Record History Card -->
+  <div class="card mb-5 overflow-hidden">
+    <button id="sr-toggle" onclick="toggleSRSection()" class="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-white/5 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="h-4 w-1 rounded-full section-gradient"></div>
+        <span class="font-semibold text-sm text-white">School Record History</span>
+        <span class="sr-badge">SR</span>
+        <span class="text-xs text-gray-500">— 8 records broken since 1993</span>
+      </div>
+      <svg id="sr-chevron" class="w-4 h-4 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </button>
+
+    <div id="sr-section" class="hidden border-t border-white/5">
+      <!-- Stats row -->
+      <div class="flex gap-6 px-5 py-3 border-b border-white/5">
+        <div>
+          <div class="text-xs text-gray-500 uppercase tracking-wide mb-0.5">Current Record</div>
+          <div class="text-lg font-bold text-white">57' 3.75"</div>
+          <div class="text-xs text-gray-400">Joel Belding · Jun 2004</div>
+        </div>
+        <div class="w-px bg-white/10"></div>
+        <div>
+          <div class="text-xs text-gray-500 uppercase tracking-wide mb-0.5">First Record</div>
+          <div class="text-lg font-bold text-white">42' 1"</div>
+          <div class="text-xs text-gray-400">Tom Harlan · Apr 1991</div>
+        </div>
+        <div class="w-px bg-white/10"></div>
+        <div>
+          <div class="text-xs text-gray-500 uppercase tracking-wide mb-0.5">Total Improvement</div>
+          <div class="text-lg font-bold text-green-400">+15' 2.75"</div>
+          <div class="text-xs text-gray-400">over 13 years</div>
+        </div>
+        <div class="w-px bg-white/10"></div>
+        <div>
+          <div class="text-xs text-gray-500 uppercase tracking-wide mb-0.5">Times Broken</div>
+          <div class="text-lg font-bold text-white">8</div>
+          <div class="text-xs text-gray-400">by 4 athletes</div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="px-5 py-4" style="height:220px; position:relative;">
+        <canvas id="srChart"></canvas>
+      </div>
+
+      <!-- Record-setting performances mini-list -->
+      <div class="border-t border-white/5 px-5 pb-4">
+        <p class="text-xs text-gray-500 uppercase tracking-wide font-bold mt-3 mb-2">Record-Setting Performances</p>
+        <div class="grid gap-1">
+          <div class="flex items-center gap-3 text-xs py-1.5 border-b border-white/5">
+            <span class="text-amber-400 font-bold w-14 tabular-nums">57' 3.75"</span>
+            <span class="text-gray-300 w-28">Joel Belding</span>
+            <span class="text-gray-500 w-10">'04</span>
+            <span class="text-blue-400 flex-1">2004 OHSAA Division I State Track and Field Championships</span>
+            <span class="text-gray-500 w-20 text-right">Jun 6, 2004</span>
+            <span class="sr-badge">SR</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs py-1.5 border-b border-white/5">
+            <span class="text-gray-300 font-bold w-14 tabular-nums">57' 3.25"</span>
+            <span class="text-gray-300 w-28">Cory Carlson</span>
+            <span class="text-gray-500 w-10">'93</span>
+            <span class="text-blue-400 flex-1">1993 OHSAA Division I State Track and Field Championships</span>
+            <span class="text-gray-500 w-20 text-right">Jun 5, 1993</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs py-1.5 border-b border-white/5">
+            <span class="text-gray-300 font-bold w-14 tabular-nums">54' 9"</span>
+            <span class="text-gray-300 w-28">Cory Carlson</span>
+            <span class="text-gray-500 w-10">'93</span>
+            <span class="text-blue-400 flex-1">1992 OHSAA District Track Meet</span>
+            <span class="text-gray-500 w-20 text-right">May 21, 1992</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs py-1.5 border-b border-white/5">
+            <span class="text-gray-300 font-bold w-14 tabular-nums">51' 6"</span>
+            <span class="text-gray-300 w-28">Mike Danner</span>
+            <span class="text-gray-500 w-10">'89</span>
+            <span class="text-blue-400 flex-1">1988 Suburban League Championships</span>
+            <span class="text-gray-500 w-20 text-right">May 14, 1988</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs py-1.5">
+            <span class="text-gray-300 font-bold w-14 tabular-nums">42' 1"</span>
+            <span class="text-gray-300 w-28">Tom Harlan</span>
+            <span class="text-gray-500 w-10">'92</span>
+            <span class="text-blue-400 flex-1">1991 Spring Invitational</span>
+            <span class="text-gray-500 w-20 text-right">Apr 12, 1991</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Existing Table (unchanged) -->
+  <div class="card overflow-hidden">
+    <div class="table-header">
+      <span>Rank</span>
+      <span>Athlete</span>
+      <span>Class</span>
+      <span>Mark</span>
+      <span>Meet</span>
+      <span class="text-right">Date</span>
+    </div>
+
+    <div class="table-row">
+      <span class="rank-1">1</span>
+      <a href="#" class="athlete-link font-medium">Joel Belding</a>
+      <span class="class-cell">'04</span>
+      <span class="mark">57' 3.75" <span class="sr-badge ml-1">SR</span></span>
+      <a href="#" class="meet-link">2004 OHSAA Division I State Championships</a>
+      <span class="date-cell text-right">Jun 6, 2004</span>
+    </div>
+    <div class="table-row">
+      <span class="rank-2">2</span>
+      <a href="#" class="athlete-link font-medium">Cory Carlson</a>
+      <span class="class-cell">'93</span>
+      <span class="mark">57' 3.25"</span>
+      <a href="#" class="meet-link">1993 OHSAA Division I State Championships</a>
+      <span class="date-cell text-right">Jun 5, 1993</span>
+    </div>
+    <div class="table-row">
+      <span class="rank-3">3</span>
+      <a href="#" class="athlete-link font-medium">Joel Belding</a>
+      <span class="class-cell">'04</span>
+      <span class="mark">56' 11.25"</span>
+      <a href="#" class="meet-link">2004 Division I Regional Track Meet</a>
+      <span class="date-cell text-right">May 27, 2004</span>
+    </div>
+    <div class="table-row">
+      <span class="text-gray-400 font-bold">4</span>
+      <a href="#" class="athlete-link font-medium">Joel Belding</a>
+      <span class="class-cell">'04</span>
+      <span class="mark">55' 0.5"</span>
+      <a href="#" class="meet-link">2004 Division I District Track Meet</a>
+      <span class="date-cell text-right">May 20, 2004</span>
+    </div>
+    <div class="table-row">
+      <span class="text-gray-400 font-bold">5</span>
+      <a href="#" class="athlete-link font-medium">Kyle Juszczyk</a>
+      <span class="class-cell">'09</span>
+      <span class="mark">54' 7.5"</span>
+      <a href="#" class="meet-link">2009 Amherst Comet Relays</a>
+      <span class="date-cell text-right">Apr 25, 2009</span>
+    </div>
+    <div class="table-row text-gray-500">
+      <span>···</span>
+      <span colspan="5" class="text-xs">629 more performances</span>
+    </div>
+  </div>
+
+<script>
+  // Toggle SR section
+  function toggleSRSection() {
+    const section = document.getElementById('sr-section');
+    const chevron = document.getElementById('sr-chevron');
+    const isHidden = section.classList.contains('hidden');
+    section.classList.toggle('hidden');
+    chevron.style.transform = isHidden ? 'rotate(180deg)' : '';
+    if (isHidden) buildChart();
+  }
+
+  let chartBuilt = false;
+  function buildChart() {
+    if (chartBuilt) return;
+    chartBuilt = true;
+
+    // Record-setting moments (chronological)
+    const records = [
+      { date: '1991-04-12', mark: 505,   label: "Tom Harlan\n42' 1\"",    formatted: "42' 1\""    },
+      { date: '1988-05-14', mark: 618,   label: "Mike Danner\n51' 6\"",   formatted: "51' 6\""    },
+      { date: '1992-05-21', mark: 657,   label: "Cory Carlson\n54' 9\"",  formatted: "54' 9\""    },
+      { date: '1993-06-05', mark: 687.25,label: "Cory Carlson\n57' 3.25\"",formatted: "57' 3.25\""},
+      { date: '2004-06-06', mark: 687.75,label: "Joel Belding\n57' 3.75\"",formatted: "57' 3.75\""},
+    ];
+
+    // Sort chronologically
+    records.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // Build step-line: each record extends to the next record's date, then jumps
+    const labels = records.map(r => new Date(r.date).getFullYear());
+    const values = records.map(r => r.mark);
+    const formatted = records.map(r => r.formatted);
+    const athletes = records.map(r => r.label.split('\n')[0]);
+
+    // Format inches → feet'inches"
+    function fmtInches(v) {
+      const ft = Math.floor(v / 12);
+      const inch = (v % 12).toFixed(2).replace(/\.?0+$/, '');
+      return `${ft}' ${inch}"`;
+    }
+
+    const ctx = document.getElementById('srChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values,
+          borderColor: '#f59e0b',
+          backgroundColor: 'rgba(245,158,11,0.08)',
+          borderWidth: 2.5,
+          stepped: 'before',
+          fill: true,
+          pointBackgroundColor: '#f59e0b',
+          pointBorderColor: '#111318',
+          pointBorderWidth: 2,
+          pointRadius: 6,
+          pointHoverRadius: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: (items) => athletes[items[0].dataIndex],
+              label: (item) => '  ' + fmtInches(item.raw),
+              afterLabel: (item) => '  ' + labels[item.dataIndex],
+            },
+            backgroundColor: '#1a1d27',
+            borderColor: '#2a2d3a',
+            borderWidth: 1,
+            titleColor: '#f3f4f6',
+            bodyColor: '#9ca3af',
+          },
+          annotation: {
+            annotations: records.map((r, i) => ({
+              type: 'label',
+              xValue: i,
+              yValue: r.mark,
+              content: athletes[i].split(' ')[1] || athletes[i],
+              color: '#9ca3af',
+              font: { size: 10 },
+              yAdjust: -18,
+            }))
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: '#1f2333' },
+            ticks: { color: '#6b7280', font: { size: 11 } },
+          },
+          y: {
+            grid: { color: '#1f2333' },
+            ticks: {
+              color: '#6b7280',
+              font: { size: 11 },
+              callback: (v) => fmtInches(v),
+            },
+            min: 460,
+          }
+        }
+      }
+    });
+  }
+</script>
+</body>
+</html>
