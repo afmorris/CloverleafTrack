@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup B — Career Progression Charts Section</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+  body { background: #111318; color: #e5e7eb; font-family: ui-sans-serif, system-ui, sans-serif; }
+  .card { background: #1a1d27; border: 1px solid #2a2d3a; border-radius: 0.5rem; }
+  .event-tab { padding: 0.4rem 0.9rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.15s; border: 1px solid #2a2d3a; color: #9ca3af; }
+  .event-tab.active { background: #22c55e; color: #fff; border-color: #22c55e; }
+  .event-tab:hover:not(.active) { background: #1f2333; color: #e5e7eb; }
+  .stat-pill { background: #1f2333; border: 1px solid #2a2d3a; border-radius: 0.375rem; padding: 0.5rem 0.75rem; }
+  .season-divider-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; color: #6b7280; text-transform: uppercase; }
+</style>
+</head>
+<body class="p-8 max-w-4xl mx-auto">
+
+  <div class="mb-6">
+    <p class="text-xs text-amber-400 font-semibold uppercase tracking-wide mb-2">Mockup B — Concept</p>
+    <h1 class="text-xl font-bold text-white mb-1">Career Progression — Dedicated New Section</h1>
+    <p class="text-sm text-gray-400">A new section below "Performance by Season". One chart per event covering the athlete's full career. Event tabs let you switch between events. Season boundaries are marked on the x-axis. The PR line shows the school record context.</p>
+  </div>
+
+  <!-- The new "Career Progression" section -->
+  <div class="card overflow-hidden">
+
+    <!-- Section heading -->
+    <div class="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+      <h2 class="font-bold text-white text-base">Career Progression</h2>
+      <span class="text-xs text-gray-500">All performances · all seasons</span>
+    </div>
+
+    <!-- Event tabs -->
+    <div class="px-5 py-3 border-b border-gray-800 flex flex-wrap gap-2">
+      <button class="event-tab active" onclick="showChart('shotput', this)">Shot Put</button>
+      <button class="event-tab" onclick="showChart('discus', this)">Discus</button>
+    </div>
+
+    <!-- Chart panel — Shot Put -->
+    <div id="panel-shotput" class="p-5">
+
+      <!-- Summary stats row -->
+      <div class="grid grid-cols-4 gap-3 mb-5">
+        <div class="stat-pill">
+          <div class="text-xs text-gray-500 mb-0.5">Career PR</div>
+          <div class="font-bold text-white">37' 5"</div>
+          <div class="text-xs text-gray-500">Apr 15, 2025</div>
+        </div>
+        <div class="stat-pill">
+          <div class="text-xs text-gray-500 mb-0.5">Competitions</div>
+          <div class="font-bold text-white">5</div>
+          <div class="text-xs text-gray-500">1 season</div>
+        </div>
+        <div class="stat-pill">
+          <div class="text-xs text-gray-500 mb-0.5">Career improvement</div>
+          <div class="font-bold text-green-400">+2' 3"</div>
+          <div class="text-xs text-gray-500">first → PR</div>
+        </div>
+        <div class="stat-pill">
+          <div class="text-xs text-gray-500 mb-0.5">All-time rank</div>
+          <div class="font-bold text-amber-400">#8</div>
+          <div class="text-xs text-gray-500">outdoor</div>
+        </div>
+      </div>
+
+      <!-- The chart -->
+      <div style="position:relative; height:260px;">
+        <canvas id="chartB-shotput"></canvas>
+      </div>
+
+      <!-- Legend -->
+      <div class="flex items-center gap-5 mt-3 text-xs text-gray-500">
+        <div class="flex items-center gap-1.5">
+          <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+          <span>Performance</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
+          <span>PR at time of competition</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <div class="w-3 h-0.5 bg-dashed" style="border-top: 2px dashed #22c55e;"></div>
+          <span>Career PR line</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Chart panel — Discus (hidden) -->
+    <div id="panel-discus" class="p-5 hidden">
+      <div class="grid grid-cols-4 gap-3 mb-5">
+        <div class="stat-pill">
+          <div class="text-xs text-gray-500 mb-0.5">Career PR</div>
+          <div class="font-bold text-white">118' 3"</div>
+          <div class="text-xs text-gray-500">May 12, 2025</div>
+        </div>
+        <div class="stat-pill">
+          <div class="text-xs text-gray-500 mb-0.5">Competitions</div>
+          <div class="font-bold text-white">6</div>
+          <div class="text-xs text-gray-500">1 season</div>
+        </div>
+        <div class="stat-pill">
+          <div class="text-xs text-gray-500 mb-0.5">Career improvement</div>
+          <div class="font-bold text-green-400">+20' 1"</div>
+          <div class="text-xs text-gray-500">first → PR</div>
+        </div>
+        <div class="stat-pill">
+          <div class="text-xs text-gray-500 mb-0.5">All-time rank</div>
+          <div class="font-bold text-amber-400">#5</div>
+          <div class="text-xs text-gray-500">outdoor</div>
+        </div>
+      </div>
+      <div style="position:relative; height:260px;">
+        <canvas id="chartB-discus"></canvas>
+      </div>
+      <div class="flex items-center gap-5 mt-3 text-xs text-gray-500">
+        <div class="flex items-center gap-1.5">
+          <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+          <span>Performance</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
+          <span>PR at time of competition</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mt-8 p-4 rounded border border-gray-700 bg-gray-900/40 text-sm text-gray-400 space-y-1">
+    <p class="font-semibold text-gray-300">Design notes — Mockup B</p>
+    <ul class="list-disc list-inside space-y-1 mt-2">
+      <li>Self-contained section — doesn't touch any existing UI</li>
+      <li>Tabs make it easy to navigate multi-event athletes</li>
+      <li>Summary stats (competitions, improvement, rank) tell the story without reading the chart</li>
+      <li>The "PR at time" orange dots show the progression of PRs even in a losing performance</li>
+      <li>Most valuable when athlete has 2+ seasons — single-season athletes see same data as Mockup A</li>
+      <li>Downside: a separate section means scrolling past the existing performance tables</li>
+    </ul>
+  </div>
+
+<script>
+function showChart(id, btn) {
+  document.querySelectorAll('[id^="panel-"]').forEach(p => p.classList.add('hidden'));
+  document.querySelectorAll('.event-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.remove('hidden');
+  btn.classList.add('active');
+}
+
+const baseChartOpts = (yFormatter, prLine) => ({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    annotation: {
+      annotations: {
+        prLine: {
+          type: 'line',
+          yMin: prLine,
+          yMax: prLine,
+          borderColor: 'rgba(34,197,94,0.5)',
+          borderWidth: 1.5,
+          borderDash: [6, 3],
+          label: {
+            display: true,
+            content: 'Career PR',
+            position: 'end',
+            font: { size: 10 },
+            color: '#22c55e',
+            backgroundColor: 'transparent',
+            yAdjust: -8,
+          }
+        }
+      }
+    },
+    tooltip: {
+      backgroundColor: '#1f2333',
+      borderColor: '#2a2d3a',
+      borderWidth: 1,
+      callbacks: {
+        label: ctx => ` ${yFormatter(ctx.raw)}`
+      }
+    }
+  },
+  scales: {
+    x: {
+      grid: { color: 'rgba(255,255,255,0.04)' },
+      ticks: { color: '#6b7280', font: { size: 10 }, maxRotation: 30 },
+    },
+    y: {
+      grid: { color: 'rgba(255,255,255,0.04)' },
+      ticks: {
+        color: '#6b7280',
+        font: { size: 10 },
+        callback: yFormatter
+      }
+    }
+  }
+});
+
+const fmtDist = inches => {
+  const ft = Math.floor(inches / 12);
+  const inch = (inches % 12).toFixed(0);
+  return `${ft}'${inch}"`;
+};
+
+// Shot Put data — all marks chronological, mark PR dots separately
+const spLabels = ['Apr 15\n2025','Apr 22','Apr 29','May 5','May 6'];
+const spMarks  = [449, 438, 417.5, 427, 447];
+// Running PR at each point: 449, 449, 449, 449, 449 (PR was set first)
+const spRunPR  = [449, 449, 449, 449, 449];
+
+new Chart(document.getElementById('chartB-shotput'), {
+  type: 'line',
+  data: {
+    labels: ['Apr 15, 2025','Apr 22','Apr 29','May 5','May 6'],
+    datasets: [
+      {
+        label: 'Mark',
+        data: spMarks,
+        borderColor: '#22c55e',
+        backgroundColor: 'rgba(34,197,94,0.08)',
+        pointBackgroundColor: spMarks.map((v,i) => v >= spRunPR[i] ? '#f59e0b' : '#22c55e'),
+        pointRadius: spMarks.map((v,i) => v >= spRunPR[i] ? 7 : 5),
+        pointHoverRadius: 8,
+        tension: 0.25,
+        fill: true,
+      }
+    ]
+  },
+  options: baseChartOpts(fmtDist, 449)
+});
+
+// Discus
+const dLabels = ['Apr 15, 2025','Apr 22','Apr 29','May 5','May 6','May 12'];
+const dMarks  = [1178, 1352, 1349, 1176, 1244, 1419];
+const dRunPR  = [1178, 1352, 1352, 1352, 1352, 1419];
+
+new Chart(document.getElementById('chartB-discus'), {
+  type: 'line',
+  data: {
+    labels: dLabels,
+    datasets: [
+      {
+        label: 'Mark',
+        data: dMarks,
+        borderColor: '#22c55e',
+        backgroundColor: 'rgba(34,197,94,0.08)',
+        pointBackgroundColor: dMarks.map((v,i) => v >= dRunPR[i] ? '#f59e0b' : '#22c55e'),
+        pointRadius: dMarks.map((v,i) => v >= dRunPR[i] ? 7 : 5),
+        pointHoverRadius: 8,
+        tension: 0.25,
+        fill: true,
+      }
+    ]
+  },
+  options: baseChartOpts(fmtDist, 1419)
+});
+</script>
+</body>
+</html>

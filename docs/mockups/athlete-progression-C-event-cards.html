@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup C — Event Summary Cards with Mini Charts</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  body { background: #111318; color: #e5e7eb; font-family: ui-sans-serif, system-ui, sans-serif; }
+  .card { background: #1a1d27; border: 1px solid #2a2d3a; border-radius: 0.5rem; }
+  .event-card { background: #1a1d27; border: 1px solid #2a2d3a; border-radius: 0.5rem; overflow: hidden; transition: border-color 0.15s; }
+  .event-card:hover { border-color: #22c55e44; }
+  .event-card-header { padding: 1rem 1rem 0.5rem; }
+  .event-name { font-weight: 700; font-size: 0.9rem; color: #f3f4f6; }
+  .event-pr { font-size: 1.5rem; font-weight: 800; color: #ffffff; line-height: 1.1; margin: 0.35rem 0 0.1rem; }
+  .event-pr-date { font-size: 0.7rem; color: #6b7280; }
+  .event-card-stats { display: flex; gap: 0.75rem; padding: 0 1rem 0.5rem; }
+  .mini-stat { font-size: 0.7rem; }
+  .mini-stat-label { color: #6b7280; }
+  .mini-stat-value { color: #d1d5db; font-weight: 600; }
+  .chart-area { padding: 0 0.5rem 0.5rem; }
+  .improvement-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 9999px; }
+  .improvement-up { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .improvement-flat { background: rgba(107,114,128,0.2); color: #9ca3af; }
+  .rank-badge { font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 9999px; background: rgba(245,158,11,0.15); color: #f59e0b; }
+  .section-header { background: linear-gradient(to right, #d97706, #f59e0b); }
+</style>
+</head>
+<body class="p-8 max-w-4xl mx-auto">
+
+  <div class="mb-6">
+    <p class="text-xs text-amber-400 font-semibold uppercase tracking-wide mb-2">Mockup C — Concept</p>
+    <h1 class="text-xl font-bold text-white mb-1">Event Summary Cards with Mini Charts</h1>
+    <p class="text-sm text-gray-400">A new grid of cards replaces or supplements the existing Personal Records table. Each card is one event: PR mark prominently displayed, improvement indicator, all-time rank badge, and a mini sparkline showing the career arc at a glance. Clicking a card could expand or link to a detailed chart view.</p>
+  </div>
+
+  <!-- Hero -->
+  <div class="card mb-5 p-5">
+    <div>
+      <h1 class="text-2xl font-extrabold text-white">Ethan Martin</h1>
+      <p class="text-gray-400 text-sm">Senior · Boys</p>
+    </div>
+    <div class="flex gap-8 mt-4">
+      <div>
+        <div class="text-2xl font-extrabold text-white">37' 5"</div>
+        <div class="text-xs text-gray-400">Shot Put PR</div>
+        <div class="text-xs text-amber-400 mt-0.5">☀ Outdoor</div>
+      </div>
+      <div>
+        <div class="text-2xl font-extrabold text-white">2</div>
+        <div class="text-xs text-gray-400">Total PRs</div>
+      </div>
+      <div>
+        <div class="text-2xl font-extrabold text-white">0</div>
+        <div class="text-xs text-gray-400">School Records</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Cards Grid — NEW SECTION -->
+  <div class="mb-2 flex items-center gap-3">
+    <div class="section-header rounded px-3 py-1.5 inline-flex items-center gap-2">
+      <span class="text-sm font-bold text-white">☀ OUTDOOR</span>
+    </div>
+    <span class="text-xs text-gray-500">Individual events</span>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+
+    <!-- Shot Put Card -->
+    <div class="event-card">
+      <div class="event-card-header">
+        <div class="flex items-center justify-between">
+          <span class="event-name">Shot Put</span>
+          <div class="flex items-center gap-1.5">
+            <span class="rank-badge">#8 all-time</span>
+            <span class="improvement-badge improvement-up">▲ +2' 3"</span>
+          </div>
+        </div>
+        <div class="event-pr">37' 5"</div>
+        <div class="event-pr-date">PR · Apr 15, 2025 · 2025 Woodridge Dual</div>
+      </div>
+      <div class="event-card-stats">
+        <div class="mini-stat">
+          <div class="mini-stat-label">Comps</div>
+          <div class="mini-stat-value">5</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-label">Season avg</div>
+          <div class="mini-stat-value">35' 9"</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-label">Best season</div>
+          <div class="mini-stat-value">2024-25</div>
+        </div>
+      </div>
+      <div class="chart-area">
+        <canvas id="card-shotput" height="80"></canvas>
+      </div>
+      <div class="px-3 pb-3 text-xs text-gray-600">Career · all performances</div>
+    </div>
+
+    <!-- Discus Card -->
+    <div class="event-card">
+      <div class="event-card-header">
+        <div class="flex items-center justify-between">
+          <span class="event-name">Discus</span>
+          <div class="flex items-center gap-1.5">
+            <span class="rank-badge">#5 all-time</span>
+            <span class="improvement-badge improvement-up">▲ +20' 1"</span>
+          </div>
+        </div>
+        <div class="event-pr">118' 3"</div>
+        <div class="event-pr-date">PR · May 12, 2025 · 2025 Stars of Track and Field</div>
+      </div>
+      <div class="event-card-stats">
+        <div class="mini-stat">
+          <div class="mini-stat-label">Comps</div>
+          <div class="mini-stat-value">6</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-label">Season avg</div>
+          <div class="mini-stat-value">107' 7"</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-label">Best season</div>
+          <div class="mini-stat-value">2024-25</div>
+        </div>
+      </div>
+      <div class="chart-area">
+        <canvas id="card-discus" height="80"></canvas>
+      </div>
+      <div class="px-3 pb-3 text-xs text-gray-600">Career · all performances</div>
+    </div>
+
+  </div>
+
+  <!-- Relay card — shows how it'd look for relay events -->
+  <div class="mb-2">
+    <span class="text-xs text-gray-500">Relay events</span>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+    <div class="event-card">
+      <div class="event-card-header">
+        <div class="flex items-center justify-between">
+          <span class="event-name">3-Person Discus Relay</span>
+          <span class="rank-badge">#1 all-time</span>
+        </div>
+        <div class="event-pr">301' 5"</div>
+        <div class="event-pr-date">Team best · Mar 28, 2026 · 2026 Cloverleaf Early Bird Relays</div>
+        <div class="text-xs text-gray-500 mt-1">Adam Gray / Ethan Martin / Jacob Atkinson</div>
+      </div>
+      <div class="event-card-stats">
+        <div class="mini-stat">
+          <div class="mini-stat-label">Team comps</div>
+          <div class="mini-stat-value">1</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-label">School record</div>
+          <div class="mini-stat-value text-amber-400">Yes ★</div>
+        </div>
+      </div>
+      <div class="px-3 pb-3 pt-1">
+        <div class="text-xs text-gray-600 italic">Relay event — chart available with 2+ competitions</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8 p-4 rounded border border-gray-700 bg-gray-900/40 text-sm text-gray-400 space-y-1">
+    <p class="font-semibold text-gray-300">Design notes — Mockup C</p>
+    <ul class="list-disc list-inside space-y-1 mt-2">
+      <li>Cards give an immediate visual summary — no need to read through a table</li>
+      <li>Improvement badge (<span class="text-green-400">▲ +2' 3"</span>) replaces the need to mentally compare first vs. best mark</li>
+      <li>All-time rank badge in the card header, not buried in a table column</li>
+      <li>Mini sparkline per card gives shape-of-career at a glance</li>
+      <li>Could replace the current PR table, or live alongside it (cards above, table below for detail)</li>
+      <li>Relay cards gracefully show "not enough data for chart" without breaking the layout</li>
+      <li>Downside: takes more vertical space than the current clean table layout</li>
+      <li>Downside: cards need thoughtful mobile layout (currently 2-col, could be 1-col on mobile)</li>
+    </ul>
+  </div>
+
+<script>
+const cardDefaults = (prIdx) => ({
+  type: 'bar',
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1f2333',
+        borderColor: '#2a2d3a',
+        borderWidth: 1,
+        callbacks: {
+          label: ctx => {
+            const inches = ctx.raw;
+            const ft = Math.floor(inches / 12);
+            const inch = (inches % 12).toFixed(0);
+            return ` ${ft}' ${inch}"`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: '#4b5563', font: { size: 9 } },
+      },
+      y: {
+        grid: { color: 'rgba(255,255,255,0.03)' },
+        ticks: {
+          color: '#4b5563',
+          font: { size: 9 },
+          callback: v => Math.floor(v/12) + "'",
+          maxTicksLimit: 4,
+        },
+      }
+    }
+  }
+});
+
+// Shot Put bars
+const spData = [449, 438, 417.5, 427, 447];
+const spPRIdx = 0; // April 15 was the PR
+
+new Chart(document.getElementById('card-shotput'), {
+  ...cardDefaults(spPRIdx),
+  data: {
+    labels: ['Apr 15','Apr 22','Apr 29','May 5','May 6'],
+    datasets: [{
+      data: spData,
+      backgroundColor: spData.map((v,i) => i === spPRIdx ? 'rgba(245,158,11,0.7)' : 'rgba(34,197,94,0.35)'),
+      borderColor: spData.map((v,i) => i === spPRIdx ? '#f59e0b' : '#22c55e'),
+      borderWidth: 1,
+      borderRadius: 2,
+    }]
+  }
+});
+
+// Discus bars
+const dData = [1178, 1352, 1349, 1176, 1244, 1419];
+const dPRIdx = 5; // May 12 was the PR
+
+new Chart(document.getElementById('card-discus'), {
+  ...cardDefaults(dPRIdx),
+  data: {
+    labels: ['Apr 15','Apr 22','Apr 29','May 5','May 6','May 12'],
+    datasets: [{
+      data: dData,
+      backgroundColor: dData.map((v,i) => i === dPRIdx ? 'rgba(245,158,11,0.7)' : 'rgba(34,197,94,0.35)'),
+      borderColor: dData.map((v,i) => i === dPRIdx ? '#f59e0b' : '#22c55e'),
+      borderWidth: 1,
+      borderRadius: 2,
+    }]
+  }
+});
+</script>
+</body>
+</html>

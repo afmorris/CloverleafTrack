@@ -449,19 +449,19 @@
                                     </div>
 
                                     @* Split layout for individual events: rows left, chart right *@
-                                    <div class="@(hasChart ? "flex gap-4 items-start" : "")">
+                                    <div class="@(hasChart ? "flex flex-wrap gap-4 items-start" : "")">
 
                                         @* Performance rows *@
-                                        <div class="@(hasChart ? "flex-1 min-w-0" : "") space-y-2">
+                                        <div class="@(hasChart ? "flex-1 min-w-0" : "") space-y-2"@(hasChart ? " style=\"min-width:260px\"" : "")>
                                             @foreach (var perf in eventGroup.Performances)
                                             {
                                                 <div class="p-3 rounded transition-colors @(perf.IsPersonalBest ? "bg-gradient-to-r from-green-50 to-transparent dark:from-green-900/40 dark:to-transparent border-l-4 border-green-500 hover:from-green-100 dark:hover:from-green-900/60" : "bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600")">
                                                     <div class="flex items-center gap-4">
                                                         <div class="font-mono font-bold w-24 text-gray-900 dark:text-gray-100">@perf.Performance</div>
                                                         <div class="text-sm text-gray-600 dark:text-gray-400 w-24">@perf.Date.ToString("MMM d")</div>
-                                                        <div class="text-sm flex-1 text-gray-900 dark:text-gray-100">
+                                                        <div class="text-sm flex-1 min-w-0 text-gray-900 dark:text-gray-100">
                                                             @{ var h = new SlugHelper(); var ms = h.GenerateSlug(perf.MeetName); }
-                                                            <a asp-controller="Meets" asp-action="Details" asp-route-slug="@ms" class="underline">@perf.MeetName</a>
+                                                            <a asp-controller="Meets" asp-action="Details" asp-route-slug="@ms" class="underline block truncate">@perf.MeetName</a>
                                                         </div>
                                                         <div class="flex gap-1">
                                                             @if (perf.IsSchoolRecord)

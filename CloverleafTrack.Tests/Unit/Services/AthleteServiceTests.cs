@@ -74,6 +74,133 @@ public class AthleteServiceTests
     }
 
     [Fact]
+    public async Task GetActiveAthletesGroupedByEventCategoryAsync_RunningRelayAppearsInSprints()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        mockRepo.Setup(r => r.GetAllWithPerformancesAsync())
+            .ReturnsAsync(new List<AthleteEventParticipation>
+            {
+                new()
+                {
+                    Athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 10, Name = "4x100m Relay", EventType = EventType.RunningRelay, EventCategory = EventCategory.Relays, SortOrder = 1 },
+                    Performance = new Performance { TimeSeconds = 51.2 }
+                }
+            });
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetActiveAthletesGroupedByEventCategoryAsync(2024);
+
+        result.Should().ContainKey(EventCategory.Sprints);
+        result.Should().NotContainKey(EventCategory.Relays);
+        result[EventCategory.Sprints].Should().ContainSingle(a => a.FullName == "Jane Doe");
+    }
+
+    [Fact]
+    public async Task GetActiveAthletesGroupedByEventCategoryAsync_DistanceRunningRelayAppearsInDistance()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        mockRepo.Setup(r => r.GetAllWithPerformancesAsync())
+            .ReturnsAsync(new List<AthleteEventParticipation>
+            {
+                new()
+                {
+                    Athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 11, Name = "Distance Medley Relay", EventType = EventType.RunningRelay, EventCategory = EventCategory.Relays, SortOrder = 1 },
+                    Performance = new Performance { TimeSeconds = 745.0 }
+                },
+                new()
+                {
+                    Athlete = new Athlete { Id = 2, FirstName = "Bob", LastName = "Jones", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 12, Name = "4x800m Relay", EventType = EventType.RunningRelay, EventCategory = EventCategory.Relays, SortOrder = 2 },
+                    Performance = new Performance { TimeSeconds = 520.0 }
+                }
+            });
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetActiveAthletesGroupedByEventCategoryAsync(2024);
+
+        result.Should().ContainKey(EventCategory.Distance);
+        result.Should().NotContainKey(EventCategory.Relays);
+        result[EventCategory.Distance].Should().HaveCount(2);
+    }
+
+    [Fact]
+    public async Task GetActiveAthletesGroupedByEventCategoryAsync_JumpRelayAppearsInJumps()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        mockRepo.Setup(r => r.GetAllWithPerformancesAsync())
+            .ReturnsAsync(new List<AthleteEventParticipation>
+            {
+                new()
+                {
+                    Athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 13, Name = "Long Jump Relay", EventType = EventType.JumpRelay, EventCategory = EventCategory.Relays, SortOrder = 1 },
+                    Performance = new Performance { DistanceInches = 192.0 }
+                }
+            });
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetActiveAthletesGroupedByEventCategoryAsync(2024);
+
+        result.Should().ContainKey(EventCategory.Jumps);
+        result.Should().NotContainKey(EventCategory.Relays);
+    }
+
+    [Fact]
+    public async Task GetActiveAthletesGroupedByEventCategoryAsync_ThrowsRelayAppearsInThrows()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        mockRepo.Setup(r => r.GetAllWithPerformancesAsync())
+            .ReturnsAsync(new List<AthleteEventParticipation>
+            {
+                new()
+                {
+                    Athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 14, Name = "Shot Put Relay", EventType = EventType.ThrowsRelay, EventCategory = EventCategory.Relays, SortOrder = 1 },
+                    Performance = new Performance { DistanceInches = 480.0 }
+                }
+            });
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetActiveAthletesGroupedByEventCategoryAsync(2024);
+
+        result.Should().ContainKey(EventCategory.Throws);
+        result.Should().NotContainKey(EventCategory.Relays);
+    }
+
+    [Fact]
+    public async Task GetActiveAthletesGroupedByEventCategoryAsync_RelayAndIndividualEventsMergeIntoSameCategory()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 };
+        mockRepo.Setup(r => r.GetAllWithPerformancesAsync())
+            .ReturnsAsync(new List<AthleteEventParticipation>
+            {
+                new()
+                {
+                    Athlete = athlete,
+                    Event = new Event { Id = 1, Name = "100m", EventType = EventType.Running, EventCategory = EventCategory.Sprints, SortOrder = 1 },
+                    Performance = new Performance { TimeSeconds = 12.1 }
+                },
+                new()
+                {
+                    Athlete = athlete,
+                    Event = new Event { Id = 10, Name = "4x100m Relay", EventType = EventType.RunningRelay, EventCategory = EventCategory.Relays, SortOrder = 10 },
+                    Performance = new Performance { TimeSeconds = 51.5 }
+                }
+            });
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetActiveAthletesGroupedByEventCategoryAsync(2024);
+
+        // Athlete appears exactly once in Sprints with both events listed
+        result.Should().ContainKey(EventCategory.Sprints);
+        result[EventCategory.Sprints].Should().ContainSingle(a => a.FullName == "Jane Doe");
+        result[EventCategory.Sprints].First().EventsInCategory.Should().HaveCount(2);
+    }
+
+    [Fact]
     public async Task GetFormerAthletesGroupedByGraduationYearAsync_OnlyReturnsInactiveAthletes()
     {
         var mockRepo = new Mock<IAthleteRepository>();
@@ -313,19 +440,19 @@ public class AthleteServiceTests
     }
 
     [Fact]
-    public async Task GetAthleteDetailsAsync_TotalSchoolRecords_IncludesRelayEventsWhereAllTimeRankIsOne()
+    public async Task GetAthleteDetailsAsync_TotalSchoolRecords_CountsAllEventsWhereAllTimeRankIsOne()
     {
         var mockRepo = new Mock<IAthleteRepository>();
         var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
         var performances = new List<AthletePerformanceDto>
         {
-            // Individual school record (reliable flag)
+            // Individual school record — AllTimeRank = 1 (SchoolRecord flag not relied upon)
             new() { EventId = 1, EventName = "100m", TimeSeconds = 11.5, PersonalBest = true,
-                    SchoolRecord = true,
+                    SchoolRecord = true, AllTimeRank = 1,
                     MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
                     SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
                     Environment = Environment.Outdoor, RelayAthletes = null },
-            // Relay at #1 all-time — SchoolRecord flag = false (unreliable) but AllTimeRank = 1
+            // Relay school record — SchoolRecord flag = false (unreliable) but AllTimeRank = 1
             new() { EventId = 10, EventName = "4x400m Relay", TimeSeconds = 200.0, PersonalBest = false,
                     SchoolRecord = false, AllTimeRank = 1,
                     MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
@@ -338,7 +465,7 @@ public class AthleteServiceTests
         var service = new AthleteService(mockRepo.Object);
         var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
 
-        result!.TotalSchoolRecords.Should().Be(2); // 1 individual SR + 1 relay event at rank 1
+        result!.TotalSchoolRecords.Should().Be(2); // 1 individual + 1 relay, both AllTimeRank = 1
     }
 
     [Fact]

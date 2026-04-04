@@ -46,15 +46,15 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                                m.Name AS MeetName,
                                m.Environment AS MeetEnvironment,
                                m.Date,
-                               p.SchoolRecord AS IsSchoolRecord,
+                               CASE WHEN (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) = 1 THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsSchoolRecord,
                                (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) AS AllTimeRank
                            FROM Performances p
                            INNER JOIN Events e ON e.Id = p.EventId
                            INNER JOIN Athletes a ON a.Id = p.AthleteId
                            INNER JOIN Meets m ON m.Id = p.MeetId
                            WHERE MONTH(m.Date) = @Month AND DAY(m.Date) = @Day
-                           ORDER BY 
-                               p.SchoolRecord DESC,
+                           ORDER BY
+                               CASE WHEN (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) = 1 THEN 0 ELSE 1 END,
                                CASE WHEN (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) <= 3 THEN 0 ELSE 1 END,
                                m.Date DESC
                            """;

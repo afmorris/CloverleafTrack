@@ -234,13 +234,13 @@ var personalRecords = individualPRs.Concat(relayBests).Select(...).ToList();
 
 ---
 
-### [C9] School Records Recalculation — Relay AllTimeRank == 1 Proxy
+### [C9] School Records Recalculation — AllTimeRank == 1 Proxy (Individual + Relay)
 
 **What changed:**
-`IsSchoolRecord` for relay performances in `PersonalRecordViewModel` uses `AllTimeRank == 1` as the school record proxy. `TotalSchoolRecords` in `AthleteDetailsViewModel` adds relay school records (distinct by EventId) to the individual count.
+`IsSchoolRecord` for relay performances in `PersonalRecordViewModel` uses `AllTimeRank == 1` as the school record proxy. `TotalSchoolRecords` in `AthleteDetailsViewModel` uses `AllTimeRank == 1` for **both** individual and relay performances (distinct by EventId).
 
 **Why:**
-The `SchoolRecord` flag on `Performance` rows is NOT reliably set by the admin entry form for relay performances. An athlete with a Mixed 4×400M relay ranked #1 all-time correctly has a school record, but the flag was `false`, causing the hero to show 0 School Records.
+The `SchoolRecord` flag on `Performance` rows is NOT reliably cleared when a newer performance supersedes the record — `sp_RebuildLeaderboards` does not reset it. An athlete with a relay at #1 all-time or an individual event where the flag is stale would show 0 School Records in the hero. Using `AllTimeRank == 1` from the Leaderboards table (which IS kept current by the SP) is authoritative for both cases.
 
 **Pattern in AthleteService:**
 ```csharp
@@ -248,13 +248,14 @@ IsSchoolRecord = p.RelayAthletes == null ? p.SchoolRecord : p.AllTimeRank == 1,
 ```
 
 ```csharp
-TotalSchoolRecords = performances.Count(p => p.SchoolRecord && p.RelayAthletes == null)
-    + performances
-        .Where(p => p.RelayAthletes != null && p.AllTimeRank == 1)
-        .Select(p => p.EventId)
-        .Distinct()
-        .Count(),
+TotalSchoolRecords = performances
+    .Where(p => p.AllTimeRank == 1)
+    .Select(p => p.EventId)
+    .Distinct()
+    .Count(),
 ```
+
+**Note:** The `IsSchoolRecord` mapping in `PersonalRecordViewModel` still uses `p.SchoolRecord` for individual rows (via the ternary above). That is fine for the PR table display because `sp_RebuildLeaderboards` does update `SchoolRecord` for individual performances after it is fixed (see C17). The hero count must not use the flag because it may be stale before the SP fix runs.
 
 **Key files:**
 - `CloverleafTrack.Services/AthleteService.cs`
@@ -362,10 +363,10 @@ This is the most important behavioral invariant to remember:
 | Flag | Individual performances | Relay performances |
 |---|---|---|
 | `PersonalBest` | ✅ Reliable — set by admin form | ❌ NOT reliable — may be false even for best relay |
-| `SchoolRecord` | ✅ Reliable — set by leaderboard rebuild | ❌ NOT reliable — may be false even for #1 all-time relay |
-| `AllTimeRank` | ✅ Set by `sp_RebuildLeaderboards` | ✅ Set by `sp_RebuildLeaderboards` — use as SR proxy |
+| `SchoolRecord` | ⚠️ Snapshot only — NOT cleared when a newer record supersedes it | ❌ NOT reliable — may be false even for #1 all-time relay |
+| `AllTimeRank` | ✅ Set by `sp_RebuildLeaderboards` — use as current SR indicator | ✅ Set by `sp_RebuildLeaderboards` — use as SR proxy |
 
-**Rule:** For relay performances, always compute PRs via best-per-event and use `AllTimeRank == 1` as the school record proxy. Never trust the `PersonalBest` or `SchoolRecord` flags on relay rows.
+**Rule:** Never use `p.SchoolRecord` to determine whether a performance is *currently* the school record. It means "was the record when this flag was last written." Use `AllTimeRank = 1` from the Leaderboards table instead. `sp_RebuildLeaderboards` keeps Leaderboards current but does NOT retroactively clear the `SchoolRecord` flag on Performance rows that have been beaten.
 
 ---
 
@@ -454,6 +455,62 @@ Expanded the unit test suite to cover the Models and ViewModels layers. Added 66
 
 ---
 
+### [C16] Roster Details — Mobile Responsive Chart Layout
+
+**What changed:**
+The season trajectory chart panel on the Roster Details page (per-event performance section) is now responsive. On mobile it stacks below the performance rows; on wider screens it sits side-by-side to the right.
+
+**Why:**
+The original layout used `flex gap-4 items-start` with a fixed `w-72 flex-shrink-0` chart panel. On narrow screens the chart overflowed the container and the performance rows were squished to ~86px wide — unusable. Also, meet names in performance rows overflowed because the `flex-1` cell lacked `min-w-0`.
+
+**Pattern used:**
+`flex-wrap` (already compiled) instead of `flex-col sm:flex-row` (responsive Tailwind classes that would require a CSS rebuild to take effect). An inline `style="min-width:260px"` on the performances div ensures `flex-wrap` triggers wrapping at ~564px (260 + 16 gap + 288 chart), giving side-by-side on tablet/desktop and stacked on mobile without requiring new Tailwind classes to be compiled.
+
+Meet name link gets `min-w-0` on the flex-1 container and `block truncate` on the `<a>` tag to prevent the inner row from overflowing on narrow screens.
+
+**Key files:**
+- `CloverleafTrack.Web/Views/Roster/Details.cshtml`
+
+**Watch out:**
+- Do NOT use new Tailwind responsive variants (e.g. `sm:flex-row`) in this file without also running the Tailwind CSS build. These classes are not compiled by default and will be silently ignored.
+- The `min-width:260px` inline style on the performances div is load-bearing for the flex-wrap stacking behavior. Removing it collapses the performances div to near-zero width because `flex-1 min-w-0` has no minimum.
+
+---
+
+### [C17] "On This Day" — SchoolRecord Flag Is Stale on Superseded Performances
+
+**What changed:**
+`HomeRepository.GetPerformanceOnThisDayAsync` no longer uses `p.SchoolRecord` to determine or sort by school record status. It now derives school record status live from the Leaderboards table (`AllTimeRank = 1`).
+
+**Before:**
+```sql
+p.SchoolRecord AS IsSchoolRecord,
+ORDER BY p.SchoolRecord DESC, ...
+```
+
+**After:**
+```sql
+CASE WHEN (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) = 1
+     THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsSchoolRecord,
+ORDER BY
+    CASE WHEN (...AllTimeRank...) = 1 THEN 0 ELSE 1 END,
+    CASE WHEN (...AllTimeRank...) <= 3 THEN 0 ELSE 1 END,
+    m.Date DESC
+```
+
+**Why:**
+When a new school record is set, the old performance's `SchoolRecord = 1` flag in the `Performances` table is NOT cleared. The flag is a snapshot of status at entry/rebuild time, not a live indicator. The old performance was being sorted to the top and displayed as "set the school record" even after being beaten.
+
+**Key files:**
+- `CloverleafTrack.DataAccess/Repositories/HomeRepository.cs`
+
+**Watch out:**
+- `p.SchoolRecord` is unreliable for determining CURRENT school record status on **any** performance row (individual or relay) when the question is "is this still the record today?" It means "was the record at the time this flag was last written." Use `AllTimeRank = 1` from the Leaderboards table for current status.
+- The existing reliability table in this file (end of C9 section) was updated to reflect this — see the updated summary below.
+- `sp_RebuildLeaderboards` keeps the `Leaderboards` table current but does NOT retroactively clear the `SchoolRecord` flag on Performance rows that are no longer #1.
+
+---
+
 ### [C15] Athlete Progression Charts — ViewModel + Service + View
 
 **What changed:**
@@ -497,5 +554,95 @@ Three supporting changes were made before the view rewrite:
 - `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` (EXPANDED)
 - `CloverleafTrack.Tests/Unit/Services/LeaderboardServiceTests.cs` (NEW)
 - `CloverleafTrack.Tests/Unit/Services/MeetServiceTests.cs` (NEW)
+
+---
+
+### [C19] sp_RebuildLeaderboards — Now Manages SchoolRecord Flag
+
+**What changed:**
+Added two steps to `sp_RebuildLeaderboards` in `docs/schema.sql`:
+
+```sql
+-- Step 7: Reset SchoolRecord flag on all Performances
+UPDATE Performances SET SchoolRecord = 0;
+
+-- Step 8: Set SchoolRecord = 1 for individual performances ranked #1 all-time
+UPDATE p SET p.SchoolRecord = 1
+FROM Performances p
+INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id
+WHERE lb.Rank = 1 AND p.AthleteId IS NOT NULL;
+```
+
+These run after the Leaderboards table is fully rebuilt (steps 9–10, previously 7–8).
+
+**Why:**
+The SP previously managed `PersonalBest` and `SeasonBest` (reset-all then recalculate) but never touched `SchoolRecord`. When a new record was set, the old performance kept `SchoolRecord = 1` forever. This caused stale flags to surface in "On This Day", meet details hero counts, and anywhere else that used the flag for current school record status.
+
+**Key files:**
+- `docs/schema.sql` — SP definition updated. Run `ALTER PROCEDURE` against the live DB to apply.
+
+**Watch out:**
+- After altering the SP, run `EXEC sp_RebuildLeaderboards` once to backfill all stale flags.
+- Relay performances still get `SchoolRecord = 0` from this SP — they are excluded by `AND p.AthleteId IS NOT NULL`. The app uses `AllTimeRank = 1` as the SR proxy for relay rows, which is correct and authoritative.
+- The schema comment on the SP header was updated to reflect that it now manages SchoolRecord in addition to PersonalBest and SeasonBest.
+
+---
+
+### [C20] Meet Details Hero — TotalSchoolRecords Uses AllTimeRank == 1
+
+**What changed:**
+`MeetService.GetMeetDetailsAsync` now counts school records using `AllTimeRank == 1` instead of the stale `p.SchoolRecord` flag:
+
+```csharp
+// Before
+TotalSchoolRecords = performances.Count(p => p.SchoolRecord),
+
+// After
+TotalSchoolRecords = performances.Count(p => p.AllTimeRank == 1),
+```
+
+`AllTimeRank` is already populated from the Leaderboards table by `MeetRepository.GetPerformancesForMeetAsync`.
+
+**Why:**
+Same root cause as the athlete details hero (C9) and "On This Day" (C17): `p.SchoolRecord` is a stale snapshot that is not cleared when a newer record supersedes it. A meet with 2 school records was showing 0 because both performances had stale `SchoolRecord = 0` flags.
+
+**Key files:**
+- `CloverleafTrack.Services/MeetService.cs`
+- `CloverleafTrack.Tests/Unit/Services/MeetServiceTests.cs` — `BuildPerf` helper gained `allTimeRank` parameter; school records test updated to pass `allTimeRank: 1` instead of `sr: true`.
+
+---
+
+### [C18] Roster Index — Relay Events Contribute to Event Category Grouping
+
+**What changed:**
+The Roster Index active-athlete grouping now includes relay event participation. Athletes who only run relays (or whose relay events span categories) appear in the correct individual-event section rather than being invisible or grouped under Relays.
+
+**Repository (`AthleteRepository.GetAllWithPerformancesAsync`):**
+- Added `e.EventType` to the Event SELECT (was missing; defaulted to 0 = Field which masked issues)
+- Added UNION ALL branch for relay performances via `PerformanceAthletes` (relay `Performance` rows have `AthleteId = NULL` so they were previously excluded by the `INNER JOIN Performances p ON p.AthleteId = a.Id` filter)
+
+**Service (`AthleteService`):**
+Two new static helpers:
+
+`GetRosterCategory(Event)` — maps relay EventType to the corresponding individual EventCategory:
+- `JumpRelay` → `Jumps`
+- `ThrowsRelay`, `FieldRelay` → `Throws`
+- `RunningRelay` → `Sprints` unless the event name contains distance keywords ("distance medley", "dmr", "800", "1500", "1600", "mile", "2000", "3200") → `Distance`
+- Everything else → `ev.EventCategory` (stored value, used as-is for individual events)
+
+`IsDistanceBasedEvent(Event)` — replaces the old `EventCategory is Throws or Jumps` check in the PR lookup. Handles relay EventTypes explicitly because relay events have `EventCategory.Relays`, not Throws/Jumps:
+- `FieldRelay`, `JumpRelay`, `ThrowsRelay` → true (use DistanceInches)
+- `Field` → fall back to `EventCategory is Throws or Jumps`
+- `Running`, `RunningRelay` → false (use TimeSeconds)
+
+**Watch out:**
+- `EventCategory.Relays` no longer appears as a key in the active athletes dictionary. All relay-only athletes are now bucketed under individual categories.
+- An athlete with both individual 100m and 4×100m relay participation appears once in Sprints with both events listed (de-duplication is handled by the existing `GroupBy(x => x.Athlete.Id)` within each category group).
+- The RunningRelay → Sprints/Distance name-based heuristic checks for substrings: "800" in the event name means distance relay. Sprint Medley Relay doesn't contain a distance number in its standard name so it correctly maps to Sprints.
+
+**Key files:**
+- `CloverleafTrack.DataAccess/Repositories/AthleteRepository.cs`
+- `CloverleafTrack.Services/AthleteService.cs`
+- `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` (5 new tests)
 
 ---

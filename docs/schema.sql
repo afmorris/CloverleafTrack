@@ -264,11 +264,13 @@ CREATE TABLE [dbo].[PersonalBestHistory] (
 -- sp_RebuildLeaderboards
 -- Called after every Performance insert, update, or delete.
 -- Rebuilds the entire Leaderboards table from scratch.
--- Also resets and recalculates all PersonalBest and SeasonBest
--- flags on Performances.
--- NOTE: Does NOT set PersonalBest/SeasonBest for relay
---       performances (WHERE AthleteId IS NOT NULL filter
---       excludes relay rows from flag updates).
+-- Also resets and recalculates PersonalBest, SeasonBest, and
+-- SchoolRecord flags on Performances.
+-- NOTE: PersonalBest, SeasonBest, and SchoolRecord are only set
+--       for individual performances (AthleteId IS NOT NULL).
+--       Relay performances keep these flags at 0; the app uses
+--       AllTimeRank = 1 from Leaderboards as the school record
+--       proxy for relay rows.
 -- ============================================================
 CREATE PROCEDURE [dbo].[sp_RebuildLeaderboards]
 AS
@@ -370,7 +372,20 @@ BEGIN
         INNER JOIN SeasonBestTimePerformances sbtp ON sbtp.PerformanceId = p.Id
         WHERE sbtp.PerformanceRank = 1;
 
-        -- Step 7: Top 10 for DISTANCE-based events (includes relay — no AthleteId filter here)
+        -- Step 7: Reset SchoolRecord flag on all Performances
+        UPDATE Performances SET SchoolRecord = 0;
+
+        -- Step 8: Set SchoolRecord = 1 for individual performances ranked #1 all-time
+        --         Relay performances keep SchoolRecord = 0; the app uses AllTimeRank = 1
+        --         from Leaderboards as the school record proxy for relay rows instead.
+        UPDATE p
+        SET p.SchoolRecord = 1
+        FROM Performances p
+        INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id
+        WHERE lb.Rank = 1
+          AND p.AthleteId IS NOT NULL;
+
+        -- Step 9: Top 10 for DISTANCE-based events (includes relay — no AthleteId filter here)
         WITH BestAthletePerformances AS (
             SELECT
                 p.Id AS PerformanceId,
@@ -407,7 +422,7 @@ BEGIN
         FROM RankedDistancePerformances
         WHERE Rank <= 10;
 
-        -- Step 8: Top 10 for TIME-based events (includes relay — no AthleteId filter here)
+        -- Step 10: Top 10 for TIME-based events (includes relay — no AthleteId filter here)
         WITH BestAthletePerformances AS (
             SELECT
                 p.Id AS PerformanceId,
