@@ -120,14 +120,14 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 | `Location` | Id, Name, City, State, ZipCode, Country |
 | `Event` | Id, Name, EventKey, EventType, EventCategory, Gender, Environment, AthleteCount, SortOrder, EventCategorySortOrder |
 | `Athlete` | Id, FirstName, LastName, Gender, GraduationYear, IsActive |
-| `Performance` | Id, AthleteId (null for relay), EventId, MeetId, TimeSeconds, DistanceInches, SortedAthleteHash, SchoolRecord, SeasonBest, PersonalBest |
+| `Performance` | Id, AthleteId (null for relay), EventId, MeetId, TimeSeconds, DistanceInches, SortedAthleteHash, SchoolRecord, SeasonBest, PersonalBest, AllTimeRank (nullable int, not a DB column — populated by queries that join Leaderboards) |
 | `PerformanceAthlete` | Id, PerformanceId, AthleteId — relay junction table |
 
 **Relay performances** set `AthleteId = null` on `Performance` and link athletes via `PerformanceAthletes` table. `SortedAthleteHash` is a nullable string on `Performance` (no NOT NULL constraint enforced at app layer).
 
-**Important caveat about performance flags:** The `PersonalBest` and `SchoolRecord` flags on relay `Performance` rows are **not reliably set** by the admin entry flow. Additionally, `SchoolRecord` on **any** Performance row (individual or relay) is a snapshot — it is **not cleared** when a newer performance supersedes the record. `sp_RebuildLeaderboards` keeps the `Leaderboards` table current but does NOT retroactively clear old `SchoolRecord` flags. Do not depend on `p.SchoolRecord` to mean "is currently the school record." Instead:
+**Important caveat about performance flags:** The `PersonalBest` and `SchoolRecord` flags on relay `Performance` rows are **not reliably set** by the admin entry flow. `sp_RebuildLeaderboards` does reset and recalculate `SchoolRecord` for **individual** performances (`AthleteId IS NOT NULL`), but relay rows keep `SchoolRecord = 0` always. Do not depend on `p.SchoolRecord` anywhere in application code — use `AllTimeRank == 1` universally for both individual and relay. Specifically:
 - Relay "PR" per event = best time (MIN TimeSeconds) or best distance (MAX DistanceInches) across all performances for that event
-- School record (individual or relay) = AllTimeRank == 1 on the Leaderboards table
+- School record (individual or relay) = `AllTimeRank == 1` on the Leaderboards table
 
 **Field vs. running determination:**
 ```csharp
@@ -221,8 +221,14 @@ Dtos are used for complex query results that span multiple tables and don't map 
 `AthleteService.GetAthleteDetailsAsync`:
 - **Personal Records table**: individual PRs use `PersonalBest = true` flag; relay PRs use best-per-event (min time / max distance) regardless of flag
 - **Hero TotalPRs**: individual performances only (`PersonalBest = true && RelayAthletes == null`)
-- **Hero TotalSchoolRecords**: all performances (individual and relay) where `AllTimeRank == 1`, distinct by EventId. Does NOT use the `SchoolRecord` DB flag — it is a stale snapshot.
+- **Hero TotalSchoolRecords**: all performances (individual and relay) where `AllTimeRank == 1`, distinct by EventId. Does NOT use the `SchoolRecord` DB flag.
 - **Season grouping**: ordered by `SeasonStartDate DESC` using the DTO field, not season name string
+- **`IsSchoolRecord` everywhere** (PersonalRecordViewModel, IndividualPerformanceViewModel, SeasonPerformanceViewModel.SchoolRecordCount): all use `AllTimeRank == 1` — never the `SchoolRecord` flag
+
+`AthleteService.GetActiveAthletesGroupedByEventCategoryAsync`:
+- Relay events are mapped to individual sport categories via `GetRosterCategory(Event)` so relay-only athletes appear in the correct section (Sprints, Distance, Jumps, or Throws) rather than being invisible
+- `RunningRelay` → `Sprints` unless the event name contains distance keywords ("distance medley", "dmr", "800", "1500", "1600", "mile", "2000", "3200") → `Distance`
+- `JumpRelay` → `Jumps`; `ThrowsRelay`/`FieldRelay` → `Throws`
 
 ---
 
@@ -269,7 +275,7 @@ class AthleteTopEventViewModel {
 
 class PersonalRecordViewModel {
     // ...standard fields...
-    bool IsSchoolRecord;        // set by service: DB flag for individual, AllTimeRank==1 for relay
+    bool IsSchoolRecord;        // set by service: AllTimeRank == 1 for both individual and relay
     string? RelayAthletes;      // null for individual; |~|-separated names for relay
     bool IsRelay;               // => RelayAthletes != null
     string[] RelayMembers;      // => RelayAthletes.Split("|~|")
@@ -346,7 +352,7 @@ Field events show a distance input; running events show a time input.
 
 - **Hero stats**: TopSprintEvent and TopFieldEvent show an Indoor/Outdoor badge (`☀️ Outdoor` / `🏢 Indoor`) below the event name. These are individual events only (not relay).
 - **Personal Records table**: includes both individual PRs and relay bests. Individual PRs use `PersonalBest = true` flag. Relay entries show the best time/distance per relay event regardless of flag. Relay rows show the team members inline (` / ` separated, each linked to their roster page) below the event name.
-- **School Records column**: shows `SR` badge for individual events where `SchoolRecord = true`, and for relay events where `AllTimeRank == 1`. The Rank column is shown whenever any PR row has either a top-10 rank OR a school record.
+- **School Records column**: shows `SR` badge whenever `AllTimeRank == 1` (applies to both individual and relay). The Rank column is shown whenever any PR row has either a top-10 rank OR a school record.
 - **Performance by Season**: shows all events including relays. Relay performance rows show the team members below the mark/date/meet row.
 - **Season ordering**: most recent season first, using `SeasonStartDate` from the DTO (not string sort).
 
@@ -415,5 +421,6 @@ See `docs/testing.md` for full test strategy and coverage details.
 - Always call `sp_RebuildLeaderboards` after any performance insert/update/delete.
 - Slugs are generated at runtime via `SlugHelper` — do not store them in the DB.
 - Do not rely on `PersonalBest` or `SchoolRecord` flags on relay performances — use best-per-event logic and `AllTimeRank == 1` respectively.
-- Do not use `p.SchoolRecord` to determine whether a performance is *currently* the school record — it is a stale snapshot and is not cleared when a newer record supersedes it. Always use `AllTimeRank = 1` from the Leaderboards table for current school record status.
+- **Never use `p.SchoolRecord` in service, ViewModel, or view code to determine whether a performance is the school record.** Always use `AllTimeRank == 1` from the Leaderboards table. The `SchoolRecord` DB column is maintained by `sp_RebuildLeaderboards` for individual performances only — relay rows always have it as `0`. Even for individuals it should not be trusted in application code; `AllTimeRank == 1` is the single authoritative test for both.
+- Every query that needs to surface `IsSchoolRecord` must either join `Leaderboards` and project `AllTimeRank`, or use a correlated subquery `(SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id)`. When using Dapper multi-mapping, place this subquery **after `p.*` and before the next model's `Id` column** so Dapper maps it to `Performance.AllTimeRank`.
 - Relay athlete name display: always join with ` / ` separator in inline contexts, never individual bullet spans.

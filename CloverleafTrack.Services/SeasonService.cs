@@ -43,7 +43,7 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
             IndoorSchoolRecords = season.Meets
                 .Where(m => m.Environment == Environment.Indoor)
                 .SelectMany(m => m.Performances)
-                .Where(p => p.SchoolRecord)
+                .Where(p => p.AllTimeRank == 1)
                 .DistinctBy(p => p.EventId)
                 .Select(p => new SchoolRecordViewModel
                 {
@@ -57,7 +57,7 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
             OutdoorSchoolRecords = season.Meets
                 .Where(m => m.Environment == Environment.Outdoor)
                 .SelectMany(m => m.Performances)
-                .Where(p => p.SchoolRecord)
+                .Where(p => p.AllTimeRank == 1)
                 .DistinctBy(p => p.EventId)
                 .Select(p => new SchoolRecordViewModel
                 {
