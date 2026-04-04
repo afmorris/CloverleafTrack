@@ -47,7 +47,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                 {
                     var first = g.First();
 
-                    if (first.Event.EventCategory is EventCategory.Throws or EventCategory.Jumps)
+                    if (IsDistanceBasedEvent(first.Event))
                     {
                         var best = g
                             .Where(p => p.Performance.DistanceInches.HasValue)
@@ -71,8 +71,8 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                     }
                 });
 
-        // Step 2: Group by EventCategory
-        var groupedByCategory = athletesWithPerformances.GroupBy(x => x.Event.EventCategory);
+        // Step 2: Group by roster category (relay events mapped to their equivalent individual category)
+        var groupedByCategory = athletesWithPerformances.GroupBy(x => GetRosterCategory(x.Event));
         foreach (var categoryGroup in groupedByCategory)
         {
             var eventCategory = categoryGroup.Key;
@@ -378,9 +378,8 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                 Environment = topFieldEvent.Environment
             } : null,
             TotalPRs = performances.Count(p => p.PersonalBest && p.RelayAthletes == null),
-            TotalSchoolRecords = performances.Count(p => p.SchoolRecord && p.RelayAthletes == null)
-                + performances
-                    .Where(p => p.RelayAthletes != null && p.AllTimeRank == 1)
+            TotalSchoolRecords = performances
+                    .Where(p => p.AllTimeRank == 1)
                     .Select(p => p.EventId)
                     .Distinct()
                     .Count(),
@@ -437,6 +436,43 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             _ => $"{gradYear} Graduate"
         };
     }
+
+    /// <summary>
+    /// Maps an event to the EventCategory used to bucket athletes on the roster page.
+    /// Relay events are remapped to their individual-event equivalent so that, for example,
+    /// a 4×100m participant appears in Sprints rather than Relays.
+    /// </summary>
+    private static EventCategory? GetRosterCategory(Event ev) => ev.EventType switch
+    {
+        EventType.JumpRelay   => EventCategory.Jumps,
+        EventType.ThrowsRelay => EventCategory.Throws,
+        EventType.FieldRelay  => EventCategory.Throws,
+        EventType.RunningRelay => MapRunningRelayCategory(ev.Name),
+        _                      => ev.EventCategory   // individual events: use stored category
+    };
+
+    private static EventCategory MapRunningRelayCategory(string eventName)
+    {
+        var name = eventName.ToLowerInvariant();
+        return (name.Contains("distance medley") || name.Contains("dmr") ||
+                name.Contains("800") || name.Contains("1500") || name.Contains("1600") ||
+                name.Contains("mile") || name.Contains("2000") || name.Contains("3200"))
+            ? EventCategory.Distance
+            : EventCategory.Sprints;
+    }
+
+    /// <summary>
+    /// Returns true when the event's PR is measured in distance (inches) rather than time.
+    /// Handles relay event types explicitly because their EventCategory is Relays, not Throws/Jumps.
+    /// </summary>
+    private static bool IsDistanceBasedEvent(Event ev) => ev.EventType switch
+    {
+        EventType.Field        => ev.EventCategory is EventCategory.Throws or EventCategory.Jumps,
+        EventType.FieldRelay   => true,
+        EventType.JumpRelay    => true,
+        EventType.ThrowsRelay  => true,
+        _                      => false  // Running and RunningRelay use time
+    };
 
     private string FormatDistance(double inches)
     {

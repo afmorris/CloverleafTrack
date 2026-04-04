@@ -51,6 +51,7 @@ public class MeetServiceTests
         double? distanceInches = null,
         bool pr = false,
         bool sr = false,
+        int? allTimeRank = null,
         string athleteName = "Jane Doe") => new()
     {
         EventId = eventId,
@@ -63,6 +64,7 @@ public class MeetServiceTests
         DistanceInches = distanceInches,
         PersonalBest = pr,
         SchoolRecord = sr,
+        AllTimeRank = allTimeRank,
         AthleteName = athleteName
     };
 
@@ -135,9 +137,9 @@ public class MeetServiceTests
         var meet = BuildMeet();
         var performances = new List<MeetPerformanceDto>
         {
-            BuildPerf(1, "100m", Gender.Male, sr: true),
-            BuildPerf(2, "200m", Gender.Female, sr: true),
-            BuildPerf(3, "400m", Gender.Male, sr: false),
+            BuildPerf(1, "100m", Gender.Male, allTimeRank: 1),
+            BuildPerf(2, "200m", Gender.Female, allTimeRank: 1),
+            BuildPerf(3, "400m", Gender.Male, allTimeRank: 2),  // rank 2, not a school record
         };
         SetupMeetDetails(meet, performances);
 
