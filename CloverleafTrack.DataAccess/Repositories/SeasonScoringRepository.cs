@@ -39,7 +39,6 @@ public class SeasonScoringRepository(IDbConnectionFactory connectionFactory) : I
             INNER JOIN Athletes a         ON a.Id  = p.AthleteId
             LEFT  JOIN MeetParticipants mpart ON mpart.Id = mp.MeetParticipantId
             WHERE s.Id = @SeasonId
-              AND mp.Deleted = 0
               AND p.AthleteId IS NOT NULL
 
             UNION ALL
@@ -74,7 +73,6 @@ public class SeasonScoringRepository(IDbConnectionFactory connectionFactory) : I
             INNER JOIN Athletes a              ON a.Id  = pa.AthleteId
             LEFT  JOIN MeetParticipants mpart  ON mpart.Id = mp.MeetParticipantId
             WHERE s.Id = @SeasonId
-              AND mp.Deleted = 0
               AND p.AthleteId IS NULL
 
             ORDER BY MeetDate, EventId, AthleteLastName, AthleteFirstName";

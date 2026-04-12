@@ -47,10 +47,10 @@ else
                 <thead class="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                     <tr class="text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wide">
                         <th class="px-4 py-3 text-left w-10">#</th>
-                        <th class="px-4 py-3 text-left">Athlete</th>
-                        <th class="px-4 py-3 text-right">Events</th>
-                        <th class="px-4 py-3 text-right" data-full>Points (Full)</th>
-                        <th class="px-4 py-3 text-right" data-split style="display:none">Points (Split)</th>
+                        <th class="px-4 py-3 text-left" data-sortable data-sort-type="text" onclick="sortTable(this)">Athlete</th>
+                        <th class="px-4 py-3 text-right" data-sortable onclick="sortTable(this)">Events</th>
+                        <th class="px-4 py-3 text-right" data-full data-sortable onclick="sortTable(this)">Points (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none" data-sortable onclick="sortTable(this)">Points (Split)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,13 +64,6 @@ else
                                    class="font-medium text-gray-900 dark:text-white hover:underline">
                                     @row.AthleteFullName
                                 </a>
-                                @if (row.ExceedsEventLimit)
-                                {
-                                    <span class="ml-2 inline-block px-1.5 py-0.5 text-xs rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700/30"
-                                          title="Athlete is entered in more than 4 events">
-                                        ⚠️ @row.EventCount events
-                                    </span>
-                                }
                             </td>
                             <td class="px-4 py-3 text-right text-gray-600 dark:text-gray-400">@row.EventCount</td>
                             <td class="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white" data-full>@row.TotalFullPoints.ToString("0.##")</td>
@@ -89,13 +82,13 @@ else
                 <thead class="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                     <tr class="text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wide">
                         <th class="px-4 py-3 text-left w-10">#</th>
-                        <th class="px-4 py-3 text-left">Athlete</th>
-                        <th class="px-4 py-3 text-right" data-full>Running (Full)</th>
-                        <th class="px-4 py-3 text-right" data-split style="display:none">Running (Split)</th>
-                        <th class="px-4 py-3 text-right" data-full>Field (Full)</th>
-                        <th class="px-4 py-3 text-right" data-split style="display:none">Field (Split)</th>
-                        <th class="px-4 py-3 text-right" data-full>Total (Full)</th>
-                        <th class="px-4 py-3 text-right" data-split style="display:none">Total (Split)</th>
+                        <th class="px-4 py-3 text-left" data-sortable data-sort-type="text" onclick="sortTable(this)">Athlete</th>
+                        <th class="px-4 py-3 text-right" data-full data-sortable onclick="sortTable(this)">Running (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none" data-sortable onclick="sortTable(this)">Running (Split)</th>
+                        <th class="px-4 py-3 text-right" data-full data-sortable onclick="sortTable(this)">Field (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none" data-sortable onclick="sortTable(this)">Field (Split)</th>
+                        <th class="px-4 py-3 text-right" data-full data-sortable onclick="sortTable(this)">Total (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none" data-sortable onclick="sortTable(this)">Total (Split)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -125,12 +118,12 @@ else
                 <thead class="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                     <tr class="text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wide">
                         <th class="px-4 py-3 text-left w-10">#</th>
-                        <th class="px-4 py-3 text-left">Athlete</th>
-                        <th class="px-4 py-3 text-right">Individual</th>
-                        <th class="px-4 py-3 text-right" data-full>Relay (Full)</th>
-                        <th class="px-4 py-3 text-right" data-split style="display:none">Relay (Split)</th>
-                        <th class="px-4 py-3 text-right" data-full>Total (Full)</th>
-                        <th class="px-4 py-3 text-right" data-split style="display:none">Total (Split)</th>
+                        <th class="px-4 py-3 text-left" data-sortable data-sort-type="text" onclick="sortTable(this)">Athlete</th>
+                        <th class="px-4 py-3 text-right" data-sortable onclick="sortTable(this)">Individual</th>
+                        <th class="px-4 py-3 text-right" data-full data-sortable onclick="sortTable(this)">Relay (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none" data-sortable onclick="sortTable(this)">Relay (Split)</th>
+                        <th class="px-4 py-3 text-right" data-full data-sortable onclick="sortTable(this)">Total (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none" data-sortable onclick="sortTable(this)">Total (Split)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -160,14 +153,14 @@ else
                     <thead class="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                         <tr class="text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wide">
                             <th class="px-4 py-3 text-left w-10">#</th>
-                            <th class="px-4 py-3 text-left">Athlete</th>
+                            <th class="px-4 py-3 text-left" data-sortable data-sort-type="text" onclick="sortTable(this)">Athlete</th>
                             @foreach (var cat in allCategories)
                             {
-                                <th class="px-4 py-3 text-right" data-full>@CategoryName(cat) (F)</th>
-                                <th class="px-4 py-3 text-right" data-split style="display:none">@CategoryName(cat) (S)</th>
+                                <th class="px-4 py-3 text-right" data-full data-sortable onclick="sortTable(this)">@CategoryName(cat) (F)</th>
+                                <th class="px-4 py-3 text-right" data-split style="display:none" data-sortable onclick="sortTable(this)">@CategoryName(cat) (S)</th>
                             }
-                            <th class="px-4 py-3 text-right" data-full>Total (F)</th>
-                            <th class="px-4 py-3 text-right" data-split style="display:none">Total (S)</th>
+                            <th class="px-4 py-3 text-right" data-full data-sortable onclick="sortTable(this)">Total (F)</th>
+                            <th class="px-4 py-3 text-right" data-split style="display:none" data-sortable onclick="sortTable(this)">Total (S)</th>
                         </tr>
                     </thead>
                     <tbody>

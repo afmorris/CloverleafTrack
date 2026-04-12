@@ -29,7 +29,5 @@ public class AthleteScoreRowViewModel
     public Dictionary<EventCategory, decimal> FullPointsByCategory { get; set; } = new();
     public Dictionary<EventCategory, decimal> SplitPointsByCategory { get; set; } = new();
 
-    // ── 4-event limit ─────────────────────────────────────────
     public int EventCount { get; set; }
-    public bool ExceedsEventLimit => EventCount > 4;
 }

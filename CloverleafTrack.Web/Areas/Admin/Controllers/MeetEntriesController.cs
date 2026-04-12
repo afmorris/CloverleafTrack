@@ -297,6 +297,87 @@ public class MeetEntriesController(
     }
 
     [HttpGet]
+    public async Task<IActionResult> EditResult(int id)
+    {
+        var entry = await meetEntryRepository.GetByIdAsync(id);
+        if (entry == null || !entry.PerformanceId.HasValue) return NotFound();
+
+        var meet = await meetRepository.GetByIdWithDetailsAsync(entry.MeetId);
+        if (meet == null) return NotFound();
+
+        var performance = await performanceRepository.GetByIdAsync(entry.PerformanceId.Value);
+        if (performance == null) return NotFound();
+
+        var isField = entry.EventType is EventType.Field or EventType.FieldRelay
+                                        or EventType.JumpRelay or EventType.ThrowsRelay;
+
+        var vm = new EnterResultViewModel
+        {
+            EntryId = id,
+            MeetId = entry.MeetId,
+            EventId = entry.EventId,
+            EventName = entry.EventName,
+            EventType = entry.EventType,
+            AthleteDisplay = entry.AthleteDisplayName,
+            IsRelay = entry.IsRelay,
+            MeetType = meet.MeetType,
+            TimeInput = !isField && performance.TimeSeconds.HasValue
+                ? PerformanceFormatHelper.FormatTime(performance.TimeSeconds.Value)
+                : null,
+            DistanceInput = isField && performance.DistanceInches.HasValue
+                ? PerformanceFormatHelper.FormatDistance(performance.DistanceInches.Value)
+                : null
+        };
+
+        return View(vm);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditResult(EnterResultViewModel model)
+    {
+        var entry = await meetEntryRepository.GetByIdAsync(model.EntryId);
+        if (entry == null || !entry.PerformanceId.HasValue) return NotFound();
+
+        var performance = await performanceRepository.GetByIdAsync(entry.PerformanceId.Value);
+        if (performance == null) return NotFound();
+
+        var evt = await eventRepository.GetByIdAsync(entry.EventId);
+        if (evt == null) return NotFound();
+
+        double? timeSeconds = null;
+        double? distanceInches = null;
+        var isField = evt.EventType is EventType.Field or EventType.FieldRelay
+                                      or EventType.JumpRelay or EventType.ThrowsRelay;
+
+        if (isField)
+        {
+            distanceInches = PerformanceFormatHelper.ParseDistance(model.DistanceInput);
+            if (!distanceInches.HasValue && !string.IsNullOrWhiteSpace(model.DistanceInput))
+            {
+                ModelState.AddModelError(nameof(model.DistanceInput), "Invalid distance format.");
+                return View(model);
+            }
+        }
+        else
+        {
+            timeSeconds = PerformanceFormatHelper.ParseTime(model.TimeInput);
+            if (!timeSeconds.HasValue && !string.IsNullOrWhiteSpace(model.TimeInput))
+            {
+                ModelState.AddModelError(nameof(model.TimeInput), "Invalid time format.");
+                return View(model);
+            }
+        }
+
+        performance.TimeSeconds = timeSeconds;
+        performance.DistanceInches = distanceInches;
+        await performanceRepository.UpdateAsync(performance);
+
+        TempData["SuccessMessage"] = "Result updated successfully!";
+        return RedirectToAction(nameof(Index), new { meetId = entry.MeetId });
+    }
+
+    [HttpGet]
     public async Task<IActionResult> EnterPlacing(int id)
     {
         var entry = await meetEntryRepository.GetByIdAsync(id);
@@ -337,6 +418,17 @@ public class MeetEntriesController(
         {
             foreach (var p in participants)
                 vm.PlaceInputs.Add(new PlaceInputRow { MeetParticipantId = p.Id, OpponentLabel = $"vs. {p.SchoolName}" });
+        }
+
+        // Pre-fill existing placing values
+        var existingPlacings = await meetPlacingRepository.GetForMeetAsync(entry.MeetId);
+        var perfPlacings = existingPlacings.Where(p => p.PerformanceId == entry.PerformanceId.Value).ToList();
+
+        foreach (var input in vm.PlaceInputs)
+        {
+            var existing = perfPlacings.FirstOrDefault(p => p.MeetParticipantId == input.MeetParticipantId);
+            if (existing != null)
+                input.Place = existing.Place;
         }
 
         return View(vm);

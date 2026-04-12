@@ -14,6 +14,14 @@
     };
 }
 
+<style>
+    th[data-sortable] { cursor: pointer; user-select: none; white-space: nowrap; }
+    th[data-sortable]:hover { background-color: rgba(0,0,0,0.04); }
+    th[data-sortable]::after { content: " \2195"; opacity: 0.3; font-size: 0.85em; }
+    th[data-sort-dir="asc"]::after { content: " \2191"; opacity: 1; }
+    th[data-sort-dir="desc"]::after { content: " \2193"; opacity: 1; }
+</style>
+
 <div class="max-w-7xl mx-auto px-6">
 
     <!-- Header -->
@@ -119,6 +127,43 @@
                 }
             }
         });
+    }
+
+    // ── Table sort ──────────────────────────────────────────────────────
+    const tableSortState = new Map();
+
+    function sortTable(th) {
+        const table = th.closest('table');
+        const tbody = table.querySelector('tbody');
+        const colIdx = th.cellIndex;
+
+        const state = tableSortState.get(table) || {};
+        const isText = th.dataset.sortType === 'text';
+        const defaultDir = isText ? 'asc' : 'desc';
+        const dir = (state.colIndex === colIdx && state.dir === defaultDir)
+            ? (defaultDir === 'asc' ? 'desc' : 'asc')
+            : defaultDir;
+        tableSortState.set(table, { colIndex: colIdx, dir });
+
+        // Update header indicators
+        table.querySelectorAll('th[data-sortable]').forEach(h => h.dataset.sortDir = '');
+        th.dataset.sortDir = dir;
+
+        // Sort rows
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort((a, b) => {
+            const aText = a.cells[colIdx] ? a.cells[colIdx].textContent.trim() : '';
+            const bText = b.cells[colIdx] ? b.cells[colIdx].textContent.trim() : '';
+            if (isText) {
+                const cmp = aText.localeCompare(bText);
+                return dir === 'asc' ? cmp : -cmp;
+            }
+            const aNum = aText === '\u2014' || aText === '' ? -Infinity : (parseFloat(aText) || 0);
+            const bNum = bText === '\u2014' || bText === '' ? -Infinity : (parseFloat(bText) || 0);
+            return dir === 'asc' ? aNum - bNum : bNum - aNum;
+        });
+
+        rows.forEach(r => tbody.appendChild(r));
     }
 
     // Initialise

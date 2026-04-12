@@ -47,10 +47,12 @@
                     <a asp-area="Admin" asp-controller="MeetEntries" asp-action="EnterResult"
                        asp-route-id="@entry.EntryId" class="btn btn-success">Enter Result</a>
                 }
-                else if (!entry.HasPlacing)
+                else
                 {
+                    <a asp-area="Admin" asp-controller="MeetEntries" asp-action="EditResult"
+                       asp-route-id="@entry.EntryId" class="btn btn-edit">Edit Result</a>
                     <a asp-area="Admin" asp-controller="MeetEntries" asp-action="EnterPlacing"
-                       asp-route-id="@entry.EntryId" class="btn btn-primary">Add Placing</a>
+                       asp-route-id="@entry.EntryId" class="btn btn-primary">@(entry.HasPlacing ? "Edit Placing" : "Add Placing")</a>
                 }
                 <form asp-area="Admin" asp-controller="MeetEntries" asp-action="DeleteEntry" method="post"
                       onsubmit="return confirm('Remove this entry?');">
