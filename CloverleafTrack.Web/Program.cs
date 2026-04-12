@@ -23,12 +23,16 @@ builder.Services.AddScoped<IPerformanceRepository, PerformanceRepository>();
 builder.Services.AddScoped<IMeetRepository, MeetRepository>();
 builder.Services.AddScoped<ILeaderboardRepository, LeaderboardRepository>();
 builder.Services.AddScoped<IHomeRepository, HomeRepository>();
+builder.Services.AddScoped<IScoringTemplateRepository, ScoringTemplateRepository>();
+builder.Services.AddScoped<IMeetPlacingRepository, MeetPlacingRepository>();
+builder.Services.AddScoped<ISeasonScoringRepository, SeasonScoringRepository>();
 
 builder.Services.AddScoped<IAthleteService, AthleteService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();
 builder.Services.AddScoped<IMeetService, MeetService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
+builder.Services.AddScoped<IScoringService, ScoringService>();
 
 builder.Services.AddScoped<IAdminAthleteRepository, AdminAthleteRepository>();
 builder.Services.AddScoped<IAdminMeetRepository, AdminMeetRepository>();
@@ -36,6 +40,10 @@ builder.Services.AddScoped<IAdminPerformanceRepository, AdminPerformanceReposito
 builder.Services.AddScoped<IAdminLocationRepository, AdminLocationRepository>();
 builder.Services.AddScoped<IAdminEventRepository, AdminEventRepository>();
 builder.Services.AddScoped<IAdminSeasonRepository, AdminSeasonRepository>();
+builder.Services.AddScoped<IAdminScoringTemplateRepository, AdminScoringTemplateRepository>();
+builder.Services.AddScoped<IAdminMeetParticipantRepository, AdminMeetParticipantRepository>();
+builder.Services.AddScoped<IAdminMeetEntryRepository, AdminMeetEntryRepository>();
+builder.Services.AddScoped<IAdminMeetPlacingRepository, AdminMeetPlacingRepository>();
 
 var app = builder.Build();
 

@@ -38,7 +38,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AI", "AI", "{C867F67D-84E2-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{67EB47E1-7C7D-44D7-80CB-46323C5298CB}"
 	ProjectSection(SolutionItems) = preProject
+		docs\backfill_meet_entries_2025_2026.sql = docs\backfill_meet_entries_2025_2026.sql
 		docs\schema.sql = docs\schema.sql
+		docs\testing.md = docs\testing.md
 	EndProjectSection
 EndProject
 Global

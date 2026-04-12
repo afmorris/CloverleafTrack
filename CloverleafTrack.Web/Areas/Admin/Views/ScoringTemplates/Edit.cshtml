@@ -1,0 +1,87 @@
+@model CloverleafTrack.ViewModels.Admin.ScoringTemplates.ScoringTemplateFormViewModel
+@{
+    ViewData["Title"] = "Edit Scoring Template";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header h1 { font-size: 24px; margin-bottom: 5px; }
+    .breadcrumb { font-size: 13px; color: #666; }
+    .breadcrumb a { color: #0066cc; text-decoration: none; }
+    .form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; color: #333; margin-bottom: 8px; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    .text-danger { color: #dc3545; font-size: 13px; }
+    .places-grid { display: grid; grid-template-columns: 80px 1fr; gap: 8px; align-items: center; }
+    .places-grid span { font-size: 14px; font-weight: 500; color: #555; }
+    .button-group { display: flex; gap: 10px; margin-top: 30px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn-primary { background: #0066cc; color: white; }
+    .btn-secondary { background: white; color: #666; border: 1px solid #ddd; }
+    .hint { font-size: 12px; color: #888; margin-top: 4px; }
+    .builtin-notice { background: #e3f2fd; border: 1px solid #90caf9; padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 20px; }
+</style>
+
+<div class="header">
+    <h1>Edit Scoring Template</h1>
+    <div class="breadcrumb"><a asp-action="Index">Scoring Templates</a> / Edit</div>
+</div>
+
+<div class="form-container">
+    @if (Model.IsBuiltIn)
+    {
+        <div class="builtin-notice">⚙️ This is a built-in template. The name cannot be changed, but you can edit the point values.</div>
+    }
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="IsBuiltIn" />
+
+        <div class="form-group">
+            <label asp-for="Name">Template Name</label>
+            @if (Model.IsBuiltIn)
+            {
+                <input asp-for="Name" readonly />
+            }
+            else
+            {
+                <input asp-for="Name" />
+            }
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Place → Points</label>
+            <p class="hint">Set to 0 to exclude a place from scoring. Add rows beyond 8th as needed.</p>
+            <div class="places-grid">
+                @for (var i = 0; i < Model.Places.Count; i++)
+                {
+                    <span>@GetOrdinal(Model.Places[i].Place)</span>
+                    <div>
+                        <input type="hidden" asp-for="Places[i].Id" />
+                        <input type="hidden" asp-for="Places[i].Place" />
+                        <input asp-for="Places[i].Points" type="number" step="0.5" min="0" style="width:100px" />
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@functions {
+    static string GetOrdinal(int n) => n switch
+    {
+        1 => "1st", 2 => "2nd", 3 => "3rd", _ => $"{n}th"
+    };
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

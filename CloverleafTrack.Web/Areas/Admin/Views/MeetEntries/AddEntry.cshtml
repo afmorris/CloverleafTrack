@@ -1,0 +1,120 @@
+@model CloverleafTrack.ViewModels.Admin.MeetEntries.AddEntryViewModel
+@using CloverleafTrack.Models.Enums
+@{
+    ViewData["Title"] = $"Add Entry — {Model.MeetName}";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header h1 { font-size: 22px; margin-bottom: 5px; }
+    .breadcrumb { font-size: 13px; color: #666; }
+    .breadcrumb a { color: #0066cc; text-decoration: none; }
+    .form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; color: #333; margin-bottom: 8px; }
+    .form-group select, .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    .text-danger { color: #dc3545; font-size: 13px; }
+    .relay-section { background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 6px; padding: 16px; }
+    .relay-section h3 { font-size: 14px; font-weight: 600; margin: 0 0 12px; }
+    .relay-slot { margin-bottom: 10px; }
+    .relay-slot label { font-size: 13px; margin-bottom: 4px; }
+    .button-group { display: flex; gap: 10px; margin-top: 30px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn-primary { background: #0066cc; color: white; }
+    .btn-secondary { background: white; color: #666; border: 1px solid #ddd; }
+</style>
+
+<div class="header">
+    <h1>Add Entry — @Model.MeetName</h1>
+    <div class="breadcrumb">
+        <a asp-action="Index" asp-route-meetId="@Model.MeetId">Meet Entries</a> / Add
+    </div>
+</div>
+
+<div class="form-container">
+    <form asp-action="AddEntry" method="post" id="addEntryForm">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="MeetId" />
+        <input type="hidden" asp-for="EventType" id="eventTypeInput" />
+        <input type="hidden" asp-for="EventAthleteCount" id="athleteCountInput" />
+
+        <div class="form-group">
+            <label asp-for="EventId">Event <span style="color:#dc3545">*</span></label>
+            <select asp-for="EventId" id="eventSelect"
+                    asp-items="@(new SelectList(Model.Events, "Id", "DisplayText"))">
+                <option value="">Select event...</option>
+            </select>
+        </div>
+
+        <div id="individualSection" style="display:none">
+            <div class="form-group">
+                <label asp-for="AthleteId">Athlete</label>
+                <select asp-for="AthleteId" id="athleteSelect">
+                    <option value="">Select athlete...</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="relaySection" style="display:none" class="relay-section">
+            <h3>Relay Team Members</h3>
+            @for (var i = 0; i < 4; i++)
+            {
+                <div class="relay-slot" id="relaySlot@(i)" style="display:none">
+                    <label>Leg @(i + 1)</label>
+                    <select name="RelayAthleteIds[@i]" id="relayAthlete@(i)">
+                        <option value="">Select athlete...</option>
+                    </select>
+                </div>
+            }
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Add Entry</button>
+            <a asp-action="Index" asp-route-meetId="@Model.MeetId" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    const events = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Events.Select(e => new {
+        id = e.Id,
+        name = e.Name,
+        eventType = e.EventType.ToString(),
+        athleteCount = e.AthleteCount
+    })));
+
+    const meetId = @Model.MeetId;
+
+    document.getElementById('eventSelect').addEventListener('change', async function () {
+        const eventId = parseInt(this.value);
+        if (!eventId) return;
+
+        const evt = events.find(e => e.id === eventId);
+        if (!evt) return;
+
+        document.getElementById('eventTypeInput').value = evt.eventType;
+        document.getElementById('athleteCountInput').value = evt.athleteCount;
+
+        const isRelay = evt.athleteCount > 1;
+
+        // Fetch athletes for this event
+        const resp = await fetch(`/Admin/MeetEntries/GetAthletesForEvent?meetId=${meetId}&eventId=${eventId}`);
+        const athletes = await resp.json();
+
+        const optionsHtml = '<option value="">Select...</option>' +
+            athletes.map(a => `<option value="${a.id}">${a.displayText}</option>`).join('');
+
+        document.getElementById('individualSection').style.display = isRelay ? 'none' : 'block';
+        document.getElementById('relaySection').style.display = isRelay ? 'block' : 'none';
+
+        if (!isRelay) {
+            document.getElementById('athleteSelect').innerHTML = optionsHtml;
+        } else {
+            for (let i = 0; i < 4; i++) {
+                const slot = document.getElementById(`relaySlot${i}`);
+                slot.style.display = i < evt.athleteCount ? 'block' : 'none';
+                document.getElementById(`relayAthlete${i}`).innerHTML = optionsHtml;
+            }
+        }
+    });
+</script>

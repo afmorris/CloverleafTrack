@@ -16,11 +16,15 @@ public class Meet
     public int LocationId { get; set; }
     public int SeasonId { get; set; }
     public MeetEntryStatus EntryStatus { get; set; }
-    
+    public MeetType MeetType { get; set; }
+    public int? ScoringTemplateId { get; set; }
+
     public List<Performance> Performances { get; set; } = new();
     public Location Location { get; set; }
     public Season Season { get; set; }
-    
+    public List<MeetParticipant> Participants { get; set; } = new();
+    public ScoringTemplate? ScoringTemplate { get; set; }
+
     public int PRCount { get; set; }
     public int SchoolRecordCount { get; set; }
     public string? EntryNotes { get; set; } = string.Empty;

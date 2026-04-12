@@ -1,0 +1,79 @@
+@model CloverleafTrack.ViewModels.Admin.MeetEntries.EnterResultViewModel
+@using CloverleafTrack.Models.Enums
+@{
+    ViewData["Title"] = $"Edit Result — {Model.AthleteDisplay}";
+    var isField = Model.EventType is EventType.Field or EventType.FieldRelay
+                                   or EventType.JumpRelay or EventType.ThrowsRelay;
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header h1 { font-size: 22px; margin-bottom: 5px; }
+    .breadcrumb { font-size: 13px; color: #666; }
+    .breadcrumb a { color: #0066cc; text-decoration: none; }
+    .form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px; }
+    .athlete-info { background: #f5f5f5; border-radius: 6px; padding: 12px 16px; margin-bottom: 24px; font-size: 14px; }
+    .athlete-info strong { font-size: 16px; display: block; margin-bottom: 4px; }
+    .athlete-info span { color: #666; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; color: #333; margin-bottom: 8px; }
+    .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    .text-danger { color: #dc3545; font-size: 13px; }
+    .hint { font-size: 12px; color: #888; margin-top: 4px; }
+    .button-group { display: flex; gap: 10px; margin-top: 30px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn-primary { background: #0066cc; color: white; }
+    .btn-secondary { background: white; color: #666; border: 1px solid #ddd; }
+</style>
+
+<div class="header">
+    <h1>Edit Result</h1>
+    <div class="breadcrumb">
+        <a asp-action="Index" asp-route-meetId="@Model.MeetId">Meet Entries</a> / Edit Result
+    </div>
+</div>
+
+<div class="form-container">
+    <div class="athlete-info">
+        <strong>@Model.AthleteDisplay</strong>
+        <span>@Model.EventName @(Model.IsRelay ? "(Relay)" : "")</span>
+    </div>
+
+    <form asp-action="EditResult" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="EntryId" />
+        <input type="hidden" asp-for="MeetId" />
+        <input type="hidden" asp-for="EventId" />
+        <input type="hidden" asp-for="EventType" />
+        <input type="hidden" asp-for="IsRelay" />
+        <input type="hidden" asp-for="MeetType" />
+
+        @if (isField)
+        {
+            <div class="form-group">
+                <label asp-for="DistanceInput">Distance</label>
+                <input asp-for="DistanceInput" placeholder="e.g., 42' 6.5&quot; or 42-06.5" autocomplete="off" />
+                <span asp-validation-for="DistanceInput" class="text-danger"></span>
+                <p class="hint">Formats: 42'6.5" or 42-06.5 or total inches (510.5)</p>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <label asp-for="TimeInput">Time</label>
+                <input asp-for="TimeInput" placeholder="e.g., 11.24 or 1:23.45" autocomplete="off" />
+                <span asp-validation-for="TimeInput" class="text-danger"></span>
+                <p class="hint">Formats: 11.24 (seconds) or 1:23.45 (min:sec)</p>
+            </div>
+        }
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Save Result</button>
+            <a asp-action="Index" asp-route-meetId="@Model.MeetId" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
