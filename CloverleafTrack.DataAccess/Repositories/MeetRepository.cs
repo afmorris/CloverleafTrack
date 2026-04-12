@@ -33,6 +33,8 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                 m.SeasonId,
                                 m.EntryStatus,
                                 m.EntryNotes,
+                                m.MeetType,
+                                m.ScoringTemplateId,
                                 l.Id,
                                 l.Name,
                                 l.City,
@@ -179,6 +181,8 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    m.LocationId,
                                    m.SeasonId,
                                    m.EntryStatus,
+                                   m.MeetType,
+                                   m.ScoringTemplateId,
                                    l.Id,
                                    l.Name,
                                    l.City,
@@ -236,13 +240,25 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
      public async Task<int> GetPerformanceCountForMeetAsync(int meetId)
      {
           using var connection = connectionFactory.CreateConnection();
-          
+
           const string sql = """
                               SELECT COUNT(*)
                               FROM Performances p
                               WHERE p.MeetId = @MeetId
                               """;
-          
+
           return await connection.ExecuteScalarAsync<int>(sql, new { MeetId = meetId });
+     }
+
+     public async Task<List<MeetParticipant>> GetParticipantsForMeetAsync(int meetId)
+     {
+          using var connection = connectionFactory.CreateConnection();
+          const string sql = """
+                              SELECT * FROM MeetParticipants
+                              WHERE MeetId = @MeetId AND Deleted = 0
+                              ORDER BY SortOrder, SchoolName
+                              """;
+          var results = await connection.QueryAsync<MeetParticipant>(sql, new { MeetId = meetId });
+          return results.ToList();
      }
 }

@@ -836,3 +836,91 @@ foreach (var perf in chronological)
 - `CloverleafTrack.Web/Views/Leaderboard/Details.cshtml`
 
 ---
+
+### [C25] Meet Participants, Entries, Placings & Season Scoring
+
+**What changed:**
+Full feature: pre-meet entry tracking, post-meet placing entry, scoring templates, and a season scoring page.
+
+**Key additions:**
+
+*Models (CloverleafTrack.Models):*
+- `MeetType` enum: `Dual=1, DoubleDual=2, Invitational=3`
+- `ScoringTemplate`, `ScoringTemplatePlace`, `MeetParticipant`, `MeetEventScoringOverride`, `MeetEntry`, `MeetEntryAthlete`, `MeetPlacing`
+- `Meet` — added `MeetType`, `ScoringTemplateId`, `Participants`, `ScoringTemplate`
+- `Season` — added `ScoringEnabled`
+
+*DTOs:*
+- `MeetEntryDto` — flat DTO for meet entry list; `IsRelay` and `AthleteDisplayName` are computed properties
+- `ScoringDataDto` — one row per athlete per placing; relay rows expanded per member via UNION ALL in the repository
+
+*Repository interfaces + implementations (7 new):*
+- `IScoringTemplateRepository` / `ScoringTemplateRepository`
+- `IAdminScoringTemplateRepository` / `AdminScoringTemplateRepository`
+- `IAdminMeetParticipantRepository` / `AdminMeetParticipantRepository`
+- `IAdminMeetEntryRepository` / `AdminMeetEntryRepository`
+- `IAdminMeetPlacingRepository` / `AdminMeetPlacingRepository`
+- `IMeetPlacingRepository` / `MeetPlacingRepository`
+- `ISeasonScoringRepository` / `SeasonScoringRepository`
+- `IMeetRepository` — added `GetParticipantsForMeetAsync`
+- `AdminMeetRepository`, `AdminSeasonRepository` — updated INSERT/UPDATE SQL for new columns
+
+*Services:*
+- `IScoringService` / `ScoringService` — aggregates ScoringDataDto rows per (AthleteId, Gender) accumulating Full/Split points by breakdown; returns null if season not found or `ScoringEnabled=false`
+- `MeetService` — injects `IMeetPlacingRepository`; `GetMeetDetailsAsync` now runs parallel tasks including placings; builds `placingLookup` dictionary for `BuildOrderedEventGroups`
+- `SeasonService.GetSeasonDetailsAsync` — now populates `SeasonId` and `ScoringEnabled` on `SeasonDetailsViewModel`
+
+*ViewModels (key):*
+- `Scoring/AthleteScoreRowViewModel`, `Scoring/SeasonScoringViewModel`
+- `Meets/MeetDetailsViewModel` — added `MeetType`, `Participants`, `HasScoring`
+- `Meets/MeetPerformanceViewModel` — added `AthleteSlug?`, `List<PerformancePlacingViewModel> Placings`, `HasPlacing`; nested `PerformancePlacingViewModel` with `MedalEmoji` computed property
+- `Seasons/SeasonDetailsViewModel` — added `SeasonId`, `ScoringEnabled`
+
+*Admin controllers (2 new):*
+- `ScoringTemplatesController` — CRUD for templates; Delete blocked for built-in templates
+- `MeetEntriesController` — Index, AddEntry, GetAthletesForEvent (AJAX), EnterResult, DeleteEntry; EnterResult POST creates Performance + PerformanceAthletes + links MeetEntry + creates MeetPlacings with FullPoints/SplitPoints
+
+*Public controller:*
+- `SeasonsController` — added `Scoring(string name)` action at `/seasons/{name}/scoring`; returns 404 if `ScoringEnabled=false`
+
+*Views (new):*
+- `Areas/Admin/Views/ScoringTemplates/` — Index, Create, Edit
+- `Areas/Admin/Views/MeetEntries/` — Index, _EntryEventGroup (partial), AddEntry, EnterResult
+- `Views/Seasons/Scoring.cshtml` + `Views/Seasons/_ScoringGenderPanel.cshtml`
+- `Views/Meets/Details.cshtml` — placing badges (🥇🥈🥉 or ordinal) added to Notes column in all three gender sections
+- `Views/Seasons/Details.cshtml` — "🏆 Season Scoring" link shown when `ScoringEnabled`
+
+*Schema (`docs/schema.sql`):*
+- `ALTER TABLE Seasons ADD ScoringEnabled BIT`
+- `ALTER TABLE Meets ADD MeetType SMALLINT, ScoringTemplateId INT`
+- New tables: `ScoringTemplates`, `ScoringTemplatePlaces`, `MeetParticipants`, `MeetEventScoringOverrides`, `MeetEntries`, `MeetEntryAthletes`, `MeetPlacings`
+- Seed: built-in "Dual Meet (5-3-1)" template with places 1→5, 2→3, 3→1
+- `RunningRelayEvents` table documented (pre-existing; added to schema file)
+
+**Watch out:**
+- `MeetPlacings.MeetParticipantId` is NULL for invitational placings. Two filtered UNIQUE indexes handle uniqueness: one WHERE NOT NULL (per-opponent), one WHERE NULL (overall). SQL Server treats NULL != NULL in unique indexes, so both cases are covered without a composite unique constraint.
+- Double Dual meets have 3 teams; one `MeetPlacing` row is created per opponent per performance. `EnterResultViewModel.PlaceInputs` has one `PlaceInputRow` per `MeetParticipant`.
+- Relay scoring: `FullPoints` = each relay member gets the template's full points for that place. `SplitPoints` = `FullPoints / AthleteCount`. Both are stored; a UI toggle selects which to display.
+- `GetTemplatePointsAsync` in `AdminMeetPlacingRepository` resolves points via: event override template → meet default template → 0 (out of range). All three cases return 0 silently if the place exceeds the template.
+- `MeetEntry.AthleteId` is NULL for relays; relay athletes are in `MeetEntryAthletes`. `GetAthleteEventCountForMeetAsync` uses UNION ALL to count both individual entries and relay memberships (to enforce the 4-event limit display flag).
+- `ScoringEnabled` on Season is the gate for both the public scoring route (404 if false) and the "Season Scoring" button on the season details page.
+- `MeetService` tests required updating: `MeetService` constructor now requires `IMeetPlacingRepository`; the test mock must be set up with `.ReturnsAsync(new List<MeetPlacing>())` to prevent `GroupBy` NullReferenceException.
+- `SeasonDetailsViewModel` now has `SeasonId` and `ScoringEnabled` — populated by `SeasonService.GetSeasonDetailsAsync`.
+
+**Key files:**
+- `CloverleafTrack.Models/Enums/MeetType.cs`
+- `CloverleafTrack.Models/Meet.cs`, `Season.cs`, `MeetPlacing.cs`, `MeetEntry.cs`, `MeetEntryAthlete.cs`, `MeetParticipant.cs`, `ScoringTemplate.cs`, `ScoringTemplatePlace.cs`, `MeetEventScoringOverride.cs`
+- `CloverleafTrack.DataAccess/Dtos/MeetEntryDto.cs`, `ScoringDataDto.cs`
+- `CloverleafTrack.DataAccess/Interfaces/I*Repository.cs` (7 new interfaces + IMeetRepository updated)
+- `CloverleafTrack.DataAccess/Repositories/Admin/*Repository.cs` (3 updated: AdminMeet, AdminSeason, AdminAthlete)
+- `CloverleafTrack.Services/ScoringService.cs`, `MeetService.cs`, `SeasonService.cs`
+- `CloverleafTrack.Services/Interfaces/IScoringService.cs`
+- `CloverleafTrack.ViewModels/Scoring/`, `Meets/MeetPerformanceViewModel.cs`, `Meets/MeetDetailsViewModel.cs`, `Seasons/SeasonDetailsViewModel.cs`, `Admin/Meets/MeetFormViewModel.cs`
+- `CloverleafTrack.Web/Areas/Admin/Controllers/ScoringTemplatesController.cs`, `MeetEntriesController.cs`, `MeetsController.cs`
+- `CloverleafTrack.Web/Controllers/SeasonsController.cs`
+- `CloverleafTrack.Web/Views/Meets/Details.cshtml`, `Views/Seasons/Details.cshtml`, `Scoring.cshtml`, `_ScoringGenderPanel.cshtml`
+- `CloverleafTrack.Web/Program.cs` (DI registrations)
+- `CloverleafTrack.Tests/Unit/Services/MeetServiceTests.cs`
+- `docs/schema.sql`
+
+---

@@ -1,0 +1,130 @@
+@using CloverleafTrack.Models.Enums
+@model CloverleafTrack.ViewModels.Scoring.SeasonScoringViewModel
+
+@{
+    ViewBag.Title = $"{Model.SeasonName} — Scoring";
+    var allCategories = Enum.GetValues<EventCategory>().OrderBy(c => (int)c).ToList();
+}
+
+@functions {
+    string OrdinalSuffix(int n) => (n % 100) switch
+    {
+        11 or 12 or 13 => "th",
+        _ => (n % 10) switch { 1 => "st", 2 => "nd", 3 => "rd", _ => "th" }
+    };
+}
+
+<div class="max-w-7xl mx-auto px-6">
+
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="mb-4">
+            <a asp-controller="Seasons" asp-action="Details" asp-route-name="@Model.SeasonSlug"
+               class="text-gray-600 dark:text-gray-400 text-sm mb-2 inline-block">
+                ← Back to @Model.SeasonName Season
+            </a>
+        </div>
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">@Model.SeasonName Scoring</h1>
+        <p class="mt-2 text-gray-600 dark:text-gray-400">Season point totals based on meet placings.</p>
+    </div>
+
+    <!-- Full / Split toggle -->
+    <div class="flex items-center gap-4 mb-6">
+        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Points mode:</span>
+        <div class="inline-flex rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden text-sm font-medium">
+            <button id="btnFull"
+                    onclick="setMode('full')"
+                    class="px-4 py-2 bg-blue-600 text-white">
+                Full (relay = full pts each)
+            </button>
+            <button id="btnSplit"
+                    onclick="setMode('split')"
+                    class="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                Split (relay pts ÷ members)
+            </button>
+        </div>
+    </div>
+
+    <!-- Boys / Girls tabs -->
+    <div class="flex gap-2 mb-6 border-b border-gray-200 dark:border-gray-700">
+        <button id="tab-boys"
+                onclick="setGender('boys')"
+                class="px-5 py-3 text-sm font-semibold border-b-2 border-blue-600 text-blue-700 dark:text-blue-400 -mb-px transition-colors">
+            ♂ Boys (@Model.Boys.Count)
+        </button>
+        <button id="tab-girls"
+                onclick="setGender('girls')"
+                class="px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-600 dark:text-gray-400 -mb-px transition-colors hover:text-gray-900 dark:hover:text-white">
+            ♀ Girls (@Model.Girls.Count)
+        </button>
+    </div>
+
+    <!-- Boys panel -->
+    <div id="panel-boys">
+        @await Html.PartialAsync("_ScoringGenderPanel", Model.Boys, new ViewDataDictionary(ViewData) { { "Gender", "boys" } })
+    </div>
+
+    <!-- Girls panel -->
+    <div id="panel-girls" style="display:none">
+        @await Html.PartialAsync("_ScoringGenderPanel", Model.Girls, new ViewDataDictionary(ViewData) { { "Gender", "girls" } })
+    </div>
+
+</div>
+
+@section Scripts {
+<script>
+    let currentMode = 'full';
+
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('btnFull').className =
+            'px-4 py-2 ' + (mode === 'full' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700');
+        document.getElementById('btnSplit').className =
+            'px-4 py-2 ' + (mode === 'split' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700');
+
+        document.querySelectorAll('[data-full]').forEach(el => {
+            el.style.display = mode === 'full' ? '' : 'none';
+        });
+        document.querySelectorAll('[data-split]').forEach(el => {
+            el.style.display = mode === 'split' ? '' : 'none';
+        });
+    }
+
+    function setGender(gender) {
+        ['boys', 'girls'].forEach(g => {
+            document.getElementById('panel-' + g).style.display = g === gender ? '' : 'none';
+            const tab = document.getElementById('tab-' + g);
+            if (g === gender) {
+                tab.classList.add('border-blue-600', 'text-blue-700', 'dark:text-blue-400');
+                tab.classList.remove('border-transparent', 'text-gray-600', 'dark:text-gray-400');
+            } else {
+                tab.classList.remove('border-blue-600', 'text-blue-700', 'dark:text-blue-400');
+                tab.classList.add('border-transparent', 'text-gray-600', 'dark:text-gray-400');
+            }
+        });
+    }
+
+    function setSubTab(gender, tab) {
+        ['total', 'runfield', 'indrelay', 'category'].forEach(t => {
+            const panel = document.getElementById(gender + '-sub-' + t);
+            const btn = document.getElementById(gender + '-subtab-' + t);
+            if (panel) panel.style.display = t === tab ? '' : 'none';
+            if (btn) {
+                if (t === tab) {
+                    btn.classList.add('border-blue-600', 'text-blue-700', 'dark:text-blue-400');
+                    btn.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+                } else {
+                    btn.classList.remove('border-blue-600', 'text-blue-700', 'dark:text-blue-400');
+                    btn.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+                }
+            }
+        });
+    }
+
+    // Initialise
+    document.addEventListener('DOMContentLoaded', function () {
+        setMode('full');
+        ['boys', 'girls'].forEach(g => setSubTab(g, 'total'));
+    });
+</script>
+}

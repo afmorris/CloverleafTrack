@@ -32,9 +32,9 @@ public class AdminSeasonRepository(IDbConnectionFactory connectionFactory) : IAd
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
-            INSERT INTO Seasons (Name, StartDate, EndDate, IsCurrentSeason, Notes, Status)
+            INSERT INTO Seasons (Name, StartDate, EndDate, IsCurrentSeason, Notes, Status, ScoringEnabled)
             OUTPUT INSERTED.Id
-            VALUES (@Name, @StartDate, @EndDate, @IsCurrentSeason, @Notes, @Status)";
+            VALUES (@Name, @StartDate, @EndDate, @IsCurrentSeason, @Notes, @Status, @ScoringEnabled)";
         return await connection.ExecuteScalarAsync<int>(sql, season);
     }
 
@@ -48,7 +48,8 @@ public class AdminSeasonRepository(IDbConnectionFactory connectionFactory) : IAd
                 EndDate = @EndDate,
                 IsCurrentSeason = @IsCurrentSeason,
                 Notes = @Notes,
-                Status = @Status
+                Status = @Status,
+                ScoringEnabled = @ScoringEnabled
             WHERE Id = @Id";
         var rowsAffected = await connection.ExecuteAsync(sql, season);
         return rowsAffected > 0;

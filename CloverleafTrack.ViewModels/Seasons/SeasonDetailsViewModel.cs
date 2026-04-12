@@ -4,7 +4,9 @@ namespace CloverleafTrack.ViewModels.Seasons;
 
 public class SeasonDetailsViewModel
 {
+    public int SeasonId { get; set; }
     public string Name { get; set; } = string.Empty;
+    public bool ScoringEnabled { get; set; }
     public int TotalPRs { get; set; }
     public int TotalAthletesWithPRs { get; set; }
     public int TotalSchoolRecordsBroken { get; set; }

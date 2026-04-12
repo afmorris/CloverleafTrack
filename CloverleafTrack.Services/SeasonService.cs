@@ -97,7 +97,9 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
 
         return new SeasonDetailsViewModel
         {
+            SeasonId = season.Id,
             Name = season.Name,
+            ScoringEnabled = season.ScoringEnabled,
             TotalPRs = totalPRs,
             TotalAthletesWithPRs = totalAthletesWithPRs,
             TotalSchoolRecordsBroken = totalSchoolRecordsBroken,

@@ -102,6 +102,13 @@ enum SeasonStatus
 {
     Draft = 1, Importing = 2, Partial = 3, RecordOnly = 4, Complete = 5
 }
+
+enum MeetType : short
+{
+    Dual = 1,       // two teams (us vs. one opponent)
+    DoubleDual = 2, // three teams (us vs. two opponents, scored independently per pair)
+    Invitational = 3 // multi-team; configurable scoring template
+}
 ```
 
 `Environment` conflicts with `System.Environment`. All files that use it add:
@@ -115,8 +122,15 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 
 | Model | Key fields |
 |---|---|
-| `Season` | Id, Name, StartDate, EndDate, IsCurrentSeason, Status, Meets |
-| `Meet` | Id, Name, Date, Environment, HandTimed, LocationId, SeasonId, EntryStatus, Slug (computed via Slugify), ResultsUrl |
+| `Season` | Id, Name, StartDate, EndDate, IsCurrentSeason, Status, ScoringEnabled, Meets |
+| `Meet` | Id, Name, Date, Environment, HandTimed, LocationId, SeasonId, EntryStatus, MeetType, ScoringTemplateId?, Participants, Slug (computed via Slugify), ResultsUrl |
+| `ScoringTemplate` | Id, Name, IsBuiltIn, Places |
+| `ScoringTemplatePlace` | Id, ScoringTemplateId, Place, Points |
+| `MeetParticipant` | Id, MeetId, SchoolName, SortOrder |
+| `MeetEventScoringOverride` | Id, MeetId, EventId, ScoringTemplateId |
+| `MeetEntry` | Id, MeetId, EventId, AthleteId? (null for relay), PerformanceId? (null until result entered), Athletes (relay junction) |
+| `MeetEntryAthlete` | Id, MeetEntryId, AthleteId |
+| `MeetPlacing` | Id, MeetId, PerformanceId, MeetParticipantId? (null for invitational), Place, FullPoints, SplitPoints |
 | `Location` | Id, Name, City, State, ZipCode, Country |
 | `Event` | Id, Name, EventKey, EventType, EventCategory, Gender, Environment, AthleteCount, SortOrder, EventCategorySortOrder |
 | `Athlete` | Id, FirstName, LastName, Gender, GraduationYear, IsActive |
@@ -147,7 +161,7 @@ Slug generation uses the `Slugify` NuGet package (`SlugHelper`). `Meet.Slug` is 
 | Controller | Route | Purpose |
 |---|---|---|
 | `HomeController` | `/` | Homepage stats, highlights, upcoming meets |
-| `SeasonsController` | `/seasons` | Season list + season detail page |
+| `SeasonsController` | `/seasons` | Season list, season detail, and season scoring (`/seasons/{name}/scoring`) |
 | `MeetsController` | `/meets` | Meet list + meet detail page |
 | `RosterController` | `/roster` | Active + former athlete list |
 | `AthletesController` | `/athletes/{slug}` | Athlete career detail — NOTE: route is `/roster/{slug}` via `RosterController`, not `AthletesController` |
@@ -158,11 +172,13 @@ Slug generation uses the `Slugify` NuGet package (`SlugHelper`). `Meet.Slug` is 
 |---|---|---|
 | `DashboardController` | `/Admin/Dashboard` | Stats overview, data quality issues |
 | `AthletesController` | `/Admin/Athletes` | CRUD athletes |
-| `MeetsController` | `/Admin/Meets` | CRUD meets |
+| `MeetsController` | `/Admin/Meets` | CRUD meets (now includes MeetType, participants) |
 | `PerformancesController` | `/Admin/Performances` | Performance entry form + CRUD |
 | `EventsController` | `/Admin/Events` | CRUD events |
 | `LocationsController` | `/Admin/Locations` | CRUD locations |
-| `SeasonsController` | `/Admin/Seasons` | CRUD seasons |
+| `SeasonsController` | `/Admin/Seasons` | CRUD seasons (now includes ScoringEnabled) |
+| `ScoringTemplatesController` | `/Admin/ScoringTemplates` | CRUD scoring templates + places; built-in templates cannot be deleted |
+| `MeetEntriesController` | `/Admin/MeetEntries` | Pre-meet entry tracking + post-meet result/placing entry |
 
 Admin area has **no authentication** — it is expected to be protected at the infrastructure layer.
 
@@ -355,8 +371,8 @@ Field events show a distance input; running events show a time input.
 
 | Table | Notes |
 |---|---|
-| `Seasons` | |
-| `Meets` | FK to Seasons, Locations |
+| `Seasons` | Added `ScoringEnabled BIT` |
+| `Meets` | FK to Seasons, Locations; added `MeetType SMALLINT`, `ScoringTemplateId INT NULL` |
 | `Locations` | |
 | `Events` | Includes SortOrder, EventCategorySortOrder, AthleteCount, Gender (1/2/3), EventKey |
 | `Athletes` | |
@@ -364,6 +380,13 @@ Field events show a distance input; running events show a time input.
 | `PerformanceAthletes` | Junction: PerformanceId, AthleteId |
 | `Leaderboards` | All-time rankings, rebuilt by `sp_RebuildLeaderboards` |
 | `RunningRelayEvents` | Separate table for running relay event definitions: Id (UNIQUEIDENTIFIER), Name, Gender (INT), SortOrder, Environment (INT), Deleted (BIT), DateCreated, DateUpdated, DateDeleted |
+| `ScoringTemplates` | Id, Name, IsBuiltIn; soft-deleted. Built-in template "Dual Meet (5-3-1)" seeded |
+| `ScoringTemplatePlaces` | Id, ScoringTemplateId, Place, Points; unique per (template, place) |
+| `MeetParticipants` | Id, MeetId, SchoolName, SortOrder; soft-deleted |
+| `MeetEventScoringOverrides` | Id, MeetId, EventId, ScoringTemplateId; per-event template override |
+| `MeetEntries` | Id, MeetId, EventId, AthleteId? (null=relay), PerformanceId? (null until result); soft-deleted |
+| `MeetEntryAthletes` | Junction: MeetEntryId, AthleteId (relay team members) |
+| `MeetPlacings` | Id, MeetId, PerformanceId, MeetParticipantId? (null=invitational), Place, FullPoints, SplitPoints; two filtered UNIQUE indexes |
 
 `sp_RebuildLeaderboards` is a stored procedure that recalculates all leaderboard rankings and resets/recalculates `PersonalBest`, `SeasonBest`, and `SchoolRecord` flags on `Performances`. It is called after every performance insert, update, or delete. It does **not** filter by gender, so Mixed relay performances are ranked alongside Boys/Girls relay performances within their own event. `SchoolRecord` and `PersonalBest`/`SeasonBest` flags are only set for individual performances (`AthleteId IS NOT NULL`); relay rows keep these flags at 0 and use `AllTimeRank = 1` as the SR proxy instead.
 
@@ -376,6 +399,39 @@ Field events show a distance input; running events show a time input.
 - **Tab UI pattern (Outdoor/Indoor):** OUTDOOR tab is always first (leftmost) and active by default. INDOOR is second. This applies to: Season Details (`all-time-outdoor`/`all-time-indoor`), Home Page highlights, Home Page season leaders, and the Leaderboard (`env-outdoor`/`env-indoor`). Active tab class: `bg-gradient-to-r from-amber-600 to-yellow-500` (outdoor) or `from-blue-600 to-blue-500` (indoor). Default is triggered by `.click()` on the outdoor tab in `DOMContentLoaded`.
 - Meets are displayed **oldest-first (ascending by date)** on both the Season Details page and the Meets index page.
 - Relay athlete names are displayed separated by ` / ` (with spaces) in inline lists — not bullet points.
+
+---
+
+## Meet Participants, Entries, Placings & Season Scoring
+
+### Pre-meet entry flow (admin)
+1. Admin creates meets with `MeetType` (Dual/DoubleDual/Invitational) and optional opponent school names.
+2. At `/Admin/MeetEntries?meetId=X`: admin adds `MeetEntry` rows (athlete + event) before the meet. Athletes who exceed the 4-event limit are flagged but not blocked.
+3. After the meet: admin clicks "Enter Result" per entry → creates `Performance` + `PerformanceAthletes` + links `PerformanceId` on `MeetEntry` + creates `MeetPlacing` row(s) (one per opponent for Dual/DoubleDual, one overall for Invitational).
+
+### Scoring templates
+- Dual and DoubleDual meets are **always auto-assigned** the built-in "Dual Meet (5-3-1)" template. The template picker is only shown for Invitational meets in the Create/Edit form.
+- `GetTemplatePointsAsync` lookup order: event-level override → meet default → 0 (out of range, silently).
+
+### Relay points
+Two pre-computed columns on `MeetPlacings`:
+- `FullPoints` — each relay member gets the full template points (e.g., 5 pts for 1st, times 4 members = 20 total across the team)
+- `SplitPoints` — `FullPoints / AthleteCount` (so the team gets 5 pts total)
+Both are stored; the season scoring page provides a toggle to choose which to display.
+
+### MeetPlacings uniqueness
+- Per-opponent (Dual/DoubleDual): `UNIQUE (PerformanceId, MeetParticipantId) WHERE MeetParticipantId IS NOT NULL`
+- Invitational overall: `UNIQUE (PerformanceId) WHERE MeetParticipantId IS NULL`
+SQL Server's NULL != NULL behavior in unique indexes means these two filtered indexes correctly cover both cases.
+
+### Season scoring page (`/seasons/{name}/scoring`)
+- Gated by `Season.ScoringEnabled = true`. Returns 404 otherwise.
+- Served by `SeasonsController.Scoring` → `IScoringService.GetSeasonScoringAsync`.
+- `ScoringService` iterates `ScoringDataDto` rows (one per athlete per placing, relay expanded per member). Accumulates separate Full/Split totals for Running/Field, Individual/Relay, and per-`EventCategory`. Result is two sorted lists: `Boys` and `Girls`.
+- View: `Views/Seasons/Scoring.cshtml` + `Views/Seasons/_ScoringGenderPanel.cshtml` partial. 4 sub-tabs per gender: Total, Running vs Field, Individual vs Relay, By Category. Full/Split toggle uses `data-full` / `data-split` attributes driven by JavaScript.
+
+### Meet details page badges
+`Views/Meets/Details.cshtml` Notes column now shows placing badges (🥇🥈🥉 or ordinal "4th", "5th", etc.) when `perf.HasPlacing` is true. One badge per `PerformancePlacingViewModel` in `perf.Placings`. Badge includes opponent school name for Dual/DoubleDual (`vs. School`), bare emoji for Invitational.
 
 ---
 
@@ -457,3 +513,6 @@ See `docs/testing.md` for full test strategy and coverage details.
 - **Never use `p.SchoolRecord` in service, ViewModel, or view code to determine whether a performance is the school record.** Always use `AllTimeRank == 1` from the Leaderboards table. The `SchoolRecord` DB column is maintained by `sp_RebuildLeaderboards` for individual performances only — relay rows always have it as `0`. Even for individuals it should not be trusted in application code; `AllTimeRank == 1` is the single authoritative test for both.
 - Every query that needs to surface `IsSchoolRecord` must either join `Leaderboards` and project `AllTimeRank`, or use a correlated subquery `(SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id)`. When using Dapper multi-mapping, place this subquery **after `p.*` and before the next model's `Id` column** so Dapper maps it to `Performance.AllTimeRank`.
 - Relay athlete name display: always join with ` / ` separator in inline contexts, never individual bullet spans.
+- For placing/scoring: use `FullPoints` / `SplitPoints` from `MeetPlacings` — do not recompute points in application code. `GetTemplatePointsAsync` handles the resolution chain.
+- `MeetEntry.AthleteId` is NULL for relay entries. Relay athletes are in `MeetEntryAthletes`. The 4-event limit check uses `GetAthleteEventCountForMeetAsync` which counts both individual entries and relay team memberships via UNION ALL.
+- When adding new DI registrations to `Program.cs`, follow the existing grouping: public repos first, then admin repos, then services.

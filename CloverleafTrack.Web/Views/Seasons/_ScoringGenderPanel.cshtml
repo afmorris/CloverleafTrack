@@ -1,0 +1,196 @@
+@using CloverleafTrack.Models.Enums
+@model List<CloverleafTrack.ViewModels.Scoring.AthleteScoreRowViewModel>
+
+@{
+    var gender = ViewData["Gender"] as string ?? "boys";
+    var allCategories = Enum.GetValues<EventCategory>().OrderBy(c => (int)c).ToList();
+}
+
+@functions {
+    string CategoryName(EventCategory c) => c switch
+    {
+        EventCategory.Sprints => "Sprints",
+        EventCategory.Distance => "Distance",
+        EventCategory.Throws => "Throws",
+        EventCategory.Jumps => "Jumps",
+        EventCategory.Relays => "Relays",
+        EventCategory.Hurdles => "Hurdles",
+        _ => c.ToString()
+    };
+}
+
+@if (!Model.Any())
+{
+    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-8 text-center text-gray-500 dark:text-gray-400">
+        No scoring data available.
+    </div>
+}
+else
+{
+    <!-- Sub-tabs -->
+    <div class="flex gap-1 mb-5 border-b border-gray-200 dark:border-gray-700 text-sm">
+        @foreach (var (subId, label) in new[] { ("total","Total"), ("runfield","Running vs Field"), ("indrelay","Individual vs Relay"), ("category","By Category") })
+        {
+            <button id="@(gender)-subtab-@subId"
+                    onclick="setSubTab('@gender','@subId')"
+                    class="px-4 py-2 font-medium border-b-2 -mb-px transition-colors
+                           @(subId == "total" ? "border-blue-600 text-blue-700 dark:text-blue-400" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white")">
+                @label
+            </button>
+        }
+    </div>
+
+    @* ── Total ─────────────────────────────────────────────────────── *@
+    <div id="@(gender)-sub-total">
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+            <table class="min-w-full text-sm">
+                <thead class="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
+                    <tr class="text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wide">
+                        <th class="px-4 py-3 text-left w-10">#</th>
+                        <th class="px-4 py-3 text-left">Athlete</th>
+                        <th class="px-4 py-3 text-right">Events</th>
+                        <th class="px-4 py-3 text-right" data-full>Points (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none">Points (Split)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Count; i++)
+                    {
+                        var row = Model[i];
+                        <tr class="border-t border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                            <td class="px-4 py-3 text-gray-500 dark:text-gray-400 font-mono text-xs">@(i + 1)</td>
+                            <td class="px-4 py-3">
+                                <a asp-controller="Roster" asp-action="Details" asp-route-slug="@row.AthleteSlug"
+                                   class="font-medium text-gray-900 dark:text-white hover:underline">
+                                    @row.AthleteFullName
+                                </a>
+                                @if (row.ExceedsEventLimit)
+                                {
+                                    <span class="ml-2 inline-block px-1.5 py-0.5 text-xs rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700/30"
+                                          title="Athlete is entered in more than 4 events">
+                                        ⚠️ @row.EventCount events
+                                    </span>
+                                }
+                            </td>
+                            <td class="px-4 py-3 text-right text-gray-600 dark:text-gray-400">@row.EventCount</td>
+                            <td class="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white" data-full>@row.TotalFullPoints.ToString("0.##")</td>
+                            <td class="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white" data-split style="display:none">@row.TotalSplitPoints.ToString("0.##")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @* ── Running vs Field ──────────────────────────────────────────── *@
+    <div id="@(gender)-sub-runfield" style="display:none">
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+            <table class="min-w-full text-sm">
+                <thead class="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
+                    <tr class="text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wide">
+                        <th class="px-4 py-3 text-left w-10">#</th>
+                        <th class="px-4 py-3 text-left">Athlete</th>
+                        <th class="px-4 py-3 text-right" data-full>Running (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none">Running (Split)</th>
+                        <th class="px-4 py-3 text-right" data-full>Field (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none">Field (Split)</th>
+                        <th class="px-4 py-3 text-right" data-full>Total (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none">Total (Split)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Count; i++)
+                    {
+                        var row = Model[i];
+                        <tr class="border-t border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                            <td class="px-4 py-3 text-gray-500 dark:text-gray-400 font-mono text-xs">@(i + 1)</td>
+                            <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">@row.AthleteFullName</td>
+                            <td class="px-4 py-3 text-right text-gray-900 dark:text-white" data-full>@row.RunningFullPoints.ToString("0.##")</td>
+                            <td class="px-4 py-3 text-right text-gray-900 dark:text-white" data-split style="display:none">@row.RunningSplitPoints.ToString("0.##")</td>
+                            <td class="px-4 py-3 text-right text-gray-900 dark:text-white" data-full>@row.FieldFullPoints.ToString("0.##")</td>
+                            <td class="px-4 py-3 text-right text-gray-900 dark:text-white" data-split style="display:none">@row.FieldSplitPoints.ToString("0.##")</td>
+                            <td class="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white" data-full>@row.TotalFullPoints.ToString("0.##")</td>
+                            <td class="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white" data-split style="display:none">@row.TotalSplitPoints.ToString("0.##")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @* ── Individual vs Relay ───────────────────────────────────────── *@
+    <div id="@(gender)-sub-indrelay" style="display:none">
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+            <table class="min-w-full text-sm">
+                <thead class="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
+                    <tr class="text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wide">
+                        <th class="px-4 py-3 text-left w-10">#</th>
+                        <th class="px-4 py-3 text-left">Athlete</th>
+                        <th class="px-4 py-3 text-right">Individual</th>
+                        <th class="px-4 py-3 text-right" data-full>Relay (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none">Relay (Split)</th>
+                        <th class="px-4 py-3 text-right" data-full>Total (Full)</th>
+                        <th class="px-4 py-3 text-right" data-split style="display:none">Total (Split)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Count; i++)
+                    {
+                        var row = Model[i];
+                        <tr class="border-t border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                            <td class="px-4 py-3 text-gray-500 dark:text-gray-400 font-mono text-xs">@(i + 1)</td>
+                            <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">@row.AthleteFullName</td>
+                            <td class="px-4 py-3 text-right text-gray-900 dark:text-white">@row.IndividualPoints.ToString("0.##")</td>
+                            <td class="px-4 py-3 text-right text-gray-900 dark:text-white" data-full>@row.RelayFullPoints.ToString("0.##")</td>
+                            <td class="px-4 py-3 text-right text-gray-900 dark:text-white" data-split style="display:none">@row.RelaySplitPoints.ToString("0.##")</td>
+                            <td class="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white" data-full>@row.TotalFullPoints.ToString("0.##")</td>
+                            <td class="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white" data-split style="display:none">@row.TotalSplitPoints.ToString("0.##")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @* ── By Category ───────────────────────────────────────────────── *@
+    <div id="@(gender)-sub-category" style="display:none">
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                    <thead class="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
+                        <tr class="text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wide">
+                            <th class="px-4 py-3 text-left w-10">#</th>
+                            <th class="px-4 py-3 text-left">Athlete</th>
+                            @foreach (var cat in allCategories)
+                            {
+                                <th class="px-4 py-3 text-right" data-full>@CategoryName(cat) (F)</th>
+                                <th class="px-4 py-3 text-right" data-split style="display:none">@CategoryName(cat) (S)</th>
+                            }
+                            <th class="px-4 py-3 text-right" data-full>Total (F)</th>
+                            <th class="px-4 py-3 text-right" data-split style="display:none">Total (S)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.Count; i++)
+                        {
+                            var row = Model[i];
+                            <tr class="border-t border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                                <td class="px-4 py-3 text-gray-500 dark:text-gray-400 font-mono text-xs">@(i + 1)</td>
+                                <td class="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">@row.AthleteFullName</td>
+                                @foreach (var cat in allCategories)
+                                {
+                                    var full = row.FullPointsByCategory.GetValueOrDefault(cat);
+                                    var split = row.SplitPointsByCategory.GetValueOrDefault(cat);
+                                    <td class="px-4 py-3 text-right text-gray-900 dark:text-white" data-full>@(full > 0 ? full.ToString("0.##") : "—")</td>
+                                    <td class="px-4 py-3 text-right text-gray-900 dark:text-white" data-split style="display:none">@(split > 0 ? split.ToString("0.##") : "—")</td>
+                                }
+                                <td class="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white" data-full>@row.TotalFullPoints.ToString("0.##")</td>
+                                <td class="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white" data-split style="display:none">@row.TotalSplitPoints.ToString("0.##")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

@@ -12,12 +12,16 @@ namespace CloverleafTrack.Tests.Unit.Services;
 public class MeetServiceTests
 {
     private readonly Mock<IMeetRepository> _mockRepo;
+    private readonly Mock<IMeetPlacingRepository> _mockPlacingRepo;
     private readonly MeetService _service;
 
     public MeetServiceTests()
     {
         _mockRepo = new Mock<IMeetRepository>();
-        _service = new MeetService(_mockRepo.Object);
+        _mockPlacingRepo = new Mock<IMeetPlacingRepository>();
+        _mockPlacingRepo.Setup(r => r.GetForMeetAsync(It.IsAny<int>()))
+                        .ReturnsAsync(new List<MeetPlacing>());
+        _service = new MeetService(_mockRepo.Object, _mockPlacingRepo.Object);
     }
 
     // -------------------------------------------------------------------------
