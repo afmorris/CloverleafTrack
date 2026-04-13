@@ -1,0 +1,66 @@
+@model CloverleafTrack.ViewModels.Admin.MeetEntries.MeetEntryEventGroupViewModel
+@{
+    var meetId = ViewContext.RouteData.Values["meetId"]
+                 ?? Context.Request.Query["meetId"].FirstOrDefault()
+                 ?? "0";
+}
+
+<div class="event-card">
+    <div class="event-header">@Model.EventName</div>
+    @foreach (var entry in Model.Entries)
+    {
+        <div class="entry-row">
+            <div class="entry-athlete">
+                @entry.AthleteDisplay
+                @if (entry.ExceedsEventLimit)
+                {
+                    <small>⚠️ Athlete exceeds 4-event limit</small>
+                }
+                @if (entry.IsRelay)
+                {
+                    <small>Relay</small>
+                }
+            </div>
+            <div class="entry-status">
+                @if (entry.HasResult)
+                {
+                    <span class="badge badge-result">✓ @(entry.FormattedResult ?? "Result")</span>
+                }
+                else
+                {
+                    <span class="badge badge-pending">Pending</span>
+                }
+                @foreach (var placing in entry.Placings)
+                {
+                    <span class="badge badge-medal">
+                        @placing.MedalEmoji
+                        @if (placing.OpponentSchoolName != null)
+                        {
+                            <span> vs. @placing.OpponentSchoolName</span>
+                        }
+                    </span>
+                }
+            </div>
+            <div class="entry-actions">
+                @if (!entry.HasResult)
+                {
+                    <a asp-area="Admin" asp-controller="MeetEntries" asp-action="EnterResult"
+                       asp-route-id="@entry.EntryId" class="btn btn-success">Enter Result</a>
+                }
+                else
+                {
+                    <a asp-area="Admin" asp-controller="MeetEntries" asp-action="EditResult"
+                       asp-route-id="@entry.EntryId" class="btn btn-edit">Edit Result</a>
+                    <a asp-area="Admin" asp-controller="MeetEntries" asp-action="EnterPlacing"
+                       asp-route-id="@entry.EntryId" class="btn btn-primary">@(entry.HasPlacing ? "Edit Placing" : "Add Placing")</a>
+                }
+                <form asp-area="Admin" asp-controller="MeetEntries" asp-action="DeleteEntry" method="post"
+                      onsubmit="return confirm('Remove this entry?');">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@entry.EntryId" />
+                    <button type="submit" class="btn btn-danger">✕</button>
+                </form>
+            </div>
+        </div>
+    }
+</div>

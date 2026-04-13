@@ -240,6 +240,28 @@ CREATE TABLE [dbo].[Leaderboards] (
 
 
 -- ============================================================
+-- RUNNING RELAY EVENTS
+-- Separate table for mixed-gender (and any other) running relay
+-- event definitions that cannot use the auto-INT identity of
+-- the main Events table.  Uses UNIQUEIDENTIFIER as PK.
+-- Application repositories must have corresponding rows in
+-- Events table for these events to surface in the app UI.
+-- ============================================================
+CREATE TABLE [dbo].[RunningRelayEvents] (
+    [Id]          UNIQUEIDENTIFIER DEFAULT (NEWID()) NOT NULL,
+    [Name]        NVARCHAR (150) NOT NULL,
+    [Gender]      INT            NOT NULL,   -- See Gender enum above (stored as INT here)
+    [SortOrder]   INT            NULL,
+    [Environment] INT            NOT NULL,   -- See Environment enum above (stored as INT here)
+    [Deleted]     BIT            DEFAULT ((0)) NOT NULL,
+    [DateCreated] DATETIME2 (7)  DEFAULT (GETUTCDATE()) NOT NULL,
+    [DateUpdated] DATETIME2 (7)  NULL,
+    [DateDeleted] DATETIME2 (7)  NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+
+-- ============================================================
 -- PERSONAL BEST HISTORY
 -- Audit trail of when each athlete achieved a personal best
 -- for each event. Not the same as the PersonalBest flag on
@@ -474,3 +496,236 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH;
 END;
+
+
+-- ============================================================
+-- SCHEMA ADDITIONS — Meet Participants, Entries, Placings
+--                    & Season Scoring
+-- ============================================================
+
+-- ── Enum additions ──────────────────────────────────────────
+--
+--   MeetType (SMALLINT stored in Meets.MeetType):
+--     1 = Dual          two teams (us vs. one opponent)
+--     2 = DoubleDual    three teams (us vs. two opponents,
+--                       scored independently per opponent pair)
+--     3 = Invitational  multi-team; template-based scoring
+--
+-- ────────────────────────────────────────────────────────────
+
+
+-- ============================================================
+-- ALTER TABLE: Seasons — add ScoringEnabled flag
+-- ============================================================
+ALTER TABLE [dbo].[Seasons]
+    ADD [ScoringEnabled] BIT DEFAULT ((0)) NOT NULL;
+
+
+-- ============================================================
+-- ALTER TABLE: Meets — add MeetType and ScoringTemplateId
+-- ============================================================
+ALTER TABLE [dbo].[Meets]
+    ADD [MeetType]          SMALLINT DEFAULT ((1)) NOT NULL,   -- See MeetType enum above
+        [ScoringTemplateId] INT      NULL;
+
+
+-- ============================================================
+-- SCORING TEMPLATES
+-- Configurable point-per-place templates for invitational
+-- meets.  Built-in templates (IsBuiltIn = 1) cannot be deleted.
+-- ============================================================
+CREATE TABLE [dbo].[ScoringTemplates] (
+    [Id]          INT            IDENTITY (1, 1) NOT NULL,
+    [Name]        NVARCHAR (100) NOT NULL,
+    [IsBuiltIn]   BIT            DEFAULT ((0)) NOT NULL,
+    [DateCreated] DATETIME2 (7)  DEFAULT (GETUTCDATE()) NOT NULL,
+    [DateUpdated] DATETIME2 (7)  NULL,
+    [Deleted]     BIT            DEFAULT ((0)) NOT NULL,
+    [DateDeleted] DATETIME2 (7)  NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+-- ── Seed data: built-in 5-3-1 Dual/Double Dual template ────
+INSERT INTO [dbo].[ScoringTemplates] ([Name], [IsBuiltIn])
+VALUES ('Dual Meet (5-3-1)', 1);
+
+
+-- ============================================================
+-- SCORING TEMPLATE PLACES
+-- Each row defines how many points are awarded for finishing
+-- in a given place within a template.
+-- ============================================================
+CREATE TABLE [dbo].[ScoringTemplatePlaces] (
+    [Id]                 INT            IDENTITY (1, 1) NOT NULL,
+    [ScoringTemplateId]  INT            NOT NULL,
+    [Place]              INT            NOT NULL,
+    [Points]             DECIMAL (10,2) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_ScoringTemplatePlaces_ScoringTemplates]
+        FOREIGN KEY ([ScoringTemplateId]) REFERENCES [dbo].[ScoringTemplates] ([Id]),
+    CONSTRAINT [UQ_ScoringTemplatePlaces_Template_Place]
+        UNIQUE NONCLUSTERED ([ScoringTemplateId] ASC, [Place] ASC)
+);
+
+CREATE NONCLUSTERED INDEX [IX_ScoringTemplatePlaces_ScoringTemplateId]
+    ON [dbo].[ScoringTemplatePlaces]([ScoringTemplateId] ASC);
+
+-- ── Seed data: 5-3-1 places ─────────────────────────────────
+DECLARE @DualTemplateId INT = SCOPE_IDENTITY();   -- inserted above
+INSERT INTO [dbo].[ScoringTemplatePlaces] ([ScoringTemplateId], [Place], [Points])
+VALUES (@DualTemplateId, 1, 5),
+       (@DualTemplateId, 2, 3),
+       (@DualTemplateId, 3, 1);
+
+
+-- ============================================================
+-- MEET PARTICIPANTS
+-- The opposing schools in a meet.  Used to label placings.
+-- Soft-deleted (Deleted + DateDeleted).
+-- ============================================================
+CREATE TABLE [dbo].[MeetParticipants] (
+    [Id]          INT            IDENTITY (1, 1) NOT NULL,
+    [MeetId]      INT            NOT NULL,
+    [SchoolName]  NVARCHAR (200) NOT NULL,
+    [SortOrder]   INT            DEFAULT ((0)) NOT NULL,
+    [DateCreated] DATETIME2 (7)  DEFAULT (GETUTCDATE()) NOT NULL,
+    [DateUpdated] DATETIME2 (7)  NULL,
+    [Deleted]     BIT            DEFAULT ((0)) NOT NULL,
+    [DateDeleted] DATETIME2 (7)  NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_MeetParticipants_Meets] FOREIGN KEY ([MeetId]) REFERENCES [dbo].[Meets] ([Id])
+);
+
+CREATE NONCLUSTERED INDEX [IX_MeetParticipants_MeetId]
+    ON [dbo].[MeetParticipants]([MeetId] ASC);
+
+
+-- ============================================================
+-- MEET EVENT SCORING OVERRIDES
+-- Per-event template override within a meet.  When present,
+-- this template takes precedence over the meet-level default.
+-- ============================================================
+CREATE TABLE [dbo].[MeetEventScoringOverrides] (
+    [Id]                 INT IDENTITY (1, 1) NOT NULL,
+    [MeetId]             INT NOT NULL,
+    [EventId]            INT NOT NULL,
+    [ScoringTemplateId]  INT NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_MeetEventScoringOverrides_Meets]
+        FOREIGN KEY ([MeetId]) REFERENCES [dbo].[Meets] ([Id]),
+    CONSTRAINT [FK_MeetEventScoringOverrides_Events]
+        FOREIGN KEY ([EventId]) REFERENCES [dbo].[Events] ([Id]),
+    CONSTRAINT [FK_MeetEventScoringOverrides_ScoringTemplates]
+        FOREIGN KEY ([ScoringTemplateId]) REFERENCES [dbo].[ScoringTemplates] ([Id]),
+    CONSTRAINT [UQ_MeetEventScoringOverrides_Meet_Event]
+        UNIQUE NONCLUSTERED ([MeetId] ASC, [EventId] ASC)
+);
+
+
+-- ============================================================
+-- MEET ENTRIES
+-- Pre-meet registration of an athlete (or relay) for an event.
+-- PerformanceId is NULL until the post-meet result is entered.
+-- AthleteId is NULL for relay entries (members are stored in
+-- MeetEntryAthletes below).
+-- ============================================================
+CREATE TABLE [dbo].[MeetEntries] (
+    [Id]            INT           IDENTITY (1, 1) NOT NULL,
+    [MeetId]        INT           NOT NULL,
+    [EventId]       INT           NOT NULL,
+    [AthleteId]     INT           NULL,            -- NULL for relay entries
+    [PerformanceId] INT           NULL,            -- NULL until result is entered
+    [DateCreated]   DATETIME2 (7) DEFAULT (GETUTCDATE()) NOT NULL,
+    [DateUpdated]   DATETIME2 (7) NULL,
+    [Deleted]       BIT           DEFAULT ((0)) NOT NULL,
+    [DateDeleted]   DATETIME2 (7) NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_MeetEntries_Meets]        FOREIGN KEY ([MeetId])        REFERENCES [dbo].[Meets]        ([Id]),
+    CONSTRAINT [FK_MeetEntries_Events]       FOREIGN KEY ([EventId])       REFERENCES [dbo].[Events]       ([Id]),
+    CONSTRAINT [FK_MeetEntries_Athletes]     FOREIGN KEY ([AthleteId])     REFERENCES [dbo].[Athletes]     ([Id]),
+    CONSTRAINT [FK_MeetEntries_Performances] FOREIGN KEY ([PerformanceId]) REFERENCES [dbo].[Performances] ([Id])
+);
+
+CREATE NONCLUSTERED INDEX [IX_MeetEntries_MeetId]
+    ON [dbo].[MeetEntries]([MeetId] ASC);
+
+CREATE NONCLUSTERED INDEX [IX_MeetEntries_EventId]
+    ON [dbo].[MeetEntries]([EventId] ASC);
+
+CREATE NONCLUSTERED INDEX [IX_MeetEntries_AthleteId]
+    ON [dbo].[MeetEntries]([AthleteId] ASC);
+
+
+-- ============================================================
+-- MEET ENTRY ATHLETES
+-- Junction table linking relay MeetEntries to their athletes.
+-- ============================================================
+CREATE TABLE [dbo].[MeetEntryAthletes] (
+    [Id]           INT IDENTITY (1, 1) NOT NULL,
+    [MeetEntryId]  INT NOT NULL,
+    [AthleteId]    INT NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_MeetEntryAthletes_MeetEntries] FOREIGN KEY ([MeetEntryId]) REFERENCES [dbo].[MeetEntries] ([Id]),
+    CONSTRAINT [FK_MeetEntryAthletes_Athletes]    FOREIGN KEY ([AthleteId])   REFERENCES [dbo].[Athletes]    ([Id])
+);
+
+CREATE NONCLUSTERED INDEX [IX_MeetEntryAthletes_MeetEntryId]
+    ON [dbo].[MeetEntryAthletes]([MeetEntryId] ASC);
+
+CREATE NONCLUSTERED INDEX [IX_MeetEntryAthletes_AthleteId]
+    ON [dbo].[MeetEntryAthletes]([AthleteId] ASC);
+
+
+-- ============================================================
+-- MEET PLACINGS
+-- One row per (performance, opponent) pairing.
+-- MeetParticipantId is NULL for invitational placings
+-- (overall place, no specific opponent).
+-- FullPoints  = relay members each get the full template points.
+-- SplitPoints = template points divided by AthleteCount.
+--
+-- Uniqueness:
+--   • Per-opponent placing  — unique on (PerformanceId, MeetParticipantId)
+--     where MeetParticipantId IS NOT NULL
+--   • Invitational placing  — unique on PerformanceId
+--     where MeetParticipantId IS NULL
+--   SQL Server NULL != NULL in unique indexes, so the two
+--   filtered indexes below cover both cases correctly.
+-- ============================================================
+CREATE TABLE [dbo].[MeetPlacings] (
+    [Id]                  INT            IDENTITY (1, 1) NOT NULL,
+    [MeetId]              INT            NOT NULL,
+    [PerformanceId]       INT            NOT NULL,
+    [MeetParticipantId]   INT            NULL,   -- NULL for invitational
+    [Place]               INT            NOT NULL,
+    [FullPoints]          DECIMAL (10,2) NOT NULL DEFAULT ((0)),
+    [SplitPoints]         DECIMAL (10,2) NOT NULL DEFAULT ((0)),
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_MeetPlacings_Meets]            FOREIGN KEY ([MeetId])            REFERENCES [dbo].[Meets]            ([Id]),
+    CONSTRAINT [FK_MeetPlacings_Performances]     FOREIGN KEY ([PerformanceId])     REFERENCES [dbo].[Performances]     ([Id]),
+    CONSTRAINT [FK_MeetPlacings_MeetParticipants] FOREIGN KEY ([MeetParticipantId]) REFERENCES [dbo].[MeetParticipants] ([Id])
+);
+
+-- One placing per performance vs. specific opponent
+CREATE UNIQUE NONCLUSTERED INDEX [UX_MeetPlacings_Perf_Participant]
+    ON [dbo].[MeetPlacings]([PerformanceId] ASC, [MeetParticipantId] ASC)
+    WHERE [MeetParticipantId] IS NOT NULL;
+
+-- One overall placing per performance (invitational)
+CREATE UNIQUE NONCLUSTERED INDEX [UX_MeetPlacings_Perf_Overall]
+    ON [dbo].[MeetPlacings]([PerformanceId] ASC)
+    WHERE [MeetParticipantId] IS NULL;
+
+CREATE NONCLUSTERED INDEX [IX_MeetPlacings_MeetId]
+    ON [dbo].[MeetPlacings]([MeetId] ASC);
+
+CREATE NONCLUSTERED INDEX [IX_MeetPlacings_PerformanceId]
+    ON [dbo].[MeetPlacings]([PerformanceId] ASC);
+
+
+-- ============================================================
+-- FK: Meets → ScoringTemplates (added after both tables exist)
+-- ============================================================
+ALTER TABLE [dbo].[Meets]
+    ADD CONSTRAINT [FK_Meets_ScoringTemplates]
+        FOREIGN KEY ([ScoringTemplateId]) REFERENCES [dbo].[ScoringTemplates] ([Id]);

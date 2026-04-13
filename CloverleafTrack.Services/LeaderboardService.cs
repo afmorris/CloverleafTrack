@@ -44,7 +44,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
     public async Task<LeaderboardDetailsViewModel?> GetLeaderboardDetailsAsync(string eventKey)
     {
         var allPerformances = await leaderboardRepository.GetAllPerformancesForEventAsync(eventKey);
-        
+
         if (!allPerformances.Any())
         {
             return null;
@@ -52,15 +52,73 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
 
         // Get event info from first performance
         var firstPerf = allPerformances.First();
-        
-        // Build all performances list with rankings
+        var isFieldEvent = allPerformances.Any(p => p.DistanceInches.HasValue);
+
+        // Compute school record progression in C#:
+        // Walk performances in chronological order, tracking the running best.
+        // Each time a new best is seen, that performance set the record at that moment.
+        var recordSettingIds = new HashSet<int>();
+        var progression = new List<SchoolRecordMomentViewModel>();
+        double? runningBest = null;
+
+        var chronological = allPerformances
+            .OrderBy(p => p.MeetDate)
+            .ThenBy(p => isFieldEvent
+                ? -(p.DistanceInches ?? 0)          // on same day, best distance first
+                : (p.TimeSeconds ?? double.MaxValue)) // on same day, fastest time first
+            .ToList();
+
+        foreach (var perf in chronological)
+        {
+            var value = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds;
+            if (!value.HasValue) continue;
+
+            var isNewRecord = runningBest == null ||
+                              (isFieldEvent ? value > runningBest : value < runningBest);
+
+            if (!isNewRecord) continue;
+
+            var improvement = runningBest.HasValue
+                ? FormatImprovement(Math.Abs(value.Value - runningBest.Value), isFieldEvent)
+                : null;
+
+            recordSettingIds.Add(perf.PerformanceId);
+            progression.Add(new SchoolRecordMomentViewModel
+            {
+                AthleteName = perf.AthleteId.HasValue
+                    ? $"{perf.AthleteFirstName} {perf.AthleteLastName}"
+                    : perf.RelayName,
+                AthleteSlug = perf.AthleteId.HasValue
+                    ? _slugHelper.GenerateSlug($"{perf.AthleteFirstName}-{perf.AthleteLastName}")
+                    : "",
+                GraduationYear = perf.GraduationYear,
+                Performance = FormatPerformance(perf.TimeSeconds, perf.DistanceInches),
+                RawValue = value.Value,
+                MeetName = perf.MeetName,
+                MeetSlug = _slugHelper.GenerateSlug(perf.MeetName),
+                MeetDate = perf.MeetDate,
+                ImprovementFormatted = improvement,
+            });
+
+            runningBest = value;
+        }
+
+        if (progression.Any())
+            progression.Last().IsCurrentRecord = true;
+
+        // Sort for display: best mark first (distance desc / time asc)
+        var sortedProgression = isFieldEvent
+            ? progression.OrderByDescending(p => p.RawValue).ToList()
+            : progression.OrderBy(p => p.RawValue).ToList();
+
+        // Build all performances list with rankings, flagging record-setting rows
         var allPerfsList = allPerformances.Select((perf, index) => new LeaderboardPerformanceViewModel
         {
             Rank = index + 1,
-            AthleteName = perf.AthleteId.HasValue 
+            AthleteName = perf.AthleteId.HasValue
                 ? $"{perf.AthleteFirstName} {perf.AthleteLastName}"
                 : perf.RelayName,
-            AthleteSlug = perf.AthleteId.HasValue 
+            AthleteSlug = perf.AthleteId.HasValue
                 ? _slugHelper.GenerateSlug($"{perf.AthleteFirstName}-{perf.AthleteLastName}")
                 : "",
             Performance = FormatPerformance(perf.TimeSeconds, perf.DistanceInches),
@@ -68,14 +126,15 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
             MeetSlug = _slugHelper.GenerateSlug(perf.MeetName),
             MeetDate = perf.MeetDate,
             GraduationYear = perf.GraduationYear,
-            IsSchoolRecord = perf.SchoolRecord
+            IsSchoolRecord = perf.AllTimeRank == 1,
+            WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
         }).ToList();
-        
+
         // Build PRs only list (best performance per athlete)
         var prsOnly = allPerformances
-            .Where(p => p.AthleteId.HasValue) // Only individual athletes (not relays)
+            .Where(p => p.AthleteId.HasValue)
             .GroupBy(p => p.AthleteId)
-            .Select(g => g.First()) // First is already the best due to ORDER BY in query
+            .Select(g => g.First()) // already ordered best-first by the query
             .Select((perf, index) => new LeaderboardPerformanceViewModel
             {
                 Rank = index + 1,
@@ -86,7 +145,8 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
                 MeetSlug = _slugHelper.GenerateSlug(perf.MeetName),
                 MeetDate = perf.MeetDate,
                 GraduationYear = perf.GraduationYear,
-                IsSchoolRecord = perf.SchoolRecord
+                IsSchoolRecord = perf.AllTimeRank == 1,
+                WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
             })
             .ToList();
 
@@ -97,9 +157,11 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
             EventKey = firstPerf.EventKey,
             Gender = firstPerf.Gender,
             Environment = firstPerf.Environment,
+            IsFieldEvent = isFieldEvent,
+            IsRelayEvent = allPerformances.Any(p => p.AthleteId == null),
             AllPerformances = allPerfsList,
             PersonalRecordsOnly = prsOnly,
-            IsRelayEvent = allPerformances.Any(p => p.AthleteId == null)
+            SchoolRecordProgression = sortedProgression,
         };
     }
 
@@ -248,6 +310,23 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
         {
             return string.Empty;
         }
+    }
+
+    private static string FormatImprovement(double delta, bool isField)
+    {
+        if (isField)
+        {
+            var feet = (int)(delta / 12);
+            var inches = delta % 12;
+            return feet > 0
+                ? $"+{feet}' {inches:0.##}\""
+                : $"+{inches:0.##}\"";
+        }
+
+        var ts = TimeSpan.FromSeconds(delta);
+        return ts.TotalMinutes >= 1
+            ? $"-{ts:m\\:ss\\.ff}"
+            : $"-{delta:0.00}s";
     }
 
     private static string FormatDistance(double inches)

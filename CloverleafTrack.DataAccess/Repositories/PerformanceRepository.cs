@@ -47,12 +47,11 @@ public class PerformanceRepository(IDbConnectionFactory connectionFactory) : IPe
                             SELECT
                                  COUNT(*)
                             FROM
-                                 Performances p,
-                                 Meets m
+                                 Performances p
+                                 INNER JOIN Meets m ON m.Id = p.MeetId
+                                 INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id AND lb.Rank = 1
                             WHERE
-                                 m.Id = p.MeetId AND
-                                 m.SeasonId = @SeasonId AND
-                                 p.SchoolRecord = 1
+                                 m.SeasonId = @SeasonId
                             """;
          return await connection.ExecuteScalarAsync<int>(sql, new { SeasonId = seasonId });
     }

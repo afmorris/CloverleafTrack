@@ -214,6 +214,13 @@
                                                                     #@perf.AllTimeRank AT
                                                                 </span>
                                                             }
+                                                            @foreach (var placing in perf.Placings)
+                                                            {
+                                                                <span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/40 dark:to-orange-800/40 text-orange-900 dark:text-orange-100 border border-orange-200 dark:border-orange-700/30"
+                                                                      title="@(placing.OpponentSchoolName != null ? $"Place vs. {placing.OpponentSchoolName}" : "Place")">
+                                                                    @placing.MedalEmoji@(placing.OpponentSchoolName != null ? $" vs. {placing.OpponentSchoolName}" : "")
+                                                                </span>
+                                                            }
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -343,6 +350,13 @@
                                                             {
                                                                 <span class="inline-block px-2 py-1 text-xs font-semibold rounded bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/40 dark:to-purple-800/40 text-purple-900 dark:text-purple-100 border border-purple-200 dark:border-purple-700/30" title="All-Time Top 10">
                                                                     #@perf.AllTimeRank AT
+                                                                </span>
+                                                            }
+                                                            @foreach (var placing in perf.Placings)
+                                                            {
+                                                                <span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/40 dark:to-orange-800/40 text-orange-900 dark:text-orange-100 border border-orange-200 dark:border-orange-700/30"
+                                                                      title="@(placing.OpponentSchoolName != null ? $"Place vs. {placing.OpponentSchoolName}" : "Place")">
+                                                                    @placing.MedalEmoji@(placing.OpponentSchoolName != null ? $" vs. {placing.OpponentSchoolName}" : "")
                                                                 </span>
                                                             }
                                                         </div>
@@ -476,6 +490,13 @@
                                                             {
                                                                 <span class="inline-block px-2 py-1 text-xs font-semibold rounded bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/40 dark:to-purple-800/40 text-purple-900 dark:text-purple-100 border border-purple-200 dark:border-purple-700/30" title="All-Time Top 10">
                                                                     #@perf.AllTimeRank AT
+                                                                </span>
+                                                            }
+                                                            @foreach (var placing in perf.Placings)
+                                                            {
+                                                                <span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/40 dark:to-orange-800/40 text-orange-900 dark:text-orange-100 border border-orange-200 dark:border-orange-700/30"
+                                                                      title="@(placing.OpponentSchoolName != null ? $"Place vs. {placing.OpponentSchoolName}" : "Place")">
+                                                                    @placing.MedalEmoji@(placing.OpponentSchoolName != null ? $" vs. {placing.OpponentSchoolName}" : "")
                                                                 </span>
                                                             }
                                                         </div>

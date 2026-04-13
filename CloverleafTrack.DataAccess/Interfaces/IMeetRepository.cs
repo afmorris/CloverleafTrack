@@ -11,4 +11,5 @@ public interface IMeetRepository
     Task<List<Meet>> GetAllMeetsWithStatsAsync();
     Task<int> GetUniqueAthleteCountForMeetAsync(int meetId);
     Task<int> GetPerformanceCountForMeetAsync(int meetId);
+    Task<List<MeetParticipant>> GetParticipantsForMeetAsync(int meetId);
 }

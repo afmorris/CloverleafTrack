@@ -11,4 +11,6 @@ public class LeaderboardPerformanceViewModel
     public DateTime MeetDate { get; set; }
     public int? GraduationYear { get; set; }
     public bool IsSchoolRecord { get; set; }
+    /// <summary>True if this performance set the school record at the time it was performed (not necessarily the current record).</summary>
+    public bool WasRecordAtTime { get; set; }
 }

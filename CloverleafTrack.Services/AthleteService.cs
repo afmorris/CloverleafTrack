@@ -282,7 +282,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                 AllTimeRank = p.AllTimeRank,
                 EventCategorySortOrder = p.EventCategorySortOrder,
                 EventSortOrder = p.EventSortOrder,
-                IsSchoolRecord = p.RelayAthletes == null ? p.SchoolRecord : p.AllTimeRank == 1,
+                IsSchoolRecord = p.AllTimeRank == 1,
                 RelayAthletes = p.RelayAthletes
             })
             .OrderBy(pr => pr.Environment)
@@ -309,7 +309,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             {
                 SeasonName = seasonGroup.Key.SeasonName,
                 PRCount = seasonGroup.Count(p => p.PersonalBest),
-                SchoolRecordCount = seasonGroup.Count(p => p.SchoolRecord),
+                SchoolRecordCount = seasonGroup.Count(p => p.AllTimeRank == 1),
                 EventGroups = seasonGroup
                     .GroupBy(p => new { p.EventId, p.EventName, p.EventCategorySortOrder, p.EventSortOrder, p.Environment })
                     .OrderBy(eg => eg.Key.EventCategorySortOrder)
@@ -340,7 +340,7 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                                     Date = p.MeetDate,
                                     MeetName = p.MeetName,
                                     IsPersonalBest = p.PersonalBest,
-                                    IsSchoolRecord = p.SchoolRecord,
+                                    IsSchoolRecord = p.AllTimeRank == 1,
                                     IsSeasonBest = p.SeasonBest,
                                     AllTimeRank = p.AllTimeRank,
                                     RawValue = p.DistanceInches ?? p.TimeSeconds,

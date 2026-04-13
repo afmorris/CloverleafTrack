@@ -87,7 +87,53 @@
             </select>
             <span asp-validation-for="SeasonId" class="text-danger"></span>
         </div>
-        
+
+        <div class="form-group">
+            <label asp-for="MeetType">Meet Type</label>
+            <select asp-for="MeetType"
+                    asp-items="Html.GetEnumSelectList<CloverleafTrack.Models.Enums.MeetType>()"
+                    class="form-control" id="meetTypeSelect">
+            </select>
+            <div style="font-size:12px;color:#888;margin-top:4px;">
+                Dual/Double Dual scoring template (5-3-1) is assigned automatically.
+            </div>
+        </div>
+
+        <div class="form-group" id="scoringTemplateGroup" style="display:none">
+            <label asp-for="ScoringTemplateId">Scoring Template</label>
+            <select asp-for="ScoringTemplateId"
+                    asp-items="@(new SelectList(Model.ScoringTemplates, "Id", "Name"))"
+                    class="form-control">
+                <option value="">Select template...</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="participantsGroup">
+            <label>Opponent Schools</label>
+            <div id="participantInputs">
+                @for (var i = 0; i < Math.Max(Model.ParticipantSchoolNames.Count, 1); i++)
+                {
+                    <div class="participant-row" style="display:flex;gap:8px;margin-bottom:8px;">
+                        @if (i < Model.ParticipantIds.Count)
+                        {
+                            <input type="hidden" name="ParticipantIds[@i]" value="@Model.ParticipantIds[i]" />
+                        }
+                        <input type="text"
+                               name="ParticipantSchoolNames[@i]"
+                               value="@(i < Model.ParticipantSchoolNames.Count ? Model.ParticipantSchoolNames[i] : "")"
+                               placeholder="School name"
+                               class="form-control" style="flex:1" />
+                        <button type="button" onclick="this.closest('.participant-row').remove()"
+                                style="padding:8px 12px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer;">✕</button>
+                    </div>
+                }
+            </div>
+            <button type="button" id="addParticipantBtn"
+                    style="margin-top:6px;padding:6px 12px;font-size:13px;background:#f0f0f0;border:1px solid #ddd;border-radius:4px;cursor:pointer;">
+                + Add School
+            </button>
+        </div>
+
         <div class="form-group">
             <label asp-for="Environment">Environment <span style="color: #dc3545;">*</span></label>
             <select asp-for="Environment" asp-items="Html.GetEnumSelectList<CloverleafTrack.Models.Enums.Environment>()" class="form-control">
@@ -130,4 +176,31 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        const meetTypeSelect = document.getElementById('meetTypeSelect');
+        const scoringTemplateGroup = document.getElementById('scoringTemplateGroup');
+        const addBtn = document.getElementById('addParticipantBtn');
+
+        function updateMeetTypeUI() {
+            const val = meetTypeSelect.value;
+            // 3 = Invitational
+            scoringTemplateGroup.style.display = val == '3' ? 'block' : 'none';
+        }
+
+        meetTypeSelect.addEventListener('change', updateMeetTypeUI);
+        updateMeetTypeUI();
+
+        let participantIndex = document.querySelectorAll('.participant-row').length;
+        addBtn.addEventListener('click', function () {
+            const row = document.createElement('div');
+            row.className = 'participant-row';
+            row.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;';
+            row.innerHTML = `<input type="text" name="ParticipantSchoolNames[${participantIndex}]"
+                                    placeholder="School name" class="form-control" style="flex:1" />
+                             <button type="button" onclick="this.closest('.participant-row').remove()"
+                                     style="padding:8px 12px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer;">✕</button>`;
+            document.getElementById('participantInputs').appendChild(row);
+            participantIndex++;
+        });
+    </script>
 }
