@@ -924,3 +924,55 @@ Full feature: pre-meet entry tracking, post-meet placing entry, scoring template
 - `docs/schema.sql`
 
 ---
+
+### [C22] Class Rank Filtering on Leaderboard Details Page
+
+**What changed:**
+Added per-class filtering to the Leaderboard event details page (`/leaderboard/{eventKey}`). Users can now click Freshman / Sophomore / Junior / Senior filter buttons above the performance tables to narrow the list to performances set while the athlete was in that class.
+
+**How class-at-time-of-performance is determined:**
+- Uses `GraduationYear` (from `Athletes`) and `MeetDate` (from `Meets`)
+- School year boundary: if `MeetDate.Month >= 8` (August onward), the school year ends in `MeetDate.Year + 1`; otherwise it ends in `MeetDate.Year`
+- `GraduationYear - schoolYearEnd`: 0 = Senior, 1 = Junior, 2 = Sophomore, 3 = Freshman; anything else = null (alumni or future)
+- Relay performances have `GraduationYear = null` → `ClassAtTimeOfPerformance = null`; class filter buttons are hidden for relay events
+
+**ViewModel change:**
+```csharp
+// LeaderboardPerformanceViewModel — new field
+public string? ClassAtTimeOfPerformance { get; set; }
+```
+
+**Service change:**
+```csharp
+// LeaderboardService — new private helper
+private static string? GetClassAtTimeOfPerformance(int? graduationYear, DateTime meetDate)
+{
+    if (!graduationYear.HasValue) return null;
+    var schoolYearEnd = meetDate.Month >= 8 ? meetDate.Year + 1 : meetDate.Year;
+    return (graduationYear.Value - schoolYearEnd) switch
+    {
+        0 => "Senior", 1 => "Junior", 2 => "Sophomore", 3 => "Freshman", _ => null
+    };
+}
+```
+Applied to both `allPerfsList` and `prsOnly` builds in `GetLeaderboardDetailsAsync`.
+
+**View changes (Details.cshtml):**
+- Class column now shows `perf.ClassAtTimeOfPerformance` (class WHEN set) instead of the old `GetClassYear()` (current class based on today)
+- Each `<tr>` gets `data-class="..."` and `data-rank="..."` attributes
+- The first `<td>` (Rank column) gets class `rank-cell` so JS can update the rank number when filtering
+- Class filter pill buttons (All / Freshman / Sophomore / Junior / Senior) appear between the view tabs and the table; hidden for relay events (`@if (!Model.IsRelayEvent)`)
+- JS `filterByClass(cls)` / `applyClassFilter(cls)` show/hide rows and re-number ranks (top-3 get amber color, rest get gray)
+- Active class filter persists when switching between All / PRs Only view tabs
+
+**Key files:**
+- `CloverleafTrack.ViewModels/Leaderboard/LeaderboardPerformanceViewModel.cs`
+- `CloverleafTrack.Services/LeaderboardService.cs`
+- `CloverleafTrack.Web/Views/Leaderboard/Details.cshtml`
+
+**Watch out:**
+- The "Class" column on the details page now shows the class AT THE TIME OF THE PERFORMANCE, not the athlete's current class. The old `GetClassYear()` Razor function is still in the file (used nowhere after this change) but can be removed later.
+- Class filter state is stored in `currentClassFilter` JS variable and re-applied when switching between All/PRs tabs via `showView()`.
+- Relay events: `ClassAtTimeOfPerformance` is always null for relay rows (no single graduation year). The filter buttons are omitted with `@if (!Model.IsRelayEvent)`.
+
+---

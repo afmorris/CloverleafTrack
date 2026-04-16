@@ -13,4 +13,6 @@ public class LeaderboardPerformanceViewModel
     public bool IsSchoolRecord { get; set; }
     /// <summary>True if this performance set the school record at the time it was performed (not necessarily the current record).</summary>
     public bool WasRecordAtTime { get; set; }
+    /// <summary>The athlete's class (Freshman/Sophomore/Junior/Senior) at the time this performance was set. Null for relays or unknown graduation years.</summary>
+    public string? ClassAtTimeOfPerformance { get; set; }
 }
