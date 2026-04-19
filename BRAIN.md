@@ -955,18 +955,28 @@ private static string? GetClassAtTimeOfPerformance(int? graduationYear, DateTime
     };
 }
 ```
-Applied to both `allPerfsList` and `prsOnly` builds in `GetLeaderboardDetailsAsync`.
+Applied to both `allPerfsList` and `prsOnly` builds in `GetLeaderboardDetailsAsync`. The `BuildPrViewModels` private helper is called once for overall PRs and once per class.
+
+**ViewModel changes:**
+```csharp
+// LeaderboardDetailsViewModel — new field
+public Dictionary<string, List<LeaderboardPerformanceViewModel>> ClassPersonalRecords { get; set; } = new();
+// Keys: "Freshman", "Sophomore", "Junior", "Senior"
+// PersonalRecordsOnly (existing) = overall best per athlete (shown when class filter = "all")
+```
 
 **View changes (Details.cshtml):**
 - Class column now shows `perf.ClassAtTimeOfPerformance` (class WHEN set) instead of the old `GetClassYear()` (current class based on today)
-- Each `<tr>` gets `data-class="..."` and `data-rank="..."` attributes
+- Each `<tr>` in the All Performances table gets `data-class="..."` and `data-rank="..."` attributes
 - The first `<td>` (Rank column) gets class `rank-cell` so JS can update the rank number when filtering
 - Class filter pill buttons (All / Freshman / Sophomore / Junior / Senior) appear between the view tabs and the table; hidden for relay events (`@if (!Model.IsRelayEvent)`)
-- JS `filterByClass(cls)` / `applyClassFilter(cls)` show/hide rows and re-number ranks (top-3 get amber color, rest get gray)
+- **PRs Only view**: renders 5 separate `<div class="prs-section hidden">` blocks — one per class (`prs-section-all`, `prs-section-Freshman`, etc.). Each block is pre-ranked server-side. The JS swaps which block is visible instead of filtering rows.
+- **All Performances view**: JS filters rows by `data-class` and re-numbers visible ranks
 - Active class filter persists when switching between All / PRs Only view tabs
 
 **Key files:**
 - `CloverleafTrack.ViewModels/Leaderboard/LeaderboardPerformanceViewModel.cs`
+- `CloverleafTrack.ViewModels/Leaderboard/LeaderboardDetailsViewModel.cs`
 - `CloverleafTrack.Services/LeaderboardService.cs`
 - `CloverleafTrack.Web/Views/Leaderboard/Details.cshtml`
 
@@ -974,5 +984,6 @@ Applied to both `allPerfsList` and `prsOnly` builds in `GetLeaderboardDetailsAsy
 - The "Class" column on the details page now shows the class AT THE TIME OF THE PERFORMANCE, not the athlete's current class. The old `GetClassYear()` Razor function is still in the file (used nowhere after this change) but can be removed later.
 - Class filter state is stored in `currentClassFilter` JS variable and re-applied when switching between All/PRs tabs via `showView()`.
 - Relay events: `ClassAtTimeOfPerformance` is always null for relay rows (no single graduation year). The filter buttons are omitted with `@if (!Model.IsRelayEvent)`.
+- Do NOT use a Razor local `void` function containing tag helpers (`asp-controller`, `asp-action`, `asp-route-*`) — Razor compiles tag helpers with `await`, making the generated code require an async context. The CS4033 error is the symptom. Use an outer `@foreach` loop instead.
 
 ---

@@ -131,26 +131,21 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
             ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
         }).ToList();
 
-        // Build PRs only list (best performance per athlete)
-        var prsOnly = allPerformances
-            .Where(p => p.AthleteId.HasValue)
-            .GroupBy(p => p.AthleteId)
-            .Select(g => g.First()) // already ordered best-first by the query
-            .Select((perf, index) => new LeaderboardPerformanceViewModel
-            {
-                Rank = index + 1,
-                AthleteName = $"{perf.AthleteFirstName} {perf.AthleteLastName}",
-                AthleteSlug = _slugHelper.GenerateSlug($"{perf.AthleteFirstName}-{perf.AthleteLastName}"),
-                Performance = FormatPerformance(perf.TimeSeconds, perf.DistanceInches),
-                MeetName = perf.MeetName,
-                MeetSlug = _slugHelper.GenerateSlug(perf.MeetName),
-                MeetDate = perf.MeetDate,
-                GraduationYear = perf.GraduationYear,
-                IsSchoolRecord = perf.AllTimeRank == 1,
-                WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
-                ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
-            })
-            .ToList();
+        // Build overall PRs list (best per athlete across all classes)
+        var prsOnly = BuildPrViewModels(
+            allPerformances.Where(p => p.AthleteId.HasValue).ToList(),
+            recordSettingIds);
+
+        // Build class-specific PRs: best per athlete within each class
+        var classPrs = new Dictionary<string, List<LeaderboardPerformanceViewModel>>();
+        foreach (var cls in new[] { "Freshman", "Sophomore", "Junior", "Senior" })
+        {
+            var classPerfs = allPerformances
+                .Where(p => p.AthleteId.HasValue &&
+                             GetClassAtTimeOfPerformance(p.GraduationYear, p.MeetDate) == cls)
+                .ToList();
+            classPrs[cls] = BuildPrViewModels(classPerfs, recordSettingIds);
+        }
 
         return new LeaderboardDetailsViewModel
         {
@@ -163,6 +158,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
             IsRelayEvent = allPerformances.Any(p => p.AthleteId == null),
             AllPerformances = allPerfsList,
             PersonalRecordsOnly = prsOnly,
+            ClassPersonalRecords = classPrs,
             SchoolRecordProgression = sortedProgression,
         };
     }
@@ -312,6 +308,30 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
         {
             return string.Empty;
         }
+    }
+
+    private List<LeaderboardPerformanceViewModel> BuildPrViewModels(
+        List<LeaderboardPerformanceDto> individualPerfs,
+        HashSet<int> recordSettingIds)
+    {
+        return individualPerfs
+            .GroupBy(p => p.AthleteId)
+            .Select(g => g.First()) // already ordered best-first by the query
+            .Select((perf, index) => new LeaderboardPerformanceViewModel
+            {
+                Rank = index + 1,
+                AthleteName = $"{perf.AthleteFirstName} {perf.AthleteLastName}",
+                AthleteSlug = _slugHelper.GenerateSlug($"{perf.AthleteFirstName}-{perf.AthleteLastName}"),
+                Performance = FormatPerformance(perf.TimeSeconds, perf.DistanceInches),
+                MeetName = perf.MeetName,
+                MeetSlug = _slugHelper.GenerateSlug(perf.MeetName),
+                MeetDate = perf.MeetDate,
+                GraduationYear = perf.GraduationYear,
+                IsSchoolRecord = perf.AllTimeRank == 1,
+                WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
+                ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
+            })
+            .ToList();
     }
 
     /// <summary>
