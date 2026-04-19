@@ -17,8 +17,11 @@ public class LeaderboardDetailsViewModel
     // All performances for this event
     public List<LeaderboardPerformanceViewModel> AllPerformances { get; set; } = new();
 
-    // Only PRs (best performance per athlete)
+    // Only PRs (best performance per athlete) — shown when class filter is "all"
     public List<LeaderboardPerformanceViewModel> PersonalRecordsOnly { get; set; } = new();
+
+    // Best performance per athlete within each class — keyed by "Freshman"/"Sophomore"/"Junior"/"Senior"
+    public Dictionary<string, List<LeaderboardPerformanceViewModel>> ClassPersonalRecords { get; set; } = new();
 
     // School record progression over time, sorted best-first (distance desc / time asc)
     public List<SchoolRecordMomentViewModel> SchoolRecordProgression { get; set; } = new();

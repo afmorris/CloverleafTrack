@@ -206,8 +206,8 @@
     }
 
     <!-- View Toggle Tabs -->
-    <div class="mb-8 flex gap-3">
-        <button onclick="showView('all')" id="all-tab" 
+    <div class="mb-4 flex gap-3 flex-wrap">
+        <button onclick="showView('all')" id="all-tab"
                 class="view-tab px-6 py-3 bg-blue-100 dark:bg-blue-500 text-gray-900 dark:text-white rounded-lg border border-blue-300 dark:border-blue-800 font-medium transition-all">
             All Performances (@Model.AllPerformances.Count)
         </button>
@@ -219,6 +219,34 @@
             </button>
         }
     </div>
+
+    @if (!Model.IsRelayEvent)
+    {
+        <!-- Class Rank Filter -->
+        <div class="mb-8 flex items-center gap-2 flex-wrap">
+            <span class="text-sm font-semibold text-gray-500 dark:text-gray-400 mr-1">Class:</span>
+            <button onclick="filterByClass('all')" id="class-all"
+                    class="class-tab px-4 py-1.5 rounded-full text-sm font-medium border transition-all bg-gray-900 dark:bg-gray-200 text-white dark:text-gray-900 border-gray-700 dark:border-gray-300">
+                All
+            </button>
+            <button onclick="filterByClass('Freshman')" id="class-Freshman"
+                    class="class-tab px-4 py-1.5 rounded-full text-sm font-medium border transition-all bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600">
+                Freshman
+            </button>
+            <button onclick="filterByClass('Sophomore')" id="class-Sophomore"
+                    class="class-tab px-4 py-1.5 rounded-full text-sm font-medium border transition-all bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600">
+                Sophomore
+            </button>
+            <button onclick="filterByClass('Junior')" id="class-Junior"
+                    class="class-tab px-4 py-1.5 rounded-full text-sm font-medium border transition-all bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600">
+                Junior
+            </button>
+            <button onclick="filterByClass('Senior')" id="class-Senior"
+                    class="class-tab px-4 py-1.5 rounded-full text-sm font-medium border transition-all bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600">
+                Senior
+            </button>
+        </div>
+    }
 
     <!-- All Performances View -->
     <div id="all-content" class="view-content">
@@ -238,8 +266,10 @@
                     <tbody>
                         @foreach (var perf in Model.AllPerformances)
                         {
-                            <tr class="perf-row border-t border-gray-700/50 @(perf.WasRecordAtTime ? "border-l-2 border-l-amber-500 bg-amber-500/5" : "")">
-                                <td class="px-6 py-4">
+                            <tr class="perf-row border-t border-gray-700/50 @(perf.WasRecordAtTime ? "border-l-2 border-l-amber-500 bg-amber-500/5" : "")"
+                                data-class="@(perf.ClassAtTimeOfPerformance ?? "")"
+                                data-rank="@perf.Rank">
+                                <td class="px-6 py-4 rank-cell">
                                     <span class="text-2xl font-bold @(perf.Rank <= 3 ? "text-amber-400" : "text-gray-400")">
                                         @perf.Rank
                                     </span>
@@ -285,7 +315,7 @@
                                     }
                                 </td>
                                 <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
-                                    @GetClassYear(perf.GraduationYear)
+                                    @(perf.ClassAtTimeOfPerformance ?? "")
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="text-xl font-mono font-bold text-gray-900 dark:text-white">
@@ -326,69 +356,90 @@
 
     <!-- PRs Only View -->
     <div id="prs-content" class="view-content hidden">
-        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full">
-                    <thead class="bg-gray-100 dark:bg-gray-900 border-b">
-                        <tr class="text-gray-600 dark:text-gray-400 text-sm">
-                            <th class="px-6 py-4 text-left font-semibold">Rank</th>
-                            <th class="px-6 py-4 text-left font-semibold">Athlete</th>
-                            <th class="px-6 py-4 text-left font-semibold">Class</th>
-                            <th class="px-6 py-4 text-left font-semibold">Mark</th>
-                            <th class="px-6 py-4 text-left font-semibold">Meet</th>
-                            <th class="px-6 py-4 text-left font-semibold">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var perf in Model.PersonalRecordsOnly)
-                        {
-                            <tr class="perf-row border-t border-gray-700/50 @(perf.WasRecordAtTime ? "border-l-2 border-l-amber-500 bg-amber-500/5" : "")">
-                                <td class="px-6 py-4">
-                                    <span class="text-2xl font-bold @(perf.Rank <= 3 ? "text-amber-400" : "text-gray-400")">
-                                        @perf.Rank
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    @if (!string.IsNullOrEmpty(perf.AthleteSlug))
-                                    {
-                                        <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
-                                           class="text-gray-900 dark:text-white font-medium underline">
-                                            @perf.AthleteName
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-gray-900 dark:text-white font-medium">@perf.AthleteName</span>
-                                    }
-                                </td>
-                                <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
-                                    @GetClassYear(perf.GraduationYear)
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="text-xl font-mono font-bold text-gray-900 dark:text-white">
-                                        @perf.Performance
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <a asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug"
-                                       class="text-gray-600 dark:text-gray-400 underline text-sm">
-                                        @perf.MeetName
-                                    </a>
-                                </td>
-                                <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
-                                    @perf.MeetDate.ToString("MMM d, yyyy")
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        @if (!Model.PersonalRecordsOnly.Any())
+        @{
+            var prSections = new[]
+            {
+                ("all",       Model.PersonalRecordsOnly),
+                ("Freshman",  Model.ClassPersonalRecords.TryGetValue("Freshman",  out var fr)  ? fr  : new List<LeaderboardPerformanceViewModel>()),
+                ("Sophomore", Model.ClassPersonalRecords.TryGetValue("Sophomore", out var so)  ? so  : new List<LeaderboardPerformanceViewModel>()),
+                ("Junior",    Model.ClassPersonalRecords.TryGetValue("Junior",    out var jr)  ? jr  : new List<LeaderboardPerformanceViewModel>()),
+                ("Senior",    Model.ClassPersonalRecords.TryGetValue("Senior",    out var sr2) ? sr2 : new List<LeaderboardPerformanceViewModel>()),
+            };
+        }
+        @foreach (var (sectionKey, sectionPerfs) in prSections)
         {
-            <div class="p-8 bg-gray-800/50 border border-gray-700 rounded-xl text-center">
-                <p class="text-gray-400">No personal records for this event yet.</p>
+            <div id="prs-section-@sectionKey" class="prs-section hidden">
+                @if (sectionPerfs.Any())
+                {
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full">
+                                <thead class="bg-gray-100 dark:bg-gray-900 border-b">
+                                    <tr class="text-gray-600 dark:text-gray-400 text-sm">
+                                        <th class="px-6 py-4 text-left font-semibold">Rank</th>
+                                        <th class="px-6 py-4 text-left font-semibold">Athlete</th>
+                                        <th class="px-6 py-4 text-left font-semibold">Class</th>
+                                        <th class="px-6 py-4 text-left font-semibold">Mark</th>
+                                        <th class="px-6 py-4 text-left font-semibold">Meet</th>
+                                        <th class="px-6 py-4 text-left font-semibold">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var perf in sectionPerfs)
+                                    {
+                                        <tr class="perf-row border-t border-gray-700/50 @(perf.WasRecordAtTime ? "border-l-2 border-l-amber-500 bg-amber-500/5" : "")">
+                                            <td class="px-6 py-4">
+                                                <span class="text-2xl font-bold @(perf.Rank <= 3 ? "text-amber-400" : "text-gray-400")">
+                                                    @perf.Rank
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                @if (!string.IsNullOrEmpty(perf.AthleteSlug))
+                                                {
+                                                    <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
+                                                       class="text-gray-900 dark:text-white font-medium underline">
+                                                        @perf.AthleteName
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-gray-900 dark:text-white font-medium">@perf.AthleteName</span>
+                                                }
+                                            </td>
+                                            <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
+                                                @(perf.ClassAtTimeOfPerformance ?? "")
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <span class="text-xl font-mono font-bold text-gray-900 dark:text-white">
+                                                    @perf.Performance
+                                                </span>
+                                                @if (perf.IsSchoolRecord)
+                                                {
+                                                    <span class="ml-2 text-xs font-bold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700/50">SR</span>
+                                                }
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <a asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug"
+                                                   class="text-gray-600 dark:text-gray-400 underline text-sm">
+                                                    @perf.MeetName
+                                                </a>
+                                            </td>
+                                            <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
+                                                @perf.MeetDate.ToString("MMM d, yyyy")
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="p-8 bg-gray-800/50 border border-gray-700 rounded-xl text-center">
+                        <p class="text-gray-400">No personal records for this class yet.</p>
+                    </div>
+                }
             </div>
         }
     </div>
@@ -498,21 +549,79 @@
     function showView(view) {
         // Hide all content
         document.querySelectorAll('.view-content').forEach(el => el.classList.add('hidden'));
-        
+
         // Show selected content
         document.getElementById(view + '-content').classList.remove('hidden');
-        
+
         // Update tab styling
         document.querySelectorAll('.view-tab').forEach(tab => {
             tab.classList.remove('bg-blue-100', 'dark:bg-blue-500', 'border-blue-300', 'dark:border-blue-800');
             tab.classList.add('bg-gray-100', 'dark:bg-gray-500', 'border-gray-300', 'dark:border-gray-800');
         });
-        
+
         const activeTab = document.getElementById(view + '-tab');
         activeTab.classList.remove('bg-gray-100', 'dark:bg-gray-500', 'border-gray-300', 'dark:border-gray-800');
         activeTab.classList.add('bg-blue-100', 'dark:bg-blue-500', 'border-blue-300', 'dark:border-blue-800');
+
+        // Re-apply current class filter to the newly visible table
+        applyClassFilter(currentClassFilter);
     }
-    
+
+    let currentClassFilter = 'all';
+
+    function filterByClass(cls) {
+        currentClassFilter = cls;
+
+        // Update class tab button styles
+        document.querySelectorAll('.class-tab').forEach(btn => {
+            btn.classList.remove('bg-gray-900', 'dark:bg-gray-200', 'text-white', 'dark:text-gray-900', 'border-gray-700', 'dark:border-gray-300');
+            btn.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+        });
+        const activeBtn = document.getElementById('class-' + cls);
+        if (activeBtn) {
+            activeBtn.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+            activeBtn.classList.add('bg-gray-900', 'dark:bg-gray-200', 'text-white', 'dark:text-gray-900', 'border-gray-700', 'dark:border-gray-300');
+        }
+
+        applyClassFilter(cls);
+    }
+
+    function applyClassFilter(cls) {
+        // All Performances table: show/hide rows by data-class and re-rank
+        const allContainer = document.getElementById('all-content');
+        if (allContainer) {
+            const rows = allContainer.querySelectorAll('tbody tr[data-class]');
+            let visibleRank = 1;
+            rows.forEach(function(row) {
+                const matches = cls === 'all' || row.dataset.class === cls;
+                if (matches) {
+                    row.style.display = '';
+                    const rankCell = row.querySelector('.rank-cell');
+                    if (rankCell) {
+                        const span = rankCell.querySelector('span');
+                        if (span) {
+                            span.textContent = visibleRank;
+                            span.className = 'text-2xl font-bold ' + (visibleRank <= 3 ? 'text-amber-400' : 'text-gray-400');
+                        }
+                    }
+                    visibleRank++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // PRs Only: swap which pre-built section is visible
+        const prsContainer = document.getElementById('prs-content');
+        if (prsContainer) {
+            prsContainer.querySelectorAll('.prs-section').forEach(function(sec) {
+                sec.classList.add('hidden');
+            });
+            const target = prsContainer.querySelector('#prs-section-' + cls);
+            if (target) target.classList.remove('hidden');
+        }
+    }
+
     // Set "all" as default on page load
     document.addEventListener('DOMContentLoaded', function() {
         showView('all');
