@@ -477,32 +477,6 @@ Meet name link gets `min-w-0` on the flex-1 container and `block truncate` on th
 
 ---
 
-### [C21] Home Page "Season at a Glance" — SchoolRecordsBroken Uses Leaderboards
-
-**What changed:**
-`HomeRepository.GetHomePageStatsAsync` now counts school records for the season by joining to the `Leaderboards` table (`Rank = 1`) instead of filtering on `p.SchoolRecord = 1`.
-
-```sql
--- Before
-(SELECT COUNT(*) FROM Performances p
- INNER JOIN Meets m ON m.Id = p.MeetId
- WHERE m.SeasonId = @SeasonId AND p.SchoolRecord = 1) AS SchoolRecordsBroken,
-
--- After
-(SELECT COUNT(*) FROM Performances p
- INNER JOIN Meets m ON m.Id = p.MeetId
- INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id AND lb.Rank = 1
- WHERE m.SeasonId = @SeasonId) AS SchoolRecordsBroken,
-```
-
-**Why:**
-Same stale flag issue as C17/C20. `p.SchoolRecord` is not cleared when a newer record supersedes it, so the count was stuck at 0 (or wrong) for the current season.
-
-**Key files:**
-- `CloverleafTrack.DataAccess/Repositories/HomeRepository.cs`
-
----
-
 ### [C17] "On This Day" — SchoolRecord Flag Is Stale on Superseded Performances
 
 **What changed:**

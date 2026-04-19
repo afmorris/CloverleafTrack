@@ -128,7 +128,7 @@ public class MeetService(
             TotalPerformances = performances.Count,
             TotalPRs = performances.Count(p => p.PersonalBest),
             TotalSchoolRecords = performances.Count(p => p.AllTimeRank == 1),
-            UniqueAthletes = uniqueAthletes,
+            UniqueAthletes = uniqueAthletes,  // Now includes relay athletes!
 
             BoysEvents = BuildOrderedEventGroups(boysPerformances, placingLookup),
             GirlsEvents = BuildOrderedEventGroups(girlsPerformances, placingLookup),
