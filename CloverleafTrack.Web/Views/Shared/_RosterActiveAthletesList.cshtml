@@ -1,14 +1,44 @@
-@model Dictionary<EventCategory, List<AthleteViewModel>>
+@model RosterViewModel
 
 <div class="mb-16">
-    <h2 class="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Current Roster</h2>
-    
-    @if (Model.Any())
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Current Roster</h2>
+        <span class="text-sm text-gray-500 dark:text-gray-400">@Model.FlatActiveAthletes.Count athletes</span>
+    </div>
+
+    @if (Model.FlatActiveAthletes.Any())
     {
-        @foreach (var category in Model.OrderBy(c => (int)c.Key))
-        {
-            @await Html.PartialAsync("_AthleteCategorySection", category)
-        }
+        <!-- Filter chips -->
+        <div class="flex flex-wrap gap-x-6 gap-y-3 mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            @await Html.PartialAsync("_FilterChipGroup", null, new ViewDataDictionary(ViewData) {
+                ["Label"] = "Gender",
+                ["FilterKey"] = "gender",
+                ["Options"] = new List<(string, string)> { ("all","All"), ("boys","Boys"), ("girls","Girls") }
+            })
+            @await Html.PartialAsync("_FilterChipGroup", null, new ViewDataDictionary(ViewData) {
+                ["Label"] = "Category",
+                ["FilterKey"] = "categories",
+                ["Options"] = new List<(string, string)> { ("all","All"), ("sprints","Sprints"), ("distance","Distance"), ("hurdles","Hurdles"), ("jumps","Jumps"), ("throws","Throws") }
+            })
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-filterable-container>
+            @foreach (var athlete in Model.FlatActiveAthletes)
+            {
+                var genderVal = athlete.Gender == CloverleafTrack.Models.Enums.Gender.Male ? "boys" : "girls";
+                var categoriesVal = string.Join(",", athlete.Categories.Select(c => c.ToString().ToLower()));
+                var classVal = athlete.Class.ToLower();
+                <div data-filterable
+                     data-gender="@genderVal"
+                     data-categories="@categoriesVal">
+                    @await Html.PartialAsync("_AthleteCard", athlete)
+                </div>
+            }
+        </div>
+
+        <div id="roster-empty" class="hidden p-8 text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 mt-4">
+            No athletes match the selected filters.
+        </div>
     }
     else
     {

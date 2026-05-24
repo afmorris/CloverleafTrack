@@ -127,6 +127,78 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
         return result;
     }
 
+    public async Task<List<AthleteViewModel>> GetFlatActiveAthletesAsync(int currentSeason)
+    {
+        var athletesWithPerformances = await repository.GetAllWithPerformancesAsync();
+
+        var prLookup = athletesWithPerformances
+            .GroupBy(p => (p.Athlete.Id, p.Event.Id))
+            .ToDictionary(
+                g => g.Key,
+                g =>
+                {
+                    var first = g.First();
+                    if (IsDistanceBasedEvent(first.Event))
+                    {
+                        var best = g.Where(p => p.Performance.DistanceInches.HasValue)
+                            .OrderByDescending(p => p.Performance.DistanceInches)
+                            .FirstOrDefault();
+                        return best != null ? FormatDistance(best.Performance.DistanceInches!.Value) : "N/A";
+                    }
+                    else
+                    {
+                        var best = g.Where(p => p.Performance.TimeSeconds.HasValue)
+                            .OrderBy(p => p.Performance.TimeSeconds)
+                            .FirstOrDefault();
+                        return best != null ? FormatTime(best.Performance.TimeSeconds!.Value) : "N/A";
+                    }
+                });
+
+        return athletesWithPerformances
+            .Where(x => x.Athlete.IsActive)
+            .GroupBy(x => x.Athlete.Id)
+            .Select(g =>
+            {
+                var first = g.First();
+
+                var events = g.GroupBy(e => e.Event.Id)
+                    .Select(eg =>
+                    {
+                        var ev = eg.First().Event;
+                        var key = (first.Athlete.Id, ev.Id);
+                        return new EventParticipationViewModel
+                        {
+                            Id = ev.Id,
+                            Name = ev.Name,
+                            Environment = ev.Environment,
+                            SortOrder = ev.SortOrder,
+                            PersonalRecord = prLookup.GetValueOrDefault(key, "N/A")
+                        };
+                    })
+                    .OrderBy(e => e.SortOrder)
+                    .ToList();
+
+                var categories = g.Select(x => GetRosterCategory(x.Event))
+                    .Where(c => c.HasValue)
+                    .Select(c => c!.Value)
+                    .Distinct()
+                    .ToList();
+
+                return new AthleteViewModel
+                {
+                    FirstName = first.Athlete.FirstName,
+                    LastName = first.Athlete.LastName,
+                    Class = GraduationYearToClass(first.Athlete.GraduationYear, currentSeason),
+                    EventsInCategory = events,
+                    Categories = categories,
+                    Gender = first.Athlete.Gender,
+                    GraduationYear = first.Athlete.GraduationYear
+                };
+            })
+            .OrderBy(a => a.FullName)
+            .ToList();
+    }
+
     public async Task<Dictionary<int, List<AthleteViewModel>>> GetFormerAthletesGroupedByGraduationYearAsync()
     {
         var athletesWithPerformances = await repository.GetAllWithPerformancesAsync();

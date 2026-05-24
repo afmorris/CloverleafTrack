@@ -2,7 +2,7 @@
 @model LeaderboardDetailsViewModel
 
 @{
-    ViewBag.Title = $"{Model.EventName} - Leaderboard";
+    ViewBag.Title = $"{Model.EventName}";
     var genderLabel = Model.Gender == CloverleafTrack.Models.Enums.Gender.Male ? "Boys" : "Girls";
     var environmentLabel = Model.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor ? "Outdoor" : "Indoor";
 }
@@ -105,7 +105,7 @@
             <button id="sr-history-toggle" onclick="toggleSrHistory()"
                     class="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                 <div class="flex items-center gap-3">
-                    <div class="h-5 w-1 rounded-full bg-gradient-to-b from-amber-500 to-yellow-400"></div>
+                    <div class="h-5 w-1 rounded-full bg-amber-500"></div>
                     <span class="font-semibold text-gray-900 dark:text-white">School Record History</span>
                     <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700/50 tracking-wide">SR</span>
                     <span class="text-sm text-gray-500 dark:text-gray-400">

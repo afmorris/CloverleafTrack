@@ -23,3 +23,20 @@
 .toggle-label {
     @apply block w-12 h-6 rounded-full bg-ctf-accent dark:bg-gray-600 transition duration-300 ease-in-out;
 }
+
+
+@layer components {
+    .filter-chip-inactive {
+        @apply bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600;
+    }
+    .filter-chip-inactive:hover {
+        @apply border-gray-400 dark:border-gray-400 text-gray-900 dark:text-white;
+    }
+    .filter-chip-active {
+        @apply bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white;
+    }
+}
+
+details[open] .details-arrow {
+    transform: rotate(90deg);
+}

@@ -725,6 +725,90 @@ A codebase-wide audit found the remaining places still using `p.SchoolRecord` (t
 - `recentSql`: replaced `p.SchoolRecord AS IsSchoolRecord` with Leaderboards subquery; updated `ORDER BY p.SchoolRecord DESC` to `ORDER BY CASE WHEN (SELECT MIN(lb.Rank) ...) = 1 THEN 0 ELSE 1 END`
 - `seasonBestSql`: replaced `p.SchoolRecord AS IsSchoolRecord` with `CAST(1 AS BIT)` (safe — this query already `INNER JOIN Leaderboards lb ... AND lb.Rank = 1`)
 
+---
+
+### [C24] UX Overhaul — Filter Chips, Flat Design, Search, Roster, Meets
+
+**What changed:**
+A broad UX improvement pass covering nearly every public-facing page. Changes are non-breaking — server rendering unchanged, JS is progressive enhancement.
+
+**1. Career progression charts removed from athlete detail page**
+`Views/Roster/Details.cshtml` — all `<canvas>` elements, Chart.js CDN script tag, chart initialization JS, and chart-related C# variables removed. Career stats grid (`Career PR`, `Competitions`, etc.) and season accordion are kept.
+
+**2. Global search (`/search-index.json` + `wwwroot/js/search.js`)**
+- New `ISearchService`/`SearchService` — builds a JSON index of athletes, meets, and events
+- New `SearchController` at `GET /search-index.json` with 5-min response cache
+- `wwwroot/js/search.js` — lazy-loads the index on first focus of `#site-search`, groups results by type (Athletes/Meets/Events, max 5 each), keyboard-navigable
+- `_Layout.cshtml` updated: search input in header, dark mode flash fix (synchronous IIFE in `<head>`), footer redesigned with three columns, title format `{Page} · Cloverleaf Track & Field`
+
+**3. Filter chip system (`wwwroot/js/filters.js` + `_FilterChipGroup.cshtml`)**
+- `filters.js` — IIFE; reads/writes URL hash; applies `filter-chip-active`/`filter-chip-inactive` classes; hides `[data-filterable]` items that don't match active filters; hides `[data-filterable-section]` containers when all children are hidden
+- `_FilterChipGroup.cshtml` — shared partial using ViewData keys `Label`, `FilterKey`, `Options`
+- CSS classes `filter-chip-active` and `filter-chip-inactive` added to `input.css` via `@layer components`; `details[open] .details-arrow` rotation added for `<details>` expand animation
+
+**4. Leaderboard — tabs → filter chips**
+`Views/Leaderboard/Index.cshtml` completely replaced: Outdoor/Indoor tab bar replaced with filter chips (`env`, `gender`, `category`); content sections use `data-filterable data-env`/`data-gender`/`data-category` attributes; `data-filterable-section` on gender column divs; date-based default env set via inline script.
+
+**5. Home page — tabs → shared segmented control with localStorage**
+`_HomePageRecentHighlightsCard.cshtml` and `_HomePageSeasonLeaders.cshtml` — tab bars removed; content divs get `data-filterable data-env="outdoor/indoor"`. A single segmented control in `Home/Index.cshtml` (above these two partials) drives both. Scripts use `localStorage.getItem('ctf.environment')` for preference persistence (key: `ctf.environment`), with month-based fallback (Dec–Feb → indoor).
+
+**6. Roster — one card per athlete**
+`AthleteViewModel` → added `Categories` (`List<EventCategory>`). `RosterViewModel` → added `FlatActiveAthletes` (`List<AthleteViewModel>`). `IAthleteService` + `AthleteService` → new `GetFlatActiveAthletesAsync`. `RosterController.Index` populates `FlatActiveAthletes`. `_RosterActiveAthletesList.cshtml` rewritten: flat grid from `FlatActiveAthletes`; gender + category filter chips; each card wrapped in `data-filterable data-gender data-categories`. Eliminates duplicate athlete cards for athletes in multiple event categories.
+
+**7. Meets — reverse-chronological, current season expanded, past collapsed**
+`_MeetsCard.cshtml` rewritten: current season (`IsCurrentSeason = true`) always expanded with "Coming Up" / "Completed" subsections; past seasons wrapped in `<details data-filterable-section>`; completed meets `OrderByDescending(m => m.Date)` in view. `_MeetListItem.cshtml` updated: flat design (`bg-white`), `data-filterable data-env` attributes, env badge with text label.
+
+**8. Visual polish — gradients replaced with flat surfaces**
+All `bg-gradient-to-br/r from-{color}-50 to-{color}-100 dark:from-{color}-900/40 ...` backgrounds replaced with `bg-white dark:bg-gray-800` (or `bg-{color}-50 dark:bg-{color}-900/20` for small badges). Files affected: all `_HomePage*.cshtml`, `_Current/PreviousSeasonCard.cshtml`, `_OverallSeasonStats.cshtml`, `_MeetsOverallStats.cshtml`, `Meets/Details.cshtml`, `Seasons/Details.cshtml`, `Leaderboard/Details.cshtml` (accent line). Tab JS in `Seasons/Details.cshtml` replaced with the same filter chip + localStorage pattern.
+
+**9. Seasons/Details.cshtml — tabs → filter chips**
+Outdoor/Indoor tab bar replaced with a segmented control using the filter chip pattern. Same localStorage persistence as Home page. Content divs get `data-filterable data-env`.
+
+**Key files:**
+- `wwwroot/js/filters.js` (NEW)
+- `wwwroot/js/search.js` (NEW)
+- `wwwroot/css/input.css` (appended `@layer components` filter chip CSS + details-arrow)
+- `Views/Shared/_FilterChipGroup.cshtml` (NEW)
+- `Views/Shared/_Layout.cshtml`
+- `Views/Shared/_MainNavigation.cshtml`
+- `Views/Shared/_MeetsCard.cshtml`
+- `Views/Shared/_MeetListItem.cshtml`
+- `Views/Shared/_HomePageRecentHighlightsCard.cshtml`
+- `Views/Shared/_HomePageSeasonLeaders.cshtml`
+- `Views/Shared/_HomePageSeasonAtAGlanceCard.cshtml`
+- `Views/Shared/_HomePageOnThisDayCard.cshtml`
+- `Views/Shared/_CurrentSeasonCard.cshtml`
+- `Views/Shared/_PreviousSeasonCard.cshtml`
+- `Views/Shared/_OverallSeasonStats.cshtml`
+- `Views/Shared/_MeetsOverallStats.cshtml`
+- `Views/Shared/_LeaderboardGenderSection.cshtml`
+- `Views/Shared/_LeaderboardMixedSection.cshtml`
+- `Views/Shared/_RosterActiveAthletesList.cshtml`
+- `Views/Shared/_AthleteCard.cshtml`
+- `Views/Roster/Details.cshtml`
+- `Views/Roster/Index.cshtml`
+- `Views/Home/Index.cshtml`
+- `Views/Meets/Index.cshtml`
+- `Views/Leaderboard/Index.cshtml`
+- `Views/Seasons/Details.cshtml`
+- `Views/Leaderboard/Details.cshtml`
+- `Services/Interfaces/ISearchService.cs` (NEW)
+- `Services/SearchService.cs` (NEW)
+- `Web/Controllers/SearchController.cs` (NEW)
+- `ViewModels/AthleteViewModel.cs` (+ `Categories`)
+- `ViewModels/RosterViewModel.cs` (+ `FlatActiveAthletes`)
+- `Services/Interfaces/IAthleteService.cs` (+ `GetFlatActiveAthletesAsync`)
+- `Services/AthleteService.cs` (+ `GetFlatActiveAthletesAsync`)
+- `Web/Controllers/RosterController.cs`
+- `Web/Program.cs` (+ `SearchService` DI)
+
+**Watch out:**
+- `filter-chip-active`/`filter-chip-inactive` are defined in `input.css` `@layer components`. After changing these styles, run `pnpm run dev` to rebuild `site.css`.
+- The `env` filter key is used on Home, Leaderboard, Meets, and Season Details pages. Each page sets its own hash-based default (via inline script), reading `localStorage('ctf.environment')` when available.
+- `_FilterChipGroup.cshtml` casts ViewData `Options` to `IEnumerable<(string Value, string Label)>`. Must pass as `List<(string, string)>` in callers.
+- Roster flat list uses `FlatActiveAthletes` from `RosterViewModel`. The old `ActiveAthletes` (`Dictionary<EventCategory, List<AthleteViewModel>>`) is still populated and used by `_AthleteCategorySection.cshtml` (if still referenced anywhere).
+- The `data-filterable-section` on `<details>` in `_MeetsCard.cshtml` will set `hidden=true` on the entire `<details>` element when all its meet items are filtered out — this hides the entire season row, which is correct.
+
 **`AdminPerformanceRepository.cs`** — `GetAllWithDetailsAsync`:
 - Added `(SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) AS AllTimeRank` subquery (placed after `p.*`, before `a.*` for correct Dapper multi-mapping)
 

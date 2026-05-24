@@ -1,16 +1,12 @@
-﻿@model HomePageViewModel
+@model HomePageViewModel
 
 @{
-    ViewBag.Title = "Cloverleaf Track & Field";
+    ViewData["Title"] = "Cloverleaf Track & Field";
 }
 
 @section Hero {
     <div class="relative h-[20vh] bg-cover bg-center bg-no-repeat" style="background-image: url('img/hero-home.jpg');">
-
-        <!-- overlay -->
         <div class="absolute inset-0 bg-black dark:bg-opacity-75 bg-opacity-25"></div>
-
-        <!-- content -->
         <div class="absolute inset-0 flex flex-col justify-center items-center text-center text-white px-4 z-10">
             <h1 class="text-4xl md:text-5xl font-heading font-extrabold mb-2">Cloverleaf Track & Field</h1>
             <p class="text-lg md:text-xl dark:text-ctf-accent text-ctf-darkaccent">Your journey. Our history. One team.</p>
@@ -22,6 +18,24 @@
 
     @await Html.PartialAsync("_HomePageSeasonAtAGlanceCard", Model)
     @await Html.PartialAsync("_HomePageOnThisDayCard", Model)
+
+    <!-- Environment segmented control for Highlights + Leaders -->
+    <div class="flex justify-end mb-4">
+        <div class="filter-group inline-flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1 border border-gray-200 dark:border-gray-700"
+             data-filter-key="env"
+             role="group"
+             aria-label="Environment">
+            <button type="button" data-value="outdoor" aria-pressed="false"
+                    class="filter-chip-inactive px-5 py-2 rounded-lg text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 flex items-center gap-1.5">
+                <span aria-hidden="true">☀️</span> Outdoor
+            </button>
+            <button type="button" data-value="indoor" aria-pressed="false"
+                    class="filter-chip-inactive px-5 py-2 rounded-lg text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 flex items-center gap-1.5">
+                <span aria-hidden="true">🏢</span> Indoor
+            </button>
+        </div>
+    </div>
+
     @await Html.PartialAsync("_HomePageRecentHighlightsCard", Model)
     @await Html.PartialAsync("_HomePageSeasonLeaders", Model)
     @await Html.PartialAsync("_HomePageUpcomingMeets", Model)
@@ -29,81 +43,27 @@
 </div>
 
 @section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Highlights Tabs
-            const highlightTabs = document.querySelectorAll('.highlights-tab');
-            const highlightContents = document.querySelectorAll('.highlights-content');
+<script>
+    (function () {
+        var month = new Date().getMonth() + 1;
+        var defaultEnv = (month >= 12 || month <= 2) ? 'indoor' : 'outdoor';
+        var stored = localStorage.getItem('ctf.environment');
+        var env = stored || defaultEnv;
 
-            highlightTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const targetTab = this.dataset.tab;
+        if (!location.hash || !location.hash.includes('env=')) {
+            var hash = location.hash ? location.hash.slice(1) : '';
+            var parts = hash ? hash.split('&').filter(function (p) { return !p.startsWith('env='); }) : [];
+            parts.unshift('env=' + env);
+            history.replaceState(null, '', '#' + parts.join('&'));
+        }
 
-                    // Update tab styles
-                    highlightTabs.forEach(t => {
-                        if (t.dataset.tab === targetTab) {
-                            if (targetTab === 'outdoor') {
-                                t.classList.add('bg-gradient-to-r', 'from-amber-600', 'to-yellow-500', 'text-white');
-                                t.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
-                            } else {
-                                t.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-blue-500', 'text-white');
-                                t.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
-                            }
-                        } else {
-                            t.classList.remove('bg-gradient-to-r', 'from-amber-600', 'to-yellow-500', 'from-blue-600', 'to-blue-500', 'text-white');
-                            t.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
-                        }
-                    });
-
-                    // Show/hide content
-                    highlightContents.forEach(content => {
-                        if (content.id === `highlights-${targetTab}`) {
-                            content.classList.remove('hidden');
-                        } else {
-                            content.classList.add('hidden');
-                        }
-                    });
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.filter-group[data-filter-key="env"] button').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    localStorage.setItem('ctf.environment', this.dataset.value);
                 });
             });
-
-            // Leaders Tabs
-            const leaderTabs = document.querySelectorAll('.leaders-tab');
-            const leaderContents = document.querySelectorAll('.leaders-content');
-
-            leaderTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const targetTab = this.dataset.tab;
-
-                    // Update tab styles
-                    leaderTabs.forEach(t => {
-                        if (t.dataset.tab === targetTab) {
-                            if (targetTab === 'outdoor') {
-                                t.classList.add('bg-gradient-to-r', 'from-amber-600', 'to-yellow-500', 'text-white');
-                                t.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
-                            } else {
-                                t.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-blue-500', 'text-white');
-                                t.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
-                            }
-                        } else {
-                            t.classList.remove('bg-gradient-to-r', 'from-amber-600', 'to-yellow-500', 'from-blue-600', 'to-blue-500', 'text-white');
-                            t.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
-                        }
-                    });
-
-                    // Show/hide content
-                    leaderContents.forEach(content => {
-                        if (content.id === `leaders-${targetTab}`) {
-                            content.classList.remove('hidden');
-                        } else {
-                            content.classList.add('hidden');
-                        }
-                    });
-                });
-            });
-
-            // Set Outdoor as default active tab for both sections
-            document.querySelector('.highlights-tab[data-tab="outdoor"]')?.click();
-            document.querySelector('.leaders-tab[data-tab="outdoor"]')?.click();
         });
-    </script>
+    }());
+</script>
 }
