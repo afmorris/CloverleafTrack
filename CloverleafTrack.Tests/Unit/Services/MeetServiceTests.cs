@@ -58,6 +58,7 @@ public class MeetServiceTests
         int? allTimeRank = null,
         string athleteName = "Jane Doe") => new()
     {
+        PerformanceId = eventId,
         EventId = eventId,
         EventName = eventName,
         EventGender = gender,
@@ -77,6 +78,7 @@ public class MeetServiceTests
         _mockRepo.Setup(r => r.GetMeetBasicInfoBySlugAsync(It.IsAny<string>())).ReturnsAsync(meet);
         _mockRepo.Setup(r => r.GetPerformancesForMeetAsync(meet.Id)).ReturnsAsync(performances);
         _mockRepo.Setup(r => r.GetUniqueAthleteCountForMeetAsync(meet.Id)).ReturnsAsync(uniqueAthletes);
+        _mockRepo.Setup(r => r.GetParticipantsForMeetAsync(meet.Id)).ReturnsAsync(new List<MeetParticipant>());
     }
 
     // -------------------------------------------------------------------------
@@ -184,8 +186,36 @@ public class MeetServiceTests
         var result = await _service.GetMeetDetailsAsync("spring-invitational");
 
         result!.MixedEvents.Should().HaveCount(1);
+        result.HasMixedEvents.Should().BeTrue();
         result.BoysEvents.Should().BeEmpty();
         result.GirlsEvents.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task GetMeetDetailsAsync_ComputesImpactSummaryCounts_FromMappedPerformanceRows()
+    {
+        var meet = BuildMeet();
+        var performances = new List<MeetPerformanceDto>
+        {
+            BuildPerf(1, "100m", Gender.Male, pr: true, allTimeRank: 1),
+            BuildPerf(2, "200m", Gender.Male, allTimeRank: 5),
+            BuildPerf(3, "400m", Gender.Female, allTimeRank: 11),
+            BuildPerf(4, "800m", Gender.Female),
+        };
+        performances[0].SeasonBest = true;
+        performances[1].SeasonBest = true;
+        SetupMeetDetails(meet, performances);
+        _mockPlacingRepo.Setup(r => r.GetForMeetAsync(meet.Id))
+            .ReturnsAsync(new List<MeetPlacing>
+            {
+                new() { MeetId = meet.Id, PerformanceId = 2, Place = 1, FullPoints = 5, SplitPoints = 5 }
+            });
+
+        var result = await _service.GetMeetDetailsAsync("spring-invitational");
+
+        result!.TopTenAllTimeCount.Should().Be(2);
+        result.SeasonBestCount.Should().Be(2);
+        result.PlacingCount.Should().Be(1);
     }
 
     [Fact]

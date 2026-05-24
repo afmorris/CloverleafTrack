@@ -20,6 +20,10 @@ public class MeetDetailsViewModel
     public int TotalPRs { get; set; }
     public int TotalSchoolRecords { get; set; }
     public int UniqueAthletes { get; set; }
+    public int TopTenAllTimeCount { get; set; }
+    public int SeasonBestCount { get; set; }
+    public int PlacingCount { get; set; }
+    public bool HasMixedEvents { get; set; }
 
     /// <summary>Opponent schools at this meet. Used for labelling double dual placings.</summary>
     public List<MeetParticipant> Participants { get; set; } = new();

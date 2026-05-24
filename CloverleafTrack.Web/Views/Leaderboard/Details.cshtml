@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = $"{Model.EventName}";
-    var genderLabel = Model.Gender == CloverleafTrack.Models.Enums.Gender.Male ? "Boys" : "Girls";
+    var genderLabel = Model.GenderLabel;
     var environmentLabel = Model.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor ? "Outdoor" : "Indoor";
 }
 

@@ -12,6 +12,9 @@ public class HomePageViewModel
     public int MeetsCompleted { get; set; }
     public int TotalMeetsThisSeason { get; set; }
 
+    // Latest Meet Impact
+    public LatestMeetImpactViewModel? LatestMeetImpact { get; set; }
+
     // On This Day
     public OnThisDayViewModel? OnThisDay { get; set; }
 

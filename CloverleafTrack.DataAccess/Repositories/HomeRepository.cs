@@ -33,6 +33,64 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
         return await connection.QueryFirstAsync<HomePageStatsDto>(sql, new { SeasonId = currentSeasonId });
     }
 
+    public async Task<LatestMeetImpactDto?> GetLatestCompletedMeetImpactAsync(int currentSeasonId)
+    {
+        using var connection = connectionFactory.CreateConnection();
+
+        const string sql = """
+                           WITH LatestMeet AS (
+                               SELECT TOP 1
+                                   m.Id,
+                                   m.Name,
+                                   m.Date,
+                                   m.Environment,
+                                   m.LocationId
+                               FROM Meets m
+                               WHERE m.SeasonId = @SeasonId
+                                 AND m.EntryStatus = 3
+                               ORDER BY m.Date DESC, m.Id DESC
+                           )
+                           SELECT
+                               lm.Name AS MeetName,
+                               lm.Date,
+                               lm.Environment,
+                               COALESCE(l.Name, '') AS LocationName,
+                               COALESCE(l.City, '') AS LocationCity,
+                               COALESCE(l.State, '') AS LocationState,
+                               (SELECT COUNT(*)
+                                FROM Performances p
+                                WHERE p.MeetId = lm.Id) AS TotalPerformances,
+                               (SELECT COUNT(*)
+                                FROM Performances p
+                                WHERE p.MeetId = lm.Id
+                                  AND p.PersonalBest = 1) AS TotalPRs,
+                               (SELECT COUNT(DISTINCT p.Id)
+                                FROM Performances p
+                                INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id AND lb.Rank = 1
+                                WHERE p.MeetId = lm.Id) AS TotalSchoolRecords,
+                               (SELECT COUNT(DISTINCT p.Id)
+                                FROM Performances p
+                                INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id AND lb.Rank <= 10
+                                WHERE p.MeetId = lm.Id) AS TopTenAllTimeMarks,
+                               (SELECT COUNT(*)
+                                FROM (
+                                    SELECT p.AthleteId
+                                    FROM Performances p
+                                    WHERE p.MeetId = lm.Id
+                                      AND p.AthleteId IS NOT NULL
+                                    UNION
+                                    SELECT pa.AthleteId
+                                    FROM Performances p
+                                    INNER JOIN PerformanceAthletes pa ON pa.PerformanceId = p.Id
+                                    WHERE p.MeetId = lm.Id
+                                ) athletes) AS UniqueAthletes
+                           FROM LatestMeet lm
+                           LEFT JOIN Locations l ON l.Id = lm.LocationId
+                           """;
+
+        return await connection.QueryFirstOrDefaultAsync<LatestMeetImpactDto>(sql, new { SeasonId = currentSeasonId });
+    }
+
     public async Task<OnThisDayDto?> GetPerformanceOnThisDayAsync(int month, int day)
     {
         using var connection = connectionFactory.CreateConnection();

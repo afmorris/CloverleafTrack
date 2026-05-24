@@ -1045,3 +1045,46 @@ public Dictionary<string, List<LeaderboardPerformanceViewModel>> ClassPersonalRe
 - Do NOT use a Razor local `void` function containing tag helpers (`asp-controller`, `asp-action`, `asp-route-*`) — Razor compiles tag helpers with `await`, making the generated code require an async context. The CS4033 error is the symptom. Use an outer `@foreach` loop instead.
 
 ---
+
+### [C26] Phase 1 Performance-Data UX Pass
+
+**What changed:**
+The public UX was tightened around performance data without adding new routes or schema:
+
+- Main navigation copy now shows `Events` and `Athletes` while keeping `/leaderboard` and `/roster`.
+- Leaderboard details use an explicit gender label mapping: Male → Boys, Female → Girls, Mixed → Mixed, default → Unknown. `SearchService` uses the same mapping for athlete search labels; event search labels already had Mixed sections.
+- Homepage adds a nullable `LatestMeetImpact` card before Season at a Glance, backed by `HomeRepository.GetLatestCompletedMeetImpactAsync(currentSeasonId)`.
+- Meet details now lead with a Meet Impact Summary: total performances, unique athletes, PRs, school records, top-10 all-time marks, season bests, scoring places, mixed relay and hand-timed indicators, plus short filtered lists generated from mapped meet performance rows.
+- Athlete details split `PersonalRecords` into individual records and relay achievements in separate sections.
+
+**Why:**
+The public site should lead with performance-product data: recent meet impact, PRs, school records, top-10 marks, scoring places, relays, and athlete record context. Mixed relay leaderboard pages must never fall through to a Girls label.
+
+**Key files:**
+- `CloverleafTrack.DataAccess/Dtos/LatestMeetImpactDto.cs`
+- `CloverleafTrack.DataAccess/Interfaces/IHomeRepository.cs`
+- `CloverleafTrack.DataAccess/Repositories/HomeRepository.cs`
+- `CloverleafTrack.Services/HomeService.cs`
+- `CloverleafTrack.Services/MeetService.cs`
+- `CloverleafTrack.Services/SearchService.cs`
+- `CloverleafTrack.ViewModels/Home/HomePageViewModel.cs`
+- `CloverleafTrack.ViewModels/Home/LatestMeetImpactViewModel.cs`
+- `CloverleafTrack.ViewModels/Leaderboard/LeaderboardDetailsViewModel.cs`
+- `CloverleafTrack.ViewModels/Meets/MeetDetailsViewModel.cs`
+- `CloverleafTrack.Web/Views/Shared/_MainNavigation.cshtml`
+- `CloverleafTrack.Web/Views/Shared/_HomePageLatestMeetImpactCard.cshtml`
+- `CloverleafTrack.Web/Views/Home/Index.cshtml`
+- `CloverleafTrack.Web/Views/Leaderboard/Details.cshtml`
+- `CloverleafTrack.Web/Views/Meets/Details.cshtml`
+- `CloverleafTrack.Web/Views/Roster/Details.cshtml`
+- `CloverleafTrack.Tests/Unit/Services/HomeServiceTests.cs`
+- `CloverleafTrack.Tests/Unit/Services/MeetServiceTests.cs`
+- `CloverleafTrack.Tests/Unit/ViewModels/Leaderboard/LeaderboardDetailsViewModelTests.cs`
+
+**Watch out:**
+- Latest Meet Impact uses completed meets only (`EntryStatus = 3`) and orders by meet date descending, then id descending. It counts current school records from `Leaderboards.Rank = 1`, top-10 marks from `Leaderboards.Rank <= 10`, and unique athletes from individual `Performances.AthleteId` UNION relay members in `PerformanceAthletes`.
+- Latest Meet Impact intentionally does not infer relay PRs; `TotalPRs` uses `Performances.PersonalBest = 1` only.
+- Meet impact summary counts are computed in `MeetService` from already mapped performance rows. Do not add a new meet details SQL query for top-10, season-best, or placing counts unless the mapped rows stop carrying that data.
+- Athlete relay achievements still rely on existing service-layer best-per-event relay logic. Do not merge them back into the individual PR table.
+
+---
