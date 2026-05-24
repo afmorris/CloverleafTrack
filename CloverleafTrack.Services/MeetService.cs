@@ -110,6 +110,15 @@ public class MeetService(
         var girlsPerformances = performances.Where(p => p.EventGender == Gender.Female).ToList();
         var mixedPerformances = performances.Where(p => p.EventGender == Gender.Mixed).ToList();
 
+        var boysEvents = BuildOrderedEventGroups(boysPerformances, placingLookup);
+        var girlsEvents = BuildOrderedEventGroups(girlsPerformances, placingLookup);
+        var mixedEvents = BuildOrderedEventGroups(mixedPerformances, placingLookup);
+        var mappedPerformances = boysEvents
+            .Concat(girlsEvents)
+            .Concat(mixedEvents)
+            .SelectMany(g => g.Performances)
+            .ToList();
+
         return new MeetDetailsViewModel
         {
             Name = meet.Name,
@@ -129,10 +138,14 @@ public class MeetService(
             TotalPRs = performances.Count(p => p.PersonalBest),
             TotalSchoolRecords = performances.Count(p => p.AllTimeRank == 1),
             UniqueAthletes = uniqueAthletes,  // Now includes relay athletes!
+            TopTenAllTimeCount = mappedPerformances.Count(p => p.AllTimeRank is <= 10),
+            SeasonBestCount = mappedPerformances.Count(p => p.IsSeasonBest),
+            PlacingCount = mappedPerformances.Count(p => p.HasPlacing),
+            HasMixedEvents = mixedEvents.Any(),
 
-            BoysEvents = BuildOrderedEventGroups(boysPerformances, placingLookup),
-            GirlsEvents = BuildOrderedEventGroups(girlsPerformances, placingLookup),
-            MixedEvents = BuildOrderedEventGroups(mixedPerformances, placingLookup)
+            BoysEvents = boysEvents,
+            GirlsEvents = girlsEvents,
+            MixedEvents = mixedEvents
         };
     }
 

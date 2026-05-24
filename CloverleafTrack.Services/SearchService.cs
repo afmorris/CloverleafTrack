@@ -19,7 +19,7 @@ public class SearchService(
 
         foreach (var athlete in activeAthletes.Concat(formerAthletes))
         {
-            var genderText = athlete.Gender == Gender.Male ? "Boys" : "Girls";
+            var genderText = GetGenderLabel(athlete.Gender);
             records.Add(new SearchRecord(
                 "athlete",
                 athlete.FullName,
@@ -74,4 +74,12 @@ public class SearchService(
 
         return records;
     }
+
+    private static string GetGenderLabel(Gender gender) => gender switch
+    {
+        Gender.Male => "Boys",
+        Gender.Female => "Girls",
+        Gender.Mixed => "Mixed",
+        _ => "Unknown"
+    };
 }

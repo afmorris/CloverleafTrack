@@ -33,6 +33,26 @@ public class HomeService(
         viewModel.MeetsCompleted = stats.MeetsCompleted;
         viewModel.TotalMeetsThisSeason = stats.TotalMeetsThisSeason;
 
+        var latestMeetImpact = await homeRepository.GetLatestCompletedMeetImpactAsync(currentSeason.Id);
+        if (latestMeetImpact != null)
+        {
+            viewModel.LatestMeetImpact = new LatestMeetImpactViewModel
+            {
+                MeetName = latestMeetImpact.MeetName,
+                MeetSlug = _slugHelper.GenerateSlug(latestMeetImpact.MeetName),
+                Date = latestMeetImpact.Date,
+                Environment = latestMeetImpact.Environment,
+                LocationName = latestMeetImpact.LocationName,
+                LocationCity = latestMeetImpact.LocationCity,
+                LocationState = latestMeetImpact.LocationState,
+                TotalPerformances = latestMeetImpact.TotalPerformances,
+                TotalPRs = latestMeetImpact.TotalPRs,
+                TotalSchoolRecords = latestMeetImpact.TotalSchoolRecords,
+                TopTenAllTimeMarks = latestMeetImpact.TopTenAllTimeMarks,
+                UniqueAthletes = latestMeetImpact.UniqueAthletes
+            };
+        }
+
         // Get "On This Day" (only if there's a performance)
         var today = DateTime.Today;
         var onThisDay = await homeRepository.GetPerformanceOnThisDayAsync(today.Month, today.Day);

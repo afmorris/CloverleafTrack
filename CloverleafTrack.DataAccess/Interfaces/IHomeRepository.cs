@@ -7,6 +7,7 @@ namespace CloverleafTrack.DataAccess.Interfaces;
 public interface IHomeRepository
 {
     Task<HomePageStatsDto> GetHomePageStatsAsync(int currentSeasonId);
+    Task<LatestMeetImpactDto?> GetLatestCompletedMeetImpactAsync(int currentSeasonId);
     Task<OnThisDayDto?> GetPerformanceOnThisDayAsync(int month, int day);
     Task<RecentHighlightDto?> GetRecentTopPerformanceAsync(int currentSeasonId, Environment environment);
     Task<ImprovementDto?> GetBiggestImprovementThisSeasonAsync(int currentSeasonId, Environment environment);

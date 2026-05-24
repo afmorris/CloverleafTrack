@@ -11,6 +11,13 @@ public class LeaderboardDetailsViewModel
     public bool IsRelayEvent { get; set;}
     public Gender Gender { get; set; }
     public Environment Environment { get; set; }
+    public string GenderLabel => Gender switch
+    {
+        Gender.Male => "Boys",
+        Gender.Female => "Girls",
+        Gender.Mixed => "Mixed",
+        _ => "Unknown"
+    };
     
     public bool IsFieldEvent { get; set; }
 

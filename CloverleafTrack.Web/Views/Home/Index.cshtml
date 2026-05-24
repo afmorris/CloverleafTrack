@@ -16,8 +16,8 @@
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
+    @await Html.PartialAsync("_HomePageLatestMeetImpactCard", Model)
     @await Html.PartialAsync("_HomePageSeasonAtAGlanceCard", Model)
-    @await Html.PartialAsync("_HomePageOnThisDayCard", Model)
 
     <!-- Environment segmented control for Highlights + Leaders -->
     <div class="flex justify-end mb-4">
@@ -38,6 +38,7 @@
 
     @await Html.PartialAsync("_HomePageRecentHighlightsCard", Model)
     @await Html.PartialAsync("_HomePageSeasonLeaders", Model)
+    @await Html.PartialAsync("_HomePageOnThisDayCard", Model)
     @await Html.PartialAsync("_HomePageUpcomingMeets", Model)
 
 </div>
