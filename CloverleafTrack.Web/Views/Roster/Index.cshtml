@@ -1,19 +1,17 @@
-﻿@model RosterViewModel
+@model RosterViewModel
 
 @{
     ViewData["Title"] = "Roster";
 }
 
-<!-- Main Content -->
 <div class="max-w-7xl mx-auto px-6">
 
-    <!-- Header -->
     <div class="mb-8">
-        <h1 class="text-5xl font-bold mb-3 text-gray-900 dark:text-white">Roster</h1>
+        <h1 class="text-4xl font-bold mb-3 text-gray-900 dark:text-white">Roster</h1>
         <p class="text-gray-600 dark:text-gray-400 text-lg">Current and former Cloverleaf athletes</p>
     </div>
 
-    @await Html.PartialAsync("_RosterActiveAthletesList", Model.ActiveAthletes)
+    @await Html.PartialAsync("_RosterActiveAthletesList", Model)
     @await Html.PartialAsync("_RosterFormerAthletesList", Model.FormerAthletes)
 
 </div>

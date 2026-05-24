@@ -1,29 +1,19 @@
-﻿@{
+@{
     var currentPath = Context.Request.Path;
+    var links = new[]
+    {
+        new { Href = "/leaderboard", Text = "Leaderboard" },
+        new { Href = "/seasons", Text = "Seasons" },
+        new { Href = "/roster", Text = "Roster" },
+        new { Href = "/meets", Text = "Meets" }
+    };
 }
 
-<nav class="font-heading text-sm uppercase tracking-wide font-semibold text-gray-100 space-x-6">
-        @{
-            var links = new[]
-            {
-                new { Href = "/leaderboard", Text = "Leaderboard" },
-                new { Href = "/seasons", Text = "Seasons" },
-                new { Href = "/roster", Text = "Roster" },
-                new { Href = "/meets", Text = "Meets" }
-            };
-
-            foreach (var link in links)
-            {
-                var isActive = currentPath.StartsWithSegments(link.Href, StringComparison.OrdinalIgnoreCase);
-                var activeClass = isActive ? "text-ctf-accent underline underline-offset-4" : "hover:text-ctf-accent";
-            }
-        }
-
-        @foreach (var link in links)
-        {
-            var isActive = currentPath.StartsWithSegments(link.Href, StringComparison.OrdinalIgnoreCase);
-            var activeClass = isActive ? "text-ctf-accent underline underline-offset-4" : "hover:text-ctf-accent";
-
-            <a href="@link.Href" class="@($"transition-colors duration-200 {activeClass}")">@link.Text</a>
-        }
+<nav class="font-heading text-sm uppercase tracking-wide font-semibold text-gray-100 space-x-6" aria-label="Main navigation">
+    @foreach (var link in links)
+    {
+        var isActive = currentPath.StartsWithSegments(link.Href, StringComparison.OrdinalIgnoreCase);
+        var activeClass = isActive ? "text-ctf-accent underline underline-offset-4" : "hover:text-ctf-accent";
+        <a href="@link.Href" class="transition-colors duration-200 @activeClass" @(isActive ? "aria-current=\"page\"" : "")>@link.Text</a>
+    }
 </nav>

@@ -1,67 +1,69 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - Cloverleaf Track</title>
+    @{
+        var pageTitle = ViewData["Title"]?.ToString() ?? "";
+        var fullTitle = pageTitle.Contains("Cloverleaf")
+            ? pageTitle
+            : (pageTitle.Length > 0 ? pageTitle + " · Cloverleaf Track & Field" : "Cloverleaf Track & Field");
+    }
+    <title>@fullTitle</title>
+    <script>(function(){var s=localStorage.getItem('theme'),d=window.matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(s===null&&d))document.documentElement.classList.add('dark');}());</script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const toggle = document.getElementById('darkModeToggle');
-            const html = document.documentElement;
-
-            // Initialize toggle state on load
-            const storedTheme = localStorage.theme;
-            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const isDark = storedTheme === 'dark' || (!storedTheme && systemPrefersDark);
-            if (isDark) {
-                html.classList.add('dark');
-                toggle.checked = true;
-            }
-
-            toggle.addEventListener('change', function () {
-                if (this.checked) {
-                    html.classList.add('dark');
-                    localStorage.theme = 'dark';
-                } else {
-                    html.classList.remove('dark');
-                    localStorage.theme = 'light';
-                }
-            });
-        });
-    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 </head>
 <body class="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300 page-background">
 
-<!-- Navigation -->
 <header class="bg-ctf-nav shadow text-white nav-background">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        <div class="flex items-center space-x-4">
-            <a href="/" class="font-heading text-xl font-extrabold text-white tracking-tight">
-                Cloverleaf Track
-            </a>
-        </div>
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+        <a href="/" class="font-heading text-xl font-extrabold text-white tracking-tight flex-shrink-0">Cloverleaf Track</a>
         @await Html.PartialAsync("_MainNavigation")
-        @await Html.PartialAsync("_DarkModeToggle")
+        <div class="flex items-center gap-3 flex-shrink-0">
+            <div class="relative" id="search-container">
+                <input type="search" id="site-search" placeholder="Search…"
+                       aria-label="Search athletes, meets, and events"
+                       autocomplete="off"
+                       class="w-32 sm:w-44 bg-white/10 text-white placeholder-gray-300 rounded-full px-4 py-1.5 text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40 transition-all duration-200">
+                <div id="search-results" role="listbox" aria-label="Search results"
+                     class="hidden absolute right-0 top-full mt-1 w-80 sm:w-96 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-xl z-50 overflow-hidden max-h-96 overflow-y-auto">
+                </div>
+            </div>
+            @await Html.PartialAsync("_DarkModeToggle")
+        </div>
     </div>
 </header>
 
-<!-- Hero Section (optional content injected from page) -->
 @RenderSection("Hero", required: false)
 
-<!-- Main Content -->
 <main class="flex-grow container mx-auto px-4 py-8 font-body text-base text-gray-800 dark:text-gray-200">
     @RenderBody()
 </main>
 
-<!-- Footer -->
 <footer class="bg-ctf-footer dark:bg-gray-800 mt-12 shadow-inner">
-    <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-600 dark:text-gray-400">
-        Made with <span class="text-red-500">♥</span> by Coach Tony
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>&copy; @DateTime.Now.Year Cloverleaf Track &amp; Field</span>
+            <a href="https://www.cloverleafschools.com/athletics" target="_blank" rel="noopener" class="hover:underline">Cloverleaf Athletics ↗</a>
+            <span>Made with <span class="text-red-500" aria-hidden="true">♥</span><span class="sr-only">love</span> by Coach Tony</span>
+        </div>
     </div>
 </footer>
 
+<script>
+    (function () {
+        var t = document.getElementById('darkModeToggle');
+        if (!t) return;
+        t.checked = document.documentElement.classList.contains('dark');
+        t.addEventListener('change', function () {
+            document.documentElement.classList.toggle('dark', this.checked);
+            localStorage.setItem('theme', this.checked ? 'dark' : 'light');
+        });
+    }());
+</script>
+<script src="~/js/filters.js" asp-append-version="true" defer></script>
+<script src="~/js/search.js" asp-append-version="true" defer></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
