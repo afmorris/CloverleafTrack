@@ -50,7 +50,12 @@
             <!-- Stats -->
             @if (!Model.IsUpcoming)
             {
-                <div class="hidden sm:flex gap-4 text-sm flex-shrink-0">
+                <div class="hidden sm:flex flex-col items-end gap-1.5 flex-shrink-0">
+                @if (Model.TeamResult != null)
+                {
+                    @await Html.PartialAsync("_TeamResultBadge", Model.TeamResult)
+                }
+                <div class="flex gap-4 text-sm">
                     <div class="text-center">
                         <div class="text-lg font-bold text-gray-800 dark:text-white">@Model.AthleteCount</div>
                         <div class="text-xs text-gray-500 dark:text-gray-400">Athletes</div>
@@ -73,6 +78,7 @@
                             <div class="text-xs text-gray-500 dark:text-gray-400">SRs</div>
                         </div>
                     }
+                </div>
                 </div>
             }
         </div>

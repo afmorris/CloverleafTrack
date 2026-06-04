@@ -102,7 +102,14 @@ public class MeetsController(
             EntryStatus = model.EntryStatus,
             EntryNotes = model.EntryNotes,
             MeetType = model.MeetType,
-            ScoringTemplateId = model.ScoringTemplateId
+            ScoringTemplateId = model.ScoringTemplateId,
+            BoysScore = model.BoysScore,
+            BoysOpponentScore = model.BoysOpponentScore,
+            GirlsScore = model.GirlsScore,
+            GirlsOpponentScore = model.GirlsOpponentScore,
+            BoysPlace = model.BoysPlace,
+            GirlsPlace = model.GirlsPlace,
+            FieldSize = model.FieldSize
         };
 
         var id = await meetRepository.CreateAsync(meet);
@@ -139,6 +146,13 @@ public class MeetsController(
             EntryNotes = meet.EntryNotes,
             MeetType = meet.MeetType,
             ScoringTemplateId = meet.ScoringTemplateId,
+            BoysScore = meet.BoysScore,
+            BoysOpponentScore = meet.BoysOpponentScore,
+            GirlsScore = meet.GirlsScore,
+            GirlsOpponentScore = meet.GirlsOpponentScore,
+            BoysPlace = meet.BoysPlace,
+            GirlsPlace = meet.GirlsPlace,
+            FieldSize = meet.FieldSize,
             ExistingParticipants = participants,
             ParticipantSchoolNames = participants.Select(p => p.SchoolName).ToList(),
             ParticipantIds = participants.Select(p => p.Id).ToList()
@@ -174,7 +188,14 @@ public class MeetsController(
             EntryStatus = model.EntryStatus,
             EntryNotes = model.EntryNotes,
             MeetType = model.MeetType,
-            ScoringTemplateId = model.ScoringTemplateId
+            ScoringTemplateId = model.ScoringTemplateId,
+            BoysScore = model.BoysScore,
+            BoysOpponentScore = model.BoysOpponentScore,
+            GirlsScore = model.GirlsScore,
+            GirlsOpponentScore = model.GirlsOpponentScore,
+            BoysPlace = model.BoysPlace,
+            GirlsPlace = model.GirlsPlace,
+            FieldSize = model.FieldSize
         };
 
         await meetRepository.UpdateAsync(meet);

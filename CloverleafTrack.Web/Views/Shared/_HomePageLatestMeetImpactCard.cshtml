@@ -28,6 +28,12 @@
                         <span>@string.Join(", ", locationParts)</span>
                     }
                 </div>
+                @if (impact.TeamResult != null)
+                {
+                    <div class="mt-2">
+                        @await Html.PartialAsync("_TeamResultBadge", impact.TeamResult)
+                    </div>
+                }
             </div>
 
             <div class="metric-strip">

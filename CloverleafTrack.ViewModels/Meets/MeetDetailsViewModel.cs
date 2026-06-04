@@ -31,6 +31,8 @@ public class MeetDetailsViewModel
     /// <summary>True when any performance in this meet has placing data recorded.</summary>
     public bool HasScoring { get; set; }
 
+    public TeamResultViewModel? TeamResult { get; set; }
+
     public List<MeetEventGroupViewModel> BoysEvents { get; set; } = new();
     public List<MeetEventGroupViewModel> GirlsEvents { get; set; } = new();
     public List<MeetEventGroupViewModel> MixedEvents { get; set; } = new();

@@ -62,7 +62,11 @@ public class HomeService(
             viewModel.LatestMeetSlug = meetSlug;
             var meetDetails = await meetService.GetMeetDetailsAsync(meetSlug);
             if (meetDetails != null)
+            {
                 viewModel.LatestMeetHighlights = BuildHighlightDigest(meetDetails);
+                if (meetDetails.TeamResult != null && viewModel.LatestMeetImpact != null)
+                    viewModel.LatestMeetImpact.TeamResult = meetDetails.TeamResult;
+            }
         }
 
         // Get "On This Day" (only if there's a performance)

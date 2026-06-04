@@ -729,3 +729,16 @@ CREATE NONCLUSTERED INDEX [IX_MeetPlacings_PerformanceId]
 ALTER TABLE [dbo].[Meets]
     ADD CONSTRAINT [FK_Meets_ScoringTemplates]
         FOREIGN KEY ([ScoringTemplateId]) REFERENCES [dbo].[ScoringTemplates] ([Id]);
+
+
+-- ============================================================
+-- Team score / placement fields (optional, entered post-meet)
+-- ============================================================
+ALTER TABLE [dbo].[Meets]
+    ADD [BoysScore]          INT NULL,
+        [BoysOpponentScore]  INT NULL,
+        [GirlsScore]         INT NULL,
+        [GirlsOpponentScore] INT NULL,
+        [BoysPlace]          INT NULL,
+        [GirlsPlace]         INT NULL,
+        [FieldSize]          INT NULL;

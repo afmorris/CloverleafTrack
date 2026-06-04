@@ -1,3 +1,4 @@
+using CloverleafTrack.Models.Enums;
 using Environment = CloverleafTrack.Models.Enums.Environment;
 
 namespace CloverleafTrack.ViewModels.Meets;
@@ -17,6 +18,9 @@ public class MeetListItemViewModel
     public int PerformanceCount { get; set; }
     public int PRCount { get; set; }
     public int SchoolRecordCount { get; set; }
-    
+
+    public MeetType MeetType { get; set; }
+    public TeamResultViewModel? TeamResult { get; set; }
+
     public bool IsUpcoming => Date > DateTime.Now;
 }

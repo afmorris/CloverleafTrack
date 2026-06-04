@@ -162,7 +162,47 @@
             <label asp-for="EntryNotes">Entry Notes</label>
             <textarea asp-for="EntryNotes" class="form-control" placeholder="Optional notes about this meet..."></textarea>
         </div>
-        
+
+        <div class="form-group" id="dualScoreGroup" style="display:none">
+            <label style="font-weight:600;font-size:15px;">Team Score (post-meet)</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;">
+                <div>
+                    <label asp-for="BoysScore" style="font-size:13px;">Boys — Our Score</label>
+                    <input asp-for="BoysScore" type="number" min="0" class="form-control" placeholder="e.g. 87" />
+                </div>
+                <div>
+                    <label asp-for="BoysOpponentScore" style="font-size:13px;">Boys — Opponent Score</label>
+                    <input asp-for="BoysOpponentScore" type="number" min="0" class="form-control" placeholder="e.g. 63" />
+                </div>
+                <div>
+                    <label asp-for="GirlsScore" style="font-size:13px;">Girls — Our Score</label>
+                    <input asp-for="GirlsScore" type="number" min="0" class="form-control" placeholder="e.g. 72" />
+                </div>
+                <div>
+                    <label asp-for="GirlsOpponentScore" style="font-size:13px;">Girls — Opponent Score</label>
+                    <input asp-for="GirlsOpponentScore" type="number" min="0" class="form-control" placeholder="e.g. 45" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" id="inviPlaceGroup" style="display:none">
+            <label style="font-weight:600;font-size:15px;">Team Placement (post-meet)</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px;">
+                <div>
+                    <label asp-for="BoysPlace" style="font-size:13px;">Boys Place</label>
+                    <input asp-for="BoysPlace" type="number" min="1" class="form-control" placeholder="e.g. 3" />
+                </div>
+                <div>
+                    <label asp-for="GirlsPlace" style="font-size:13px;">Girls Place</label>
+                    <input asp-for="GirlsPlace" type="number" min="1" class="form-control" placeholder="e.g. 5" />
+                </div>
+                <div>
+                    <label asp-for="FieldSize" style="font-size:13px;"># of Teams</label>
+                    <input asp-for="FieldSize" type="number" min="2" class="form-control" placeholder="e.g. 12" />
+                </div>
+            </div>
+        </div>
+
         <div class="button-group">
             <button type="submit" class="btn btn-primary">Save Meet</button>
             @if (Model.Id == 0)
@@ -181,10 +221,15 @@
         const scoringTemplateGroup = document.getElementById('scoringTemplateGroup');
         const addBtn = document.getElementById('addParticipantBtn');
 
+        const dualScoreGroup = document.getElementById('dualScoreGroup');
+        const inviPlaceGroup = document.getElementById('inviPlaceGroup');
+
         function updateMeetTypeUI() {
             const val = meetTypeSelect.value;
-            // 3 = Invitational
+            // 3 = Invitational, 1 = Dual, 2 = DoubleDual
             scoringTemplateGroup.style.display = val == '3' ? 'block' : 'none';
+            dualScoreGroup.style.display = (val == '1' || val == '2') ? 'block' : 'none';
+            inviPlaceGroup.style.display = val == '3' ? 'block' : 'none';
         }
 
         meetTypeSelect.addEventListener('change', updateMeetTypeUI);

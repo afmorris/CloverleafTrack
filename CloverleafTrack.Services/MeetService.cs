@@ -48,6 +48,7 @@ public class MeetService(
                 var athleteCount = await meetRepository.GetUniqueAthleteCountForMeetAsync(meet.Id);
                 var performanceCount = await meetRepository.GetPerformanceCountForMeetAsync(meet.Id);
 
+                var teamResult = BuildTeamResult(meet, null);
                 seasonMeets.Meets.Add(new MeetListItemViewModel
                 {
                     Id = meet.Id,
@@ -61,7 +62,9 @@ public class MeetService(
                     AthleteCount = athleteCount,
                     PerformanceCount = performanceCount,
                     PRCount = meet.PRCount,
-                    SchoolRecordCount = meet.SchoolRecordCount
+                    SchoolRecordCount = meet.SchoolRecordCount,
+                    MeetType = meet.MeetType,
+                    TeamResult = teamResult.HasResult ? teamResult : null
                 });
             }
 
@@ -119,6 +122,9 @@ public class MeetService(
             .SelectMany(g => g.Performances)
             .ToList();
 
+        var opponentName = participants.Count == 1 ? participants[0].SchoolName : null;
+        var teamResult = BuildTeamResult(meet, opponentName);
+
         return new MeetDetailsViewModel
         {
             Name = meet.Name,
@@ -132,12 +138,13 @@ public class MeetService(
             MeetType = meet.MeetType,
             Participants = participants,
             HasScoring = placings.Count > 0,
+            TeamResult = teamResult.HasResult ? teamResult : null,
 
             // Stats
             TotalPerformances = performances.Count,
             TotalPRs = performances.Count(p => p.PersonalBest),
             TotalSchoolRecords = performances.Count(p => p.AllTimeRank == 1),
-            UniqueAthletes = uniqueAthletes,  // Now includes relay athletes!
+            UniqueAthletes = uniqueAthletes,
             TopTenAllTimeCount = mappedPerformances.Count(p => p.AllTimeRank is <= 10),
             SeasonBestCount = mappedPerformances.Count(p => p.IsSeasonBest),
             PlacingCount = mappedPerformances.Count(p => p.HasPlacing),
@@ -148,6 +155,20 @@ public class MeetService(
             MixedEvents = mixedEvents
         };
     }
+
+    private static TeamResultViewModel BuildTeamResult(Meet meet, string? opponentName) =>
+        new()
+        {
+            MeetType = meet.MeetType,
+            OpponentName = opponentName,
+            BoysScore = meet.BoysScore,
+            BoysOpponentScore = meet.BoysOpponentScore,
+            GirlsScore = meet.GirlsScore,
+            GirlsOpponentScore = meet.GirlsOpponentScore,
+            BoysPlace = meet.BoysPlace,
+            GirlsPlace = meet.GirlsPlace,
+            FieldSize = meet.FieldSize
+        };
 
     private List<MeetEventGroupViewModel> BuildOrderedEventGroups(
         List<MeetPerformanceDto> performances,

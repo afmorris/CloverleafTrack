@@ -47,6 +47,28 @@ public class MeetFormViewModel
     [Display(Name = "Entry Notes")]
     public string? EntryNotes { get; set; }
 
+    // Team score / placement (post-meet)
+    [Display(Name = "Boys Score")]
+    public int? BoysScore { get; set; }
+
+    [Display(Name = "Opponent Boys Score")]
+    public int? BoysOpponentScore { get; set; }
+
+    [Display(Name = "Girls Score")]
+    public int? GirlsScore { get; set; }
+
+    [Display(Name = "Opponent Girls Score")]
+    public int? GirlsOpponentScore { get; set; }
+
+    [Display(Name = "Boys Place")]
+    public int? BoysPlace { get; set; }
+
+    [Display(Name = "Girls Place")]
+    public int? GirlsPlace { get; set; }
+
+    [Display(Name = "Field Size (# of teams)")]
+    public int? FieldSize { get; set; }
+
     // For dropdowns
     public List<LocationOptionViewModel> Locations { get; set; } = new();
     public List<SeasonOptionViewModel> Seasons { get; set; } = new();

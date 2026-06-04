@@ -1,3 +1,4 @@
+using CloverleafTrack.ViewModels.Meets;
 using Environment = CloverleafTrack.Models.Enums.Environment;
 
 namespace CloverleafTrack.ViewModels.Home;
@@ -16,4 +17,6 @@ public class LatestMeetImpactViewModel
     public int TotalSchoolRecords { get; set; }
     public int TopTenAllTimeMarks { get; set; }
     public int UniqueAthletes { get; set; }
+
+    public TeamResultViewModel? TeamResult { get; set; }
 }

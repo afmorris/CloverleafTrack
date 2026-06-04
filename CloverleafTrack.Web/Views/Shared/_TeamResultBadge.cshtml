@@ -1,0 +1,31 @@
+@model CloverleafTrack.ViewModels.Meets.TeamResultViewModel
+
+@if (Model.HasResult)
+{
+    var isDual = Model.MeetType == CloverleafTrack.Models.Enums.MeetType.Dual
+              || Model.MeetType == CloverleafTrack.Models.Enums.MeetType.DoubleDual;
+    <div class="flex flex-wrap gap-1.5">
+        @if (Model.BoysResultLabel != null)
+        {
+            if (isDual)
+            {
+                <span class="@(Model.BoysWon ? "chip-win" : "chip-loss")">@Model.BoysResultLabel</span>
+            }
+            else
+            {
+                <span class="chip-rank">@Model.BoysResultLabel</span>
+            }
+        }
+        @if (Model.GirlsResultLabel != null)
+        {
+            if (isDual)
+            {
+                <span class="@(Model.GirlsWon ? "chip-win" : "chip-loss")">@Model.GirlsResultLabel</span>
+            }
+            else
+            {
+                <span class="chip-rank">@Model.GirlsResultLabel</span>
+            }
+        }
+    </div>
+}
