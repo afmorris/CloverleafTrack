@@ -3,157 +3,119 @@
 @if (Model.IndoorBreakoutAthlete != null || Model.IndoorBiggestImprovement != null || Model.IndoorTopPerformance != null ||
      Model.OutdoorBreakoutAthlete != null || Model.OutdoorBiggestImprovement != null || Model.OutdoorTopPerformance != null)
 {
-    <section class="mb-16">
-        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Recent Highlights</h2>
+    <section class="mb-10">
+        <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Season highlights</h2>
 
-        <!-- Outdoor Content -->
-        <div data-filterable data-env="outdoor" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm p-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Outdoor content -->
+        <div data-filterable data-env="outdoor">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 @if (Model.OutdoorBreakoutAthlete != null)
                 {
-                    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all shadow-sm hover:shadow-md">
-                        <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 mb-4 font-semibold">
-                            <span class="text-2xl" aria-hidden="true">🌟</span>
-                            <span class="uppercase tracking-wide text-sm">Breakout Athlete</span>
-                        </div>
-                        <div class="font-mono text-4xl font-bold text-purple-600 dark:text-purple-400 mb-3">@Model.OutdoorBreakoutAthlete.PRCount PRs</div>
-                        <div class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
-                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.OutdoorBreakoutAthlete.Slug" class="underline">
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Breakout athlete</div>
+                        <div class="mark text-2xl font-bold text-gray-900 dark:text-white mb-1">@Model.OutdoorBreakoutAthlete.PRCount PRs</div>
+                        <div class="font-medium text-gray-900 dark:text-white">
+                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.OutdoorBreakoutAthlete.Slug" class="underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
                                 @Model.OutdoorBreakoutAthlete.FullName
                             </a>
                         </div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">@Model.OutdoorBreakoutAthlete.Class</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-500">Personal records this season</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">@Model.OutdoorBreakoutAthlete.Class</div>
                     </div>
                 }
 
                 @if (Model.OutdoorBiggestImprovement != null)
                 {
-                    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all shadow-sm hover:shadow-md">
-                        <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 mb-4 font-semibold">
-                            <span class="text-2xl" aria-hidden="true">📈</span>
-                            <span class="uppercase tracking-wide text-sm">Biggest Improvement</span>
-                        </div>
-                        <div class="font-mono text-4xl font-bold text-blue-600 dark:text-blue-400 mb-3">@Model.OutdoorBiggestImprovement.ImprovementDisplay</div>
-                        <div class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
-                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.OutdoorBiggestImprovement.AthleteSlug" class="underline">
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Biggest improvement</div>
+                        <div class="mark text-2xl font-bold text-pr mb-1">@Model.OutdoorBiggestImprovement.ImprovementDisplay</div>
+                        <div class="font-medium text-gray-900 dark:text-white">
+                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.OutdoorBiggestImprovement.AthleteSlug" class="underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
                                 @Model.OutdoorBiggestImprovement.AthleteFullName
                             </a>
                         </div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">@Model.OutdoorBiggestImprovement.EventName</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-500">
-                            From @Model.OutdoorBiggestImprovement.PreviousPerformance<br />
-                            to @Model.OutdoorBiggestImprovement.CurrentPerformance
-                        </div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">@Model.OutdoorBiggestImprovement.EventName</div>
+                        <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">@Model.OutdoorBiggestImprovement.PreviousPerformance → @Model.OutdoorBiggestImprovement.CurrentPerformance</div>
                     </div>
                 }
 
                 @if (Model.OutdoorTopPerformance != null)
                 {
-                    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 border border-gray-200 dark:border-gray-700 hover:border-green-500 dark:hover:border-green-500 transition-all shadow-sm hover:shadow-md">
-                        <div class="flex items-center gap-2 text-green-600 dark:text-green-400 mb-4 font-semibold">
-                            <span class="text-2xl" aria-hidden="true">⚡</span>
-                            <span class="uppercase tracking-wide text-sm">Top Performance</span>
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Top performance</div>
+                        <div class="mark text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                            @Model.OutdoorTopPerformance.Performance
+                            @if (Model.OutdoorTopPerformance.IsSchoolRecord) { <span class="chip-sr">SR</span> }
+                            else if (Model.OutdoorTopPerformance.IsPersonalBest) { <span class="chip-pr">PR</span> }
                         </div>
-                        <div class="font-mono text-4xl font-bold text-green-600 dark:text-green-400 mb-3">@Model.OutdoorTopPerformance.Performance</div>
-                        <div class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
-                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.OutdoorTopPerformance.AthleteSlug" class="underline">
+                        <div class="font-medium text-gray-900 dark:text-white">
+                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.OutdoorTopPerformance.AthleteSlug" class="underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
                                 @Model.OutdoorTopPerformance.AthleteFullName
                             </a>
                         </div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                            @Model.OutdoorTopPerformance.EventName
-                            @if (Model.OutdoorTopPerformance.IsPersonalBest)
-                            {
-                                <span class="ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">PR</span>
-                            }
-                            @if (Model.OutdoorTopPerformance.IsSchoolRecord)
-                            {
-                                <span class="ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">SR</span>
-                            }
-                        </div>
-                        <div class="text-xs text-gray-500 dark:text-gray-500">
+                        <div class="text-sm text-gray-500 dark:text-gray-400">@Model.OutdoorTopPerformance.EventName</div>
+                        <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">
                             <a asp-controller="Meets" asp-action="Details" asp-route-slug="@Model.OutdoorTopPerformance.MeetSlug" class="underline">
                                 @Model.OutdoorTopPerformance.MeetName
-                            </a><br />
-                            @Model.OutdoorTopPerformance.Date.ToString("MMMM d, yyyy")
+                            </a>
+                            · @Model.OutdoorTopPerformance.Date.ToString("MMM d, yyyy")
                         </div>
                     </div>
                 }
             </div>
         </div>
 
-        <!-- Indoor Content -->
-        <div data-filterable data-env="indoor" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm p-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Indoor content -->
+        <div data-filterable data-env="indoor">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 @if (Model.IndoorBreakoutAthlete != null)
                 {
-                    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all shadow-sm hover:shadow-md">
-                        <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 mb-4 font-semibold">
-                            <span class="text-2xl" aria-hidden="true">🌟</span>
-                            <span class="uppercase tracking-wide text-sm">Breakout Athlete</span>
-                        </div>
-                        <div class="font-mono text-4xl font-bold text-purple-600 dark:text-purple-400 mb-3">@Model.IndoorBreakoutAthlete.PRCount PRs</div>
-                        <div class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
-                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.IndoorBreakoutAthlete.Slug" class="underline">
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Breakout athlete</div>
+                        <div class="mark text-2xl font-bold text-gray-900 dark:text-white mb-1">@Model.IndoorBreakoutAthlete.PRCount PRs</div>
+                        <div class="font-medium text-gray-900 dark:text-white">
+                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.IndoorBreakoutAthlete.Slug" class="underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
                                 @Model.IndoorBreakoutAthlete.FullName
                             </a>
                         </div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">@Model.IndoorBreakoutAthlete.Class</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-500">Personal records this season</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">@Model.IndoorBreakoutAthlete.Class</div>
                     </div>
                 }
 
                 @if (Model.IndoorBiggestImprovement != null)
                 {
-                    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all shadow-sm hover:shadow-md">
-                        <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 mb-4 font-semibold">
-                            <span class="text-2xl" aria-hidden="true">📈</span>
-                            <span class="uppercase tracking-wide text-sm">Biggest Improvement</span>
-                        </div>
-                        <div class="font-mono text-4xl font-bold text-blue-600 dark:text-blue-400 mb-3">@Model.IndoorBiggestImprovement.ImprovementDisplay</div>
-                        <div class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
-                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.IndoorBiggestImprovement.AthleteSlug" class="underline">
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Biggest improvement</div>
+                        <div class="mark text-2xl font-bold text-pr mb-1">@Model.IndoorBiggestImprovement.ImprovementDisplay</div>
+                        <div class="font-medium text-gray-900 dark:text-white">
+                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.IndoorBiggestImprovement.AthleteSlug" class="underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
                                 @Model.IndoorBiggestImprovement.AthleteFullName
                             </a>
                         </div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">@Model.IndoorBiggestImprovement.EventName</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-500">
-                            From @Model.IndoorBiggestImprovement.PreviousPerformance<br />
-                            to @Model.IndoorBiggestImprovement.CurrentPerformance
-                        </div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">@Model.IndoorBiggestImprovement.EventName</div>
+                        <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">@Model.IndoorBiggestImprovement.PreviousPerformance → @Model.IndoorBiggestImprovement.CurrentPerformance</div>
                     </div>
                 }
 
                 @if (Model.IndoorTopPerformance != null)
                 {
-                    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-8 border border-gray-200 dark:border-gray-700 hover:border-green-500 dark:hover:border-green-500 transition-all shadow-sm hover:shadow-md">
-                        <div class="flex items-center gap-2 text-green-600 dark:text-green-400 mb-4 font-semibold">
-                            <span class="text-2xl" aria-hidden="true">⚡</span>
-                            <span class="uppercase tracking-wide text-sm">Top Performance</span>
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Top performance</div>
+                        <div class="mark text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                            @Model.IndoorTopPerformance.Performance
+                            @if (Model.IndoorTopPerformance.IsSchoolRecord) { <span class="chip-sr">SR</span> }
+                            else if (Model.IndoorTopPerformance.IsPersonalBest) { <span class="chip-pr">PR</span> }
                         </div>
-                        <div class="font-mono text-4xl font-bold text-green-600 dark:text-green-400 mb-3">@Model.IndoorTopPerformance.Performance</div>
-                        <div class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
-                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.IndoorTopPerformance.AthleteSlug" class="underline">
+                        <div class="font-medium text-gray-900 dark:text-white">
+                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@Model.IndoorTopPerformance.AthleteSlug" class="underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
                                 @Model.IndoorTopPerformance.AthleteFullName
                             </a>
                         </div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                            @Model.IndoorTopPerformance.EventName
-                            @if (Model.IndoorTopPerformance.IsPersonalBest)
-                            {
-                                <span class="ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">PR</span>
-                            }
-                            @if (Model.IndoorTopPerformance.IsSchoolRecord)
-                            {
-                                <span class="ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">SR</span>
-                            }
-                        </div>
-                        <div class="text-xs text-gray-500 dark:text-gray-500">
+                        <div class="text-sm text-gray-500 dark:text-gray-400">@Model.IndoorTopPerformance.EventName</div>
+                        <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">
                             <a asp-controller="Meets" asp-action="Details" asp-route-slug="@Model.IndoorTopPerformance.MeetSlug" class="underline">
                                 @Model.IndoorTopPerformance.MeetName
-                            </a><br />
-                            @Model.IndoorTopPerformance.Date.ToString("MMMM d, yyyy")
+                            </a>
+                            · @Model.IndoorTopPerformance.Date.ToString("MMM d, yyyy")
                         </div>
                     </div>
                 }

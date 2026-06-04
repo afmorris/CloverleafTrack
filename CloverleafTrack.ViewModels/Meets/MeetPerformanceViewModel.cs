@@ -36,4 +36,12 @@ public class PerformancePlacingViewModel
         3 => "🥉",
         _ => $"{Place}th"
     };
+
+    public string PlaceLabel => Place switch
+    {
+        1 => "1st",
+        2 => "2nd",
+        3 => "3rd",
+        _ => $"{Place}th"
+    };
 }

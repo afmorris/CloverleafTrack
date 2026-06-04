@@ -71,11 +71,11 @@
                      aria-label="Environment">
                     <button type="button" data-value="outdoor" aria-pressed="false"
                             class="filter-chip-inactive px-4 py-1.5 rounded-lg text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1">
-                        ☀️ Outdoor
+                        Outdoor
                     </button>
                     <button type="button" data-value="indoor" aria-pressed="false"
                             class="filter-chip-inactive px-4 py-1.5 rounded-lg text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1">
-                        🏢 Indoor
+                        Indoor
                     </button>
                 </div>
             </div>
@@ -334,7 +334,7 @@
                             </div>
                             @if (!string.IsNullOrEmpty(meet.Location))
                             {
-                                <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">📍 @meet.Location</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">@meet.Location</div>
                             }
                             <div class="flex gap-4 text-sm">
                                 @if (meet.PRCount > 0)

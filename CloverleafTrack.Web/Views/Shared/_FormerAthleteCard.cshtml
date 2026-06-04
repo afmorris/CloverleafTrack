@@ -26,14 +26,7 @@
         {
             <div class="flex items-center justify-between text-sm">
                 <span class="text-gray-800 dark:text-gray-300 flex items-center gap-2">
-                    @if (evt.Environment == CloverleafTrack.Models.Enums.Environment.Indoor)
-                    {
-                        <span class="text-blue-400 text-xs">🏢</span>
-                    }
-                    else
-                    {
-                        <span class="text-amber-400 text-xs">☀️</span>
-                    }
+                    <span class="text-xs text-gray-400 dark:text-gray-600">@(evt.Environment == CloverleafTrack.Models.Enums.Environment.Indoor ? "In" : "Out")</span>
                     @evt.Name
                 </span>
                 <span class="font-mono font-semibold text-gray-900 dark:text-white">@evt.PersonalRecord</span>

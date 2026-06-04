@@ -54,7 +54,7 @@
         @if (Model.IndoorSchoolRecords?.Any() == true)
         {
             <div class="bg-gray-300/50 dark:bg-gray-900/50 rounded-lg p-4 border border-blue-500/30">
-                <div class="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">🏢 Indoor SRs (@Model.IndoorSchoolRecordCount)</div>
+                <div class="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">Indoor SRs (@Model.IndoorSchoolRecordCount)</div>
                 <div class="text-xs text-gray-600 dark:text-gray-400 space-y-1">
                     @foreach (var record in Model.IndoorSchoolRecords.Take(4))
                     {
@@ -73,7 +73,7 @@
         @if (Model.OutdoorSchoolRecords?.Any() == true)
         {
             <div class="bg-gray-300/50 dark:bg-gray-900/50 rounded-lg p-4 border border-amber-500/30">
-                <div class="text-sm font-medium text-yellow-700 dark:text-yellow-300 mb-2">☀️ Outdoor SRs (@Model.OutdoorSchoolRecordCount)</div>
+                <div class="text-sm font-medium text-yellow-700 dark:text-yellow-300 mb-2">Outdoor SRs (@Model.OutdoorSchoolRecordCount)</div>
                 <div class="text-xs text-gray-600 dark:text-gray-400 space-y-1">
                     @foreach (var record in Model.OutdoorSchoolRecords.Take(4))
                     {

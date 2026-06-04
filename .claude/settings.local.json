@@ -7,7 +7,12 @@
       "Bash(dotnet test:*)",
       "Bash(dotnet build:*)",
       "Bash(xargs grep:*)",
-      "PowerShell(\\(Get-Content \"C:\\\\Users\\\\antho\\\\source\\\\repos\\\\CloverleafTrack\\\\CloverleafTrack.Web\\\\wwwroot\\\\css\\\\input.css\" | Measure-Object -Line\\).Lines)"
+      "PowerShell(\\(Get-Content \"C:\\\\Users\\\\antho\\\\source\\\\repos\\\\CloverleafTrack\\\\CloverleafTrack.Web\\\\wwwroot\\\\css\\\\input.css\" | Measure-Object -Line\\).Lines)",
+      "Bash(Find -type d \"C:\\\\Users\\\\antho\\\\source\\\\repos\\\\CloverleafTrack\\\\Views\")",
+      "Bash(Get-Content *)",
+      "Bash(pnpm dev *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

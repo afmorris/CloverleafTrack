@@ -18,7 +18,7 @@
         @await Html.PartialAsync("_FilterChipGroup", null, new ViewDataDictionary(ViewData) {
             ["Label"] = "Environment",
             ["FilterKey"] = "env",
-            ["Options"] = new List<(string, string)> { ("outdoor","☀️ Outdoor"), ("indoor","🏢 Indoor") }
+            ["Options"] = new List<(string, string)> { ("outdoor","Outdoor"), ("indoor","Indoor") }
         })
         @await Html.PartialAsync("_FilterChipGroup", null, new ViewDataDictionary(ViewData) {
             ["Label"] = "Gender",
