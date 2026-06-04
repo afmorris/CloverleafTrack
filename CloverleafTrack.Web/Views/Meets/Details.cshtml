@@ -1,8 +1,16 @@
 @using Slugify
+@using CloverleafTrack.Models.Enums
 @model MeetDetailsViewModel
 
 @{
     ViewBag.Title = Model.Name;
+    var typeBadge = Model.MeetType switch
+    {
+        MeetType.Dual => "Dual",
+        MeetType.DoubleDual => "Double Dual",
+        MeetType.Invitational => "Invitational",
+        _ => ""
+    };
 }
 
 @functions {
@@ -43,7 +51,7 @@
         </a>
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">@Model.Name</h1>
 
-        <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 dark:text-gray-400 mt-2">
+        <div class="flex flex-wrap gap-x-3 gap-y-1.5 text-sm text-gray-500 dark:text-gray-400 mt-2 items-center">
             <span>@Model.Date.ToString("MMMM d, yyyy")</span>
             <span>@Model.SeasonName season</span>
             @{
@@ -51,6 +59,7 @@
             }
             @if (!string.IsNullOrEmpty(loc)) { <span>@loc</span> }
             <span class="chip-place">@(Model.Environment == CloverleafTrack.Models.Enums.Environment.Indoor ? "Indoor" : "Outdoor")</span>
+            @if (!string.IsNullOrEmpty(typeBadge)) { <span class="chip-rank">@typeBadge</span> }
             @if (Model.HandTimed) { <span class="chip-rank">Hand-timed</span> }
         </div>
     </div>
@@ -91,10 +100,13 @@
                         <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">@GetCategoryName(catGroup.Key)</h3>
                         @foreach (var eventGroup in catGroup)
                         {
-                            <div class="mb-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                                <div class="px-4 py-2 bg-blue-50 dark:bg-blue-900/10 border-b border-blue-100 dark:border-blue-900/20">
-                                    <h4 class="font-medium text-blue-900 dark:text-blue-300 text-sm">@eventGroup.EventName</h4>
-                                </div>
+                            <details open class="mb-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                                <summary class="px-4 py-2.5 bg-blue-50 dark:bg-blue-900/10 border-b border-blue-100 dark:border-blue-900/20 cursor-pointer list-none flex items-center justify-between select-none hover:bg-blue-100 dark:hover:bg-blue-900/20 transition-colors">
+                                    <span class="font-medium text-blue-900 dark:text-blue-300 text-sm">@eventGroup.EventName</span>
+                                    <svg class="details-arrow w-4 h-4 text-blue-400 dark:text-blue-600 flex-shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </summary>
                                 <table class="w-full text-sm">
                                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                         @foreach (var perf in eventGroup.Performances)
@@ -104,13 +116,6 @@
                                                 <td class="px-4 py-2">
                                                     @if (IsRelay(perf.AthleteName))
                                                     {
-                                                        <div class="text-gray-900 dark:text-white text-xs leading-relaxed">
-                                                            @string.Join(" / ", GetRelayAthletes(perf.AthleteName).Select(a => {
-                                                                var slug = AthleteSlug(a);
-                                                                return string.IsNullOrEmpty(slug) ? a : a; // Rendered in loop below
-                                                            }))
-                                                        </div>
-                                                        @* Relay: linked names *@
                                                         <div class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
                                                             @{
                                                                 var members = GetRelayAthletes(perf.AthleteName);
@@ -166,7 +171,7 @@
                                         }
                                     </tbody>
                                 </table>
-                            </div>
+                            </details>
                         }
                     </div>
                 }
@@ -188,10 +193,13 @@
                         <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">@GetCategoryName(catGroup.Key)</h3>
                         @foreach (var eventGroup in catGroup)
                         {
-                            <div class="mb-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                                <div class="px-4 py-2 bg-pink-50 dark:bg-pink-900/10 border-b border-pink-100 dark:border-pink-900/20">
-                                    <h4 class="font-medium text-pink-900 dark:text-pink-300 text-sm">@eventGroup.EventName</h4>
-                                </div>
+                            <details open class="mb-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                                <summary class="px-4 py-2.5 bg-pink-50 dark:bg-pink-900/10 border-b border-pink-100 dark:border-pink-900/20 cursor-pointer list-none flex items-center justify-between select-none hover:bg-pink-100 dark:hover:bg-pink-900/20 transition-colors">
+                                    <span class="font-medium text-pink-900 dark:text-pink-300 text-sm">@eventGroup.EventName</span>
+                                    <svg class="details-arrow w-4 h-4 text-pink-400 dark:text-pink-600 flex-shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </summary>
                                 <table class="w-full text-sm">
                                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                         @foreach (var perf in eventGroup.Performances)
@@ -256,7 +264,7 @@
                                         }
                                     </tbody>
                                 </table>
-                            </div>
+                            </details>
                         }
                     </div>
                 }
@@ -278,10 +286,13 @@
                     <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">@GetCategoryName(catGroup.Key)</h3>
                     @foreach (var eventGroup in catGroup)
                     {
-                        <div class="mb-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                            <div class="px-4 py-2 bg-purple-50 dark:bg-purple-900/10 border-b border-purple-100 dark:border-purple-900/20">
-                                <h4 class="font-medium text-purple-900 dark:text-purple-300 text-sm">@eventGroup.EventName</h4>
-                            </div>
+                        <details open class="mb-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                            <summary class="px-4 py-2.5 bg-purple-50 dark:bg-purple-900/10 border-b border-purple-100 dark:border-purple-900/20 cursor-pointer list-none flex items-center justify-between select-none hover:bg-purple-100 dark:hover:bg-purple-900/20 transition-colors">
+                                <span class="font-medium text-purple-900 dark:text-purple-300 text-sm">@eventGroup.EventName</span>
+                                <svg class="details-arrow w-4 h-4 text-purple-400 dark:text-purple-600 flex-shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </summary>
                             <table class="w-full text-sm">
                                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                     @foreach (var perf in eventGroup.Performances)
@@ -346,7 +357,7 @@
                                     }
                                 </tbody>
                             </table>
-                        </div>
+                        </details>
                     }
                 </div>
             }
