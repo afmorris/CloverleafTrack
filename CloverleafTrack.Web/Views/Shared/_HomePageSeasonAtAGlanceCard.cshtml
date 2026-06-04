@@ -1,31 +1,20 @@
 @model HomePageViewModel
 
-<section class="mb-12">
-    <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Season at a Glance</h2>
-
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-5 border border-purple-200 dark:border-purple-700/30">
-            <div class="text-xs text-purple-700 dark:text-purple-300 mb-2 font-semibold uppercase tracking-wide">Season PRs</div>
-            <div class="text-4xl font-bold text-purple-900 dark:text-purple-100 mb-1">@Model.TotalPRsThisSeason</div>
-            <div class="text-xs text-purple-600 dark:text-purple-400">across all events</div>
-        </div>
-
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-5 border border-blue-200 dark:border-blue-700/30">
-            <div class="text-xs text-blue-700 dark:text-blue-300 mb-2 font-semibold uppercase tracking-wide">Active Athletes</div>
-            <div class="text-4xl font-bold text-blue-900 dark:text-blue-100 mb-1">@Model.ActiveAthletes</div>
-            <div class="text-xs text-blue-600 dark:text-blue-400">competing this season</div>
-        </div>
-
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-5 border border-yellow-200 dark:border-yellow-700/30">
-            <div class="text-xs text-yellow-700 dark:text-yellow-300 mb-2 font-semibold uppercase tracking-wide">School Records</div>
-            <div class="text-4xl font-bold text-yellow-900 dark:text-yellow-100 mb-1">@Model.SchoolRecordsBroken</div>
-            <div class="text-xs text-yellow-600 dark:text-yellow-400">new records this season</div>
-        </div>
-
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-5 border border-green-200 dark:border-green-700/30">
-            <div class="text-xs text-green-700 dark:text-green-300 mb-2 font-semibold uppercase tracking-wide">Meets</div>
-            <div class="text-4xl font-bold text-green-900 dark:text-green-100 mb-1">@Model.MeetsCompleted / @Model.TotalMeetsThisSeason</div>
-            <div class="text-xs text-green-600 dark:text-green-400">season progress</div>
-        </div>
+<div class="metric-strip mb-6">
+    <div class="metric-cell">
+        <span class="metric-value text-pr">@Model.TotalPRsThisSeason</span>
+        <span class="metric-label">Season PRs</span>
     </div>
-</section>
+    <div class="metric-cell">
+        <span class="metric-value text-sr">@Model.SchoolRecordsBroken</span>
+        <span class="metric-label">Records</span>
+    </div>
+    <div class="metric-cell">
+        <span class="metric-value">@Model.ActiveAthletes</span>
+        <span class="metric-label">Athletes</span>
+    </div>
+    <div class="metric-cell">
+        <span class="metric-value">@Model.MeetsCompleted<span class="text-base font-normal text-gray-400 dark:text-gray-500">/@Model.TotalMeetsThisSeason</span></span>
+        <span class="metric-label">Meets</span>
+    </div>
+</div>

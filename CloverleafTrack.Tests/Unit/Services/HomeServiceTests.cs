@@ -3,6 +3,7 @@ using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
 using CloverleafTrack.Services;
+using CloverleafTrack.Services.Interfaces;
 using FluentAssertions;
 using Moq;
 using Environment = CloverleafTrack.Models.Enums.Environment;
@@ -13,13 +14,16 @@ public class HomeServiceTests
 {
     private readonly Mock<IHomeRepository> _homeRepository;
     private readonly Mock<ISeasonRepository> _seasonRepository;
+    private readonly Mock<IMeetService> _meetService;
     private readonly HomeService _service;
 
     public HomeServiceTests()
     {
         _homeRepository = new Mock<IHomeRepository>();
         _seasonRepository = new Mock<ISeasonRepository>();
-        _service = new HomeService(_homeRepository.Object, _seasonRepository.Object);
+        _meetService = new Mock<IMeetService>();
+        _meetService.Setup(m => m.GetMeetDetailsAsync(It.IsAny<string>())).ReturnsAsync((CloverleafTrack.ViewModels.Meets.MeetDetailsViewModel?)null);
+        _service = new HomeService(_homeRepository.Object, _seasonRepository.Object, _meetService.Object);
     }
 
     [Fact]

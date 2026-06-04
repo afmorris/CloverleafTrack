@@ -38,4 +38,8 @@ public class HomePageViewModel
 
     // Upcoming Meets
     public List<UpcomingMeetViewModel> UpcomingMeets { get; set; } = new();
+
+    // Latest meet highlights digest (deterministic, capped at 8)
+    public List<HighlightPerformanceViewModel> LatestMeetHighlights { get; set; } = new();
+    public string? LatestMeetSlug { get; set; }
 }

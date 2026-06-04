@@ -2,13 +2,15 @@ using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models.Enums;
 using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.ViewModels.Home;
+using CloverleafTrack.ViewModels.Meets;
 using Slugify;
 
 namespace CloverleafTrack.Services;
 
 public class HomeService(
     IHomeRepository homeRepository,
-    ISeasonRepository seasonRepository) : IHomeService
+    ISeasonRepository seasonRepository,
+    IMeetService meetService) : IHomeService
 {
     private readonly SlugHelper _slugHelper = new();
 
@@ -51,6 +53,16 @@ public class HomeService(
                 TopTenAllTimeMarks = latestMeetImpact.TopTenAllTimeMarks,
                 UniqueAthletes = latestMeetImpact.UniqueAthletes
             };
+        }
+
+        // Build latest-meet highlights digest
+        if (latestMeetImpact != null)
+        {
+            var meetSlug = _slugHelper.GenerateSlug(latestMeetImpact.MeetName);
+            viewModel.LatestMeetSlug = meetSlug;
+            var meetDetails = await meetService.GetMeetDetailsAsync(meetSlug);
+            if (meetDetails != null)
+                viewModel.LatestMeetHighlights = BuildHighlightDigest(meetDetails);
         }
 
         // Get "On This Day" (only if there's a performance)
@@ -243,6 +255,80 @@ public class HomeService(
         }).ToList();
 
         return viewModel;
+    }
+
+    private List<HighlightPerformanceViewModel> BuildHighlightDigest(MeetDetailsViewModel meet, int cap = 8)
+    {
+        var allGroups = meet.BoysEvents.Concat(meet.GirlsEvents).Concat(meet.MixedEvents).ToList();
+
+        var flat = allGroups.SelectMany((eg, groupIdx) =>
+            eg.Performances.Select((p, perfIdx) => new
+            {
+                eg.EventName,
+                SortOrder = groupIdx * 1000 + perfIdx,
+                Perf = p
+            })).ToList();
+
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        var result = new List<HighlightPerformanceViewModel>();
+
+        HighlightPerformanceViewModel ToVm(string eventName, MeetPerformanceViewModel p, int? overridePlace = null)
+        {
+            var name = p.AthleteName ?? string.Empty;
+            string? slug = null;
+            if (!name.Contains("|~|"))
+            {
+                var parts = name.Split(' ');
+                if (parts.Length >= 2)
+                    slug = _slugHelper.GenerateSlug($"{parts[0]}-{parts[1]}");
+            }
+            var bestPlace = overridePlace ?? p.Placings.OrderBy(pl => pl.Place).FirstOrDefault()?.Place;
+            var placeContext = p.Placings.OrderBy(pl => pl.Place).FirstOrDefault()?.OpponentSchoolName;
+            return new HighlightPerformanceViewModel
+            {
+                EventName = eventName,
+                AthleteName = name.Contains("|~|") ? string.Join(" / ", name.Split("|~|")) : name,
+                AthleteSlug = slug,
+                Performance = p.Performance,
+                IsSchoolRecord = p.IsSchoolRecord,
+                IsPersonalBest = p.IsPersonalBest,
+                AllTimeRank = p.AllTimeRank,
+                BestPlace = bestPlace,
+                PlaceContext = placeContext
+            };
+        }
+
+        void AddTier(IEnumerable<(string EventName, int SortOrder, MeetPerformanceViewModel Perf)> candidates)
+        {
+            foreach (var c in candidates)
+            {
+                if (result.Count >= cap) return;
+                var key = $"{c.EventName}|{c.Perf.AthleteName}";
+                if (seen.Add(key)) result.Add(ToVm(c.EventName, c.Perf));
+            }
+        }
+
+        // Tier 1: School records
+        AddTier(flat.Where(x => x.Perf.IsSchoolRecord)
+            .OrderBy(x => x.Perf.AllTimeRank ?? int.MaxValue).ThenBy(x => x.SortOrder)
+            .Select(x => (x.EventName, x.SortOrder, x.Perf)));
+
+        // Tier 2: Top-10 all-time (not already in tier 1)
+        AddTier(flat.Where(x => x.Perf.AllTimeRank is <= 10)
+            .OrderBy(x => x.Perf.AllTimeRank ?? int.MaxValue).ThenBy(x => x.SortOrder)
+            .Select(x => (x.EventName, x.SortOrder, x.Perf)));
+
+        // Tier 3: Top-3 places
+        AddTier(flat.Where(x => x.Perf.Placings.Any(p => p.Place <= 3))
+            .OrderBy(x => x.Perf.Placings.Min(p => p.Place)).ThenBy(x => x.SortOrder)
+            .Select(x => (x.EventName, x.SortOrder, x.Perf)));
+
+        // Tier 4: PRs
+        AddTier(flat.Where(x => x.Perf.IsPersonalBest)
+            .OrderBy(x => x.Perf.AllTimeRank ?? int.MaxValue).ThenBy(x => x.SortOrder)
+            .Select(x => (x.EventName, x.SortOrder, x.Perf)));
+
+        return result;
     }
 
     private async Task<int> GetCurrentSeasonYearAsync()

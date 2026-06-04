@@ -1,0 +1,67 @@
+@model HomePageViewModel
+
+@if (Model.LatestMeetHighlights.Any())
+{
+    <section class="mb-6">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">Highlights</h2>
+
+        <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <table class="w-full text-sm">
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                    @{
+                        int i = 0;
+                        foreach (var h in Model.LatestMeetHighlights)
+                        {
+                            i++;
+                            var rowClass = h.IsSchoolRecord ? "row-sr" : (h.IsPersonalBest ? "row-pr" : "");
+                            // Hide items beyond 6 on mobile (items 7-8 hidden below sm)
+                            var hideOnMobile = i > 6 ? "hidden sm:table-row" : "";
+                            <tr class="@rowClass @hideOnMobile">
+                                <td class="px-4 py-2.5">
+                                    @if (!string.IsNullOrEmpty(h.AthleteSlug))
+                                    {
+                                        <a asp-controller="Roster" asp-action="Details" asp-route-slug="@h.AthleteSlug"
+                                           class="font-medium text-gray-900 dark:text-white hover:underline">@h.AthleteName</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="font-medium text-gray-900 dark:text-white">@h.AthleteName</span>
+                                    }
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">@h.EventName</div>
+                                </td>
+                                <td class="px-4 py-2.5 text-right whitespace-nowrap">
+                                    <span class="mark font-semibold @(h.IsSchoolRecord ? "text-sr" : (h.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@h.Performance</span>
+                                </td>
+                                <td class="px-4 py-2.5 text-right">
+                                    <div class="flex items-center justify-end gap-1">
+                                        @if (h.IsSchoolRecord) { <span class="chip-sr">SR</span> }
+                                        else if (h.IsPersonalBest) { <span class="chip-pr">PR</span> }
+                                        @if (h.AllTimeRank.HasValue && h.AllTimeRank <= 10)
+                                        {
+                                            <span class="@(h.AllTimeRank == 1 ? "chip-sr" : "chip-rank")">#@h.AllTimeRank</span>
+                                        }
+                                        @if (h.BestPlace.HasValue)
+                                        {
+                                            var placeLabel = h.BestPlace switch { 1 => "1st", 2 => "2nd", 3 => "3rd", var n => $"{n}th" };
+                                            <span class="chip-place">@placeLabel@(h.PlaceContext != null ? $" vs. {h.PlaceContext}" : "")</span>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.LatestMeetSlug))
+        {
+            <div class="mt-2 text-right">
+                <a asp-controller="Meets" asp-action="Details" asp-route-slug="@Model.LatestMeetSlug"
+                   class="text-sm text-ctf-darkaccent dark:text-ctf-accent hover:underline">
+                    See all @(Model.LatestMeetImpact?.TotalPerformances > 0 ? Model.LatestMeetImpact.TotalPerformances + " results" : "results") →
+                </a>
+            </div>
+        }
+    </section>
+}
