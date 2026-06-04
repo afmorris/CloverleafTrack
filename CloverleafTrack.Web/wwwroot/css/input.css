@@ -40,3 +40,146 @@
 details[open] .details-arrow {
     transform: rotate(90deg);
 }
+
+/* === Design system: semantic color roles === */
+
+/* Mark: tabular-figures for performance numbers */
+.mark {
+    font-variant-numeric: tabular-nums;
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+}
+
+/* Chip base + role variants */
+.chip {
+    @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-semibold leading-none;
+    font-size: 11px;
+}
+.chip-pr {
+    @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-semibold leading-none
+           bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300;
+    font-size: 11px;
+}
+.chip-sr {
+    @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-semibold leading-none
+           bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300;
+    font-size: 11px;
+}
+.chip-rank {
+    @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-semibold leading-none
+           bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300;
+    font-size: 11px;
+}
+.chip-place {
+    @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-semibold leading-none
+           border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300;
+    font-size: 11px;
+}
+.chip-win {
+    @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-semibold leading-none
+           bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300;
+    font-size: 11px;
+}
+.chip-loss {
+    @apply inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-semibold leading-none
+           bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300;
+    font-size: 11px;
+}
+
+/* Row/text semantic roles */
+.row-pr {
+    @apply bg-emerald-50 dark:bg-emerald-950/20;
+}
+.row-sr {
+    @apply bg-amber-50 dark:bg-amber-950/20;
+}
+.text-pr {
+    @apply text-emerald-700 dark:text-emerald-400;
+}
+.text-sr {
+    @apply text-amber-700 dark:text-amber-400;
+}
+.text-rank-1 {
+    @apply text-amber-600 dark:text-amber-400 font-bold;
+}
+
+/* Active athlete green dot */
+.dot-active {
+    @apply inline-block w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 flex-shrink-0;
+}
+
+/* Metric strip — 4-number impact row */
+.metric-strip {
+    @apply grid grid-cols-4 divide-x divide-gray-200 dark:divide-gray-700
+           bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700;
+}
+.metric-cell {
+    @apply flex flex-col items-center py-3 px-2;
+}
+.metric-value {
+    @apply text-2xl font-bold mark;
+}
+.metric-label {
+    @apply text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mt-0.5;
+}
+
+/* Pill tabs (season selector) */
+.pill-tab {
+    @apply px-3 py-1 rounded-full text-sm font-medium transition-colors
+           bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300
+           hover:bg-gray-200 dark:hover:bg-gray-600
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-ctf-accent;
+}
+.pill-tab-active {
+    @apply bg-ctf-nav text-white dark:bg-ctf-accent dark:text-gray-900;
+}
+
+/* Segmented toggle (sex / env) */
+.seg-toggle {
+    @apply inline-flex bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5
+           border border-gray-200 dark:border-gray-700;
+}
+.seg-btn {
+    @apply px-4 py-1.5 rounded-md text-sm font-medium transition-colors
+           text-gray-600 dark:text-gray-400
+           hover:text-gray-900 dark:hover:text-gray-100
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-ctf-accent;
+}
+.seg-btn-active {
+    @apply bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm;
+}
+
+/* Accordion */
+.accordion-trigger {
+    @apply w-full flex items-center justify-between py-3 text-left
+           font-medium text-gray-900 dark:text-white
+           border-b border-gray-200 dark:border-gray-700
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ctf-accent;
+}
+.accordion-trigger .chevron {
+    transition: transform 0.2s ease;
+    @apply flex-shrink-0 text-gray-400 dark:text-gray-500;
+}
+.accordion-trigger[aria-expanded="true"] .chevron {
+    transform: rotate(180deg);
+}
+
+/* Bottom nav tab item */
+.tab-item {
+    @apply flex-1 flex flex-col items-center justify-center py-2 gap-0.5
+           text-gray-400 transition-colors no-underline;
+}
+.tab-item-active {
+    @apply text-ctf-accent;
+}
+
+/* Bottom nav safe area */
+.bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Body clearance for mobile bottom nav */
+@media (max-width: 639px) {
+    body {
+        padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+    }
+}
