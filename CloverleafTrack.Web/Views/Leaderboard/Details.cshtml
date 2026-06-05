@@ -3,60 +3,35 @@
 
 @{
     ViewBag.Title = $"{Model.EventName}";
-    var genderLabel = Model.GenderLabel;
     var environmentLabel = Model.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor ? "Outdoor" : "Indoor";
+    var currentYear  = DateTime.Now.Year;
+    var currentMonth = DateTime.Now.Month;
+    var adjustedCurrentYear = currentMonth >= 6 ? currentYear + 1 : currentYear;
 }
 
 @functions {
-    string GetClassYear(int? gradYear)
+    string GetClassYear(int? gradYear, int adjustedYear)
     {
         if (!gradYear.HasValue) return "";
-        
-        var currentYear = DateTime.Now.Year;
-        var currentMonth = DateTime.Now.Month;
-        
-        // Adjust current year based on whether we're past graduation (typically June)
-        var adjustedCurrentYear = currentMonth >= 6 ? currentYear + 1 : currentYear;
-        
-        var diff = gradYear.Value - adjustedCurrentYear;
-        
-        return diff switch
+        return (gradYear.Value - adjustedYear) switch
         {
             >= 3 => "Freshman",
-            2 => "Sophomore",
-            1 => "Junior",
-            0 => "Senior",
-            _ => $"'{gradYear.Value.ToString().Substring(2)}"
+            2    => "Sophomore",
+            1    => "Junior",
+            0    => "Senior",
+            _    => $"'{gradYear.Value.ToString().Substring(2)}"
         };
     }
 
-    string[] GetRelayAthletes(string athleteName)
-    {
-        return athleteName?.Split("|~|") ?? Array.Empty<string>();
-    }
+    string[] GetRelayAthletes(string athleteName) =>
+        athleteName?.Split("|~|") ?? Array.Empty<string>();
 }
 
 <style>
-    .perf-row {
-        transition: all 0.2s ease-in-out;
-    }
-    .perf-row:hover {
-        background: rgba(59, 130, 246, 0.1);
-    }
+    .sr-history-grid { display: grid; grid-template-columns: 2fr 3fr; }
+    .sr-history-left { border-right: 1px solid #e5e7eb; }
+    .dark .sr-history-left { border-right-color: #374151; }
 
-    /* SR History two-column layout */
-    .sr-history-grid {
-        display: grid;
-        grid-template-columns: 2fr 3fr;
-    }
-    .sr-history-left {
-        border-right: 1px solid #e5e7eb;
-    }
-    .dark .sr-history-left {
-        border-right-color: #374151;
-    }
-
-    /* Timeline */
     .timeline-track { position: relative; padding-left: 1.5rem; }
     .timeline-track::before { content: ''; position: absolute; left: 7px; top: 12px; bottom: 12px; width: 2px; background: #e5e7eb; }
     .dark .timeline-track::before { background: #374151; }
@@ -69,27 +44,18 @@
     .dark .timeline-dot-past { background: #4b5563; }
 </style>
 
-<!-- Main Content -->
 <div class="max-w-7xl mx-auto px-6">
 
     <!-- Header -->
     <div class="mb-8">
-        <a asp-controller="Leaderboard" asp-action="Index" class="text-gray-600 dark:text-gray-400 text-sm mb-2 inline-block">
+        <a asp-controller="Leaderboard" asp-action="Index" class="text-gray-600 dark:text-gray-400 text-sm mb-2 inline-block hover:underline">
             ← Back to Leaderboard
         </a>
         <h1 class="text-4xl font-bold text-gray-900 dark:text-white">
-            @if (Model.Environment == CloverleafTrack.Models.Enums.Environment.Indoor)
-            {
-                <span>Indoor</span>
-            }
-            else
-            {
-                <span>Outdoor</span>
-            } @Model.EventName
+            @environmentLabel @Model.EventName
         </h1>
-        
         <p class="text-gray-600 dark:text-gray-400 text-lg">
-            @genderLabel @environmentLabel All-Time Rankings
+            @Model.GenderLabel @environmentLabel All-Time Rankings
         </p>
     </div>
 
@@ -98,123 +64,107 @@
     {
         var current = Model.SchoolRecordProgression.First();
         var first = Model.SchoolRecordProgression.Last();
-        var timesbroken = Model.SchoolRecordProgression.Count - 1;
+        var timesBroken = Model.SchoolRecordProgression.Count - 1;
 
         <div class="mb-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-            <!-- Collapsible header -->
-            <button id="sr-history-toggle" onclick="toggleSrHistory()"
-                    class="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                <div class="flex items-center gap-3">
-                    <div class="h-5 w-1 rounded-full bg-amber-500"></div>
-                    <span class="font-semibold text-gray-900 dark:text-white">School Record History</span>
-                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700/50 tracking-wide">SR</span>
-                    <span class="text-sm text-gray-500 dark:text-gray-400">
-                        — broken @timesbroken time@(timesbroken == 1 ? "" : "s") since @first.MeetDate.Year
-                    </span>
-                </div>
-                <svg id="sr-history-chevron" class="w-5 h-5 text-gray-400 transition-transform duration-200"
-                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                </svg>
-            </button>
+            <details>
+                <summary class="cursor-pointer list-none w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <div class="h-5 w-1 rounded-full bg-amber-500"></div>
+                        <span class="font-semibold text-gray-900 dark:text-white">School Record History</span>
+                        <span class="chip-sr">SR</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">
+                            — broken @timesBroken time@(timesBroken == 1 ? "" : "s") since @first.MeetDate.Year
+                        </span>
+                    </div>
+                    <svg class="details-arrow w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </summary>
 
-            <div id="sr-history-body" class="hidden border-t border-gray-200 dark:border-gray-700">
-                <div class="sr-history-grid">
-
-                    <!-- Left: Timeline of record holders -->
-                    <div class="sr-history-left px-6 py-5">
-                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">Record Holders</p>
-                        <div class="timeline-track">
-                            @foreach (var moment in Model.SchoolRecordProgression)
-                            {
-                                var relayMembers = moment.AthleteName.Contains("|~|")
-                                    ? moment.AthleteName.Split("|~|")
-                                    : null;
-                                <div class="timeline-item">
-                                    <div class="timeline-dot @(moment.IsCurrentRecord ? "timeline-dot-current" : "timeline-dot-past")"></div>
-
-                                    <div>
-                                        <div class="flex items-baseline gap-2 flex-wrap">
-                                            @if (relayMembers != null)
-                                            {
-                                                <span class="font-semibold text-gray-900 dark:text-gray-200 text-sm">
-                                                    @string.Join(" / ", relayMembers)
-                                                </span>
-                                            }
-                                            else
-                                            {
-                                                <span class="@(moment.IsCurrentRecord ? "font-bold text-gray-900 dark:text-white" : "font-semibold text-gray-700 dark:text-gray-300") text-sm">
-                                                    @moment.AthleteName
-                                                </span>
-                                                @if (moment.GraduationYear.HasValue)
+                <div class="border-t border-gray-200 dark:border-gray-700">
+                    <div class="sr-history-grid">
+                        <div class="sr-history-left px-6 py-5">
+                            <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">Record Holders</p>
+                            <div class="timeline-track">
+                                @foreach (var moment in Model.SchoolRecordProgression)
+                                {
+                                    var relayMembers2 = moment.AthleteName.Contains("|~|")
+                                        ? moment.AthleteName.Split("|~|") : null;
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot @(moment.IsCurrentRecord ? "timeline-dot-current" : "timeline-dot-past")"></div>
+                                        <div>
+                                            <div class="flex items-baseline gap-2 flex-wrap">
+                                                @if (relayMembers2 != null)
                                                 {
-                                                    <span class="text-xs text-gray-500">'@(moment.GraduationYear.Value.ToString().Substring(2))</span>
+                                                    <span class="font-semibold text-gray-900 dark:text-gray-200 text-sm">@string.Join(" / ", relayMembers2)</span>
                                                 }
-                                            }
-                                            @if (moment.IsCurrentRecord)
-                                            {
-                                                <span class="text-xs font-bold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700/50">Current SR</span>
-                                            }
-                                        </div>
-                                        <div class="@(moment.IsCurrentRecord ? "text-amber-500 dark:text-amber-400" : "text-gray-700 dark:text-gray-300") font-bold text-base font-mono">
-                                            @moment.Performance
-                                        </div>
-                                        <div class="text-xs text-gray-500">
-                                            @moment.MeetDate.ToString("MMM d, yyyy")
-                                        </div>
-                                        <div class="flex items-center gap-2 mt-1 flex-wrap">
+                                                else
+                                                {
+                                                    <a asp-controller="Roster" asp-action="Details" asp-route-slug="@moment.AthleteSlug"
+                                                       class="@(moment.IsCurrentRecord ? "font-bold text-gray-900 dark:text-white" : "font-semibold text-gray-700 dark:text-gray-300") text-sm underline">
+                                                        @moment.AthleteName
+                                                    </a>
+                                                    @if (moment.GraduationYear.HasValue)
+                                                    {
+                                                        <span class="text-xs text-gray-500">'@(moment.GraduationYear.Value.ToString().Substring(2))</span>
+                                                    }
+                                                }
+                                                @if (moment.IsCurrentRecord) { <span class="chip-sr">Current SR</span> }
+                                            </div>
+                                            <div class="@(moment.IsCurrentRecord ? "text-amber-500 dark:text-amber-400" : "text-gray-700 dark:text-gray-300") font-bold text-base mark">
+                                                @moment.Performance
+                                            </div>
+                                            <div class="text-xs text-gray-500">@moment.MeetDate.ToString("MMM d, yyyy")</div>
                                             @if (moment.ImprovementFormatted != null)
                                             {
-                                                <span class="text-xs font-bold px-1.5 py-0.5 rounded-full bg-green-900/30 text-green-400 border border-green-700/50">
+                                                <span class="text-xs font-bold px-1.5 py-0.5 rounded-full bg-green-900/30 text-green-400 border border-green-700/50 mt-1 inline-block">
                                                     @moment.ImprovementFormatted
                                                 </span>
                                             }
                                             else
                                             {
-                                                <span class="text-xs text-gray-600 dark:text-gray-600">First recorded school record</span>
+                                                <span class="text-xs text-gray-500 dark:text-gray-600">First recorded school record</span>
                                             }
                                         </div>
                                     </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-
-                    <!-- Right: Step chart -->
-                    <div class="px-6 py-5 flex flex-col">
-                        <div class="flex items-center justify-between mb-4">
-                            <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Record Progression</p>
-                            <div class="flex items-center gap-2 text-xs text-gray-500">
-                                <span class="inline-block w-4 h-0.5 bg-amber-400 rounded"></span>
-                                School record at time of performance
+                                }
                             </div>
                         </div>
-                        <div class="flex-1" style="min-height:240px; position:relative;">
-                            <canvas id="srProgressionChart"
-                                data-labels="@System.Text.Json.JsonSerializer.Serialize(Model.SchoolRecordProgression.OrderBy(p => p.MeetDate).Select(p => p.MeetDate.Year.ToString()).ToList())"
-                                data-values="@System.Text.Json.JsonSerializer.Serialize(Model.SchoolRecordProgression.OrderBy(p => p.MeetDate).Select(p => p.RawValue).ToList())"
-                                data-names="@System.Text.Json.JsonSerializer.Serialize(Model.SchoolRecordProgression.OrderBy(p => p.MeetDate).Select(p => p.AthleteName).ToList())"
-                                data-perfs="@System.Text.Json.JsonSerializer.Serialize(Model.SchoolRecordProgression.OrderBy(p => p.MeetDate).Select(p => p.Performance).ToList())"
-                                data-isfield="@Model.IsFieldEvent.ToString().ToLower()">
-                            </canvas>
+
+                        <div class="px-6 py-5 flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Record Progression</p>
+                                <div class="flex items-center gap-2 text-xs text-gray-500">
+                                    <span class="inline-block w-4 h-0.5 bg-amber-400 rounded"></span>
+                                    School record at time
+                                </div>
+                            </div>
+                            <div class="flex-1" style="min-height:240px;position:relative;">
+                                <canvas id="srProgressionChart"
+                                    data-labels="@System.Text.Json.JsonSerializer.Serialize(Model.SchoolRecordProgression.OrderBy(p => p.MeetDate).Select(p => p.MeetDate.Year.ToString()).ToList())"
+                                    data-values="@System.Text.Json.JsonSerializer.Serialize(Model.SchoolRecordProgression.OrderBy(p => p.MeetDate).Select(p => p.RawValue).ToList())"
+                                    data-names="@System.Text.Json.JsonSerializer.Serialize(Model.SchoolRecordProgression.OrderBy(p => p.MeetDate).Select(p => p.AthleteName).ToList())"
+                                    data-perfs="@System.Text.Json.JsonSerializer.Serialize(Model.SchoolRecordProgression.OrderBy(p => p.MeetDate).Select(p => p.Performance).ToList())"
+                                    data-isfield="@Model.IsFieldEvent.ToString().ToLower()">
+                                </canvas>
+                            </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
+            </details>
         </div>
     }
 
-    <!-- View Toggle Tabs -->
+    <!-- View Toggle -->
     <div class="mb-4 flex gap-3 flex-wrap">
         <button onclick="showView('all')" id="all-tab"
-                class="view-tab px-6 py-3 bg-blue-100 dark:bg-blue-500 text-gray-900 dark:text-white rounded-lg border border-blue-300 dark:border-blue-800 font-medium transition-all">
+                class="pill-tab pill-tab-active">
             All Performances (@Model.AllPerformances.Count)
         </button>
         @if (!Model.IsRelayEvent)
         {
-            <button onclick="showView('prs')" id="prs-tab"
-                    class="view-tab px-6 py-3 bg-gray-100 dark:bg-gray-500 text-gray-900 dark:text-white rounded-lg border border-gray-300 dark:border-gray-800 font-medium transition-all">
+            <button onclick="showView('prs')" id="prs-tab" class="pill-tab">
                 PRs Only (@Model.PersonalRecordsOnly.Count)
             </button>
         }
@@ -222,121 +172,116 @@
 
     @if (!Model.IsRelayEvent)
     {
-        <!-- Class Rank Filter -->
-        <div class="mb-8 flex items-center gap-2 flex-wrap">
+        <div class="mb-6 flex items-center gap-2 flex-wrap">
             <span class="text-sm font-semibold text-gray-500 dark:text-gray-400 mr-1">Class:</span>
-            <button onclick="filterByClass('all')" id="class-all"
-                    class="class-tab px-4 py-1.5 rounded-full text-sm font-medium border transition-all bg-gray-900 dark:bg-gray-200 text-white dark:text-gray-900 border-gray-700 dark:border-gray-300">
-                All
-            </button>
-            <button onclick="filterByClass('Freshman')" id="class-Freshman"
-                    class="class-tab px-4 py-1.5 rounded-full text-sm font-medium border transition-all bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600">
-                Freshman
-            </button>
-            <button onclick="filterByClass('Sophomore')" id="class-Sophomore"
-                    class="class-tab px-4 py-1.5 rounded-full text-sm font-medium border transition-all bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600">
-                Sophomore
-            </button>
-            <button onclick="filterByClass('Junior')" id="class-Junior"
-                    class="class-tab px-4 py-1.5 rounded-full text-sm font-medium border transition-all bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600">
-                Junior
-            </button>
-            <button onclick="filterByClass('Senior')" id="class-Senior"
-                    class="class-tab px-4 py-1.5 rounded-full text-sm font-medium border transition-all bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600">
-                Senior
-            </button>
+            @foreach (var cls in new[] { ("all","All"), ("Freshman","Fr"), ("Sophomore","So"), ("Junior","Jr"), ("Senior","Sr") })
+            {
+                <button onclick="filterByClass('@cls.Item1')" id="class-@cls.Item1"
+                        class="class-tab pill-tab @(cls.Item1 == "all" ? "pill-tab-active" : "")">
+                    @cls.Item2
+                </button>
+            }
         </div>
     }
 
-    <!-- All Performances View -->
+    <!-- All Performances -->
     <div id="all-content" class="view-content">
         <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="min-w-full">
-                    <thead class="bg-gray-100 dark:bg-gray-900 border-b">
-                        <tr class="text-gray-600 dark:text-gray-400 text-sm">
-                            <th class="px-6 py-4 text-left font-semibold">Rank</th>
-                            <th class="px-6 py-4 text-left font-semibold">Athlete</th>
-                            <th class="px-6 py-4 text-left font-semibold">Class</th>
-                            <th class="px-6 py-4 text-left font-semibold">Mark</th>
-                            <th class="px-6 py-4 text-left font-semibold">Meet</th>
-                            <th class="px-6 py-4 text-left font-semibold">Date</th>
+                <table id="all-table" class="min-w-full text-sm">
+                    <thead class="bg-gray-50 dark:bg-gray-700/50">
+                        <tr class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                            <th class="px-5 py-3 text-left font-medium w-14 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 select-none" data-sort-col="rank" data-sort-type="num">
+                                Rank <span class="sort-ind">↕</span>
+                            </th>
+                            <th class="px-5 py-3 text-left font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 select-none" data-sort-col="athlete" data-sort-type="str">
+                                Athlete <span class="sort-ind">↕</span>
+                            </th>
+                            <th class="px-5 py-3 text-left font-medium hidden sm:table-cell">Class</th>
+                            <th class="px-5 py-3 text-left font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 select-none" data-sort-col="mark" data-sort-type="num">
+                                Mark <span class="sort-ind">↕</span>
+                            </th>
+                            <th class="px-5 py-3 text-left font-medium hidden md:table-cell">Meet</th>
+                            <th class="px-5 py-3 text-left font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 select-none hidden sm:table-cell" data-sort-col="date" data-sort-type="num">
+                                Date <span class="sort-ind">↕</span>
+                            </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                         @foreach (var perf in Model.AllPerformances)
                         {
-                            <tr class="perf-row border-t border-gray-700/50 @(perf.WasRecordAtTime ? "border-l-2 border-l-amber-500 bg-amber-500/5" : "")"
+                            var isGold    = perf.Rank == 1;
+                            var rowClass  = isGold
+                                ? "bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25"
+                                : "hover:bg-gray-50 dark:hover:bg-gray-700/30";
+                            var srBorder  = perf.WasRecordAtTime ? "border-l-2 border-l-amber-400" : "";
+                            var isStill   = perf.GraduationYear.HasValue && perf.GraduationYear.Value >= adjustedCurrentYear;
+                            var isRelay   = perf.AthleteName.Contains("|~|");
+                            <tr class="@rowClass @srBorder"
                                 data-class="@(perf.ClassAtTimeOfPerformance ?? "")"
-                                data-rank="@perf.Rank">
-                                <td class="px-6 py-4 rank-cell">
-                                    <span class="text-2xl font-bold @(perf.Rank <= 3 ? "text-amber-400" : "text-gray-400")">
+                                data-rank-val="@perf.Rank"
+                                data-athlete-val="@perf.AthleteName"
+                                data-mark-val="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "0")"
+                                data-date-val="@perf.MeetDate.Ticks">
+                                <td class="px-5 py-3 rank-cell w-14">
+                                    <span class="text-xl font-bold tabular-nums @(isGold ? "text-amber-500" : perf.Rank <= 3 ? "text-amber-400" : "text-gray-400 dark:text-gray-500")">
                                         @perf.Rank
                                     </span>
                                 </td>
-                                <td class="px-6 py-4">
-                                    @if (perf.AthleteName.Contains("|~|"))
+                                <td class="px-5 py-3">
+                                    @if (isRelay)
                                     {
-                                        var relayMembers = GetRelayAthletes(perf.AthleteName);
-                                        <ul class="list-disc list-inside mt-1">
-                                            @foreach (var athlete in relayMembers)
+                                        <div class="space-y-0.5">
+                                            @foreach (var athlete in GetRelayAthletes(perf.AthleteName))
                                             {
-                                                var split = athlete.Split(' ');
+                                                var split = athlete.Trim().Split(' ');
                                                 if (split.Length >= 2)
                                                 {
-                                                    var firstName = split[0];
-                                                    var lastName = split[1];
-                                                    var helper = new SlugHelper();
-                                                    var slug = helper.GenerateSlug($"{firstName}-{lastName}");
-
-                                                    <div class="text-gray-900 dark:text-white">
-                                                        <span class="mr-2">•</span>
-                                                        <a asp-controller="Roster" asp-action="Details" asp-route-slug="@slug" class="underline">
-                                                            @athlete
-                                                        </a>
-                                                    </div>
+                                                    var slug = new SlugHelper().GenerateSlug($"{split[0]}-{split[1]}");
+                                                    <div><a asp-controller="Roster" asp-action="Details" asp-route-slug="@slug" class="underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent text-sm">@athlete</a></div>
                                                 }
+                                                else { <div class="text-sm text-gray-900 dark:text-white">@athlete</div> }
                                             }
-                                        </ul>
+                                        </div>
                                     }
                                     else
                                     {
-                                        @if (!string.IsNullOrEmpty(perf.AthleteSlug))
-                                        {
-                                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
-                                            class="text-gray-900 dark:text-white font-medium underline">
-                                                @perf.AthleteName
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-gray-900 dark:text-white font-medium">@perf.AthleteName</span>
-                                        }
+                                        <div class="flex items-center gap-1.5">
+                                            @if (!string.IsNullOrEmpty(perf.AthleteSlug))
+                                            {
+                                                <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
+                                                   class="font-medium text-gray-900 dark:text-white underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
+                                                    @perf.AthleteName
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="font-medium text-gray-900 dark:text-white">@perf.AthleteName</span>
+                                            }
+                                            @if (isStill)
+                                            {
+                                                <span class="w-2 h-2 rounded-full bg-green-500 inline-block flex-shrink-0" title="Still competing" aria-label="Still competing"></span>
+                                            }
+                                        </div>
                                     }
                                 </td>
-                                <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
+                                <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">
                                     @(perf.ClassAtTimeOfPerformance ?? "")
                                 </td>
-                                <td class="px-6 py-4">
-                                    <span class="text-xl font-mono font-bold text-gray-900 dark:text-white">
-                                        @perf.Performance
-                                    </span>
-                                    @if (perf.IsSchoolRecord)
-                                    {
-                                        <span class="ml-2 text-xs font-bold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700/50">SR</span>
-                                    }
-                                    else if (perf.WasRecordAtTime)
-                                    {
-                                        <span class="ml-2 text-xs font-bold px-1.5 py-0.5 rounded bg-amber-100/50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-500/70 border border-amber-200/50 dark:border-amber-700/30">SR</span>
-                                    }
+                                <td class="px-5 py-3">
+                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                        <span class="mark font-bold text-gray-900 dark:text-white">@perf.Performance</span>
+                                        @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
+                                        else if (perf.WasRecordAtTime) { <span class="chip-sr" style="opacity:0.5">SR</span> }
+                                    </div>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-5 py-3 hidden md:table-cell">
                                     <a asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug"
-                                       class="text-gray-600 dark:text-gray-400 underline text-sm">
+                                       class="text-gray-600 dark:text-gray-400 underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent text-sm">
                                         @perf.MeetName
                                     </a>
                                 </td>
-                                <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
+                                <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">
                                     @perf.MeetDate.ToString("MMM d, yyyy")
                                 </td>
                             </tr>
@@ -348,13 +293,13 @@
 
         @if (!Model.AllPerformances.Any())
         {
-            <div class="p-8 bg-gray-800/50 border border-gray-700 rounded-xl text-center">
+            <div class="p-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-center">
                 <p class="text-gray-400">No performances recorded for this event yet.</p>
             </div>
         }
     </div>
 
-    <!-- PRs Only View -->
+    <!-- PRs Only -->
     <div id="prs-content" class="view-content hidden">
         @{
             var prSections = new[]
@@ -373,60 +318,64 @@
                 {
                     <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
                         <div class="overflow-x-auto">
-                            <table class="min-w-full">
-                                <thead class="bg-gray-100 dark:bg-gray-900 border-b">
-                                    <tr class="text-gray-600 dark:text-gray-400 text-sm">
-                                        <th class="px-6 py-4 text-left font-semibold">Rank</th>
-                                        <th class="px-6 py-4 text-left font-semibold">Athlete</th>
-                                        <th class="px-6 py-4 text-left font-semibold">Class</th>
-                                        <th class="px-6 py-4 text-left font-semibold">Mark</th>
-                                        <th class="px-6 py-4 text-left font-semibold">Meet</th>
-                                        <th class="px-6 py-4 text-left font-semibold">Date</th>
+                            <table class="min-w-full text-sm">
+                                <thead class="bg-gray-50 dark:bg-gray-700/50">
+                                    <tr class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                        <th class="px-5 py-3 text-left font-medium w-14">Rank</th>
+                                        <th class="px-5 py-3 text-left font-medium">Athlete</th>
+                                        <th class="px-5 py-3 text-left font-medium hidden sm:table-cell">Class</th>
+                                        <th class="px-5 py-3 text-left font-medium">Mark</th>
+                                        <th class="px-5 py-3 text-left font-medium hidden md:table-cell">Meet</th>
+                                        <th class="px-5 py-3 text-left font-medium hidden sm:table-cell">Date</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                                     @foreach (var perf in sectionPerfs)
                                     {
-                                        <tr class="perf-row border-t border-gray-700/50 @(perf.WasRecordAtTime ? "border-l-2 border-l-amber-500 bg-amber-500/5" : "")">
-                                            <td class="px-6 py-4">
-                                                <span class="text-2xl font-bold @(perf.Rank <= 3 ? "text-amber-400" : "text-gray-400")">
+                                        var isGold2   = perf.Rank == 1;
+                                        var rowClass2 = isGold2
+                                            ? "bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25"
+                                            : "hover:bg-gray-50 dark:hover:bg-gray-700/30";
+                                        var isStill2  = perf.GraduationYear.HasValue && perf.GraduationYear.Value >= adjustedCurrentYear;
+                                        <tr class="@rowClass2 @(perf.WasRecordAtTime ? "border-l-2 border-l-amber-400" : "")">
+                                            <td class="px-5 py-3 w-14">
+                                                <span class="text-xl font-bold tabular-nums @(isGold2 ? "text-amber-500" : perf.Rank <= 3 ? "text-amber-400" : "text-gray-400 dark:text-gray-500")">
                                                     @perf.Rank
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4">
-                                                @if (!string.IsNullOrEmpty(perf.AthleteSlug))
-                                                {
-                                                    <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
-                                                       class="text-gray-900 dark:text-white font-medium underline">
-                                                        @perf.AthleteName
-                                                    </a>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-gray-900 dark:text-white font-medium">@perf.AthleteName</span>
-                                                }
+                                            <td class="px-5 py-3">
+                                                <div class="flex items-center gap-1.5">
+                                                    @if (!string.IsNullOrEmpty(perf.AthleteSlug))
+                                                    {
+                                                        <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
+                                                           class="font-medium text-gray-900 dark:text-white underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
+                                                            @perf.AthleteName
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="font-medium text-gray-900 dark:text-white">@perf.AthleteName</span>
+                                                    }
+                                                    @if (isStill2)
+                                                    {
+                                                        <span class="w-2 h-2 rounded-full bg-green-500 inline-block flex-shrink-0" title="Still competing" aria-label="Still competing"></span>
+                                                    }
+                                                </div>
                                             </td>
-                                            <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
-                                                @(perf.ClassAtTimeOfPerformance ?? "")
+                                            <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">@(perf.ClassAtTimeOfPerformance ?? "")</td>
+                                            <td class="px-5 py-3">
+                                                <div class="flex items-center gap-1.5 flex-wrap">
+                                                    <span class="mark font-bold text-gray-900 dark:text-white">@perf.Performance</span>
+                                                    @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
+                                                </div>
                                             </td>
-                                            <td class="px-6 py-4">
-                                                <span class="text-xl font-mono font-bold text-gray-900 dark:text-white">
-                                                    @perf.Performance
-                                                </span>
-                                                @if (perf.IsSchoolRecord)
-                                                {
-                                                    <span class="ml-2 text-xs font-bold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700/50">SR</span>
-                                                }
-                                            </td>
-                                            <td class="px-6 py-4">
+                                            <td class="px-5 py-3 hidden md:table-cell">
                                                 <a asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug"
-                                                   class="text-gray-600 dark:text-gray-400 underline text-sm">
+                                                   class="text-gray-600 dark:text-gray-400 underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent text-sm">
                                                     @perf.MeetName
                                                 </a>
                                             </td>
-                                            <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
-                                                @perf.MeetDate.ToString("MMM d, yyyy")
-                                            </td>
+                                            <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">@perf.MeetDate.ToString("MMM d, yyyy")</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -436,7 +385,7 @@
                 }
                 else
                 {
-                    <div class="p-8 bg-gray-800/50 border border-gray-700 rounded-xl text-center">
+                    <div class="p-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-center">
                         <p class="text-gray-400">No personal records for this class yet.</p>
                     </div>
                 }
@@ -448,182 +397,133 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-    // SR History panel toggle — lazy-initializes chart on first open
+    // SR chart
     let srChartBuilt = false;
-    function toggleSrHistory() {
-        const body = document.getElementById('sr-history-body');
-        const chevron = document.getElementById('sr-history-chevron');
-        const isHidden = body.classList.contains('hidden');
-        body.classList.toggle('hidden');
-        chevron.style.transform = isHidden ? 'rotate(180deg)' : '';
-        if (isHidden && !srChartBuilt) buildSrChart();
+    const srDetails = document.querySelector('.sr-history-grid')?.closest('details');
+    if (srDetails) {
+        srDetails.addEventListener('toggle', function () {
+            if (this.open && !srChartBuilt) buildSrChart();
+        });
     }
 
     function buildSrChart() {
         srChartBuilt = true;
         const canvas = document.getElementById('srProgressionChart');
         if (!canvas) return;
-
         const labels  = JSON.parse(canvas.dataset.labels);
         const values  = JSON.parse(canvas.dataset.values);
         const names   = JSON.parse(canvas.dataset.names);
         const perfs   = JSON.parse(canvas.dataset.perfs);
         const isField = canvas.dataset.isfield === 'true';
 
-        // Format raw value (inches or seconds) to a readable string for Y-axis ticks
-        function fmtInches(v) {
-            const ft = Math.floor(v / 12);
-            const rem = v % 12;
-            const inchStr = rem === 0 ? '0' : rem.toFixed(2).replace(/\.?0+$/, '');
-            return `${ft}' ${inchStr}"`;
-        }
-        function fmtSeconds(v) {
-            if (v >= 60) {
-                const m = Math.floor(v / 60);
-                const s = v % 60;
-                return `${m}:${s.toFixed(2).padStart(5, '0')}`;
-            }
-            return `${v.toFixed(2)}`;
-        }
-        function fmtTick(v) { return isField ? fmtInches(v) : fmtSeconds(v); }
-
-        // Relay names are |~|-separated — flatten to a readable string for tooltips
-        function displayName(raw) {
-            return raw.includes('|~|') ? raw.split('|~|').join(' / ') : raw;
-        }
+        function fmtInches(v) { const ft = Math.floor(v/12); const r = v%12; return `${ft}' ${r===0?'0':r.toFixed(2).replace(/\.?0+$/,'')}"`; }
+        function fmtSecs(v)   { if(v>=60){const m=Math.floor(v/60);const s=v%60;return `${m}:${s.toFixed(2).padStart(5,'0')}`;} return `${v.toFixed(2)}`; }
+        function displayName(raw) { return raw.includes('|~|') ? raw.split('|~|').join(' / ') : raw; }
 
         new Chart(canvas, {
             type: 'line',
             data: {
                 labels,
-                datasets: [{
-                    data: values,
-                    borderColor: '#f59e0b',
-                    backgroundColor: 'rgba(245,158,11,0.07)',
-                    borderWidth: 2.5,
-                    stepped: 'before',
-                    fill: true,
-                    pointBackgroundColor: values.map((_, i) => i === values.length - 1 ? '#f59e0b' : '#4b5563'),
-                    pointBorderColor: values.map((_, i) => i === values.length - 1 ? '#1f2937' : '#f59e0b'),
-                    pointBorderWidth: 2,
-                    pointRadius: 6,
-                    pointHoverRadius: 8,
-                }]
+                datasets: [{ data: values, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.07)', borderWidth: 2.5, stepped: 'before', fill: true, pointBackgroundColor: values.map((_,i)=>i===values.length-1?'#f59e0b':'#4b5563'), pointBorderColor: values.map((_,i)=>i===values.length-1?'#1f2937':'#f59e0b'), pointBorderWidth: 2, pointRadius: 6, pointHoverRadius: 8 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            title: (items) => displayName(names[items[0].dataIndex]),
-                            label: (item) => '  ' + perfs[item.dataIndex],
-                            afterLabel: (item) => '  ' + labels[item.dataIndex],
-                        },
-                        backgroundColor: '#1f2937',
-                        borderColor: '#374151',
-                        borderWidth: 1,
-                        titleColor: '#f3f4f6',
-                        bodyColor: '#9ca3af',
-                    }
+                    tooltip: { callbacks: { title:(items)=>displayName(names[items[0].dataIndex]), label:(item)=>'  '+perfs[item.dataIndex], afterLabel:(item)=>'  '+labels[item.dataIndex] }, backgroundColor:'#1f2937', borderColor:'#374151', borderWidth:1, titleColor:'#f3f4f6', bodyColor:'#9ca3af' }
                 },
                 scales: {
-                    x: {
-                        grid: { color: 'rgba(75,85,99,0.3)' },
-                        ticks: { color: '#6b7280', font: { size: 11 } },
-                    },
-                    y: {
-                        grid: { color: 'rgba(75,85,99,0.3)' },
-                        ticks: {
-                            color: '#6b7280',
-                            font: { size: 11 },
-                            callback: (v) => fmtTick(v),
-                        },
-                    }
+                    x: { grid:{color:'rgba(75,85,99,0.3)'}, ticks:{color:'#6b7280',font:{size:11}} },
+                    y: { grid:{color:'rgba(75,85,99,0.3)'}, ticks:{color:'#6b7280',font:{size:11},callback:(v)=>isField?fmtInches(v):fmtSecs(v)} }
                 }
             }
         });
     }
 
+    // View toggle
     function showView(view) {
-        // Hide all content
         document.querySelectorAll('.view-content').forEach(el => el.classList.add('hidden'));
-
-        // Show selected content
         document.getElementById(view + '-content').classList.remove('hidden');
-
-        // Update tab styling
-        document.querySelectorAll('.view-tab').forEach(tab => {
-            tab.classList.remove('bg-blue-100', 'dark:bg-blue-500', 'border-blue-300', 'dark:border-blue-800');
-            tab.classList.add('bg-gray-100', 'dark:bg-gray-500', 'border-gray-300', 'dark:border-gray-800');
+        document.querySelectorAll('#all-tab, #prs-tab').forEach(btn => {
+            btn.classList.remove('pill-tab-active');
         });
-
-        const activeTab = document.getElementById(view + '-tab');
-        activeTab.classList.remove('bg-gray-100', 'dark:bg-gray-500', 'border-gray-300', 'dark:border-gray-800');
-        activeTab.classList.add('bg-blue-100', 'dark:bg-blue-500', 'border-blue-300', 'dark:border-blue-800');
-
-        // Re-apply current class filter to the newly visible table
+        const tab = document.getElementById(view + '-tab');
+        if (tab) tab.classList.add('pill-tab-active');
         applyClassFilter(currentClassFilter);
     }
 
+    // Class filter
     let currentClassFilter = 'all';
 
     function filterByClass(cls) {
         currentClassFilter = cls;
-
-        // Update class tab button styles
-        document.querySelectorAll('.class-tab').forEach(btn => {
-            btn.classList.remove('bg-gray-900', 'dark:bg-gray-200', 'text-white', 'dark:text-gray-900', 'border-gray-700', 'dark:border-gray-300');
-            btn.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
-        });
-        const activeBtn = document.getElementById('class-' + cls);
-        if (activeBtn) {
-            activeBtn.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
-            activeBtn.classList.add('bg-gray-900', 'dark:bg-gray-200', 'text-white', 'dark:text-gray-900', 'border-gray-700', 'dark:border-gray-300');
-        }
-
+        document.querySelectorAll('.class-tab').forEach(btn => btn.classList.remove('pill-tab-active'));
+        const active = document.getElementById('class-' + cls);
+        if (active) active.classList.add('pill-tab-active');
         applyClassFilter(cls);
     }
 
     function applyClassFilter(cls) {
-        // All Performances table: show/hide rows by data-class and re-rank
         const allContainer = document.getElementById('all-content');
         if (allContainer) {
-            const rows = allContainer.querySelectorAll('tbody tr[data-class]');
             let visibleRank = 1;
-            rows.forEach(function(row) {
+            allContainer.querySelectorAll('tbody tr[data-class]').forEach(function (row) {
                 const matches = cls === 'all' || row.dataset.class === cls;
+                row.style.display = matches ? '' : 'none';
                 if (matches) {
-                    row.style.display = '';
-                    const rankCell = row.querySelector('.rank-cell');
-                    if (rankCell) {
-                        const span = rankCell.querySelector('span');
-                        if (span) {
-                            span.textContent = visibleRank;
-                            span.className = 'text-2xl font-bold ' + (visibleRank <= 3 ? 'text-amber-400' : 'text-gray-400');
-                        }
-                    }
+                    const span = row.querySelector('.rank-cell span');
+                    if (span) { span.textContent = visibleRank; span.className = 'text-xl font-bold tabular-nums ' + (visibleRank <= 3 ? 'text-amber-400' : 'text-gray-400 dark:text-gray-500'); }
                     visibleRank++;
-                } else {
-                    row.style.display = 'none';
                 }
             });
         }
-
-        // PRs Only: swap which pre-built section is visible
         const prsContainer = document.getElementById('prs-content');
         if (prsContainer) {
-            prsContainer.querySelectorAll('.prs-section').forEach(function(sec) {
-                sec.classList.add('hidden');
-            });
+            prsContainer.querySelectorAll('.prs-section').forEach(s => s.classList.add('hidden'));
             const target = prsContainer.querySelector('#prs-section-' + cls);
             if (target) target.classList.remove('hidden');
         }
     }
 
-    // Set "all" as default on page load
-    document.addEventListener('DOMContentLoaded', function() {
+    // Sortable columns
+    (function () {
+        var sortState = {};
+
+        function getCellVal(row, col) {
+            return row.dataset[col + 'Val'] ?? '';
+        }
+
+        document.querySelectorAll('th[data-sort-col]').forEach(function (th) {
+            th.addEventListener('click', function () {
+                var col    = this.dataset.sortCol;
+                var type   = this.dataset.sortType;
+                var table  = this.closest('table');
+                var tbody  = table.querySelector('tbody');
+                var rows   = Array.from(tbody.querySelectorAll('tr'));
+                var asc    = sortState[col] !== 'asc';
+                sortState[col] = asc ? 'asc' : 'desc';
+
+                // Reset all sort indicators
+                table.querySelectorAll('.sort-ind').forEach(s => s.textContent = '↕');
+                this.querySelector('.sort-ind').textContent = asc ? '↑' : '↓';
+
+                rows.sort(function (a, b) {
+                    var va = getCellVal(a, col);
+                    var vb = getCellVal(b, col);
+                    if (type === 'num') {
+                        var diff = parseFloat(va) - parseFloat(vb);
+                        return asc ? diff : -diff;
+                    }
+                    var cmp = va.localeCompare(vb);
+                    return asc ? cmp : -cmp;
+                });
+
+                rows.forEach(r => tbody.appendChild(r));
+            });
+        });
+    }());
+
+    document.addEventListener('DOMContentLoaded', function () {
         showView('all');
     });
 </script>

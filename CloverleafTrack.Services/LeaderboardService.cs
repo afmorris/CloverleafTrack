@@ -129,12 +129,14 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
             IsSchoolRecord = perf.AllTimeRank == 1,
             WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
             ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
+            RawValue = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds,
         }).ToList();
 
         // Build overall PRs list (best per athlete across all classes)
         var prsOnly = BuildPrViewModels(
             allPerformances.Where(p => p.AthleteId.HasValue).ToList(),
-            recordSettingIds);
+            recordSettingIds,
+            isFieldEvent);
 
         // Build class-specific PRs: best per athlete within each class
         var classPrs = new Dictionary<string, List<LeaderboardPerformanceViewModel>>();
@@ -144,7 +146,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
                 .Where(p => p.AthleteId.HasValue &&
                              GetClassAtTimeOfPerformance(p.GraduationYear, p.MeetDate) == cls)
                 .ToList();
-            classPrs[cls] = BuildPrViewModels(classPerfs, recordSettingIds);
+            classPrs[cls] = BuildPrViewModels(classPerfs, recordSettingIds, isFieldEvent);
         }
 
         return new LeaderboardDetailsViewModel
@@ -312,7 +314,8 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
 
     private List<LeaderboardPerformanceViewModel> BuildPrViewModels(
         List<LeaderboardPerformanceDto> individualPerfs,
-        HashSet<int> recordSettingIds)
+        HashSet<int> recordSettingIds,
+        bool isFieldEvent)
     {
         return individualPerfs
             .GroupBy(p => p.AthleteId)
@@ -330,6 +333,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
                 IsSchoolRecord = perf.AllTimeRank == 1,
                 WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
                 ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
+                RawValue = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds,
             })
             .ToList();
     }

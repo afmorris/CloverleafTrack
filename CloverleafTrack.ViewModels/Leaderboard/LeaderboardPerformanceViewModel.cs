@@ -15,4 +15,6 @@ public class LeaderboardPerformanceViewModel
     public bool WasRecordAtTime { get; set; }
     /// <summary>The athlete's class (Freshman/Sophomore/Junior/Senior) at the time this performance was set. Null for relays or unknown graduation years.</summary>
     public string? ClassAtTimeOfPerformance { get; set; }
+    /// <summary>Raw numeric value for sort: DistanceInches for field events, TimeSeconds for running events.</summary>
+    public double? RawValue { get; set; }
 }
