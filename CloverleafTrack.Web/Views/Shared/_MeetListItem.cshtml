@@ -35,7 +35,11 @@
                     <span class="px-2 py-0.5 @envBadgeClass rounded text-xs font-semibold flex-shrink-0">@envText</span>
                     @if (Model.IsUpcoming)
                     {
-                        <span class="px-2 py-0.5 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700/30 rounded text-xs font-bold">UPCOMING</span>
+                        var daysUntil = (Model.Date.Date - DateTime.Today).Days;
+                        var countdown = daysUntil == 0 ? "Today"
+                                      : daysUntil == 1 ? "Tomorrow"
+                                      : $"in {daysUntil} days";
+                        <span class="px-2 py-0.5 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700/30 rounded text-xs font-bold">@countdown</span>
                     }
                 </div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">
