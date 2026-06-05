@@ -156,13 +156,6 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    m.SeasonId,
                                    m.EntryStatus,
                                    m.MeetType,
-                                   m.BoysScore,
-                                   m.BoysOpponentScore,
-                                   m.GirlsScore,
-                                   m.GirlsOpponentScore,
-                                   m.BoysPlace,
-                                   m.GirlsPlace,
-                                   m.FieldSize,
                                    COUNT(CASE WHEN p.PersonalBest = 1 THEN 1 END) AS PRCount,
                                    (SELECT COUNT(*) FROM Performances p2 INNER JOIN Leaderboards lb ON lb.PerformanceId = p2.Id AND lb.Rank = 1 WHERE p2.MeetId = m.Id) AS SchoolRecordCount,
                                    l.Id,
@@ -191,13 +184,6 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    m.EntryStatus,
                                    m.MeetType,
                                    m.ScoringTemplateId,
-                                   m.BoysScore,
-                                   m.BoysOpponentScore,
-                                   m.GirlsScore,
-                                   m.GirlsOpponentScore,
-                                   m.BoysPlace,
-                                   m.GirlsPlace,
-                                   m.FieldSize,
                                    l.Id,
                                    l.Name,
                                    l.City,
@@ -269,11 +255,49 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
      {
           using var connection = connectionFactory.CreateConnection();
           const string sql = """
-                              SELECT * FROM MeetParticipants
-                              WHERE MeetId = @MeetId AND Deleted = 0
-                              ORDER BY SortOrder, SchoolName
+                              SELECT mp.*, s.*
+                              FROM MeetParticipants mp
+                              INNER JOIN Schools s ON s.Id = mp.SchoolId AND s.Deleted = 0
+                              WHERE mp.MeetId = @MeetId AND mp.Deleted = 0
+                              ORDER BY mp.SortOrder, s.Name
                               """;
-          var results = await connection.QueryAsync<MeetParticipant>(sql, new { MeetId = meetId });
+
+          var results = await connection.QueryAsync<MeetParticipant, School, MeetParticipant>(
+               sql,
+               (participant, school) => { participant.School = school; return participant; },
+               new { MeetId = meetId },
+               splitOn: "Id");
+
+          return results.ToList();
+     }
+
+     public async Task<List<MeetTeamResult>> GetTeamResultsForMeetsAsync(List<int> meetIds)
+     {
+          if (meetIds.Count == 0) return new List<MeetTeamResult>();
+          using var connection = connectionFactory.CreateConnection();
+          const string sql = """
+                              SELECT mtr.*, mp.*, s.*
+                              FROM MeetTeamResults mtr
+                              LEFT JOIN MeetParticipants mp ON mp.Id = mtr.OpponentMeetParticipantId AND mp.Deleted = 0
+                              LEFT JOIN Schools s ON s.Id = mp.SchoolId AND s.Deleted = 0
+                              WHERE mtr.MeetId IN @MeetIds AND mtr.Deleted = 0
+                              ORDER BY mtr.MeetId, mtr.Gender, mtr.Id
+                              """;
+
+          var results = await connection.QueryAsync<MeetTeamResult, MeetParticipant, School, MeetTeamResult>(
+               sql,
+               (result, participant, school) =>
+               {
+                    if (participant != null)
+                    {
+                         participant.School = school ?? new School();
+                         result.OpponentMeetParticipant = participant;
+                    }
+                    return result;
+               },
+               new { MeetIds = meetIds },
+               splitOn: "Id,Id");
+
           return results.ToList();
      }
 }

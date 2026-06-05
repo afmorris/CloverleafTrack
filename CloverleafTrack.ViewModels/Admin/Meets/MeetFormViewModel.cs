@@ -9,31 +9,31 @@ namespace CloverleafTrack.ViewModels.Admin.Meets;
 public class MeetFormViewModel
 {
     public int Id { get; set; }
-    
+
     [Required]
     [StringLength(200)]
     [Display(Name = "Meet Name")]
     public string Name { get; set; } = string.Empty;
-    
+
     [Required]
     [Display(Name = "Date")]
     public DateTime Date { get; set; } = DateTime.Today;
-    
+
     [Required]
     [Display(Name = "Location")]
     public int LocationId { get; set; }
-    
+
     [Required]
     [Display(Name = "Environment")]
     public Environment Environment { get; set; }
-    
+
     [Display(Name = "Hand Timed")]
     public bool HandTimed { get; set; }
-    
+
     [Required]
     [Display(Name = "Season")]
     public int SeasonId { get; set; }
-    
+
     [Display(Name = "Entry Status")]
     public MeetEntryStatus EntryStatus { get; set; }
 
@@ -47,38 +47,22 @@ public class MeetFormViewModel
     [Display(Name = "Entry Notes")]
     public string? EntryNotes { get; set; }
 
-    // Team score / placement (post-meet)
-    [Display(Name = "Boys Score")]
-    public decimal? BoysScore { get; set; }
-
-    [Display(Name = "Opponent Boys Score")]
-    public decimal? BoysOpponentScore { get; set; }
-
-    [Display(Name = "Girls Score")]
-    public decimal? GirlsScore { get; set; }
-
-    [Display(Name = "Opponent Girls Score")]
-    public decimal? GirlsOpponentScore { get; set; }
-
-    [Display(Name = "Boys Place")]
-    public int? BoysPlace { get; set; }
-
-    [Display(Name = "Girls Place")]
-    public int? GirlsPlace { get; set; }
-
-    [Display(Name = "Field Size (# of teams)")]
-    public int? FieldSize { get; set; }
-
-    // For dropdowns
+    // Dropdowns
     public List<LocationOptionViewModel> Locations { get; set; } = new();
     public List<SeasonOptionViewModel> Seasons { get; set; } = new();
     public List<LocationOptionViewModel> RecentLocations { get; set; } = new();
     public List<ScoringTemplateOptionViewModel> ScoringTemplates { get; set; } = new();
+    public List<SchoolOptionViewModel> Schools { get; set; } = new();
 
-    /// <summary>Opponent school names entered on the form (up to 2 for DoubleDual, 1 for Dual, many for Invitational).</summary>
-    public List<string> ParticipantSchoolNames { get; set; } = new();
+    /// <summary>Selected school IDs for each participant slot.</summary>
+    public List<int> ParticipantSchoolIds { get; set; } = new();
+
+    /// <summary>Existing MeetParticipant.Id values — index-aligned with ParticipantSchoolIds for update vs. insert.</summary>
     public List<int> ParticipantIds { get; set; } = new();
 
-    /// <summary>Existing participants loaded for editing.</summary>
+    /// <summary>Loaded on Edit to display current participants.</summary>
     public List<MeetParticipant> ExistingParticipants { get; set; } = new();
+
+    /// <summary>Team result rows for the Edit form — server-rendered based on meet type and participants.</summary>
+    public List<MeetTeamResultFormViewModel> TeamResults { get; set; } = new();
 }

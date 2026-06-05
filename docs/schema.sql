@@ -579,25 +579,80 @@ VALUES (@DualTemplateId, 1, 5),
 
 
 -- ============================================================
+-- SCHOOLS
+-- Persistent list of opponent schools referenced by meets.
+-- Cloverleaf is always implicit and never stored here.
+-- Soft-deleted (Deleted + DateDeleted).
+-- ============================================================
+CREATE TABLE [dbo].[Schools] (
+    [Id]          INT            IDENTITY (1, 1) NOT NULL,
+    [Name]        NVARCHAR (200) NOT NULL,
+    [ShortName]   NVARCHAR (50)  NULL,
+    [DateCreated] DATETIME2 (7)  DEFAULT (GETUTCDATE()) NOT NULL,
+    [DateUpdated] DATETIME2 (7)  NULL,
+    [Deleted]     BIT            DEFAULT ((0)) NOT NULL,
+    [DateDeleted] DATETIME2 (7)  NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+
+-- ============================================================
 -- MEET PARTICIPANTS
--- The opposing schools in a meet.  Used to label placings.
+-- The opposing schools in a meet.  References Schools table.
+-- Gender is NULL for all-gender participation (default); may be
+-- set to Male/Female for gender-specific invitational fields.
 -- Soft-deleted (Deleted + DateDeleted).
 -- ============================================================
 CREATE TABLE [dbo].[MeetParticipants] (
     [Id]          INT            IDENTITY (1, 1) NOT NULL,
     [MeetId]      INT            NOT NULL,
-    [SchoolName]  NVARCHAR (200) NOT NULL,
+    [SchoolId]    INT            NOT NULL,
+    [Gender]      SMALLINT       NULL,   -- NULL = all genders; see Gender enum above
     [SortOrder]   INT            DEFAULT ((0)) NOT NULL,
     [DateCreated] DATETIME2 (7)  DEFAULT (GETUTCDATE()) NOT NULL,
     [DateUpdated] DATETIME2 (7)  NULL,
     [Deleted]     BIT            DEFAULT ((0)) NOT NULL,
     [DateDeleted] DATETIME2 (7)  NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_MeetParticipants_Meets] FOREIGN KEY ([MeetId]) REFERENCES [dbo].[Meets] ([Id])
+    CONSTRAINT [FK_MeetParticipants_Meets]   FOREIGN KEY ([MeetId])   REFERENCES [dbo].[Meets]   ([Id]),
+    CONSTRAINT [FK_MeetParticipants_Schools] FOREIGN KEY ([SchoolId]) REFERENCES [dbo].[Schools] ([Id])
 );
 
 CREATE NONCLUSTERED INDEX [IX_MeetParticipants_MeetId]
     ON [dbo].[MeetParticipants]([MeetId] ASC);
+
+
+-- ============================================================
+-- MEET TEAM RESULTS
+-- One row per (meet × gender × opponent).
+-- OpponentMeetParticipantId is NULL for invitational results
+-- (no specific opponent — just an overall place/field size).
+-- Dual/DoubleDual rows store OurScore/OpponentScore.
+-- Invitational rows store Place/FieldSize.
+-- Soft-deleted (Deleted + DateDeleted).
+-- ============================================================
+CREATE TABLE [dbo].[MeetTeamResults] (
+    [Id]                        INT            IDENTITY (1, 1) NOT NULL,
+    [MeetId]                    INT            NOT NULL,
+    [Gender]                    SMALLINT       NOT NULL,   -- See Gender enum above (Male=1, Female=2)
+    [OpponentMeetParticipantId] INT            NULL,       -- NULL for invitational results
+    [OurScore]                  DECIMAL (8,2)  NULL,
+    [OpponentScore]             DECIMAL (8,2)  NULL,
+    [Place]                     INT            NULL,
+    [FieldSize]                 INT            NULL,
+    [DateCreated]               DATETIME2 (7)  DEFAULT (GETUTCDATE()) NOT NULL,
+    [DateUpdated]               DATETIME2 (7)  NULL,
+    [Deleted]                   BIT            DEFAULT ((0)) NOT NULL,
+    [DateDeleted]               DATETIME2 (7)  NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_MeetTeamResults_Meets]
+        FOREIGN KEY ([MeetId]) REFERENCES [dbo].[Meets] ([Id]),
+    CONSTRAINT [FK_MeetTeamResults_MeetParticipants]
+        FOREIGN KEY ([OpponentMeetParticipantId]) REFERENCES [dbo].[MeetParticipants] ([Id])
+);
+
+CREATE NONCLUSTERED INDEX [IX_MeetTeamResults_MeetId]
+    ON [dbo].[MeetTeamResults]([MeetId] ASC);
 
 
 -- ============================================================
@@ -732,22 +787,10 @@ ALTER TABLE [dbo].[Meets]
 
 
 -- ============================================================
--- Team score / placement fields (optional, entered post-meet)
+-- NOTE: Team score / placement data is now stored in the
+-- MeetTeamResults table (see above), not on the Meets table.
+-- The old BoysScore, BoysOpponentScore, GirlsScore,
+-- GirlsOpponentScore, BoysPlace, GirlsPlace, and FieldSize
+-- columns have been removed from Meets.
+-- See docs/migration_schools.sql for the migration script.
 -- ============================================================
-ALTER TABLE [dbo].[Meets]
-    ADD [BoysScore]          DECIMAL(8,2) NULL,
-        [BoysOpponentScore]  DECIMAL(8,2) NULL,
-        [GirlsScore]         DECIMAL(8,2) NULL,
-        [GirlsOpponentScore] DECIMAL(8,2) NULL,
-        [BoysPlace]          INT NULL,
-        [GirlsPlace]         INT NULL,
-        [FieldSize]          INT NULL;
-
--- ============================================================
--- Widen score columns to DECIMAL(8,2) to support fractional scores
--- (run this if the columns were previously added as INT)
--- ============================================================
-ALTER TABLE [dbo].[Meets] ALTER COLUMN [BoysScore]          DECIMAL(8,2) NULL;
-ALTER TABLE [dbo].[Meets] ALTER COLUMN [BoysOpponentScore]  DECIMAL(8,2) NULL;
-ALTER TABLE [dbo].[Meets] ALTER COLUMN [GirlsScore]         DECIMAL(8,2) NULL;
-ALTER TABLE [dbo].[Meets] ALTER COLUMN [GirlsOpponentScore] DECIMAL(8,2) NULL;

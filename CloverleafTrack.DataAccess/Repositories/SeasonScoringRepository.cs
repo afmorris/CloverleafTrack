@@ -27,7 +27,7 @@ public class SeasonScoringRepository(IDbConnectionFactory connectionFactory) : I
                 a.LastName      AS AthleteLastName,
                 a.Gender        AS AthleteGender,
                 mp.MeetParticipantId,
-                mpart.SchoolName AS OpponentSchoolName,
+                sc.Name AS OpponentSchoolName,
                 mp.Place,
                 mp.FullPoints,
                 mp.SplitPoints
@@ -37,7 +37,8 @@ public class SeasonScoringRepository(IDbConnectionFactory connectionFactory) : I
             INNER JOIN Meets m            ON m.Id  = p.MeetId
             INNER JOIN Seasons s          ON s.Id  = m.SeasonId
             INNER JOIN Athletes a         ON a.Id  = p.AthleteId
-            LEFT  JOIN MeetParticipants mpart ON mpart.Id = mp.MeetParticipantId
+            LEFT  JOIN MeetParticipants mpart ON mpart.Id = mp.MeetParticipantId AND mpart.Deleted = 0
+            LEFT  JOIN Schools sc             ON sc.Id   = mpart.SchoolId        AND sc.Deleted = 0
             WHERE s.Id = @SeasonId
               AND p.AthleteId IS NOT NULL
 
@@ -60,7 +61,7 @@ public class SeasonScoringRepository(IDbConnectionFactory connectionFactory) : I
                 a.LastName      AS AthleteLastName,
                 a.Gender        AS AthleteGender,
                 mp.MeetParticipantId,
-                mpart.SchoolName AS OpponentSchoolName,
+                sc.Name AS OpponentSchoolName,
                 mp.Place,
                 mp.FullPoints,
                 mp.SplitPoints
@@ -71,7 +72,8 @@ public class SeasonScoringRepository(IDbConnectionFactory connectionFactory) : I
             INNER JOIN Seasons s               ON s.Id  = m.SeasonId
             INNER JOIN PerformanceAthletes pa  ON pa.PerformanceId = p.Id
             INNER JOIN Athletes a              ON a.Id  = pa.AthleteId
-            LEFT  JOIN MeetParticipants mpart  ON mpart.Id = mp.MeetParticipantId
+            LEFT  JOIN MeetParticipants mpart  ON mpart.Id = mp.MeetParticipantId AND mpart.Deleted = 0
+            LEFT  JOIN Schools sc              ON sc.Id   = mpart.SchoolId        AND sc.Deleted = 0
             WHERE s.Id = @SeasonId
               AND p.AthleteId IS NULL
 

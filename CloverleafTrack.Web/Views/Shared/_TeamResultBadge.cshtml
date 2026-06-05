@@ -5,26 +5,15 @@
     var isDual = Model.MeetType == CloverleafTrack.Models.Enums.MeetType.Dual
               || Model.MeetType == CloverleafTrack.Models.Enums.MeetType.DoubleDual;
     <div class="flex flex-wrap gap-1.5">
-        @if (Model.BoysResultLabel != null)
+        @foreach (var entry in Model.Entries.Where(e => e.Label.Length > 0))
         {
             if (isDual)
             {
-                <span class="@(Model.BoysWon ? "chip-win" : "chip-loss")">@Model.BoysResultLabel</span>
+                <span class="@(entry.Won ? "chip-win" : "chip-loss")">@entry.Label</span>
             }
             else
             {
-                <span class="chip-rank">@Model.BoysResultLabel</span>
-            }
-        }
-        @if (Model.GirlsResultLabel != null)
-        {
-            if (isDual)
-            {
-                <span class="@(Model.GirlsWon ? "chip-win" : "chip-loss")">@Model.GirlsResultLabel</span>
-            }
-            else
-            {
-                <span class="chip-rank">@Model.GirlsResultLabel</span>
+                <span class="chip-rank">@entry.Label</span>
             }
         }
     </div>

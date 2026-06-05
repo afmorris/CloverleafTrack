@@ -15,7 +15,9 @@ public class MeetsController(
     IAdminLocationRepository locationRepository,
     IAdminSeasonRepository seasonRepository,
     IAdminScoringTemplateRepository scoringTemplateRepository,
-    IAdminMeetParticipantRepository participantRepository) : Controller
+    IAdminMeetParticipantRepository participantRepository,
+    IAdminSchoolRepository schoolRepository,
+    IAdminMeetTeamResultRepository teamResultRepository) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(string? searchName, int? seasonId, Environment? environment, MeetEntryStatus? entryStatus)
@@ -102,20 +104,12 @@ public class MeetsController(
             EntryStatus = model.EntryStatus,
             EntryNotes = model.EntryNotes,
             MeetType = model.MeetType,
-            ScoringTemplateId = model.ScoringTemplateId,
-            BoysScore = model.BoysScore,
-            BoysOpponentScore = model.BoysOpponentScore,
-            GirlsScore = model.GirlsScore,
-            GirlsOpponentScore = model.GirlsOpponentScore,
-            BoysPlace = model.BoysPlace,
-            GirlsPlace = model.GirlsPlace,
-            FieldSize = model.FieldSize
+            ScoringTemplateId = model.ScoringTemplateId
         };
 
         var id = await meetRepository.CreateAsync(meet);
 
-        // Create participants
-        await SyncParticipants(id, model.ParticipantSchoolNames, new List<int>(), new List<MeetParticipant>());
+        await SyncParticipants(id, model.ParticipantSchoolIds, new List<int>(), new List<MeetParticipant>());
 
         TempData["SuccessMessage"] = $"Meet '{model.Name}' created successfully!";
 
@@ -133,6 +127,8 @@ public class MeetsController(
 
         var participants = await participantRepository.GetForMeetAsync(id);
 
+        var existingResults = await teamResultRepository.GetForMeetAsync(id);
+
         var viewModel = new MeetFormViewModel
         {
             Id = meet.Id,
@@ -146,16 +142,10 @@ public class MeetsController(
             EntryNotes = meet.EntryNotes,
             MeetType = meet.MeetType,
             ScoringTemplateId = meet.ScoringTemplateId,
-            BoysScore = meet.BoysScore,
-            BoysOpponentScore = meet.BoysOpponentScore,
-            GirlsScore = meet.GirlsScore,
-            GirlsOpponentScore = meet.GirlsOpponentScore,
-            BoysPlace = meet.BoysPlace,
-            GirlsPlace = meet.GirlsPlace,
-            FieldSize = meet.FieldSize,
             ExistingParticipants = participants,
-            ParticipantSchoolNames = participants.Select(p => p.SchoolName).ToList(),
-            ParticipantIds = participants.Select(p => p.Id).ToList()
+            ParticipantSchoolIds = participants.Select(p => p.SchoolId).ToList(),
+            ParticipantIds = participants.Select(p => p.Id).ToList(),
+            TeamResults = BuildTeamResultRows(meet.MeetType, participants, existingResults)
         };
 
         await LoadFormData(viewModel);
@@ -188,20 +178,14 @@ public class MeetsController(
             EntryStatus = model.EntryStatus,
             EntryNotes = model.EntryNotes,
             MeetType = model.MeetType,
-            ScoringTemplateId = model.ScoringTemplateId,
-            BoysScore = model.BoysScore,
-            BoysOpponentScore = model.BoysOpponentScore,
-            GirlsScore = model.GirlsScore,
-            GirlsOpponentScore = model.GirlsOpponentScore,
-            BoysPlace = model.BoysPlace,
-            GirlsPlace = model.GirlsPlace,
-            FieldSize = model.FieldSize
+            ScoringTemplateId = model.ScoringTemplateId
         };
 
         await meetRepository.UpdateAsync(meet);
 
         var existing = await participantRepository.GetForMeetAsync(model.Id);
-        await SyncParticipants(model.Id, model.ParticipantSchoolNames, model.ParticipantIds, existing);
+        await SyncParticipants(model.Id, model.ParticipantSchoolIds, model.ParticipantIds, existing);
+        await SyncTeamResults(model.Id, model.TeamResults);
 
         TempData["SuccessMessage"] = "Meet updated successfully!";
         return RedirectToAction(nameof(Index));
@@ -243,7 +227,7 @@ public class MeetsController(
             EntryStatus = MeetEntryStatus.NotAvailable,
             MeetType = meet.MeetType,
             ScoringTemplateId = meet.ScoringTemplateId,
-            ParticipantSchoolNames = participants.Select(p => p.SchoolName).ToList()
+            ParticipantSchoolIds = participants.Select(p => p.SchoolId).ToList()
         };
 
         await LoadFormData(viewModel);
@@ -310,6 +294,14 @@ public class MeetsController(
             Name = t.Name,
             IsBuiltIn = t.IsBuiltIn
         }).ToList();
+
+        var schools = await schoolRepository.GetAllAsync();
+        viewModel.Schools = schools.Select(s => new SchoolOptionViewModel
+        {
+            Id = s.Id,
+            Name = s.Name,
+            ShortName = s.ShortName
+        }).ToList();
     }
 
     /// <summary>Returns the Id of the built-in dual/double dual scoring template.</summary>
@@ -319,22 +311,19 @@ public class MeetsController(
         return templates.FirstOrDefault(t => t.IsBuiltIn && t.Name.Contains("Dual"))?.Id;
     }
 
-    /// <summary>
-    /// Reconciles the submitted school names with existing participant rows.
-    /// Names at index i correspond to ParticipantIds[i] (0 = new row).
-    /// </summary>
+    /// <summary>Reconciles submitted school IDs with existing participant rows.</summary>
     private async Task SyncParticipants(
         int meetId,
-        List<string> schoolNames,
+        List<int> schoolIds,
         List<int> existingIds,
         List<MeetParticipant> currentParticipants)
     {
-        for (var i = 0; i < schoolNames.Count; i++)
+        for (var i = 0; i < schoolIds.Count; i++)
         {
-            var name = schoolNames[i].Trim();
+            var schoolId = schoolIds[i];
             var existingId = i < existingIds.Count ? existingIds[i] : 0;
 
-            if (string.IsNullOrEmpty(name))
+            if (schoolId <= 0)
             {
                 if (existingId > 0)
                     await participantRepository.DeleteAsync(existingId);
@@ -344,9 +333,9 @@ public class MeetsController(
             if (existingId > 0)
             {
                 var existing = currentParticipants.FirstOrDefault(p => p.Id == existingId);
-                if (existing != null && existing.SchoolName != name)
+                if (existing != null && existing.SchoolId != schoolId)
                 {
-                    existing.SchoolName = name;
+                    existing.SchoolId = schoolId;
                     existing.SortOrder = i;
                     await participantRepository.UpdateAsync(existing);
                 }
@@ -356,17 +345,82 @@ public class MeetsController(
                 await participantRepository.CreateAsync(new MeetParticipant
                 {
                     MeetId = meetId,
-                    SchoolName = name,
+                    SchoolId = schoolId,
                     SortOrder = i
                 });
             }
         }
 
-        // Delete any existing participants not in the new list
         foreach (var p in currentParticipants)
         {
             if (!existingIds.Contains(p.Id))
                 await participantRepository.DeleteAsync(p.Id);
         }
+    }
+
+    private async Task SyncTeamResults(int meetId, List<MeetTeamResultFormViewModel> rows)
+    {
+        await teamResultRepository.DeleteAllForMeetAsync(meetId);
+        foreach (var r in rows.Where(r => r.OurScore.HasValue || r.OpponentScore.HasValue || r.Place.HasValue))
+        {
+            await teamResultRepository.CreateAsync(new MeetTeamResult
+            {
+                MeetId = meetId,
+                Gender = r.Gender,
+                OpponentMeetParticipantId = r.OpponentMeetParticipantId,
+                OurScore = r.OurScore,
+                OpponentScore = r.OpponentScore,
+                Place = r.Place,
+                FieldSize = r.FieldSize
+            });
+        }
+    }
+
+    private static List<MeetTeamResultFormViewModel> BuildTeamResultRows(
+        MeetType meetType,
+        List<MeetParticipant> participants,
+        List<MeetTeamResult> existing)
+    {
+        var rows = new List<MeetTeamResultFormViewModel>();
+        var genders = new[] { Gender.Male, Gender.Female };
+
+        if (meetType == MeetType.Invitational)
+        {
+            foreach (var gender in genders)
+            {
+                var ex = existing.FirstOrDefault(r => r.Gender == gender && r.OpponentMeetParticipantId == null);
+                rows.Add(new MeetTeamResultFormViewModel
+                {
+                    Id = ex?.Id ?? 0,
+                    Gender = gender,
+                    OpponentMeetParticipantId = null,
+                    IsInvitational = true,
+                    Place = ex?.Place,
+                    FieldSize = ex?.FieldSize
+                });
+            }
+        }
+        else
+        {
+            foreach (var participant in participants)
+            {
+                foreach (var gender in genders)
+                {
+                    var ex = existing.FirstOrDefault(r => r.Gender == gender && r.OpponentMeetParticipantId == participant.Id);
+                    rows.Add(new MeetTeamResultFormViewModel
+                    {
+                        Id = ex?.Id ?? 0,
+                        Gender = gender,
+                        OpponentMeetParticipantId = participant.Id,
+                        OpponentName = participant.SchoolName,
+                        IsInvitational = false,
+                        OurScore = ex?.OurScore,
+                        OpponentScore = ex?.OpponentScore
+                    });
+                }
+            }
+        }
+
+        return rows;
     }
 }

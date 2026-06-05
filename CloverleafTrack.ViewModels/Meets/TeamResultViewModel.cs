@@ -5,44 +5,39 @@ namespace CloverleafTrack.ViewModels.Meets;
 public class TeamResultViewModel
 {
     public MeetType MeetType { get; set; }
+    public List<TeamResultEntryViewModel> Entries { get; set; } = new();
+    public bool HasResult => Entries.Count > 0;
+}
+
+public class TeamResultEntryViewModel
+{
+    public Gender Gender { get; set; }
     public string? OpponentName { get; set; }
-    public decimal? BoysScore { get; set; }
-    public decimal? BoysOpponentScore { get; set; }
-    public decimal? GirlsScore { get; set; }
-    public decimal? GirlsOpponentScore { get; set; }
-    public int? BoysPlace { get; set; }
-    public int? GirlsPlace { get; set; }
+    public decimal? OurScore { get; set; }
+    public decimal? OpponentScore { get; set; }
+    public int? Place { get; set; }
     public int? FieldSize { get; set; }
+    public bool IsDualStyle { get; set; }
 
-    public bool HasResult => BoysScore.HasValue || GirlsScore.HasValue ||
-                             BoysPlace.HasValue || GirlsPlace.HasValue;
+    public string GenderLabel => Gender == Gender.Male ? "Boys" : "Girls";
 
-    private bool IsDualStyle => MeetType == MeetType.Dual || MeetType == MeetType.DoubleDual;
+    public bool Won => IsDualStyle && OurScore.HasValue && OpponentScore.HasValue && OurScore > OpponentScore;
 
-    public bool BoysWon => IsDualStyle && BoysScore.HasValue && BoysScore > BoysOpponentScore;
-    public bool GirlsWon => IsDualStyle && GirlsScore.HasValue && GirlsScore > GirlsOpponentScore;
-
-    public string? BoysResultLabel
+    public string Label
     {
         get
         {
-            if (IsDualStyle && BoysScore.HasValue)
-                return $"Boys {(BoysWon ? "W" : "L")} {BoysScore:0.##}-{BoysOpponentScore:0.##}";
-            if (!IsDualStyle && BoysPlace.HasValue)
-                return $"Boys {BoysPlace}{Ordinal(BoysPlace.Value)}{(FieldSize.HasValue ? $" of {FieldSize}" : "")}";
-            return null;
-        }
-    }
-
-    public string? GirlsResultLabel
-    {
-        get
-        {
-            if (IsDualStyle && GirlsScore.HasValue)
-                return $"Girls {(GirlsWon ? "W" : "L")} {GirlsScore:0.##}-{GirlsOpponentScore:0.##}";
-            if (!IsDualStyle && GirlsPlace.HasValue)
-                return $"Girls {GirlsPlace}{Ordinal(GirlsPlace.Value)}{(FieldSize.HasValue ? $" of {FieldSize}" : "")}";
-            return null;
+            if (IsDualStyle && OurScore.HasValue)
+            {
+                var vs = OpponentName != null ? $" vs. {OpponentName}" : "";
+                return $"{GenderLabel} {(Won ? "W" : "L")} {OurScore:0.##}-{OpponentScore:0.##}{vs}";
+            }
+            if (!IsDualStyle && Place.HasValue)
+            {
+                var of = FieldSize.HasValue ? $" of {FieldSize}" : "";
+                return $"{GenderLabel} {Place}{Ordinal(Place.Value)}{of}";
+            }
+            return string.Empty;
         }
     }
 

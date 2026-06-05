@@ -45,6 +45,9 @@ builder.Services.AddScoped<IAdminScoringTemplateRepository, AdminScoringTemplate
 builder.Services.AddScoped<IAdminMeetParticipantRepository, AdminMeetParticipantRepository>();
 builder.Services.AddScoped<IAdminMeetEntryRepository, AdminMeetEntryRepository>();
 builder.Services.AddScoped<IAdminMeetPlacingRepository, AdminMeetPlacingRepository>();
+builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+builder.Services.AddScoped<IAdminSchoolRepository, AdminSchoolRepository>();
+builder.Services.AddScoped<IAdminMeetTeamResultRepository, AdminMeetTeamResultRepository>();
 
 var app = builder.Build();
 

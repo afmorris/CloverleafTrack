@@ -29,14 +29,7 @@ public class Meet
     public int SchoolRecordCount { get; set; }
     public string? EntryNotes { get; set; } = string.Empty;
 
-    // Optional team score / placement (entered post-meet)
-    public decimal? BoysScore { get; set; }
-    public decimal? BoysOpponentScore { get; set; }
-    public decimal? GirlsScore { get; set; }
-    public decimal? GirlsOpponentScore { get; set; }
-    public int? BoysPlace { get; set; }
-    public int? GirlsPlace { get; set; }
-    public int? FieldSize { get; set; }
+    public List<MeetTeamResult> TeamResults { get; set; } = new();
 
     public string Slug
     {

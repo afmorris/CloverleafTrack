@@ -1,0 +1,10 @@
+@model CloverleafTrack.ViewModels.Admin.Schools.SchoolFormViewModel
+@{
+    ViewData["Title"] = "Edit School";
+}
+
+@await Html.PartialAsync("Create", Model)
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

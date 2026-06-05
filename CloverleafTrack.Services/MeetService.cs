@@ -43,12 +43,18 @@ public class MeetService(
             };
 
             // Get athlete counts for each meet
-            foreach (var meet in meets)
+            var allMeetIds = allMeets.Select(m => m.Id).ToList();
+        var allTeamResults = await meetRepository.GetTeamResultsForMeetsAsync(allMeetIds);
+        var teamResultsByMeet = allTeamResults.GroupBy(r => r.MeetId)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        foreach (var meet in meets)
             {
                 var athleteCount = await meetRepository.GetUniqueAthleteCountForMeetAsync(meet.Id);
                 var performanceCount = await meetRepository.GetPerformanceCountForMeetAsync(meet.Id);
 
-                var teamResult = BuildTeamResult(meet, null);
+                teamResultsByMeet.TryGetValue(meet.Id, out var meetResults);
+                var teamResult = BuildTeamResult(meet, meetResults ?? new());
                 seasonMeets.Meets.Add(new MeetListItemViewModel
                 {
                     Id = meet.Id,
@@ -122,8 +128,9 @@ public class MeetService(
             .SelectMany(g => g.Performances)
             .ToList();
 
-        var opponentName = participants.Count == 1 ? participants[0].SchoolName : null;
-        var teamResult = BuildTeamResult(meet, opponentName);
+        var teamResultsTask = meetRepository.GetTeamResultsForMeetsAsync(new List<int> { meet.Id });
+        await teamResultsTask;
+        var teamResult = BuildTeamResult(meet, teamResultsTask.Result);
 
         return new MeetDetailsViewModel
         {
@@ -156,19 +163,27 @@ public class MeetService(
         };
     }
 
-    private static TeamResultViewModel BuildTeamResult(Meet meet, string? opponentName) =>
-        new()
-        {
-            MeetType = meet.MeetType,
-            OpponentName = opponentName,
-            BoysScore = meet.BoysScore,
-            BoysOpponentScore = meet.BoysOpponentScore,
-            GirlsScore = meet.GirlsScore,
-            GirlsOpponentScore = meet.GirlsOpponentScore,
-            BoysPlace = meet.BoysPlace,
-            GirlsPlace = meet.GirlsPlace,
-            FieldSize = meet.FieldSize
-        };
+    private static TeamResultViewModel BuildTeamResult(Meet meet, List<MeetTeamResult> teamResults)
+    {
+        var isDual = meet.MeetType == MeetType.Dual || meet.MeetType == MeetType.DoubleDual;
+        var entries = teamResults
+            .OrderBy(r => r.Gender)
+            .ThenBy(r => r.OpponentName)
+            .ThenBy(r => r.Id)
+            .Select(r => new TeamResultEntryViewModel
+            {
+                Gender = r.Gender,
+                OpponentName = r.OpponentName,
+                OurScore = r.OurScore,
+                OpponentScore = r.OpponentScore,
+                Place = r.Place,
+                FieldSize = r.FieldSize,
+                IsDualStyle = isDual
+            })
+            .ToList();
+
+        return new TeamResultViewModel { MeetType = meet.MeetType, Entries = entries };
+    }
 
     private List<MeetEventGroupViewModel> BuildOrderedEventGroups(
         List<MeetPerformanceDto> performances,

@@ -128,11 +128,9 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
-            INSERT INTO Meets (Name, Date, LocationId, Environment, HandTimed, SeasonId, EntryStatus, EntryNotes, MeetType, ScoringTemplateId,
-                               BoysScore, BoysOpponentScore, GirlsScore, GirlsOpponentScore, BoysPlace, GirlsPlace, FieldSize)
+            INSERT INTO Meets (Name, Date, LocationId, Environment, HandTimed, SeasonId, EntryStatus, EntryNotes, MeetType, ScoringTemplateId)
             OUTPUT INSERTED.Id
-            VALUES (@Name, @Date, @LocationId, @Environment, @HandTimed, @SeasonId, @EntryStatus, @EntryNotes, @MeetType, @ScoringTemplateId,
-                    @BoysScore, @BoysOpponentScore, @GirlsScore, @GirlsOpponentScore, @BoysPlace, @GirlsPlace, @FieldSize)";
+            VALUES (@Name, @Date, @LocationId, @Environment, @HandTimed, @SeasonId, @EntryStatus, @EntryNotes, @MeetType, @ScoringTemplateId)";
         return await connection.ExecuteScalarAsync<int>(sql, meet);
     }
 
@@ -150,14 +148,7 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
                 EntryStatus = @EntryStatus,
                 EntryNotes = @EntryNotes,
                 MeetType = @MeetType,
-                ScoringTemplateId = @ScoringTemplateId,
-                BoysScore = @BoysScore,
-                BoysOpponentScore = @BoysOpponentScore,
-                GirlsScore = @GirlsScore,
-                GirlsOpponentScore = @GirlsOpponentScore,
-                BoysPlace = @BoysPlace,
-                GirlsPlace = @GirlsPlace,
-                FieldSize = @FieldSize
+                ScoringTemplateId = @ScoringTemplateId
             WHERE Id = @Id";
         var rowsAffected = await connection.ExecuteAsync(sql, meet);
         return rowsAffected > 0;

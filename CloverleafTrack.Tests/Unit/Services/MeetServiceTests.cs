@@ -21,6 +21,8 @@ public class MeetServiceTests
         _mockPlacingRepo = new Mock<IMeetPlacingRepository>();
         _mockPlacingRepo.Setup(r => r.GetForMeetAsync(It.IsAny<int>()))
                         .ReturnsAsync(new List<MeetPlacing>());
+        _mockRepo.Setup(r => r.GetTeamResultsForMeetsAsync(It.IsAny<List<int>>()))
+                 .ReturnsAsync(new List<MeetTeamResult>());
         _service = new MeetService(_mockRepo.Object, _mockPlacingRepo.Object);
     }
 
