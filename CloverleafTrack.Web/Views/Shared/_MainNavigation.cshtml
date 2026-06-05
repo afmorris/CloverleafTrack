@@ -19,7 +19,7 @@
             ? currentPath.Equals(new PathString("/"))
             : currentPath.StartsWithSegments(new PathString(link.Href), StringComparison.OrdinalIgnoreCase);
         var cls = isActive ? "transition-colors duration-200 text-ctf-accent underline underline-offset-4" : "transition-colors duration-200 hover:text-ctf-accent";
-        <a href="@link.Href" class="@cls" @(isActive ? Html.Raw("aria-current=\"page\"") : Html.Raw(""))>@link.Text</a>
+        <a href="@link.Href" class="@cls rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" @(isActive ? Html.Raw("aria-current=\"page\"") : Html.Raw(""))>@link.Text</a>
     }
 </nav>
 
