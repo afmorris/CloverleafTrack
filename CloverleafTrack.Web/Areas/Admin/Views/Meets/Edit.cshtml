@@ -10,12 +10,16 @@
     <script>
         const meetTypeSelect = document.getElementById('meetTypeSelect');
         const scoringTemplateGroup = document.getElementById('scoringTemplateGroup');
+        const dualScoreGroup = document.getElementById('dualScoreGroup');
+        const inviPlaceGroup = document.getElementById('inviPlaceGroup');
         const addBtn = document.getElementById('addParticipantBtn');
 
         function updateMeetTypeUI() {
             const val = meetTypeSelect.value;
-            // 3 = Invitational
+            // 3 = Invitational, 1 = Dual, 2 = DoubleDual
             scoringTemplateGroup.style.display = val == '3' ? 'block' : 'none';
+            dualScoreGroup.style.display = (val == '1' || val == '2') ? 'block' : 'none';
+            inviPlaceGroup.style.display = val == '3' ? 'block' : 'none';
         }
 
         meetTypeSelect.addEventListener('change', updateMeetTypeUI);
