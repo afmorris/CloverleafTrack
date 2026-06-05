@@ -49,16 +49,16 @@ public class MeetFormViewModel
 
     // Team score / placement (post-meet)
     [Display(Name = "Boys Score")]
-    public int? BoysScore { get; set; }
+    public decimal? BoysScore { get; set; }
 
     [Display(Name = "Opponent Boys Score")]
-    public int? BoysOpponentScore { get; set; }
+    public decimal? BoysOpponentScore { get; set; }
 
     [Display(Name = "Girls Score")]
-    public int? GirlsScore { get; set; }
+    public decimal? GirlsScore { get; set; }
 
     [Display(Name = "Opponent Girls Score")]
-    public int? GirlsOpponentScore { get; set; }
+    public decimal? GirlsOpponentScore { get; set; }
 
     [Display(Name = "Boys Place")]
     public int? BoysPlace { get; set; }

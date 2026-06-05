@@ -735,10 +735,19 @@ ALTER TABLE [dbo].[Meets]
 -- Team score / placement fields (optional, entered post-meet)
 -- ============================================================
 ALTER TABLE [dbo].[Meets]
-    ADD [BoysScore]          INT NULL,
-        [BoysOpponentScore]  INT NULL,
-        [GirlsScore]         INT NULL,
-        [GirlsOpponentScore] INT NULL,
+    ADD [BoysScore]          DECIMAL(8,2) NULL,
+        [BoysOpponentScore]  DECIMAL(8,2) NULL,
+        [GirlsScore]         DECIMAL(8,2) NULL,
+        [GirlsOpponentScore] DECIMAL(8,2) NULL,
         [BoysPlace]          INT NULL,
         [GirlsPlace]         INT NULL,
         [FieldSize]          INT NULL;
+
+-- ============================================================
+-- Widen score columns to DECIMAL(8,2) to support fractional scores
+-- (run this if the columns were previously added as INT)
+-- ============================================================
+ALTER TABLE [dbo].[Meets] ALTER COLUMN [BoysScore]          DECIMAL(8,2) NULL;
+ALTER TABLE [dbo].[Meets] ALTER COLUMN [BoysOpponentScore]  DECIMAL(8,2) NULL;
+ALTER TABLE [dbo].[Meets] ALTER COLUMN [GirlsScore]         DECIMAL(8,2) NULL;
+ALTER TABLE [dbo].[Meets] ALTER COLUMN [GirlsOpponentScore] DECIMAL(8,2) NULL;

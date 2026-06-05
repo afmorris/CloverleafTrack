@@ -6,10 +6,10 @@ public class TeamResultViewModel
 {
     public MeetType MeetType { get; set; }
     public string? OpponentName { get; set; }
-    public int? BoysScore { get; set; }
-    public int? BoysOpponentScore { get; set; }
-    public int? GirlsScore { get; set; }
-    public int? GirlsOpponentScore { get; set; }
+    public decimal? BoysScore { get; set; }
+    public decimal? BoysOpponentScore { get; set; }
+    public decimal? GirlsScore { get; set; }
+    public decimal? GirlsOpponentScore { get; set; }
     public int? BoysPlace { get; set; }
     public int? GirlsPlace { get; set; }
     public int? FieldSize { get; set; }
@@ -27,7 +27,7 @@ public class TeamResultViewModel
         get
         {
             if (IsDualStyle && BoysScore.HasValue)
-                return $"Boys {(BoysWon ? "W" : "L")} {BoysScore}-{BoysOpponentScore}";
+                return $"Boys {(BoysWon ? "W" : "L")} {BoysScore:0.##}-{BoysOpponentScore:0.##}";
             if (!IsDualStyle && BoysPlace.HasValue)
                 return $"Boys {BoysPlace}{Ordinal(BoysPlace.Value)}{(FieldSize.HasValue ? $" of {FieldSize}" : "")}";
             return null;
@@ -39,7 +39,7 @@ public class TeamResultViewModel
         get
         {
             if (IsDualStyle && GirlsScore.HasValue)
-                return $"Girls {(GirlsWon ? "W" : "L")} {GirlsScore}-{GirlsOpponentScore}";
+                return $"Girls {(GirlsWon ? "W" : "L")} {GirlsScore:0.##}-{GirlsOpponentScore:0.##}";
             if (!IsDualStyle && GirlsPlace.HasValue)
                 return $"Girls {GirlsPlace}{Ordinal(GirlsPlace.Value)}{(FieldSize.HasValue ? $" of {FieldSize}" : "")}";
             return null;

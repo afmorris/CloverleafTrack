@@ -168,19 +168,19 @@
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;">
                 <div>
                     <label asp-for="BoysScore" style="font-size:13px;">Boys — Our Score</label>
-                    <input asp-for="BoysScore" type="number" min="0" class="form-control" placeholder="e.g. 87" />
+                    <input asp-for="BoysScore" type="number" min="0" step="any" class="form-control" placeholder="e.g. 87.5" />
                 </div>
                 <div>
                     <label asp-for="BoysOpponentScore" style="font-size:13px;">Boys — Opponent Score</label>
-                    <input asp-for="BoysOpponentScore" type="number" min="0" class="form-control" placeholder="e.g. 63" />
+                    <input asp-for="BoysOpponentScore" type="number" min="0" step="any" class="form-control" placeholder="e.g. 63" />
                 </div>
                 <div>
                     <label asp-for="GirlsScore" style="font-size:13px;">Girls — Our Score</label>
-                    <input asp-for="GirlsScore" type="number" min="0" class="form-control" placeholder="e.g. 72" />
+                    <input asp-for="GirlsScore" type="number" min="0" step="any" class="form-control" placeholder="e.g. 72" />
                 </div>
                 <div>
                     <label asp-for="GirlsOpponentScore" style="font-size:13px;">Girls — Opponent Score</label>
-                    <input asp-for="GirlsOpponentScore" type="number" min="0" class="form-control" placeholder="e.g. 45" />
+                    <input asp-for="GirlsOpponentScore" type="number" min="0" step="any" class="form-control" placeholder="e.g. 45" />
                 </div>
             </div>
         </div>
