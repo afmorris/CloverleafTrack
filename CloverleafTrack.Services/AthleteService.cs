@@ -388,22 +388,24 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                     .ThenBy(eg => eg.Key.EventSortOrder)
                     .Select(eventGroup =>
                     {
-                        var prPerformance = eventGroup
-                            .Where(p => p.PersonalBest)
-                            .OrderByDescending(p => p.MeetDate)
-                            .FirstOrDefault();
-
                         var isFieldEvent = eventGroup.First().DistanceInches.HasValue;
+
+                        // Season best (used for accordion summary label + Δ column baseline)
+                        var seasonBest = isFieldEvent
+                            ? eventGroup.Where(p => p.DistanceInches.HasValue).OrderByDescending(p => p.DistanceInches).FirstOrDefault()
+                            : eventGroup.Where(p => p.TimeSeconds.HasValue).OrderBy(p => p.TimeSeconds).FirstOrDefault();
+
                         return new EventPerformanceGroupViewModel
                         {
                             EventId = eventGroup.Key.EventId,
                             EventName = eventGroup.Key.EventName,
                             Environment = eventGroup.Key.Environment,
                             IsFieldEvent = isFieldEvent,
-                            PersonalRecordPerformance = prPerformance != null
-                                ? FormatPerformance(prPerformance.TimeSeconds, prPerformance.DistanceInches)
+                            PersonalRecordPerformance = seasonBest != null
+                                ? FormatPerformance(seasonBest.TimeSeconds, seasonBest.DistanceInches)
                                 : "",
-                            PersonalRecordDate = prPerformance?.MeetDate ?? DateTime.MinValue,
+                            PersonalRecordDate = seasonBest?.MeetDate ?? DateTime.MinValue,
+                            PersonalRecordRawValue = isFieldEvent ? seasonBest?.DistanceInches : seasonBest?.TimeSeconds,
                             Performances = eventGroup
                                 .OrderByDescending(p => p.MeetDate)
                                 .Select(p => new IndividualPerformanceViewModel

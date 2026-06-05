@@ -12,5 +12,7 @@ public class EventPerformanceGroupViewModel
     public int EventCategorySortOrder { get; set; }
     /// <summary>True for field/jump/throw events (higher RawValue = better). False for running events (lower = better).</summary>
     public bool IsFieldEvent { get; set; }
+    /// <summary>Raw value of the season best (DistanceInches for field, TimeSeconds for running). Used for Δ-to-PR column.</summary>
+    public double? PersonalRecordRawValue { get; set; }
     public List<IndividualPerformanceViewModel> Performances { get; set; } = new();
 }
