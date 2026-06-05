@@ -16,18 +16,50 @@
 </head>
 <body class="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300 page-background">
 
+<!-- Skip to main content -->
+<a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-gray-900 focus:rounded focus:shadow-lg focus:outline focus:outline-2 focus:outline-blue-500">
+    Skip to main content
+</a>
+
+<!-- Mobile search overlay -->
+<div id="search-overlay" class="hidden fixed inset-0 z-50 bg-white dark:bg-gray-900 sm:hidden flex-col" role="dialog" aria-modal="true" aria-label="Search">
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+        <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+        </svg>
+        <input type="search" id="search-overlay-input" placeholder="Search athletes, meets, events…"
+               autocomplete="off"
+               class="flex-1 bg-transparent text-gray-900 dark:text-white text-base outline-none placeholder-gray-400 dark:placeholder-gray-500">
+        <button id="search-overlay-close" type="button" aria-label="Close search"
+                class="p-1.5 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 rounded">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+    <div id="search-overlay-results" class="flex-1 overflow-y-auto"></div>
+</div>
+
 <header class="bg-ctf-nav shadow text-white nav-background">
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
         <a href="/" class="font-heading text-xl font-extrabold text-white tracking-tight flex-shrink-0">Cloverleaf Track</a>
         @await Html.PartialAsync("_MainNavigation")
         <div class="flex items-center gap-3 flex-shrink-0">
-            <div class="relative" id="search-container">
-                <input type="search" id="site-search" placeholder="Search…"
+            <!-- Mobile search icon -->
+            <button id="search-mobile-btn" type="button" aria-label="Open search"
+                    class="sm:hidden p-1.5 text-white/80 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white rounded">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+                </svg>
+            </button>
+            <!-- Desktop search -->
+            <div class="relative hidden sm:block" id="search-container">
+                <input type="search" id="site-search" placeholder="Search… (⌘K)"
                        aria-label="Search athletes, meets, and events"
                        autocomplete="off"
-                       class="w-32 sm:w-44 bg-white/10 text-white placeholder-gray-300 rounded-full px-4 py-1.5 text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40 transition-all duration-200">
+                       class="w-44 bg-white/10 text-white placeholder-gray-300 rounded-full px-4 py-1.5 text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40 transition-all duration-200">
                 <div id="search-results" role="listbox" aria-label="Search results"
-                     class="hidden absolute right-0 top-full mt-1 w-80 sm:w-96 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-xl z-50 overflow-hidden max-h-96 overflow-y-auto">
+                     class="hidden absolute right-0 top-full mt-1 w-96 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-xl z-50 overflow-hidden max-h-96 overflow-y-auto">
                 </div>
             </div>
             @await Html.PartialAsync("_DarkModeToggle")
@@ -37,7 +69,7 @@
 
 @RenderSection("Hero", required: false)
 
-<main class="flex-grow container mx-auto px-4 py-8 font-body text-base text-gray-800 dark:text-gray-200">
+<main id="main-content" class="flex-grow container mx-auto px-4 py-8 font-body text-base text-gray-800 dark:text-gray-200" tabindex="-1">
     @RenderBody()
 </main>
 
