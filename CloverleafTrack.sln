@@ -50,6 +50,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{2844
 	ProjectSection(SolutionItems) = preProject
 		scripts\ohsaa-schools.json = scripts\ohsaa-schools.json
 		scripts\scrape-ohsaa-schools.mjs = scripts\scrape-ohsaa-schools.mjs
+		scripts\update-event-sort-orders.sql = scripts\update-event-sort-orders.sql
 	EndProjectSection
 EndProject
 Global

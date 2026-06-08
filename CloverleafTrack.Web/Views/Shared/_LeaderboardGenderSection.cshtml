@@ -1,11 +1,36 @@
 @using Slugify
 @model List<LeaderboardEventViewModel>
 
+@functions {
+    static string GetGroupLabel(int sortOrder) => sortOrder switch
+    {
+        < 100  => "Sprints",
+        < 150  => "Hurdles",
+        < 300  => "Distance",
+        < 430  => "Throws",
+        _      => "Jumps"
+    };
+}
+
+@{
+    string? currentGroup = null;
+}
+
 <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
     <table class="w-full text-sm">
         <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
             @foreach (var evt in Model.Where(x => !string.IsNullOrEmpty(x.Performance)))
             {
+                var group = GetGroupLabel(evt.SortOrder);
+                if (group != currentGroup)
+                {
+                    currentGroup = group;
+                    <tr>
+                        <td colspan="2" class="px-4 pt-4 pb-1.5 bg-white dark:bg-gray-800">
+                            <span class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">@group</span>
+                        </td>
+                    </tr>
+                }
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors">
                     <td class="px-4 py-2.5">
                         <a asp-controller="Leaderboard" asp-action="Details" asp-route-eventKey="@evt.EventKey.ToLower()"
