@@ -71,9 +71,9 @@ public class LeaderboardServiceTests
 
         var result = await _service.GetLeaderboardAsync();
 
-        result.BoysOutdoorCategories.Should().NotBeEmpty();
-        result.GirlsOutdoorCategories.Should().NotBeEmpty();
-        result.MixedOutdoorCategories.Should().BeEmpty();
+        result.BoysOutdoor.Should().NotBeEmpty();
+        result.GirlsOutdoor.Should().NotBeEmpty();
+        result.MixedOutdoor.Should().BeEmpty();
     }
 
     [Fact]
@@ -88,12 +88,12 @@ public class LeaderboardServiceTests
 
         var result = await _service.GetLeaderboardAsync();
 
-        result.BoysOutdoorCategories.Should().NotBeEmpty();
-        result.BoysIndoorCategories.Should().NotBeEmpty();
+        result.BoysOutdoor.Should().NotBeEmpty();
+        result.BoysIndoor.Should().NotBeEmpty();
     }
 
     [Fact]
-    public async Task GetLeaderboardAsync_PlacesMixedPerformances_InMixedCategories_NotBoysOrGirls()
+    public async Task GetLeaderboardAsync_PlacesMixedPerformances_InMixedList_NotBoysOrGirls()
     {
         var performances = new List<LeaderboardDto>
         {
@@ -104,94 +104,42 @@ public class LeaderboardServiceTests
 
         var result = await _service.GetLeaderboardAsync();
 
-        result.MixedOutdoorCategories.Should().NotBeEmpty();
-        result.BoysOutdoorCategories.Should().BeEmpty();
-        result.GirlsOutdoorCategories.Should().BeEmpty();
+        result.MixedOutdoor.Should().NotBeEmpty();
+        result.BoysOutdoor.Should().BeEmpty();
+        result.GirlsOutdoor.Should().BeEmpty();
     }
 
     [Fact]
-    public async Task GetLeaderboardAsync_ReturnsAllEmptyCategories_WhenNoData()
+    public async Task GetLeaderboardAsync_ReturnsAllEmpty_WhenNoData()
     {
         _mockRepo.Setup(r => r.GetTopPerformancePerEventAsync()).ReturnsAsync(new List<LeaderboardDto>());
 
         var result = await _service.GetLeaderboardAsync();
 
-        result.BoysOutdoorCategories.Should().BeEmpty();
-        result.BoysIndoorCategories.Should().BeEmpty();
-        result.GirlsOutdoorCategories.Should().BeEmpty();
-        result.GirlsIndoorCategories.Should().BeEmpty();
-        result.MixedOutdoorCategories.Should().BeEmpty();
-        result.MixedIndoorCategories.Should().BeEmpty();
+        result.BoysOutdoor.Should().BeEmpty();
+        result.BoysIndoor.Should().BeEmpty();
+        result.GirlsOutdoor.Should().BeEmpty();
+        result.GirlsIndoor.Should().BeEmpty();
+        result.MixedOutdoor.Should().BeEmpty();
+        result.MixedIndoor.Should().BeEmpty();
     }
 
-    // -------------------------------------------------------------------------
-    // GetLeaderboardAsync — category grouping
-    // -------------------------------------------------------------------------
-
     [Fact]
-    public async Task GetLeaderboardAsync_GroupsNonRelays_ByEventCategory()
+    public async Task GetLeaderboardAsync_OrdersEvents_BySortOrder()
     {
         var performances = new List<LeaderboardDto>
         {
-            BuildDto(1, "100m",  "100m",  Gender.Male, Environment.Outdoor, EventCategory.Sprints,  sortOrder: 10),
-            BuildDto(2, "1600m", "1600m", Gender.Male, Environment.Outdoor, EventCategory.Distance, sortOrder: 20),
+            BuildDto(2, "1600m", "1600m", Gender.Male, Environment.Outdoor, sortOrder: 20),
+            BuildDto(1, "100m",  "100m",  Gender.Male, Environment.Outdoor, sortOrder: 10),
+            BuildDto(3, "Shot Put", "shot-put", Gender.Male, Environment.Outdoor, sortOrder: 30,
+                timeSeconds: null, distanceInches: 480),
         };
         _mockRepo.Setup(r => r.GetTopPerformancePerEventAsync()).ReturnsAsync(performances);
 
         var result = await _service.GetLeaderboardAsync();
 
-        var categoryNames = result.BoysOutdoorCategories.Select(c => c.CategoryName).ToList();
-        categoryNames.Should().Contain("Sprints");
-        categoryNames.Should().Contain("Distance");
-    }
-
-    [Fact]
-    public async Task GetLeaderboardAsync_SeparatesRunningRelays_IntoOwnCategory()
-    {
-        var performances = new List<LeaderboardDto>
-        {
-            BuildDto(1, "100m",         "100m",         Gender.Male, Environment.Outdoor, EventCategory.Sprints, sortOrder: 10),
-            BuildDto(2, "4x100m Relay", "4x100m-relay", Gender.Male, Environment.Outdoor, EventCategory.Relays, EventType.RunningRelay, sortOrder: 50),
-        };
-        _mockRepo.Setup(r => r.GetTopPerformancePerEventAsync()).ReturnsAsync(performances);
-
-        var result = await _service.GetLeaderboardAsync();
-
-        var categoryNames = result.BoysOutdoorCategories.Select(c => c.CategoryName).ToList();
-        categoryNames.Should().Contain("Sprints");
-        categoryNames.Should().Contain("Running Relays");
-    }
-
-    [Fact]
-    public async Task GetLeaderboardAsync_SeparatesJumpRelays_IntoOwnCategory()
-    {
-        var performances = new List<LeaderboardDto>
-        {
-            BuildDto(1, "Distance Medley Jump Relay", "dmj-relay", Gender.Male, Environment.Outdoor,
-                EventCategory.Relays, EventType.JumpRelay, sortOrder: 60, timeSeconds: null, distanceInches: 840),
-        };
-        _mockRepo.Setup(r => r.GetTopPerformancePerEventAsync()).ReturnsAsync(performances);
-
-        var result = await _service.GetLeaderboardAsync();
-
-        var categoryNames = result.BoysOutdoorCategories.Select(c => c.CategoryName).ToList();
-        categoryNames.Should().Contain("Jump Relays");
-    }
-
-    [Fact]
-    public async Task GetLeaderboardAsync_OrdersSprints_BeforeRunningRelays()
-    {
-        var performances = new List<LeaderboardDto>
-        {
-            BuildDto(2, "4x100m Relay", "4x100m-relay", Gender.Male, Environment.Outdoor, EventCategory.Relays, EventType.RunningRelay, sortOrder: 50),
-            BuildDto(1, "100m",         "100m",          Gender.Male, Environment.Outdoor, EventCategory.Sprints, sortOrder: 10),
-        };
-        _mockRepo.Setup(r => r.GetTopPerformancePerEventAsync()).ReturnsAsync(performances);
-
-        var result = await _service.GetLeaderboardAsync();
-
-        var categoryNames = result.BoysOutdoorCategories.Select(c => c.CategoryName).ToList();
-        categoryNames.IndexOf("Sprints").Should().BeLessThan(categoryNames.IndexOf("Running Relays"));
+        var eventNames = result.BoysOutdoor.Select(e => e.EventName).ToList();
+        eventNames.Should().ContainInOrder("100m", "1600m", "Shot Put");
     }
 
     // -------------------------------------------------------------------------

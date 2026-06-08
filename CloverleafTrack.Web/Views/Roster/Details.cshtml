@@ -227,6 +227,7 @@
             </div>
 
             <!-- Season panels -->
+            @{ bool firstEventRendered = false; }
             @for (int si = 0; si < Model.Seasons.Count; si++)
             {
                 var season = Model.Seasons[si];
@@ -255,7 +256,9 @@
 
                         @foreach (var eg in envGroups)
                         {
-                            <details open class="mb-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                            var openAttr = !firstEventRendered ? "open" : "";
+                            firstEventRendered = true;
+                            <details @openAttr class="mb-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                                 <summary class="px-4 py-2.5 @summaryBg cursor-pointer list-none flex items-center justify-between select-none transition-colors">
                                     <div class="flex items-center gap-2 flex-wrap">
                                         <span class="font-medium @summaryText text-sm">@eg.EventName</span>

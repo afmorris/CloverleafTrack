@@ -3,9 +3,8 @@
 
     var links = new[]
     {
-        new { Href = "/",            Text = "Results",  Icon = "results"  },
         new { Href = "/roster",      Text = "Athletes", Icon = "athletes" },
-        new { Href = "/leaderboard", Text = "Records",  Icon = "records"  },
+        new { Href = "/leaderboard", Text = "Leaderboard",  Icon = "leaderboard"  },
         new { Href = "/meets",       Text = "Meets",    Icon = "meets"    },
     };
 }
@@ -35,14 +34,6 @@
            class="tab-item @(isActive ? "tab-item-active" : "")"
            @(isActive ? Html.Raw("aria-current=\"page\"") : Html.Raw(""))>
 
-            @if (link.Icon == "results")
-            {
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <rect x="18" y="3" width="3" height="18" rx="1"/>
-                    <rect x="11" y="8" width="3" height="13" rx="1"/>
-                    <rect x="4" y="13" width="3" height="8" rx="1"/>
-                </svg>
-            }
             else if (link.Icon == "athletes")
             {
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -52,7 +43,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 3.13a4 4 0 010 7.75"/>
                 </svg>
             }
-            else if (link.Icon == "records")
+            else if (link.Icon == "leaderboard")
             {
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 21h8M12 17v4"/>

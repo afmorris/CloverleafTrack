@@ -2,93 +2,63 @@
 
 @{
     var isOutdoor = Model.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor;
-    var borderColor = Model.IsUpcoming ? "border-l-green-500 dark:border-l-green-400"
-                    : isOutdoor ? "border-l-amber-500 dark:border-l-amber-400"
-                    : "border-l-blue-500 dark:border-l-blue-400";
-
-    var envText = isOutdoor ? "Outdoor" : "Indoor";
-    var envBadgeClass = isOutdoor
-        ? "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700/30"
-        : "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-700/30";
+    var monthColorClass = isOutdoor ? "text-amber-600 dark:text-amber-400" : "text-blue-600 dark:text-blue-400";
 }
 
-<a asp-controller="Meets" asp-action="Details" asp-route-slug="@Model.Slug"
-   class="block bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 border-l-4 @borderColor p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-   data-filterable
-   data-env="@(isOutdoor ? "outdoor" : "indoor")">
-    <div class="flex items-center justify-between">
-        <div class="flex items-center gap-4 flex-1 min-w-0">
-            <!-- Date Badge -->
-            <div class="flex flex-col items-center bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 min-w-[56px] text-center flex-shrink-0">
-                <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
-                    @Model.Date.ToString("MMM")
-                </div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
-                    @Model.Date.Day
-                </div>
-            </div>
-
-            <!-- Meet Info -->
-            <div class="flex-1 min-w-0">
-                <div class="flex flex-wrap items-center gap-2 mb-1">
-                    <h3 class="text-base font-semibold text-gray-900 dark:text-white">@Model.Name</h3>
-                    <span class="px-2 py-0.5 @envBadgeClass rounded text-xs font-semibold flex-shrink-0">@envText</span>
-                    @if (Model.IsUpcoming)
-                    {
-                        var daysUntil = (Model.Date.Date - DateTime.Today).Days;
-                        var countdown = daysUntil == 0 ? "Today"
-                                      : daysUntil == 1 ? "Tomorrow"
-                                      : $"in {daysUntil} days";
-                        <span class="px-2 py-0.5 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700/30 rounded text-xs font-bold">@countdown</span>
-                    }
-                </div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">
-                    @Model.LocationName
-                    @if (!string.IsNullOrEmpty(Model.LocationCity) && !string.IsNullOrEmpty(Model.LocationState))
-                    {
-                        <span> · @Model.LocationCity, @Model.LocationState</span>
-                    }
-                </div>
-            </div>
-
-            <!-- Stats -->
-            @if (!Model.IsUpcoming)
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 cursor-pointer"
+    onclick="window.location='@Url.Action("Details", "Meets", new { slug = Model.Slug })'"
+    data-filterable
+    data-env="@(isOutdoor ? "outdoor" : "indoor")">
+    <td class="px-4 py-3 tabular-nums w-14 flex-shrink-0">
+        <div class="text-xs font-semibold @monthColorClass uppercase leading-none">@Model.Date.ToString("MMM")</div>
+        <div class="text-base font-bold text-gray-900 dark:text-white leading-tight">@Model.Date.Day</div>
+    </td>
+    <td class="px-4 py-3">
+        <div class="flex items-center gap-2 flex-wrap">
+            <a asp-controller="Meets" asp-action="Details" asp-route-slug="@Model.Slug"
+               class="font-medium text-gray-900 dark:text-white hover:underline"
+               onclick="event.stopPropagation()">@Model.Name</a>
+            @if (Model.IsUpcoming)
             {
-                <div class="hidden sm:flex flex-col items-end gap-1.5 flex-shrink-0">
-                @if (Model.TeamResult != null)
-                {
-                    @await Html.PartialAsync("_TeamResultBadge", Model.TeamResult)
-                }
-                <div class="flex gap-4 text-sm">
-                    <div class="text-center">
-                        <div class="text-lg font-bold text-gray-800 dark:text-white">@Model.AthleteCount</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400">Athletes</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-lg font-bold text-gray-800 dark:text-white">@Model.PerformanceCount</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400">Perfs</div>
-                    </div>
-                    @if (Model.PRCount > 0)
-                    {
-                        <div class="text-center">
-                            <div class="text-lg font-bold text-blue-700 dark:text-blue-400">@Model.PRCount</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">PRs</div>
-                        </div>
-                    }
-                    @if (Model.SchoolRecordCount > 0)
-                    {
-                        <div class="text-center">
-                            <div class="text-lg font-bold text-yellow-700 dark:text-yellow-400">@Model.SchoolRecordCount</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">SRs</div>
-                        </div>
-                    }
-                </div>
-                </div>
+                var daysUntil = (Model.Date.Date - DateTime.Today).Days;
+                var countdown = daysUntil == 0 ? "Today"
+                              : daysUntil == 1 ? "Tomorrow"
+                              : $"in {daysUntil} days";
+                <span class="px-2 py-0.5 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700/30 rounded text-xs font-bold flex-shrink-0">@countdown</span>
             }
         </div>
-
-        <svg class="w-5 h-5 text-gray-400 flex-shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    </td>
+    <td class="px-4 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">
+        @if (!string.IsNullOrEmpty(Model.LocationCity) && !string.IsNullOrEmpty(Model.LocationState))
+        {
+            @($"{Model.LocationCity}, {Model.LocationState}")
+        }
+        else if (!string.IsNullOrEmpty(Model.LocationName))
+        {
+            @Model.LocationName
+        }
+    </td>
+    <td class="px-4 py-3 hidden sm:table-cell">
+        @if (Model.TeamResult != null)
+        {
+            @await Html.PartialAsync("_TeamResultBadge", Model.TeamResult)
+        }
+    </td>
+    <td class="px-4 py-3 hidden sm:table-cell">
+        <div class="flex gap-1.5">
+            @if (Model.PRCount > 0)
+            {
+                <span class="chip-pr">@Model.PRCount PR</span>
+            }
+            @if (Model.SchoolRecordCount > 0)
+            {
+                <span class="chip-sr">@Model.SchoolRecordCount SR</span>
+            }
+        </div>
+    </td>
+    <td class="px-4 py-3 text-right">
+        <svg class="w-4 h-4 text-gray-400 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
-    </div>
-</a>
+    </td>
+</tr>

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>CloverleafTrack.SearchGenerator</AssemblyName>
+        <RootNamespace>CloverleafTrack.SearchGenerator</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\CloverleafTrack.Services\CloverleafTrack.Services.csproj" />
+        <ProjectReference Include="..\CloverleafTrack.DataAccess\CloverleafTrack.DataAccess.csproj" />
+    </ItemGroup>
+
+</Project>

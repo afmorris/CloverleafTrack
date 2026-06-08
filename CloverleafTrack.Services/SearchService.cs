@@ -45,30 +45,27 @@ public class SearchService(
         var leaderboard = await leaderboardService.GetLeaderboardAsync();
         var allSections = new[]
         {
-            (leaderboard.BoysOutdoorCategories, "Boys", "Outdoor"),
-            (leaderboard.BoysIndoorCategories, "Boys", "Indoor"),
-            (leaderboard.GirlsOutdoorCategories, "Girls", "Outdoor"),
-            (leaderboard.GirlsIndoorCategories, "Girls", "Indoor"),
-            (leaderboard.MixedOutdoorCategories, "Mixed", "Outdoor"),
-            (leaderboard.MixedIndoorCategories, "Mixed", "Indoor"),
+            (leaderboard.BoysOutdoor,   "Boys",  "Outdoor"),
+            (leaderboard.BoysIndoor,    "Boys",  "Indoor"),
+            (leaderboard.GirlsOutdoor,  "Girls", "Outdoor"),
+            (leaderboard.GirlsIndoor,   "Girls", "Indoor"),
+            (leaderboard.MixedOutdoor,  "Mixed", "Outdoor"),
+            (leaderboard.MixedIndoor,   "Mixed", "Indoor"),
         };
 
-        foreach (var (categories, gender, env) in allSections)
+        foreach (var (events, gender, env) in allSections)
         {
-            foreach (var category in categories)
+            foreach (var evt in events.Where(e => !string.IsNullOrEmpty(e.Performance)))
             {
-                foreach (var evt in category.Events.Where(e => !string.IsNullOrEmpty(e.Performance)))
-                {
-                    var holder = string.IsNullOrWhiteSpace(evt.AthleteFullName?.Trim())
-                        ? evt.Performance
-                        : $"{evt.AthleteFullName} · {evt.Performance}";
+                var holder = string.IsNullOrWhiteSpace(evt.AthleteFullName?.Trim())
+                    ? evt.Performance
+                    : $"{evt.AthleteFullName} · {evt.Performance}";
 
-                    records.Add(new SearchRecord(
-                        "event",
-                        $"{gender} {evt.EventName} ({env})",
-                        holder,
-                        $"/leaderboard/{evt.EventKey.ToLower()}"));
-                }
+                records.Add(new SearchRecord(
+                    "event",
+                    $"{gender} {evt.EventName} ({env})",
+                    holder,
+                    $"/leaderboard/{evt.EventKey.ToLower()}"));
             }
         }
 

@@ -37,6 +37,8 @@ public class LeaderboardEventViewModel
         }
     }
 
+    public int SortOrder { get; set; }
+
     public string Performance { get; set; } = string.Empty;
     public DateTime? MeetDate { get; set; }
     public string MeetName { get; set; } = string.Empty;

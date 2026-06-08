@@ -1,22 +1,47 @@
 @model KeyValuePair<int, List<AthleteViewModel>>
 
-<details class="mb-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-    <summary class="p-6 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors flex items-center justify-between">
-        <div>
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Class of @Model.Key</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400">@Model.Value.Count athletes</p>
+<details class="mb-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+    <summary class="px-4 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between select-none list-none">
+        <div class="flex items-center gap-3">
+            <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Class of @Model.Key</h3>
+            <span class="text-xs text-gray-500 dark:text-gray-400">@Model.Value.Count athletes</span>
         </div>
-        <svg class="w-6 h-6 text-gray-600 dark:text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        <svg class="details-arrow w-4 h-4 text-gray-400 dark:text-gray-500 flex-shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
         </svg>
     </summary>
-    
-    <div class="p-6 pt-2 bg-white dark:bg-gray-800">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+    <table class="w-full text-sm border-t border-gray-100 dark:border-gray-700">
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
             @foreach (var athlete in Model.Value)
             {
-                @await Html.PartialAsync("_FormerAthleteCard", athlete)
+                var topEvent = athlete.EventsInCategory.FirstOrDefault();
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <td class="px-4 py-2.5">
+                        <a asp-controller="Roster" asp-action="Details" asp-route-slug="@athlete.AthleteSlug"
+                           class="font-medium text-gray-900 dark:text-white hover:underline">
+                            @athlete.FullName
+                        </a>
+                    </td>
+                    <td class="px-4 py-2.5 hidden sm:table-cell">
+                        @if (athlete.Gender == CloverleafTrack.Models.Enums.Gender.Male)
+                        {
+                            <span class="text-blue-500 dark:text-blue-400 font-medium text-xs">M</span>
+                        }
+                        else
+                        {
+                            <span class="text-pink-500 dark:text-pink-400 font-medium text-xs">F</span>
+                        }
+                    </td>
+                    <td class="px-4 py-2.5 text-gray-600 dark:text-gray-400 truncate max-w-[160px] hidden md:table-cell">@(topEvent?.Name ?? "")</td>
+                    <td class="px-4 py-2.5 text-right">
+                        @if (topEvent != null)
+                        {
+                            <span class="mark font-semibold text-gray-900 dark:text-white">@topEvent.PersonalRecord</span>
+                        }
+                    </td>
+                </tr>
             }
-        </div>
-    </div>
+        </tbody>
+    </table>
 </details>

@@ -1,7 +1,10 @@
-﻿services:
+services:
   cloverleaftrack.web:
     image: cloverleaftrack.web
     build:
       context: .
       dockerfile: CloverleafTrack.Web/Dockerfile
-
+      args:
+        # Provide a SQL Server connection string to bake search-index.json into the image.
+        # If omitted, the app generates the index dynamically at runtime.
+        SEARCH_DB_CONNECTION: ${SEARCH_DB_CONNECTION:-}

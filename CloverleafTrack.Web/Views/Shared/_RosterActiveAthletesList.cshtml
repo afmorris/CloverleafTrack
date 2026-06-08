@@ -22,18 +22,58 @@
             })
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-filterable-container>
-            @foreach (var athlete in Model.FlatActiveAthletes)
-            {
-                var genderVal = athlete.Gender == CloverleafTrack.Models.Enums.Gender.Male ? "boys" : "girls";
-                var categoriesVal = string.Join(",", athlete.Categories.Select(c => c.ToString().ToLower()));
-                var classVal = athlete.Class.ToLower();
-                <div data-filterable
-                     data-gender="@genderVal"
-                     data-categories="@categoriesVal">
-                    @await Html.PartialAsync("_AthleteCard", athlete)
-                </div>
-            }
+        <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden" data-filterable-container>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                        <tr>
+                            <th class="px-4 py-2.5 text-left font-medium">Name</th>
+                            <th class="px-4 py-2.5 text-left font-medium hidden sm:table-cell">Class</th>
+                            <th class="px-4 py-2.5 text-left font-medium hidden sm:table-cell">Gender</th>
+                            <th class="px-4 py-2.5 text-left font-medium hidden md:table-cell">Top Event</th>
+                            <th class="px-4 py-2.5 text-left font-medium">Best Mark</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                        @foreach (var athlete in Model.FlatActiveAthletes)
+                        {
+                            var genderVal = athlete.Gender == CloverleafTrack.Models.Enums.Gender.Male ? "boys" : "girls";
+                            var categoriesVal = string.Join(",", athlete.Categories.Select(c => c.ToString().ToLower()));
+                            var topEvent = athlete.EventsInCategory.FirstOrDefault();
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                                data-filterable
+                                data-gender="@genderVal"
+                                data-categories="@categoriesVal">
+                                <td class="px-4 py-2.5">
+                                    <a href="@Url.Action("Details", "Roster", new { slug = athlete.AthleteSlug })"
+                                       class="flex items-center gap-1.5 font-medium text-gray-900 dark:text-white hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
+                                        <span class="w-2 h-2 rounded-full bg-green-500 inline-block flex-shrink-0" aria-label="Active athlete"></span>
+                                        @athlete.FullName
+                                    </a>
+                                </td>
+                                <td class="px-4 py-2.5 text-gray-500 dark:text-gray-400 hidden sm:table-cell">@athlete.Class</td>
+                                <td class="px-4 py-2.5 hidden sm:table-cell">
+                                    @if (athlete.Gender == CloverleafTrack.Models.Enums.Gender.Male)
+                                    {
+                                        <span class="text-blue-500 dark:text-blue-400 font-medium text-xs">M</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-pink-500 dark:text-pink-400 font-medium text-xs">F</span>
+                                    }
+                                </td>
+                                <td class="px-4 py-2.5 text-gray-600 dark:text-gray-400 truncate max-w-[160px] hidden md:table-cell">@(topEvent?.Name ?? "")</td>
+                                <td class="px-4 py-2.5">
+                                    @if (topEvent != null)
+                                    {
+                                        <span class="mark font-semibold text-gray-900 dark:text-white">@topEvent.PersonalRecord</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="roster-empty" class="hidden p-8 text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 mt-4">

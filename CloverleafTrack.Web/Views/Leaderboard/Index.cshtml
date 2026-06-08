@@ -25,37 +25,32 @@
             ["FilterKey"] = "gender",
             ["Options"] = new List<(string, string)> { ("all","All"), ("boys","Boys"), ("girls","Girls"), ("mixed","Mixed Relays") }
         })
-        @await Html.PartialAsync("_FilterChipGroup", null, new ViewDataDictionary(ViewData) {
-            ["Label"] = "Category",
-            ["FilterKey"] = "category",
-            ["Options"] = new List<(string, string)> { ("all","All"), ("sprints","Sprints"), ("distance","Distance"), ("hurdles","Hurdles"), ("relays","Relays"), ("jumps","Jumps"), ("throws","Throws") }
-        })
     </div>
 
     <!-- Outdoor content -->
     <div data-filterable data-env="outdoor">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <div data-filterable data-gender="boys" data-filterable-section>
-                <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6 flex items-center gap-2">
+            <div data-filterable data-gender="boys">
+                <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">♂</span> Boys <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Outdoor</span>
                 </h2>
-                @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(true, false, Model.BoysOutdoorCategories))
+                @await Html.PartialAsync("_LeaderboardGenderSection", Model.BoysOutdoor)
             </div>
-            <div data-filterable data-gender="girls" data-filterable-section>
-                <h2 class="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-6 flex items-center gap-2">
+            <div data-filterable data-gender="girls">
+                <h2 class="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">♀</span> Girls <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Outdoor</span>
                 </h2>
-                @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(false, false, Model.GirlsOutdoorCategories))
+                @await Html.PartialAsync("_LeaderboardGenderSection", Model.GirlsOutdoor)
             </div>
         </div>
-        @if (Model.MixedOutdoorCategories.Any())
+        @if (Model.MixedOutdoor.Any())
         {
             <div data-filterable data-gender="mixed" class="border-t border-gray-200 dark:border-gray-700 pt-8 mb-8">
-                <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-6 flex items-center gap-2">
+                <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">⚥</span> Mixed Relays <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Outdoor</span>
                 </h2>
                 <div class="max-w-lg">
-                    @await Html.PartialAsync("_LeaderboardMixedSection", new Tuple<bool, List<LeaderboardCategoryViewModel>>(false, Model.MixedOutdoorCategories))
+                    @await Html.PartialAsync("_LeaderboardGenderSection", Model.MixedOutdoor)
                 </div>
             </div>
         }
@@ -64,27 +59,27 @@
     <!-- Indoor content -->
     <div data-filterable data-env="indoor">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <div data-filterable data-gender="boys" data-filterable-section>
-                <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6 flex items-center gap-2">
+            <div data-filterable data-gender="boys">
+                <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">♂</span> Boys <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Indoor</span>
                 </h2>
-                @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(true, true, Model.BoysIndoorCategories))
+                @await Html.PartialAsync("_LeaderboardGenderSection", Model.BoysIndoor)
             </div>
-            <div data-filterable data-gender="girls" data-filterable-section>
-                <h2 class="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-6 flex items-center gap-2">
+            <div data-filterable data-gender="girls">
+                <h2 class="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">♀</span> Girls <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Indoor</span>
                 </h2>
-                @await Html.PartialAsync("_LeaderboardGenderSection", new Tuple<bool, bool, List<LeaderboardCategoryViewModel>>(false, true, Model.GirlsIndoorCategories))
+                @await Html.PartialAsync("_LeaderboardGenderSection", Model.GirlsIndoor)
             </div>
         </div>
-        @if (Model.MixedIndoorCategories.Any())
+        @if (Model.MixedIndoor.Any())
         {
             <div data-filterable data-gender="mixed" class="border-t border-gray-200 dark:border-gray-700 pt-8 mb-8">
-                <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-6 flex items-center gap-2">
+                <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">⚥</span> Mixed Relays <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Indoor</span>
                 </h2>
                 <div class="max-w-lg">
-                    @await Html.PartialAsync("_LeaderboardMixedSection", new Tuple<bool, List<LeaderboardCategoryViewModel>>(true, Model.MixedIndoorCategories))
+                    @await Html.PartialAsync("_LeaderboardGenderSection", Model.MixedIndoor)
                 </div>
             </div>
         }

@@ -12,7 +12,18 @@
       "Bash(Get-Content *)",
       "Bash(pnpm dev *)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(python3 -c ' *)",
+      "Bash(node -e ' *)",
+      "Bash(pnpm run *)",
+      "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\(0,'utf8'\\);console.log\\(JSON.parse\\(d\\).scripts\\)\")",
+      "Bash(git commit *)",
+      "WebFetch(domain:cloverleaftrack.com)",
+      "Bash(New-Item -ItemType Directory -Path \"C:\\\\Users\\\\antho\\\\source\\\\repos\\\\CloverleafTrack\\\\CloverleafTrack.SearchGenerator\" -Force)",
+      "Bash(Out-Null)",
+      "PowerShell(New-Item *)",
+      "WebFetch(domain:ohsaa.finalforms.com)",
+      "Bash(node *)"
     ]
   }
 }
