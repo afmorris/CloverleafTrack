@@ -19,4 +19,16 @@ public class SearchController(ISearchService searchService, IWebHostEnvironment 
             PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
         });
     }
+
+    [HttpGet("/static/search-index.json")]
+    [ResponseCache(Duration = 300, VaryByHeader = "Accept-Encoding")]
+    public async Task<IActionResult> StaticExport()
+    {
+        var records = await searchService.GetSearchIndexAsync();
+        var staticRecords = records.Select(r => r with { Url = r.Url + ".html" }).ToList();
+        return Json(staticRecords, new System.Text.Json.JsonSerializerOptions
+        {
+            PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
+        });
+    }
 }
