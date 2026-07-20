@@ -244,20 +244,9 @@ def portainer_stack(name):
     return None
 
 
-def build_stack_env():
-    """Collect PORTAINER_ENV_* variables into Portainer stack Env format."""
-    env = []
-    for key, value in os.environ.items():
-        if key.startswith("PORTAINER_ENV_"):
-            name = key[len("PORTAINER_ENV_"):]
-            env.append({"name": name, "value": value})
-    return env
-
-
 def create_or_update_stack(endpoint_id):
     """Create the cloverleaftrack stack if it doesn't exist; otherwise ensure it's Git-backed."""
     existing = portainer_stack(STACK_NAME)
-    env = build_stack_env()
 
     git_config = {
         "URL": "https://github.com/afmorris/homelab-infrastructure.git",
@@ -275,20 +264,10 @@ def create_or_update_stack(endpoint_id):
             print("Converting existing stack to Git-backed deployment...")
             payload = {
                 "stackFileContent": existing.get("StackFileContent", ""),
-                "env": env or existing.get("Env", []),
+                "env": existing.get("Env", []),
                 "GitConfig": git_config,
             }
             portainer_request(f"/stacks/{stack_id}/git?endpointId={endpoint_id}", method="PUT", data=payload)
-        else:
-            # Update env if provided
-            if env:
-                print("Updating stack environment variables...")
-                payload = {
-                    "env": env,
-                    "GitConfig": git_config,
-                    "pullLatest": True,
-                }
-                portainer_request(f"/stacks/{stack_id}?endpointId={endpoint_id}", method="PUT", data=payload)
         return stack_id
 
     print(f"Creating new Git-backed stack '{STACK_NAME}'...")
@@ -297,7 +276,7 @@ def create_or_update_stack(endpoint_id):
         "type": 2,  # Docker standalone
         "endpointId": endpoint_id,
         "fromAppTemplate": False,
-        "env": env,
+        "env": [],
         "GitConfig": git_config,
     }
     result = portainer_request(f"/stacks/create/standalone/repository?endpointId={endpoint_id}", method="POST", data=payload)
@@ -306,9 +285,7 @@ def create_or_update_stack(endpoint_id):
 
 def redeploy_stack(stack_id, endpoint_id):
     """Redeploy a Git-backed stack, pulling the latest compose file."""
-    env = build_stack_env()
     payload = {
-        "env": env,
         "pullLatest": True,
     }
     print(f"Redeploying stack {STACK_NAME} (id={stack_id}) with latest image...")

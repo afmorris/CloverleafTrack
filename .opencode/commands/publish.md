@@ -12,7 +12,6 @@ Run the publish script:
 PORTAINER_ACCESS_TOKEN="$PORTAINER_ACCESS_TOKEN" \
 PORTAINER_URL="https://portainer.morriscloud.com" \
 PORTAINER_STACK_NAME="cloverleaftrack" \
-PORTAINER_ENV_DefaultConnection="$CLOVERLEAFTRACK_CONNECTION_STRING" \
 /home/tony/src/CloverleafTrack/.opencode/scripts/publish.py
 ```
 
@@ -24,8 +23,8 @@ The script will:
 5. Ensure a Git-backed Portainer stack named `cloverleaftrack` exists on endpoint 3 using the compose file at `https://github.com/afmorris/homelab-infrastructure/stacks/cloverleaftrack/docker-compose.yml`.
 6. Redeploy the stack, pulling the latest compose file and image.
 
-If `PORTAINER_ACCESS_TOKEN` is not available in the environment, stop and tell the user to generate a Portainer API access token (My account → API access token) and set it before running `/publish`.
+The database connection string must be configured once in the Portainer UI for the `cloverleaftrack` stack as an environment variable named `DefaultConnection`. It is not passed by this script and should never be committed to Git.
 
-The database connection string must be provided via `PORTAINER_ENV_DefaultConnection` (or `CLOVERLEAFTRACK_CONNECTION_STRING` mapped to it). Do NOT commit secrets to either repo.
+If `PORTAINER_ACCESS_TOKEN` is not available in the environment, stop and tell the user to generate a Portainer API access token (My account → API access token) and set it before running `/publish`.
 
 If any step fails, show the relevant output and ask the user what to do next. Do not proceed past a failure without confirmation.
