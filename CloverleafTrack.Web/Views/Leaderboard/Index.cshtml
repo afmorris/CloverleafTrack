@@ -29,14 +29,14 @@
 
     <!-- Outdoor content -->
     <div data-filterable data-env="outdoor">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <div data-filterable data-gender="boys">
+        <div class="grid grid-cols-1 gap-8 mb-8" data-filterable-gender-grid>
+            <div data-filterable data-gender="boys" class="lg:col-span-1">
                 <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">♂</span> Boys <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Outdoor</span>
                 </h2>
                 @await Html.PartialAsync("_LeaderboardGenderSection", Model.BoysOutdoor)
             </div>
-            <div data-filterable data-gender="girls">
+            <div data-filterable data-gender="girls" class="lg:col-span-1">
                 <h2 class="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">♀</span> Girls <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Outdoor</span>
                 </h2>
@@ -49,7 +49,7 @@
                 <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">⚥</span> Mixed Relays <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Outdoor</span>
                 </h2>
-                <div class="max-w-lg">
+                <div data-filterable-mixed-section>
                     @await Html.PartialAsync("_LeaderboardGenderSection", Model.MixedOutdoor)
                 </div>
             </div>
@@ -58,14 +58,14 @@
 
     <!-- Indoor content -->
     <div data-filterable data-env="indoor">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <div data-filterable data-gender="boys">
+        <div class="grid grid-cols-1 gap-8 mb-8" data-filterable-gender-grid>
+            <div data-filterable data-gender="boys" class="lg:col-span-1">
                 <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">♂</span> Boys <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Indoor</span>
                 </h2>
                 @await Html.PartialAsync("_LeaderboardGenderSection", Model.BoysIndoor)
             </div>
-            <div data-filterable data-gender="girls">
+            <div data-filterable data-gender="girls" class="lg:col-span-1">
                 <h2 class="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">♀</span> Girls <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Indoor</span>
                 </h2>
@@ -78,7 +78,7 @@
                 <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-4 flex items-center gap-2">
                     <span aria-hidden="true">⚥</span> Mixed Relays <span class="text-base font-normal text-gray-500 dark:text-gray-400">— Indoor</span>
                 </h2>
-                <div class="max-w-lg">
+                <div data-filterable-mixed-section>
                     @await Html.PartialAsync("_LeaderboardGenderSection", Model.MixedIndoor)
                 </div>
             </div>
@@ -99,5 +99,56 @@
             history.replaceState(null, '', '#' + parts.join('&'));
         }
     }());
+
+    // Expand the gender grid to full width when only one gender column is visible
+    function adjustLeaderboardLayout() {
+        document.querySelectorAll('[data-filterable-gender-grid]').forEach(function (grid) {
+            var visible = Array.from(grid.querySelectorAll('[data-filterable]')).filter(function (c) {
+                return !c.hidden;
+            });
+            if (visible.length === 1) {
+                grid.classList.remove('lg:grid-cols-2');
+                grid.classList.add('lg:grid-cols-1');
+            } else {
+                grid.classList.remove('lg:grid-cols-1');
+                grid.classList.add('lg:grid-cols-2');
+            }
+        });
+
+        // Expand mixed-relay section to full width when filtered to mixed
+        document.querySelectorAll('[data-filterable-mixed-section]').forEach(function (section) {
+            var filters = (function () {
+                if (!location.hash || location.hash === '#') return {};
+                var result = {};
+                location.hash.slice(1).split('&').forEach(function (pair) {
+                    var parts = pair.split('=');
+                    if (parts.length === 2) result[parts[0]] = decodeURIComponent(parts[1]);
+                });
+                return result;
+            }());
+            var isMixedOnly = filters['gender'] === 'mixed';
+            if (isMixedOnly) {
+                section.classList.remove('max-w-lg');
+                section.classList.add('max-w-none');
+            } else {
+                section.classList.remove('max-w-none');
+                section.classList.add('max-w-lg');
+            }
+        });
+    }
+
+    // Hook into the existing filter system
+    var originalApplyFilters = window.applyFilters;
+    window.applyFilters = function () {
+        if (typeof originalApplyFilters === 'function') originalApplyFilters();
+        adjustLeaderboardLayout();
+    };
+
+    window.addEventListener('hashchange', adjustLeaderboardLayout);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', adjustLeaderboardLayout);
+    } else {
+        adjustLeaderboardLayout();
+    }
 </script>
 }
