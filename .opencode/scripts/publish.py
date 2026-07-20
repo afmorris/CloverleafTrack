@@ -6,12 +6,13 @@ Steps:
 2. Ask for confirmation if the bump is unclear.
 3. Create and push the annotated tag.
 4. Poll GitHub Actions for the "Build and Push Docker Image" workflow run.
-5. Redeploy the ctf container via Portainer with the latest image.
+5. Redeploy the cloverleaftrack Portainer stack with the latest image.
 
 Required env vars:
     PORTAINER_ACCESS_TOKEN  Portainer API access token
     PORTAINER_URL           defaults to https://portainer.morriscloud.com
-    PORTAINER_CONTAINER     defaults to ctf
+    PORTAINER_STACK_NAME    defaults to cloverleaftrack
+    PORTAINER_ENV_*         Environment variables passed to the stack (e.g. DefaultConnection)
 """
 
 import json
@@ -28,15 +29,15 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 PORTAINER_URL = os.environ.get("PORTAINER_URL", "https://portainer.morriscloud.com").rstrip("/")
 PORTAINER_TOKEN = os.environ.get("PORTAINER_ACCESS_TOKEN", "")
-CONTAINER_NAME = os.environ.get("PORTAINER_CONTAINER", "ctf")
+STACK_NAME = os.environ.get("PORTAINER_STACK_NAME", "cloverleaftrack")
 WORKFLOW_NAME = "Build and Push Docker Image"
 TAG_PREFIX = "v"
 
 
-def run(cmd, *, check=True, capture=True, text=True):
+def run(cmd, *, check=True, capture=True, text=True, cwd=None):
     return subprocess.run(
         cmd,
-        cwd=REPO_ROOT,
+        cwd=cwd or REPO_ROOT,
         check=check,
         capture_output=capture,
         text=text,
@@ -231,144 +232,88 @@ def portainer_endpoint():
     endpoints = portainer_request("/endpoints")
     if not endpoints:
         raise RuntimeError("No Portainer endpoints found.")
-    # Prefer the first environment; in most single-node setups this is correct.
-    return endpoints[0]["Id"]
+    active = [e for e in endpoints if e.get("Status") == 1]
+    return (active or endpoints)[0]["Id"]
 
 
-def portainer_container(endpoint_id, name):
-    containers = portainer_request(f"/endpoints/{endpoint_id}/docker/containers/json?all=true")
-    for c in containers:
-        for n in c.get("Names", []):
-            if n.lstrip("/") == name:
-                return c
-    raise RuntimeError(f"Container {name!r} not found on Portainer endpoint {endpoint_id}.")
+def portainer_stack(name):
+    stacks = portainer_request("/stacks")
+    for s in stacks:
+        if s.get("Name") == name:
+            return s
+    return None
 
 
-def strip_runtime_network_config(networks):
-    """Return only the fields valid for container create."""
-    valid_keys = {"Aliases", "IPAMConfig", "Links"}
-    cleaned = {}
-    for net_name, cfg in networks.items():
-        cleaned[net_name] = {k: v for k, v in cfg.items() if k in valid_keys}
-    return cleaned
+def build_stack_env():
+    """Collect PORTAINER_ENV_* variables into Portainer stack Env format."""
+    env = []
+    for key, value in os.environ.items():
+        if key.startswith("PORTAINER_ENV_"):
+            name = key[len("PORTAINER_ENV_"):]
+            env.append({"name": name, "value": value})
+    return env
 
 
-def exposed_ports_from_bindings(port_bindings):
-    """Derive ExposedPorts from PortBindings keys (e.g. '80/tcp')."""
-    exposed = {}
-    for port in (port_bindings or {}).keys():
-        exposed[port] = {}
-    return exposed
+def create_or_update_stack(endpoint_id):
+    """Create the cloverleaftrack stack if it doesn't exist; otherwise ensure it's Git-backed."""
+    existing = portainer_stack(STACK_NAME)
+    env = build_stack_env()
 
-
-def redeploy_container(endpoint_id, container_name):
-    print(f"Looking up container {container_name!r} on Portainer...")
-    container_summary = portainer_container(endpoint_id, container_name)
-    container_id = container_summary["Id"]
-    image = container_summary["Image"]
-    print(f"Found container {container_name} ({container_id[:12]}) using image {image}")
-
-    print("Pulling latest image...")
-    portainer_request(
-        f"/endpoints/{endpoint_id}/docker/images/create?fromImage={urllib.parse.quote(image)}",
-        method="POST",
-    )
-
-    print("Inspecting container configuration...")
-    inspect = portainer_request(f"/endpoints/{endpoint_id}/docker/containers/{container_id}/json")
-
-    config = inspect.get("Config", {})
-    host_config = inspect.get("HostConfig", {})
-    network_settings = inspect.get("NetworkSettings", {})
-    networks = network_settings.get("Networks", {})
-
-    port_bindings = host_config.get("PortBindings")
-    exposed_ports = exposed_ports_from_bindings(port_bindings)
-
-    create_payload = {
-        "Hostname": config.get("Hostname"),
-        "Domainname": config.get("Domainname"),
-        "User": config.get("User"),
-        "AttachStdin": config.get("AttachStdin", False),
-        "AttachStdout": config.get("AttachStdout", False),
-        "AttachStderr": config.get("AttachStderr", False),
-        "Tty": config.get("Tty", False),
-        "OpenStdin": config.get("OpenStdin", False),
-        "StdinOnce": config.get("StdinOnce", False),
-        "Env": config.get("Env"),
-        "Cmd": config.get("Cmd"),
-        "Entrypoint": config.get("Entrypoint"),
-        "Image": image,
-        "Volumes": config.get("Volumes"),
-        "WorkingDir": config.get("WorkingDir"),
-        "Labels": config.get("Labels"),
-        "ExposedPorts": exposed_ports,
-        "NetworkingConfig": {
-            "EndpointsConfig": strip_runtime_network_config(networks),
-        },
-        "HostConfig": {
-            "Binds": host_config.get("Binds"),
-            "PortBindings": port_bindings,
-            "RestartPolicy": host_config.get("RestartPolicy"),
-            "AutoRemove": host_config.get("AutoRemove", False),
-            "LogConfig": host_config.get("LogConfig"),
-            "NetworkMode": host_config.get("NetworkMode"),
-            "PublishAllPorts": host_config.get("PublishAllPorts", False),
-            "Privileged": host_config.get("Privileged", False),
-            "CpuShares": host_config.get("CpuShares"),
-            "Memory": host_config.get("Memory"),
-            "MemoryReservation": host_config.get("MemoryReservation"),
-            "NanoCpus": host_config.get("NanoCpus"),
-            "PidsLimit": host_config.get("PidsLimit"),
-        },
+    git_config = {
+        "URL": "https://github.com/afmorris/homelab-infrastructure.git",
+        "ReferenceName": "refs/heads/main",
+        "ConfigFilePath": "stacks/cloverleaftrack/docker-compose.yml",
+        "AutoSync": True,
     }
 
-    # Remove null-ish keys that Docker may reject
-    for key in list(create_payload.keys()):
-        if create_payload[key] is None:
-            del create_payload[key]
+    if existing:
+        stack_id = existing["Id"]
+        print(f"Stack '{STACK_NAME}' already exists (id={stack_id}).")
 
-    host_config_payload = create_payload["HostConfig"]
-    for key in list(host_config_payload.keys()):
-        if host_config_payload[key] is None:
-            del host_config_payload[key]
+        # If it's not already a Git-backed stack, update it to be one.
+        if not existing.get("GitConfig"):
+            print("Converting existing stack to Git-backed deployment...")
+            payload = {
+                "stackFileContent": existing.get("StackFileContent", ""),
+                "env": env or existing.get("Env", []),
+                "GitConfig": git_config,
+            }
+            portainer_request(f"/stacks/{stack_id}/git?endpointId={endpoint_id}", method="PUT", data=payload)
+        else:
+            # Update env if provided
+            if env:
+                print("Updating stack environment variables...")
+                payload = {
+                    "env": env,
+                    "GitConfig": git_config,
+                    "pullLatest": True,
+                }
+                portainer_request(f"/stacks/{stack_id}?endpointId={endpoint_id}", method="PUT", data=payload)
+        return stack_id
 
-    if create_payload.get("ExposedPorts"):
-        # Docker doesn't like HostConfig.NetworkMode when NetworkingConfig is provided
-        if "NetworkingConfig" in create_payload:
-            host_config_payload.pop("NetworkMode", None)
+    print(f"Creating new Git-backed stack '{STACK_NAME}'...")
+    payload = {
+        "name": STACK_NAME,
+        "type": 2,  # Docker standalone
+        "endpointId": endpoint_id,
+        "fromAppTemplate": False,
+        "env": env,
+        "GitConfig": git_config,
+    }
+    result = portainer_request(f"/stacks/create/standalone/repository?endpointId={endpoint_id}", method="POST", data=payload)
+    return result["Id"]
 
-    print("Stopping container...")
-    portainer_request(
-        f"/endpoints/{endpoint_id}/docker/containers/{container_id}/stop",
-        method="POST",
-    )
 
-    print("Removing container...")
-    portainer_request(
-        f"/endpoints/{endpoint_id}/docker/containers/{container_id}?force=true",
-        method="DELETE",
-    )
-
-    print(f"Creating new container {container_name} with latest image...")
-    encoded_name = urllib.parse.quote(container_name)
-    new_container = portainer_request(
-        f"/endpoints/{endpoint_id}/docker/containers/create?name={encoded_name}",
-        method="POST",
-        data=create_payload,
-    )
-
-    new_id = new_container.get("Id") or new_container.get("id")
-    if not new_id:
-        raise RuntimeError(f"Failed to create container: {new_container}")
-
-    print(f"Starting new container {new_id[:12]}...")
-    portainer_request(
-        f"/endpoints/{endpoint_id}/docker/containers/{new_id}/start",
-        method="POST",
-    )
-
-    print(f"Container {container_name} redeployed successfully.")
+def redeploy_stack(stack_id, endpoint_id):
+    """Redeploy a Git-backed stack, pulling the latest compose file."""
+    env = build_stack_env()
+    payload = {
+        "env": env,
+        "pullLatest": True,
+    }
+    print(f"Redeploying stack {STACK_NAME} (id={stack_id}) with latest image...")
+    portainer_request(f"/stacks/{stack_id}/git/redeploy?endpointId={endpoint_id}", method="POST", data=payload)
+    print(f"Stack '{STACK_NAME}' redeployed successfully.")
 
 
 def main():
@@ -422,16 +367,18 @@ def main():
             file=sys.stderr,
         )
 
-    if not confirm(f"Push tag {next_tag} and redeploy {CONTAINER_NAME}?"):
+    if not confirm(f"Push tag {next_tag} and redeploy stack {STACK_NAME}?"):
         print("Aborted.")
         sys.exit(0)
 
     create_and_push_tag(next_tag, f"{next_ver[0]}.{next_ver[1]}.{next_ver[2]}")
     wait_for_build(next_tag)
-    endpoint_id = portainer_endpoint()
-    redeploy_container(endpoint_id, CONTAINER_NAME)
 
-    print(f"\nPublished {next_tag} and redeployed {CONTAINER_NAME}.")
+    endpoint_id = portainer_endpoint()
+    stack_id = create_or_update_stack(endpoint_id)
+    redeploy_stack(stack_id, endpoint_id)
+
+    print(f"\nPublished {next_tag} and redeployed stack {STACK_NAME}.")
 
 
 if __name__ == "__main__":
