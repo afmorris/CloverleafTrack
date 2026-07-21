@@ -72,7 +72,7 @@ def redeploy_stack(stack_id, endpoint_id):
     print(f"Redeploying stack {STACK_NAME} (id={stack_id}) with latest image...")
     portainer_request(
         f"/stacks/{stack_id}/git/redeploy?endpointId={endpoint_id}",
-        method="POST",
+        method="PUT",
         data=payload,
     )
     print(f"Stack '{STACK_NAME}' redeployed.")
