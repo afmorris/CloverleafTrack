@@ -56,3 +56,12 @@ jobs:
             ghcr.io/afmorris/cloverleaftrack:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Delete old package versions
+        if: steps.tag_version.outputs.new_tag != ''
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: cloverleaftrack
+          package-type: container
+          min-versions-to-keep: 5
+          delete-only-pre-release-versions: false
