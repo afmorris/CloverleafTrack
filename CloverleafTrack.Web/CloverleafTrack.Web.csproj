@@ -5,6 +5,9 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <SourceRevisionId Condition="'$(SourceRevisionId)' == ''">unknown</SourceRevisionId>
+        <VersionSuffix Condition="'$(VersionSuffix)' == ''">$(SourceRevisionId)</VersionSuffix>
+        <InformationalVersion Condition="'$(InformationalVersion)' == ''">$(VersionPrefix)-$(VersionSuffix)</InformationalVersion>
     </PropertyGroup>
 
     <ItemGroup>
