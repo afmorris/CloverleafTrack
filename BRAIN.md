@@ -1088,3 +1088,27 @@ The public site should lead with performance-product data: recent meet impact, P
 - Athlete relay achievements still rely on existing service-layer best-per-event relay logic. Do not merge them back into the individual PR table.
 
 ---
+
+### [C17] Leaderboard Full-Width Layout When Filtered
+
+**What changed:**
+The Leaderboard page now expands to full width when a gender filter reduces the visible columns to one.
+
+- `CloverleafTrack.Web/Views/Leaderboard/Index.cshtml`:
+  - The Boys/Girls grid wrapper changed from `grid-cols-1 lg:grid-cols-2` to a single CSS class managed via the `data-filterable-gender-grid` attribute.
+  - Added client-side JavaScript `adjustLeaderboardLayout()` that inspects visible `[data-filterable]` columns inside each grid after `applyFilters()` runs.
+  - When only one gender column is visible, it switches the grid to `lg:grid-cols-1`; otherwise it restores `lg:grid-cols-2`.
+  - The Mixed Relays section wrapper now uses `data-filterable-mixed-section` and is expanded to `max-w-none` when `gender=mixed` is selected; it otherwise keeps the narrower `max-w-lg`.
+
+**Why:**
+Filtered URLs like `#env=outdoor&gender=boys` were rendering a single column of data inside a two-column grid, leaving most of the page empty and making the leaderboard hard to read.
+
+**Key files:**
+- `CloverleafTrack.Web/Views/Leaderboard/Index.cshtml`
+
+**Watch out:**
+- The layout adjustment hooks into `window.applyFilters` because the filter script is loaded from `filters.js` (not inline). This override must be declared **after** `filters.js` is included. It is safe here because the filter script is in the layout and the leaderboard script is in the page's `Scripts` section.
+- `applyFilters` sets `hidden` directly; layout counts should check the `.hidden` property.
+- The grid's base class is now `grid grid-cols-1 gap-8 mb-8` so it defaults to a single column on smaller breakpoints; the JavaScript only controls the `lg:grid-cols-*` breakpoint behavior.
+
+---
