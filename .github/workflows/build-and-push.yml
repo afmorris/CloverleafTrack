@@ -52,7 +52,7 @@ jobs:
           file: ./CloverleafTrack.Web/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ steps.tag_version.outputs.new_tag }}
-            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/afmorris/cloverleaftrack:${{ steps.tag_version.outputs.new_tag }}
+            ghcr.io/afmorris/cloverleaftrack:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
