@@ -31,3 +31,20 @@ jobs:
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
         with:
           model: ollama-cloud/kimi-k2.7-code
+          prompt: |
+            When creating branches, commits, or pull requests for this repo,
+            use Conventional Commits style:
+            - feat: for new features
+            - fix: for bug fixes
+            - docs: for documentation
+            - style: for formatting only
+            - refactor: for code restructuring
+            - perf: for performance improvements
+            - test: for test changes
+            - chore: for maintenance
+            - build: for build/dependency changes
+            - ci: for CI/CD changes
+
+            Branch names should be lowercase and descriptive, e.g. feat/short-description or fix/short-description.
+            Pull request titles should use Conventional Commits, e.g. "fix: correct footer rendering" or "feat: add season scoring".
+            Keep individual commit messages concise and in Conventional Commits format.
