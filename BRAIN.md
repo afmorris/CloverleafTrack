@@ -315,7 +315,7 @@ Relay team members displayed below the event name as linked names joined by ` / 
     <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
         @for (int i = 0; i < pr.RelayMembers.Length; i++)
         {
-            <a href="/athletes/@...">@pr.RelayMembers[i]</a>
+            <a href="/@...">@pr.RelayMembers[i]</a>
             @if (i < pr.RelayMembers.Length - 1) { <span> / </span> }
         }
     </div>
@@ -812,7 +812,7 @@ Outdoor/Indoor tab bar replaced with a segmented control using the filter chip p
 **`AdminPerformanceRepository.cs`** — `GetAllWithDetailsAsync`:
 - Added `(SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) AS AllTimeRank` subquery (placed after `p.*`, before `a.*` for correct Dapper multi-mapping)
 
-**`Admin/Views/Performances/Index.cshtml`**:
+**`Admin/Views/Performances/Index.cshtml`:**
 - `@if (perf.SchoolRecord)` → `@if (perf.AllTimeRank == 1)`
 
 **Why:**
@@ -1110,5 +1110,35 @@ Filtered URLs like `#env=outdoor&gender=boys` were rendering a single column of 
 - The layout adjustment hooks into `window.applyFilters` because the filter script is loaded from `filters.js` (not inline). This override must be declared **after** `filters.js` is included. It is safe here because the filter script is in the layout and the leaderboard script is in the page's `Scripts` section.
 - `applyFilters` sets `hidden` directly; layout counts should check the `.hidden` property.
 - The grid's base class is now `grid grid-cols-1 gap-8 mb-8` so it defaults to a single column on smaller breakpoints; the JavaScript only controls the `lg:grid-cols-*` breakpoint behavior.
+
+---
+
+### [C27] Footer Build Version / Commit SHA
+
+**What changed:**
+The public site footer now displays the short git commit SHA that the site was built from (e.g., `v95ef166`).
+
+- `CloverleafTrack.Web/CloverleafTrack.Web.csproj` was updated to default `SourceRevisionId` and `InformationalVersion` properties when they are not supplied by the build environment, making deterministic output without requiring new tooling.
+- A new `BuildMetadataHelper` static class reads `AssemblyInformationalVersionAttribute` and extracts the commit SHA from the `+commitSha` suffix that MSBuild injects when `SourceRevisionId` is set.
+- `Views/Shared/_Layout.cshtml` footer now appends the short SHA to the "Made with ♥ by Coach Tony" line.
+
+**Build-time behavior:**
+```bash
+dotnet build -p:SourceRevisionId=$(git rev-parse --short HEAD)
+```
+produces an assembly informational version like `1.0.0-unknown+95ef166`, and the footer renders `v95ef166`.
+
+**Why:**
+The issue requested that the footer make it clear which git tag or commit generated the website. Embedding the commit SHA in the footer lets visitors and admins confirm exactly what code is running.
+
+**Key files:**
+- `CloverleafTrack.Web/CloverleafTrack.Web.csproj`
+- `CloverleafTrack.Web/Utilities/BuildMetadataHelper.cs` (NEW)
+- `CloverleafTrack.Web/Views/Shared/_Layout.cshtml`
+
+**Watch out:**
+- The SHA is sourced from the assembly's `AssemblyInformationalVersionAttribute`, which is set from `InformationalVersion` at compile time. If you build without `SourceRevisionId`, the default value `unknown` is used and the footer shows `vunknown`.
+- In Docker builds, pass `--build-arg` or use the git context so that `SourceRevisionId` is populated; otherwise the published image will display `vunknown`.
+- The admin area uses its own `_Layout.cshtml` and does not yet display the version. Add it there too if admins need it in the admin UI.
 
 ---
