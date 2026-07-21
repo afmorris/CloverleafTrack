@@ -1,52 +1,58 @@
-name: Build and Push Docker Image
+name: Build and Publish CloverleafTrack
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - main
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+permissions:
+  contents: write
+  packages: write
 
 jobs:
-  build-and-push:
+  tag-and-build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
-      - uses: actions/checkout@v6
-      - uses: docker/setup-buildx-action@v3
-      - uses: docker/login-action@v3
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
-          registry: ${{ env.REGISTRY }}
+          fetch-depth: 0
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: patch
+          release_branches: main
+          tag_prefix: v
+          create_annotated_tag: true
+
+      - name: Skip build if no new tag
+        if: steps.tag_version.outputs.new_tag == ''
+        run: echo "No new tag generated; skipping build."
+
+      - name: Set up Docker Buildx
+        if: steps.tag_version.outputs.new_tag != ''
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        if: steps.tag_version.outputs.new_tag != ''
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract version from tags
-        id: version
-        run: |
-          # Remove 'v' prefix from tag (v1.0.0 -> 1.0.0)
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Building version: $VERSION"
-      - name: Extract metadata (tags, labels)
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=raw,value=latest
-      - name: Build and push Docker images
+
+      - name: Build and push Docker image
+        if: steps.tag_version.outputs.new_tag != ''
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./CloverleafTrack.Web/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ steps.tag_version.outputs.new_tag }}
+            ghcr.io/${{ github.repository }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
