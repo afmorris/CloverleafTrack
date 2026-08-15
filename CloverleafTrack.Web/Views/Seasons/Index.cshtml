@@ -1,7 +1,19 @@
-﻿@model List<CloverleafTrack.ViewModels.Seasons.SeasonCardViewModel>
+﻿@using CloverleafTrack.ViewModels.Shared
+@model List<CloverleafTrack.ViewModels.Seasons.SeasonCardViewModel>
 
 @{
 	ViewData["Title"] = "Seasons";
+
+	ViewData["Seo"] = new SeoMetadataViewModel
+	{
+		Description = "Cloverleaf Colts track & field seasons — meet schedules, results, and season records.",
+		CanonicalPath = "/seasons",
+		Breadcrumbs = new List<SeoBreadcrumbViewModel>
+		{
+			new() { Name = "Home", Path = "/" },
+			new() { Name = "Seasons", Path = "/seasons" }
+		}
+	};
 }
 
 @functions {
