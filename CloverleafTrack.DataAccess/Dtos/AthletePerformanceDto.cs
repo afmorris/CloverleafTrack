@@ -18,6 +18,7 @@ public class AthletePerformanceDto
     public bool SchoolRecord { get; set; }
     public bool SeasonBest { get; set; }
     public int? AllTimeRank { get; set; }
+    public byte? Percentile { get; set; }
     public DateTime MeetDate { get; set; }
     public string MeetName { get; set; } = string.Empty;
     public string SeasonName { get; set; } = string.Empty;

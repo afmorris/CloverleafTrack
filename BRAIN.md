@@ -1142,3 +1142,84 @@ The issue requested that the footer make it clear which git tag or commit genera
 - The admin area uses its own `_Layout.cshtml` and does not yet display the version. Add it there too if admins need it in the admin UI.
 
 ---
+
+### [C28] Percentile Foundation (+ Median/IQR) — GitHub Issue #4
+
+**What changed:**
+Added data-foundation support for per-performance percentiles and per-event median/Q1/Q3/mark-count. No UI in this change — presentation is separate follow-up issues. This is a P1 dependency for four other backlog items (percentile display, mark color scale, roster redesign, career chart context), so the math below was hand-traced rather than assumed correct.
+
+**New tables (`docs/schema.sql`, appended in a new "SCHEMA ADDITIONS: Percentile Foundation" section):**
+
+```sql
+CREATE TABLE PerformancePercentiles (
+    PerformanceId INT     NOT NULL PRIMARY KEY,  -- FK -> Performances
+    Percentile    TINYINT NOT NULL               -- 1-100, higher is better
+);
+
+CREATE TABLE EventStatistics (
+    EventId        INT        NOT NULL PRIMARY KEY,  -- FK -> Events
+    MedianValue    FLOAT (53) NULL,
+    Q1Value        FLOAT (53) NULL,
+    Q3Value        FLOAT (53) NULL,
+    EventMarkCount INT        NOT NULL
+);
+```
+
+Both are truncate-and-repopulate every time `sp_RebuildLeaderboards` runs (Steps 11-12, added directly into the existing `CREATE PROCEDURE` body — same in-place-edit convention as [C19]'s SchoolRecord steps, *not* an `ALTER PROCEDURE` in the schema-additions section; only the two new `CREATE TABLE` statements were appended there). Same transaction as the Leaderboards/PersonalBest/SeasonBest/SchoolRecord rebuild — they can never drift out of sync with each other because a partial rebuild rolls back entirely (existing `BEGIN TRY`/`CATCH`/`ROLLBACK` wrapper).
+
+**Why a new table instead of a column on `Leaderboards`:**
+The issue's own text raised this as the open design question. `Leaderboards` is documented everywhere (CLAUDE.md, this file, multiple repository comments) as an **all-time top-10** table — several existing queries assume that cardinality (`Rank <= 10` filters, `LEFT JOIN ... AND lb.Rank = 1` for SR checks, etc.). Widening it to one row per performance (up to hundreds of rows per event) would silently change what "a row in Leaderboards" means for every existing consumer. A dedicated `PerformancePercentiles` table keeps the top-10 contract intact and mirrors the existing pattern (`Leaderboards`/`EventStatistics`/`PersonalBestHistory` are all derived, rebuild-owned tables that sit outside the raw `Performances` table). `EventStatistics` follows the same reasoning versus denormalizing onto `Events` — `Events` is admin-maintained configuration data; median/Q1/Q3/count are derived and change on every write.
+
+**Percentile algorithm (the part that had to be exactly right):**
+
+Definition used: `percentile(P) = 100 * (count of marks in EventId strictly worse than P) / (total marks in EventId)`, rounded to nearest integer (round-half-away-from-zero, T-SQL `ROUND` default), clamped to `[1, 100]`, with one explicit special case: **a population of exactly 1 mark returns 100** (the literal formula gives 0/1 = 0% for a lone mark, which would render as a broken/undefined value; a mark with nothing to compare against is defined as the event's best-and-only record instead of its worst).
+
+Direction is derived from `Event.EventType`, never from which column is non-null:
+- Running (`EventType` 1, 3): lower `TimeSeconds` is better → "worse" = higher `TimeSeconds`.
+- Field (`EventType` 0, 2, 4, 5): higher `DistanceInches` is better → "worse" = lower `DistanceInches`.
+
+**Tie handling — the reason `RANK()` was NOT used:** the SQL uses `COUNT(*) OVER (PARTITION BY EventId ORDER BY <value> RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)` to count "marks not better than P" (ties included). `RANGE` framing (as opposed to `ROWS`) makes every row that ties on the `ORDER BY` key resolve to the *same* cumulative count within its partition, so tied performances always get identical percentiles by construction — no rank-to-percentile conversion step exists to get wrong. `RANK()` would have produced an equivalent number of "not-worse" rows here too, but the `COUNT()`/`RANGE` approach keeps the "count of marks not better than P" semantics explicit in the SQL rather than hiding it behind a rank value that then has to be converted.
+
+**Population scoping:** No `AthleteId IS NOT NULL` filter anywhere in the percentile/statistics steps (unlike the `SchoolRecord`/`PersonalBest`/`SeasonBest` steps, which are individual-only). Relay and individual performances are both included in the same `PARTITION BY EventId` window — this is automatic and correct because `UQ_Events_EventKey_Gender_Environment` already guarantees one `EventId` == one comparable population (a relay event and its corresponding individual event are always different rows in `Events` with different `EventId`s, so they can never be pooled together even without an explicit filter).
+
+**Median/Q1/Q3:** Computed via `PERCENTILE_CONT(0.5 / 0.25 / 0.75) WITHIN GROUP (ORDER BY value) OVER (PARTITION BY EventId)` — SQL Server's linear-interpolation percentile function (the "continuous" method), which for an even-count population returns the average of the two middle order statistics (the standard definition) rather than picking one arbitrarily. `NULL`-when-sparse rule: `MedianValue`/`Q1Value`/`Q3Value` are set to `NULL` when `EventMarkCount < 10`; `EventMarkCount` itself is **always** populated (never null), specifically so the UI can render "#9 of 604" without a second query even for events too small to show a reference band.
+
+**Worked example (hand-traced, since no SQL Server is available to run this against):** 8 synthetic 100m dash times (running event, lower is better): 10.90, 11.05, 11.05, 11.20, 11.35, 11.50, 11.50, 11.80 seconds.
+
+| Time | Marks strictly worse | Percentile (100×worse/8, rounded) |
+|---|---|---|
+| 10.90 | 7 | 88 |
+| 11.05 (×2, tied) | 5 | 63 (both) |
+| 11.20 | 4 | 50 |
+| 11.35 | 3 | 38 |
+| 11.50 (×2, tied) | 1 | 13 (both) |
+| 11.80 | 0 | 1 (clamped up from 0) |
+
+Median (even count, N=8): average of 4th and 5th sorted values = (11.20 + 11.35) / 2 = **11.275**. Q1 (interpolated at position 2.75 of 8): both surrounding values are 11.05 → **11.05**. Q3 (interpolated at position 6.25 of 8): both surrounding values are 11.50 → **11.50**. Note this specific 8-mark example is below the 10-mark floor, so in production `EventStatistics` would store `NULL` for all three and `EventMarkCount = 8` — the median/Q1/Q3 above are shown purely to demonstrate the interpolation math, not what would actually be stored for this event.
+
+**C# / DTO / repository plumbing (making the data reachable, not just present in the DB):**
+
+- `CloverleafTrack.Models/Performance.cs` — added `public byte? Percentile { get; set; }`, same "populated by queries that join X, null when not loaded" convention as `AllTimeRank` (see [C22]/[C23] reliability notes — same caveat applies: don't assume null means "no data exists", it may mean "this query didn't join PerformancePercentiles").
+- `AthletePerformanceDto` (+`Percentile`), `LeaderboardPerformanceDto` (+`Percentile`, +`EventMarkCount`, +`MedianValue`, +`Q1Value`, +`Q3Value`), `LeaderboardDto` (+`Percentile`).
+- `AthleteRepository.GetAllWithPerformancesAsync` (roster rows) and `GetAllPerformancesForAthleteAsync` (athlete PRs / season performances) — added `(SELECT pp.Percentile FROM PerformancePercentiles pp WHERE pp.PerformanceId = p.Id) AS Percentile` subqueries, same pattern as the existing `AllTimeRank` subquery.
+- `LeaderboardRepository.GetAllPerformancesForEventAsync` (event detail rows) — `LEFT JOIN PerformancePercentiles` and `LEFT JOIN EventStatistics`, so every row on the event details page carries its own percentile plus the event-wide median/Q1/Q3/count without a second query.
+- `LeaderboardRepository.GetTopPerformancePerEventAsync` (leaderboard index top-1 rows) — `LEFT JOIN PerformancePercentiles` for the `Percentile` field.
+- Admin repositories (`AdminPerformanceRepository`, etc.) were intentionally **not** touched — out of scope per the acceptance criteria ("athlete PRs, event rows, and roster rows"), and admin views don't consume percentile yet.
+
+**Watch out:**
+- `Performance.Percentile` is a C# property only, **not** a DB column on `Performances` — exactly like `AllTimeRank`. Any new query that needs it must add the `PerformancePercentiles` subquery/join; it will silently stay `null` otherwise. Do not assume `null` means "this event has no percentile data."
+- `PerformancePercentiles` and `EventStatistics` are fully truncated and rebuilt on every `sp_RebuildLeaderboards` call (same as `Leaderboards`). Do not attempt incremental/partial updates — the whole point of "recomputed automatically on every write, never drifts" is that the full rebuild is cheap enough to run every time and is already the established pattern for this SP.
+- The single-mark-returns-100 special case is a **deliberate deviation** from the literal formula, not a bug — see the algorithm section above. If the formula ever needs to change, make sure this edge case is preserved or explicitly and deliberately changed (with a note here).
+- `CloverleafTrack.Tests/TestSupport/PercentileMath.cs` is a **test-only** mirror of the SQL algorithm — it is never referenced from `CloverleafTrack.Services` or `CloverleafTrack.DataAccess`. It exists only because this environment cannot run T-SQL against a real SQL Server to verify the stored procedure directly. If the SQL algorithm changes, this mirror (and `CloverleafTrack.Tests/Unit/DataAccess/PercentileMathTests.cs`) must be updated to match, or it will silently document stale behavior.
+- **Needs verification against a real SQL Server** (could not be run in this environment — no SQL Server available, `dotnet build`/`test` also blocked by network-restricted NuGet): the `RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` window frame syntax and `PERCENTILE_CONT(...) OVER (PARTITION BY ...)` syntax compile and behave as described; the `TRUNCATE TABLE PerformancePercentiles` / `EventStatistics` statements succeed inside the existing transaction without lock/permission issues; actual query performance of the new window-function passes over `Performances` at real data volumes (hundreds to low thousands of rows per event, so should be trivial, but unverified); the new Dapper subqueries/joins in `AthleteRepository`/`LeaderboardRepository` compile and map correctly (column name matching for `Percentile`/`MedianValue`/`Q1Value`/`Q3Value`/`EventMarkCount` was checked by hand against the DTO property names, not by an actual Dapper run).
+
+**Key files:**
+- `docs/schema.sql` — Steps 11-12 added to `sp_RebuildLeaderboards`; new "SCHEMA ADDITIONS: Percentile Foundation" section with `PerformancePercentiles` and `EventStatistics` tables.
+- `CloverleafTrack.Models/Performance.cs`
+- `CloverleafTrack.DataAccess/Dtos/AthletePerformanceDto.cs`, `LeaderboardPerformanceDto.cs`, `LeaderboardDto.cs`
+- `CloverleafTrack.DataAccess/Repositories/AthleteRepository.cs`, `LeaderboardRepository.cs`
+- `CloverleafTrack.Tests/TestSupport/PercentileMath.cs` (NEW, test-only)
+- `CloverleafTrack.Tests/Unit/DataAccess/PercentileMathTests.cs` (NEW)
+- `CLAUDE.md` — `Performances`/`Leaderboards` table docs updated with the two new tables and `sp_RebuildLeaderboards` description
+
+---

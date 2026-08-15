@@ -134,7 +134,7 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 | `Location` | Id, Name, City, State, ZipCode, Country |
 | `Event` | Id, Name, EventKey, EventType, EventCategory, Gender, Environment, AthleteCount, SortOrder, EventCategorySortOrder |
 | `Athlete` | Id, FirstName, LastName, Gender, GraduationYear, IsActive |
-| `Performance` | Id, AthleteId (null for relay), EventId, MeetId, TimeSeconds, DistanceInches, SortedAthleteHash, SchoolRecord, SeasonBest, PersonalBest, AllTimeRank (nullable int, not a DB column — populated by queries that join Leaderboards) |
+| `Performance` | Id, AthleteId (null for relay), EventId, MeetId, TimeSeconds, DistanceInches, SortedAthleteHash, SchoolRecord, SeasonBest, PersonalBest, AllTimeRank (nullable int, not a DB column — populated by queries that join Leaderboards), Percentile (nullable byte, not a DB column — populated by queries that join PerformancePercentiles) |
 | `PerformanceAthlete` | Id, PerformanceId, AthleteId — relay junction table |
 
 **Relay performances** set `AthleteId = null` on `Performance` and link athletes via `PerformanceAthletes` table. `SortedAthleteHash` is a nullable string on `Performance` (no NOT NULL constraint enforced at app layer).
@@ -387,8 +387,12 @@ Field events show a distance input; running events show a time input.
 | `MeetEntries` | Id, MeetId, EventId, AthleteId? (null=relay), PerformanceId? (null until result); soft-deleted |
 | `MeetEntryAthletes` | Junction: MeetEntryId, AthleteId (relay team members) |
 | `MeetPlacings` | Id, MeetId, PerformanceId, MeetParticipantId? (null=invitational), Place, FullPoints, SplitPoints; two filtered UNIQUE indexes |
+| `PerformancePercentiles` | PerformanceId (PK/FK → Performances), Percentile (TINYINT, 1-100). One row per performance (individual **and** relay) — every mark ever recorded, not just top-10. Rebuilt by `sp_RebuildLeaderboards`. |
+| `EventStatistics` | EventId (PK/FK → Events), MedianValue, Q1Value, Q3Value (FLOAT, nullable), EventMarkCount (INT, always populated). Median/Q1/Q3 are NULL when `EventMarkCount < 10`. Rebuilt by `sp_RebuildLeaderboards`. |
 
 `sp_RebuildLeaderboards` is a stored procedure that recalculates all leaderboard rankings and resets/recalculates `PersonalBest`, `SeasonBest`, and `SchoolRecord` flags on `Performances`. It is called after every performance insert, update, or delete. It does **not** filter by gender, so Mixed relay performances are ranked alongside Boys/Girls relay performances within their own event. `SchoolRecord` and `PersonalBest`/`SeasonBest` flags are only set for individual performances (`AthleteId IS NOT NULL`); relay rows keep these flags at 0 and use `AllTimeRank = 1` as the SR proxy instead.
+
+It also rebuilds `PerformancePercentiles` (percentile per performance, 1-100, scoped strictly to `EventId`) and `EventStatistics` (median/Q1/Q3/mark count per `EventId`), in the same transaction. Unlike the flags above, percentile applies equally to individual **and** relay performances — no `AthleteId IS NOT NULL` filter, because the population is already correctly scoped by `EventId` (see `UQ_Events_EventKey_Gender_Environment`). See BRAIN.md for the full design rationale (tie handling, single-mark edge case, why a new table instead of widening `Leaderboards`).
 
 ---
 
@@ -453,6 +457,8 @@ SQL Server's NULL != NULL behavior in unique indexes means these two filtered in
 
 ```
 CloverleafTrack.Tests/Unit/
+├── DataAccess/
+│   └── PercentileMathTests.cs      — percentile/median/Q1/Q3 algorithm spec (mirrors sp_RebuildLeaderboards SQL; see CloverleafTrack.Tests/TestSupport/PercentileMath.cs)
 ├── Models/
 │   └── MeetTests.cs                — Slug generation, ResultsUrl format
 ├── Services/
