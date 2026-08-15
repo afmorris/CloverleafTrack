@@ -234,11 +234,13 @@ Dtos are used for complex query results that span multiple tables and don't map 
 
 `LeaderboardService.GetLeaderboardAsync` splits performances into Boys/Girls/Mixed × Outdoor/Indoor, producing six category lists on `LeaderboardViewModel`.
 
-`LeaderboardService.GetLeaderboardDetailsAsync` fetches all performances for an event, then computes the school record progression entirely in C# (no extra SQL query):
+`LeaderboardService.GetLeaderboardDetailsAsync(eventKey, scope = "all-time", depth = 25)` fetches performances for an event (optionally filtered to a single season — see below), then computes the school record progression entirely in C# (no extra SQL query):
 1. Sort all performances chronologically (same-day ties broken by best mark first)
 2. Walk through tracking the running best — each new best is a record-setting moment
 3. Collect into `SchoolRecordProgression`, sorted best-first for display (distance desc / time asc)
 4. Track record-setting `PerformanceId`s in a `HashSet<int>` to set `WasRecordAtTime` on each row in `AllPerformances` and `PersonalRecordsOnly`
+
+**Season scope + depth (see BRAIN.md "Event Page Depth"):** `scope` is `"all-time"` (default), `"season"` (current season, resolved via `ISeasonRepository.GetAllAsync()`), or `"season-{id}"` (a specific past season) — resolved into a `SeasonId` filter on `ILeaderboardRepository.GetAllPerformancesForEventAsync(eventKey, seasonId)`. `depth` is `10`/`25`/`100`, or `0` meaning "All" (unbounded). **Depth is applied after both scope and class filtering** — `ClassAllPerformances`/`ClassPersonalRecords` are each built by filtering the scoped performance set down to one class, re-ranking 1..N within that subset, and only then depth-limiting; "Top 25 Juniors" is the top 25 juniors, not the juniors within the overall top 25. The `AllPerformances`/`PersonalRecordsOnly` ("all classes") lists are depth-limited independently of the per-class dictionaries. A season scope that has zero performances for the event does not 404 (event metadata falls back to an all-time query) — only a truly nonexistent event (empty at all scopes) returns null.
 
 `AthleteService.GetAthleteDetailsAsync`:
 - **Personal Records table**: individual PRs use `PersonalBest = true` flag; relay PRs use best-per-event (min time / max distance) regardless of flag
@@ -321,9 +323,16 @@ class IndividualPerformanceViewModel {
 ```csharp
 bool IsFieldEvent;                                  // drives Y-axis direction and improvement formatting
 bool IsRelayEvent;
-List<LeaderboardPerformanceViewModel> AllPerformances;
-List<LeaderboardPerformanceViewModel> PersonalRecordsOnly;
-List<SchoolRecordMomentViewModel> SchoolRecordProgression; // sorted best-first; empty for relay events with no data
+List<LeaderboardPerformanceViewModel> AllPerformances;      // depth-limited, class = "all"
+Dictionary<string, List<LeaderboardPerformanceViewModel>> ClassAllPerformances;  // depth-limited per class
+List<LeaderboardPerformanceViewModel> PersonalRecordsOnly;  // depth-limited, class = "all"
+Dictionary<string, List<LeaderboardPerformanceViewModel>> ClassPersonalRecords; // depth-limited per class
+List<SchoolRecordMomentViewModel> SchoolRecordProgression;  // sorted best-first; from the scoped set — see BRAIN.md "Event Page Depth"
+string ScopeValue;             // "all-time" | "season" | "season-{id}" — normalized, never the raw query string (embedded in inline JS in the view)
+int DepthValue;                // 10 / 25 / 100, or 0 = "All"
+int TotalPerformanceCount;     // total in scope before depth-limiting
+int? CurrentSeasonId;
+List<SeasonFilterOptionViewModel> SeasonOptions; // past (non-current) seasons, most-recent-first
 ```
 
 `LeaderboardPerformanceViewModel` key fields:
