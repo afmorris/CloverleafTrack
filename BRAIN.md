@@ -1142,3 +1142,54 @@ The issue requested that the footer make it clear which git tag or commit genera
 - The admin area uses its own `_Layout.cshtml` and does not yet display the version. Add it there too if admins need it in the admin UI.
 
 ---
+
+### [C28] Events IA — `/leaderboard` Renamed to `/events` (Routing Only)
+
+**What changed:**
+The public route for the all-time top-10 pages was renamed from `/leaderboard` / `/leaderboard/{eventKey}` to `/events` / `/events/{eventKey}`, via attribute routing on `LeaderboardController` (same pattern already used by `RosterController`, `SeasonsController`, `MeetsController` for their parameterized detail actions):
+
+```csharp
+[HttpGet("/events")]
+public async Task<IActionResult> Index() { ... }
+
+[HttpGet("/events/{eventKey}")]
+public async Task<IActionResult> Details(string eventKey) { ... }
+```
+
+Two new actions were added to 301-redirect the old, live/indexed URLs so they never 404:
+
+```csharp
+[HttpGet("/leaderboard")]
+public IActionResult IndexLegacyRedirect() => RedirectToActionPermanent(nameof(Index));
+
+[HttpGet("/leaderboard/{eventKey}")]
+public IActionResult DetailsLegacyRedirect(string eventKey) => RedirectToActionPermanent(nameof(Details), new { eventKey });
+```
+
+`RedirectToActionPermanent` issues a real HTTP 301 and resolves the target URL through the (now `/events`-based) attribute routes, so the redirect target is always correct even if the route template changes again later.
+
+**Explicitly NOT renamed (do not "fix" this later):**
+`LeaderboardController`, `LeaderboardService`/`ILeaderboardService`, the `Leaderboards` DB table, `sp_RebuildLeaderboards`, and the `Views/Leaderboard/` folder are all still named "Leaderboard". This was intentional — the issue was a URL/IA rename only, not a rename of the internal domain concept. `LeaderboardServiceTests.cs` required zero changes because the service layer was untouched.
+
+**Why:**
+`/leaderboard` didn't describe what the page actually is (event-by-event all-time top-10 lists across every event). `/events` is clearer for visitors and matches the nav label. The old URL had to keep working (301, not 404) because it's live and indexed.
+
+**Views needed no `/leaderboard` hardcoding fixed:** `Views/Shared/_LeaderboardGenderSection.cshtml` and `Views/Leaderboard/Details.cshtml` link to event rows and "Back to Leaderboard" via `asp-controller="Leaderboard" asp-action="..."` tag helpers, not hardcoded hrefs, so they picked up `/events` automatically once the controller's attribute routes changed. (This also confirms the earlier claim in this project's issue backlog that the leaderboard index page had *zero* links to event detail pages was false — it always linked every row, just via tag helper rather than a raw `<a href="/leaderboard/...">`.)
+
+**Places that DID need a manual `/leaderboard` → `/events` string update:**
+- `CloverleafTrack.Services/SearchService.cs` — `GetSearchIndexAsync()` builds the ⌘K search index (and the SearchGenerator console app's static export) consumed by both `SearchController` (`/search-index.json`, `/static/search-index.json`) and `CloverleafTrack.SearchGenerator`; it hardcoded `$"/leaderboard/{evt.EventKey.ToLower()}"` for every event search record — changed to `/events/{evt.EventKey.ToLower()}"`.
+- `CloverleafTrack.Web/Views/Shared/_MainNavigation.cshtml` — nav link href `/leaderboard` → `/events`, link text "Leaderboard" → "Events". The `Icon` key on the link object is still the string `"leaderboard"` (only used internally to pick which inline SVG to render) — left as-is, it's not user-facing.
+
+**Watch out:**
+- An earlier `BRAIN.md` entry, **[C26] Phase 1 Performance-Data UX Pass**, claims *"Main navigation copy now shows `Events` and `Athletes` while keeping `/leaderboard` and `/roster`."* That claim was inaccurate/aspirational — as of this entry's session, `_MainNavigation.cshtml` still said `href="/leaderboard"` / text `"Leaderboard"` before this change. Per the append-only convention this entry supersedes that claim rather than editing it: the nav now genuinely says "Events" and links to `/events`, and the URL itself changed too (not just the label).
+- Once an MVC action has an explicit route attribute (`[HttpGet("...")]`), it stops matching the app's conventional route (`{controller=Home}/{action=Index}/{id?}` in `Program.cs`) entirely. That's why separate `IndexLegacyRedirect` / `DetailsLegacyRedirect` actions were added rather than trying to make `Index`/`Details` handle both paths — a single action can't carry two `[HttpGet]` templates and still cleanly express "redirect the old one, render the new one."
+- `Views/Leaderboard/Index.cshtml`'s `<h1>`, `ViewData["Title"]`, and the JS function name `adjustLeaderboardLayout()` were deliberately left saying "Leaderboard" — those are page-content/internal-naming, not the nav link or route, and were out of scope for this rename.
+- `docs/schema.sql`, `docs/testing.md`, `UX_IMPROVEMENTS_PROMPT.md`, and `scripts/update-event-sort-orders.sql` all mention "leaderboard" as the feature/table name — none of those are public link targets, so none were touched.
+
+**Key files:**
+- `CloverleafTrack.Web/Controllers/LeaderboardController.cs`
+- `CloverleafTrack.Web/Views/Shared/_MainNavigation.cshtml`
+- `CloverleafTrack.Services/SearchService.cs`
+- `CLAUDE.md` (routing table entry updated)
+
+---
