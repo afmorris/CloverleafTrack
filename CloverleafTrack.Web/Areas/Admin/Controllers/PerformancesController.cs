@@ -2,6 +2,7 @@
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
+using CloverleafTrack.Web.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 
@@ -186,6 +187,18 @@ public class PerformancesController(
             }
         }
 
+        // Optional, additive attempt series — only offered for field events. Saving it recomputes
+        // Performances.DistanceInches from the best valid attempt and rebuilds leaderboards again;
+        // see IAdminPerformanceRepository.SaveAttemptSeriesAsync for the all-foul edge case.
+        if (model.RecordFullSeries && IsFieldEventType(evt?.EventType))
+        {
+            var attempts = ParseAttemptInputs(model.Attempts);
+            if (attempts.Count > 0)
+            {
+                await performanceRepository.SaveAttemptSeriesAsync(performanceId, attempts);
+            }
+        }
+
         TempData["SuccessMessage"] = "Performance added successfully!";
 
         if (saveAndAddAnother)
@@ -281,6 +294,27 @@ public class PerformancesController(
             viewModel.RelayAthleteIds = await performanceRepository.GetAthleteIdsForPerformanceAsync(id);
         }
 
+        // Load any previously recorded attempt series so the form can pre-populate it
+        if (IsFieldEventType(evt?.EventType))
+        {
+            var existingAttempts = await performanceRepository.GetAttemptsForPerformanceAsync(id);
+            if (existingAttempts.Count > 0)
+            {
+                viewModel.RecordFullSeries = true;
+                foreach (var attempt in existingAttempts)
+                {
+                    var slot = viewModel.Attempts.FirstOrDefault(a => a.AttemptNumber == attempt.AttemptNumber);
+                    if (slot == null) continue;
+
+                    slot.IsFoul = attempt.IsFoul;
+                    slot.IsPass = attempt.IsPass;
+                    slot.DistanceInput = attempt.DistanceInches.HasValue
+                        ? PerformanceFormatHelper.FormatDistance(attempt.DistanceInches.Value)
+                        : null;
+                }
+            }
+        }
+
         return View(viewModel);
     }
 
@@ -367,6 +401,18 @@ public class PerformancesController(
             foreach (var athleteId in model.RelayAthleteIds)
             {
                 await performanceRepository.CreatePerformanceAthleteAsync(model.Id, athleteId);
+            }
+        }
+
+        // Optional, additive attempt series — only offered for field events. Saving it recomputes
+        // Performances.DistanceInches from the best valid attempt and rebuilds leaderboards again;
+        // see IAdminPerformanceRepository.SaveAttemptSeriesAsync for the all-foul edge case.
+        if (model.RecordFullSeries && IsFieldEventType(evt?.EventType))
+        {
+            var attempts = ParseAttemptInputs(model.Attempts);
+            if (attempts.Count > 0)
+            {
+                await performanceRepository.SaveAttemptSeriesAsync(model.Id, attempts);
             }
         }
 
@@ -574,5 +620,51 @@ public class PerformancesController(
         var feet = Math.Floor(inches / 12);
         var remaining = inches % 12;
         return $"{feet:0}' {remaining:0.##}\"";
+    }
+
+    /// <summary>
+    /// Attempt series is only offered for individual field events and field-based relays —
+    /// never Running/RunningRelay. Mirrors the existing isFieldEvent Razor/JS convention on
+    /// the entry form's single-mark DistanceInput/TimeInput toggle, but scoped to exactly the
+    /// three EventTypes the issue calls out (FieldRelay is intentionally excluded).
+    /// </summary>
+    private static bool IsFieldEventType(EventType? eventType) =>
+        eventType is EventType.Field or EventType.ThrowsRelay or EventType.JumpRelay;
+
+    /// <summary>
+    /// Parses the 6 attempt-input slots into PerformanceAttempt rows using
+    /// PerformanceFormatHelper.ParseDistance (never inline distance parsing — see CLAUDE.md).
+    /// A slot with no distance text, no foul flag, and no pass flag is skipped entirely (an
+    /// unused slot, e.g. an athlete who only took 4 of their 6 attempts). Foul/pass slots are
+    /// stored with a null distance; distance slots require a value ParseDistance can parse.
+    /// </summary>
+    private static List<PerformanceAttempt> ParseAttemptInputs(List<PerformanceAttemptInputViewModel> inputs)
+    {
+        var attempts = new List<PerformanceAttempt>();
+
+        foreach (var input in inputs)
+        {
+            var hasDistanceText = !string.IsNullOrWhiteSpace(input.DistanceInput);
+            if (!hasDistanceText && !input.IsFoul && !input.IsPass)
+            {
+                continue; // unused slot
+            }
+
+            double? distance = null;
+            if (!input.IsFoul && !input.IsPass && hasDistanceText)
+            {
+                distance = PerformanceFormatHelper.ParseDistance(input.DistanceInput);
+            }
+
+            attempts.Add(new PerformanceAttempt
+            {
+                AttemptNumber = (byte)input.AttemptNumber,
+                DistanceInches = distance,
+                IsFoul = input.IsFoul,
+                IsPass = input.IsPass
+            });
+        }
+
+        return attempts;
     }
 }

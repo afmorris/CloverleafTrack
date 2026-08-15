@@ -274,6 +274,7 @@
                                         @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
                                         else if (perf.WasRecordAtTime) { <span class="chip-sr" style="opacity:0.5">SR</span> }
                                     </div>
+                                    @await Html.PartialAsync("_AttemptSeriesExpanded", perf.AttemptSeries)
                                 </td>
                                 <td class="px-5 py-3 hidden md:table-cell">
                                     <a asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug"
@@ -368,6 +369,7 @@
                                                     <span class="mark font-bold text-gray-900 dark:text-white">@perf.Performance</span>
                                                     @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
                                                 </div>
+                                                @await Html.PartialAsync("_AttemptSeriesExpanded", perf.AttemptSeries)
                                             </td>
                                             <td class="px-5 py-3 hidden md:table-cell">
                                                 <a asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug"

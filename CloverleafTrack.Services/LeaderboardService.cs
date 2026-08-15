@@ -1,14 +1,18 @@
 ﻿using CloverleafTrack.DataAccess.Dtos;
 using CloverleafTrack.DataAccess.Interfaces;
+using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
 using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.ViewModels.Leaderboard;
+using CloverleafTrack.ViewModels.Shared;
 using Slugify;
 using Environment = CloverleafTrack.Models.Enums.Environment;
 
 namespace CloverleafTrack.Services;
 
-public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : ILeaderboardService
+public class LeaderboardService(
+    ILeaderboardRepository leaderboardRepository,
+    IPerformanceAttemptRepository? attemptRepository = null) : ILeaderboardService
 {
     private readonly SlugHelper _slugHelper = new();
 
@@ -97,6 +101,12 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
             ? progression.OrderByDescending(p => p.RawValue).ToList()
             : progression.OrderBy(p => p.RawValue).ToList();
 
+        // Build a lookup: PerformanceId → attempt series (empty/absent for performances with no recorded series)
+        var attempts = attemptRepository != null
+            ? await attemptRepository.GetAttemptsForPerformancesAsync(allPerformances.Select(p => p.PerformanceId))
+            : new List<PerformanceAttempt>();
+        var attemptLookup = PerformanceAttemptSeriesBuilder.BuildLookup(attempts);
+
         // Build all performances list with rankings, flagging record-setting rows
         var allPerfsList = allPerformances.Select((perf, index) => new LeaderboardPerformanceViewModel
         {
@@ -116,13 +126,15 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
             WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
             ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
             RawValue = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds,
+            AttemptSeries = attemptLookup.GetValueOrDefault(perf.PerformanceId) ?? new PerformanceAttemptSeriesViewModel()
         }).ToList();
 
         // Build overall PRs list (best per athlete across all classes)
         var prsOnly = BuildPrViewModels(
             allPerformances.Where(p => p.AthleteId.HasValue).ToList(),
             recordSettingIds,
-            isFieldEvent);
+            isFieldEvent,
+            attemptLookup);
 
         // Build class-specific PRs: best per athlete within each class
         var classPrs = new Dictionary<string, List<LeaderboardPerformanceViewModel>>();
@@ -132,7 +144,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
                 .Where(p => p.AthleteId.HasValue &&
                              GetClassAtTimeOfPerformance(p.GraduationYear, p.MeetDate) == cls)
                 .ToList();
-            classPrs[cls] = BuildPrViewModels(classPerfs, recordSettingIds, isFieldEvent);
+            classPrs[cls] = BuildPrViewModels(classPerfs, recordSettingIds, isFieldEvent, attemptLookup);
         }
 
         return new LeaderboardDetailsViewModel
@@ -192,7 +204,8 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
     private List<LeaderboardPerformanceViewModel> BuildPrViewModels(
         List<LeaderboardPerformanceDto> individualPerfs,
         HashSet<int> recordSettingIds,
-        bool isFieldEvent)
+        bool isFieldEvent,
+        Dictionary<int, PerformanceAttemptSeriesViewModel> attemptLookup)
     {
         return individualPerfs
             .GroupBy(p => p.AthleteId)
@@ -211,6 +224,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository) : 
                 WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
                 ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
                 RawValue = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds,
+                AttemptSeries = attemptLookup.GetValueOrDefault(perf.PerformanceId) ?? new PerformanceAttemptSeriesViewModel()
             })
             .ToList();
     }

@@ -794,3 +794,56 @@ ALTER TABLE [dbo].[Meets]
 -- columns have been removed from Meets.
 -- See docs/migration_schools.sql for the migration script.
 -- ============================================================
+
+
+-- ============================================================
+-- SCHEMA ADDITIONS — Field-Event Attempt Series (Issue #12)
+-- ============================================================
+--
+-- Field-event throws/jumps often have up to 6 attempts per
+-- performance (fouls, passes, valid marks). Performances only
+-- ever stored the single best mark. PerformanceAttempts adds
+-- the full per-attempt series as OPTIONAL, ADDITIVE child data.
+--
+-- Performances.DistanceInches is untouched by this addition and
+-- keeps meaning exactly what it always has — "the best mark" —
+-- so every existing query, sp_RebuildLeaderboards, and the
+-- Leaderboards table keep working unchanged whether or not a
+-- given Performance has attempt rows. A Performance NEVER
+-- requires PerformanceAttempts rows to exist; 45 years of
+-- history with no series data is expected and must render
+-- identically to a performance that simply hasn't had its
+-- series recorded yet.
+--
+-- CK_PerformanceAttempts_Valid enforces the same
+-- foul/pass-XOR-distance rule per attempt that
+-- CK_Performances_DistanceOrTime enforces per performance:
+-- an attempt is either a foul, a pass, or a valid distance —
+-- never more than one of those, never none of them.
+--
+-- ON DELETE CASCADE means deleting a Performance row deletes
+-- its PerformanceAttempts automatically at the FK level. The
+-- application layer (AdminPerformanceRepository.DeleteAsync)
+-- must NOT also manually delete PerformanceAttempts rows —
+-- that would be redundant, not harmful, but the FK already
+-- guarantees no orphaned attempt rows are possible.
+-- ============================================================
+CREATE TABLE [dbo].[PerformanceAttempts] (
+    [Id]             INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [PerformanceId]  INT NOT NULL,
+    [AttemptNumber]  TINYINT NOT NULL,      -- 1..6
+    [DistanceInches] FLOAT(53) NULL,        -- NULL when foul or pass
+    [IsFoul]         BIT NOT NULL DEFAULT 0,
+    [IsPass]         BIT NOT NULL DEFAULT 0,
+    CONSTRAINT [FK_PerformanceAttempts_Performances]
+        FOREIGN KEY ([PerformanceId]) REFERENCES [dbo].[Performances]([Id]) ON DELETE CASCADE,
+    CONSTRAINT [UQ_PerformanceAttempts_Performance_Attempt]
+        UNIQUE ([PerformanceId], [AttemptNumber]),
+    CONSTRAINT [CK_PerformanceAttempts_Valid]
+        CHECK (([IsFoul] = 1 AND [DistanceInches] IS NULL)
+            OR ([IsPass] = 1 AND [DistanceInches] IS NULL)
+            OR ([IsFoul] = 0 AND [IsPass] = 0 AND [DistanceInches] IS NOT NULL))
+);
+
+CREATE NONCLUSTERED INDEX [IX_PerformanceAttempts_PerformanceId]
+    ON [dbo].[PerformanceAttempts]([PerformanceId] ASC);

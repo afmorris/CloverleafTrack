@@ -1,0 +1,51 @@
+@using CloverleafTrack.ViewModels.Shared
+@using CloverleafTrack.Web.Utilities
+@model PerformanceAttemptSeriesViewModel
+
+@*
+    Compact attempt-series strip: up to 6 small boxes plus valid-count/average/spread.
+    Renders NOTHING (not even an empty wrapper) when Model.HasAttempts is false — this
+    keeps the 45 years of history without a recorded series looking exactly as it does
+    today. Used standalone on the Meet recap page (no disclosure at all) and as the first
+    line of _AttemptSeriesExpanded.cshtml on the Athlete and Event pages.
+*@
+@if (Model.HasAttempts)
+{
+    <div class="flex items-center gap-2 mt-1 flex-wrap">
+        <div class="flex gap-1" role="img" aria-label="Attempt series">
+            @foreach (var attempt in Model.Attempts)
+            {
+                if (attempt.IsFoul)
+                {
+                    <span class="w-6 h-6 flex items-center justify-center rounded border border-dashed border-gray-400 dark:border-gray-500 text-[10px] text-gray-400 dark:text-gray-500 font-semibold"
+                          title="Attempt @attempt.AttemptNumber: Foul">F</span>
+                }
+                else if (attempt.IsPass)
+                {
+                    <span class="w-6 h-6 flex items-center justify-center rounded border border-gray-300 dark:border-gray-600 text-[10px] text-gray-400 dark:text-gray-500"
+                          title="Attempt @attempt.AttemptNumber: Pass">&mdash;</span>
+                }
+                else
+                {
+                    var formatted = attempt.DistanceInches.HasValue ? PerformanceFormatHelper.FormatDistance(attempt.DistanceInches.Value) : "";
+                    var boxClass = attempt.IsBest
+                        ? "border-amber-500 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 font-bold"
+                        : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300";
+                    <span class="min-w-[2.75rem] h-6 px-1 flex items-center justify-center rounded border text-[10px] tabular-nums @boxClass"
+                          title="Attempt @attempt.AttemptNumber: @formatted">@formatted</span>
+                }
+            }
+        </div>
+        <span class="text-[11px] text-gray-400 dark:text-gray-500 whitespace-nowrap">
+            @Model.ValidAttemptCount valid
+            @if (Model.AverageValidInches.HasValue)
+            {
+                <text> &middot; avg @PerformanceFormatHelper.FormatDistance(Model.AverageValidInches.Value)</text>
+            }
+            @if (Model.SpreadInches.HasValue)
+            {
+                <text> &middot; spread @PerformanceFormatHelper.FormatDistance(Model.SpreadInches.Value)</text>
+            }
+        </span>
+    </div>
+}

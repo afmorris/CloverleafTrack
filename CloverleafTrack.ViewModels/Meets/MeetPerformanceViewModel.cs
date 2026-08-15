@@ -1,3 +1,5 @@
+using CloverleafTrack.ViewModels.Shared;
+
 namespace CloverleafTrack.ViewModels.Meets;
 
 public class MeetPerformanceViewModel
@@ -9,6 +11,9 @@ public class MeetPerformanceViewModel
     public bool IsSchoolRecord { get; set; }
     public bool IsSeasonBest { get; set; }
     public int? AllTimeRank { get; set; }
+
+    /// <summary>Empty (HasAttempts == false) unless PerformanceAttempts rows exist for this performance.</summary>
+    public PerformanceAttemptSeriesViewModel AttemptSeries { get; set; } = new();
 
     /// <summary>
     /// Placings for this performance. Invitational = one entry; Double Dual = up to two (one per opponent).

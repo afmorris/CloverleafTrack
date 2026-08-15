@@ -26,7 +26,17 @@ public class PerformanceEntryViewModel
     
     // Relay athletes
     public List<int> RelayAthleteIds { get; set; } = new();
-    
+
+    // Field-event attempt series — optional, additive. Only offered for Field/ThrowsRelay/JumpRelay
+    // events (see the isFieldEvent JS/Razor check shared with the single-mark DistanceInput field).
+    // Off (false) by default so the existing fast single-mark path is completely unchanged.
+    [Display(Name = "Record full attempt series")]
+    public bool RecordFullSeries { get; set; }
+
+    public List<PerformanceAttemptInputViewModel> Attempts { get; set; } = Enumerable.Range(1, 6)
+        .Select(n => new PerformanceAttemptInputViewModel { AttemptNumber = n })
+        .ToList();
+
     // For display
     public string MeetName { get; set; } = string.Empty;
     public DateTime MeetDate { get; set; }

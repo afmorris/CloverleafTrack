@@ -263,4 +263,52 @@ public class LeaderboardServiceTests
 
         result!.IsRelayEvent.Should().BeFalse();
     }
+
+    // -------------------------------------------------------------------------
+    // Attempt series wiring — field-event attempt series (issue #12)
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public async Task GetLeaderboardDetailsAsync_Performance_HasNoAttemptSeries_WhenNoneRecorded()
+    {
+        var performances = new List<LeaderboardPerformanceDto>
+        {
+            new() { PerformanceId = 1, EventId = 1, EventName = "Shot Put", EventKey = "shot-put",
+                    AthleteId = 1, AthleteFirstName = "Jane", AthleteLastName = "Doe",
+                    DistanceInches = 480, MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    Gender = Gender.Female, Environment = Environment.Outdoor },
+        };
+        _mockRepo.Setup(r => r.GetAllPerformancesForEventAsync("shot-put")).ReturnsAsync(performances);
+
+        var result = await _service.GetLeaderboardDetailsAsync("shot-put");
+
+        result!.AllPerformances.Single().AttemptSeries.HasAttempts.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task GetLeaderboardDetailsAsync_Performance_HasAttemptSeries_WhenAttemptsRecorded()
+    {
+        var mockAttemptRepo = new Mock<IPerformanceAttemptRepository>();
+        var serviceWithAttempts = new LeaderboardService(_mockRepo.Object, mockAttemptRepo.Object);
+
+        var performances = new List<LeaderboardPerformanceDto>
+        {
+            new() { PerformanceId = 7, EventId = 1, EventName = "Shot Put", EventKey = "shot-put",
+                    AthleteId = 1, AthleteFirstName = "Jane", AthleteLastName = "Doe",
+                    DistanceInches = 480, MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    Gender = Gender.Female, Environment = Environment.Outdoor },
+        };
+        _mockRepo.Setup(r => r.GetAllPerformancesForEventAsync("shot-put")).ReturnsAsync(performances);
+        mockAttemptRepo.Setup(r => r.GetAttemptsForPerformancesAsync(It.IsAny<IEnumerable<int>>()))
+            .ReturnsAsync(new List<CloverleafTrack.Models.PerformanceAttempt>
+            {
+                new() { PerformanceId = 7, AttemptNumber = 1, IsFoul = true },
+                new() { PerformanceId = 7, AttemptNumber = 2, DistanceInches = 480 },
+            });
+
+        var result = await serviceWithAttempts.GetLeaderboardDetailsAsync("shot-put");
+
+        result!.AllPerformances.Single().AttemptSeries.HasAttempts.Should().BeTrue();
+        result.AllPerformances.Single().AttemptSeries.ValidAttemptCount.Should().Be(1);
+    }
 }

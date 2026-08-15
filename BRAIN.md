@@ -1142,3 +1142,79 @@ The issue requested that the footer make it clear which git tag or commit genera
 - The admin area uses its own `_Layout.cshtml` and does not yet display the version. Add it there too if admins need it in the admin UI.
 
 ---
+
+### [C28] Field-Event Attempt Series (Issue #12)
+
+**What changed:**
+Added optional, additive per-attempt data (up to 6 attempts: valid mark, foul, or pass) for field-event performances, alongside the existing single-best-mark `Performances.DistanceInches` column, which keeps its exact current meaning and is untouched by this feature when no series is recorded.
+
+**New table — `PerformanceAttempts`** (see `docs/schema.sql`, "SCHEMA ADDITIONS — Field-Event Attempt Series"):
+```sql
+CREATE TABLE [dbo].[PerformanceAttempts] (
+    [Id]             INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [PerformanceId]  INT NOT NULL,
+    [AttemptNumber]  TINYINT NOT NULL,      -- 1..6
+    [DistanceInches] FLOAT(53) NULL,        -- NULL when foul or pass
+    [IsFoul]         BIT NOT NULL DEFAULT 0,
+    [IsPass]         BIT NOT NULL DEFAULT 0,
+    CONSTRAINT [FK_PerformanceAttempts_Performances]
+        FOREIGN KEY ([PerformanceId]) REFERENCES [dbo].[Performances]([Id]) ON DELETE CASCADE,
+    CONSTRAINT [UQ_PerformanceAttempts_Performance_Attempt]
+        UNIQUE ([PerformanceId], [AttemptNumber]),
+    CONSTRAINT [CK_PerformanceAttempts_Valid]
+        CHECK (([IsFoul] = 1 AND [DistanceInches] IS NULL)
+            OR ([IsPass] = 1 AND [DistanceInches] IS NULL)
+            OR ([IsFoul] = 0 AND [IsPass] = 0 AND [DistanceInches] IS NOT NULL))
+);
+```
+`ON DELETE CASCADE` means deleting a `Performance` cascades to its `PerformanceAttempts` rows at the FK level. `AdminPerformanceRepository.DeleteAsync` deliberately does **not** also manually delete `PerformanceAttempts` — that would be redundant, not harmful, but there's nothing for it to clean up. Do not add a manual delete there.
+
+**Recompute-on-save behavior:**
+`IAdminPerformanceRepository.SaveAttemptSeriesAsync(performanceId, attempts)` replaces the full series (delete-then-insert, not a diff/upsert), recomputes `Performances.DistanceInches` as the best (max) valid attempt, and calls `EXEC sp_RebuildLeaderboards` — the same call every other performance write in this repository already makes. This mirrors `CreateAsync`/`UpdateAsync`/`DeleteAsync`.
+
+**All-foul/all-pass edge case — the decision:**
+When no attempt in the series is valid (every attempt is a foul or a pass), `PerformanceAttemptSeries.BestValidDistance(attempts)` returns `null`, and `SaveAttemptSeriesAsync` **leaves `Performances.DistanceInches` untouched** — it does not null it out and does not error. Reasoning:
+- `CK_Performances_DistanceOrTime` requires a non-null `DistanceInches` for field events; nulling it out on save would violate that constraint, and the constraint was explicitly kept unchanged by this feature.
+- There is no new value to promote to "the best mark" when the whole series is fouls/passes, so leaving the existing value (typically the mark manually entered on the single-mark path before/alongside the series) is the only safe, non-destructive choice.
+- The admin entry form's plain "Distance" field stays required and visible even when "Record full series" is checked, specifically so there is always a valid seed value for the initial `Performances` insert — the attempt series is genuinely supplementary detail on top of it, not a replacement input path.
+- Tested directly: `PerformanceAttemptTests.BestValidDistance_ReturnsNull_ForAllFoulSeries` and `PerformanceAttemptSeriesBuilderTests.BuildLookup_NoAttemptMarkedBest_WhenSeriesIsAllFoul`.
+
+**Best-mark computation is order-independent:** `PerformanceAttemptSeries.BestValidDistance` takes the max over valid attempts regardless of `AttemptNumber` order — the best mark is very often not the last attempt taken. Covered by `BestValidDistance_ReturnsMax_WhenBestAttemptIsNotTheLastOne` and `BuildLookup_MarksBestAttempt_EvenWhenNotLastInOrder`.
+
+**Gating — which events offer this:**
+Only `EventType.Field` (0), `ThrowsRelay` (5), and `JumpRelay` (4). **`FieldRelay` (2) is intentionally excluded** — the issue explicitly lists only those three EventTypes; do not "helpfully" add FieldRelay back in. `PerformancesController.IsFieldEventType(EventType?)` is the single source of truth for this on the admin side. The admin form's JS/Razor field-vs-running detection (`indexOf('Field') >= 0 || indexOf('Jump') >= 0 || indexOf('Throw') >= 0`, from `CLAUDE.md`) is reused unmodified to show/hide the "Record full series" toggle — it's a superset (also matches `FieldRelay`) but the toggle only actually persists a series when the controller's stricter `IsFieldEventType` check also passes, so submitting a series for a `FieldRelay` performance is silently a no-op.
+
+**Display — silent-by-default, three different placements:**
+- `PerformanceAttemptSeriesViewModel.HasAttempts` gates the *entire* strip — no PerformanceAttempts rows means the partial renders nothing at all, not even an empty wrapper div. This is what keeps 45 years of history with no series data rendering identically to today.
+- `_AttemptStrip.cshtml` (`Views/Shared/`) — the compact strip alone: up to 6 boxes (foul = dashed box "F", pass = em dash, valid = formatted distance, best attempt accented amber), plus valid count / average / spread.
+- `_AttemptSeriesExpanded.cshtml` (`Views/Shared/`) — strip + a native `<details>/<summary>` holding an inline-SVG bar chart. No JS charting library. Never expanded by default.
+- **Meet recap page (`Views/Meets/Details.cshtml`) uses `_AttemptStrip.cshtml` directly — never `_AttemptSeriesExpanded.cshtml`.** No `<details>` markup exists in the DOM there at all, not even collapsed, because a meet can have many throwers and a disclosure-per-row is too much visual noise at that density. **A future change must not "fix" this by swapping in the expanded partial** — this was a deliberate, explicit placement rule from the issue, not an oversight.
+- Athlete page (`Views/Roster/Details.cshtml`, "Performance by Season" per-meet rows) and Event page (`Views/Leaderboard/Details.cshtml`, both the "All Performances" and "PRs Only" tables) use `_AttemptSeriesExpanded.cshtml` — strip + collapsed disclosure.
+- Roster's Personal Records summary table (career-best-per-event) was **not** wired up to attempt series — only the per-meet "Performance by Season" rows were. Each PR row *is* backed by a specific `PerformanceId` so this could be added the same way if wanted later; it was left out to keep this change scoped to the three placements the issue named explicitly.
+
+**Wiring pattern (repeated 3x — Meet/Athlete/Leaderboard):** each public service (`MeetService`, `AthleteService`, `LeaderboardService`) takes an **optional** `IPerformanceAttemptRepository? attemptRepository = null` constructor parameter (defaults to null rather than required) specifically so the ~25 existing `new XyzService(mockRepo.Object)` call sites across the test suite did not need to be touched. When null (or when no attempts exist for the loaded performances), every display ViewModel gets a fresh empty `PerformanceAttemptSeriesViewModel` (`HasAttempts == false`) — the same silent-by-default behavior as if the repository had returned zero rows. `PerformanceAttemptSeriesBuilder.BuildLookup(attempts)` (in `CloverleafTrack.Services`) is the single shared mapper from a flat `List<PerformanceAttempt>` to a `PerformanceId → PerformanceAttemptSeriesViewModel` dictionary, used by all three services — do not duplicate this grouping/best-marking logic per service.
+
+**Distance parsing/formatting:** `PerformanceFormatHelper.ParseDistance`/`FormatDistance` (existing `Web/Utilities` helper) is reused for every attempt distance — the admin controller's `ParseAttemptInputs` calls `ParseDistance`, and `_AttemptStrip.cshtml`/`_AttemptSeriesExpanded.cshtml` call `FormatDistance` directly in the Razor view (Views compile inside the Web project, so they can reference `Web.Utilities` directly — the `CloverleafTrack.ViewModels` project cannot, since it doesn't reference Web, which is why `PerformanceAttemptViewModel.DistanceInches` stays a raw `double?` and formatting happens only in the view layer).
+
+**Key files:**
+- `docs/schema.sql` — new `PerformanceAttempts` table + index, in a new "SCHEMA ADDITIONS — Field-Event Attempt Series" section
+- `CloverleafTrack.Models/PerformanceAttempt.cs` (NEW) — entity + `PerformanceAttemptSeries.BestValidDistance` (pure, DB-free, unit-testable)
+- `CloverleafTrack.DataAccess/Interfaces/IAdminPerformanceRepository.cs`, `Repositories/AdminPerformanceRepository.cs` — `GetAttemptsForPerformanceAsync`, `SaveAttemptSeriesAsync`
+- `CloverleafTrack.DataAccess/Interfaces/IPerformanceAttemptRepository.cs`, `Repositories/PerformanceAttemptRepository.cs` (NEW) — public batch read by PerformanceIds
+- `CloverleafTrack.ViewModels/Shared/PerformanceAttemptSeriesViewModel.cs` (NEW)
+- `CloverleafTrack.ViewModels/Admin/Performances/PerformanceAttemptInputViewModel.cs` (NEW), `PerformanceEntryViewModel.cs` (+ `RecordFullSeries`, `Attempts`)
+- `CloverleafTrack.ViewModels/Meets/MeetPerformanceViewModel.cs`, `Athletes/IndividualPerformanceViewModel.cs`, `Leaderboard/LeaderboardPerformanceViewModel.cs` (+ `AttemptSeries`)
+- `CloverleafTrack.Services/PerformanceAttemptSeriesBuilder.cs` (NEW), `MeetService.cs`, `AthleteService.cs`, `LeaderboardService.cs`
+- `CloverleafTrack.Web/Areas/Admin/Controllers/PerformancesController.cs` — `IsFieldEventType`, `ParseAttemptInputs`, wired into `Create`/`Edit` GET+POST
+- `CloverleafTrack.Web/Areas/Admin/Views/Performances/Create.cshtml`, `Edit.cshtml` — "Record full series" toggle + 6 attempt rows, off by default
+- `CloverleafTrack.Web/Views/Shared/_AttemptStrip.cshtml`, `_AttemptSeriesExpanded.cshtml` (NEW)
+- `CloverleafTrack.Web/Views/Meets/Details.cshtml`, `Views/Roster/Details.cshtml`, `Views/Leaderboard/Details.cshtml` — partial calls
+- `CloverleafTrack.Web/Program.cs` — DI registration for `IPerformanceAttemptRepository`
+- Tests: `CloverleafTrack.Tests/Unit/Models/PerformanceAttemptTests.cs`, `Unit/ViewModels/Shared/PerformanceAttemptSeriesViewModelTests.cs`, `Unit/Services/PerformanceAttemptSeriesBuilderTests.cs`, plus wiring tests added to `AthleteServiceTests.cs`, `MeetServiceTests.cs`, `LeaderboardServiceTests.cs`
+
+**Watch out:**
+- Not built/tested against a real SQL Server — NuGet was network-blocked and there was no SQL Server available in this environment. The T-SQL (CHECK constraint syntax, `TINYINT`, cascade delete) needs manual verification against real SQL Server before merge.
+- `SaveAttemptSeriesAsync` is delete-then-insert for the whole series, not an upsert/diff. Fine for the admin form's "replace the whole series" UX, but don't call it with a partial series expecting the rest to survive.
+- `IsFieldEventType` in the controller intentionally does **not** match the broader JS/Razor `isFieldEvent` convention used for the single-mark Distance/Time toggle — the toggle convention includes `FieldRelay`, `IsFieldEventType` does not. Keep that gap; it's deliberate.
+
+---
