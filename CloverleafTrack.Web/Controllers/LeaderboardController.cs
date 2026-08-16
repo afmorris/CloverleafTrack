@@ -14,10 +14,21 @@ public class LeaderboardController(ILeaderboardService leaderboardService) : Con
         return View(viewModel);
     }
 
+    // scope: "all-time" (default) | "season" (current season) | "season-{id}" (a specific past season)
+    // depth: "10" | "25" (default) | "100" | "all"
     [HttpGet("/events/{eventKey}")]
-    public async Task<IActionResult> Details(string eventKey)
+    public async Task<IActionResult> Details(string eventKey, string? scope, string? depth)
     {
-        var viewModel = await leaderboardService.GetLeaderboardDetailsAsync(eventKey);
+        var resolvedScope = string.IsNullOrWhiteSpace(scope) ? "all-time" : scope;
+        var resolvedDepth = depth switch
+        {
+            "10" => 10,
+            "100" => 100,
+            "all" => 0, // 0 is the "All" sentinel understood by ILeaderboardService
+            _ => 25,    // covers "25", null, and any unrecognized value
+        };
+
+        var viewModel = await leaderboardService.GetLeaderboardDetailsAsync(eventKey, resolvedScope, resolvedDepth);
 
         if (viewModel == null)
         {

@@ -89,4 +89,12 @@
     } else {
         initFilterChips();
     }
+
+    // Exposed so other pages with their own hash-driven controls (e.g. the event detail page's
+    // scope/depth/class controls) can read/write the same "#key=value&key2=value2" hash format
+    // instead of re-implementing hash parsing.
+    window.CtfFilters = {
+        getHashFilters: getHashFilters,
+        setHashFilter: setHashFilter,
+    };
 }());

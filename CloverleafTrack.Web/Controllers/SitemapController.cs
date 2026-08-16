@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CloverleafTrack.Web.Controllers;
 
 /// <summary>
-/// Serves /sitemap.xml, enumerating every canonical public route: home, the roster/leaderboard/meets/seasons
+/// Serves /sitemap.xml, enumerating every canonical public route: home, the roster/events/meets/seasons
 /// index pages, and every athlete, event, meet, and season detail page. Reuses ISearchService (already
 /// enumerates athletes/meets/events for the site search overlay) and ISeasonService rather than adding new
 /// repository queries. robots.txt (wwwroot/robots.txt) points crawlers at this route.
@@ -22,7 +22,7 @@ public class SitemapController(ISearchService searchService, ISeasonService seas
         {
             "/",
             "/roster",
-            "/leaderboard",
+            "/events",
             "/meets",
             "/seasons"
         };

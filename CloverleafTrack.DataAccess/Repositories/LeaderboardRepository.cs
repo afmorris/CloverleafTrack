@@ -59,12 +59,12 @@ public class LeaderboardRepository(IDbConnectionFactory connectionFactory) : ILe
         return results.ToList();
     }
 
-    public async Task<List<LeaderboardPerformanceDto>> GetAllPerformancesForEventAsync(string eventKey)
+    public async Task<List<LeaderboardPerformanceDto>> GetAllPerformancesForEventAsync(string eventKey, int? seasonId = null)
     {
         using var connection = connectionFactory.CreateConnection();
 
         const string sql = """
-                           SELECT 
+                           SELECT
                                e.Id as EventId,
                                e.Name as EventName,
                                e.EventKey,
@@ -79,14 +79,14 @@ public class LeaderboardRepository(IDbConnectionFactory connectionFactory) : ILe
                                a.FirstName as AthleteFirstName,
                                a.LastName as AthleteLastName,
                                a.GraduationYear,
-                               CASE 
-                                     WHEN p.AthleteId IS NULL THEN 
+                               CASE
+                                     WHEN p.AthleteId IS NULL THEN
                                           -- For relays, concatenate all athlete names
                                           (SELECT STRING_AGG(a2.FirstName + ' ' + a2.LastName, '|~|')
                                           FROM PerformanceAthletes pa
                                           INNER JOIN Athletes a2 ON a2.Id = pa.AthleteId
                                           WHERE pa.PerformanceId = p.Id)
-                                     ELSE 
+                                     ELSE
                                           ''
                                END as RelayName,
                                m.Id as MeetId,
@@ -107,6 +107,7 @@ public class LeaderboardRepository(IDbConnectionFactory connectionFactory) : ILe
                            LEFT JOIN EventStatistics es ON es.EventId = e.Id
                            WHERE
                                e.EventKey = @EventKey
+                               AND (@SeasonId IS NULL OR m.SeasonId = @SeasonId)
                            ORDER BY
                                -- For running events (time-based), order by time ascending (fastest first)
                                CASE WHEN p.TimeSeconds IS NOT NULL THEN p.TimeSeconds ELSE 999999 END ASC,
@@ -115,7 +116,7 @@ public class LeaderboardRepository(IDbConnectionFactory connectionFactory) : ILe
                                m.Date DESC
                            """;
 
-        var results = await connection.QueryAsync<LeaderboardPerformanceDto>(sql, new { EventKey = eventKey });
+        var results = await connection.QueryAsync<LeaderboardPerformanceDto>(sql, new { EventKey = eventKey, SeasonId = seasonId });
         return results.ToList();
     }
 }

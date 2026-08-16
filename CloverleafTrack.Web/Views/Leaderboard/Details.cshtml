@@ -27,8 +27,8 @@
         Breadcrumbs = new List<SeoBreadcrumbViewModel>
         {
             new() { Name = "Home", Path = "/" },
-            new() { Name = "Leaderboard", Path = "/leaderboard" },
-            new() { Name = $"{Model.GenderLabel} {Model.EventName}", Path = Context.Request.Path.Value ?? "/leaderboard" }
+            new() { Name = "Leaderboard", Path = "/events" },
+            new() { Name = $"{Model.GenderLabel} {Model.EventName}", Path = Context.Request.Path.Value ?? "/events" }
         }
     };
 }
@@ -180,11 +180,47 @@
         </div>
     }
 
+    <!-- Scope & Depth Controls -->
+    <div id="scope-depth-controls" data-base-url="@Url.Action("Details", "Leaderboard", new { eventKey = Model.EventKey })">
+        <div class="mb-3 flex flex-wrap items-center gap-2">
+            <span class="text-sm font-semibold text-gray-500 dark:text-gray-400 mr-1">Scope:</span>
+            <a href="#" class="scope-link pill-tab @(Model.ScopeValue == "all-time" ? "pill-tab-active" : "")" data-scope="all-time">All-time</a>
+            @if (Model.CurrentSeasonId.HasValue)
+            {
+                <a href="#" class="scope-link pill-tab @(Model.ScopeValue == "season" ? "pill-tab-active" : "")" data-scope="season">This Season</a>
+            }
+            @if (Model.SeasonOptions.Any())
+            {
+                <select id="season-picker" class="pill-tab" aria-label="Choose a past season">
+                    <option value="">Past season…</option>
+                    @foreach (var opt in Model.SeasonOptions)
+                    {
+                        var seasonScopeValue = $"season-{opt.Id}";
+                        <option value="@seasonScopeValue" selected="@(Model.ScopeValue == seasonScopeValue)">@opt.Name</option>
+                    }
+                </select>
+            }
+        </div>
+        <div class="mb-4 flex flex-wrap items-center gap-2">
+            <span class="text-sm font-semibold text-gray-500 dark:text-gray-400 mr-1">Depth:</span>
+            @foreach (var d in new[] { (10, "Top 10"), (25, "Top 25"), (100, "Top 100"), (0, "All") })
+            {
+                <a href="#" class="depth-link pill-tab @(Model.DepthValue == d.Item1 ? "pill-tab-active" : "")" data-depth="@d.Item1">@d.Item2</a>
+            }
+            @if (Model.DepthValue != 0 && Model.TotalPerformanceCount > Model.DepthValue)
+            {
+                <a href="#" class="depth-link text-xs text-gray-500 dark:text-gray-400 underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent" data-depth="0">
+                    Show all @Model.TotalPerformanceCount &rarr;
+                </a>
+            }
+        </div>
+    </div>
+
     <!-- View Toggle -->
     <div class="mb-4 flex gap-3 flex-wrap">
         <button onclick="showView('all')" id="all-tab"
                 class="pill-tab pill-tab-active">
-            All Performances (@Model.AllPerformances.Count)
+            All Performances (@Model.AllPerformances.Count@(Model.TotalPerformanceCount > Model.AllPerformances.Count ? $" of {Model.TotalPerformanceCount}" : ""))
         </button>
         @if (!Model.IsRelayEvent)
         {
@@ -209,113 +245,138 @@
     }
 
     <!-- All Performances -->
+    <!--
+        Each class (all/Freshman/Sophomore/Junior/Senior) is pre-rendered as its own scope- and
+        depth-limited section (same pattern as "PRs Only" below), so that switching the Class
+        chip is an instant client-side section toggle rather than a client-side re-filter+re-rank
+        of a single giant table — depth is applied per class server-side (see LeaderboardService),
+        so "Top 25 Juniors" is genuinely the top 25 juniors, not the juniors among the overall
+        top 25. See BRAIN.md "Event Page Depth" entry.
+    -->
     <div id="all-content" class="view-content">
-        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-            <div class="overflow-x-auto">
-                <table id="all-table" class="min-w-full text-sm" data-sortable>
-                    <thead class="bg-gray-50 dark:bg-gray-700/50">
-                        <tr class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                            <th class="px-5 py-3 text-left font-medium w-14" data-sort-col="rank" data-sort-type="num" data-sort-dir="asc">
-                                Rank
-                            </th>
-                            <th class="px-5 py-3 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">
-                                Athlete
-                            </th>
-                            <th class="px-5 py-3 text-left font-medium hidden sm:table-cell">Class</th>
-                            <th class="px-5 py-3 text-left font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(Model.IsFieldEvent ? "desc" : "asc")">
-                                Mark
-                            </th>
-                            <th class="px-5 py-3 text-left font-medium hidden md:table-cell">Meet</th>
-                            <th class="px-5 py-3 text-left font-medium hidden sm:table-cell" data-sort-col="date" data-sort-type="str" data-sort-dir="asc">
-                                Date
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
-                        @foreach (var perf in Model.AllPerformances)
-                        {
-                            var isGold    = perf.Rank == 1;
-                            var rowClass  = isGold
-                                ? "bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25"
-                                : "hover:bg-gray-50 dark:hover:bg-gray-700/30";
-                            var srBorder  = perf.WasRecordAtTime ? "border-l-2 border-l-amber-400" : "";
-                            var isStill   = perf.GraduationYear.HasValue && perf.GraduationYear.Value >= adjustedCurrentYear;
-                            var isRelay   = perf.AthleteName.Contains("|~|");
-                            <tr class="@rowClass @srBorder"
-                                data-class="@(perf.ClassAtTimeOfPerformance ?? "")">
-                                <td class="px-5 py-3 rank-cell w-14" data-sort="@perf.Rank">
-                                    <span class="text-xl font-bold tabular-nums @(isGold ? "text-amber-500" : perf.Rank <= 3 ? "text-amber-400" : "text-gray-400 dark:text-gray-500")">
-                                        @perf.Rank
-                                    </span>
-                                </td>
-                                <td class="px-5 py-3" data-sort="@perf.AthleteName">
-                                    @if (isRelay)
-                                    {
-                                        <div class="space-y-0.5">
-                                            @foreach (var athlete in GetRelayAthletes(perf.AthleteName))
-                                            {
-                                                var split = athlete.Trim().Split(' ');
-                                                if (split.Length >= 2)
-                                                {
-                                                    var slug = new SlugHelper().GenerateSlug($"{split[0]}-{split[1]}");
-                                                    <div><a asp-controller="Roster" asp-action="Details" asp-route-slug="@slug" class="underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent text-sm">@athlete</a></div>
-                                                }
-                                                else { <div class="text-sm text-gray-900 dark:text-white">@athlete</div> }
-                                            }
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="flex items-center gap-1.5">
-                                            @if (!string.IsNullOrEmpty(perf.AthleteSlug))
-                                            {
-                                                <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
-                                                   class="font-medium text-gray-900 dark:text-white underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
-                                                    @perf.AthleteName
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <span class="font-medium text-gray-900 dark:text-white">@perf.AthleteName</span>
-                                            }
-                                            @if (isStill)
-                                            {
-                                                <span class="w-2 h-2 rounded-full bg-green-500 inline-block flex-shrink-0" title="Still competing" aria-label="Still competing"></span>
-                                            }
-                                        </div>
-                                    }
-                                </td>
-                                <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">
-                                    @(perf.ClassAtTimeOfPerformance ?? "")
-                                </td>
-                                <td class="px-5 py-3" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
-                                    <div class="flex items-center gap-1.5 flex-wrap">
-                                        <span class="mark font-bold text-gray-900 dark:text-white">@perf.Performance</span>
-                                        @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
-                                        else if (perf.WasRecordAtTime) { <span class="chip-sr" style="opacity:0.5">SR</span> }
-                                    </div>
-                                    @await Html.PartialAsync("_AttemptSeriesExpanded", perf.AttemptSeries)
-                                </td>
-                                <td class="px-5 py-3 hidden md:table-cell">
-                                    <a asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug"
-                                       class="text-gray-600 dark:text-gray-400 underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent text-sm">
-                                        @perf.MeetName
-                                    </a>
-                                </td>
-                                <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell" data-sort="@(perf.MeetDate.ToString("yyyy-MM-dd"))">
-                                    @perf.MeetDate.ToString("MMM d, yyyy")
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        @if (!Model.AllPerformances.Any())
+        @{
+            var allSections = new[]
+            {
+                ("all",       Model.AllPerformances),
+                ("Freshman",  Model.ClassAllPerformances.TryGetValue("Freshman",  out var afr) ? afr : new List<LeaderboardPerformanceViewModel>()),
+                ("Sophomore", Model.ClassAllPerformances.TryGetValue("Sophomore", out var aso) ? aso : new List<LeaderboardPerformanceViewModel>()),
+                ("Junior",    Model.ClassAllPerformances.TryGetValue("Junior",    out var ajr) ? ajr : new List<LeaderboardPerformanceViewModel>()),
+                ("Senior",    Model.ClassAllPerformances.TryGetValue("Senior",    out var asr) ? asr : new List<LeaderboardPerformanceViewModel>()),
+            };
+        }
+        @foreach (var (sectionKey, sectionPerfs) in allSections)
         {
-            <div class="p-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-center">
-                <p class="text-gray-400">No performances recorded for this event yet.</p>
+            <div id="all-section-@sectionKey" class="all-section @(sectionKey == "all" ? "" : "hidden")">
+                @if (sectionPerfs.Any())
+                {
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-sm" data-sortable>
+                                <thead class="bg-gray-50 dark:bg-gray-700/50">
+                                    <tr class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                        <th class="px-5 py-3 text-left font-medium w-14" data-sort-col="rank" data-sort-type="num" data-sort-dir="asc">
+                                            Rank
+                                        </th>
+                                        <th class="px-5 py-3 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">
+                                            Athlete
+                                        </th>
+                                        <th class="px-5 py-3 text-left font-medium hidden sm:table-cell">Class</th>
+                                        <th class="px-5 py-3 text-left font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(Model.IsFieldEvent ? "desc" : "asc")">
+                                            Mark
+                                        </th>
+                                        <th class="px-5 py-3 text-left font-medium hidden md:table-cell">Meet</th>
+                                        <th class="px-5 py-3 text-left font-medium hidden sm:table-cell" data-sort-col="date" data-sort-type="str" data-sort-dir="asc">
+                                            Date
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                                    @foreach (var perf in sectionPerfs)
+                                    {
+                                        var isGold    = perf.Rank == 1;
+                                        var rowClass  = isGold
+                                            ? "bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25"
+                                            : "hover:bg-gray-50 dark:hover:bg-gray-700/30";
+                                        var srBorder  = perf.WasRecordAtTime ? "border-l-2 border-l-amber-400" : "";
+                                        var isStill   = perf.GraduationYear.HasValue && perf.GraduationYear.Value >= adjustedCurrentYear;
+                                        var isRelay   = perf.AthleteName.Contains("|~|");
+                                        <tr class="@rowClass @srBorder"
+                                            data-class="@(perf.ClassAtTimeOfPerformance ?? "")">
+                                            <td class="px-5 py-3 rank-cell w-14" data-sort="@perf.Rank">
+                                                <span class="text-xl font-bold tabular-nums @(isGold ? "text-amber-500" : perf.Rank <= 3 ? "text-amber-400" : "text-gray-400 dark:text-gray-500")">
+                                                    @perf.Rank
+                                                </span>
+                                            </td>
+                                            <td class="px-5 py-3" data-sort="@perf.AthleteName">
+                                                @if (isRelay)
+                                                {
+                                                    <div class="space-y-0.5">
+                                                        @foreach (var athlete in GetRelayAthletes(perf.AthleteName))
+                                                        {
+                                                            var split = athlete.Trim().Split(' ');
+                                                            if (split.Length >= 2)
+                                                            {
+                                                                var slug = new SlugHelper().GenerateSlug($"{split[0]}-{split[1]}");
+                                                                <div><a asp-controller="Roster" asp-action="Details" asp-route-slug="@slug" class="underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent text-sm">@athlete</a></div>
+                                                            }
+                                                            else { <div class="text-sm text-gray-900 dark:text-white">@athlete</div> }
+                                                        }
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="flex items-center gap-1.5">
+                                                        @if (!string.IsNullOrEmpty(perf.AthleteSlug))
+                                                        {
+                                                            <a asp-controller="Roster" asp-action="Details" asp-route-slug="@perf.AthleteSlug"
+                                                               class="font-medium text-gray-900 dark:text-white underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
+                                                                @perf.AthleteName
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="font-medium text-gray-900 dark:text-white">@perf.AthleteName</span>
+                                                        }
+                                                        @if (isStill)
+                                                        {
+                                                            <span class="w-2 h-2 rounded-full bg-green-500 inline-block flex-shrink-0" title="Still competing" aria-label="Still competing"></span>
+                                                        }
+                                                    </div>
+                                                }
+                                            </td>
+                                            <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">
+                                                @(perf.ClassAtTimeOfPerformance ?? "")
+                                            </td>
+                                            <td class="px-5 py-3" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
+                                                <div class="flex items-center gap-1.5 flex-wrap">
+                                                    <span class="mark font-bold text-gray-900 dark:text-white">@perf.Performance</span>
+                                                    @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
+                                                    else if (perf.WasRecordAtTime) { <span class="chip-sr" style="opacity:0.5">SR</span> }
+                                                </div>
+                                                @await Html.PartialAsync("_AttemptSeriesExpanded", perf.AttemptSeries)
+                                            </td>
+                                            <td class="px-5 py-3 hidden md:table-cell">
+                                                <a asp-controller="Meets" asp-action="Details" asp-route-slug="@perf.MeetSlug"
+                                                   class="text-gray-600 dark:text-gray-400 underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent text-sm">
+                                                    @perf.MeetName
+                                                </a>
+                                            </td>
+                                            <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell" data-sort="@(perf.MeetDate.ToString("yyyy-MM-dd"))">
+                                                @perf.MeetDate.ToString("MMM d, yyyy")
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="p-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-center">
+                        <p class="text-gray-400">No performances recorded for this event yet.</p>
+                    </div>
+                }
             </div>
         }
     </div>
@@ -462,7 +523,7 @@
         });
     }
 
-    // View toggle
+    // View toggle (All Performances <-> PRs Only)
     function showView(view) {
         document.querySelectorAll('.view-content').forEach(el => el.classList.add('hidden'));
         document.getElementById(view + '-content').classList.remove('hidden');
@@ -471,46 +532,109 @@
         });
         const tab = document.getElementById(view + '-tab');
         if (tab) tab.classList.add('pill-tab-active');
-        applyClassFilter(currentClassFilter);
     }
 
-    // Class filter
-    let currentClassFilter = 'all';
-
+    // Class filter — toggles between pre-rendered, already scope+depth-limited sections
+    // (all/Freshman/Sophomore/Junior/Senior) on both the "All Performances" and "PRs Only"
+    // tabs. Each section's ranks were computed server-side for that exact class, so no
+    // client-side re-ranking is needed (see LeaderboardService.GetLeaderboardDetailsAsync).
     function filterByClass(cls) {
-        currentClassFilter = cls;
         document.querySelectorAll('.class-tab').forEach(btn => btn.classList.remove('pill-tab-active'));
         const active = document.getElementById('class-' + cls);
         if (active) active.classList.add('pill-tab-active');
-        applyClassFilter(cls);
+
+        document.querySelectorAll('.all-section').forEach(s => s.classList.add('hidden'));
+        const allTarget = document.getElementById('all-section-' + cls);
+        if (allTarget) allTarget.classList.remove('hidden');
+
+        document.querySelectorAll('.prs-section').forEach(s => s.classList.add('hidden'));
+        const prsTarget = document.getElementById('prs-section-' + cls);
+        if (prsTarget) prsTarget.classList.remove('hidden');
+
+        if (window.CtfFilters) window.CtfFilters.setHashFilter('class', cls);
     }
 
-    function applyClassFilter(cls) {
-        const allContainer = document.getElementById('all-content');
-        if (allContainer) {
-            let visibleRank = 1;
-            allContainer.querySelectorAll('tbody tr[data-class]').forEach(function (row) {
-                const matches = cls === 'all' || row.dataset.class === cls;
-                row.style.display = matches ? '' : 'none';
-                if (matches) {
-                    const span = row.querySelector('.rank-cell span');
-                    if (span) { span.textContent = visibleRank; span.className = 'text-xl font-bold tabular-nums ' + (visibleRank <= 3 ? 'text-amber-400' : 'text-gray-400 dark:text-gray-500'); }
-                    visibleRank++;
-                }
+    // Scope & Depth controls — these require a server round-trip (a different SeasonId filter
+    // or a different depth cap changes what was queried/rendered, not just what's visible), so
+    // clicking them navigates to a new URL. Class stays an instant client-side toggle (above)
+    // because every class section for the current scope+depth is already pre-rendered.
+    (function () {
+        var controls = document.getElementById('scope-depth-controls');
+        if (!controls) return;
+        var baseUrl = controls.dataset.baseUrl;
+        var currentScope = '@Model.ScopeValue';
+        var currentDepth = @Model.DepthValue;
+
+        function hashState() {
+            return window.CtfFilters ? window.CtfFilters.getHashFilters() : {};
+        }
+
+        function depthToHashValue(d) {
+            return d === 0 ? 'all' : String(d);
+        }
+
+        function navigateTo(scope, depth, cls) {
+            var query = [];
+            if (scope && scope !== 'all-time') query.push('scope=' + encodeURIComponent(scope));
+            query.push('depth=' + depthToHashValue(depth));
+
+            var hashParts = [];
+            if (scope && scope !== 'all-time') hashParts.push('scope=' + encodeURIComponent(scope));
+            hashParts.push('depth=' + depthToHashValue(depth));
+            if (cls && cls !== 'all') hashParts.push('class=' + encodeURIComponent(cls));
+
+            location.href = baseUrl + '?' + query.join('&') + '#' + hashParts.join('&');
+        }
+
+        document.querySelectorAll('.scope-link').forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                navigateTo(this.dataset.scope, currentDepth, hashState().class || 'all');
+            });
+        });
+
+        document.querySelectorAll('.depth-link').forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                navigateTo(currentScope, parseInt(this.dataset.depth, 10), hashState().class || 'all');
+            });
+        });
+
+        var seasonPicker = document.getElementById('season-picker');
+        if (seasonPicker) {
+            seasonPicker.addEventListener('change', function () {
+                if (!this.value) return;
+                navigateTo(this.value, currentDepth, hashState().class || 'all');
             });
         }
-        const prsContainer = document.getElementById('prs-content');
-        if (prsContainer) {
-            prsContainer.querySelectorAll('.prs-section').forEach(s => s.classList.add('hidden'));
-            const target = prsContainer.querySelector('#prs-section-' + cls);
-            if (target) target.classList.remove('hidden');
-        }
-    }
 
-    // Column sorting for #all-table is handled sitewide by wwwroot/js/sortable-tables.js
-    // (auto-inits any <table data-sortable>). See BRAIN.md for the extraction notes.
+        // Round-trip: if the page was loaded with a hash requesting a different scope/depth
+        // than what the server actually rendered (e.g. a shared "#scope=season-2019&depth=25"
+        // link with no matching query string), redirect once so the server re-renders with the
+        // requested scope/depth. When the hash already matches (the common case — no hash, or a
+        // hash written by our own navigateTo above), no redirect happens.
+        //
+        // NOTE: this must run on DOMContentLoaded, not synchronously here — filters.js (which
+        // provides window.CtfFilters) is loaded with `defer`, so it executes after this inline
+        // script block but before DOMContentLoaded. Reading the hash synchronously here would
+        // always see an empty filter set and never detect a mismatch.
+        document.addEventListener('DOMContentLoaded', function () {
+            var initialHash = hashState();
+            var hashScope = initialHash.scope || 'all-time';
+            var hashDepthRaw = initialHash.depth;
+            var hashDepth = hashDepthRaw === undefined ? 25 : (hashDepthRaw === 'all' ? 0 : parseInt(hashDepthRaw, 10));
+            if (!isNaN(hashDepth) && (hashScope !== currentScope || hashDepth !== currentDepth)) {
+                navigateTo(hashScope, hashDepth, initialHash.class || 'all');
+            }
+        });
+    }());
+
+    // Column sorting is handled sitewide by wwwroot/js/sortable-tables.js (auto-inits every
+    // <table data-sortable>, including each of the 5 per-class tables above). See BRAIN.md.
 
     document.addEventListener('DOMContentLoaded', function () {
+        var hashClass = (window.CtfFilters ? window.CtfFilters.getHashFilters() : {}).class || 'all';
+        filterByClass(hashClass);
         showView('all');
     });
 </script>
