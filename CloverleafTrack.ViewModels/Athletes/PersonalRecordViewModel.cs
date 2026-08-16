@@ -11,6 +11,8 @@ public class PersonalRecordViewModel
     public DateTime Date { get; set; }
     public string MeetName { get; set; } = string.Empty;
     public int? AllTimeRank { get; set; }
+    public byte? Percentile { get; set; }
+    public int? EventMarkCount { get; set; }
     public int EventCategorySortOrder { get; set; }
     public int EventSortOrder { get; set; }
     public bool IsSchoolRecord { get; set; }

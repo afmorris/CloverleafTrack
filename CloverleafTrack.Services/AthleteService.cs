@@ -355,6 +355,8 @@ public class AthleteService(
                 Date = p.MeetDate,
                 MeetName = p.MeetName,
                 AllTimeRank = p.AllTimeRank,
+                Percentile = p.Percentile,
+                EventMarkCount = p.EventMarkCount,
                 EventCategorySortOrder = p.EventCategorySortOrder,
                 EventSortOrder = p.EventSortOrder,
                 IsSchoolRecord = p.AllTimeRank == 1,
