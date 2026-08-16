@@ -1525,3 +1525,27 @@ Extended `wwwroot/js/filters.js`'s existing hash-parsing helpers (`getHashFilter
 - `CloverleafTrack.Tests/Unit/Services/LeaderboardServiceTests.cs` — scope × depth × class composition tests
 
 ---
+
+### [C34] Footer SHA Actually Wired Through Docker/CI — Supersedes [C27]'s "pass --build-arg" Note
+
+**What changed:**
+[C27] added `BuildMetadataHelper` and the `.csproj`'s `SourceRevisionId`/`InformationalVersion` properties, and noted that Docker builds needed `--build-arg`/git context wiring to populate it — but that wiring was never actually added. In production the footer showed `vunknown` instead of a real commit SHA.
+
+Root cause, confirmed by testing `dotnet publish` directly: when `SourceRevisionId` is unset, the `.csproj`'s own `Condition="'$(SourceRevisionId)' == ''"` defaults it to the literal string `"unknown"` — and separately, the .NET SDK's built-in behavior auto-appends `+$(SourceRevisionId)` to `InformationalVersion` regardless of the `.csproj`'s custom logic. With `SourceRevisionId` defaulted to `"unknown"`, the SDK appends `+unknown`, producing an `InformationalVersion` like `1.0.0-unknown+unknown`. `BuildMetadataHelper.GetShortCommitSha()` takes the first 7 characters after the `+` — and `"unknown"` is exactly 7 characters, so it passes through unchanged. The footer's `vunknown` wasn't a fallback failing to trigger; it was the real value, correctly extracted, from a `SourceRevisionId` that was never set to an actual commit SHA.
+
+**Fix — two files, both needed:**
+- `CloverleafTrack.Web/Dockerfile` — `publish-web` stage gained `ARG SOURCE_REVISION_ID=unknown` and `/p:SourceRevisionId=$SOURCE_REVISION_ID` on the `dotnet publish` line. (The `dotnet build` line in the `build` stage does NOT need this — its output is never copied into the final image; only `publish-web`'s `/app/publish` is.)
+- `.github/workflows/build-and-push.yml` — the `docker/build-push-action@v6` step gained `build-args: | SOURCE_REVISION_ID=${{ github.sha }}`.
+
+**Verified by direct test** (not just reasoning): ran `dotnet publish CloverleafTrack.Web/CloverleafTrack.Web.csproj /p:SourceRevisionId=abc1234` and confirmed via `strings` on the output DLL that `InformationalVersion` became `1.0.0-abc1234+abc1234` — `GetShortCommitSha()` correctly extracts `abc1234`.
+
+**Watch out:**
+- Local `docker build` without passing `--build-arg SOURCE_REVISION_ID=...` will still show `vunknown` — this is expected and fine; only the CI-built production image needs the real SHA.
+- If a future change touches `Dockerfile`'s multi-stage `ARG` scoping: Docker `ARG`s declared before a stage's `FROM` are not automatically inherited by later stages — each stage that needs one must redeclare it (see how `BUILD_CONFIGURATION` is redeclared in `build`, `publish-web`, and `publish-generator`). `SOURCE_REVISION_ID` only needed redeclaring in `publish-web` since that's the only stage that uses it.
+- `GetShortCommitSha()`'s fallback path (no `+` found) would also misfire the same way if `InformationalVersion` itself ever became exactly a 7-character non-SHA string — this is a narrow, unlikely edge case, not something this fix needed to touch, but worth knowing if `vunknown`-style bugs resurface with a different literal string.
+
+**Key files:**
+- `CloverleafTrack.Web/Dockerfile`
+- `.github/workflows/build-and-push.yml`
+
+---

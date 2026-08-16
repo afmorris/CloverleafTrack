@@ -51,6 +51,8 @@ jobs:
           context: .
           file: ./CloverleafTrack.Web/Dockerfile
           push: true
+          build-args: |
+            SOURCE_REVISION_ID=${{ github.sha }}
           tags: |
             ghcr.io/afmorris/cloverleaftrack:${{ steps.tag_version.outputs.new_tag }}
             ghcr.io/afmorris/cloverleaftrack:latest

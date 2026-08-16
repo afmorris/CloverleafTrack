@@ -21,7 +21,8 @@ RUN dotnet build "./CloverleafTrack.Web.csproj" -c $BUILD_CONFIGURATION -o /app/
 
 FROM build AS publish-web
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./CloverleafTrack.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+ARG SOURCE_REVISION_ID=unknown
+RUN dotnet publish "./CloverleafTrack.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false /p:SourceRevisionId=$SOURCE_REVISION_ID
 
 FROM build AS publish-generator
 ARG BUILD_CONFIGURATION=Release
