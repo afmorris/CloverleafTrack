@@ -515,4 +515,26 @@ public class LeaderboardServiceTests
         result!.AllPerformances.Single().AttemptSeries.HasAttempts.Should().BeTrue();
         result.AllPerformances.Single().AttemptSeries.ValidAttemptCount.Should().Be(1);
     }
+
+    // -------------------------------------------------------------------------
+    // Percentile wiring — mark-cell tint (issue #21)
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public async Task GetLeaderboardDetailsAsync_Percentile_FlowsThroughToAllPerformancesAndPrsOnly()
+    {
+        var performances = new List<LeaderboardPerformanceDto>
+        {
+            new() { PerformanceId = 1, EventId = 1, EventName = "Shot Put", EventKey = "shot-put",
+                    AthleteId = 1, AthleteFirstName = "Jane", AthleteLastName = "Doe",
+                    DistanceInches = 480, MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    Gender = Gender.Female, Environment = Environment.Outdoor, Percentile = 92 },
+        };
+        _mockRepo.Setup(r => r.GetAllPerformancesForEventAsync("shot-put", null)).ReturnsAsync(performances);
+
+        var result = await _service.GetLeaderboardDetailsAsync("shot-put");
+
+        result!.AllPerformances.Single().Percentile.Should().Be((byte)92);
+        result.PersonalRecordsOnly.Single().Percentile.Should().Be((byte)92);
+    }
 }

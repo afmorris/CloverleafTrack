@@ -248,6 +248,7 @@ public class LeaderboardService(
             WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
             ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
             RawValue = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds,
+            Percentile = perf.Percentile,
             AttemptSeries = attemptLookup.GetValueOrDefault(perf.PerformanceId) ?? new PerformanceAttemptSeriesViewModel()
         }).ToList();
     }
@@ -313,6 +314,7 @@ public class LeaderboardService(
                 WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
                 ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
                 RawValue = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds,
+                Percentile = perf.Percentile,
                 AttemptSeries = attemptLookup.GetValueOrDefault(perf.PerformanceId) ?? new PerformanceAttemptSeriesViewModel()
             })
             .ToList();

@@ -1608,3 +1608,28 @@ The Roster Details "Personal Bests" table gained two new columns — **Pct** (pe
 - `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` — 2 new tests: percentile-as-tiebreaker, and `AllTimeRank` still wins over a higher percentile when both are present
 
 ---
+
+### [C37] Diverging Color Scale on Event-Page Mark Cells (Issue #21)
+
+**What changed:**
+The Mark cell on the event detail page (`/events/{eventKey}`, both the "All Performances" per-class tables and the "PRs Only" per-class tables) now gets a percentile-driven tint: a 22%-alpha background fill plus a 3px full-strength inset left edge, with the mark text itself recolored to the bucket's `ink` value. Colors come entirely from the already-built `PercentileHelper` (added in [C35] for the roster percentile column, unused-until-now `GetFillColor`/`GetInkColor` methods) — no new color table, exactly the "one source of truth" the helper was built for.
+
+**Where the tint does NOT apply, and why:**
+Per the issue: tint is only valid on tables where every row is the *same event* — that's what makes percentile-within-that-table comparable via color at a glance. The Roster Personal Bests table ([C35]/#19) and the future Roster index ([#23]) both mix multiple events per table, so they use the plain percentile *numeral* instead (no tint) — this was already the correct call in [C35], made before this issue was implemented, not something this change needed to touch.
+
+**Accessibility — forced-colors / high-contrast mode:**
+A `.pct-tint-td` class hook plus a page-scoped `@media (forced-colors: active)` rule (in the existing `<style>` block already present in `Leaderboard/Details.cshtml`) strips the tint background and box-shadow with `!important` — `!important` in an external/embedded stylesheet rule does take precedence over a plain (non-`!important`) inline `style` attribute, which is what makes suppressing an inline-styled tint from a stylesheet rule possible at all. The mark numeral itself is unaffected (forced-colors mode overrides inline text colors via the browser's own UA stylesheet, not something this page needs to handle manually).
+
+**Data plumbing:** `LeaderboardPerformanceViewModel` gained `Percentile` (byte?) — the DTO (`LeaderboardPerformanceDto.Percentile`) and the repository JOIN (`LEFT JOIN PerformancePercentiles`) already existed from the percentile-foundation work ([C31]); this change was purely wiring the already-available column through `LeaderboardService`'s two ViewModel builders (`BuildAllPerformanceViewModels`, `BuildPrViewModels`) into the view.
+
+**Watch out:**
+- `markFill`/`markInk` (and the `2`-suffixed variants in the PRs Only loop) are computed once per row in the `@foreach` block, mirroring the existing `isGold`/`rowClass` pattern in the same file — don't move percentile-color computation into the service layer "to be consistent with tint being applied in the view," the color *values* are looked up from `PercentileHelper` (a shared, testable, single-source lookup) which is the actual requirement; only the row-level null-check-and-call is view-layer, same as every other per-row display concern already in this file.
+- A performance with no `Percentile` (shouldn't happen post-migration, but the DTO leaves it nullable) falls back to the pre-existing plain `text-gray-900 dark:text-white` classes and no tint — same defensive-null pattern as [C35]'s `PercentileRankViewModel.HasData`.
+
+**Key files:**
+- `CloverleafTrack.ViewModels/Leaderboard/LeaderboardPerformanceViewModel.cs`
+- `CloverleafTrack.Services/LeaderboardService.cs`
+- `CloverleafTrack.Web/Views/Leaderboard/Details.cshtml`
+- `CloverleafTrack.Tests/Unit/Services/LeaderboardServiceTests.cs` — 1 new test verifying `Percentile` flows into both `AllPerformances` and `PersonalRecordsOnly`
+
+---

@@ -1,5 +1,6 @@
 @using Slugify
 @using CloverleafTrack.ViewModels.Shared
+@using CloverleafTrack.Web.Utilities
 @model LeaderboardDetailsViewModel
 
 @{
@@ -66,6 +67,13 @@
     .timeline-dot-current { background: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
     .timeline-dot-past { background: #9ca3af; }
     .dark .timeline-dot-past { background: #4b5563; }
+
+    /* Mark cell percentile tint (issue #21). Inline style carries the actual color per row;
+       forced-colors/high-contrast mode strips the tint but leaves the numeral (and its inline
+       ink color, which forced-colors also overrides via its own UA stylesheet) legible. */
+    @@media (forced-colors: active) {
+        .pct-tint-td { background-color: Canvas !important; box-shadow: none !important; }
+    }
 </style>
 
 <div class="max-w-7xl mx-auto px-6">
@@ -300,6 +308,8 @@
                                         var srBorder  = perf.WasRecordAtTime ? "border-l-2 border-l-amber-400" : "";
                                         var isStill   = perf.GraduationYear.HasValue && perf.GraduationYear.Value >= adjustedCurrentYear;
                                         var isRelay   = perf.AthleteName.Contains("|~|");
+                                        var markFill  = perf.Percentile.HasValue ? PercentileHelper.GetFillColor(perf.Percentile.Value) : null;
+                                        var markInk   = perf.Percentile.HasValue ? PercentileHelper.GetInkColor(perf.Percentile.Value) : null;
                                         <tr class="@rowClass @srBorder"
                                             data-class="@(perf.ClassAtTimeOfPerformance ?? "")">
                                             <td class="px-5 py-3 rank-cell w-14" data-sort="@perf.Rank">
@@ -347,9 +357,10 @@
                                             <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">
                                                 @(perf.ClassAtTimeOfPerformance ?? "")
                                             </td>
-                                            <td class="px-5 py-3" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
+                                            <td class="px-5 py-3 pct-tint-td" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")"
+                                                style="@(markFill != null ? $"background-color:{markFill}38;box-shadow:inset 3px 0 0 0 {markFill}" : "")">
                                                 <div class="flex items-center gap-1.5 flex-wrap">
-                                                    <span class="mark font-bold text-gray-900 dark:text-white">@perf.Performance</span>
+                                                    <span class="mark font-bold @(markInk == null ? "text-gray-900 dark:text-white" : "")" style="@(markInk != null ? $"color:{markInk}" : "")">@perf.Performance</span>
                                                     @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
                                                     else if (perf.WasRecordAtTime) { <span class="chip-sr" style="opacity:0.5">SR</span> }
                                                 </div>
@@ -419,6 +430,8 @@
                                             ? "bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25"
                                             : "hover:bg-gray-50 dark:hover:bg-gray-700/30";
                                         var isStill2  = perf.GraduationYear.HasValue && perf.GraduationYear.Value >= adjustedCurrentYear;
+                                        var markFill2 = perf.Percentile.HasValue ? PercentileHelper.GetFillColor(perf.Percentile.Value) : null;
+                                        var markInk2  = perf.Percentile.HasValue ? PercentileHelper.GetInkColor(perf.Percentile.Value) : null;
                                         <tr class="@rowClass2 @(perf.WasRecordAtTime ? "border-l-2 border-l-amber-400" : "")">
                                             <td class="px-5 py-3 w-14">
                                                 <span class="text-xl font-bold tabular-nums @(isGold2 ? "text-amber-500" : perf.Rank <= 3 ? "text-amber-400" : "text-gray-400 dark:text-gray-500")">
@@ -445,9 +458,9 @@
                                                 </div>
                                             </td>
                                             <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">@(perf.ClassAtTimeOfPerformance ?? "")</td>
-                                            <td class="px-5 py-3">
+                                            <td class="px-5 py-3 pct-tint-td" style="@(markFill2 != null ? $"background-color:{markFill2}38;box-shadow:inset 3px 0 0 0 {markFill2}" : "")">
                                                 <div class="flex items-center gap-1.5 flex-wrap">
-                                                    <span class="mark font-bold text-gray-900 dark:text-white">@perf.Performance</span>
+                                                    <span class="mark font-bold @(markInk2 == null ? "text-gray-900 dark:text-white" : "")" style="@(markInk2 != null ? $"color:{markInk2}" : "")">@perf.Performance</span>
                                                     @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
                                                 </div>
                                                 @await Html.PartialAsync("_AttemptSeriesExpanded", perf.AttemptSeries)
