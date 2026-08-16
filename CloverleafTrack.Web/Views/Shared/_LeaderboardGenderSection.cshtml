@@ -17,7 +17,13 @@
 }
 
 <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-    <table class="w-full text-sm">
+    <table class="w-full text-sm" data-sortable>
+        <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            <tr>
+                <th class="px-4 py-2 text-left font-medium" data-sort-col="event" data-sort-type="str" data-sort-dir="asc">Event</th>
+                <th class="px-4 py-2 text-right font-medium" data-sort-col="date" data-sort-type="str" data-sort-dir="asc">Recorded</th>
+            </tr>
+        </thead>
         <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
             @foreach (var evt in Model.Where(x => !string.IsNullOrEmpty(x.Performance)))
             {
@@ -25,14 +31,14 @@
                 if (group != currentGroup)
                 {
                     currentGroup = group;
-                    <tr>
+                    <tr data-sort-group-header>
                         <td colspan="2" class="px-4 pt-4 pb-1.5 bg-white dark:bg-gray-800">
                             <span class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">@group</span>
                         </td>
                     </tr>
                 }
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors">
-                    <td class="px-4 py-2.5">
+                    <td class="px-4 py-2.5" data-sort="@evt.EventName">
                         <a asp-controller="Leaderboard" asp-action="Details" asp-route-eventKey="@evt.EventKey.ToLower()"
                            class="font-medium text-gray-900 dark:text-white hover:underline">
                             @evt.EventName
@@ -67,7 +73,7 @@
                             </div>
                         }
                     </td>
-                    <td class="px-4 py-2.5 text-right whitespace-nowrap">
+                    <td class="px-4 py-2.5 text-right whitespace-nowrap" data-sort="@(evt.MeetDate?.ToString("yyyy-MM-dd") ?? "")">
                         <span class="mark font-bold text-gray-900 dark:text-white">@evt.Performance</span>
                         @if (evt.MeetDate.HasValue)
                         {

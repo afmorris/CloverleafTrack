@@ -184,3 +184,14 @@ details[open] .details-arrow {
         padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px));
     }
 }
+
+/* Sortable table column headers — see wwwroot/js/sortable-tables.js */
+.sort-th-btn {
+    @apply w-full h-full flex items-center gap-1 text-left bg-transparent cursor-pointer select-none
+           hover:text-gray-900 dark:hover:text-white
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ctf-accent
+           rounded-sm;
+}
+.sort-caret {
+    @apply inline-block w-4 flex-shrink-0 text-center text-gray-400 dark:text-gray-500;
+}

@@ -165,7 +165,7 @@ Slug generation uses the `Slugify` NuGet package (`SlugHelper`). `Meet.Slug` is 
 | `MeetsController` | `/meets` | Meet list + meet detail page |
 | `RosterController` | `/roster` | Active + former athlete list |
 | `AthletesController` | `/athletes/{slug}` | Athlete career detail — NOTE: route is `/roster/{slug}` via `RosterController`, not `AthletesController` |
-| `LeaderboardController` | `/leaderboard` | All-time top 10 lists |
+| `LeaderboardController` | `/events` (legacy `/leaderboard` 301-redirects here — see BRAIN.md "Events IA") | All-time top 10 lists |
 
 ### Admin area (Areas/Admin/)
 | Controller | Route | Purpose |
