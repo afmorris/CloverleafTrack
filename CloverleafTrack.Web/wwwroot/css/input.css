@@ -35,6 +35,13 @@
     .filter-chip-active {
         @apply bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white;
     }
+    /* Selection must not be fill-alone (issue #28) — a checkmark accompanies the active state. */
+    .chip-check {
+        display: none;
+    }
+    .filter-chip-active .chip-check {
+        display: inline;
+    }
 }
 
 details[open] .details-arrow {
