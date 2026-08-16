@@ -29,7 +29,7 @@ public class SeoHelperTests
     {
         var text = new string('a', 50) + " " + new string('b', 50) + " " + new string('c', 100);
         var result = SeoHelper.Truncate(text, 160);
-        result.Length.Should().BeLessOrEqualTo(160);
+        result.Length.Should().BeLessThanOrEqualTo(160);
     }
 
     [Fact]
