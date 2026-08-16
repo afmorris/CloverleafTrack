@@ -1633,3 +1633,40 @@ A `.pct-tint-td` class hook plus a page-scoped `@media (forced-colors: active)` 
 - `CloverleafTrack.Tests/Unit/Services/LeaderboardServiceTests.cs` — 1 new test verifying `Percentile` flows into both `AllPerformances` and `PersonalRecordsOnly`
 
 ---
+
+### [C38] Gender Encoding — Roster Grouped by Gender, No Per-Row Column (Issue #28)
+
+**What changed:**
+Both roster surfaces (`_RosterActiveAthletesList.cshtml` for active athletes, `_FormerAthleteYearGroupSection.cshtml` for former athletes, nested per graduation year) had a per-row "Gender" column showing a colored `M`/`F` letter (`text-blue-500` / `text-pink-500`) — the classic color-alone-conveys-meaning failure (fails deuteranopia/protanopia, grayscale, print, forced-colors). Both are now split into two separately-rendered gender sections, each with a triple-encoded (shape glyph + word + color) header stating identity once instead of per-row, and each with its own independently sortable table with no gender column at all.
+
+**Colors are NOT the leaderboard's existing pink/blue.** The issue explicitly rejected pink/blue (worst-pair CVD ΔE 26.8) in favor of new validated categorical slots: Boys = circle glyph + `#3987e5`, Girls = rounded-square glyph + `#d95926`. **The pre-existing Leaderboard Index page's Boys/Girls headers (♂/♀ glyphs, blue-600/pink-600) were deliberately NOT touched** — the issue's "Problem" section is specifically scoped to the roster's per-row column bug, and the leaderboard's existing headers already avoid "color alone" (they pair color with the word "Boys"/"Girls"), so they already pass the core accessibility bar even though they use a different color pair than this issue's new decision. If sitewide consistency with the new color pair is wanted later, that's a separate follow-up, not something this change's scope covered.
+
+**New shared building block:**
+- `CloverleafTrack.ViewModels/Shared/GenderSectionHeaderViewModel.cs` (NEW) — `Gender`, `Count`, and `Size` ("lg" default for page-level sections, "sm" for the nested former-athletes-by-year context).
+- `CloverleafTrack.Web/Views/Shared/_GenderSectionHeader.cshtml` (NEW) — renders the glyph (inline SVG circle/rounded-rect, not a Unicode character, for reliable cross-platform rendering) + word + color + athlete count. **Reserved for headers only** — do not reuse this partial per-row; that would reintroduce exactly the bug this issue fixed. Scoped to Male/Female only: individual `Athlete.Gender` is never `Mixed` (unlike `Event.Gender`, which can be), so this deliberately has no Mixed case — do not add one without first confirming athletes can actually be Mixed, which they cannot under the current schema.
+
+**Why two separate tables per surface, not one table with a group-divider row:**
+`sortable-tables.js`'s existing `data-sort-group-header` convention (used in `_LeaderboardGenderSection.cshtml`) hides group-header rows and lets other rows interleave freely while any sort is active, restoring grouping only on the third click (reset). Using that pattern here would mean sorting the roster by name silently ungroups Boys/Girls with zero indication of which is which — arguably a worse failure than the original color-only badge, since it loses the information entirely rather than just encoding it inaccessibly. Two independently-`data-sortable` tables can never cross-contaminate: sorting one gender's table never affects the other's grouping or visibility.
+
+**Filtering — reused the existing mechanism, no new JS:**
+The gender filter chip's existing `data-filterable data-gender="boys|girls"` convention (already used on the Leaderboard Index page's Boys/Girls divs) is applied to each gender *section* wrapper div (not per-row, since there's no per-row gender attribute anymore) — `filters.js` already hides an entire `[data-filterable]` element outright when its own attribute doesn't match, which is exactly "drop the entire other section rather than an empty header," reusing the same behavior [C17] established for the leaderboard's full-width collapse. **Watch out:** the gender-filtering div and the category-filtering `data-filterable-section` (auto-hide-if-all-children-filtered-out) div must be two separate NESTED elements, not the same element carrying both attributes — `filters.js` runs two independent passes (`[data-filterable]` self-match, then `[data-filterable-section]` descendant-visibility recompute) and putting both on one element lets the second pass silently undo the first pass's gender-based hide, since the individual `<tr>` rows (which only carry `data-categories`, no `data-gender`) would count as "visible descendants" regardless of the outer gender match.
+
+**Filter chip accessibility (`_FilterChipGroup.cshtml`):**
+- `aria-pressed` was **already** being set correctly by `filters.js`'s `applyFilters()` (`btn.setAttribute('aria-pressed', ...)`) — confirmed, not a gap needing a fix.
+- Added a visually-hidden-until-active `✓` glyph (`.chip-check`, new `@@layer components` rule in `input.css`, requires the `pnpm run prod` Tailwind rebuild already reflected in `site.css`) so the active chip state isn't fill-color-alone either — same principle as the gender fix, applied to the filter chip system itself.
+
+**Dead code, deliberately not touched:** `_AthleteCard.cshtml` (used only by `_AthleteCategorySection.cshtml`, which is itself never invoked from any live page — confirmed via a repo-wide reference search) has the same color-only M/F badge, but since it's unreachable it doesn't affect any real page or the "grayscale screenshot" acceptance criterion. Left alone rather than fixed or deleted; worth revisiting whenever [#24] (splitting alumni off the roster page) touches this dead code path.
+
+**Watch out:**
+- `GenderSectionHeaderViewModel.Size` exists specifically because a page-level `text-2xl` header would be visually oversized nested one level inside a per-class-year `<details>` — don't hardcode a new consumer to "lg" without checking its visual context first.
+- Both restructured `.cshtml` files hit the same Razor pitfall as [C32]/the attempt-series fix: inside an already-open `@if {}` or `@{ }` code block at the top level of the file, do not wrap a statement in a redundant `@{ }` — this is the second time this exact mistake has been made and caught in this codebase; if you see `RZ1010` again, this is almost certainly why.
+
+**Key files:**
+- `CloverleafTrack.ViewModels/Shared/GenderSectionHeaderViewModel.cs` (NEW)
+- `CloverleafTrack.Web/Views/Shared/_GenderSectionHeader.cshtml` (NEW)
+- `CloverleafTrack.Web/Views/Shared/_RosterActiveAthletesList.cshtml`
+- `CloverleafTrack.Web/Views/Shared/_FormerAthleteYearGroupSection.cshtml`
+- `CloverleafTrack.Web/Views/Shared/_FilterChipGroup.cshtml`
+- `CloverleafTrack.Web/wwwroot/css/input.css`, `site.css`
+
+---

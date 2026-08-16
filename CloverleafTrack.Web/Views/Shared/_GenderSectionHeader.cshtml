@@ -1,0 +1,35 @@
+@using CloverleafTrack.Models.Enums
+@model CloverleafTrack.ViewModels.Shared.GenderSectionHeaderViewModel
+
+@*
+    Shared triple-encoded (shape glyph + word + color) gender section header (issue #28).
+    Colors are the validated categorical slots — NOT pink/blue, which fail the worst-pair CVD
+    check. Reserved for headers/chips only; never repeat this per-row (that's the bug this
+    issue fixed on the roster). Genuinely mixed lists (search, mixed relays, custom leaderboard)
+    use the plain word in normal text ink instead — do not reuse this partial there.
+*@
+@{
+    var isBoys = Model.Gender == Gender.Male;
+    var label = isBoys ? "Boys" : "Girls";
+    var color = isBoys ? "#3987e5" : "#d95926";
+    var isSmall = Model.Size == "sm";
+    var headingClass = isSmall
+        ? "text-sm font-semibold mb-2 flex items-center gap-1.5"
+        : "text-2xl font-bold mb-4 flex items-center gap-2";
+    var countClass = isSmall
+        ? "text-xs font-normal text-gray-500 dark:text-gray-400"
+        : "text-base font-normal text-gray-500 dark:text-gray-400";
+    var glyphSize = isSmall ? 10 : 14;
+}
+<h3 class="@headingClass" style="color:@color">
+    @if (isBoys)
+    {
+        <svg width="@glyphSize" height="@glyphSize" viewBox="0 0 14 14" aria-hidden="true" class="flex-shrink-0"><circle cx="7" cy="7" r="7" fill="@color" /></svg>
+    }
+    else
+    {
+        <svg width="@glyphSize" height="@glyphSize" viewBox="0 0 14 14" aria-hidden="true" class="flex-shrink-0"><rect width="14" height="14" rx="4" fill="@color" /></svg>
+    }
+    @label
+    <span class="@countClass">— @Model.Count athlete@(Model.Count == 1 ? "" : "s")</span>
+</h3>
