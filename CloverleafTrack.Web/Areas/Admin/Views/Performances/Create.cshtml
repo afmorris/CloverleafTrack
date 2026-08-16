@@ -22,6 +22,14 @@
     .relay-athletes h4 { font-size: 14px; margin-bottom: 12px; color: #666; }
     .relay-athlete-slot { margin-bottom: 10px; }
     
+    .attempt-series { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 2px dashed #ddd; margin-top: 15px; }
+    .attempt-series h4 { font-size: 14px; margin-bottom: 12px; color: #666; }
+    .attempt-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .attempt-row label.attempt-num { width: 70px; font-size: 13px; color: #666; flex-shrink: 0; }
+    .attempt-row input[type="text"] { flex: 1; padding: 8px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    .attempt-row label.attempt-flag { display: flex; align-items: center; gap: 4px; font-size: 13px; color: #666; font-weight: normal; white-space: nowrap; }
+    .record-series-toggle { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 14px; font-weight: 500; }
+
     .alert-info { background: #e3f2fd; border: 1px solid #2196f3; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 13px; }
     .alert-warning { background: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 13px; }
     .alert-success { background: #e8f5e9; border: 1px solid #4caf50; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 13px; }
@@ -146,8 +154,30 @@
                 <div class="hint">Accepts: 11.24, 11.24s, 1:23.45, 1m23.45s</div>
                 <span asp-validation-for="TimeInput" class="text-danger"></span>
             </div>
+
+            <div id="recordSeriesToggleGroup" style="@(isFieldEvent ? "" : "display: none;")">
+                <label class="record-series-toggle">
+                    <input type="checkbox" asp-for="RecordFullSeries" id="recordFullSeries" />
+                    Record full attempt series (fouls, passes, all 6 marks)
+                </label>
+
+                <div class="attempt-series" id="attemptSeriesSection" style="display: none;">
+                    <h4>Attempts (leave a row blank to skip it)</h4>
+                    @for (int i = 0; i < Model.Attempts.Count; i++)
+                    {
+                        <div class="attempt-row">
+                            <label class="attempt-num">Attempt @Model.Attempts[i].AttemptNumber</label>
+                            <input type="hidden" asp-for="Attempts[i].AttemptNumber" />
+                            <input type="text" asp-for="Attempts[i].DistanceInput" class="attempt-distance-input" placeholder="e.g., 19'4" />
+                            <label class="attempt-flag"><input type="checkbox" asp-for="Attempts[i].IsFoul" class="attempt-foul-input" /> Foul</label>
+                            <label class="attempt-flag"><input type="checkbox" asp-for="Attempts[i].IsPass" class="attempt-pass-input" /> Pass</label>
+                        </div>
+                    }
+                    <div class="hint">A row counts only if it has a distance, or Foul, or Pass checked. Distance and Foul/Pass are mutually exclusive.</div>
+                </div>
+            </div>
         </div>
-        
+
         <div class="button-group" id="buttonGroup" style="@(Model.EventId > 0 ? "" : "display: none;")">
             <button type="submit" name="saveAndAddAnother" value="true" class="btn btn-success">
                 Save & Add Another
@@ -207,17 +237,21 @@
                     
                     // Show/hide appropriate performance input
                     var eventTypeStr = eventType ? eventType.toString() : '';
-                    var isFieldEvent = eventTypeStr.indexOf('Field') >= 0 || 
-                                       eventTypeStr.indexOf('Jump') >= 0 || 
+                    var isFieldEvent = eventTypeStr.indexOf('Field') >= 0 ||
+                                       eventTypeStr.indexOf('Jump') >= 0 ||
                                        eventTypeStr.indexOf('Throw') >= 0;
                     if (isFieldEvent) {
                         $('#distanceGroup').show();
                         $('#timeGroup').hide();
+                        $('#recordSeriesToggleGroup').show();
                     } else {
                         $('#timeGroup').show();
                         $('#distanceGroup').hide();
+                        $('#recordSeriesToggleGroup').hide();
+                        $('#recordFullSeries').prop('checked', false);
+                        $('#attemptSeriesSection').hide();
                     }
-                    
+
                     // Load athletes filtered by meet date and event gender via AJAX
                     $.get('@Url.Action("GetAthletesForMeetAndEvent", "Performances")', 
                         { meetId: meetId, eventId: eventId }, 
@@ -270,6 +304,37 @@
                     $('#athleteSection').hide();
                     $('#performanceSection').hide();
                     $('#buttonGroup').hide();
+                }
+            });
+
+            // "Record full attempt series" toggle — off by default, section hidden until checked
+            $('#recordFullSeries').change(function () {
+                $('#attemptSeriesSection').toggle($(this).is(':checked'));
+            });
+            if ($('#recordFullSeries').is(':checked')) {
+                $('#attemptSeriesSection').show();
+            }
+
+            // Each attempt row: a valid distance and Foul/Pass are mutually exclusive
+            // (matches CK_PerformanceAttempts_Valid). Checking one clears the others.
+            $('.attempt-foul-input').change(function () {
+                var row = $(this).closest('.attempt-row');
+                if ($(this).is(':checked')) {
+                    row.find('.attempt-distance-input').val('');
+                    row.find('.attempt-pass-input').prop('checked', false);
+                }
+            });
+            $('.attempt-pass-input').change(function () {
+                var row = $(this).closest('.attempt-row');
+                if ($(this).is(':checked')) {
+                    row.find('.attempt-distance-input').val('');
+                    row.find('.attempt-foul-input').prop('checked', false);
+                }
+            });
+            $('.attempt-distance-input').on('input', function () {
+                if ($(this).val()) {
+                    var row = $(this).closest('.attempt-row');
+                    row.find('.attempt-foul-input, .attempt-pass-input').prop('checked', false);
                 }
             });
         });

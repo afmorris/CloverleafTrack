@@ -542,4 +542,63 @@ public class AthleteServiceTests
         relayPR.RelayMembers.Should().Contain("Jane Doe");
         relayPR.RelayMembers.Should().Contain("Sarah Brown");
     }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_SeasonPerformance_HasAttemptSeries_WhenAttemptsRecorded()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var mockAttemptRepo = new Mock<IPerformanceAttemptRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { PerformanceId = 42, EventId = 5, EventName = "Shot Put", DistanceInches = 480, PersonalBest = true,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+        mockAttemptRepo.Setup(r => r.GetAttemptsForPerformancesAsync(It.IsAny<IEnumerable<int>>()))
+            .ReturnsAsync(new List<PerformanceAttempt>
+            {
+                new() { PerformanceId = 42, AttemptNumber = 1, DistanceInches = 460 },
+                new() { PerformanceId = 42, AttemptNumber = 2, IsFoul = true },
+                new() { PerformanceId = 42, AttemptNumber = 3, DistanceInches = 480 },
+            });
+
+        var service = new AthleteService(mockRepo.Object, mockAttemptRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        var seasonPerf = result!.Seasons.Single().EventGroups.Single().Performances.Single();
+        seasonPerf.AttemptSeries.HasAttempts.Should().BeTrue();
+        seasonPerf.AttemptSeries.Attempts.Should().HaveCount(3);
+        seasonPerf.AttemptSeries.Attempts.Single(a => a.IsBest).DistanceInches.Should().Be(480);
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_SeasonPerformance_HasNoAttemptSeries_WhenNoneRecorded()
+    {
+        // Silent-by-default: a performance with no PerformanceAttempts rows must render
+        // identically to today — AttemptSeries.HasAttempts must be false, not just empty-ish.
+        var mockRepo = new Mock<IAthleteRepository>();
+        var mockAttemptRepo = new Mock<IPerformanceAttemptRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { PerformanceId = 99, EventId = 5, EventName = "Shot Put", DistanceInches = 480, PersonalBest = true,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+        mockAttemptRepo.Setup(r => r.GetAttemptsForPerformancesAsync(It.IsAny<IEnumerable<int>>()))
+            .ReturnsAsync(new List<PerformanceAttempt>());
+
+        var service = new AthleteService(mockRepo.Object, mockAttemptRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        var seasonPerf = result!.Seasons.Single().EventGroups.Single().Performances.Single();
+        seasonPerf.AttemptSeries.HasAttempts.Should().BeFalse();
+    }
 }

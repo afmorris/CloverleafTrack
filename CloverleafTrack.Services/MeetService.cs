@@ -5,13 +5,15 @@ using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
 using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.ViewModels.Meets;
+using CloverleafTrack.ViewModels.Shared;
 using Slugify;
 
 namespace CloverleafTrack.Services;
 
 public class MeetService(
     IMeetRepository meetRepository,
-    IMeetPlacingRepository meetPlacingRepository) : IMeetService
+    IMeetPlacingRepository meetPlacingRepository,
+    IPerformanceAttemptRepository? attemptRepository = null) : IMeetService
 {
     public async Task<MeetsIndexViewModel> GetMeetsIndexAsync()
     {
@@ -114,14 +116,20 @@ public class MeetService(
             .GroupBy(p => p.PerformanceId)
             .ToDictionary(g => g.Key, g => g.ToList());
 
+        // Build a lookup: PerformanceId → attempt series (empty/absent for performances with no recorded series)
+        var attempts = attemptRepository != null
+            ? await attemptRepository.GetAttemptsForPerformancesAsync(performances.Select(p => p.PerformanceId))
+            : new List<PerformanceAttempt>();
+        var attemptLookup = PerformanceAttemptSeriesBuilder.BuildLookup(attempts);
+
         // Group by gender
         var boysPerformances = performances.Where(p => p.EventGender == Gender.Male).ToList();
         var girlsPerformances = performances.Where(p => p.EventGender == Gender.Female).ToList();
         var mixedPerformances = performances.Where(p => p.EventGender == Gender.Mixed).ToList();
 
-        var boysEvents = BuildOrderedEventGroups(boysPerformances, placingLookup);
-        var girlsEvents = BuildOrderedEventGroups(girlsPerformances, placingLookup);
-        var mixedEvents = BuildOrderedEventGroups(mixedPerformances, placingLookup);
+        var boysEvents = BuildOrderedEventGroups(boysPerformances, placingLookup, attemptLookup);
+        var girlsEvents = BuildOrderedEventGroups(girlsPerformances, placingLookup, attemptLookup);
+        var mixedEvents = BuildOrderedEventGroups(mixedPerformances, placingLookup, attemptLookup);
         var mappedPerformances = boysEvents
             .Concat(girlsEvents)
             .Concat(mixedEvents)
@@ -187,7 +195,8 @@ public class MeetService(
 
     private List<MeetEventGroupViewModel> BuildOrderedEventGroups(
         List<MeetPerformanceDto> performances,
-        Dictionary<int, List<MeetPlacing>> placingLookup)
+        Dictionary<int, List<MeetPlacing>> placingLookup,
+        Dictionary<int, PerformanceAttemptSeriesViewModel> attemptLookup)
     {
         // Separate relays from non-relays based on event name
         var relays = performances.Where(p => IsRelay(p.EventName)).ToList();
@@ -201,28 +210,28 @@ public class MeetService(
         var eventGroups = new List<MeetEventGroupViewModel>();
 
         // 1. Sprints
-        AddEventGroupsForCategory(eventGroups, nonRelays, EventCategory.Sprints, placingLookup);
+        AddEventGroupsForCategory(eventGroups, nonRelays, EventCategory.Sprints, placingLookup, attemptLookup);
 
         // 2. Distance
-        AddEventGroupsForCategory(eventGroups, nonRelays, EventCategory.Distance, placingLookup);
+        AddEventGroupsForCategory(eventGroups, nonRelays, EventCategory.Distance, placingLookup, attemptLookup);
 
         // 3. Hurdles
-        AddEventGroupsForCategory(eventGroups, nonRelays, EventCategory.Hurdles, placingLookup);
+        AddEventGroupsForCategory(eventGroups, nonRelays, EventCategory.Hurdles, placingLookup, attemptLookup);
 
         // 4. Running Relays
-        AddEventGroupsFromList(eventGroups, runningRelays, placingLookup);
+        AddEventGroupsFromList(eventGroups, runningRelays, placingLookup, attemptLookup);
 
         // 5. Jumps
-        AddEventGroupsForCategory(eventGroups, nonRelays, EventCategory.Jumps, placingLookup);
+        AddEventGroupsForCategory(eventGroups, nonRelays, EventCategory.Jumps, placingLookup, attemptLookup);
 
         // 6. Jump Relays
-        AddEventGroupsFromList(eventGroups, jumpRelays, placingLookup);
+        AddEventGroupsFromList(eventGroups, jumpRelays, placingLookup, attemptLookup);
 
         // 7. Throws
-        AddEventGroupsForCategory(eventGroups, nonRelays, EventCategory.Throws, placingLookup);
+        AddEventGroupsForCategory(eventGroups, nonRelays, EventCategory.Throws, placingLookup, attemptLookup);
 
         // 8. Throw Relays
-        AddEventGroupsFromList(eventGroups, throwRelays, placingLookup);
+        AddEventGroupsFromList(eventGroups, throwRelays, placingLookup, attemptLookup);
 
         return eventGroups;
     }
@@ -231,7 +240,8 @@ public class MeetService(
         List<MeetEventGroupViewModel> eventGroups,
         List<MeetPerformanceDto> performances,
         EventCategory category,
-        Dictionary<int, List<MeetPlacing>> placingLookup)
+        Dictionary<int, List<MeetPlacing>> placingLookup,
+        Dictionary<int, PerformanceAttemptSeriesViewModel> attemptLookup)
     {
         var categoryPerformances = performances
             .Where(p => p.EventCategory == category)
@@ -246,7 +256,7 @@ public class MeetService(
                 EventName = group.Key.EventName,
                 EventCategory = group.Key.EventCategory,
                 IsFieldEvent = IsFieldEventType(group.Key.EventType),
-                Performances = group.Select(p => BuildPerformanceViewModel(p, placingLookup)).ToList()
+                Performances = group.Select(p => BuildPerformanceViewModel(p, placingLookup, attemptLookup)).ToList()
             });
         }
     }
@@ -254,7 +264,8 @@ public class MeetService(
     private void AddEventGroupsFromList(
         List<MeetEventGroupViewModel> eventGroups,
         List<MeetPerformanceDto> performances,
-        Dictionary<int, List<MeetPlacing>> placingLookup)
+        Dictionary<int, List<MeetPlacing>> placingLookup,
+        Dictionary<int, PerformanceAttemptSeriesViewModel> attemptLookup)
     {
         var grouped = performances
             .GroupBy(p => new { p.EventId, p.EventName, p.EventCategory, p.EventSortOrder, p.EventType })
@@ -268,7 +279,7 @@ public class MeetService(
                 EventName = group.Key.EventName,
                 EventCategory = group.Key.EventCategory,
                 IsFieldEvent = IsFieldEventType(group.Key.EventType),
-                Performances = group.Select(p => BuildPerformanceViewModel(p, placingLookup)).ToList()
+                Performances = group.Select(p => BuildPerformanceViewModel(p, placingLookup, attemptLookup)).ToList()
             });
         }
     }
@@ -282,7 +293,8 @@ public class MeetService(
 
     private static MeetPerformanceViewModel BuildPerformanceViewModel(
         MeetPerformanceDto p,
-        Dictionary<int, List<MeetPlacing>> placingLookup)
+        Dictionary<int, List<MeetPlacing>> placingLookup,
+        Dictionary<int, PerformanceAttemptSeriesViewModel> attemptLookup)
     {
         var slugHelper = new SlugHelper();
         var isIndividual = p.AthleteId.HasValue;
@@ -296,6 +308,7 @@ public class MeetService(
             IsSchoolRecord = p.AllTimeRank == 1,
             IsSeasonBest = p.SeasonBest,
             AllTimeRank = p.AllTimeRank,
+            AttemptSeries = attemptLookup.GetValueOrDefault(p.PerformanceId) ?? new PerformanceAttemptSeriesViewModel(),
             RawValue = p.DistanceInches ?? p.TimeSeconds
         };
 

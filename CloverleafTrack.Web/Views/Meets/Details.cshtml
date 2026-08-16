@@ -187,6 +187,7 @@
                                                 </td>
                                                 <td class="px-4 py-2 text-right whitespace-nowrap" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
                                                     <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
+                                                    @await Html.PartialAsync("_AttemptStrip", perf.AttemptSeries)
                                                 </td>
                                                 <td class="px-4 py-2 text-right">
                                                     <div class="flex items-center justify-end gap-1 flex-wrap">
@@ -287,6 +288,7 @@
                                                 </td>
                                                 <td class="px-4 py-2 text-right whitespace-nowrap" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
                                                     <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
+                                                    @await Html.PartialAsync("_AttemptStrip", perf.AttemptSeries)
                                                 </td>
                                                 <td class="px-4 py-2 text-right">
                                                     <div class="flex items-center justify-end gap-1 flex-wrap">
@@ -387,6 +389,7 @@
                                             </td>
                                             <td class="px-4 py-2 text-right whitespace-nowrap" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
                                                 <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
+                                                @await Html.PartialAsync("_AttemptStrip", perf.AttemptSeries)
                                             </td>
                                             <td class="px-4 py-2 text-right">
                                                 <div class="flex items-center justify-end gap-1 flex-wrap">

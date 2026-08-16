@@ -26,6 +26,7 @@ builder.Services.AddScoped<IHomeRepository, HomeRepository>();
 builder.Services.AddScoped<IScoringTemplateRepository, ScoringTemplateRepository>();
 builder.Services.AddScoped<IMeetPlacingRepository, MeetPlacingRepository>();
 builder.Services.AddScoped<ISeasonScoringRepository, SeasonScoringRepository>();
+builder.Services.AddScoped<IPerformanceAttemptRepository, PerformanceAttemptRepository>();
 
 builder.Services.AddScoped<IAthleteService, AthleteService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();

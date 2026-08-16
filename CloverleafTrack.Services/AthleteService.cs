@@ -4,10 +4,13 @@ using CloverleafTrack.Models.Enums;
 using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.ViewModels;
 using CloverleafTrack.ViewModels.Athletes;
+using CloverleafTrack.ViewModels.Shared;
 
 namespace CloverleafTrack.Services;
 
-public class AthleteService(IAthleteRepository repository) : IAthleteService
+public class AthleteService(
+    IAthleteRepository repository,
+    IPerformanceAttemptRepository? attemptRepository = null) : IAthleteService
 {
     public async Task<List<AthleteViewModel>> GetActiveAthletesAsync(int currentSeason)
     {
@@ -373,6 +376,12 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
             .OrderBy(pr => pr.AllTimeRank ?? 999)
             .FirstOrDefault();
 
+        // Build a lookup: PerformanceId → attempt series (empty/absent for performances with no recorded series)
+        var attempts = attemptRepository != null
+            ? await attemptRepository.GetAttemptsForPerformancesAsync(performances.Select(p => p.PerformanceId))
+            : new List<PerformanceAttempt>();
+        var attemptLookup = PerformanceAttemptSeriesBuilder.BuildLookup(attempts);
+
         // Group by season (ordered most recent first)
         var seasons = performances
             .GroupBy(p => new { p.SeasonName, p.SeasonStartDate })
@@ -418,7 +427,8 @@ public class AthleteService(IAthleteRepository repository) : IAthleteService
                                     IsSeasonBest = p.SeasonBest,
                                     AllTimeRank = p.AllTimeRank,
                                     RawValue = p.DistanceInches ?? p.TimeSeconds,
-                                    RelayAthletes = p.RelayAthletes
+                                    RelayAthletes = p.RelayAthletes,
+                                    AttemptSeries = attemptLookup.GetValueOrDefault(p.PerformanceId) ?? new PerformanceAttemptSeriesViewModel()
                                 })
                                 .ToList()
                         };
