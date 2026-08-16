@@ -1143,6 +1143,64 @@ The issue requested that the footer make it clear which git tag or commit genera
 
 ---
 
+### [C30] SEO / Open Graph / JSON-LD (GitHub issue #17)
+
+**What changed:**
+Every public page now gets a data-derived `<meta name="description">`, full Open Graph + Twitter Card tags, and schema.org JSON-LD (`Organization` on the homepage, `Person` on athlete pages, `SportsEvent` on meet pages, `BreadcrumbList` sitewide). Added `robots.txt` and a `/sitemap.xml` route enumerating every canonical URL.
+
+**New shared building blocks:**
+- `CloverleafTrack.ViewModels/Shared/SeoMetadataViewModel.cs` (NEW) — `Description`, `CanonicalPath` (defaults to the current request path when null), `OgType`, `ImagePath` (defaults to `/img/hero-home.jpg` when null), `Breadcrumbs` (`List<SeoBreadcrumbViewModel>`), `JsonLdBlocks` (`List<string>` of pre-serialized JSON-LD objects).
+- `CloverleafTrack.Web/Utilities/SeoHelper.cs` (NEW) — static helpers: `Truncate(text, maxLength=160)` (word-boundary safe truncation + ellipsis, used as a safety net on every data-derived description), and JSON-LD builders `BuildOrganizationJsonLd`, `BuildPersonJsonLd`, `BuildSportsEventJsonLd`, `BuildBreadcrumbJsonLd`. All JSON is built as `Dictionary<string, object?>` (not anonymous types) specifically because JSON-LD requires literal `"@context"`/`"@type"` keys, which C# anonymous-type property names cannot represent — `System.Text.Json.JsonSerializer.Serialize` correctly walks nested `Dictionary<string, object?>`/`List<...>` values boxed as `object?` using their runtime type, which is the standard .NET pattern for building JSON-LD without a schema library. Uses the *default* `JavaScriptEncoder` (HTML-safe) deliberately — do not switch to `UnsafeRelaxedJsonEscaping`, the blocks are embedded raw inside `<script>` tags via `@Html.Raw`.
+- `CloverleafTrack.Web/Views/Shared/_SeoMetadata.cshtml` (NEW) — reads `ViewData["Seo"] as SeoMetadataViewModel`, falls back to a generic sitewide description/breadcrumb (`Home` only) when a page hasn't set one, and renders `<meta name="description">`, `<link rel="canonical">`, full OG + `twitter:card=summary_large_image` tags, and one `<script type="application/ld+json">` per JSON-LD block (BreadcrumbList is always rendered; page-specific blocks like Person/SportsEvent/Organization are appended). Rendered once from `Views/Shared/_Layout.cshtml`'s `<head>` via `@await Html.PartialAsync("_SeoMetadata")` — **the admin area has its own separate `_Layout.cshtml` (see C27) and is untouched**, admin pages get no SEO tags (also blocked in `robots.txt`).
+
+**Pattern each Details/Index view follows** (mirrors the existing `ViewData["Title"]` convention — the child view executes and populates ViewData before the layout reads it):
+```csharp
+@using CloverleafTrack.ViewModels.Shared
+@{
+    ViewData["Seo"] = new SeoMetadataViewModel
+    {
+        Description = CloverleafTrack.Web.Utilities.SeoHelper.Truncate($"..."),
+        Breadcrumbs = new List<SeoBreadcrumbViewModel> { new() { Name = "Home", Path = "/" }, ... },
+        JsonLdBlocks = new List<string> { CloverleafTrack.Web.Utilities.SeoHelper.BuildPersonJsonLd(...) } // optional
+    };
+}
+```
+`CanonicalPath`/`ImagePath` are deliberately left unset on every Details page — the current request path (via `Context.Request.Path`) is already the canonical URL for `/roster/{slug}`, `/leaderboard/{eventKey}`, `/meets/{slug}`, `/seasons/{name}`, so the partial's default is correct without duplicating the slug/eventKey in the view.
+
+**Per-page descriptions built from data already on the ViewModel — no new service/repository calls:**
+- **Roster/Details.cshtml**: `Model.FullName`, `Model.GraduationYear`, `Model.TopSprintEvent ?? Model.TopFieldEvent` (name/performance/`AllTimeRank`), `Model.TotalPRs`, `Model.TotalSchoolRecords`. JSON-LD `Person` awards list = every `individualRecords` row with `IsSchoolRecord == true`.
+- **Leaderboard/Details.cshtml**: `Model.GenderLabel`/`Model.EventName`, current record from `Model.SchoolRecordProgression` (`FirstOrDefault(p => p.IsCurrentRecord)`), distinct athlete count from `Model.AllPerformances.Select(p => p.AthleteName).Distinct()` (relay rows count as one "athlete" per unique team-name string — an approximation, not exact head-count), total mark count, earliest year from `Model.AllPerformances.Min(p => p.MeetDate).Year`.
+- **Meets/Details.cshtml**: `Model.Name`, `Model.Date`, `Model.LocationName`, `Model.TotalPerformances`, `Model.TotalPRs`, `Model.TotalSchoolRecords`. JSON-LD `SportsEvent` location built from `LocationName`/`LocationCity`/`LocationState`.
+- **Home/Index.cshtml**: `Model.ActiveAthletes`, `Model.TotalPRsThisSeason`, `Model.SchoolRecordsBroken`. JSON-LD `Organization`.
+- Index pages (Roster/Leaderboard/Meets/Seasons) and Seasons/Details get static or lightly data-derived descriptions + breadcrumbs but no JSON-LD block beyond the sitewide `BreadcrumbList`.
+
+**Sitemap + robots.txt:**
+- `CloverleafTrack.Web/Controllers/SitemapController.cs` (NEW) — `GET /sitemap.xml`. Deliberately reuses `ISearchService.GetSearchIndexAsync()` (already enumerates every athlete/meet/event URL for the search overlay — see C24's search feature) plus `ISeasonService.GetSeasonCardsAsync()` for `/seasons/{name}` and four static index paths (`/`, `/roster`, `/leaderboard`, `/meets`, `/seasons`). No new repository methods were added. XML is hand-built with a small manual escape helper (`&`/`<`/`>`/`"`/`'`) rather than `XDocument`, specifically to avoid `XDocument.Save(StringWriter)`'s well-known `encoding="utf-16"` declaration bug when the declared/actual encodings don't match.
+- `CloverleafTrack.Web/wwwroot/robots.txt` (NEW) — `Allow: /`, `Disallow: /Admin/`, and `Sitemap: https://cloverleaftrack.com/sitemap.xml` (production domain confirmed live in `claude/export-verification.md`). Served automatically by the existing `MapStaticAssets()` call in `Program.cs` — no routing change needed.
+
+**Watch out:**
+- **No per-page OG image generation.** `og:image` always falls back to the static `/img/hero-home.jpg` (3.2 MB — large for a social-preview asset; a follow-up should generate/resize a dedicated OG image, ideally per-page via a headless-browser render pipeline, which was explicitly out of scope for this change per the GitHub issue). `SeoMetadataViewModel.ImagePath` exists so a future per-page image can be wired in without touching the partial.
+- **The static export pipeline (see `claude/export-verification.md`) will not discover `/sitemap.xml` on its own** — it's a dynamic route, not a static file, and nothing in the exported HTML links to it (by design; sitemap.xml is meant to be crawled by search engines directly, not via link-following). Whatever crawls the site to produce the static export must be told to *also* request `/sitemap.xml` and `/robots.txt` explicitly, the same lesson already learned about orphaned event pages in that doc.
+- `SeoHelper.Truncate` is a safety net, not the primary length control — every per-page description was hand-checked against the ~160-char budget using representative data, but a very long athlete/meet/event name could still trigger the truncation path. The break is word-boundary-aware (falls back to a hard cut only if there's no space in the last ~120 chars).
+- `robots.txt`'s `Sitemap:` line hard-codes `https://cloverleaftrack.com` because robots.txt must be a static file — it cannot reflect `Request.Host` per-environment the way the rest of this feature does. If the production domain ever changes, update this file by hand.
+- Building JSON-LD with `Dictionary<string, object?>` values relies on System.Text.Json's runtime-type serialization for `object`-typed dictionary values. Do **not** refactor `SeoHelper`'s JSON-LD builders to use C# records/anonymous types for the top-level object — `@type`/`@context` are not legal C# identifiers even escaped, so there is no way to get System.Text.Json to emit those exact keys from a strongly-typed object without a custom `JsonPropertyName`-annotated class, which would need one class per schema.org type. The dictionary approach was chosen to keep this to one small helper file.
+
+**Key files:**
+- `CloverleafTrack.ViewModels/Shared/SeoMetadataViewModel.cs` (NEW)
+- `CloverleafTrack.Web/Utilities/SeoHelper.cs` (NEW)
+- `CloverleafTrack.Web/Views/Shared/_SeoMetadata.cshtml` (NEW)
+- `CloverleafTrack.Web/Views/Shared/_Layout.cshtml` (renders the partial in `<head>`)
+- `CloverleafTrack.Web/Controllers/SitemapController.cs` (NEW)
+- `CloverleafTrack.Web/wwwroot/robots.txt` (NEW)
+- `CloverleafTrack.Web/Views/Home/Index.cshtml`
+- `CloverleafTrack.Web/Views/Roster/Index.cshtml`, `Views/Roster/Details.cshtml`
+- `CloverleafTrack.Web/Views/Leaderboard/Index.cshtml`, `Views/Leaderboard/Details.cshtml`
+- `CloverleafTrack.Web/Views/Meets/Index.cshtml`, `Views/Meets/Details.cshtml`
+- `CloverleafTrack.Web/Views/Seasons/Index.cshtml`, `Views/Seasons/Details.cshtml`
+- `CloverleafTrack.Tests/Unit/Utilities/SeoHelperTests.cs` (NEW) — `Truncate` word-boundary/length behavior, structural validity (via `JsonDocument.Parse`) and required fields for all four JSON-LD builders.
+
+---
+
 ### [C29] Sortable Tables Sitewide — Extracted `wwwroot/js/sortable-tables.js`
 
 **What changed:**

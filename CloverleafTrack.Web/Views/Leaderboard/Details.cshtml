@@ -1,4 +1,5 @@
 @using Slugify
+@using CloverleafTrack.ViewModels.Shared
 @model LeaderboardDetailsViewModel
 
 @{
@@ -7,6 +8,29 @@
     var currentYear  = DateTime.Now.Year;
     var currentMonth = DateTime.Now.Month;
     var adjustedCurrentYear = currentMonth >= 6 ? currentYear + 1 : currentYear;
+
+    var eventSrMoment = Model.SchoolRecordProgression.FirstOrDefault(p => p.IsCurrentRecord)
+        ?? Model.SchoolRecordProgression.FirstOrDefault();
+    var eventSrPart = eventSrMoment != null
+        ? $" School record {eventSrMoment.Performance} by {eventSrMoment.AthleteName} ({eventSrMoment.MeetDate.Year})."
+        : "";
+    var eventAthleteCount = Model.AllPerformances.Select(p => p.AthleteName).Distinct().Count();
+    var eventMarksCount = Model.AllPerformances.Count;
+    var eventEarliestYear = eventMarksCount > 0 ? Model.AllPerformances.Min(p => p.MeetDate).Year : (int?)null;
+    var eventSincePart = eventEarliestYear.HasValue ? $" since {eventEarliestYear}." : ".";
+    var eventDescription = CloverleafTrack.Web.Utilities.SeoHelper.Truncate(
+        $"{Model.GenderLabel} {Model.EventName} all-time leaderboard — Cloverleaf Track & Field.{eventSrPart} {eventAthleteCount} athlete{(eventAthleteCount == 1 ? "" : "s")}, {eventMarksCount:N0} mark{(eventMarksCount == 1 ? "" : "s")}{eventSincePart}");
+
+    ViewData["Seo"] = new SeoMetadataViewModel
+    {
+        Description = eventDescription,
+        Breadcrumbs = new List<SeoBreadcrumbViewModel>
+        {
+            new() { Name = "Home", Path = "/" },
+            new() { Name = "Leaderboard", Path = "/leaderboard" },
+            new() { Name = $"{Model.GenderLabel} {Model.EventName}", Path = Context.Request.Path.Value ?? "/leaderboard" }
+        }
+    };
 }
 
 @functions {

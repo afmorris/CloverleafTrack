@@ -1,7 +1,20 @@
+@using CloverleafTrack.ViewModels.Shared
 @model SeasonDetailsViewModel
 
 @{
     ViewBag.Title = $"{Model.Name} Season";
+
+    ViewData["Seo"] = new SeoMetadataViewModel
+    {
+        Description = CloverleafTrack.Web.Utilities.SeoHelper.Truncate(
+            $"{Model.Name} season — Cloverleaf Track & Field. {Model.TotalMeets} meets, {Model.TotalPRs} personal records, {Model.TotalSchoolRecordsBroken} school records broken."),
+        Breadcrumbs = new List<SeoBreadcrumbViewModel>
+        {
+            new() { Name = "Home", Path = "/" },
+            new() { Name = "Seasons", Path = "/seasons" },
+            new() { Name = Model.Name, Path = Context.Request.Path.Value ?? "/seasons" }
+        }
+    };
 
     var maleIndoor = Model.IndoorTopPerformances.Where(p => p.Gender == Gender.Male).ToList();
     var femaleIndoor = Model.IndoorTopPerformances.Where(p => p.Gender == Gender.Female).ToList();

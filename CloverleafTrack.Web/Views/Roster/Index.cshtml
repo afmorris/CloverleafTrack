@@ -1,7 +1,19 @@
+@using CloverleafTrack.ViewModels.Shared
 @model RosterViewModel
 
 @{
     ViewData["Title"] = "Roster";
+
+    ViewData["Seo"] = new SeoMetadataViewModel
+    {
+        Description = "Cloverleaf Colts track & field roster — active athletes and alumni by graduation year, with personal records and career stats.",
+        CanonicalPath = "/roster",
+        Breadcrumbs = new List<SeoBreadcrumbViewModel>
+        {
+            new() { Name = "Home", Path = "/" },
+            new() { Name = "Roster", Path = "/roster" }
+        }
+    };
 }
 
 <div class="max-w-7xl mx-auto px-6">

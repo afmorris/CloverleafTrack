@@ -447,6 +447,17 @@ SQL Server's NULL != NULL behavior in unique indexes means these two filtered in
 
 ---
 
+## SEO / Open Graph / JSON-LD
+
+Every public page (not the admin area, which has its own `_Layout.cshtml`) renders a data-derived `<meta name="description">`, Open Graph + Twitter Card tags, and schema.org JSON-LD.
+
+- `CloverleafTrack.ViewModels/Shared/SeoMetadataViewModel.cs` — `Description`, `CanonicalPath` (defaults to the current request path), `OgType`, `ImagePath` (defaults to `/img/hero-home.jpg` — there is no per-page OG image generation, see BRAIN.md C28), `Breadcrumbs`, `JsonLdBlocks` (pre-serialized JSON strings).
+- `CloverleafTrack.Web/Utilities/SeoHelper.cs` — `Truncate` (word-boundary-safe, ~160 char budget) and JSON-LD builders (`BuildOrganizationJsonLd`, `BuildPersonJsonLd`, `BuildSportsEventJsonLd`, `BuildBreadcrumbJsonLd`), built on `Dictionary<string, object?>` so `"@type"`/`"@context"` keys serialize correctly.
+- Each Details/Index view sets `ViewData["Seo"] = new SeoMetadataViewModel {...}` from data already on its own ViewModel (same convention as `ViewData["Title"]`); `Views/Shared/_Layout.cshtml` renders `Views/Shared/_SeoMetadata.cshtml` once in `<head>`, which reads `ViewData["Seo"]` and falls back to a generic sitewide description when a page hasn't set one.
+- `Controllers/SitemapController.cs` serves `GET /sitemap.xml` by reusing `ISearchService.GetSearchIndexAsync()` (athletes/meets/events) + `ISeasonService.GetSeasonCardsAsync()` — no new repository methods. `wwwroot/robots.txt` points at it with a hard-coded production domain (robots.txt can't be templated per-environment).
+
+---
+
 ## Testing
 
 **Framework:** xUnit 2.x + Moq + FluentAssertions. Tests live in `CloverleafTrack.Tests/Unit/`.

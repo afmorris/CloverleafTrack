@@ -10,6 +10,7 @@
             : (pageTitle.Length > 0 ? pageTitle + " · Cloverleaf Track & Field" : "Cloverleaf Track & Field");
     }
     <title>@fullTitle</title>
+    @await Html.PartialAsync("_SeoMetadata")
     <script>(function(){var s=localStorage.getItem('theme'),d=window.matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(s===null&&d))document.documentElement.classList.add('dark');}());</script>
     <link rel="stylesheet" href="~/css/site.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
