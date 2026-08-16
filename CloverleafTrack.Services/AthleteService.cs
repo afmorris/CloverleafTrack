@@ -367,15 +367,22 @@ public class AthleteService(
             .ThenBy(pr => pr.EventSortOrder)
             .ToList();
 
-        // Get top events for hero section (individual events only)
+        // Get top events for hero section (individual events only).
+        // AllTimeRank only exists for the true top 10 all-time in an event, so it ties at the
+        // "?? 999" fallback for the vast majority of athletes — Percentile (populated for nearly
+        // every performance) is the tiebreaker that actually reflects which event is genuinely
+        // their best, rather than falling back to personalRecords' structural sort order. See
+        // BRAIN.md [C36] / issue #48.
         var topSprintEvent = personalRecords
             .Where(pr => pr.EventCategorySortOrder <= 30) // Sprints, Distance, Hurdles
             .OrderBy(pr => pr.AllTimeRank ?? 999)
+            .ThenByDescending(pr => pr.Percentile ?? 0)
             .FirstOrDefault();
 
         var topFieldEvent = personalRecords
             .Where(pr => pr.EventCategorySortOrder >= 40) // Jumps, Throws
             .OrderBy(pr => pr.AllTimeRank ?? 999)
+            .ThenByDescending(pr => pr.Percentile ?? 0)
             .FirstOrDefault();
 
         // Build a lookup: PerformanceId → attempt series (empty/absent for performances with no recorded series)
