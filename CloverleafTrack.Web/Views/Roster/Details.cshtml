@@ -6,8 +6,6 @@
     ViewBag.Title = Model.FullName;
     var individualRecords = Model.PersonalRecords.Where(pr => !pr.IsRelay).ToList();
     var relayRecords = Model.PersonalRecords.Where(pr => pr.IsRelay).ToList();
-    var hasAnyIndividualRank = individualRecords.Any(pr => pr.AllTimeRank.HasValue || pr.IsSchoolRecord);
-    var hasAnyRelayRank = relayRecords.Any(pr => pr.AllTimeRank.HasValue || pr.IsSchoolRecord);
 
     var athleteTopEvent = Model.TopSprintEvent ?? Model.TopFieldEvent;
     var athleteRankPart = athleteTopEvent?.AllTimeRank.HasValue == true ? $" (#{athleteTopEvent.AllTimeRank} all-time)" : "";
@@ -126,10 +124,8 @@
                                     <th class="px-4 py-2 text-left font-medium">Best</th>
                                     <th class="px-4 py-2 text-left font-medium hidden sm:table-cell">Date</th>
                                     <th class="px-4 py-2 text-left font-medium hidden md:table-cell">Meet</th>
-                                    @if (hasAnyIndividualRank)
-                                    {
-                                        <th class="px-4 py-2 text-left font-medium w-px"></th>
-                                    }
+                                    <th class="px-4 py-2 text-left font-medium">Pct</th>
+                                    <th class="px-4 py-2 text-left font-medium">All-time rank</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
@@ -138,21 +134,16 @@
                                     var rowClass = pr.IsSchoolRecord ? "row-sr" : "";
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 @rowClass">
                                         <td class="px-4 py-2.5 font-medium text-gray-900 dark:text-gray-100">@pr.EventName</td>
-                                        <td class="px-4 py-2.5"><span class="mark font-bold text-gray-900 dark:text-gray-100">@pr.Performance</span></td>
+                                        <td class="px-4 py-2.5">
+                                            <span class="mark font-bold text-gray-900 dark:text-gray-100">@pr.Performance</span>
+                                            @if (pr.IsSchoolRecord) { <span class="chip-sr ml-1">SR</span> }
+                                        </td>
                                         <td class="px-4 py-2.5 text-gray-500 dark:text-gray-400 hidden sm:table-cell">@pr.Date.ToString("MMM d, yyyy")</td>
                                         <td class="px-4 py-2.5 text-gray-700 dark:text-gray-300 hidden md:table-cell">
                                             @{ var helper = new SlugHelper(); var meetSlug = helper.GenerateSlug(pr.MeetName); }
                                             <a asp-controller="Meets" asp-action="Details" asp-route-slug="@meetSlug" class="underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">@pr.MeetName</a>
                                         </td>
-                                        @if (hasAnyIndividualRank)
-                                        {
-                                            <td class="px-4 py-2.5">
-                                                <div class="flex gap-1 flex-wrap items-center">
-                                                    @if (pr.IsSchoolRecord) { <span class="chip-sr">SR</span> }
-                                                    @if (pr.AllTimeRank.HasValue) { <span class="chip-rank">#@pr.AllTimeRank AT</span> }
-                                                </div>
-                                            </td>
-                                        }
+                                        @await Html.PartialAsync("_PercentileRankCells", new PercentileRankViewModel { Percentile = pr.Percentile, AllTimeRank = pr.AllTimeRank, EventMarkCount = pr.EventMarkCount })
                                     </tr>
                                 }
                             </tbody>
@@ -169,10 +160,8 @@
                                     <th class="px-4 py-2 text-left font-medium">Best</th>
                                     <th class="px-4 py-2 text-left font-medium hidden sm:table-cell">Date</th>
                                     <th class="px-4 py-2 text-left font-medium hidden md:table-cell">Meet</th>
-                                    @if (hasAnyRelayRank)
-                                    {
-                                        <th class="px-4 py-2 text-left font-medium w-px"></th>
-                                    }
+                                    <th class="px-4 py-2 text-left font-medium">Pct</th>
+                                    <th class="px-4 py-2 text-left font-medium">All-time rank</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
@@ -194,21 +183,16 @@
                                                 }
                                             </div>
                                         </td>
-                                        <td class="px-4 py-2.5"><span class="mark font-bold text-gray-900 dark:text-gray-100">@pr.Performance</span></td>
+                                        <td class="px-4 py-2.5">
+                                            <span class="mark font-bold text-gray-900 dark:text-gray-100">@pr.Performance</span>
+                                            @if (pr.IsSchoolRecord) { <span class="chip-sr ml-1">SR</span> }
+                                        </td>
                                         <td class="px-4 py-2.5 text-gray-500 dark:text-gray-400 hidden sm:table-cell">@pr.Date.ToString("MMM d, yyyy")</td>
                                         <td class="px-4 py-2.5 text-gray-700 dark:text-gray-300 hidden md:table-cell">
                                             @{ var helper2 = new SlugHelper(); var mSlug2 = helper2.GenerateSlug(pr.MeetName); }
                                             <a asp-controller="Meets" asp-action="Details" asp-route-slug="@mSlug2" class="underline hover:text-ctf-darkaccent dark:hover:text-ctf-accent">@pr.MeetName</a>
                                         </td>
-                                        @if (hasAnyRelayRank)
-                                        {
-                                            <td class="px-4 py-2.5">
-                                                <div class="flex gap-1 flex-wrap items-center">
-                                                    @if (pr.IsSchoolRecord) { <span class="chip-sr">SR</span> }
-                                                    @if (pr.AllTimeRank.HasValue) { <span class="chip-rank">#@pr.AllTimeRank AT</span> }
-                                                </div>
-                                            </td>
-                                        }
+                                        @await Html.PartialAsync("_PercentileRankCells", new PercentileRankViewModel { Percentile = pr.Percentile, AllTimeRank = pr.AllTimeRank, EventMarkCount = pr.EventMarkCount })
                                     </tr>
                                 }
                             </tbody>

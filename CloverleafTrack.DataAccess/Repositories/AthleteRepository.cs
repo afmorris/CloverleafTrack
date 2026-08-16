@@ -127,6 +127,9 @@ ORDER BY a.LastName, a.FirstName;
                                     (SELECT pp.Percentile
                                     FROM PerformancePercentiles pp
                                     WHERE pp.PerformanceId = p.Id) as Percentile,
+                                    (SELECT es.EventMarkCount
+                                    FROM EventStatistics es
+                                    WHERE es.EventId = e.Id) as EventMarkCount,
                                     m.Date as MeetDate,
                                     m.Name as MeetName,
                                     s.Name as SeasonName,
@@ -162,6 +165,9 @@ ORDER BY a.LastName, a.FirstName;
                                     (SELECT pp.Percentile
                                     FROM PerformancePercentiles pp
                                     WHERE pp.PerformanceId = p.Id) as Percentile,
+                                    (SELECT es.EventMarkCount
+                                    FROM EventStatistics es
+                                    WHERE es.EventId = e.Id) as EventMarkCount,
                                     m.Date as MeetDate,
                                     m.Name as MeetName,
                                     s.Name as SeasonName,

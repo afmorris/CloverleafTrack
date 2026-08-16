@@ -1,0 +1,35 @@
+@using CloverleafTrack.Web.Utilities
+@model CloverleafTrack.ViewModels.Shared.PercentileRankViewModel
+
+@*
+    Shared "Pct" + "All-time rank" column pair (issue #19). Renders two <td> cells — call this
+    partial directly inside a <tr>. Percentile color comes from PercentileHelper, the single
+    source of truth also used by the future mark-cell tint (issue #21).
+
+    Accessibility: the plain-English reading is exposed two ways on purpose — a `title`
+    attribute for the mouse, and a visually-hidden span for screen readers (NOT aria-label,
+    which would replace the visible number instead of supplementing it). Touch users get
+    neither; that's accepted since the number and rank are both already on screen.
+*@
+@if (Model.HasData)
+{
+    var pct = (int)Model.Percentile!.Value;
+    var color = PercentileHelper.GetTextColor(pct);
+    var suffix = PercentileHelper.OrdinalSuffix(pct);
+    var reading = PercentileHelper.GetReading(pct);
+    <td class="px-4 py-2.5 whitespace-nowrap" title="@reading">
+        <span class="tabular-nums font-bold" style="color:@color">@pct</span><span class="text-xs opacity-70" style="color:@color">@suffix</span>
+        <span class="sr-only">@reading</span>
+    </td>
+    <td class="px-4 py-2.5 text-gray-500 dark:text-gray-400 tabular-nums whitespace-nowrap">
+        @if (Model.AllTimeRank.HasValue && Model.EventMarkCount.HasValue)
+        {
+            <text>#@Model.AllTimeRank of @Model.EventMarkCount</text>
+        }
+    </td>
+}
+else
+{
+    <td></td>
+    <td></td>
+}

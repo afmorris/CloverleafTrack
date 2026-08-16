@@ -1549,3 +1549,42 @@ Root cause, confirmed by testing `dotnet publish` directly: when `SourceRevision
 - `.github/workflows/build-and-push.yml`
 
 ---
+
+### [C35] Percentile + All-Time Rank on Every Personal Best (Issue #19)
+
+**What changed:**
+The Roster Details "Personal Bests" table gained two new columns — **Pct** (percentile as a colored numeral with ordinal suffix) and **All-time rank** (`#9 of 412`) — for both the individual-PR table and the relay-PR table. The old conditional `#N AT` badge column (gated behind `hasAnyIndividualRank`/`hasAnyRelayRank`, only rendered when at least one row had a rank) was removed **from this table only**. The `SR` school-record chip was NOT removed — it moved inline next to the mark in the "Best" column instead of living in the now-gone badge column.
+
+**Scope, per the issue:** the `#N AT` badge stays everywhere else (`chip-rank` is still used on meet results, the home page highlights digest, and `_TeamResultBadge.cshtml`) — this was a table-level change, not a retirement of the badge.
+
+**New shared building blocks (designed for reuse by [#21], the mark-color-scale issue, not built yet):**
+- `CloverleafTrack.Web/Utilities/PercentileHelper.cs` (NEW) — single source of truth for the diverging percentile color scale. Holds all three color variants per bucket (`Fill`, `Ink`, `Text`) even though this change only consumes `Text` — the values are already fully specified in issue #21's table and match #19's `Text` column exactly, so building all three now means #21 later just calls the same helper instead of duplicating the bucket table. Also owns `OrdinalSuffix(int)` and `GetReading(int)` (the plain-English "97th percentile of program history — far above median" tooltip text).
+- `CloverleafTrack.ViewModels/Shared/PercentileRankViewModel.cs` (NEW) — small dedicated ViewModel (`Percentile`, `AllTimeRank`, `EventMarkCount`) so the partial isn't coupled to `PersonalRecordViewModel` specifically; a future `/search` page (#29) or event-page integration can reuse the same partial with its own data.
+- `CloverleafTrack.Web/Views/Shared/_PercentileRankCells.cshtml` (NEW) — renders the two `<td>` cells together (Pct + Rank always appear as a pair). Called directly inside a `<tr>`, same pattern as `_AttemptStrip`/`_AttemptSeriesExpanded` being invoked mid-row elsewhere in this codebase.
+
+**Data plumbing:** `AthletePerformanceDto` gained `EventMarkCount` (from `EventStatistics`, needed for the "of 412" part — `Percentile` and `AllTimeRank` were already present from the percentile-foundation work). `AthleteRepository.GetAllPerformancesForAthleteAsync`'s two UNION branches (individual + relay) both gained a `(SELECT es.EventMarkCount FROM EventStatistics es WHERE es.EventId = e.Id)` scalar subquery. `EventMarkCount` is guaranteed non-null whenever `Percentile` is — both come from the same `sp_RebuildLeaderboards` rebuild pass, and `EventStatistics` always gets a row for every `EventId` that has at least one performance (unlike `MedianValue`/`Q1Value`/`Q3Value`, which are the only columns nulled below the 10-mark floor).
+
+**Accessibility, per the issue's explicit spec:**
+- `title` attribute on the Pct cell carries the plain-English reading (mouse-only, but free).
+- A `sr-only` span **inside** the percentile element carries the same reading, so screen readers announce "97th percentile of program history — far above median" rather than just "97th" — this supplements the visible number, it does not replace it.
+- Deliberately **not** an `aria-label` on the same element — an `aria-label` would override the visible number for assistive tech instead of adding to it, which is exactly the failure mode the issue calls out.
+- No tap-to-reveal popover for touch users — accepted per the issue as not worth the interaction cost, since the number and rank are already both on screen.
+
+**Watch out:**
+- `PercentileRankViewModel.HasData` gates the whole partial on `Percentile.HasValue` — a performance with no percentile data (shouldn't happen post-migration, but matters for defensive rendering) gets two empty `<td>` cells, not a missing-column layout break.
+- The Rank cell only shows `#X of Y` when **both** `AllTimeRank` and `EventMarkCount` are present — `AllTimeRank` is null for the vast majority of athletes (only top-10-all-time performances get a `Leaderboards` row), so most rows will show a Pct number with an empty Rank cell. That's expected, not a bug.
+- New columns have no `hidden` responsive classes — they're meant to survive the mobile breakpoint per the issue ("it's two short strings"), unlike Date/Meet which already collapse via `hidden sm:table-cell`/`hidden md:table-cell`.
+- `PercentileHelper`'s `Fill`/`Ink` variants are unused dead code until #21 is built — this is intentional forward-prep, not scope creep on #19, since the color table is a single already-fully-specified source shared by both issues.
+
+**Key files:**
+- `CloverleafTrack.Web/Utilities/PercentileHelper.cs` (NEW)
+- `CloverleafTrack.ViewModels/Shared/PercentileRankViewModel.cs` (NEW)
+- `CloverleafTrack.Web/Views/Shared/_PercentileRankCells.cshtml` (NEW)
+- `CloverleafTrack.DataAccess/Dtos/AthletePerformanceDto.cs`
+- `CloverleafTrack.DataAccess/Repositories/AthleteRepository.cs`
+- `CloverleafTrack.ViewModels/Athletes/PersonalRecordViewModel.cs`
+- `CloverleafTrack.Services/AthleteService.cs`
+- `CloverleafTrack.Web/Views/Roster/Details.cshtml`
+- `CloverleafTrack.Tests/Unit/Utilities/PercentileHelperTests.cs` (NEW)
+
+---
