@@ -1,0 +1,44 @@
+@using CloverleafTrack.ViewModels.Shared
+@{
+    var seo = ViewData["Seo"] as SeoMetadataViewModel ?? new SeoMetadataViewModel();
+
+    var request = Context.Request;
+    var baseUrl = $"{request.Scheme}://{request.Host}";
+    var currentPath = request.Path.Value ?? "/";
+    var canonicalPath = string.IsNullOrEmpty(seo.CanonicalPath) ? currentPath : seo.CanonicalPath;
+    var canonicalUrl = baseUrl + canonicalPath;
+    var imageUrl = baseUrl + (string.IsNullOrEmpty(seo.ImagePath) ? "/img/hero-home.jpg" : seo.ImagePath);
+
+    var pageTitle = ViewData["Title"]?.ToString() ?? "";
+    var socialTitle = string.IsNullOrWhiteSpace(pageTitle)
+        ? "Cloverleaf Track & Field"
+        : (pageTitle.Contains("Cloverleaf") ? pageTitle : $"{pageTitle} · Cloverleaf Track & Field");
+
+    var description = string.IsNullOrWhiteSpace(seo.Description)
+        ? "Cloverleaf Colts track & field results — athlete career pages, all-time leaderboards, meet results, and school records."
+        : seo.Description;
+
+    var breadcrumbs = seo.Breadcrumbs.Count > 0
+        ? seo.Breadcrumbs
+        : new List<SeoBreadcrumbViewModel> { new() { Name = "Home", Path = "/" } };
+}
+<meta name="description" content="@description" />
+<link rel="canonical" href="@canonicalUrl" />
+
+<meta property="og:site_name" content="Cloverleaf Track & Field" />
+<meta property="og:title" content="@socialTitle" />
+<meta property="og:description" content="@description" />
+<meta property="og:url" content="@canonicalUrl" />
+<meta property="og:image" content="@imageUrl" />
+<meta property="og:type" content="@seo.OgType" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="@socialTitle" />
+<meta name="twitter:description" content="@description" />
+<meta name="twitter:image" content="@imageUrl" />
+
+<script type="application/ld+json">@Html.Raw(CloverleafTrack.Web.Utilities.SeoHelper.BuildBreadcrumbJsonLd(breadcrumbs, baseUrl))</script>
+@foreach (var block in seo.JsonLdBlocks)
+{
+    <script type="application/ld+json">@Html.Raw(block)</script>
+}

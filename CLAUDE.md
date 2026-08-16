@@ -165,7 +165,7 @@ Slug generation uses the `Slugify` NuGet package (`SlugHelper`). `Meet.Slug` is 
 | `MeetsController` | `/meets` | Meet list + meet detail page |
 | `RosterController` | `/roster` | Active + former athlete list |
 | `AthletesController` | `/athletes/{slug}` | Athlete career detail — NOTE: route is `/roster/{slug}` via `RosterController`, not `AthletesController` |
-| `LeaderboardController` | `/leaderboard` | All-time top 10 lists |
+| `LeaderboardController` | `/events` (legacy `/leaderboard` 301-redirects here — see BRAIN.md "Events IA") | All-time top 10 lists |
 
 ### Admin area (Areas/Admin/)
 | Controller | Route | Purpose |
@@ -448,6 +448,17 @@ SQL Server's NULL != NULL behavior in unique indexes means these two filtered in
 - **School Records column**: shows `SR` badge whenever `AllTimeRank == 1` (applies to both individual and relay). The Rank column is shown whenever any PR row has either a top-10 rank OR a school record.
 - **Performance by Season**: shows all events including relays. Relay performance rows show the team members below the mark/date/meet row.
 - **Season ordering**: most recent season first, using `SeasonStartDate` from the DTO (not string sort).
+
+---
+
+## SEO / Open Graph / JSON-LD
+
+Every public page (not the admin area, which has its own `_Layout.cshtml`) renders a data-derived `<meta name="description">`, Open Graph + Twitter Card tags, and schema.org JSON-LD.
+
+- `CloverleafTrack.ViewModels/Shared/SeoMetadataViewModel.cs` — `Description`, `CanonicalPath` (defaults to the current request path), `OgType`, `ImagePath` (defaults to `/img/hero-home.jpg` — there is no per-page OG image generation, see BRAIN.md C28), `Breadcrumbs`, `JsonLdBlocks` (pre-serialized JSON strings).
+- `CloverleafTrack.Web/Utilities/SeoHelper.cs` — `Truncate` (word-boundary-safe, ~160 char budget) and JSON-LD builders (`BuildOrganizationJsonLd`, `BuildPersonJsonLd`, `BuildSportsEventJsonLd`, `BuildBreadcrumbJsonLd`), built on `Dictionary<string, object?>` so `"@type"`/`"@context"` keys serialize correctly.
+- Each Details/Index view sets `ViewData["Seo"] = new SeoMetadataViewModel {...}` from data already on its own ViewModel (same convention as `ViewData["Title"]`); `Views/Shared/_Layout.cshtml` renders `Views/Shared/_SeoMetadata.cshtml` once in `<head>`, which reads `ViewData["Seo"]` and falls back to a generic sitewide description when a page hasn't set one.
+- `Controllers/SitemapController.cs` serves `GET /sitemap.xml` by reusing `ISearchService.GetSearchIndexAsync()` (athletes/meets/events) + `ISeasonService.GetSeasonCardsAsync()` — no new repository methods. `wwwroot/robots.txt` points at it with a hard-coded production domain (robots.txt can't be templated per-environment).
 
 ---
 
