@@ -16,18 +16,16 @@
 {
     @await Html.PartialAsync("_AttemptStrip", Model)
 
-    @{
-        var validAttempts = Model.Attempts.Where(a => a.IsValid).ToList();
-        var maxValid = validAttempts.Count > 0 ? validAttempts.Max(a => a.DistanceInches!.Value) : 0;
-        var chartScaleMax = maxValid > 0 ? maxValid * 1.15 : 1;
+    var validAttempts = Model.Attempts.Where(a => a.IsValid).ToList();
+    var maxValid = validAttempts.Count > 0 ? validAttempts.Max(a => a.DistanceInches!.Value) : 0;
+    var chartScaleMax = maxValid > 0 ? maxValid * 1.15 : 1;
 
-        const int chartWidth = 220;
-        const int chartHeight = 70;
-        const int labelHeight = 14;
-        const int barGap = 5;
-        var barCount = Model.Attempts.Count;
-        var barWidth = barCount > 0 ? (double)(chartWidth - barGap * (barCount - 1)) / barCount : chartWidth;
-    }
+    const int chartWidth = 220;
+    const int chartHeight = 70;
+    const int labelHeight = 14;
+    const int barGap = 5;
+    var barCount = Model.Attempts.Count;
+    var barWidth = barCount > 0 ? (double)(chartWidth - barGap * (barCount - 1)) / barCount : chartWidth;
 
     <details class="mt-1">
         <summary class="text-[11px] text-gray-400 dark:text-gray-500 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300 select-none">Show attempt chart</summary>
@@ -44,7 +42,8 @@
                     var fill = attempt.IsFoul ? "#d1d5db" : attempt.IsPass ? "#e5e7eb" : (attempt.IsBest ? "#f59e0b" : "#60a5fa");
 
                     <rect x="@x.ToString("0.##")" y="@y.ToString("0.##")" width="@barWidth.ToString("0.##")" height="@barHeight.ToString("0.##")" fill="@fill" rx="2"></rect>
-                    <text x="@((x + barWidth / 2).ToString("0.##"))" y="@(chartHeight + 11)" font-size="9" text-anchor="middle" fill="currentColor" class="text-gray-500 dark:text-gray-400">@attempt.AttemptNumber</text>
+                    @* SVG <text> collides with Razor's reserved <text> markup tag, so it must be emitted raw rather than as literal markup. *@
+                    @Html.Raw($"<text x=\"{(x + barWidth / 2).ToString("0.##")}\" y=\"{chartHeight + 11}\" font-size=\"9\" text-anchor=\"middle\" fill=\"currentColor\" class=\"text-gray-500 dark:text-gray-400\">{attempt.AttemptNumber}</text>")
                 }
             </svg>
         </div>
