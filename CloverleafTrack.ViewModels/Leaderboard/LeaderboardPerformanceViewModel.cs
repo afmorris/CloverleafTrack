@@ -1,3 +1,5 @@
+using CloverleafTrack.ViewModels.Shared;
+
 namespace CloverleafTrack.ViewModels.Leaderboard;
 
 public class LeaderboardPerformanceViewModel
@@ -17,4 +19,7 @@ public class LeaderboardPerformanceViewModel
     public string? ClassAtTimeOfPerformance { get; set; }
     /// <summary>Raw numeric value for sort: DistanceInches for field events, TimeSeconds for running events.</summary>
     public double? RawValue { get; set; }
+
+    /// <summary>Empty (HasAttempts == false) unless PerformanceAttempts rows exist for this performance.</summary>
+    public PerformanceAttemptSeriesViewModel AttemptSeries { get; set; } = new();
 }

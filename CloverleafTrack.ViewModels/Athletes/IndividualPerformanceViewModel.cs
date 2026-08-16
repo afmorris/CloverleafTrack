@@ -1,3 +1,5 @@
+using CloverleafTrack.ViewModels.Shared;
+
 namespace CloverleafTrack.ViewModels.Athletes;
 
 public class IndividualPerformanceViewModel
@@ -14,4 +16,7 @@ public class IndividualPerformanceViewModel
     public string? RelayAthletes { get; set; }
     public bool IsRelay => RelayAthletes != null;
     public string[] RelayMembers => RelayAthletes?.Split("|~|") ?? Array.Empty<string>();
+
+    /// <summary>Empty (HasAttempts == false) unless PerformanceAttempts rows exist for this performance.</summary>
+    public PerformanceAttemptSeriesViewModel AttemptSeries { get; set; } = new();
 }

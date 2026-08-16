@@ -1,7 +1,19 @@
+@using CloverleafTrack.ViewModels.Shared
 @model MeetsIndexViewModel
 
 @{
     ViewData["Title"] = "Meets";
+
+    ViewData["Seo"] = new SeoMetadataViewModel
+    {
+        Description = "Cloverleaf Colts track & field meet schedule and results, organized by season.",
+        CanonicalPath = "/meets",
+        Breadcrumbs = new List<SeoBreadcrumbViewModel>
+        {
+            new() { Name = "Home", Path = "/" },
+            new() { Name = "Meets", Path = "/meets" }
+        }
+    };
 }
 
 <div class="max-w-7xl mx-auto px-6">

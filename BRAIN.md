@@ -1143,6 +1143,297 @@ The issue requested that the footer make it clear which git tag or commit genera
 
 ---
 
+### [C32] Field-Event Attempt Series (Issue #12)
+
+**What changed:**
+Added optional, additive per-attempt data (up to 6 attempts: valid mark, foul, or pass) for field-event performances, alongside the existing single-best-mark `Performances.DistanceInches` column, which keeps its exact current meaning and is untouched by this feature when no series is recorded.
+
+**New table — `PerformanceAttempts`** (see `docs/schema.sql`, "SCHEMA ADDITIONS — Field-Event Attempt Series"):
+```sql
+CREATE TABLE [dbo].[PerformanceAttempts] (
+    [Id]             INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [PerformanceId]  INT NOT NULL,
+    [AttemptNumber]  TINYINT NOT NULL,      -- 1..6
+    [DistanceInches] FLOAT(53) NULL,        -- NULL when foul or pass
+    [IsFoul]         BIT NOT NULL DEFAULT 0,
+    [IsPass]         BIT NOT NULL DEFAULT 0,
+    CONSTRAINT [FK_PerformanceAttempts_Performances]
+        FOREIGN KEY ([PerformanceId]) REFERENCES [dbo].[Performances]([Id]) ON DELETE CASCADE,
+    CONSTRAINT [UQ_PerformanceAttempts_Performance_Attempt]
+        UNIQUE ([PerformanceId], [AttemptNumber]),
+    CONSTRAINT [CK_PerformanceAttempts_Valid]
+        CHECK (([IsFoul] = 1 AND [DistanceInches] IS NULL)
+            OR ([IsPass] = 1 AND [DistanceInches] IS NULL)
+            OR ([IsFoul] = 0 AND [IsPass] = 0 AND [DistanceInches] IS NOT NULL))
+);
+```
+`ON DELETE CASCADE` means deleting a `Performance` cascades to its `PerformanceAttempts` rows at the FK level. `AdminPerformanceRepository.DeleteAsync` deliberately does **not** also manually delete `PerformanceAttempts` — that would be redundant, not harmful, but there's nothing for it to clean up. Do not add a manual delete there.
+
+**Recompute-on-save behavior:**
+`IAdminPerformanceRepository.SaveAttemptSeriesAsync(performanceId, attempts)` replaces the full series (delete-then-insert, not a diff/upsert), recomputes `Performances.DistanceInches` as the best (max) valid attempt, and calls `EXEC sp_RebuildLeaderboards` — the same call every other performance write in this repository already makes. This mirrors `CreateAsync`/`UpdateAsync`/`DeleteAsync`.
+
+**All-foul/all-pass edge case — the decision:**
+When no attempt in the series is valid (every attempt is a foul or a pass), `PerformanceAttemptSeries.BestValidDistance(attempts)` returns `null`, and `SaveAttemptSeriesAsync` **leaves `Performances.DistanceInches` untouched** — it does not null it out and does not error. Reasoning:
+- `CK_Performances_DistanceOrTime` requires a non-null `DistanceInches` for field events; nulling it out on save would violate that constraint, and the constraint was explicitly kept unchanged by this feature.
+- There is no new value to promote to "the best mark" when the whole series is fouls/passes, so leaving the existing value (typically the mark manually entered on the single-mark path before/alongside the series) is the only safe, non-destructive choice.
+- The admin entry form's plain "Distance" field stays required and visible even when "Record full series" is checked, specifically so there is always a valid seed value for the initial `Performances` insert — the attempt series is genuinely supplementary detail on top of it, not a replacement input path.
+- Tested directly: `PerformanceAttemptTests.BestValidDistance_ReturnsNull_ForAllFoulSeries` and `PerformanceAttemptSeriesBuilderTests.BuildLookup_NoAttemptMarkedBest_WhenSeriesIsAllFoul`.
+
+**Best-mark computation is order-independent:** `PerformanceAttemptSeries.BestValidDistance` takes the max over valid attempts regardless of `AttemptNumber` order — the best mark is very often not the last attempt taken. Covered by `BestValidDistance_ReturnsMax_WhenBestAttemptIsNotTheLastOne` and `BuildLookup_MarksBestAttempt_EvenWhenNotLastInOrder`.
+
+**Gating — which events offer this:**
+Only `EventType.Field` (0), `ThrowsRelay` (5), and `JumpRelay` (4). **`FieldRelay` (2) is intentionally excluded** — the issue explicitly lists only those three EventTypes; do not "helpfully" add FieldRelay back in. `PerformancesController.IsFieldEventType(EventType?)` is the single source of truth for this on the admin side. The admin form's JS/Razor field-vs-running detection (`indexOf('Field') >= 0 || indexOf('Jump') >= 0 || indexOf('Throw') >= 0`, from `CLAUDE.md`) is reused unmodified to show/hide the "Record full series" toggle — it's a superset (also matches `FieldRelay`) but the toggle only actually persists a series when the controller's stricter `IsFieldEventType` check also passes, so submitting a series for a `FieldRelay` performance is silently a no-op.
+
+**Display — silent-by-default, three different placements:**
+- `PerformanceAttemptSeriesViewModel.HasAttempts` gates the *entire* strip — no PerformanceAttempts rows means the partial renders nothing at all, not even an empty wrapper div. This is what keeps 45 years of history with no series data rendering identically to today.
+- `_AttemptStrip.cshtml` (`Views/Shared/`) — the compact strip alone: up to 6 boxes (foul = dashed box "F", pass = em dash, valid = formatted distance, best attempt accented amber), plus valid count / average / spread.
+- `_AttemptSeriesExpanded.cshtml` (`Views/Shared/`) — strip + a native `<details>/<summary>` holding an inline-SVG bar chart. No JS charting library. Never expanded by default.
+- **Meet recap page (`Views/Meets/Details.cshtml`) uses `_AttemptStrip.cshtml` directly — never `_AttemptSeriesExpanded.cshtml`.** No `<details>` markup exists in the DOM there at all, not even collapsed, because a meet can have many throwers and a disclosure-per-row is too much visual noise at that density. **A future change must not "fix" this by swapping in the expanded partial** — this was a deliberate, explicit placement rule from the issue, not an oversight.
+- Athlete page (`Views/Roster/Details.cshtml`, "Performance by Season" per-meet rows) and Event page (`Views/Leaderboard/Details.cshtml`, both the "All Performances" and "PRs Only" tables) use `_AttemptSeriesExpanded.cshtml` — strip + collapsed disclosure.
+- Roster's Personal Records summary table (career-best-per-event) was **not** wired up to attempt series — only the per-meet "Performance by Season" rows were. Each PR row *is* backed by a specific `PerformanceId` so this could be added the same way if wanted later; it was left out to keep this change scoped to the three placements the issue named explicitly.
+
+**Wiring pattern (repeated 3x — Meet/Athlete/Leaderboard):** each public service (`MeetService`, `AthleteService`, `LeaderboardService`) takes an **optional** `IPerformanceAttemptRepository? attemptRepository = null` constructor parameter (defaults to null rather than required) specifically so the ~25 existing `new XyzService(mockRepo.Object)` call sites across the test suite did not need to be touched. When null (or when no attempts exist for the loaded performances), every display ViewModel gets a fresh empty `PerformanceAttemptSeriesViewModel` (`HasAttempts == false`) — the same silent-by-default behavior as if the repository had returned zero rows. `PerformanceAttemptSeriesBuilder.BuildLookup(attempts)` (in `CloverleafTrack.Services`) is the single shared mapper from a flat `List<PerformanceAttempt>` to a `PerformanceId → PerformanceAttemptSeriesViewModel` dictionary, used by all three services — do not duplicate this grouping/best-marking logic per service.
+
+**Distance parsing/formatting:** `PerformanceFormatHelper.ParseDistance`/`FormatDistance` (existing `Web/Utilities` helper) is reused for every attempt distance — the admin controller's `ParseAttemptInputs` calls `ParseDistance`, and `_AttemptStrip.cshtml`/`_AttemptSeriesExpanded.cshtml` call `FormatDistance` directly in the Razor view (Views compile inside the Web project, so they can reference `Web.Utilities` directly — the `CloverleafTrack.ViewModels` project cannot, since it doesn't reference Web, which is why `PerformanceAttemptViewModel.DistanceInches` stays a raw `double?` and formatting happens only in the view layer).
+
+**Key files:**
+- `docs/schema.sql` — new `PerformanceAttempts` table + index, in a new "SCHEMA ADDITIONS — Field-Event Attempt Series" section
+- `CloverleafTrack.Models/PerformanceAttempt.cs` (NEW) — entity + `PerformanceAttemptSeries.BestValidDistance` (pure, DB-free, unit-testable)
+- `CloverleafTrack.DataAccess/Interfaces/IAdminPerformanceRepository.cs`, `Repositories/AdminPerformanceRepository.cs` — `GetAttemptsForPerformanceAsync`, `SaveAttemptSeriesAsync`
+- `CloverleafTrack.DataAccess/Interfaces/IPerformanceAttemptRepository.cs`, `Repositories/PerformanceAttemptRepository.cs` (NEW) — public batch read by PerformanceIds
+- `CloverleafTrack.ViewModels/Shared/PerformanceAttemptSeriesViewModel.cs` (NEW)
+- `CloverleafTrack.ViewModels/Admin/Performances/PerformanceAttemptInputViewModel.cs` (NEW), `PerformanceEntryViewModel.cs` (+ `RecordFullSeries`, `Attempts`)
+- `CloverleafTrack.ViewModels/Meets/MeetPerformanceViewModel.cs`, `Athletes/IndividualPerformanceViewModel.cs`, `Leaderboard/LeaderboardPerformanceViewModel.cs` (+ `AttemptSeries`)
+- `CloverleafTrack.Services/PerformanceAttemptSeriesBuilder.cs` (NEW), `MeetService.cs`, `AthleteService.cs`, `LeaderboardService.cs`
+- `CloverleafTrack.Web/Areas/Admin/Controllers/PerformancesController.cs` — `IsFieldEventType`, `ParseAttemptInputs`, wired into `Create`/`Edit` GET+POST
+- `CloverleafTrack.Web/Areas/Admin/Views/Performances/Create.cshtml`, `Edit.cshtml` — "Record full series" toggle + 6 attempt rows, off by default
+- `CloverleafTrack.Web/Views/Shared/_AttemptStrip.cshtml`, `_AttemptSeriesExpanded.cshtml` (NEW)
+- `CloverleafTrack.Web/Views/Meets/Details.cshtml`, `Views/Roster/Details.cshtml`, `Views/Leaderboard/Details.cshtml` — partial calls
+- `CloverleafTrack.Web/Program.cs` — DI registration for `IPerformanceAttemptRepository`
+- Tests: `CloverleafTrack.Tests/Unit/Models/PerformanceAttemptTests.cs`, `Unit/ViewModels/Shared/PerformanceAttemptSeriesViewModelTests.cs`, `Unit/Services/PerformanceAttemptSeriesBuilderTests.cs`, plus wiring tests added to `AthleteServiceTests.cs`, `MeetServiceTests.cs`, `LeaderboardServiceTests.cs`
+
+**Watch out:**
+- Not built/tested against a real SQL Server — NuGet was network-blocked and there was no SQL Server available in this environment. The T-SQL (CHECK constraint syntax, `TINYINT`, cascade delete) needs manual verification against real SQL Server before merge.
+- `SaveAttemptSeriesAsync` is delete-then-insert for the whole series, not an upsert/diff. Fine for the admin form's "replace the whole series" UX, but don't call it with a partial series expecting the rest to survive.
+- `IsFieldEventType` in the controller intentionally does **not** match the broader JS/Razor `isFieldEvent` convention used for the single-mark Distance/Time toggle — the toggle convention includes `FieldRelay`, `IsFieldEventType` does not. Keep that gap; it's deliberate.
+
+---
+
+### [C31] Percentile Foundation (+ Median/IQR) — GitHub Issue #4
+
+**What changed:**
+Added data-foundation support for per-performance percentiles and per-event median/Q1/Q3/mark-count. No UI in this change — presentation is separate follow-up issues. This is a P1 dependency for four other backlog items (percentile display, mark color scale, roster redesign, career chart context), so the math below was hand-traced rather than assumed correct.
+
+**New tables (`docs/schema.sql`, appended in a new "SCHEMA ADDITIONS: Percentile Foundation" section):**
+
+```sql
+CREATE TABLE PerformancePercentiles (
+    PerformanceId INT     NOT NULL PRIMARY KEY,  -- FK -> Performances
+    Percentile    TINYINT NOT NULL               -- 1-100, higher is better
+);
+
+CREATE TABLE EventStatistics (
+    EventId        INT        NOT NULL PRIMARY KEY,  -- FK -> Events
+    MedianValue    FLOAT (53) NULL,
+    Q1Value        FLOAT (53) NULL,
+    Q3Value        FLOAT (53) NULL,
+    EventMarkCount INT        NOT NULL
+);
+```
+
+Both are truncate-and-repopulate every time `sp_RebuildLeaderboards` runs (Steps 11-12, added directly into the existing `CREATE PROCEDURE` body — same in-place-edit convention as [C19]'s SchoolRecord steps, *not* an `ALTER PROCEDURE` in the schema-additions section; only the two new `CREATE TABLE` statements were appended there). Same transaction as the Leaderboards/PersonalBest/SeasonBest/SchoolRecord rebuild — they can never drift out of sync with each other because a partial rebuild rolls back entirely (existing `BEGIN TRY`/`CATCH`/`ROLLBACK` wrapper).
+
+**Why a new table instead of a column on `Leaderboards`:**
+The issue's own text raised this as the open design question. `Leaderboards` is documented everywhere (CLAUDE.md, this file, multiple repository comments) as an **all-time top-10** table — several existing queries assume that cardinality (`Rank <= 10` filters, `LEFT JOIN ... AND lb.Rank = 1` for SR checks, etc.). Widening it to one row per performance (up to hundreds of rows per event) would silently change what "a row in Leaderboards" means for every existing consumer. A dedicated `PerformancePercentiles` table keeps the top-10 contract intact and mirrors the existing pattern (`Leaderboards`/`EventStatistics`/`PersonalBestHistory` are all derived, rebuild-owned tables that sit outside the raw `Performances` table). `EventStatistics` follows the same reasoning versus denormalizing onto `Events` — `Events` is admin-maintained configuration data; median/Q1/Q3/count are derived and change on every write.
+
+**Percentile algorithm (the part that had to be exactly right):**
+
+Definition used: `percentile(P) = 100 * (count of marks in EventId strictly worse than P) / (total marks in EventId)`, rounded to nearest integer (round-half-away-from-zero, T-SQL `ROUND` default), clamped to `[1, 100]`, with one explicit special case: **a population of exactly 1 mark returns 100** (the literal formula gives 0/1 = 0% for a lone mark, which would render as a broken/undefined value; a mark with nothing to compare against is defined as the event's best-and-only record instead of its worst).
+
+Direction is derived from `Event.EventType`, never from which column is non-null:
+- Running (`EventType` 1, 3): lower `TimeSeconds` is better → "worse" = higher `TimeSeconds`.
+- Field (`EventType` 0, 2, 4, 5): higher `DistanceInches` is better → "worse" = lower `DistanceInches`.
+
+**Tie handling — the reason `RANK()` was NOT used:** the SQL uses `COUNT(*) OVER (PARTITION BY EventId ORDER BY <value> RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)` to count "marks not better than P" (ties included). `RANGE` framing (as opposed to `ROWS`) makes every row that ties on the `ORDER BY` key resolve to the *same* cumulative count within its partition, so tied performances always get identical percentiles by construction — no rank-to-percentile conversion step exists to get wrong. `RANK()` would have produced an equivalent number of "not-worse" rows here too, but the `COUNT()`/`RANGE` approach keeps the "count of marks not better than P" semantics explicit in the SQL rather than hiding it behind a rank value that then has to be converted.
+
+**Population scoping:** No `AthleteId IS NOT NULL` filter anywhere in the percentile/statistics steps (unlike the `SchoolRecord`/`PersonalBest`/`SeasonBest` steps, which are individual-only). Relay and individual performances are both included in the same `PARTITION BY EventId` window — this is automatic and correct because `UQ_Events_EventKey_Gender_Environment` already guarantees one `EventId` == one comparable population (a relay event and its corresponding individual event are always different rows in `Events` with different `EventId`s, so they can never be pooled together even without an explicit filter).
+
+**Median/Q1/Q3:** Computed via `PERCENTILE_CONT(0.5 / 0.25 / 0.75) WITHIN GROUP (ORDER BY value) OVER (PARTITION BY EventId)` — SQL Server's linear-interpolation percentile function (the "continuous" method), which for an even-count population returns the average of the two middle order statistics (the standard definition) rather than picking one arbitrarily. `NULL`-when-sparse rule: `MedianValue`/`Q1Value`/`Q3Value` are set to `NULL` when `EventMarkCount < 10`; `EventMarkCount` itself is **always** populated (never null), specifically so the UI can render "#9 of 604" without a second query even for events too small to show a reference band.
+
+**Worked example (hand-traced, since no SQL Server is available to run this against):** 8 synthetic 100m dash times (running event, lower is better): 10.90, 11.05, 11.05, 11.20, 11.35, 11.50, 11.50, 11.80 seconds.
+
+| Time | Marks strictly worse | Percentile (100×worse/8, rounded) |
+|---|---|---|
+| 10.90 | 7 | 88 |
+| 11.05 (×2, tied) | 5 | 63 (both) |
+| 11.20 | 4 | 50 |
+| 11.35 | 3 | 38 |
+| 11.50 (×2, tied) | 1 | 13 (both) |
+| 11.80 | 0 | 1 (clamped up from 0) |
+
+Median (even count, N=8): average of 4th and 5th sorted values = (11.20 + 11.35) / 2 = **11.275**. Q1 (interpolated at position 2.75 of 8): both surrounding values are 11.05 → **11.05**. Q3 (interpolated at position 6.25 of 8): both surrounding values are 11.50 → **11.50**. Note this specific 8-mark example is below the 10-mark floor, so in production `EventStatistics` would store `NULL` for all three and `EventMarkCount = 8` — the median/Q1/Q3 above are shown purely to demonstrate the interpolation math, not what would actually be stored for this event.
+
+**C# / DTO / repository plumbing (making the data reachable, not just present in the DB):**
+
+- `CloverleafTrack.Models/Performance.cs` — added `public byte? Percentile { get; set; }`, same "populated by queries that join X, null when not loaded" convention as `AllTimeRank` (see [C22]/[C23] reliability notes — same caveat applies: don't assume null means "no data exists", it may mean "this query didn't join PerformancePercentiles").
+- `AthletePerformanceDto` (+`Percentile`), `LeaderboardPerformanceDto` (+`Percentile`, +`EventMarkCount`, +`MedianValue`, +`Q1Value`, +`Q3Value`), `LeaderboardDto` (+`Percentile`).
+- `AthleteRepository.GetAllWithPerformancesAsync` (roster rows) and `GetAllPerformancesForAthleteAsync` (athlete PRs / season performances) — added `(SELECT pp.Percentile FROM PerformancePercentiles pp WHERE pp.PerformanceId = p.Id) AS Percentile` subqueries, same pattern as the existing `AllTimeRank` subquery.
+- `LeaderboardRepository.GetAllPerformancesForEventAsync` (event detail rows) — `LEFT JOIN PerformancePercentiles` and `LEFT JOIN EventStatistics`, so every row on the event details page carries its own percentile plus the event-wide median/Q1/Q3/count without a second query.
+- `LeaderboardRepository.GetTopPerformancePerEventAsync` (leaderboard index top-1 rows) — `LEFT JOIN PerformancePercentiles` for the `Percentile` field.
+- Admin repositories (`AdminPerformanceRepository`, etc.) were intentionally **not** touched — out of scope per the acceptance criteria ("athlete PRs, event rows, and roster rows"), and admin views don't consume percentile yet.
+
+**Watch out:**
+- `Performance.Percentile` is a C# property only, **not** a DB column on `Performances` — exactly like `AllTimeRank`. Any new query that needs it must add the `PerformancePercentiles` subquery/join; it will silently stay `null` otherwise. Do not assume `null` means "this event has no percentile data."
+- `PerformancePercentiles` and `EventStatistics` are fully truncated and rebuilt on every `sp_RebuildLeaderboards` call (same as `Leaderboards`). Do not attempt incremental/partial updates — the whole point of "recomputed automatically on every write, never drifts" is that the full rebuild is cheap enough to run every time and is already the established pattern for this SP.
+- The single-mark-returns-100 special case is a **deliberate deviation** from the literal formula, not a bug — see the algorithm section above. If the formula ever needs to change, make sure this edge case is preserved or explicitly and deliberately changed (with a note here).
+- `CloverleafTrack.Tests/TestSupport/PercentileMath.cs` is a **test-only** mirror of the SQL algorithm — it is never referenced from `CloverleafTrack.Services` or `CloverleafTrack.DataAccess`. It exists only because this environment cannot run T-SQL against a real SQL Server to verify the stored procedure directly. If the SQL algorithm changes, this mirror (and `CloverleafTrack.Tests/Unit/DataAccess/PercentileMathTests.cs`) must be updated to match, or it will silently document stale behavior.
+- **Needs verification against a real SQL Server** (could not be run in this environment — no SQL Server available, `dotnet build`/`test` also blocked by network-restricted NuGet): the `RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` window frame syntax and `PERCENTILE_CONT(...) OVER (PARTITION BY ...)` syntax compile and behave as described; the `TRUNCATE TABLE PerformancePercentiles` / `EventStatistics` statements succeed inside the existing transaction without lock/permission issues; actual query performance of the new window-function passes over `Performances` at real data volumes (hundreds to low thousands of rows per event, so should be trivial, but unverified); the new Dapper subqueries/joins in `AthleteRepository`/`LeaderboardRepository` compile and map correctly (column name matching for `Percentile`/`MedianValue`/`Q1Value`/`Q3Value`/`EventMarkCount` was checked by hand against the DTO property names, not by an actual Dapper run).
+
+**Key files:**
+- `docs/schema.sql` — Steps 11-12 added to `sp_RebuildLeaderboards`; new "SCHEMA ADDITIONS: Percentile Foundation" section with `PerformancePercentiles` and `EventStatistics` tables.
+- `CloverleafTrack.Models/Performance.cs`
+- `CloverleafTrack.DataAccess/Dtos/AthletePerformanceDto.cs`, `LeaderboardPerformanceDto.cs`, `LeaderboardDto.cs`
+- `CloverleafTrack.DataAccess/Repositories/AthleteRepository.cs`, `LeaderboardRepository.cs`
+- `CloverleafTrack.Tests/TestSupport/PercentileMath.cs` (NEW, test-only)
+- `CloverleafTrack.Tests/Unit/DataAccess/PercentileMathTests.cs` (NEW)
+- `CLAUDE.md` — `Performances`/`Leaderboards` table docs updated with the two new tables and `sp_RebuildLeaderboards` description
+
+---
+
+### [C30] SEO / Open Graph / JSON-LD (GitHub issue #17)
+
+**What changed:**
+Every public page now gets a data-derived `<meta name="description">`, full Open Graph + Twitter Card tags, and schema.org JSON-LD (`Organization` on the homepage, `Person` on athlete pages, `SportsEvent` on meet pages, `BreadcrumbList` sitewide). Added `robots.txt` and a `/sitemap.xml` route enumerating every canonical URL.
+
+**New shared building blocks:**
+- `CloverleafTrack.ViewModels/Shared/SeoMetadataViewModel.cs` (NEW) — `Description`, `CanonicalPath` (defaults to the current request path when null), `OgType`, `ImagePath` (defaults to `/img/hero-home.jpg` when null), `Breadcrumbs` (`List<SeoBreadcrumbViewModel>`), `JsonLdBlocks` (`List<string>` of pre-serialized JSON-LD objects).
+- `CloverleafTrack.Web/Utilities/SeoHelper.cs` (NEW) — static helpers: `Truncate(text, maxLength=160)` (word-boundary safe truncation + ellipsis, used as a safety net on every data-derived description), and JSON-LD builders `BuildOrganizationJsonLd`, `BuildPersonJsonLd`, `BuildSportsEventJsonLd`, `BuildBreadcrumbJsonLd`. All JSON is built as `Dictionary<string, object?>` (not anonymous types) specifically because JSON-LD requires literal `"@context"`/`"@type"` keys, which C# anonymous-type property names cannot represent — `System.Text.Json.JsonSerializer.Serialize` correctly walks nested `Dictionary<string, object?>`/`List<...>` values boxed as `object?` using their runtime type, which is the standard .NET pattern for building JSON-LD without a schema library. Uses the *default* `JavaScriptEncoder` (HTML-safe) deliberately — do not switch to `UnsafeRelaxedJsonEscaping`, the blocks are embedded raw inside `<script>` tags via `@Html.Raw`.
+- `CloverleafTrack.Web/Views/Shared/_SeoMetadata.cshtml` (NEW) — reads `ViewData["Seo"] as SeoMetadataViewModel`, falls back to a generic sitewide description/breadcrumb (`Home` only) when a page hasn't set one, and renders `<meta name="description">`, `<link rel="canonical">`, full OG + `twitter:card=summary_large_image` tags, and one `<script type="application/ld+json">` per JSON-LD block (BreadcrumbList is always rendered; page-specific blocks like Person/SportsEvent/Organization are appended). Rendered once from `Views/Shared/_Layout.cshtml`'s `<head>` via `@await Html.PartialAsync("_SeoMetadata")` — **the admin area has its own separate `_Layout.cshtml` (see C27) and is untouched**, admin pages get no SEO tags (also blocked in `robots.txt`).
+
+**Pattern each Details/Index view follows** (mirrors the existing `ViewData["Title"]` convention — the child view executes and populates ViewData before the layout reads it):
+```csharp
+@using CloverleafTrack.ViewModels.Shared
+@{
+    ViewData["Seo"] = new SeoMetadataViewModel
+    {
+        Description = CloverleafTrack.Web.Utilities.SeoHelper.Truncate($"..."),
+        Breadcrumbs = new List<SeoBreadcrumbViewModel> { new() { Name = "Home", Path = "/" }, ... },
+        JsonLdBlocks = new List<string> { CloverleafTrack.Web.Utilities.SeoHelper.BuildPersonJsonLd(...) } // optional
+    };
+}
+```
+`CanonicalPath`/`ImagePath` are deliberately left unset on every Details page — the current request path (via `Context.Request.Path`) is already the canonical URL for `/roster/{slug}`, `/leaderboard/{eventKey}`, `/meets/{slug}`, `/seasons/{name}`, so the partial's default is correct without duplicating the slug/eventKey in the view.
+
+**Per-page descriptions built from data already on the ViewModel — no new service/repository calls:**
+- **Roster/Details.cshtml**: `Model.FullName`, `Model.GraduationYear`, `Model.TopSprintEvent ?? Model.TopFieldEvent` (name/performance/`AllTimeRank`), `Model.TotalPRs`, `Model.TotalSchoolRecords`. JSON-LD `Person` awards list = every `individualRecords` row with `IsSchoolRecord == true`.
+- **Leaderboard/Details.cshtml**: `Model.GenderLabel`/`Model.EventName`, current record from `Model.SchoolRecordProgression` (`FirstOrDefault(p => p.IsCurrentRecord)`), distinct athlete count from `Model.AllPerformances.Select(p => p.AthleteName).Distinct()` (relay rows count as one "athlete" per unique team-name string — an approximation, not exact head-count), total mark count, earliest year from `Model.AllPerformances.Min(p => p.MeetDate).Year`.
+- **Meets/Details.cshtml**: `Model.Name`, `Model.Date`, `Model.LocationName`, `Model.TotalPerformances`, `Model.TotalPRs`, `Model.TotalSchoolRecords`. JSON-LD `SportsEvent` location built from `LocationName`/`LocationCity`/`LocationState`.
+- **Home/Index.cshtml**: `Model.ActiveAthletes`, `Model.TotalPRsThisSeason`, `Model.SchoolRecordsBroken`. JSON-LD `Organization`.
+- Index pages (Roster/Leaderboard/Meets/Seasons) and Seasons/Details get static or lightly data-derived descriptions + breadcrumbs but no JSON-LD block beyond the sitewide `BreadcrumbList`.
+
+**Sitemap + robots.txt:**
+- `CloverleafTrack.Web/Controllers/SitemapController.cs` (NEW) — `GET /sitemap.xml`. Deliberately reuses `ISearchService.GetSearchIndexAsync()` (already enumerates every athlete/meet/event URL for the search overlay — see C24's search feature) plus `ISeasonService.GetSeasonCardsAsync()` for `/seasons/{name}` and four static index paths (`/`, `/roster`, `/leaderboard`, `/meets`, `/seasons`). No new repository methods were added. XML is hand-built with a small manual escape helper (`&`/`<`/`>`/`"`/`'`) rather than `XDocument`, specifically to avoid `XDocument.Save(StringWriter)`'s well-known `encoding="utf-16"` declaration bug when the declared/actual encodings don't match.
+- `CloverleafTrack.Web/wwwroot/robots.txt` (NEW) — `Allow: /`, `Disallow: /Admin/`, and `Sitemap: https://cloverleaftrack.com/sitemap.xml` (production domain confirmed live in `claude/export-verification.md`). Served automatically by the existing `MapStaticAssets()` call in `Program.cs` — no routing change needed.
+
+**Watch out:**
+- **No per-page OG image generation.** `og:image` always falls back to the static `/img/hero-home.jpg` (3.2 MB — large for a social-preview asset; a follow-up should generate/resize a dedicated OG image, ideally per-page via a headless-browser render pipeline, which was explicitly out of scope for this change per the GitHub issue). `SeoMetadataViewModel.ImagePath` exists so a future per-page image can be wired in without touching the partial.
+- **The static export pipeline (see `claude/export-verification.md`) will not discover `/sitemap.xml` on its own** — it's a dynamic route, not a static file, and nothing in the exported HTML links to it (by design; sitemap.xml is meant to be crawled by search engines directly, not via link-following). Whatever crawls the site to produce the static export must be told to *also* request `/sitemap.xml` and `/robots.txt` explicitly, the same lesson already learned about orphaned event pages in that doc.
+- `SeoHelper.Truncate` is a safety net, not the primary length control — every per-page description was hand-checked against the ~160-char budget using representative data, but a very long athlete/meet/event name could still trigger the truncation path. The break is word-boundary-aware (falls back to a hard cut only if there's no space in the last ~120 chars).
+- `robots.txt`'s `Sitemap:` line hard-codes `https://cloverleaftrack.com` because robots.txt must be a static file — it cannot reflect `Request.Host` per-environment the way the rest of this feature does. If the production domain ever changes, update this file by hand.
+- Building JSON-LD with `Dictionary<string, object?>` values relies on System.Text.Json's runtime-type serialization for `object`-typed dictionary values. Do **not** refactor `SeoHelper`'s JSON-LD builders to use C# records/anonymous types for the top-level object — `@type`/`@context` are not legal C# identifiers even escaped, so there is no way to get System.Text.Json to emit those exact keys from a strongly-typed object without a custom `JsonPropertyName`-annotated class, which would need one class per schema.org type. The dictionary approach was chosen to keep this to one small helper file.
+
+**Key files:**
+- `CloverleafTrack.ViewModels/Shared/SeoMetadataViewModel.cs` (NEW)
+- `CloverleafTrack.Web/Utilities/SeoHelper.cs` (NEW)
+- `CloverleafTrack.Web/Views/Shared/_SeoMetadata.cshtml` (NEW)
+- `CloverleafTrack.Web/Views/Shared/_Layout.cshtml` (renders the partial in `<head>`)
+- `CloverleafTrack.Web/Controllers/SitemapController.cs` (NEW)
+- `CloverleafTrack.Web/wwwroot/robots.txt` (NEW)
+- `CloverleafTrack.Web/Views/Home/Index.cshtml`
+- `CloverleafTrack.Web/Views/Roster/Index.cshtml`, `Views/Roster/Details.cshtml`
+- `CloverleafTrack.Web/Views/Leaderboard/Index.cshtml`, `Views/Leaderboard/Details.cshtml`
+- `CloverleafTrack.Web/Views/Meets/Index.cshtml`, `Views/Meets/Details.cshtml`
+- `CloverleafTrack.Web/Views/Seasons/Index.cshtml`, `Views/Seasons/Details.cshtml`
+- `CloverleafTrack.Tests/Unit/Utilities/SeoHelperTests.cs` (NEW) — `Truncate` word-boundary/length behavior, structural validity (via `JsonDocument.Parse`) and required fields for all four JSON-LD builders.
+
+---
+
+### [C29] Sortable Tables Sitewide — Extracted `wwwroot/js/sortable-tables.js`
+
+**What changed:**
+The column-sort implementation that previously lived inline in `Leaderboard/Details.cshtml` (`/leaderboard/{eventKey}.html`) was extracted into a shared, sitewide module — `CloverleafTrack.Web/wwwroot/js/sortable-tables.js` — registered in `_Layout.cshtml` alongside `filters.js`/`search.js`, and applied to the Roster table, Leaderboard index, and Meet results tables, which previously had no sorting at all.
+
+**Markup contract (auto-init, progressive enhancement):**
+```html
+<table data-sortable>
+  <thead>
+    <tr>
+      <th data-sort-col="mark" data-sort-type="num" data-sort-dir="asc">Mark</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td data-sort="71.10">1:11.10</td></tr>
+  </tbody>
+</table>
+```
+- `data-sort-col` — stable column id, also the URL hash key.
+- `data-sort-type` — `"num"` (parseFloat) or `"str"` (localeCompare; also used for ISO `yyyy-MM-dd` dates, which sort correctly as text).
+- `data-sort-dir` — `"asc"` | `"desc"`, declares which raw-value direction is "best" for that column (e.g. `asc` for times, `desc` for distances/field events). Defaults to `asc`.
+- `data-sort="value"` on the matching `<td>` (index-matched to the header, not by name) supplies the raw sort key. **Never** put a formatted display string there — see the fixes list below.
+- The module auto-wraps each `<th data-sort-col>`'s existing text in a real `<button type="button">` plus a fixed-width `aria-hidden` caret span at init time. **Razor markup should only carry the data-* attributes and the plain label text — do not hand-author the button/caret.**
+
+**Why extract instead of leaving it inline:**
+The event detail page's sort script (click → toggle asc/desc, reorder rows in place) worked but was inline, page-specific, keyboard-inaccessible (click handler on the bare `<th>`, no real button), had no "best/worst" semantics (first click was literally ascending regardless of whether ascending meant "best" for that column), no URL persistence, and no third "reset to original order" state. Issue #7 asked for sorting sitewide plus this checklist of gaps, so the extraction became a rewrite-in-place: same visual/functional result on the event page (verify: `/leaderboard/{eventKey}.html` — Rank/Athlete/Mark/Date columns), new shared behavior everywhere else.
+
+**Gaps fixed vs. the old inline script (all in `sortable-tables.js`):**
+1. **Three-state click cycle** — best-first → worst-first → original DOM order → repeat (old script only toggled asc/desc, no reset state). Original DOM order is captured once at init (`Array.prototype.slice.call(tbody.children)`) and replayed by re-appending every row in that saved order.
+2. **`data-sort-dir` = "best" direction** — first click on a column always shows the best performance first, not literally-ascending. `data-sort-dir="asc"` for times/ranks/dates, `="desc"` for distances and field events. On Leaderboard Details this is now driven dynamically off `Model.IsFieldEvent`; on Meet results it's driven off the new `MeetEventGroupViewModel.IsFieldEvent`.
+3. **URL hash state** — `#sort=<col>&dir=<asc|desc>`, read once at page load and applied via `table._sortableApplyFromHash(col, dir)`, written via `history.replaceState` on every click. Follows the exact same "read-modify-write, don't clobber other keys" convention as `filters.js`'s `#env=outdoor&gender=boys` hash (own `getHashParams`/`setHashParams` pair, not shared code, but the identical algorithm). Since `history.replaceState` never fires `hashchange`, this module and `filters.js` never trigger each other and can coexist on the same hash string safely.
+4. **Stable sort** — relies on `Array.prototype.sort` being spec-guaranteed stable (ES2019+); no custom tie-breaking needed.
+5. **Composes with filters** — the module never sets a data row's own `hidden` or `style.display`; it only reorders DOM nodes via `tbody.appendChild(row)`, so whatever `filters.js` (the `hidden` property) or page-specific filters (`Leaderboard/Details.cshtml`'s own `applyClassFilter`, which uses `row.style.display`) set stays intact through a sort. `isRowVisible(row)` checks both conventions (`!row.hidden && row.style.display !== 'none'`) wherever the module needs to know what's currently visible (rank renumbering).
+6. **`.rank-cell` renumbering** — after every sort, `.rank-cell` elements (optionally with a nested `<span>`, matching Leaderboard Details' existing markup) are renumbered 1..n in final DOM order, counting only currently-visible rows. **Watch out:** this only updates the number text, not the amber/gray top-3 color classes that `Leaderboard/Details.cshtml`'s own `applyClassFilter` also applies when renumbering for its class filter — a cosmetic gap (the gold/amber color stays tied to the row's original rank after a sort reorders it), intentionally left presentation-agnostic in the shared module rather than hardcoding one page's color scheme. `applyClassFilter` and the sort module renumber independently but consistently (same "sequential position among visible rows" semantics), so using both together (sort then class-filter, or vice versa) composes correctly.
+7. **Accessibility** — real `<button>` per sortable header (auto-generated, see markup contract above) for native keyboard support; `aria-sort="ascending"|"descending"|"none"` on the `<th>`, exactly one non-`"none"` per table at a time; a `.sr-only[aria-live="polite"][role="status"]` region auto-inserted after each `<table data-sortable>` announcing `"Sorted by {label}, best first"` / `"...worst first"` / `"Sort cleared, showing original order"`; a fixed-width (`w-4`) `aria-hidden` caret span (`↕`/`↑`/`↓`) so no layout shift when the glyph changes.
+8. **Grouped/sectioned tables** — new convention: `<tr data-sort-group-header>` marks a divider/category-label row (e.g. the "Sprints"/"Distance"/etc. rows inside `_LeaderboardGenderSection.cshtml`'s single flat table). These rows are excluded from the sort entirely and hidden (`row.hidden = true`) while any sort is active, then restored together with the full original order on the third click. This is the module's own bookkeeping (not filters' `hidden` usage) but uses the same property, which is safe since group-header rows are never also `[data-filterable]` items.
+
+**Column sort-key sourcing (never derived from visible/formatted text):**
+- **Time columns**: raw `TimeSeconds` — e.g. Leaderboard Details' `RawValue` (already existed), and new `MeetPerformanceViewModel.RawValue` (added this change, `= p.DistanceInches ?? p.TimeSeconds`, mirroring the existing `IndividualPerformanceViewModel.RawValue` pattern from [C15]).
+- **Distance columns**: raw `DistanceInches`, same `RawValue` field (only one of Time/Distance is ever populated per performance, so the null-coalesce is safe).
+- **Class/grade columns**: an ordinal, never alphabetical. Roster's "Class" column uses a new `@functions { static int ClassOrdinal(string cls) }` helper in `_RosterActiveAthletesList.cshtml` / `_FormerAthleteYearGroupSection.cshtml` mapping `"Freshman"→1 ... "Senior"→4` (fallback `5` for the `"{year} Graduate"` format `AthleteService.GraduationYearToClass` can also produce, defensively, though active-roster athletes should never hit it).
+- **Date columns**: ISO `yyyy-MM-dd`. Leaderboard Details' Date column was migrated off the old `perf.MeetDate.Ticks` numeric sort to this convention for sitewide consistency (equivalent chronological ordering either way — no behavior change, just standardized).
+- **Gender columns**: raw `(int)Gender` enum value, not the "M"/"F" badge text.
+
+**Where sorting was intentionally *not* added, and why:**
+- Roster's "Best Mark" column and Leaderboard Index's "Mark" (embedded with the date in the 2nd column of `_LeaderboardGenderSection.cshtml`) are **not** sortable — each row's mark is for a different top event per athlete/event-group, so raw seconds/inches values are not comparable across rows (a 100m time vs. a shot put distance). Leaderboard Index is sortable by **Event** name and **Date** ("Recorded") instead. Roster is sortable by Name/Class/Gender/Top-Event-name instead.
+- Meet results tables (`Meets/Details.cshtml`) *are* sortable by Mark, because each `<table data-sortable>` is scoped to a single event group (one event per `<details>`), so every row's mark is the same unit (all times or all distances) — this is what unlocked adding `MeetEventGroupViewModel.IsFieldEvent` and `MeetPerformanceViewModel.RawValue`.
+
+**New/changed C# (needed only for Meet results Mark sorting):**
+- `CloverleafTrack.ViewModels/Meets/MeetPerformanceViewModel.cs` — added `RawValue` (double?).
+- `CloverleafTrack.ViewModels/Meets/MeetEventGroupViewModel.cs` — added `IsFieldEvent` (bool).
+- `CloverleafTrack.Services/MeetService.cs` — `AddEventGroupsForCategory` / `AddEventGroupsFromList` group keys now also carry `p.EventType` (additive, does not change grouping granularity — EventId/EventName/Category/SortOrder already uniquely identify an event); new private `IsFieldEventType(EventType)` helper (`Field`, `FieldRelay`, `JumpRelay`, `ThrowsRelay` → true); `BuildPerformanceViewModel` now sets `RawValue = p.DistanceInches ?? p.TimeSeconds`.
+
+**CSS:**
+- `CloverleafTrack.Web/wwwroot/css/input.css` — appended `.sort-th-btn` (the auto-generated header button: `w-full h-full flex items-center gap-1 text-left`, hover/focus-visible ring) and `.sort-caret` (`inline-block w-4 text-center`, reserves width) to the plain top-level component-class section at the end of the file (same style as `.pill-tab`/`.chip-sr`/etc. — most of this file's custom classes live outside the one small `@layer components { }` block near the top; new classes should keep following that established plain-top-level-rule convention, not fight to get into the `@layer` block).
+- **`wwwroot/css/site.css` (the compiled Tailwind output) was rebuilt in this session** via `pnpm dlx tailwindcss@3.4.17 -i ./CloverleafTrack.Web/wwwroot/css/input.css -o ./CloverleafTrack.Web/wwwroot/css/site.css --minify` and the diff is included in this change. **Watch out:** the sandboxed dev environment's outbound network access for `pnpm dlx` is flaky/intermittent (many consecutive attempts timed out before one finally succeeded) — if you add or change Tailwind classes in a future session and the build tool is unreachable, `input.css`/Razor changes will be committed but `site.css` will silently be stale (new classes present in source, absent from the shipped stylesheet, so e.g. sort buttons would render unstyled/without hover-focus treatment even though sorting itself still functions, since it's pure JS/DOM). Always diff `site.css` after any `input.css` or new-Tailwind-class change and rebuild before merging if it's empty/unchanged.
+
+**Key files:**
+- `CloverleafTrack.Web/wwwroot/js/sortable-tables.js` (NEW — the shared module, extensively commented with the full markup contract)
+- `CloverleafTrack.Web/Views/Shared/_Layout.cshtml` (script tag registered after `filters.js`/`search.js`)
+- `CloverleafTrack.Web/Views/Leaderboard/Details.cshtml` (refactored: removed the inline "Sortable columns" IIFE and per-row `data-*-val` attributes in favor of per-cell `data-sort`; `<th>` markup simplified to attributes-only, no more hand-rolled `.sort-ind` spans)
+- `CloverleafTrack.Web/Views/Shared/_RosterActiveAthletesList.cshtml`, `_FormerAthleteYearGroupSection.cshtml` (Roster — both the active and former athlete tables)
+- `CloverleafTrack.Web/Views/Shared/_LeaderboardGenderSection.cshtml` (Leaderboard index — used by all six Boys/Girls/Mixed × Outdoor/Indoor sections; `data-sort-group-header` on the category-divider rows)
+- `CloverleafTrack.Web/Views/Meets/Details.cshtml` (Meet results — Boys/Girls/Mixed sections, one `<table data-sortable>` per event group)
+- `CloverleafTrack.ViewModels/Meets/MeetPerformanceViewModel.cs`, `MeetEventGroupViewModel.cs`
+- `CloverleafTrack.Services/MeetService.cs`
+- `CloverleafTrack.Web/wwwroot/css/input.css`, `site.css`
+
+**Watch out (summary):**
+- Compile risk: this session could not run `dotnet build` (NuGet network-blocked in this sandbox), so the `MeetService.cs`/ViewModel changes were not compiler-verified — re-check on first real build if anything looks off, though the changes are small, additive, and follow existing patterns closely (mirrors [C15]'s `RawValue` precedent exactly).
+- `pnpm dlx` network access in this sandbox is unreliable — see the CSS note above.
+- Don't add sort-related markup (button/caret) by hand in Razor — the module generates it from `data-sort-col`/label text at init. Hand-authoring it would double up or fight the module's DOM manipulation.
+- `data-sort-col` values must be unique **within a page** if you want the URL-hash restore-on-load feature to target the right column on the right table; they don't need to be globally unique across all tables on a page (e.g. "athlete"/"mark" are reused identically across every Meet-results event-group table, which is intentional — a bookmarked `#sort=mark&dir=asc` link sorts every event table on that meet page the same way).
+
+---
+
 ### [C28] Events IA — `/leaderboard` Renamed to `/events` (Routing Only)
 
 **What changed:**
@@ -1194,7 +1485,7 @@ public IActionResult DetailsLegacyRedirect(string eventKey) => RedirectToActionP
 
 ---
 
-### [C29] Event Page Depth — Season Scope + Depth Controls on `/events/{eventKey}`
+### [C33] Event Page Depth — Season Scope + Depth Controls on `/events/{eventKey}`
 
 **What changed:**
 The event detail page (`Views/Leaderboard/Details.cshtml`, `LeaderboardService.GetLeaderboardDetailsAsync`) gained two new controls, on top of the existing School Record History / All Performances-PRs Only / class-rank-chip features:

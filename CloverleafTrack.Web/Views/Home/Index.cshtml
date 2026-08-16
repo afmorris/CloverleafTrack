@@ -1,7 +1,27 @@
+@using CloverleafTrack.ViewModels.Shared
 @model HomePageViewModel
 
 @{
     ViewData["Title"] = "Cloverleaf Track & Field";
+
+    var homeBaseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+    var homeDescription = CloverleafTrack.Web.Utilities.SeoHelper.Truncate(
+        $"Cloverleaf Colts track & field — {Model.ActiveAthletes} active athletes, {Model.TotalPRsThisSeason} PRs and {Model.SchoolRecordsBroken} school records this season. All-time leaderboards, meet results, and career pages.");
+
+    ViewData["Seo"] = new SeoMetadataViewModel
+    {
+        Description = homeDescription,
+        CanonicalPath = "/",
+        OgType = "website",
+        Breadcrumbs = new List<SeoBreadcrumbViewModel>
+        {
+            new() { Name = "Home", Path = "/" }
+        },
+        JsonLdBlocks = new List<string>
+        {
+            CloverleafTrack.Web.Utilities.SeoHelper.BuildOrganizationJsonLd(homeBaseUrl)
+        }
+    };
 }
 
 <div class="max-w-4xl mx-auto px-4 sm:px-6">

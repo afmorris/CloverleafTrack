@@ -293,6 +293,13 @@ CREATE TABLE [dbo].[PersonalBestHistory] (
 --       Relay performances keep these flags at 0; the app uses
 --       AllTimeRank = 1 from Leaderboards as the school record
 --       proxy for relay rows.
+--
+-- Also rebuilds PerformancePercentiles (one row per performance,
+-- individual AND relay — population is every Performance row
+-- sharing an EventId) and EventStatistics (median/Q1/Q3/mark
+-- count per EventId). See "SCHEMA ADDITIONS: Percentile
+-- Foundation" near the end of this file for both tables' DDL
+-- and BRAIN.md for the tie-handling rationale.
 -- ============================================================
 CREATE PROCEDURE [dbo].[sp_RebuildLeaderboards]
 AS
@@ -480,6 +487,134 @@ BEGIN
         SELECT EventId, SeasonId, Gender, Environment, PerformanceId, Rank
         FROM RankedTimePerformances
         WHERE Rank <= 10;
+
+        -- Step 11: Rebuild PerformancePercentiles — one row per PERFORMANCE
+        --          (not just top-10; this covers every mark ever recorded).
+        --          Population = every Performance row sharing EventId, which
+        --          already isolates gender/environment/relay-vs-individual
+        --          because UQ_Events_EventKey_Gender_Environment guarantees
+        --          one EventId == one comparable population.
+        --
+        --          percentile(P) = 100 * (marks strictly worse than P) / (total marks in event)
+        --          rounded to nearest integer, clamped 1..100. A lone mark in
+        --          an event has no one to be "worse than" (0/1 = 0%), which
+        --          would look like a broken/undefined value in the UI, so it
+        --          is special-cased to 100 (the mark that stands alone is
+        --          definitionally the event's best-and-only record).
+        --
+        --          Tie handling: COUNT(*) OVER (... ORDER BY value RANGE
+        --          BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) is used
+        --          instead of RANK()/DENSE_RANK(). RANGE (not ROWS) framing
+        --          means every row that ties on the ORDER BY key resolves to
+        --          the SAME cumulative count, so CountBetterOrEqual — and
+        --          therefore the derived percentile — is identical for all
+        --          tied performances. RANK() would have produced the same
+        --          result here too, but COUNT()-with-RANGE keeps the "count
+        --          of marks not better than P" semantics explicit rather
+        --          than relying on a rank-to-percentile conversion.
+        TRUNCATE TABLE PerformancePercentiles;
+
+        WITH DistancePercentileStats AS (
+            SELECT
+                p.Id AS PerformanceId,
+                COUNT(*) OVER (PARTITION BY p.EventId) AS TotalMarks,
+                COUNT(*) OVER (
+                    PARTITION BY p.EventId
+                    ORDER BY p.DistanceInches DESC
+                    RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+                ) AS CountBetterOrEqual   -- marks with DistanceInches >= this mark's (ties included)
+            FROM Performances p
+            INNER JOIN Events e ON e.Id = p.EventId
+            WHERE e.EventType IN (0, 2, 4, 5)   -- Field, FieldRelay, JumpRelay, ThrowsRelay
+              AND p.DistanceInches IS NOT NULL
+        ),
+        TimePercentileStats AS (
+            SELECT
+                p.Id AS PerformanceId,
+                COUNT(*) OVER (PARTITION BY p.EventId) AS TotalMarks,
+                COUNT(*) OVER (
+                    PARTITION BY p.EventId
+                    ORDER BY p.TimeSeconds ASC
+                    RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+                ) AS CountBetterOrEqual   -- marks with TimeSeconds <= this mark's (ties included)
+            FROM Performances p
+            INNER JOIN Events e ON e.Id = p.EventId
+            WHERE e.EventType IN (1, 3)   -- Running, RunningRelay
+              AND p.TimeSeconds IS NOT NULL
+        ),
+        AllPercentileStats AS (
+            SELECT PerformanceId, TotalMarks, CountBetterOrEqual FROM DistancePercentileStats
+            UNION ALL
+            SELECT PerformanceId, TotalMarks, CountBetterOrEqual FROM TimePercentileStats
+        ),
+        ComputedPercentiles AS (
+            SELECT
+                PerformanceId,
+                CASE
+                    WHEN TotalMarks = 1 THEN 100
+                    ELSE CAST(ROUND(100.0 * (TotalMarks - CountBetterOrEqual) / TotalMarks, 0) AS INT)
+                END AS RawPercentile
+            FROM AllPercentileStats
+        )
+        INSERT INTO PerformancePercentiles (PerformanceId, Percentile)
+        SELECT
+            PerformanceId,
+            CAST(
+                CASE
+                    WHEN RawPercentile < 1 THEN 1
+                    WHEN RawPercentile > 100 THEN 100
+                    ELSE RawPercentile
+                END AS TINYINT
+            ) AS Percentile
+        FROM ComputedPercentiles;
+
+        -- Step 12: Rebuild EventStatistics — one row per EventId with the
+        --          median/Q1/Q3 raw value and total mark count. MedianValue,
+        --          Q1Value, and Q3Value are NULL when the event has fewer
+        --          than 10 marks (too small a sample for a meaningful
+        --          reference band); EventMarkCount is always populated.
+        --          PERCENTILE_CONT is the linear-interpolation method, so an
+        --          even-count population's median is the average of the two
+        --          middle values (standard definition).
+        TRUNCATE TABLE EventStatistics;
+
+        WITH DistanceEventStats AS (
+            SELECT DISTINCT
+                p.EventId,
+                COUNT(*) OVER (PARTITION BY p.EventId) AS EventMarkCount,
+                PERCENTILE_CONT(0.5)  WITHIN GROUP (ORDER BY p.DistanceInches) OVER (PARTITION BY p.EventId) AS MedianValue,
+                PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY p.DistanceInches) OVER (PARTITION BY p.EventId) AS Q1Value,
+                PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY p.DistanceInches) OVER (PARTITION BY p.EventId) AS Q3Value
+            FROM Performances p
+            INNER JOIN Events e ON e.Id = p.EventId
+            WHERE e.EventType IN (0, 2, 4, 5)
+              AND p.DistanceInches IS NOT NULL
+        ),
+        TimeEventStats AS (
+            SELECT DISTINCT
+                p.EventId,
+                COUNT(*) OVER (PARTITION BY p.EventId) AS EventMarkCount,
+                PERCENTILE_CONT(0.5)  WITHIN GROUP (ORDER BY p.TimeSeconds) OVER (PARTITION BY p.EventId) AS MedianValue,
+                PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY p.TimeSeconds) OVER (PARTITION BY p.EventId) AS Q1Value,
+                PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY p.TimeSeconds) OVER (PARTITION BY p.EventId) AS Q3Value
+            FROM Performances p
+            INNER JOIN Events e ON e.Id = p.EventId
+            WHERE e.EventType IN (1, 3)
+              AND p.TimeSeconds IS NOT NULL
+        ),
+        AllEventStats AS (
+            SELECT * FROM DistanceEventStats
+            UNION ALL
+            SELECT * FROM TimeEventStats
+        )
+        INSERT INTO EventStatistics (EventId, MedianValue, Q1Value, Q3Value, EventMarkCount)
+        SELECT
+            EventId,
+            CASE WHEN EventMarkCount >= 10 THEN MedianValue ELSE NULL END,
+            CASE WHEN EventMarkCount >= 10 THEN Q1Value ELSE NULL END,
+            CASE WHEN EventMarkCount >= 10 THEN Q3Value ELSE NULL END,
+            EventMarkCount
+        FROM AllEventStats;
 
         COMMIT TRANSACTION;
         PRINT 'Leaderboards rebuild completed successfully.';
@@ -794,3 +929,118 @@ ALTER TABLE [dbo].[Meets]
 -- columns have been removed from Meets.
 -- See docs/migration_schools.sql for the migration script.
 -- ============================================================
+
+
+-- ============================================================
+-- SCHEMA ADDITIONS — Field-Event Attempt Series (Issue #12)
+-- ============================================================
+--
+-- Field-event throws/jumps often have up to 6 attempts per
+-- performance (fouls, passes, valid marks). Performances only
+-- ever stored the single best mark. PerformanceAttempts adds
+-- the full per-attempt series as OPTIONAL, ADDITIVE child data.
+--
+-- Performances.DistanceInches is untouched by this addition and
+-- keeps meaning exactly what it always has — "the best mark" —
+-- so every existing query, sp_RebuildLeaderboards, and the
+-- Leaderboards table keep working unchanged whether or not a
+-- given Performance has attempt rows. A Performance NEVER
+-- requires PerformanceAttempts rows to exist; 45 years of
+-- history with no series data is expected and must render
+-- identically to a performance that simply hasn't had its
+-- series recorded yet.
+--
+-- CK_PerformanceAttempts_Valid enforces the same
+-- foul/pass-XOR-distance rule per attempt that
+-- CK_Performances_DistanceOrTime enforces per performance:
+-- an attempt is either a foul, a pass, or a valid distance —
+-- never more than one of those, never none of them.
+--
+-- ON DELETE CASCADE means deleting a Performance row deletes
+-- its PerformanceAttempts automatically at the FK level. The
+-- application layer (AdminPerformanceRepository.DeleteAsync)
+-- must NOT also manually delete PerformanceAttempts rows —
+-- that would be redundant, not harmful, but the FK already
+-- guarantees no orphaned attempt rows are possible.
+-- ============================================================
+CREATE TABLE [dbo].[PerformanceAttempts] (
+    [Id]             INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [PerformanceId]  INT NOT NULL,
+    [AttemptNumber]  TINYINT NOT NULL,      -- 1..6
+    [DistanceInches] FLOAT(53) NULL,        -- NULL when foul or pass
+    [IsFoul]         BIT NOT NULL DEFAULT 0,
+    [IsPass]         BIT NOT NULL DEFAULT 0,
+    CONSTRAINT [FK_PerformanceAttempts_Performances]
+        FOREIGN KEY ([PerformanceId]) REFERENCES [dbo].[Performances]([Id]) ON DELETE CASCADE,
+    CONSTRAINT [UQ_PerformanceAttempts_Performance_Attempt]
+        UNIQUE ([PerformanceId], [AttemptNumber]),
+    CONSTRAINT [CK_PerformanceAttempts_Valid]
+        CHECK (([IsFoul] = 1 AND [DistanceInches] IS NULL)
+            OR ([IsPass] = 1 AND [DistanceInches] IS NULL)
+            OR ([IsFoul] = 0 AND [IsPass] = 0 AND [DistanceInches] IS NOT NULL))
+);
+
+CREATE NONCLUSTERED INDEX [IX_PerformanceAttempts_PerformanceId]
+    ON [dbo].[PerformanceAttempts]([PerformanceId] ASC);
+
+
+-- ============================================================
+-- SCHEMA ADDITIONS: Percentile Foundation (+ Median/IQR)
+-- ============================================================
+-- Both tables are rebuilt in full (TRUNCATE + repopulate) by
+-- sp_RebuildLeaderboards in the same transaction as Leaderboards,
+-- PersonalBest, SeasonBest, and SchoolRecord — see Steps 11-12
+-- in the procedure body above. See BRAIN.md for the full design
+-- rationale, especially why percentile lives in its own table
+-- instead of a new column on Leaderboards.
+-- ============================================================
+
+-- ============================================================
+-- PERFORMANCE PERCENTILES
+-- One row per Performance (individual AND relay — every mark
+-- ever recorded, not just the top-10 rows that live in
+-- Leaderboards). Percentile is 1-100, higher is better, scoped
+-- strictly to PerformanceId's EventId. Deliberately NOT a column
+-- on Leaderboards: Leaderboards is documented ("All-time top-10
+-- rankings") and consumed elsewhere as a top-10-only table (see
+-- e.g. GetTopPerformancePerEventAsync, various "Rank <= 10"
+-- queries); widening it to one row per performance would change
+-- its cardinality contract for every existing consumer. A
+-- dedicated table keeps that contract intact and mirrors the
+-- existing Leaderboards/EventStatistics pattern of derived,
+-- rebuild-owned data living outside the raw Performances table.
+-- ============================================================
+CREATE TABLE [dbo].[PerformancePercentiles] (
+    [PerformanceId] INT     NOT NULL,
+    [Percentile]    TINYINT NOT NULL,   -- 1-100, higher is better
+    PRIMARY KEY CLUSTERED ([PerformanceId] ASC),
+    CONSTRAINT [FK_PerformancePercentiles_Performances]
+        FOREIGN KEY ([PerformanceId]) REFERENCES [dbo].[Performances] ([Id])
+);
+
+
+-- ============================================================
+-- EVENT STATISTICS
+-- One row per EventId: median/Q1/Q3 raw value (TimeSeconds or
+-- DistanceInches, matching whichever column the event uses) and
+-- total mark count. MedianValue/Q1Value/Q3Value are NULL when
+-- EventMarkCount < 10 — too small a sample for a statistically
+-- meaningful reference band; the eventual UI suppresses the band
+-- when null. EventMarkCount is always populated so the UI can
+-- render e.g. "#9 of 604" without a second query.
+--
+-- Lives in its own table (not denormalized onto Events) because
+-- Events is configuration data (name, type, gender, environment)
+-- maintained by admins; these values are derived and rebuilt on
+-- every performance write, matching the Leaderboards precedent.
+-- ============================================================
+CREATE TABLE [dbo].[EventStatistics] (
+    [EventId]        INT        NOT NULL,
+    [MedianValue]    FLOAT (53) NULL,
+    [Q1Value]        FLOAT (53) NULL,
+    [Q3Value]        FLOAT (53) NULL,
+    [EventMarkCount] INT        NOT NULL,
+    PRIMARY KEY CLUSTERED ([EventId] ASC),
+    CONSTRAINT [FK_EventStatistics_Events]
+        FOREIGN KEY ([EventId]) REFERENCES [dbo].[Events] ([Id])
+);

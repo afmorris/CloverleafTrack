@@ -1,9 +1,21 @@
+@using CloverleafTrack.ViewModels.Shared
 @model LeaderboardViewModel
 
 @{
     ViewData["Title"] = "Leaderboard";
     var month = DateTime.Now.Month;
     var defaultEnv = (month >= 12 || month <= 2) ? "indoor" : "outdoor";
+
+    ViewData["Seo"] = new SeoMetadataViewModel
+    {
+        Description = "Cloverleaf Colts all-time leaderboards — top performers in every event, indoor and outdoor, boys and girls.",
+        CanonicalPath = "/events",
+        Breadcrumbs = new List<SeoBreadcrumbViewModel>
+        {
+            new() { Name = "Home", Path = "/" },
+            new() { Name = "Leaderboard", Path = "/events" }
+        }
+    };
 }
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

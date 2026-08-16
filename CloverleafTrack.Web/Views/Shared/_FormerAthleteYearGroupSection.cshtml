@@ -11,19 +11,27 @@
         </svg>
     </summary>
 
-    <table class="w-full text-sm border-t border-gray-100 dark:border-gray-700">
+    <table class="w-full text-sm border-t border-gray-100 dark:border-gray-700" data-sortable>
+        <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            <tr>
+                <th class="px-4 py-2 text-left font-medium" data-sort-col="name" data-sort-type="str" data-sort-dir="asc">Name</th>
+                <th class="px-4 py-2 text-left font-medium hidden sm:table-cell" data-sort-col="gender" data-sort-type="num" data-sort-dir="asc">Gender</th>
+                <th class="px-4 py-2 text-left font-medium hidden md:table-cell" data-sort-col="event" data-sort-type="str" data-sort-dir="asc">Top Event</th>
+                <th class="px-4 py-2 text-right font-medium">Best Mark</th>
+            </tr>
+        </thead>
         <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
             @foreach (var athlete in Model.Value)
             {
                 var topEvent = athlete.EventsInCategory.FirstOrDefault();
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                    <td class="px-4 py-2.5">
+                    <td class="px-4 py-2.5" data-sort="@athlete.FullName">
                         <a asp-controller="Roster" asp-action="Details" asp-route-slug="@athlete.AthleteSlug"
                            class="font-medium text-gray-900 dark:text-white hover:underline">
                             @athlete.FullName
                         </a>
                     </td>
-                    <td class="px-4 py-2.5 hidden sm:table-cell">
+                    <td class="px-4 py-2.5 hidden sm:table-cell" data-sort="@((int)athlete.Gender)">
                         @if (athlete.Gender == CloverleafTrack.Models.Enums.Gender.Male)
                         {
                             <span class="text-blue-500 dark:text-blue-400 font-medium text-xs">M</span>
@@ -33,7 +41,7 @@
                             <span class="text-pink-500 dark:text-pink-400 font-medium text-xs">F</span>
                         }
                     </td>
-                    <td class="px-4 py-2.5 text-gray-600 dark:text-gray-400 truncate max-w-[160px] hidden md:table-cell">@(topEvent?.Name ?? "")</td>
+                    <td class="px-4 py-2.5 text-gray-600 dark:text-gray-400 truncate max-w-[160px] hidden md:table-cell" data-sort="@(topEvent?.Name ?? "")">@(topEvent?.Name ?? "")</td>
                     <td class="px-4 py-2.5 text-right">
                         @if (topEvent != null)
                         {

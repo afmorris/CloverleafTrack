@@ -28,4 +28,14 @@ public class LeaderboardPerformanceDto
     public bool PersonalBest { get; set; }
     public bool SchoolRecord { get; set; }
     public int? AllTimeRank { get; set; }
+    public byte? Percentile { get; set; }
+
+    // Event-level statistics (same value repeated on every row for the event) —
+    // denormalized here so the UI can render "#9 of 604" and a median/IQR band
+    // without a second query. Null Median/Q1/Q3 means the event has fewer than
+    // 10 marks (see EventStatistics table / sp_RebuildLeaderboards).
+    public int EventMarkCount { get; set; }
+    public double? MedianValue { get; set; }
+    public double? Q1Value { get; set; }
+    public double? Q3Value { get; set; }
 }

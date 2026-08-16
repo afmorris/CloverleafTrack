@@ -156,30 +156,77 @@ public class AdminPerformanceRepository(IDbConnectionFactory connectionFactory) 
     public async Task<bool> DeleteAsync(int id)
     {
         using var connection = connectionFactory.CreateConnection();
-        
+
         // Get the performance details before deleting (for leaderboard recalculation)
         const string getPerformanceSql = "SELECT EventId FROM Performances WHERE Id = @Id";
         var eventId = await connection.QuerySingleOrDefaultAsync<int?>(getPerformanceSql, new { Id = id });
-        
+
         // Delete related records in the correct order (respecting foreign key constraints)
-        
+
         // 1. Delete from Leaderboards (references Performances)
         await connection.ExecuteAsync("DELETE FROM Leaderboards WHERE PerformanceId = @Id", new { Id = id });
-        
+
         // 2. Delete from PerformanceAthletes (references Performances)
         await connection.ExecuteAsync("DELETE FROM PerformanceAthletes WHERE PerformanceId = @Id", new { Id = id });
-        
+
+        // NOTE: PerformanceAttempts is intentionally NOT deleted here. Its FK
+        // (FK_PerformanceAttempts_Performances) is declared ON DELETE CASCADE,
+        // so SQL Server removes any attempt rows automatically when the
+        // Performances row below is deleted. Adding a manual delete here would
+        // be redundant, not harmful, but there is nothing for it to clean up.
+
         // 3. Delete the performance itself
         const string sql = "DELETE FROM Performances WHERE Id = @Id";
         var rowsAffected = await connection.ExecuteAsync(sql, new { Id = id });
-        
+
         // 4. Recalculate leaderboards for the affected event
         if (eventId.HasValue)
         {
             await connection.ExecuteAsync("EXEC sp_RebuildLeaderboards");
         }
-        
+
         return rowsAffected > 0;
+    }
+
+    public async Task<List<PerformanceAttempt>> GetAttemptsForPerformanceAsync(int performanceId)
+    {
+        using var connection = connectionFactory.CreateConnection();
+        const string sql = "SELECT * FROM PerformanceAttempts WHERE PerformanceId = @PerformanceId ORDER BY AttemptNumber";
+        var attempts = await connection.QueryAsync<PerformanceAttempt>(sql, new { PerformanceId = performanceId });
+        return attempts.ToList();
+    }
+
+    public async Task SaveAttemptSeriesAsync(int performanceId, List<PerformanceAttempt> attempts)
+    {
+        using var connection = connectionFactory.CreateConnection();
+
+        // Replace the full series for this performance.
+        await connection.ExecuteAsync("DELETE FROM PerformanceAttempts WHERE PerformanceId = @PerformanceId", new { PerformanceId = performanceId });
+
+        const string insertSql = @"
+            INSERT INTO PerformanceAttempts (PerformanceId, AttemptNumber, DistanceInches, IsFoul, IsPass)
+            VALUES (@PerformanceId, @AttemptNumber, @DistanceInches, @IsFoul, @IsPass)";
+
+        foreach (var attempt in attempts)
+        {
+            attempt.PerformanceId = performanceId;
+            await connection.ExecuteAsync(insertSql, attempt);
+        }
+
+        // Recompute Performances.DistanceInches as the best (max) valid attempt.
+        // All-foul/all-pass edge case: BestValidDistance returns null and we
+        // deliberately leave the existing DistanceInches value untouched — see
+        // the interface doc comment and BRAIN.md for why.
+        var bestValid = PerformanceAttemptSeries.BestValidDistance(attempts);
+        if (bestValid.HasValue)
+        {
+            await connection.ExecuteAsync(
+                "UPDATE Performances SET DistanceInches = @DistanceInches WHERE Id = @Id",
+                new { DistanceInches = bestValid.Value, Id = performanceId });
+        }
+
+        // Recalculate leaderboards, exactly as every other performance write does.
+        await connection.ExecuteAsync("EXEC sp_RebuildLeaderboards");
     }
 
     public async Task<List<Performance>> GetPerformancesForMeetAsync(int meetId)

@@ -380,4 +380,48 @@ public class MeetServiceTests
         meetNames[0].Should().Be("Earlier Meet");
         meetNames[1].Should().Be("Later Meet");
     }
+
+    // -------------------------------------------------------------------------
+    // Attempt series wiring — field-event attempt series (issue #12)
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public async Task GetMeetDetailsAsync_Performance_HasNoAttemptSeries_WhenNoneRecorded()
+    {
+        // Silent-by-default: a performance with no PerformanceAttempts rows must render
+        // identically to today on the meet recap page.
+        var meet = BuildMeet();
+        var perf = BuildPerf(1, "Shot Put", Gender.Male, EventCategory.Throws, EventType.Field, distanceInches: 480);
+        SetupMeetDetails(meet, new List<MeetPerformanceDto> { perf });
+
+        var result = await _service.GetMeetDetailsAsync("spring-invitational");
+
+        var vm = result!.BoysEvents.Single().Performances.Single();
+        vm.AttemptSeries.HasAttempts.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task GetMeetDetailsAsync_Performance_HasAttemptSeries_WhenAttemptsRecorded()
+    {
+        var mockAttemptRepo = new Mock<IPerformanceAttemptRepository>();
+        var serviceWithAttempts = new MeetService(_mockRepo.Object, _mockPlacingRepo.Object, mockAttemptRepo.Object);
+
+        var meet = BuildMeet();
+        var perf = BuildPerf(1, "Shot Put", Gender.Male, EventCategory.Throws, EventType.Field, distanceInches: 480);
+        SetupMeetDetails(meet, new List<MeetPerformanceDto> { perf });
+        mockAttemptRepo.Setup(r => r.GetAttemptsForPerformancesAsync(It.IsAny<IEnumerable<int>>()))
+            .ReturnsAsync(new List<PerformanceAttempt>
+            {
+                new() { PerformanceId = 1, AttemptNumber = 1, DistanceInches = 460 },
+                new() { PerformanceId = 1, AttemptNumber = 2, IsPass = true },
+                new() { PerformanceId = 1, AttemptNumber = 3, DistanceInches = 480 },
+            });
+
+        var result = await serviceWithAttempts.GetMeetDetailsAsync("spring-invitational");
+
+        var vm = result!.BoysEvents.Single().Performances.Single();
+        vm.AttemptSeries.HasAttempts.Should().BeTrue();
+        vm.AttemptSeries.ValidAttemptCount.Should().Be(2);
+        vm.AttemptSeries.Attempts.Single(a => a.IsBest).DistanceInches.Should().Be(480);
+    }
 }

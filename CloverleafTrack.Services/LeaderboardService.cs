@@ -1,14 +1,19 @@
 ﻿using CloverleafTrack.DataAccess.Dtos;
 using CloverleafTrack.DataAccess.Interfaces;
+using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
 using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.ViewModels.Leaderboard;
+using CloverleafTrack.ViewModels.Shared;
 using Slugify;
 using Environment = CloverleafTrack.Models.Enums.Environment;
 
 namespace CloverleafTrack.Services;
 
-public class LeaderboardService(ILeaderboardRepository leaderboardRepository, ISeasonRepository seasonRepository) : ILeaderboardService
+public class LeaderboardService(
+    ILeaderboardRepository leaderboardRepository,
+    ISeasonRepository seasonRepository,
+    IPerformanceAttemptRepository? attemptRepository = null) : ILeaderboardService
 {
     private static readonly string[] Classes = { "Freshman", "Sophomore", "Junior", "Senior" };
 
@@ -135,13 +140,19 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository, IS
             ? progression.OrderByDescending(p => p.RawValue).ToList()
             : progression.OrderBy(p => p.RawValue).ToList();
 
+        // Build a lookup: PerformanceId → attempt series (empty/absent for performances with no recorded series)
+        var attempts = attemptRepository != null
+            ? await attemptRepository.GetAttemptsForPerformancesAsync(scopedPerformances.Select(p => p.PerformanceId))
+            : new List<PerformanceAttempt>();
+        var attemptLookup = PerformanceAttemptSeriesBuilder.BuildLookup(attempts);
+
         // Depth is applied AFTER scope (already applied via the SQL SeasonId filter above) and
         // AFTER class filtering (each class-specific list below is built from its own filtered
         // subset, then depth-limited independently) — see BRAIN.md "Event Page Depth" entry.
         var effectiveDepth = depth <= 0 ? int.MaxValue : depth;
 
         // Build the "all classes" performances list with rankings, flagging record-setting rows.
-        var allPerfsListFull = BuildAllPerformanceViewModels(scopedPerformances, recordSettingIds, isFieldEvent);
+        var allPerfsListFull = BuildAllPerformanceViewModels(scopedPerformances, recordSettingIds, isFieldEvent, attemptLookup);
         var totalPerformanceCount = allPerfsListFull.Count;
         var allPerfsList = allPerfsListFull.Take(effectiveDepth).ToList();
 
@@ -153,7 +164,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository, IS
             var classDtos = scopedPerformances
                 .Where(p => p.AthleteId.HasValue && GetClassAtTimeOfPerformance(p.GraduationYear, p.MeetDate) == cls)
                 .ToList();
-            classAllPerfs[cls] = BuildAllPerformanceViewModels(classDtos, recordSettingIds, isFieldEvent)
+            classAllPerfs[cls] = BuildAllPerformanceViewModels(classDtos, recordSettingIds, isFieldEvent, attemptLookup)
                 .Take(effectiveDepth)
                 .ToList();
         }
@@ -162,7 +173,8 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository, IS
         var prsOnly = BuildPrViewModels(
                 scopedPerformances.Where(p => p.AthleteId.HasValue).ToList(),
                 recordSettingIds,
-                isFieldEvent)
+                isFieldEvent,
+                attemptLookup)
             .Take(effectiveDepth)
             .ToList();
 
@@ -174,7 +186,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository, IS
                 .Where(p => p.AthleteId.HasValue &&
                              GetClassAtTimeOfPerformance(p.GraduationYear, p.MeetDate) == cls)
                 .ToList();
-            classPrs[cls] = BuildPrViewModels(classPerfs, recordSettingIds, isFieldEvent)
+            classPrs[cls] = BuildPrViewModels(classPerfs, recordSettingIds, isFieldEvent, attemptLookup)
                 .Take(effectiveDepth)
                 .ToList();
         }
@@ -215,7 +227,8 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository, IS
     private List<LeaderboardPerformanceViewModel> BuildAllPerformanceViewModels(
         IEnumerable<LeaderboardPerformanceDto> perfs,
         HashSet<int> recordSettingIds,
-        bool isFieldEvent)
+        bool isFieldEvent,
+        Dictionary<int, PerformanceAttemptSeriesViewModel> attemptLookup)
     {
         return perfs.Select((perf, index) => new LeaderboardPerformanceViewModel
         {
@@ -235,6 +248,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository, IS
             WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
             ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
             RawValue = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds,
+            AttemptSeries = attemptLookup.GetValueOrDefault(perf.PerformanceId) ?? new PerformanceAttemptSeriesViewModel()
         }).ToList();
     }
 
@@ -279,7 +293,8 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository, IS
     private List<LeaderboardPerformanceViewModel> BuildPrViewModels(
         List<LeaderboardPerformanceDto> individualPerfs,
         HashSet<int> recordSettingIds,
-        bool isFieldEvent)
+        bool isFieldEvent,
+        Dictionary<int, PerformanceAttemptSeriesViewModel> attemptLookup)
     {
         return individualPerfs
             .GroupBy(p => p.AthleteId)
@@ -298,6 +313,7 @@ public class LeaderboardService(ILeaderboardRepository leaderboardRepository, IS
                 WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
                 ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
                 RawValue = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds,
+                AttemptSeries = attemptLookup.GetValueOrDefault(perf.PerformanceId) ?? new PerformanceAttemptSeriesViewModel()
             })
             .ToList();
     }

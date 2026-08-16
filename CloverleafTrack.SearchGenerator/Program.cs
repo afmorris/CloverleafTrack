@@ -28,7 +28,7 @@ var performanceRepo  = new PerformanceRepository(connectionFactory);
 var athleteService     = new AthleteService(athleteRepo);
 var seasonService      = new SeasonService(seasonRepo, performanceRepo, meetRepo);
 var meetService        = new MeetService(meetRepo, meetPlacingRepo);
-var leaderboardService = new LeaderboardService(leaderboardRepo);
+var leaderboardService = new LeaderboardService(leaderboardRepo, seasonRepo);
 var searchService      = new SearchService(athleteService, meetService, leaderboardService, seasonService);
 
 var records = await searchService.GetSearchIndexAsync();

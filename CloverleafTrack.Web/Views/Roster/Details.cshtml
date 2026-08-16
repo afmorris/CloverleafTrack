@@ -1,4 +1,5 @@
 @using Slugify
+@using CloverleafTrack.ViewModels.Shared
 @model AthleteDetailsViewModel
 
 @{
@@ -7,6 +8,37 @@
     var relayRecords = Model.PersonalRecords.Where(pr => pr.IsRelay).ToList();
     var hasAnyIndividualRank = individualRecords.Any(pr => pr.AllTimeRank.HasValue || pr.IsSchoolRecord);
     var hasAnyRelayRank = relayRecords.Any(pr => pr.AllTimeRank.HasValue || pr.IsSchoolRecord);
+
+    var athleteTopEvent = Model.TopSprintEvent ?? Model.TopFieldEvent;
+    var athleteRankPart = athleteTopEvent?.AllTimeRank.HasValue == true ? $" (#{athleteTopEvent.AllTimeRank} all-time)" : "";
+    var athleteEventPart = athleteTopEvent != null ? $" {athleteTopEvent.EventName} PR {athleteTopEvent.Performance}{athleteRankPart}," : "";
+    var athleteGenderLabel = Model.Gender == Gender.Male ? "Boys" : "Girls";
+    var athleteDescription = CloverleafTrack.Web.Utilities.SeoHelper.Truncate(
+        $"{Model.FullName}, Class of {Model.GraduationYear} — Cloverleaf Track & Field.{athleteEventPart} {Model.TotalPRs} personal record{(Model.TotalPRs == 1 ? "" : "s")}, {Model.TotalSchoolRecords} school record{(Model.TotalSchoolRecords == 1 ? "" : "s")}.");
+
+    var athleteBaseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+    var athletePath = Context.Request.Path.Value ?? "/roster";
+    var athleteAwards = individualRecords
+        .Where(r => r.IsSchoolRecord)
+        .Select(r => $"School Record — {r.EventName}: {r.Performance}")
+        .ToList();
+
+    ViewData["Seo"] = new SeoMetadataViewModel
+    {
+        Description = athleteDescription,
+        OgType = "profile",
+        Breadcrumbs = new List<SeoBreadcrumbViewModel>
+        {
+            new() { Name = "Home", Path = "/" },
+            new() { Name = "Roster", Path = "/roster" },
+            new() { Name = Model.FullName, Path = athletePath }
+        },
+        JsonLdBlocks = new List<string>
+        {
+            CloverleafTrack.Web.Utilities.SeoHelper.BuildPersonJsonLd(
+                Model.FullName, athleteBaseUrl + athletePath, athleteDescription, athleteGenderLabel, athleteAwards)
+        }
+    };
 }
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -326,6 +358,7 @@
                                                             }
                                                         </div>
                                                     }
+                                                    @await Html.PartialAsync("_AttemptSeriesExpanded", perf.AttemptSeries)
                                                 </td>
                                                 <td class="px-4 py-2.5 text-gray-500 dark:text-gray-400 hidden sm:table-cell">@perf.Date.ToString("MMM d")</td>
                                                 <td class="px-4 py-2.5 text-gray-700 dark:text-gray-300">
