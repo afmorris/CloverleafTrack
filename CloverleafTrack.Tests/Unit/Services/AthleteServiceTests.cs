@@ -414,6 +414,65 @@ public class AthleteServiceTests
     }
 
     [Fact]
+    public async Task GetAthleteDetailsAsync_TopSprintEvent_PicksHighestPercentile_WhenNoAllTimeRank()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            // Sorts first structurally (lower EventSortOrder) but a mediocre percentile
+            new() { EventId = 1, EventName = "100m", TimeSeconds = 13.5, PersonalBest = true,
+                    EventCategorySortOrder = 10, EventSortOrder = 1, Percentile = 40, AllTimeRank = null,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            // Sorts second structurally but is genuinely the athlete's best event
+            new() { EventId = 2, EventName = "400m", TimeSeconds = 58.0, PersonalBest = true,
+                    EventCategorySortOrder = 10, EventSortOrder = 2, Percentile = 92, AllTimeRank = null,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.TopSprintEvent.Should().NotBeNull();
+        result.TopSprintEvent!.EventName.Should().Be("400m", "the 400m has the higher percentile even though the 100m sorts first structurally");
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_TopSprintEvent_PrefersAllTimeRank_OverPercentile()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            // Lower percentile but an actual all-time top-10 rank — should still win
+            new() { EventId = 1, EventName = "100m", TimeSeconds = 12.0, PersonalBest = true,
+                    EventCategorySortOrder = 10, EventSortOrder = 1, Percentile = 60, AllTimeRank = 8,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            // Higher percentile but no all-time rank at all
+            new() { EventId = 2, EventName = "400m", TimeSeconds = 58.0, PersonalBest = true,
+                    EventCategorySortOrder = 10, EventSortOrder = 2, Percentile = 95, AllTimeRank = null,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.TopSprintEvent!.EventName.Should().Be("100m", "an actual all-time top-10 rank should outrank a merely-higher percentile");
+    }
+
+    [Fact]
     public async Task GetAthleteDetailsAsync_TotalPRs_CountsOnlyIndividualPerformances()
     {
         var mockRepo = new Mock<IAthleteRepository>();

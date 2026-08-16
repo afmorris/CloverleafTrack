@@ -1588,3 +1588,23 @@ The Roster Details "Personal Bests" table gained two new columns — **Pct** (pe
 - `CloverleafTrack.Tests/Unit/Utilities/PercentileHelperTests.cs` (NEW)
 
 ---
+
+### [C36] Top Sprint/Field Event Selection — Percentile Tiebreaker (Issue #48)
+
+**What changed:**
+`AthleteService.GetAthleteDetailsAsync`'s `topSprintEvent`/`topFieldEvent` selection (used for the Roster hero "Top Event" display) gained `.ThenByDescending(pr => pr.Percentile ?? 0)` after the existing `.OrderBy(pr => pr.AllTimeRank ?? 999)`.
+
+**Why:**
+`AllTimeRank` only exists for the true top 10 all-time in an event (from the `Leaderboards` table). For any athlete who isn't top-10-all-time in *any* individual event — the large majority of the roster — every one of their events tied at the `?? 999` fallback. Since LINQ's `OrderBy` is a stable sort, ties preserved `personalRecords`' original structural order (sorted by `Environment`, then `EventCategorySortOrder`, then `EventSortOrder` — see the PersonalRecordViewModel construction just above this code), so `.FirstOrDefault()` silently returned whichever event had the lowest `EventSortOrder`, not the athlete's actual best event. E.g. an athlete who ran both the 100m and 400m, with no all-time rank in either, would always get "100m" as their Top Sprint Event regardless of which one they were actually better at relative to the field.
+
+`Percentile` (added in [C31]/[C35]) is populated for nearly every performance, not just the top 10, making it the correct tiebreaker: pick the athlete's highest-percentile event when no `AllTimeRank` distinguishes them.
+
+**Watch out:**
+- `AllTimeRank` still wins outright when present — an athlete with an actual top-10-all-time mark keeps that as their Top Event even if a different event has a higher raw percentile. This is intentional: a precise, verified all-time placement is a stronger claim than a percentile estimate.
+- This only affects *selection* (which event is chosen). The hero display itself still only shows a rank chip (`#N`) when `AllTimeRank.HasValue`, and shows nothing for the majority of athletes who now correctly have a *meaningful* Top Event but no numeric rank badge to go with it. Whether to also surface the percentile on the badge was deliberately left open — see the issue.
+
+**Key files:**
+- `CloverleafTrack.Services/AthleteService.cs`
+- `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` — 2 new tests: percentile-as-tiebreaker, and `AllTimeRank` still wins over a higher percentile when both are present
+
+---
