@@ -17,6 +17,7 @@ public class LeaderboardDto
     public int PerformanceId { get; set; }
     public double? TimeSeconds { get; set; }
     public double? DistanceInches { get; set; }
+    public byte? Percentile { get; set; }
     public int AthleteId { get; set; }
     public string AthleteFirstName { get; set; } = string.Empty;
     public string AthleteLastName { get; set; } = string.Empty;

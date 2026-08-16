@@ -32,7 +32,8 @@ public class AthleteRepository(IDbConnectionFactory connectionFactory) : IAthlet
 SELECT
     a.Id, a.FirstName, a.LastName, a.GraduationYear, a.Gender, a.IsActive,
     e.Id AS EventId, e.Id, e.Name, e.EventCategory, e.EventType, e.Environment, e.SortOrder,
-    p.Id AS PerformanceId, p.Id, p.DistanceInches, p.TimeSeconds
+    p.Id AS PerformanceId, p.Id, p.DistanceInches, p.TimeSeconds,
+    (SELECT pp.Percentile FROM PerformancePercentiles pp WHERE pp.PerformanceId = p.Id) AS Percentile
 FROM Athletes a
 INNER JOIN Performances p ON p.AthleteId = a.Id
 INNER JOIN Events e ON e.Id = p.EventId
@@ -42,7 +43,8 @@ UNION ALL
 SELECT
     a.Id, a.FirstName, a.LastName, a.GraduationYear, a.Gender, a.IsActive,
     e.Id AS EventId, e.Id, e.Name, e.EventCategory, e.EventType, e.Environment, e.SortOrder,
-    p.Id AS PerformanceId, p.Id, p.DistanceInches, p.TimeSeconds
+    p.Id AS PerformanceId, p.Id, p.DistanceInches, p.TimeSeconds,
+    (SELECT pp.Percentile FROM PerformancePercentiles pp WHERE pp.PerformanceId = p.Id) AS Percentile
 FROM Athletes a
 INNER JOIN PerformanceAthletes pa ON pa.AthleteId = a.Id
 INNER JOIN Performances p ON p.Id = pa.PerformanceId AND p.AthleteId IS NULL
@@ -122,6 +124,9 @@ ORDER BY a.LastName, a.FirstName;
                                     (SELECT MIN(lb.Rank)
                                     FROM Leaderboards lb
                                     WHERE lb.PerformanceId = p.Id) as AllTimeRank,
+                                    (SELECT pp.Percentile
+                                    FROM PerformancePercentiles pp
+                                    WHERE pp.PerformanceId = p.Id) as Percentile,
                                     m.Date as MeetDate,
                                     m.Name as MeetName,
                                     s.Name as SeasonName,
@@ -154,6 +159,9 @@ ORDER BY a.LastName, a.FirstName;
                                     (SELECT MIN(lb.Rank)
                                     FROM Leaderboards lb
                                     WHERE lb.PerformanceId = p.Id) as AllTimeRank,
+                                    (SELECT pp.Percentile
+                                    FROM PerformancePercentiles pp
+                                    WHERE pp.PerformanceId = p.Id) as Percentile,
                                     m.Date as MeetDate,
                                     m.Name as MeetName,
                                     s.Name as SeasonName,

@@ -134,7 +134,7 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 | `Location` | Id, Name, City, State, ZipCode, Country |
 | `Event` | Id, Name, EventKey, EventType, EventCategory, Gender, Environment, AthleteCount, SortOrder, EventCategorySortOrder |
 | `Athlete` | Id, FirstName, LastName, Gender, GraduationYear, IsActive |
-| `Performance` | Id, AthleteId (null for relay), EventId, MeetId, TimeSeconds, DistanceInches, SortedAthleteHash, SchoolRecord, SeasonBest, PersonalBest, AllTimeRank (nullable int, not a DB column — populated by queries that join Leaderboards) |
+| `Performance` | Id, AthleteId (null for relay), EventId, MeetId, TimeSeconds, DistanceInches, SortedAthleteHash, SchoolRecord, SeasonBest, PersonalBest, AllTimeRank (nullable int, not a DB column — populated by queries that join Leaderboards), Percentile (nullable byte, not a DB column — populated by queries that join PerformancePercentiles) |
 | `PerformanceAthlete` | Id, PerformanceId, AthleteId — relay junction table |
 
 **Relay performances** set `AthleteId = null` on `Performance` and link athletes via `PerformanceAthletes` table. `SortedAthleteHash` is a nullable string on `Performance` (no NOT NULL constraint enforced at app layer).
@@ -165,7 +165,7 @@ Slug generation uses the `Slugify` NuGet package (`SlugHelper`). `Meet.Slug` is 
 | `MeetsController` | `/meets` | Meet list + meet detail page |
 | `RosterController` | `/roster` | Active + former athlete list |
 | `AthletesController` | `/athletes/{slug}` | Athlete career detail — NOTE: route is `/roster/{slug}` via `RosterController`, not `AthletesController` |
-| `LeaderboardController` | `/leaderboard` | All-time top 10 lists |
+| `LeaderboardController` | `/events` (legacy `/leaderboard` 301-redirects here — see BRAIN.md "Events IA") | All-time top 10 lists |
 
 ### Admin area (Areas/Admin/)
 | Controller | Route | Purpose |
@@ -387,8 +387,12 @@ Field events show a distance input; running events show a time input.
 | `MeetEntries` | Id, MeetId, EventId, AthleteId? (null=relay), PerformanceId? (null until result); soft-deleted |
 | `MeetEntryAthletes` | Junction: MeetEntryId, AthleteId (relay team members) |
 | `MeetPlacings` | Id, MeetId, PerformanceId, MeetParticipantId? (null=invitational), Place, FullPoints, SplitPoints; two filtered UNIQUE indexes |
+| `PerformancePercentiles` | PerformanceId (PK/FK → Performances), Percentile (TINYINT, 1-100). One row per performance (individual **and** relay) — every mark ever recorded, not just top-10. Rebuilt by `sp_RebuildLeaderboards`. |
+| `EventStatistics` | EventId (PK/FK → Events), MedianValue, Q1Value, Q3Value (FLOAT, nullable), EventMarkCount (INT, always populated). Median/Q1/Q3 are NULL when `EventMarkCount < 10`. Rebuilt by `sp_RebuildLeaderboards`. |
 
 `sp_RebuildLeaderboards` is a stored procedure that recalculates all leaderboard rankings and resets/recalculates `PersonalBest`, `SeasonBest`, and `SchoolRecord` flags on `Performances`. It is called after every performance insert, update, or delete. It does **not** filter by gender, so Mixed relay performances are ranked alongside Boys/Girls relay performances within their own event. `SchoolRecord` and `PersonalBest`/`SeasonBest` flags are only set for individual performances (`AthleteId IS NOT NULL`); relay rows keep these flags at 0 and use `AllTimeRank = 1` as the SR proxy instead.
+
+It also rebuilds `PerformancePercentiles` (percentile per performance, 1-100, scoped strictly to `EventId`) and `EventStatistics` (median/Q1/Q3/mark count per `EventId`), in the same transaction. Unlike the flags above, percentile applies equally to individual **and** relay performances — no `AthleteId IS NOT NULL` filter, because the population is already correctly scoped by `EventId` (see `UQ_Events_EventKey_Gender_Environment`). See BRAIN.md for the full design rationale (tie handling, single-mark edge case, why a new table instead of widening `Leaderboards`).
 
 ---
 
@@ -447,12 +451,25 @@ SQL Server's NULL != NULL behavior in unique indexes means these two filtered in
 
 ---
 
+## SEO / Open Graph / JSON-LD
+
+Every public page (not the admin area, which has its own `_Layout.cshtml`) renders a data-derived `<meta name="description">`, Open Graph + Twitter Card tags, and schema.org JSON-LD.
+
+- `CloverleafTrack.ViewModels/Shared/SeoMetadataViewModel.cs` — `Description`, `CanonicalPath` (defaults to the current request path), `OgType`, `ImagePath` (defaults to `/img/hero-home.jpg` — there is no per-page OG image generation, see BRAIN.md C28), `Breadcrumbs`, `JsonLdBlocks` (pre-serialized JSON strings).
+- `CloverleafTrack.Web/Utilities/SeoHelper.cs` — `Truncate` (word-boundary-safe, ~160 char budget) and JSON-LD builders (`BuildOrganizationJsonLd`, `BuildPersonJsonLd`, `BuildSportsEventJsonLd`, `BuildBreadcrumbJsonLd`), built on `Dictionary<string, object?>` so `"@type"`/`"@context"` keys serialize correctly.
+- Each Details/Index view sets `ViewData["Seo"] = new SeoMetadataViewModel {...}` from data already on its own ViewModel (same convention as `ViewData["Title"]`); `Views/Shared/_Layout.cshtml` renders `Views/Shared/_SeoMetadata.cshtml` once in `<head>`, which reads `ViewData["Seo"]` and falls back to a generic sitewide description when a page hasn't set one.
+- `Controllers/SitemapController.cs` serves `GET /sitemap.xml` by reusing `ISearchService.GetSearchIndexAsync()` (athletes/meets/events) + `ISeasonService.GetSeasonCardsAsync()` — no new repository methods. `wwwroot/robots.txt` points at it with a hard-coded production domain (robots.txt can't be templated per-environment).
+
+---
+
 ## Testing
 
 **Framework:** xUnit 2.x + Moq + FluentAssertions. Tests live in `CloverleafTrack.Tests/Unit/`.
 
 ```
 CloverleafTrack.Tests/Unit/
+├── DataAccess/
+│   └── PercentileMathTests.cs      — percentile/median/Q1/Q3 algorithm spec (mirrors sp_RebuildLeaderboards SQL; see CloverleafTrack.Tests/TestSupport/PercentileMath.cs)
 ├── Models/
 │   └── MeetTests.cs                — Slug generation, ResultsUrl format
 ├── Services/

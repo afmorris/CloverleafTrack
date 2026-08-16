@@ -11,6 +11,12 @@ public class Performance
     public bool PersonalBest { get; set; }
     /// <summary>Populated by queries that join Leaderboards. Null when not loaded.</summary>
     public int? AllTimeRank { get; set; }
+    /// <summary>
+    /// 1-100, higher is better. Populated by queries that join PerformancePercentiles
+    /// (rebuilt for every performance by sp_RebuildLeaderboards). Null when not loaded
+    /// — do not assume null means "no percentile data exists"; check the query first.
+    /// </summary>
+    public byte? Percentile { get; set; }
 
     public int? AthleteId { get; set; }
     public int EventId { get; set; }

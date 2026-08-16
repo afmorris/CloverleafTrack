@@ -24,17 +24,18 @@ public class LeaderboardRepository(IDbConnectionFactory connectionFactory) : ILe
                                p.Id as PerformanceId,
                                p.TimeSeconds,
                                p.DistanceInches,
+                               pp.Percentile,
                                a.Id as AthleteId,
                                a.FirstName as AthleteFirstName,
                                a.LastName as AthleteLastName,
-                               CASE 
-                                     WHEN p.AthleteId IS NULL THEN 
+                               CASE
+                                     WHEN p.AthleteId IS NULL THEN
                                           -- For relays, concatenate all athlete names
                                           (SELECT STRING_AGG(a2.FirstName + ' ' + a2.LastName, '|~|')
                                           FROM PerformanceAthletes pa
                                           INNER JOIN Athletes a2 ON a2.Id = pa.AthleteId
                                           WHERE pa.PerformanceId = p.Id)
-                                     ELSE 
+                                     ELSE
                                           ''
                                END as RelayName,
                                m.Date as MeetDate,
@@ -42,6 +43,7 @@ public class LeaderboardRepository(IDbConnectionFactory connectionFactory) : ILe
                            FROM Events e
                            LEFT JOIN Leaderboards lb ON lb.EventId = e.Id AND lb.Rank = 1
                            LEFT JOIN Performances p ON p.Id = lb.PerformanceId
+                           LEFT JOIN PerformancePercentiles pp ON pp.PerformanceId = p.Id
                            LEFT JOIN Athletes a ON a.Id = p.AthleteId
                            LEFT JOIN Meets m ON m.Id = p.MeetId
                            WHERE
@@ -90,12 +92,19 @@ public class LeaderboardRepository(IDbConnectionFactory connectionFactory) : ILe
                                m.Id as MeetId,
                                m.Name as MeetName,
                                m.Date as MeetDate,
-                               lb.Rank as AllTimeRank
+                               lb.Rank as AllTimeRank,
+                               pp.Percentile,
+                               ISNULL(es.EventMarkCount, 0) as EventMarkCount,
+                               es.MedianValue,
+                               es.Q1Value,
+                               es.Q3Value
                            FROM Events e
                            INNER JOIN Performances p ON p.EventId = e.Id
                            LEFT JOIN Athletes a ON a.Id = p.AthleteId
                            LEFT JOIN Meets m ON m.Id = p.MeetId
                            LEFT JOIN Leaderboards lb ON lb.PerformanceId = p.Id
+                           LEFT JOIN PerformancePercentiles pp ON pp.PerformanceId = p.Id
+                           LEFT JOIN EventStatistics es ON es.EventId = e.Id
                            WHERE
                                e.EventKey = @EventKey
                            ORDER BY

@@ -15,6 +15,9 @@ public class MeetPerformanceViewModel
     /// <summary>Empty (HasAttempts == false) unless PerformanceAttempts rows exist for this performance.</summary>
     public PerformanceAttemptSeriesViewModel AttemptSeries { get; set; } = new();
 
+    /// <summary>Raw numeric value for client-side sorting: DistanceInches for field events, TimeSeconds for running events. Never use the formatted Performance string as a sort key.</summary>
+    public double? RawValue { get; set; }
+
     /// <summary>
     /// Placings for this performance. Invitational = one entry; Double Dual = up to two (one per opponent).
     /// Empty if no placing has been recorded.

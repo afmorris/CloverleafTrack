@@ -245,7 +245,7 @@ public class MeetService(
     {
         var categoryPerformances = performances
             .Where(p => p.EventCategory == category)
-            .GroupBy(p => new { p.EventId, p.EventName, p.EventCategory, p.EventSortOrder })
+            .GroupBy(p => new { p.EventId, p.EventName, p.EventCategory, p.EventSortOrder, p.EventType })
             .OrderBy(g => g.Key.EventSortOrder);
 
         foreach (var group in categoryPerformances)
@@ -255,6 +255,7 @@ public class MeetService(
                 EventId = group.Key.EventId,
                 EventName = group.Key.EventName,
                 EventCategory = group.Key.EventCategory,
+                IsFieldEvent = IsFieldEventType(group.Key.EventType),
                 Performances = group.Select(p => BuildPerformanceViewModel(p, placingLookup, attemptLookup)).ToList()
             });
         }
@@ -267,7 +268,7 @@ public class MeetService(
         Dictionary<int, PerformanceAttemptSeriesViewModel> attemptLookup)
     {
         var grouped = performances
-            .GroupBy(p => new { p.EventId, p.EventName, p.EventCategory, p.EventSortOrder })
+            .GroupBy(p => new { p.EventId, p.EventName, p.EventCategory, p.EventSortOrder, p.EventType })
             .OrderBy(g => g.Key.EventSortOrder);
 
         foreach (var group in grouped)
@@ -277,10 +278,18 @@ public class MeetService(
                 EventId = group.Key.EventId,
                 EventName = group.Key.EventName,
                 EventCategory = group.Key.EventCategory,
+                IsFieldEvent = IsFieldEventType(group.Key.EventType),
                 Performances = group.Select(p => BuildPerformanceViewModel(p, placingLookup, attemptLookup)).ToList()
             });
         }
     }
+
+    /// <summary>Field events (including field-relay variants) sort higher-is-better; running events sort lower-is-better.</summary>
+    private static bool IsFieldEventType(EventType eventType) => eventType switch
+    {
+        EventType.Field or EventType.FieldRelay or EventType.JumpRelay or EventType.ThrowsRelay => true,
+        _ => false
+    };
 
     private static MeetPerformanceViewModel BuildPerformanceViewModel(
         MeetPerformanceDto p,
@@ -299,7 +308,8 @@ public class MeetService(
             IsSchoolRecord = p.AllTimeRank == 1,
             IsSeasonBest = p.SeasonBest,
             AllTimeRank = p.AllTimeRank,
-            AttemptSeries = attemptLookup.GetValueOrDefault(p.PerformanceId) ?? new PerformanceAttemptSeriesViewModel()
+            AttemptSeries = attemptLookup.GetValueOrDefault(p.PerformanceId) ?? new PerformanceAttemptSeriesViewModel(),
+            RawValue = p.DistanceInches ?? p.TimeSeconds
         };
 
         if (placingLookup.TryGetValue(p.PerformanceId, out var perfPlacings))
