@@ -65,7 +65,7 @@ public class SearchService(
                     "event",
                     $"{gender} {evt.EventName} ({env})",
                     holder,
-                    $"/leaderboard/{evt.EventKey.ToLower()}"));
+                    $"/events/{evt.EventKey.ToLower()}"));
             }
         }
 
