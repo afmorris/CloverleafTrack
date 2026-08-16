@@ -188,22 +188,22 @@
     <div id="all-content" class="view-content">
         <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
             <div class="overflow-x-auto">
-                <table id="all-table" class="min-w-full text-sm">
+                <table id="all-table" class="min-w-full text-sm" data-sortable>
                     <thead class="bg-gray-50 dark:bg-gray-700/50">
                         <tr class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                            <th class="px-5 py-3 text-left font-medium w-14 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 select-none" data-sort-col="rank" data-sort-type="num">
-                                Rank <span class="sort-ind">↕</span>
+                            <th class="px-5 py-3 text-left font-medium w-14" data-sort-col="rank" data-sort-type="num" data-sort-dir="asc">
+                                Rank
                             </th>
-                            <th class="px-5 py-3 text-left font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 select-none" data-sort-col="athlete" data-sort-type="str">
-                                Athlete <span class="sort-ind">↕</span>
+                            <th class="px-5 py-3 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">
+                                Athlete
                             </th>
                             <th class="px-5 py-3 text-left font-medium hidden sm:table-cell">Class</th>
-                            <th class="px-5 py-3 text-left font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 select-none" data-sort-col="mark" data-sort-type="num">
-                                Mark <span class="sort-ind">↕</span>
+                            <th class="px-5 py-3 text-left font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(Model.IsFieldEvent ? "desc" : "asc")">
+                                Mark
                             </th>
                             <th class="px-5 py-3 text-left font-medium hidden md:table-cell">Meet</th>
-                            <th class="px-5 py-3 text-left font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 select-none hidden sm:table-cell" data-sort-col="date" data-sort-type="num">
-                                Date <span class="sort-ind">↕</span>
+                            <th class="px-5 py-3 text-left font-medium hidden sm:table-cell" data-sort-col="date" data-sort-type="str" data-sort-dir="asc">
+                                Date
                             </th>
                         </tr>
                     </thead>
@@ -218,17 +218,13 @@
                             var isStill   = perf.GraduationYear.HasValue && perf.GraduationYear.Value >= adjustedCurrentYear;
                             var isRelay   = perf.AthleteName.Contains("|~|");
                             <tr class="@rowClass @srBorder"
-                                data-class="@(perf.ClassAtTimeOfPerformance ?? "")"
-                                data-rank-val="@perf.Rank"
-                                data-athlete-val="@perf.AthleteName"
-                                data-mark-val="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "0")"
-                                data-date-val="@perf.MeetDate.Ticks">
-                                <td class="px-5 py-3 rank-cell w-14">
+                                data-class="@(perf.ClassAtTimeOfPerformance ?? "")">
+                                <td class="px-5 py-3 rank-cell w-14" data-sort="@perf.Rank">
                                     <span class="text-xl font-bold tabular-nums @(isGold ? "text-amber-500" : perf.Rank <= 3 ? "text-amber-400" : "text-gray-400 dark:text-gray-500")">
                                         @perf.Rank
                                     </span>
                                 </td>
-                                <td class="px-5 py-3">
+                                <td class="px-5 py-3" data-sort="@perf.AthleteName">
                                     @if (isRelay)
                                     {
                                         <div class="space-y-0.5">
@@ -268,7 +264,7 @@
                                 <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">
                                     @(perf.ClassAtTimeOfPerformance ?? "")
                                 </td>
-                                <td class="px-5 py-3">
+                                <td class="px-5 py-3" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
                                     <div class="flex items-center gap-1.5 flex-wrap">
                                         <span class="mark font-bold text-gray-900 dark:text-white">@perf.Performance</span>
                                         @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
@@ -281,7 +277,7 @@
                                         @perf.MeetName
                                     </a>
                                 </td>
-                                <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">
+                                <td class="px-5 py-3 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell" data-sort="@(perf.MeetDate.ToString("yyyy-MM-dd"))">
                                     @perf.MeetDate.ToString("MMM d, yyyy")
                                 </td>
                             </tr>
@@ -485,43 +481,8 @@
         }
     }
 
-    // Sortable columns
-    (function () {
-        var sortState = {};
-
-        function getCellVal(row, col) {
-            return row.dataset[col + 'Val'] ?? '';
-        }
-
-        document.querySelectorAll('th[data-sort-col]').forEach(function (th) {
-            th.addEventListener('click', function () {
-                var col    = this.dataset.sortCol;
-                var type   = this.dataset.sortType;
-                var table  = this.closest('table');
-                var tbody  = table.querySelector('tbody');
-                var rows   = Array.from(tbody.querySelectorAll('tr'));
-                var asc    = sortState[col] !== 'asc';
-                sortState[col] = asc ? 'asc' : 'desc';
-
-                // Reset all sort indicators
-                table.querySelectorAll('.sort-ind').forEach(s => s.textContent = '↕');
-                this.querySelector('.sort-ind').textContent = asc ? '↑' : '↓';
-
-                rows.sort(function (a, b) {
-                    var va = getCellVal(a, col);
-                    var vb = getCellVal(b, col);
-                    if (type === 'num') {
-                        var diff = parseFloat(va) - parseFloat(vb);
-                        return asc ? diff : -diff;
-                    }
-                    var cmp = va.localeCompare(vb);
-                    return asc ? cmp : -cmp;
-                });
-
-                rows.forEach(r => tbody.appendChild(r));
-            });
-        });
-    }());
+    // Column sorting for #all-table is handled sitewide by wwwroot/js/sortable-tables.js
+    // (auto-inits any <table data-sortable>). See BRAIN.md for the extraction notes.
 
     document.addEventListener('DOMContentLoaded', function () {
         showView('all');

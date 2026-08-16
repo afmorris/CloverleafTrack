@@ -113,13 +113,20 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                     </svg>
                                 </summary>
-                                <table class="w-full text-sm">
+                                <table class="w-full text-sm" data-sortable>
+                                    <thead class="text-[10px] uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                                        <tr>
+                                            <th class="px-4 py-1 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">Athlete</th>
+                                            <th class="px-4 py-1 text-right font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(eventGroup.IsFieldEvent ? "desc" : "asc")">Mark</th>
+                                            <th class="px-4 py-1 text-right font-medium">Result</th>
+                                        </tr>
+                                    </thead>
                                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                         @foreach (var perf in eventGroup.Performances)
                                         {
                                             var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsPersonalBest ? "row-pr" : "");
                                             <tr class="@rowClass hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                                                <td class="px-4 py-2">
+                                                <td class="px-4 py-2" data-sort="@perf.AthleteName">
                                                     @if (IsRelay(perf.AthleteName))
                                                     {
                                                         <div class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -153,7 +160,7 @@
                                                         }
                                                     }
                                                 </td>
-                                                <td class="px-4 py-2 text-right whitespace-nowrap">
+                                                <td class="px-4 py-2 text-right whitespace-nowrap" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
                                                     <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
                                                 </td>
                                                 <td class="px-4 py-2 text-right">
@@ -206,13 +213,20 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                     </svg>
                                 </summary>
-                                <table class="w-full text-sm">
+                                <table class="w-full text-sm" data-sortable>
+                                    <thead class="text-[10px] uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                                        <tr>
+                                            <th class="px-4 py-1 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">Athlete</th>
+                                            <th class="px-4 py-1 text-right font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(eventGroup.IsFieldEvent ? "desc" : "asc")">Mark</th>
+                                            <th class="px-4 py-1 text-right font-medium">Result</th>
+                                        </tr>
+                                    </thead>
                                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                         @foreach (var perf in eventGroup.Performances)
                                         {
                                             var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsPersonalBest ? "row-pr" : "");
                                             <tr class="@rowClass hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                                                <td class="px-4 py-2">
+                                                <td class="px-4 py-2" data-sort="@perf.AthleteName">
                                                     @if (IsRelay(perf.AthleteName))
                                                     {
                                                         <div class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -246,7 +260,7 @@
                                                         }
                                                     }
                                                 </td>
-                                                <td class="px-4 py-2 text-right whitespace-nowrap">
+                                                <td class="px-4 py-2 text-right whitespace-nowrap" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
                                                     <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
                                                 </td>
                                                 <td class="px-4 py-2 text-right">
@@ -299,13 +313,20 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                 </svg>
                             </summary>
-                            <table class="w-full text-sm">
+                            <table class="w-full text-sm" data-sortable>
+                                <thead class="text-[10px] uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                                    <tr>
+                                        <th class="px-4 py-1 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">Athlete</th>
+                                        <th class="px-4 py-1 text-right font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(eventGroup.IsFieldEvent ? "desc" : "asc")">Mark</th>
+                                        <th class="px-4 py-1 text-right font-medium">Result</th>
+                                    </tr>
+                                </thead>
                                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                     @foreach (var perf in eventGroup.Performances)
                                     {
                                         var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsPersonalBest ? "row-pr" : "");
                                         <tr class="@rowClass hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                                            <td class="px-4 py-2">
+                                            <td class="px-4 py-2" data-sort="@perf.AthleteName">
                                                 @if (IsRelay(perf.AthleteName))
                                                 {
                                                     <div class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -339,7 +360,7 @@
                                                     }
                                                 }
                                             </td>
-                                            <td class="px-4 py-2 text-right whitespace-nowrap">
+                                            <td class="px-4 py-2 text-right whitespace-nowrap" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
                                                 <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
                                             </td>
                                             <td class="px-4 py-2 text-right">

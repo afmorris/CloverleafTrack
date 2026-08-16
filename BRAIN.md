@@ -1143,6 +1143,82 @@ The issue requested that the footer make it clear which git tag or commit genera
 
 ---
 
+### [C29] Sortable Tables Sitewide — Extracted `wwwroot/js/sortable-tables.js`
+
+**What changed:**
+The column-sort implementation that previously lived inline in `Leaderboard/Details.cshtml` (`/leaderboard/{eventKey}.html`) was extracted into a shared, sitewide module — `CloverleafTrack.Web/wwwroot/js/sortable-tables.js` — registered in `_Layout.cshtml` alongside `filters.js`/`search.js`, and applied to the Roster table, Leaderboard index, and Meet results tables, which previously had no sorting at all.
+
+**Markup contract (auto-init, progressive enhancement):**
+```html
+<table data-sortable>
+  <thead>
+    <tr>
+      <th data-sort-col="mark" data-sort-type="num" data-sort-dir="asc">Mark</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td data-sort="71.10">1:11.10</td></tr>
+  </tbody>
+</table>
+```
+- `data-sort-col` — stable column id, also the URL hash key.
+- `data-sort-type` — `"num"` (parseFloat) or `"str"` (localeCompare; also used for ISO `yyyy-MM-dd` dates, which sort correctly as text).
+- `data-sort-dir` — `"asc"` | `"desc"`, declares which raw-value direction is "best" for that column (e.g. `asc` for times, `desc` for distances/field events). Defaults to `asc`.
+- `data-sort="value"` on the matching `<td>` (index-matched to the header, not by name) supplies the raw sort key. **Never** put a formatted display string there — see the fixes list below.
+- The module auto-wraps each `<th data-sort-col>`'s existing text in a real `<button type="button">` plus a fixed-width `aria-hidden` caret span at init time. **Razor markup should only carry the data-* attributes and the plain label text — do not hand-author the button/caret.**
+
+**Why extract instead of leaving it inline:**
+The event detail page's sort script (click → toggle asc/desc, reorder rows in place) worked but was inline, page-specific, keyboard-inaccessible (click handler on the bare `<th>`, no real button), had no "best/worst" semantics (first click was literally ascending regardless of whether ascending meant "best" for that column), no URL persistence, and no third "reset to original order" state. Issue #7 asked for sorting sitewide plus this checklist of gaps, so the extraction became a rewrite-in-place: same visual/functional result on the event page (verify: `/leaderboard/{eventKey}.html` — Rank/Athlete/Mark/Date columns), new shared behavior everywhere else.
+
+**Gaps fixed vs. the old inline script (all in `sortable-tables.js`):**
+1. **Three-state click cycle** — best-first → worst-first → original DOM order → repeat (old script only toggled asc/desc, no reset state). Original DOM order is captured once at init (`Array.prototype.slice.call(tbody.children)`) and replayed by re-appending every row in that saved order.
+2. **`data-sort-dir` = "best" direction** — first click on a column always shows the best performance first, not literally-ascending. `data-sort-dir="asc"` for times/ranks/dates, `="desc"` for distances and field events. On Leaderboard Details this is now driven dynamically off `Model.IsFieldEvent`; on Meet results it's driven off the new `MeetEventGroupViewModel.IsFieldEvent`.
+3. **URL hash state** — `#sort=<col>&dir=<asc|desc>`, read once at page load and applied via `table._sortableApplyFromHash(col, dir)`, written via `history.replaceState` on every click. Follows the exact same "read-modify-write, don't clobber other keys" convention as `filters.js`'s `#env=outdoor&gender=boys` hash (own `getHashParams`/`setHashParams` pair, not shared code, but the identical algorithm). Since `history.replaceState` never fires `hashchange`, this module and `filters.js` never trigger each other and can coexist on the same hash string safely.
+4. **Stable sort** — relies on `Array.prototype.sort` being spec-guaranteed stable (ES2019+); no custom tie-breaking needed.
+5. **Composes with filters** — the module never sets a data row's own `hidden` or `style.display`; it only reorders DOM nodes via `tbody.appendChild(row)`, so whatever `filters.js` (the `hidden` property) or page-specific filters (`Leaderboard/Details.cshtml`'s own `applyClassFilter`, which uses `row.style.display`) set stays intact through a sort. `isRowVisible(row)` checks both conventions (`!row.hidden && row.style.display !== 'none'`) wherever the module needs to know what's currently visible (rank renumbering).
+6. **`.rank-cell` renumbering** — after every sort, `.rank-cell` elements (optionally with a nested `<span>`, matching Leaderboard Details' existing markup) are renumbered 1..n in final DOM order, counting only currently-visible rows. **Watch out:** this only updates the number text, not the amber/gray top-3 color classes that `Leaderboard/Details.cshtml`'s own `applyClassFilter` also applies when renumbering for its class filter — a cosmetic gap (the gold/amber color stays tied to the row's original rank after a sort reorders it), intentionally left presentation-agnostic in the shared module rather than hardcoding one page's color scheme. `applyClassFilter` and the sort module renumber independently but consistently (same "sequential position among visible rows" semantics), so using both together (sort then class-filter, or vice versa) composes correctly.
+7. **Accessibility** — real `<button>` per sortable header (auto-generated, see markup contract above) for native keyboard support; `aria-sort="ascending"|"descending"|"none"` on the `<th>`, exactly one non-`"none"` per table at a time; a `.sr-only[aria-live="polite"][role="status"]` region auto-inserted after each `<table data-sortable>` announcing `"Sorted by {label}, best first"` / `"...worst first"` / `"Sort cleared, showing original order"`; a fixed-width (`w-4`) `aria-hidden` caret span (`↕`/`↑`/`↓`) so no layout shift when the glyph changes.
+8. **Grouped/sectioned tables** — new convention: `<tr data-sort-group-header>` marks a divider/category-label row (e.g. the "Sprints"/"Distance"/etc. rows inside `_LeaderboardGenderSection.cshtml`'s single flat table). These rows are excluded from the sort entirely and hidden (`row.hidden = true`) while any sort is active, then restored together with the full original order on the third click. This is the module's own bookkeeping (not filters' `hidden` usage) but uses the same property, which is safe since group-header rows are never also `[data-filterable]` items.
+
+**Column sort-key sourcing (never derived from visible/formatted text):**
+- **Time columns**: raw `TimeSeconds` — e.g. Leaderboard Details' `RawValue` (already existed), and new `MeetPerformanceViewModel.RawValue` (added this change, `= p.DistanceInches ?? p.TimeSeconds`, mirroring the existing `IndividualPerformanceViewModel.RawValue` pattern from [C15]).
+- **Distance columns**: raw `DistanceInches`, same `RawValue` field (only one of Time/Distance is ever populated per performance, so the null-coalesce is safe).
+- **Class/grade columns**: an ordinal, never alphabetical. Roster's "Class" column uses a new `@functions { static int ClassOrdinal(string cls) }` helper in `_RosterActiveAthletesList.cshtml` / `_FormerAthleteYearGroupSection.cshtml` mapping `"Freshman"→1 ... "Senior"→4` (fallback `5` for the `"{year} Graduate"` format `AthleteService.GraduationYearToClass` can also produce, defensively, though active-roster athletes should never hit it).
+- **Date columns**: ISO `yyyy-MM-dd`. Leaderboard Details' Date column was migrated off the old `perf.MeetDate.Ticks` numeric sort to this convention for sitewide consistency (equivalent chronological ordering either way — no behavior change, just standardized).
+- **Gender columns**: raw `(int)Gender` enum value, not the "M"/"F" badge text.
+
+**Where sorting was intentionally *not* added, and why:**
+- Roster's "Best Mark" column and Leaderboard Index's "Mark" (embedded with the date in the 2nd column of `_LeaderboardGenderSection.cshtml`) are **not** sortable — each row's mark is for a different top event per athlete/event-group, so raw seconds/inches values are not comparable across rows (a 100m time vs. a shot put distance). Leaderboard Index is sortable by **Event** name and **Date** ("Recorded") instead. Roster is sortable by Name/Class/Gender/Top-Event-name instead.
+- Meet results tables (`Meets/Details.cshtml`) *are* sortable by Mark, because each `<table data-sortable>` is scoped to a single event group (one event per `<details>`), so every row's mark is the same unit (all times or all distances) — this is what unlocked adding `MeetEventGroupViewModel.IsFieldEvent` and `MeetPerformanceViewModel.RawValue`.
+
+**New/changed C# (needed only for Meet results Mark sorting):**
+- `CloverleafTrack.ViewModels/Meets/MeetPerformanceViewModel.cs` — added `RawValue` (double?).
+- `CloverleafTrack.ViewModels/Meets/MeetEventGroupViewModel.cs` — added `IsFieldEvent` (bool).
+- `CloverleafTrack.Services/MeetService.cs` — `AddEventGroupsForCategory` / `AddEventGroupsFromList` group keys now also carry `p.EventType` (additive, does not change grouping granularity — EventId/EventName/Category/SortOrder already uniquely identify an event); new private `IsFieldEventType(EventType)` helper (`Field`, `FieldRelay`, `JumpRelay`, `ThrowsRelay` → true); `BuildPerformanceViewModel` now sets `RawValue = p.DistanceInches ?? p.TimeSeconds`.
+
+**CSS:**
+- `CloverleafTrack.Web/wwwroot/css/input.css` — appended `.sort-th-btn` (the auto-generated header button: `w-full h-full flex items-center gap-1 text-left`, hover/focus-visible ring) and `.sort-caret` (`inline-block w-4 text-center`, reserves width) to the plain top-level component-class section at the end of the file (same style as `.pill-tab`/`.chip-sr`/etc. — most of this file's custom classes live outside the one small `@layer components { }` block near the top; new classes should keep following that established plain-top-level-rule convention, not fight to get into the `@layer` block).
+- **`wwwroot/css/site.css` (the compiled Tailwind output) was rebuilt in this session** via `pnpm dlx tailwindcss@3.4.17 -i ./CloverleafTrack.Web/wwwroot/css/input.css -o ./CloverleafTrack.Web/wwwroot/css/site.css --minify` and the diff is included in this change. **Watch out:** the sandboxed dev environment's outbound network access for `pnpm dlx` is flaky/intermittent (many consecutive attempts timed out before one finally succeeded) — if you add or change Tailwind classes in a future session and the build tool is unreachable, `input.css`/Razor changes will be committed but `site.css` will silently be stale (new classes present in source, absent from the shipped stylesheet, so e.g. sort buttons would render unstyled/without hover-focus treatment even though sorting itself still functions, since it's pure JS/DOM). Always diff `site.css` after any `input.css` or new-Tailwind-class change and rebuild before merging if it's empty/unchanged.
+
+**Key files:**
+- `CloverleafTrack.Web/wwwroot/js/sortable-tables.js` (NEW — the shared module, extensively commented with the full markup contract)
+- `CloverleafTrack.Web/Views/Shared/_Layout.cshtml` (script tag registered after `filters.js`/`search.js`)
+- `CloverleafTrack.Web/Views/Leaderboard/Details.cshtml` (refactored: removed the inline "Sortable columns" IIFE and per-row `data-*-val` attributes in favor of per-cell `data-sort`; `<th>` markup simplified to attributes-only, no more hand-rolled `.sort-ind` spans)
+- `CloverleafTrack.Web/Views/Shared/_RosterActiveAthletesList.cshtml`, `_FormerAthleteYearGroupSection.cshtml` (Roster — both the active and former athlete tables)
+- `CloverleafTrack.Web/Views/Shared/_LeaderboardGenderSection.cshtml` (Leaderboard index — used by all six Boys/Girls/Mixed × Outdoor/Indoor sections; `data-sort-group-header` on the category-divider rows)
+- `CloverleafTrack.Web/Views/Meets/Details.cshtml` (Meet results — Boys/Girls/Mixed sections, one `<table data-sortable>` per event group)
+- `CloverleafTrack.ViewModels/Meets/MeetPerformanceViewModel.cs`, `MeetEventGroupViewModel.cs`
+- `CloverleafTrack.Services/MeetService.cs`
+- `CloverleafTrack.Web/wwwroot/css/input.css`, `site.css`
+
+**Watch out (summary):**
+- Compile risk: this session could not run `dotnet build` (NuGet network-blocked in this sandbox), so the `MeetService.cs`/ViewModel changes were not compiler-verified — re-check on first real build if anything looks off, though the changes are small, additive, and follow existing patterns closely (mirrors [C15]'s `RawValue` precedent exactly).
+- `pnpm dlx` network access in this sandbox is unreliable — see the CSS note above.
+- Don't add sort-related markup (button/caret) by hand in Razor — the module generates it from `data-sort-col`/label text at init. Hand-authoring it would double up or fight the module's DOM manipulation.
+- `data-sort-col` values must be unique **within a page** if you want the URL-hash restore-on-load feature to target the right column on the right table; they don't need to be globally unique across all tables on a page (e.g. "athlete"/"mark" are reused identically across every Meet-results event-group table, which is intentional — a bookmarked `#sort=mark&dir=asc` link sorts every event table on that meet page the same way).
+
+---
+
 ### [C28] Events IA — `/leaderboard` Renamed to `/events` (Routing Only)
 
 **What changed:**
