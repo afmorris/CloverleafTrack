@@ -23,4 +23,8 @@ public class AthleteDetailsViewModel
     
     // Season Performance
     public List<SeasonPerformanceViewModel> Seasons { get; set; } = new();
+
+    // Career Progression (issue #26) — one chart per event the athlete has performances in.
+    // Never hidden by default; this is the page's "payoff artifact."
+    public List<CareerChartViewModel> CareerCharts { get; set; } = new();
 }

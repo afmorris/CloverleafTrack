@@ -5,6 +5,7 @@ using CloverleafTrack.Models.Enums;
 using CloverleafTrack.Models.Helpers;
 using CloverleafTrack.Services;
 using CloverleafTrack.ViewModels;
+using CloverleafTrack.ViewModels.Athletes;
 using FluentAssertions;
 using Moq;
 using Environment = CloverleafTrack.Models.Enums.Environment;
@@ -659,5 +660,188 @@ public class AthleteServiceTests
 
         var seasonPerf = result!.Seasons.Single().EventGroups.Single().Performances.Single();
         seasonPerf.AttemptSeries.HasAttempts.Should().BeFalse();
+    }
+
+    // -------------------------------------------------------------------------
+    // Career progression charts (issue #26)
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_CareerChart_RecordZoneSuppressed_WhenAthleteHoldsRecord()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { PerformanceId = 1, EventId = 1, EventName = "100m", TimeSeconds = 11.5, AllTimeRank = 1,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+        mockRepo.Setup(r => r.GetSchoolRecordsForEventsAsync(It.IsAny<IEnumerable<int>>()))
+            .ReturnsAsync(new List<EventRecordDto> { new() { EventId = 1, TimeSeconds = 11.5 } });
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.CareerCharts.Single().ShowRecordZone.Should().BeFalse("the athlete already holds this record — the zone would be empty");
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_CareerChart_RecordZoneShown_WhenAthleteDoesNotHoldRecord()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { PerformanceId = 1, EventId = 1, EventName = "100m", TimeSeconds = 12.5, AllTimeRank = 15,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+        mockRepo.Setup(r => r.GetSchoolRecordsForEventsAsync(It.IsAny<IEnumerable<int>>()))
+            .ReturnsAsync(new List<EventRecordDto> { new() { EventId = 1, TimeSeconds = 11.0 } });
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        var chart = result!.CareerCharts.Single();
+        chart.ShowRecordZone.Should().BeTrue();
+        chart.RecordLinePixelY.Should().NotBeNull();
+        // Record zone must span from the top of the plot down to the record line.
+        chart.RecordZoneTopPixelY.Should().Be(chart.PlotTop);
+        chart.RecordZoneBottomPixelY.Should().Be(chart.RecordLinePixelY);
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_CareerChart_MedianBandSuppressed_ForRelayEvents()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { PerformanceId = 1, EventId = 10, EventName = "4x400m Relay", TimeSeconds = 200.0,
+                    EventMarkCount = 50, MedianValue = 210.0, Q1Value = 205.0, Q3Value = 215.0,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = "Jane Doe|~|Mary Smith|~|Lisa Jones|~|Sarah Brown" },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.CareerCharts.Single().ShowMedianBand.Should().BeFalse("relay event populations are unstable — the median band must be suppressed regardless of mark count");
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_CareerChart_MedianBandSuppressed_WhenFewerThanTenMarks()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { PerformanceId = 1, EventId = 1, EventName = "100m", TimeSeconds = 12.5,
+                    EventMarkCount = 8, MedianValue = null, Q1Value = null, Q3Value = null,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.CareerCharts.Single().ShowMedianBand.Should().BeFalse("EventStatistics leaves Median/Q1/Q3 null below the 10-mark floor");
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_CareerChart_MedianBandShown_WhenIndividualEventWithTenOrMoreMarks()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { PerformanceId = 1, EventId = 1, EventName = "100m", TimeSeconds = 12.5,
+                    EventMarkCount = 50, MedianValue = 12.8, Q1Value = 12.6, Q3Value = 13.0,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        var chart = result!.CareerCharts.Single();
+        chart.ShowMedianBand.Should().BeTrue();
+        chart.IqrZoneTopPixelY.Should().NotBeNull();
+        chart.IqrZoneBottomPixelY.Should().NotBeNull();
+        chart.IqrZoneTopPixelY!.Value.Should().BeLessThanOrEqualTo(chart.IqrZoneBottomPixelY!.Value, "top/bottom must already be pixel-ordered regardless of event type — the view should never need to reason about which is smaller");
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_CareerChart_FlagsCorrectPointAsCareerBest()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { PerformanceId = 1, EventId = 1, EventName = "100m", TimeSeconds = 13.0,
+                    MeetName = "Meet 1", MeetDate = new DateTime(2023, 3, 1),
+                    SeasonName = "2022-2023", SeasonStartDate = new DateTime(2023, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            new() { PerformanceId = 2, EventId = 1, EventName = "100m", TimeSeconds = 11.8,
+                    MeetName = "Meet 2", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            new() { PerformanceId = 3, EventId = 1, EventName = "100m", TimeSeconds = 12.4,
+                    MeetName = "Meet 3", MeetDate = new DateTime(2025, 3, 1),
+                    SeasonName = "2024-2025", SeasonStartDate = new DateTime(2025, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        var chart = result!.CareerCharts.Single();
+        chart.Points.Should().HaveCount(3);
+        chart.Points.Single(p => p.IsCareerBest).Formatted.Should().Be("11.80");
+        chart.CareerBestFormatted.Should().Be("11.80");
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_CareerChart_OneChartPerDistinctEvent()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { PerformanceId = 1, EventId = 1, EventName = "100m", TimeSeconds = 12.5,
+                    MeetName = "Meet 1", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            new() { PerformanceId = 2, EventId = 2, EventName = "200m", TimeSeconds = 26.0,
+                    MeetName = "Meet 1", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.CareerCharts.Should().HaveCount(2);
+        result.CareerCharts.Select(c => c.EventId).Should().BeEquivalentTo(new[] { 1, 2 });
     }
 }

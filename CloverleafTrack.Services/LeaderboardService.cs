@@ -162,7 +162,7 @@ public class LeaderboardService(
         foreach (var cls in Classes)
         {
             var classDtos = scopedPerformances
-                .Where(p => p.AthleteId.HasValue && GetClassAtTimeOfPerformance(p.GraduationYear, p.MeetDate) == cls)
+                .Where(p => p.AthleteId.HasValue && ClassYearCalculator.GetClassAtTimeOfPerformance(p.GraduationYear, p.MeetDate) == cls)
                 .ToList();
             classAllPerfs[cls] = BuildAllPerformanceViewModels(classDtos, recordSettingIds, isFieldEvent, attemptLookup)
                 .Take(effectiveDepth)
@@ -184,7 +184,7 @@ public class LeaderboardService(
         {
             var classPerfs = scopedPerformances
                 .Where(p => p.AthleteId.HasValue &&
-                             GetClassAtTimeOfPerformance(p.GraduationYear, p.MeetDate) == cls)
+                             ClassYearCalculator.GetClassAtTimeOfPerformance(p.GraduationYear, p.MeetDate) == cls)
                 .ToList();
             classPrs[cls] = BuildPrViewModels(classPerfs, recordSettingIds, isFieldEvent, attemptLookup)
                 .Take(effectiveDepth)
@@ -246,7 +246,7 @@ public class LeaderboardService(
             GraduationYear = perf.GraduationYear,
             IsSchoolRecord = perf.AllTimeRank == 1,
             WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
-            ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
+            ClassAtTimeOfPerformance = ClassYearCalculator.GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
             RawValue = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds,
             Percentile = perf.Percentile,
             AttemptSeries = attemptLookup.GetValueOrDefault(perf.PerformanceId) ?? new PerformanceAttemptSeriesViewModel()
@@ -312,32 +312,12 @@ public class LeaderboardService(
                 GraduationYear = perf.GraduationYear,
                 IsSchoolRecord = perf.AllTimeRank == 1,
                 WasRecordAtTime = recordSettingIds.Contains(perf.PerformanceId),
-                ClassAtTimeOfPerformance = GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
+                ClassAtTimeOfPerformance = ClassYearCalculator.GetClassAtTimeOfPerformance(perf.GraduationYear, perf.MeetDate),
                 RawValue = isFieldEvent ? perf.DistanceInches : perf.TimeSeconds,
                 Percentile = perf.Percentile,
                 AttemptSeries = attemptLookup.GetValueOrDefault(perf.PerformanceId) ?? new PerformanceAttemptSeriesViewModel()
             })
             .ToList();
-    }
-
-    /// <summary>
-    /// Returns the athlete's class (Freshman/Sophomore/Junior/Senior) at the time the performance was set,
-    /// based on the athlete's graduation year and the meet date. Returns null for relays or unknown grad years.
-    /// School year boundary: August or later means the school year that ends in meetDate.Year + 1.
-    /// </summary>
-    private static string? GetClassAtTimeOfPerformance(int? graduationYear, DateTime meetDate)
-    {
-        if (!graduationYear.HasValue) return null;
-        // Meets in August or later belong to the school year that ends the following June
-        var schoolYearEnd = meetDate.Month >= 8 ? meetDate.Year + 1 : meetDate.Year;
-        return (graduationYear.Value - schoolYearEnd) switch
-        {
-            0 => "Senior",
-            1 => "Junior",
-            2 => "Sophomore",
-            3 => "Freshman",
-            _ => null
-        };
     }
 
     private static string FormatImprovement(double delta, bool isField)

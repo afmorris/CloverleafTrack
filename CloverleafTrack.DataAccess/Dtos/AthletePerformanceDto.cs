@@ -20,6 +20,9 @@ public class AthletePerformanceDto
     public int? AllTimeRank { get; set; }
     public byte? Percentile { get; set; }
     public int? EventMarkCount { get; set; }
+    public double? MedianValue { get; set; }
+    public double? Q1Value { get; set; }
+    public double? Q3Value { get; set; }
     public DateTime MeetDate { get; set; }
     public string MeetName { get; set; } = string.Empty;
     public string SeasonName { get; set; } = string.Empty;
