@@ -67,14 +67,8 @@
     .timeline-dot-current { background: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
     .timeline-dot-past { background: #9ca3af; }
     .dark .timeline-dot-past { background: #4b5563; }
-
-    /* Mark cell percentile tint (issue #21). Inline style carries the actual color per row;
-       forced-colors/high-contrast mode strips the tint but leaves the numeral (and its inline
-       ink color, which forced-colors also overrides via its own UA stylesheet) legible. */
-    @@media (forced-colors: active) {
-        .pct-tint-td { background-color: Canvas !important; box-shadow: none !important; }
-    }
 </style>
+@* .pct-tint-td forced-colors handling now lives in input.css (shared with the Roster page, issue #23). *@
 
 <div class="max-w-7xl mx-auto px-6">
 

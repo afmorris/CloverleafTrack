@@ -28,6 +28,11 @@
  * - data-sort-dir:  "asc" | "desc" — which raw-value direction counts as "best" for
  *                    this column (e.g. "asc" for times, "desc" for distances). Defaults
  *                    to "asc" when omitted.
+ * - data-sort-default: mark exactly one <th data-sort-col> per table with this boolean
+ *                    attribute to have that column sort best-first on page load when the
+ *                    URL has no #sort hash (e.g. Roster's percentile column, issue #23).
+ *                    Like a chip filter's "all" state, the default is never written into
+ *                    the hash — only a sort the user actually picked appears there.
  * - Each <th data-sort-col> is automatically wrapped in a real <button> (keyboard
  *   support for free) plus a fixed-width, aria-hidden caret — do not hand-author the
  *   button/caret markup, just the data-* attributes and the header label text.
@@ -254,6 +259,19 @@
             var mode = dir === bestDir ? 'best' : 'worst';
             applySort(entry, mode, false);
         };
+
+        // Applies the table's own default sort (a <th data-sort-col data-sort-default>), for
+        // pages that want an initial best-first order (e.g. Roster's percentile column, issue
+        // #23) without writing that default into the URL — matches filters.js's convention that
+        // the default state is represented by absence from the hash, not by an explicit value.
+        table._sortableApplyDefault = function () {
+            var entry = null;
+            for (var i = 0; i < sortables.length; i++) {
+                if (sortables[i].th.hasAttribute('data-sort-default')) { entry = sortables[i]; break; }
+            }
+            if (!entry) return;
+            applySort(entry, 'best', false);
+        };
     }
 
     function initAll() {
@@ -265,6 +283,12 @@
             tables.forEach(function (table) {
                 if (typeof table._sortableApplyFromHash === 'function') {
                     table._sortableApplyFromHash(hashParams.sort, hashParams.dir);
+                }
+            });
+        } else {
+            tables.forEach(function (table) {
+                if (typeof table._sortableApplyDefault === 'function') {
+                    table._sortableApplyDefault();
                 }
             });
         }

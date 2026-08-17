@@ -2,6 +2,7 @@ using CloverleafTrack.DataAccess.Dtos;
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
+using CloverleafTrack.Models.Helpers;
 using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.ViewModels;
 using CloverleafTrack.ViewModels.Athletes;
@@ -136,28 +137,27 @@ public class AthleteService(
     {
         var athletesWithPerformances = await repository.GetAllWithPerformancesAsync();
 
-        var prLookup = athletesWithPerformances
+        // Best single performance per (athlete, event) — the mark shown, and the source of
+        // truth for that event's Percentile, since percentile is a property of the specific
+        // performance (sp_RebuildLeaderboards), not of the event itself.
+        var bestByEvent = athletesWithPerformances
             .GroupBy(p => (p.Athlete.Id, p.Event.Id))
-            .ToDictionary(
-                g => g.Key,
-                g =>
-                {
-                    var first = g.First();
-                    if (IsDistanceBasedEvent(first.Event))
-                    {
-                        var best = g.Where(p => p.Performance.DistanceInches.HasValue)
-                            .OrderByDescending(p => p.Performance.DistanceInches)
-                            .FirstOrDefault();
-                        return best != null ? FormatDistance(best.Performance.DistanceInches!.Value) : "N/A";
-                    }
-                    else
-                    {
-                        var best = g.Where(p => p.Performance.TimeSeconds.HasValue)
-                            .OrderBy(p => p.Performance.TimeSeconds)
-                            .FirstOrDefault();
-                        return best != null ? FormatTime(best.Performance.TimeSeconds!.Value) : "N/A";
-                    }
-                });
+            .ToDictionary(g => g.Key, g => BestPerformance(g, g.First().Event));
+
+        // Best performance per (athlete, event, season) — feeds the season trend sparkline for
+        // whichever event ends up as the athlete's Top Event below.
+        var bestBySeasonEvent = athletesWithPerformances
+            .GroupBy(p => (AthleteId: p.Athlete.Id, EventId: p.Event.Id, p.SeasonStartDate, p.SeasonName))
+            .Select(g => new SeasonEventBest
+            {
+                AthleteId = g.Key.AthleteId,
+                EventId = g.Key.EventId,
+                SeasonStartDate = g.Key.SeasonStartDate,
+                SeasonName = g.Key.SeasonName,
+                Best = BestPerformance(g, g.First().Event)
+            })
+            .Where(x => x.Best != null)
+            .ToList();
 
         return athletesWithPerformances
             .Where(x => x.Athlete.IsActive)
@@ -171,13 +171,17 @@ public class AthleteService(
                     {
                         var ev = eg.First().Event;
                         var key = (first.Athlete.Id, ev.Id);
+                        var best = bestByEvent.GetValueOrDefault(key);
+                        var isFieldEvent = IsDistanceBasedEvent(ev);
                         return new EventParticipationViewModel
                         {
                             Id = ev.Id,
                             Name = ev.Name,
                             Environment = ev.Environment,
                             SortOrder = ev.SortOrder,
-                            PersonalRecord = prLookup.GetValueOrDefault(key, "N/A")
+                            PersonalRecord = best != null ? FormatPerformance(best.Performance.TimeSeconds, best.Performance.DistanceInches) : "N/A",
+                            Percentile = best?.Performance.Percentile,
+                            IsFieldEvent = isFieldEvent
                         };
                     })
                     .OrderBy(e => e.SortOrder)
@@ -189,6 +193,16 @@ public class AthleteService(
                     .Distinct()
                     .ToList();
 
+                // Top Event = best event by percentile, not simply the first by SortOrder —
+                // see BRAIN.md [C36]/#48, the same tiebreak logic used for the athlete detail
+                // hero stats, generalized here across all categories instead of sprint/field only.
+                var topEvent = events.Where(e => e.Percentile.HasValue).OrderByDescending(e => e.Percentile).FirstOrDefault()
+                    ?? events.FirstOrDefault();
+
+                var seasonTrend = topEvent != null
+                    ? BuildSeasonTrend(bestBySeasonEvent.Where(x => x.AthleteId == first.Athlete.Id && x.EventId == topEvent.Id), topEvent.IsFieldEvent)
+                    : new List<SparklinePointViewModel>();
+
                 return new AthleteViewModel
                 {
                     FirstName = first.Athlete.FirstName,
@@ -197,11 +211,57 @@ public class AthleteService(
                     EventsInCategory = events,
                     Categories = categories,
                     Gender = first.Athlete.Gender,
-                    GraduationYear = first.Athlete.GraduationYear
+                    GraduationYear = first.Athlete.GraduationYear,
+                    TopEvent = topEvent,
+                    SeasonTrend = seasonTrend
                 };
             })
             .OrderBy(a => a.FullName)
             .ToList();
+    }
+
+    private static AthleteEventParticipation? BestPerformance(IEnumerable<AthleteEventParticipation> group, Event ev) =>
+        IsDistanceBasedEvent(ev)
+            ? group.Where(p => p.Performance.DistanceInches.HasValue).OrderByDescending(p => p.Performance.DistanceInches).FirstOrDefault()
+            : group.Where(p => p.Performance.TimeSeconds.HasValue).OrderBy(p => p.Performance.TimeSeconds).FirstOrDefault();
+
+    private class SeasonEventBest
+    {
+        public int AthleteId { get; set; }
+        public int EventId { get; set; }
+        public DateTime SeasonStartDate { get; set; }
+        public string SeasonName { get; set; } = string.Empty;
+        public AthleteEventParticipation? Best { get; set; }
+    }
+
+    // Fixed 88x24 viewBox, matching the career chart's "precompute every pixel server-side"
+    // convention (BRAIN.md [C39]) so the view never does axis math. Points are spaced evenly by
+    // season index rather than proportionally to elapsed calendar time — the career chart made
+    // the opposite choice once and had to walk it back (BRAIN.md [C40]) once real off-season gaps
+    // made date-proportional spacing look broken.
+    private List<SparklinePointViewModel> BuildSeasonTrend(IEnumerable<SeasonEventBest> seasonBests, bool isFieldEvent)
+    {
+        const double plotLeft = 3, plotRight = 85, plotTop = 3, plotBottom = 21;
+
+        var ordered = seasonBests.OrderBy(x => x.SeasonStartDate).ToList();
+        if (ordered.Count == 0) return new List<SparklinePointViewModel>();
+
+        var rawValues = ordered.Select(x => isFieldEvent ? x.Best!.Performance.DistanceInches!.Value : x.Best!.Performance.TimeSeconds!.Value);
+        var (min, max) = CareerChartGeometry.ComputeDomain(rawValues);
+
+        return ordered.Select((x, i) =>
+        {
+            var rawValue = isFieldEvent ? x.Best!.Performance.DistanceInches!.Value : x.Best!.Performance.TimeSeconds!.Value;
+            var pixelX = ordered.Count == 1 ? (plotLeft + plotRight) / 2.0 : plotLeft + (plotRight - plotLeft) * i / (ordered.Count - 1);
+            var pixelY = CareerChartGeometry.MapValueToPixelY(rawValue, min, max, plotTop, plotBottom, isFieldEvent);
+            return new SparklinePointViewModel
+            {
+                PixelX = pixelX,
+                PixelY = pixelY,
+                SeasonName = x.SeasonName,
+                Formatted = FormatPerformance(x.Best!.Performance.TimeSeconds, x.Best!.Performance.DistanceInches)
+            };
+        }).ToList();
     }
 
     public async Task<Dictionary<int, List<AthleteViewModel>>> GetFormerAthletesGroupedByGraduationYearAsync()

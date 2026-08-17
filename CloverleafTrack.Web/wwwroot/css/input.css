@@ -202,3 +202,58 @@ details[open] .details-arrow {
 .sort-caret {
     @apply inline-block w-4 flex-shrink-0 text-center text-gray-400 dark:text-gray-500;
 }
+
+/* Mark cell percentile tint (issue #21; reused site-wide — was previously duplicated as a
+   page-local <style> block on Leaderboard/Details.cshtml, now shared). Inline style carries the
+   actual color per row; forced-colors/high-contrast mode strips the tint but leaves the numeral
+   (and its inline ink color, which forced-colors also overrides via its own UA stylesheet) legible. */
+@media (forced-colors: active) {
+    .pct-tint-td { background-color: Canvas !important; box-shadow: none !important; }
+}
+
+/* Percentile bar (issue #23) — track + fill + fixed median tick at the midpoint. */
+.pct-bar-track {
+    @apply relative w-16 sm:w-20 h-2.5 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex-shrink-0;
+}
+.pct-bar-fill {
+    @apply absolute inset-y-0 left-0 rounded-full;
+}
+.pct-bar-median-tick {
+    @apply absolute inset-y-0 left-1/2 w-px bg-gray-500 dark:bg-gray-400 opacity-60;
+}
+@media (forced-colors: active) {
+    .pct-bar-fill { background-color: Highlight !important; }
+}
+
+/* Roster mobile cards (issue #23) — a single <table data-sortable> reflows into cards below
+   `sm` via CSS grid on the row, instead of a parallel card DOM. That keeps sortable-tables.js's
+   row reordering and filters.js's row hiding working unmodified at every breakpoint, rather
+   than needing a second implementation of either for a second DOM shape. Top Event and Season
+   Trend are folded away here (a compact event label lives inside the mark cell instead) — the
+   mockup's mobile card only ever showed name/class, mark/percentile, and the full-width bar.
+*/
+@media (max-width: 639px) {
+    .roster-table thead { display: none; }
+    .roster-table, .roster-table tbody { @apply block w-full; }
+    /* CSS grid on a table row has cross-browser sizing quirks (<tr> retains anonymous
+       table-object behavior even under a display override) — flexbox is the reliable version
+       of this "table row becomes a card" technique. */
+    .roster-table tbody tr[data-filterable] {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 0.75rem;
+        row-gap: 0.5rem;
+        @apply px-4 py-3;
+    }
+    .roster-table td { @apply block p-0 border-0 min-w-0; }
+    .roster-table td.col-name { @apply flex-1; order: 1; }
+    .roster-table td.col-event { display: none; }
+    .roster-table td.col-mark { @apply flex-1; text-align: right; order: 2; }
+    /* text-align:right (inherited from .col-mark) plus truncate clips the wrong end — the
+       start of the string disappears instead of the end. The event sub-label needs its own
+       left alignment so the truncation ellipsis lands where it reads correctly. */
+    .roster-table td.col-mark .mark { @apply block truncate; }
+    .roster-table td.col-mark div { @apply block truncate text-left; }
+    .roster-table td.col-pct { flex: 1 1 100%; order: 3; }
+    .roster-table td.col-trend { display: none; }
+}

@@ -448,6 +448,22 @@ SQL Server's NULL != NULL behavior in unique indexes means these two filtered in
 
 ---
 
+## Roster Active List Page — Key Behaviors
+
+(`Views/Shared/_RosterActiveAthletesList.cshtml` + `AthleteService.GetFlatActiveAthletesAsync`, rendered from `RosterController.Index` via `Views/Roster/Index.cshtml`)
+
+- One `<table data-sortable>` per gender section (boys/girls, per [C28]'s triple-encoding — no per-row gender indicator). Columns: Athlete (name + class subtitle), Top Event, Best Mark (tinted), Percentile (bar + numeral), Season Trend (sparkline).
+- **Top Event** is the athlete's best event by `Percentile` (falling back to first-by-`SortOrder` only when no performance has percentile data at all) — the same tiebreak logic as the athlete detail page's hero stats ([C36]/#48), generalized here across all categories rather than sprint/field only. `AthleteViewModel.TopEvent` is an `EventParticipationViewModel`, not a `.FirstOrDefault()` of `EventsInCategory`.
+- **Best Mark tint** reuses `PercentileHelper.GetFillColor`/`GetInkColor` (originally for event pages, #21) — `background-color:{fill}38;box-shadow:inset 3px 0 0 0 {fill}` on the `<td>`, `color:{ink}` on the mark text. Shared `.pct-tint-td` forced-colors rule lives in `input.css` (used by both this page and `Leaderboard/Details.cshtml`).
+- **Percentile column**: `.pct-bar-track`/`.pct-bar-fill`/`.pct-bar-median-tick` (in `input.css`) render a bar whose width equals the percentile and whose median tick is fixed at the bar's horizontal midpoint (50% is always the median position by definition — no extra computation needed). Numeral sits beside it. Default sort column, descending, via `data-sort-default` on the header `<th>` — see `sortable-tables.js`.
+- **Season Trend sparkline**: `AthleteViewModel.SeasonTrend` (a `List<SparklinePointViewModel>`) — the athlete's best mark per season *in their Top Event only*, pixel-mapped server-side against a fixed 88×24 viewBox using `CareerChartGeometry.MapValueToPixelY`/`ComputeDomain` (the same pure functions the career progression chart uses), points spaced evenly by season index rather than calendar date.
+- **Filters**: Gender, Category, and Class (Fr/So/Jr/Sr) chip groups (`_FilterChipGroup`, `filters.js`) plus a client-side Name text filter. The Name filter reuses the same `[data-filterable]`/hash-state mechanism as the chips — `filters.js` treats the `name` hash key as a case-insensitive substring match instead of an exact/CSV match, and exposes `window.CtfFilters.applyFilters` so the page's own input handler can re-run filtering after updating the hash. An athlete whose `Class` doesn't map to Fr/So/Jr/Sr (e.g. a stale `IsActive` flag past graduation) gets `data-class="other"`, not an empty attribute — `filters.js` treats an empty data attribute as "matches every filter value," so an empty string would make that row appear under every specific Class chip.
+- **CSV export**: client-side only, reads the currently-visible (post-filter) `<tr data-filterable>` rows via `data-csv-*` attributes and downloads a generated CSV — no server endpoint.
+- **Mobile (`< sm`)**: the same `<table>` rows reflow into cards via CSS **flexbox** on the `<tr>` (`.roster-table` rules in `input.css`), not a parallel card DOM and not CSS Grid (grid on a `<tr>` has cross-browser sizing quirks — see BRAIN.md [C42]). Top Event and Season Trend are dropped on mobile; Top Event folds into a small sub-line under the mark instead.
+- **Any inline `<script>` on this page (or any page) that touches `window.CtfFilters` must guard with `document.readyState === 'loading' ? addEventListener('DOMContentLoaded', init) : init()`** — `filters.js` loads with `defer` in `_Layout.cshtml`, so an un-deferred inline script placed earlier in the body will run before it and see `window.CtfFilters` as `undefined`.
+
+---
+
 ## Roster Details Page — Key Behaviors
 
 (`Views/Roster/Details.cshtml` + `AthleteService.GetAthleteDetailsAsync`)
