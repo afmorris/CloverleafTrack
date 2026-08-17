@@ -1,15 +1,33 @@
 @using CloverleafTrack.ViewModels.Shared
+@using CloverleafTrack.Web.Utilities
 @model RosterViewModel
 
+@*
+    Roster redesign (issue #23). Best Mark alone can't be sorted or compared across events
+    (8.94 vs 1:11.10 vs 35' 1" are incommensurable) — Percentile is the comparable value that
+    lives beside it, and is what the table actually sorts by default. See BRAIN.md [C42].
+
+    Mobile: a single <table data-sortable> per gender reflows into cards below `sm` via CSS
+    grid on the <tr> (see .roster-table rules in input.css), rather than a parallel card DOM —
+    that keeps sortable-tables.js's row reordering and filters.js's row hiding working
+    unmodified at every breakpoint, instead of needing to duplicate that logic for a second
+    DOM shape.
+*@
+
 @functions {
-    // Sort key for the Class column — never sort grade labels alphabetically.
-    static int ClassOrdinal(string cls) => cls switch
+    // Chip filter value for the Class filter group — distinct from ClassOrdinal-style sort
+    // keys, this just needs to match _FilterChipGroup's lowercase Option values.
+    // Non-empty, deliberately unmatched sentinel for anything that isn't Fr/So/Jr/Sr (e.g. an
+    // athlete flagged IsActive after their graduation year has passed) — filters.js treats an
+    // EMPTY data attribute as "no opinion, always visible," so leaving this blank would make
+    // such a row show up under every specific Class chip instead of only "All".
+    static string ClassFilterValue(string cls) => cls switch
     {
-        "Freshman" => 1,
-        "Sophomore" => 2,
-        "Junior" => 3,
-        "Senior" => 4,
-        _ => 5
+        "Freshman" => "fr",
+        "Sophomore" => "so",
+        "Junior" => "jr",
+        "Senior" => "sr",
+        _ => "other"
     };
 }
 
@@ -28,36 +46,79 @@
                 @await Html.PartialAsync("_GenderSectionHeader", new GenderSectionHeaderViewModel { Gender = gender, Count = athletes.Count })
                 <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-sm" data-sortable>
+                        <table class="roster-table w-full text-sm" data-sortable>
                             <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                                 <tr>
-                                    <th class="px-4 py-2.5 text-left font-medium" data-sort-col="name" data-sort-type="str" data-sort-dir="asc">Name</th>
-                                    <th class="px-4 py-2.5 text-left font-medium hidden sm:table-cell" data-sort-col="class" data-sort-type="num" data-sort-dir="asc">Class</th>
-                                    <th class="px-4 py-2.5 text-left font-medium hidden md:table-cell" data-sort-col="event" data-sort-type="str" data-sort-dir="asc">Top Event</th>
-                                    <th class="px-4 py-2.5 text-left font-medium">Best Mark</th>
+                                    <th class="col-name px-4 py-2.5 text-left font-medium" data-sort-col="name" data-sort-type="str" data-sort-dir="asc">Athlete</th>
+                                    <th class="col-event px-4 py-2.5 text-left font-medium hidden md:table-cell" data-sort-col="event" data-sort-type="str" data-sort-dir="asc">Top Event</th>
+                                    <th class="col-mark px-4 py-2.5 text-left font-medium">Best Mark</th>
+                                    <th class="col-pct px-4 py-2.5 text-left font-medium" data-sort-col="pct" data-sort-type="num" data-sort-dir="desc" data-sort-default>Percentile</th>
+                                    <th class="col-trend px-4 py-2.5 text-left font-medium hidden lg:table-cell">Season Trend</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                                 @foreach (var athlete in athletes)
                                 {
                                     var categoriesVal = string.Join(",", athlete.Categories.Select(c => c.ToString().ToLower()));
-                                    var topEvent = athlete.EventsInCategory.FirstOrDefault();
+                                    var topEvent = athlete.TopEvent;
+                                    var pct = topEvent?.Percentile;
+                                    var fill = pct.HasValue ? PercentileHelper.GetFillColor(pct.Value) : null;
+                                    var ink = pct.HasValue ? PercentileHelper.GetInkColor(pct.Value) : null;
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50"
                                         data-filterable
-                                        data-categories="@categoriesVal">
-                                        <td class="px-4 py-2.5" data-sort="@athlete.FullName">
+                                        data-name="@athlete.FullName.ToLower()"
+                                        data-categories="@categoriesVal"
+                                        data-class="@ClassFilterValue(athlete.Class)"
+                                        data-csv-class="@athlete.Class"
+                                        data-csv-gender="@(gender == CloverleafTrack.Models.Enums.Gender.Male ? "Boys" : "Girls")"
+                                        data-csv-event="@(topEvent?.Name ?? "")"
+                                        data-csv-mark="@(topEvent?.PersonalRecord ?? "")"
+                                        data-csv-pct="@(pct.HasValue ? $"{pct}th" : "")">
+                                        <td class="col-name px-4 py-2.5" data-sort="@athlete.FullName">
                                             <a href="@Url.Action("Details", "Roster", new { slug = athlete.AthleteSlug })"
                                                class="flex items-center gap-1.5 font-medium text-gray-900 dark:text-white hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
                                                 <span class="w-2 h-2 rounded-full bg-green-500 inline-block flex-shrink-0" aria-label="Active athlete"></span>
                                                 @athlete.FullName
                                             </a>
+                                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">@athlete.Class</div>
                                         </td>
-                                        <td class="px-4 py-2.5 text-gray-500 dark:text-gray-400 hidden sm:table-cell" data-sort="@ClassOrdinal(athlete.Class)">@athlete.Class</td>
-                                        <td class="px-4 py-2.5 text-gray-600 dark:text-gray-400 truncate max-w-[160px] hidden md:table-cell" data-sort="@(topEvent?.Name ?? "")">@(topEvent?.Name ?? "")</td>
-                                        <td class="px-4 py-2.5">
+                                        <td class="col-event px-4 py-2.5 text-gray-600 dark:text-gray-400 truncate max-w-[160px] hidden md:table-cell" data-sort="@(topEvent?.Name ?? "")">@(topEvent?.Name ?? "")</td>
+                                        <td class="col-mark px-4 py-2.5 pct-tint-td" style="@(fill != null ? $"background-color:{fill}38;box-shadow:inset 3px 0 0 0 {fill}" : "")">
                                             @if (topEvent != null)
                                             {
-                                                <span class="mark font-semibold text-gray-900 dark:text-white">@topEvent.PersonalRecord</span>
+                                                <span class="mark font-semibold @(ink == null ? "text-gray-900 dark:text-white" : "")" style="@(ink != null ? $"color:{ink}" : "")">@topEvent.PersonalRecord</span>
+                                                <div class="text-[11px] text-gray-500 dark:text-gray-400 md:hidden">@topEvent.Name</div>
+                                            }
+                                        </td>
+                                        <td class="col-pct px-4 py-2.5" data-sort="@(pct?.ToString() ?? "")">
+                                            @if (pct.HasValue)
+                                            {
+                                                <div class="flex items-center gap-2" title="@PercentileHelper.GetReading(pct.Value)">
+                                                    <div class="pct-bar-track">
+                                                        <div class="pct-bar-fill" style="width:@(pct)%;background:@fill"></div>
+                                                        <div class="pct-bar-median-tick"></div>
+                                                    </div>
+                                                    <span class="text-xs font-semibold tabular-nums flex-shrink-0" style="color:@ink">@(pct)<sup>th</sup></span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-xs text-gray-400 dark:text-gray-500">—</span>
+                                            }
+                                        </td>
+                                        <td class="col-trend px-4 py-2.5 hidden lg:table-cell">
+                                            @if (athlete.SeasonTrend.Count > 0)
+                                            {
+                                                var last = athlete.SeasonTrend[^1];
+                                                <svg viewBox="0 0 88 24" width="88" height="24" role="img" aria-label="@(topEvent?.Name) season trend across @athlete.SeasonTrend.Count season@(athlete.SeasonTrend.Count == 1 ? "" : "s")">
+                                                    @if (athlete.SeasonTrend.Count > 1)
+                                                    {
+                                                        <polyline points="@athlete.SparklinePolyline" fill="none" stroke="#3ba55d" stroke-width="1.5" stroke-linejoin="round" />
+                                                    }
+                                                    <circle cx="@last.PixelX.ToString("0.##")" cy="@last.PixelY.ToString("0.##")" r="2.5" fill="#3ba55d">
+                                                        <title>@last.Formatted — @last.SeasonName</title>
+                                                    </circle>
+                                                </svg>
                                             }
                                         </td>
                                     </tr>
@@ -79,8 +140,8 @@
 
     @if (Model.FlatActiveAthletes.Any())
     {
-        <!-- Filter chips -->
-        <div class="flex flex-wrap gap-x-6 gap-y-3 mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+        <!-- Filters + search + export -->
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3 mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
             @await Html.PartialAsync("_FilterChipGroup", null, new ViewDataDictionary(ViewData) {
                 ["Label"] = "Gender",
                 ["FilterKey"] = "gender",
@@ -91,14 +152,89 @@
                 ["FilterKey"] = "categories",
                 ["Options"] = new List<(string, string)> { ("all","All"), ("sprints","Sprints"), ("distance","Distance"), ("hurdles","Hurdles"), ("jumps","Jumps"), ("throws","Throws") }
             })
+            @await Html.PartialAsync("_FilterChipGroup", null, new ViewDataDictionary(ViewData) {
+                ["Label"] = "Class",
+                ["FilterKey"] = "class",
+                ["Options"] = new List<(string, string)> { ("all","All"), ("fr","Fr"), ("so","So"), ("jr","Jr"), ("sr","Sr") }
+            })
+
+            <div class="flex items-center gap-1.5 w-full sm:w-auto sm:ml-auto">
+                <label for="roster-name-filter" class="sr-only">Search by name</label>
+                <input type="search" id="roster-name-filter" placeholder="Search by name…"
+                       class="min-w-0 flex-1 sm:flex-none px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-ctf-accent sm:w-56" />
+                <button type="button" id="roster-csv-export"
+                        class="flex-shrink-0 px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 whitespace-nowrap">
+                    Export CSV
+                </button>
+            </div>
         </div>
 
-        await RenderGenderSection(boysAthletes, CloverleafTrack.Models.Enums.Gender.Male, "boys");
-        await RenderGenderSection(girlsAthletes, CloverleafTrack.Models.Enums.Gender.Female, "girls");
+        <div id="roster-active">
+            @{ await RenderGenderSection(boysAthletes, CloverleafTrack.Models.Enums.Gender.Male, "boys"); }
+            @{ await RenderGenderSection(girlsAthletes, CloverleafTrack.Models.Enums.Gender.Female, "girls"); }
+        </div>
 
         <div id="roster-empty" class="hidden p-8 text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 mt-4">
             No athletes match the selected filters.
         </div>
+
+        <script>
+            (function () {
+                // filters.js loads with `defer`, so it runs after HTML parsing while this inline
+                // script (not deferred) runs immediately as the parser reaches it — window.CtfFilters
+                // would still be undefined here without waiting for DOMContentLoaded first.
+                function init() {
+                    var nameInput = document.getElementById('roster-name-filter');
+                    if (nameInput) {
+                        var current = window.CtfFilters.getHashFilters();
+                        if (current.name) nameInput.value = current.name;
+                        nameInput.addEventListener('input', function () {
+                            window.CtfFilters.setHashFilter('name', this.value.trim() || 'all');
+                            window.CtfFilters.applyFilters();
+                        });
+                    }
+
+                    var csvBtn = document.getElementById('roster-csv-export');
+                    if (csvBtn) {
+                        csvBtn.addEventListener('click', function () {
+                            var rows = [['Name', 'Class', 'Gender', 'Top Event', 'Best Mark', 'Percentile']];
+                            document.querySelectorAll('#roster-active tr[data-filterable]').forEach(function (tr) {
+                                if (tr.hidden) return;
+                                rows.push([
+                                    tr.dataset.name || '',
+                                    tr.dataset.csvClass || '',
+                                    tr.dataset.csvGender || '',
+                                    tr.dataset.csvEvent || '',
+                                    tr.dataset.csvMark || '',
+                                    tr.dataset.csvPct || ''
+                                ]);
+                            });
+                            var csv = rows.map(function (r) {
+                                return r.map(function (v) {
+                                    var s = String(v).replace(/"/g, '""');
+                                    return /[",\n]/.test(s) ? '"' + s + '"' : s;
+                                }).join(',');
+                            }).join('\r\n');
+                            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                            var url = URL.createObjectURL(blob);
+                            var a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'roster.csv';
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                        });
+                    }
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', init);
+                } else {
+                    init();
+                }
+            }());
+        </script>
     }
     else
     {

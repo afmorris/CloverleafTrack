@@ -33,10 +33,13 @@ SELECT
     a.Id, a.FirstName, a.LastName, a.GraduationYear, a.Gender, a.IsActive,
     e.Id AS EventId, e.Id, e.Name, e.EventCategory, e.EventType, e.Environment, e.SortOrder,
     p.Id AS PerformanceId, p.Id, p.DistanceInches, p.TimeSeconds,
-    (SELECT pp.Percentile FROM PerformancePercentiles pp WHERE pp.PerformanceId = p.Id) AS Percentile
+    (SELECT pp.Percentile FROM PerformancePercentiles pp WHERE pp.PerformanceId = p.Id) AS Percentile,
+    se.StartDate AS SeasonStartDate, se.Name AS SeasonName
 FROM Athletes a
 INNER JOIN Performances p ON p.AthleteId = a.Id
 INNER JOIN Events e ON e.Id = p.EventId
+INNER JOIN Meets m ON m.Id = p.MeetId
+INNER JOIN Seasons se ON se.Id = m.SeasonId
 
 UNION ALL
 
@@ -44,24 +47,29 @@ SELECT
     a.Id, a.FirstName, a.LastName, a.GraduationYear, a.Gender, a.IsActive,
     e.Id AS EventId, e.Id, e.Name, e.EventCategory, e.EventType, e.Environment, e.SortOrder,
     p.Id AS PerformanceId, p.Id, p.DistanceInches, p.TimeSeconds,
-    (SELECT pp.Percentile FROM PerformancePercentiles pp WHERE pp.PerformanceId = p.Id) AS Percentile
+    (SELECT pp.Percentile FROM PerformancePercentiles pp WHERE pp.PerformanceId = p.Id) AS Percentile,
+    se.StartDate AS SeasonStartDate, se.Name AS SeasonName
 FROM Athletes a
 INNER JOIN PerformanceAthletes pa ON pa.AthleteId = a.Id
 INNER JOIN Performances p ON p.Id = pa.PerformanceId AND p.AthleteId IS NULL
 INNER JOIN Events e ON e.Id = p.EventId
+INNER JOIN Meets m ON m.Id = p.MeetId
+INNER JOIN Seasons se ON se.Id = m.SeasonId
 
 ORDER BY a.LastName, a.FirstName;
 ";
-        
-        var results = await connection.QueryAsync<Athlete, Event, Performance, AthleteEventParticipation>(
+
+        var results = await connection.QueryAsync<Athlete, Event, Performance, SeasonMarker, AthleteEventParticipation>(
             sql,
-            (athlete, eventInfo, performance) => new AthleteEventParticipation
+            (athlete, eventInfo, performance, season) => new AthleteEventParticipation
             {
                 Athlete = athlete,
                 Event = eventInfo,
-                Performance = performance
+                Performance = performance,
+                SeasonStartDate = season.SeasonStartDate,
+                SeasonName = season.SeasonName
             },
-            splitOn: "EventId,PerformanceId"
+            splitOn: "EventId,PerformanceId,SeasonStartDate"
         );
 
         return results.ToList();

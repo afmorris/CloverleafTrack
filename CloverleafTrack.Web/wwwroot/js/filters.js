@@ -55,8 +55,16 @@
             var visible = true;
             Object.keys(filters).forEach(function (key) {
                 var value = filters[key];
-                if (value === 'all') return;
+                if (value === 'all' || value === '') return;
                 var itemVal = (item.dataset[key] || '').toLowerCase();
+
+                // "name" is a free-text substring match (Roster name filter, issue #23), not a
+                // chip value picked from a fixed list — every other key keeps the exact/CSV match.
+                if (key === 'name') {
+                    if (itemVal.indexOf(value.toLowerCase()) === -1) visible = false;
+                    return;
+                }
+
                 if (!itemVal) return; // no data attribute for this key = matches everything
                 var vals = itemVal.split(',').map(function (v) { return v.trim(); });
                 if (!vals.includes(value.toLowerCase())) visible = false;
@@ -96,5 +104,6 @@
     window.CtfFilters = {
         getHashFilters: getHashFilters,
         setHashFilter: setHashFilter,
+        applyFilters: applyFilters,
     };
 }());

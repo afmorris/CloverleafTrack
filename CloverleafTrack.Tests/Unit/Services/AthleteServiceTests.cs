@@ -964,4 +964,110 @@ public class AthleteServiceTests
         result.CareerCharts[firstShotPutIndex].Environment.Should().Be(Environment.Outdoor);
         result.CareerCharts[firstShotPutIndex + 1].Environment.Should().Be(Environment.Indoor);
     }
+
+    [Fact]
+    public async Task GetFlatActiveAthletesAsync_TopEvent_PicksHighestPercentileEvent_NotFirstBySortOrder()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        mockRepo.Setup(r => r.GetAllWithPerformancesAsync())
+            .ReturnsAsync(new List<AthleteEventParticipation>
+            {
+                new()
+                {
+                    Athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 1, Name = "100m", EventType = EventType.Running, SortOrder = 1 },
+                    Performance = new Performance { TimeSeconds = 12.5, Percentile = 40 },
+                    SeasonStartDate = new DateTime(2024, 3, 1), SeasonName = "2023-2024"
+                },
+                new()
+                {
+                    Athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 2, Name = "Shot Put", EventType = EventType.Field, EventCategory = EventCategory.Throws, SortOrder = 2 },
+                    Performance = new Performance { DistanceInches = 400, Percentile = 92 },
+                    SeasonStartDate = new DateTime(2024, 3, 1), SeasonName = "2023-2024"
+                }
+            });
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetFlatActiveAthletesAsync(2024);
+
+        result.Should().HaveCount(1);
+        result[0].TopEvent.Should().NotBeNull();
+        result[0].TopEvent!.Name.Should().Be("Shot Put");
+        result[0].TopEvent!.Percentile.Should().Be(92);
+    }
+
+    [Fact]
+    public async Task GetFlatActiveAthletesAsync_TopEvent_FallsBackToFirstBySortOrder_WhenNoPercentileData()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        mockRepo.Setup(r => r.GetAllWithPerformancesAsync())
+            .ReturnsAsync(new List<AthleteEventParticipation>
+            {
+                new()
+                {
+                    Athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 1, Name = "100m", EventType = EventType.Running, SortOrder = 1 },
+                    Performance = new Performance { TimeSeconds = 12.5, Percentile = null },
+                    SeasonStartDate = new DateTime(2024, 3, 1), SeasonName = "2023-2024"
+                },
+                new()
+                {
+                    Athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 2, Name = "Shot Put", EventType = EventType.Field, EventCategory = EventCategory.Throws, SortOrder = 2 },
+                    Performance = new Performance { DistanceInches = 400, Percentile = null },
+                    SeasonStartDate = new DateTime(2024, 3, 1), SeasonName = "2023-2024"
+                }
+            });
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetFlatActiveAthletesAsync(2024);
+
+        result[0].TopEvent!.Name.Should().Be("100m");
+    }
+
+    [Fact]
+    public async Task GetFlatActiveAthletesAsync_SeasonTrend_OneEvenlySpacedPointPerSeason_BestPerSeason()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        mockRepo.Setup(r => r.GetAllWithPerformancesAsync())
+            .ReturnsAsync(new List<AthleteEventParticipation>
+            {
+                // 2023-2024: two marks, best (farthest) should win the season point
+                new()
+                {
+                    Athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 1, Name = "Shot Put", EventType = EventType.Field, EventCategory = EventCategory.Throws, SortOrder = 1 },
+                    Performance = new Performance { DistanceInches = 380, Percentile = 70 },
+                    SeasonStartDate = new DateTime(2023, 3, 1), SeasonName = "2022-2023"
+                },
+                new()
+                {
+                    Athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 1, Name = "Shot Put", EventType = EventType.Field, EventCategory = EventCategory.Throws, SortOrder = 1 },
+                    Performance = new Performance { DistanceInches = 400, Percentile = 92 },
+                    SeasonStartDate = new DateTime(2024, 3, 1), SeasonName = "2023-2024"
+                },
+                new()
+                {
+                    Athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", IsActive = true, GraduationYear = 2025 },
+                    Event = new Event { Id = 1, Name = "Shot Put", EventType = EventType.Field, EventCategory = EventCategory.Throws, SortOrder = 1 },
+                    Performance = new Performance { DistanceInches = 390, Percentile = 85 },
+                    SeasonStartDate = new DateTime(2024, 3, 1), SeasonName = "2023-2024"
+                }
+            });
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetFlatActiveAthletesAsync(2024);
+
+        var trend = result[0].SeasonTrend;
+        trend.Should().HaveCount(2);
+        trend[0].SeasonName.Should().Be("2022-2023");
+        trend[0].Formatted.Should().Be("31' 8\"");
+        trend[1].SeasonName.Should().Be("2023-2024");
+        trend[1].Formatted.Should().Be("33' 4\"");
+
+        // Later (better) season sits visually higher — smaller pixelY — for a field event.
+        trend[1].PixelY.Should().BeLessThan(trend[0].PixelY);
+    }
 }
