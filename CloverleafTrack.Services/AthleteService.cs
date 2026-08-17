@@ -6,6 +6,7 @@ using CloverleafTrack.Services.Interfaces;
 using CloverleafTrack.ViewModels;
 using CloverleafTrack.ViewModels.Athletes;
 using CloverleafTrack.ViewModels.Shared;
+using Environment = CloverleafTrack.Models.Enums.Environment;
 
 namespace CloverleafTrack.Services;
 
@@ -600,6 +601,7 @@ public class AthleteService(
             {
                 EventId = group.Key,
                 EventName = first.EventName,
+                Environment = first.Environment,
                 IsFieldEvent = isFieldEvent,
                 IsRelay = isRelay,
                 Points = points,
@@ -626,8 +628,16 @@ public class AthleteService(
             });
         }
 
+        // Group same-named indoor/outdoor pairs adjacent (e.g. both "Shot Put" charts sit next
+        // to each other in the tab bar, Outdoor first per the sitewide Outdoor-first convention),
+        // rather than scattering them wherever raw point count happened to sort them — the whole
+        // point of showing the Environment on the tab is to disambiguate the pair, which doesn't
+        // help if they're nowhere near each other. Groups themselves are still ordered by total
+        // significance (most active event group first).
         return charts
-            .OrderByDescending(c => c.Points.Count)
+            .GroupBy(c => c.EventName)
+            .OrderByDescending(g => g.Sum(c => c.Points.Count))
+            .SelectMany(g => g.OrderBy(c => c.Environment == Environment.Outdoor ? 0 : 1))
             .ToList();
     }
 

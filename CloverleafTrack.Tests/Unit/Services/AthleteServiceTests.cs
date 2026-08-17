@@ -910,4 +910,58 @@ public class AthleteServiceTests
         var gap2 = xs[2] - xs[1];
         gap1.Should().BeApproximately(gap2, 0.01, "spacing must be uniform by chronological order regardless of the wildly uneven real date gaps between these three performances");
     }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_CareerChart_IndoorAndOutdoorSameEventName_AreSeparateChartsWithEnvironmentSet()
+    {
+        // Regression test: Indoor/Outdoor versions of the same event name (e.g. "Shot Put") are
+        // different EventIds and correctly become separate charts — but a real screenshot showed
+        // both tabs just said "Shot Put" with nothing to tell them apart. Environment must be set
+        // per chart, and same-named charts must sort adjacent (Outdoor first) instead of scattered.
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            // Outdoor Shot Put — 3 marks (EventId 1)
+            new() { PerformanceId = 1, EventId = 1, EventName = "Shot Put", DistanceInches = 400,
+                    MeetName = "Meet 1", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            new() { PerformanceId = 2, EventId = 1, EventName = "Shot Put", DistanceInches = 410,
+                    MeetName = "Meet 2", MeetDate = new DateTime(2024, 4, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            new() { PerformanceId = 3, EventId = 1, EventName = "Shot Put", DistanceInches = 420,
+                    MeetName = "Meet 3", MeetDate = new DateTime(2024, 5, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            // Indoor Shot Put — 1 mark (EventId 2, different from EventId 1 despite the same name)
+            new() { PerformanceId = 4, EventId = 2, EventName = "Shot Put", DistanceInches = 395,
+                    MeetName = "Meet 4", MeetDate = new DateTime(2024, 1, 15),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Indoor, RelayAthletes = null },
+            // Unrelated event in between, to prove grouping isn't accidental adjacency from insertion order
+            new() { PerformanceId = 5, EventId = 3, EventName = "Discus", DistanceInches = 300,
+                    MeetName = "Meet 5", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        var shotPutCharts = result!.CareerCharts.Where(c => c.EventName == "Shot Put").ToList();
+        shotPutCharts.Should().HaveCount(2);
+        shotPutCharts.Select(c => c.Environment).Should().BeEquivalentTo(new[] { Environment.Outdoor, Environment.Indoor });
+
+        // The two Shot Put charts (higher total point count than Discus) must sort adjacent,
+        // Outdoor first, not scattered wherever raw per-chart point count happened to land them.
+        var names = result.CareerCharts.Select(c => c.EventName).ToList();
+        var firstShotPutIndex = names.IndexOf("Shot Put");
+        names[firstShotPutIndex + 1].Should().Be("Shot Put");
+        result.CareerCharts[firstShotPutIndex].Environment.Should().Be(Environment.Outdoor);
+        result.CareerCharts[firstShotPutIndex + 1].Environment.Should().Be(Environment.Indoor);
+    }
 }
