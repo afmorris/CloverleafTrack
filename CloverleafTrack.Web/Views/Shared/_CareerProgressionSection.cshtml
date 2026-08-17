@@ -1,0 +1,120 @@
+@using CloverleafTrack.ViewModels.Athletes
+@model List<CareerChartViewModel>
+
+@*
+    Career progression chart (issue #26). Server-rendered SVG, no Chart.js and no client-side
+    axis math — every coordinate here was precomputed by AthleteService/CareerChartGeometry.
+    Never hidden by default; this is the page's "payoff artifact," unlike the season accordion
+    below it which starts collapsed. Chart.js was deliberately dropped for this chart (the
+    mockup's version is ~40 lines of hand-rolled SVG): removes a CDN dependency, removes the
+    lazy-init-in-hidden-panels problem entirely (see [C15]'s watch-out notes), and works with
+    JS disabled — only the tab *switching* between events needs JS, not the chart itself.
+*@
+@if (Model.Any())
+{
+    <section class="mb-8">
+        <h2 class="text-xl font-bold mb-3 text-gray-900 dark:text-white">Career Progression</h2>
+
+        @if (Model.Count > 1)
+        {
+            <div class="flex flex-wrap gap-2 mb-4" role="tablist" aria-label="Event selector">
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    <button type="button" onclick="showCareerChart(@i)" id="career-tab-@i"
+                            class="pill-tab @(i == 0 ? "pill-tab-active" : "")">
+                        @Model[i].EventName
+                    </button>
+                }
+            </div>
+        }
+
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            var chart = Model[i];
+            var zoneWidth = chart.PlotRight - chart.PlotLeft;
+            <div id="career-panel-@i" class="career-chart-panel bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 @(i == 0 ? "" : "hidden")">
+                <svg viewBox="0 0 620 280" class="w-full h-auto" role="img" aria-label="Career progression chart for @chart.EventName">
+                    @if (chart.ShowRecordZone)
+                    {
+                        <rect x="@chart.PlotLeft.ToString("0.##")" y="@chart.RecordZoneTopPixelY?.ToString("0.##")" width="@zoneWidth.ToString("0.##")" height="@((chart.RecordZoneBottomPixelY - chart.RecordZoneTopPixelY)?.ToString("0.##"))" fill="#f0a92b" opacity="0.10" />
+                        <line x1="@chart.PlotLeft.ToString("0.##")" x2="@chart.PlotRight.ToString("0.##")" y1="@chart.RecordLinePixelY?.ToString("0.##")" y2="@chart.RecordLinePixelY?.ToString("0.##")" stroke="#f0a92b" stroke-width="1.5" stroke-dasharray="4 3" />
+                        @* SVG <text> collides with Razor's reserved <text> markup tag, so it must be emitted raw rather than as literal markup. *@
+                        @Html.Raw($"<text x=\"{chart.PlotRight:0.##}\" y=\"{chart.RecordLinePixelY - 4:0.##}\" text-anchor=\"end\" font-size=\"10\" fill=\"#f0a92b\" class=\"hidden sm:inline\">Record: {System.Net.WebUtility.HtmlEncode(chart.RecordFormatted)}</text>")
+                    }
+                    @if (chart.ShowMedianBand)
+                    {
+                        <rect x="@chart.PlotLeft.ToString("0.##")" y="@chart.IqrZoneTopPixelY?.ToString("0.##")" width="@zoneWidth.ToString("0.##")" height="@((chart.IqrZoneBottomPixelY - chart.IqrZoneTopPixelY)?.ToString("0.##"))" fill="#5598e7" opacity="0.17" />
+                        <line x1="@chart.PlotLeft.ToString("0.##")" x2="@chart.PlotRight.ToString("0.##")" y1="@chart.MedianLinePixelY?.ToString("0.##")" y2="@chart.MedianLinePixelY?.ToString("0.##")" stroke="#5598e7" stroke-width="1.5" stroke-dasharray="4 3" />
+                        @Html.Raw($"<text x=\"{chart.PlotLeft:0.##}\" y=\"{chart.MedianLinePixelY - 4:0.##}\" text-anchor=\"start\" font-size=\"10\" fill=\"#5598e7\" class=\"hidden sm:inline\">Middle 50% of program</text>")
+                    }
+                    @foreach (var tick in chart.ClassTicks)
+                    {
+                        <line x1="@tick.PixelX.ToString("0.##")" x2="@tick.PixelX.ToString("0.##")" y1="@chart.PlotTop.ToString("0.##")" y2="@chart.PlotBottom.ToString("0.##")" stroke="currentColor" stroke-opacity="0.12" stroke-width="1" class="text-gray-400 dark:text-gray-500" />
+                        @Html.Raw($"<text x=\"{tick.PixelX:0.##}\" y=\"{chart.PlotBottom + 16:0.##}\" text-anchor=\"middle\" font-size=\"9\" fill=\"currentColor\" class=\"text-gray-400 dark:text-gray-500\">{System.Net.WebUtility.HtmlEncode(tick.Label)}</text>")
+                    }
+                    @foreach (var ytick in chart.YTicks)
+                    {
+                        var yTickClass = "text-gray-400 dark:text-gray-500" + (ytick.HiddenOnMobile ? " hidden sm:inline" : "");
+                        @Html.Raw($"<text x=\"{chart.PlotLeft - 6:0.##}\" y=\"{ytick.PixelY + 3:0.##}\" text-anchor=\"end\" font-size=\"9\" fill=\"currentColor\" class=\"{yTickClass}\">{System.Net.WebUtility.HtmlEncode(ytick.Label)}</text>")
+                    }
+                    <polyline points="@chart.PolylinePoints" fill="none" stroke="#3ba55d" stroke-width="2" stroke-linejoin="round" />
+                    @foreach (var pt in chart.Points)
+                    {
+                        <circle cx="@pt.PixelX.ToString("0.##")" cy="@pt.PixelY.ToString("0.##")" r="@(pt.IsCareerBest ? "5" : "3")" fill="#3ba55d" stroke="@(pt.IsCareerBest ? "white" : "none")" stroke-width="@(pt.IsCareerBest ? "1.5" : "0")">
+                            <title>@pt.Formatted — @pt.Date.ToString("MMM d, yyyy")@(pt.IsCareerBest ? " (career best)" : "")</title>
+                        </circle>
+                    }
+                </svg>
+
+                <!-- Legend: marks are never identified by color alone — line vs. dashed vs. filled zone vs. ringed marker -->
+                <div class="flex flex-wrap gap-x-4 gap-y-1 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">
+                    <span class="flex items-center gap-1.5"><span class="inline-block w-4 h-0.5 rounded" style="background:#3ba55d"></span> Your marks</span>
+                    <span class="flex items-center gap-1.5"><span class="inline-block w-2.5 h-2.5 rounded-full border-2 border-white dark:border-gray-800" style="background:#3ba55d"></span> Career best</span>
+                    @if (chart.ShowRecordZone)
+                    {
+                        <span class="flex items-center gap-1.5"><span class="inline-block w-4 border-t-2 border-dashed" style="border-color:#f0a92b"></span> Record: @chart.RecordFormatted</span>
+                    }
+                    @if (chart.ShowMedianBand)
+                    {
+                        <span class="flex items-center gap-1.5"><span class="inline-block w-4 border-t-2 border-dashed" style="border-color:#5598e7"></span> Program median: @chart.MedianFormatted</span>
+                        <span class="flex items-center gap-1.5"><span class="inline-block w-3 h-3 rounded-sm" style="background:#5598e7;opacity:0.4"></span> Middle 50% of program</span>
+                    }
+                </div>
+
+                <!-- Stat row -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3 text-sm">
+                    <div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">Career Best</div>
+                        <div class="font-semibold text-gray-900 dark:text-white mark">@chart.CareerBestFormatted</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">Improvement</div>
+                        <div class="font-semibold text-gray-900 dark:text-white">@(chart.CareerImprovementFormatted ?? "—")</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">Percentile</div>
+                        <div class="font-semibold text-gray-900 dark:text-white">@(chart.BestPercentile.HasValue ? $"{chart.BestPercentile}th" : "—")</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">Off the Record</div>
+                        <div class="font-semibold text-gray-900 dark:text-white">@(chart.DeltaOffRecordFormatted ?? (chart.ShowRecordZone ? "—" : "Holds record"))</div>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+    @if (Model.Count > 1)
+    {
+        <script>
+            function showCareerChart(index) {
+                document.querySelectorAll('.career-chart-panel').forEach(function (el, i) {
+                    el.classList.toggle('hidden', i !== index);
+                });
+                document.querySelectorAll('[id^="career-tab-"]').forEach(function (btn, i) {
+                    btn.classList.toggle('pill-tab-active', i === index);
+                });
+            }
+        </script>
+    }
+}

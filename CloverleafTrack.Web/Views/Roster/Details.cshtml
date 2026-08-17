@@ -216,6 +216,8 @@
         </section>
     }
 
+    @await Html.PartialAsync("_CareerProgressionSection", Model.CareerCharts)
+
     <!-- Performance by Season -->
     @if (Model.Seasons.Any())
     {

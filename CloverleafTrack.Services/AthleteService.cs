@@ -1,3 +1,4 @@
+using CloverleafTrack.DataAccess.Dtos;
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
@@ -478,8 +479,161 @@ public class AthleteService(
                     .Count(),
 
             PersonalRecords = personalRecords,
-            Seasons = seasons
+            Seasons = seasons,
+            CareerCharts = await BuildCareerCharts(performances, athlete.GraduationYear)
         };
+    }
+
+    /// <summary>
+    /// Builds one career progression chart per event the athlete has performances in (issue #26).
+    /// Y-axis inversion and domain math live in CareerChartGeometry (unit-tested directly) —
+    /// this method only gathers the values and calls it; it never reimplements the mapping.
+    /// </summary>
+    private async Task<List<CareerChartViewModel>> BuildCareerCharts(List<AthletePerformanceDto> performances, int graduationYear)
+    {
+        const double plotLeft = 40, plotRight = 580, plotTop = 20, plotBottom = 220;
+
+        var eventIds = performances.Select(p => p.EventId).Distinct().ToList();
+        var records = await repository.GetSchoolRecordsForEventsAsync(eventIds) ?? new List<EventRecordDto>();
+        var recordsByEvent = records.ToDictionary(r => r.EventId);
+
+        var charts = new List<CareerChartViewModel>();
+
+        foreach (var group in performances.GroupBy(p => p.EventId))
+        {
+            var eventPerfs = group.OrderBy(p => p.MeetDate).ToList();
+            var first = eventPerfs[0];
+            var isFieldEvent = first.DistanceInches.HasValue;
+            var isRelay = eventPerfs.Any(p => p.RelayAthletes != null);
+
+            double RawValue(AthletePerformanceDto p) => (isFieldEvent ? p.DistanceInches : p.TimeSeconds) ?? 0;
+            bool IsBetter(double a, double b) => isFieldEvent ? a > b : a < b;
+
+            var careerBest = eventPerfs.OrderBy(p => isFieldEvent ? -RawValue(p) : RawValue(p)).First();
+            var domainValues = eventPerfs.Select(RawValue).ToList();
+
+            // Record territory — sourced from Leaderboards.Rank = 1 via a dedicated query, never
+            // from the stale Performances.SchoolRecord flag. Suppressed if the athlete already
+            // holds it (the "how much air is left" zone is meaningless once you ARE the record).
+            recordsByEvent.TryGetValue(group.Key, out var recordDto);
+            double? recordValue = recordDto == null ? null : (isFieldEvent ? recordDto.DistanceInches : recordDto.TimeSeconds);
+            var athleteHoldsRecord = eventPerfs.Any(p => p.AllTimeRank == 1);
+            var showRecordZone = recordValue.HasValue && !athleteHoldsRecord;
+            if (showRecordZone) domainValues.Add(recordValue!.Value);
+
+            // Program median/IQR — suppressed for relays (unstable population) and events with
+            // fewer than ~10 program marks, matching EventStatistics' own NULL-below-10 rule.
+            var markCount = first.EventMarkCount ?? 0;
+            var showMedianBand = !isRelay && markCount >= 10 && first.MedianValue.HasValue && first.Q1Value.HasValue && first.Q3Value.HasValue;
+            if (showMedianBand)
+            {
+                domainValues.Add(first.Q1Value!.Value);
+                domainValues.Add(first.Q3Value!.Value);
+            }
+
+            var (domainMin, domainMax) = CareerChartGeometry.ComputeDomain(domainValues);
+
+            double PixelY(double raw) => CareerChartGeometry.MapValueToPixelY(raw, domainMin, domainMax, plotTop, plotBottom, isFieldEvent);
+
+            // X positions: true date-proportional spacing (not index-based) so class-year tick
+            // marks land at real calendar positions, not evenly-spaced fabricated ones.
+            var minDate = eventPerfs.Min(p => p.MeetDate);
+            var maxDate = eventPerfs.Max(p => p.MeetDate);
+            var dateRangeDays = Math.Max(1, (maxDate - minDate).TotalDays);
+            double PixelX(DateTime date) => eventPerfs.Count == 1
+                ? (plotLeft + plotRight) / 2
+                : plotLeft + (date - minDate).TotalDays / dateRangeDays * (plotRight - plotLeft);
+
+            var points = eventPerfs.Select(p => new CareerChartPointViewModel
+            {
+                PixelX = PixelX(p.MeetDate),
+                PixelY = PixelY(RawValue(p)),
+                Formatted = FormatPerformance(p.TimeSeconds, p.DistanceInches),
+                Date = p.MeetDate,
+                ClassAtTime = ClassYearCalculator.GetClassAtTimeOfPerformance(graduationYear, p.MeetDate),
+                IsCareerBest = p.PerformanceId == careerBest.PerformanceId
+            }).ToList();
+
+            // Class-year ticks: position at the first performance date for each class actually
+            // represented, rather than computing exact August-boundary dates — every tick this
+            // way is anchored to a real data point, never extrapolated past the plotted range.
+            var classTicks = points
+                .Where(p => p.ClassAtTime != null)
+                .GroupBy(p => p.ClassAtTime)
+                .Select(g => g.OrderBy(p => p.Date).First())
+                .OrderBy(p => p.Date)
+                .Select(p => new ClassYearTickViewModel { PixelX = p.PixelX, Label = p.ClassAtTime![..2] })
+                .ToList();
+
+            var yTicks = new List<CareerChartYTickViewModel>();
+            for (var i = 0; i <= 4; i++)
+            {
+                var raw = domainMin + (domainMax - domainMin) * i / 4.0;
+                yTicks.Add(new CareerChartYTickViewModel
+                {
+                    PixelY = PixelY(raw),
+                    Label = FormatPerformance(isFieldEvent ? null : raw, isFieldEvent ? raw : null),
+                    HiddenOnMobile = i == 1 || i == 3
+                });
+            }
+
+            var bestRaw = RawValue(careerBest);
+            var firstRaw = RawValue(eventPerfs[0]);
+            string? improvementFormatted = eventPerfs.Count > 1 && IsBetter(bestRaw, firstRaw)
+                ? FormatDelta(Math.Abs(bestRaw - firstRaw), isFieldEvent, improvement: true)
+                : null;
+            string? deltaOffRecordFormatted = showRecordZone
+                ? FormatDelta(Math.Abs(recordValue!.Value - bestRaw), isFieldEvent, improvement: false)
+                : null;
+
+            charts.Add(new CareerChartViewModel
+            {
+                EventId = group.Key,
+                EventName = first.EventName,
+                IsFieldEvent = isFieldEvent,
+                IsRelay = isRelay,
+                Points = points,
+                ClassTicks = classTicks,
+                YTicks = yTicks,
+                ShowRecordZone = showRecordZone,
+                RecordFormatted = recordValue.HasValue ? FormatPerformance(isFieldEvent ? null : recordValue, isFieldEvent ? recordValue : null) : null,
+                RecordLinePixelY = showRecordZone ? PixelY(recordValue!.Value) : null,
+                RecordZoneTopPixelY = showRecordZone ? plotTop : null,
+                RecordZoneBottomPixelY = showRecordZone ? PixelY(recordValue!.Value) : null,
+                ShowMedianBand = showMedianBand,
+                MedianFormatted = showMedianBand ? FormatPerformance(isFieldEvent ? null : first.MedianValue, isFieldEvent ? first.MedianValue : null) : null,
+                MedianLinePixelY = showMedianBand ? PixelY(first.MedianValue!.Value) : null,
+                IqrZoneTopPixelY = showMedianBand ? Math.Min(PixelY(first.Q1Value!.Value), PixelY(first.Q3Value!.Value)) : null,
+                IqrZoneBottomPixelY = showMedianBand ? Math.Max(PixelY(first.Q1Value!.Value), PixelY(first.Q3Value!.Value)) : null,
+                CareerBestFormatted = FormatPerformance(careerBest.TimeSeconds, careerBest.DistanceInches),
+                CareerImprovementFormatted = improvementFormatted,
+                BestPercentile = careerBest.Percentile,
+                DeltaOffRecordFormatted = deltaOffRecordFormatted,
+                PlotLeft = plotLeft,
+                PlotRight = plotRight,
+                PlotTop = plotTop,
+                PlotBottom = plotBottom
+            });
+        }
+
+        return charts
+            .OrderByDescending(c => c.Points.Count)
+            .ToList();
+    }
+
+    /// <summary>Formats an unsigned magnitude delta with an explicit sign — "+2' 6.25&quot;"/"-0.43s" for an improvement, "2' 6.25&quot;"/"0.43s" (no sign) for a gap-to-record.</summary>
+    private static string FormatDelta(double delta, bool isField, bool improvement)
+    {
+        var sign = improvement ? "+" : "";
+        if (isField)
+        {
+            var feet = (int)(delta / 12);
+            var inches = delta % 12;
+            return feet > 0 ? $"{sign}{feet}' {inches:0.##}\"" : $"{sign}{inches:0.##}\"";
+        }
+
+        var ts = TimeSpan.FromSeconds(delta);
+        return ts.TotalMinutes >= 1 ? $"{sign}{ts:m\\:ss\\.ff}" : $"{sign}{delta:0.00}s";
     }
 
     private string FormatPerformance(double? timeSeconds, double? distanceInches)

@@ -127,9 +127,10 @@ ORDER BY a.LastName, a.FirstName;
                                     (SELECT pp.Percentile
                                     FROM PerformancePercentiles pp
                                     WHERE pp.PerformanceId = p.Id) as Percentile,
-                                    (SELECT es.EventMarkCount
-                                    FROM EventStatistics es
-                                    WHERE es.EventId = e.Id) as EventMarkCount,
+                                    es.EventMarkCount,
+                                    es.MedianValue,
+                                    es.Q1Value,
+                                    es.Q3Value,
                                     m.Date as MeetDate,
                                     m.Name as MeetName,
                                     s.Name as SeasonName,
@@ -140,6 +141,7 @@ ORDER BY a.LastName, a.FirstName;
                                     INNER JOIN Events e ON e.Id = p.EventId
                                     INNER JOIN Meets m ON m.Id = p.MeetId
                                     INNER JOIN Seasons s ON s.Id = m.SeasonId
+                                    LEFT JOIN EventStatistics es ON es.EventId = e.Id
                             WHERE
                                     p.AthleteId = @AthleteId
 
@@ -165,9 +167,10 @@ ORDER BY a.LastName, a.FirstName;
                                     (SELECT pp.Percentile
                                     FROM PerformancePercentiles pp
                                     WHERE pp.PerformanceId = p.Id) as Percentile,
-                                    (SELECT es.EventMarkCount
-                                    FROM EventStatistics es
-                                    WHERE es.EventId = e.Id) as EventMarkCount,
+                                    es.EventMarkCount,
+                                    es.MedianValue,
+                                    es.Q1Value,
+                                    es.Q3Value,
                                     m.Date as MeetDate,
                                     m.Name as MeetName,
                                     s.Name as SeasonName,
@@ -182,6 +185,7 @@ ORDER BY a.LastName, a.FirstName;
                                     INNER JOIN Events e ON e.Id = p.EventId
                                     INNER JOIN Meets m ON m.Id = p.MeetId
                                     INNER JOIN Seasons s ON s.Id = m.SeasonId
+                                    LEFT JOIN EventStatistics es ON es.EventId = e.Id
                             WHERE
                                     pa.AthleteId = @AthleteId
                                     AND p.AthleteId IS NULL
@@ -194,5 +198,28 @@ ORDER BY a.LastName, a.FirstName;
         
         var performances = await connection.QueryAsync<AthletePerformanceDto>(sql, new { AthleteId = athleteId });
         return performances.ToList();
+    }
+
+    public async Task<List<EventRecordDto>> GetSchoolRecordsForEventsAsync(IEnumerable<int> eventIds)
+    {
+        var ids = eventIds.Distinct().ToList();
+        if (ids.Count == 0) return new List<EventRecordDto>();
+
+        using var connection = connectionFactory.CreateConnection();
+
+        const string sql = """
+                        SELECT
+                                e.Id as EventId,
+                                p.TimeSeconds,
+                                p.DistanceInches
+                        FROM Leaderboards lb
+                        INNER JOIN Performances p ON p.Id = lb.PerformanceId
+                        INNER JOIN Events e ON e.Id = p.EventId
+                        WHERE lb.Rank = 1
+                          AND e.Id IN @EventIds
+                        """;
+
+        var records = await connection.QueryAsync<EventRecordDto>(sql, new { EventIds = ids });
+        return records.ToList();
     }
 }

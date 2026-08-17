@@ -1670,3 +1670,52 @@ The gender filter chip's existing `data-filterable data-gender="boys|girls"` con
 - `CloverleafTrack.Web/wwwroot/css/input.css`, `site.css`
 
 ---
+
+### [C39] Career Progression Chart Rebuilt — Server-Rendered SVG, No Chart.js (Issue #26)
+
+**What changed:**
+[C15] added a Chart.js-based career progression chart to the Roster Details page; [C24]'s UX overhaul later removed it entirely (no `<canvas>`, no Chart.js script tag). This issue rebuilds it from scratch — not as a restoration of the old chart, but as a new, richer design: the athlete's line rendered *against the program's distribution* (record territory zone, median/IQR band, class-year ticks), as fully server-rendered SVG with zero client-side charting library. This resolves the "athlete progression chart missing from production" line item in issue #16 — that claim was accurate (the old chart really was gone), but the fix was this rebuild, not restoring what [C24] deliberately removed.
+
+**Why hand-rolled SVG instead of Chart.js:** the issue explicitly asked to reconsider Chart.js for this specific chart. Reasons that won: (1) removes a CDN script dependency, (2) removes the "Chart.js in a hidden panel renders at 0×0, needs lazy-init" problem [C15] had to work around, entirely — there's no JS execution required to draw the chart at all, (3) works with JS disabled. The existing SR-progression Chart.js chart on the Leaderboard Details page ([C24] BRAIN entry) was **not** touched or migrated — that's a separate, working feature; this decision was scoped to the career chart only.
+
+**The one thing the issue calls "trivially easy to get upside-down" — solved with an isolated, directly-tested pure function:**
+`CareerChartGeometry.MapValueToPixelY(rawValue, min, max, plotTop, plotBottom, isFieldEvent)` is the single place axis inversion happens. The chart always renders "better" as visually higher (smaller pixelY) regardless of event type — field events (higher raw = better) and running events (lower raw = better) must map in *opposite* raw-value directions but the *same* visual direction. This is isolated in `CloverleafTrack.Services/CareerChartGeometry.cs` specifically so it can be unit-tested directly rather than trusted by eye in a browser — `CareerChartGeometryTests.cs` asserts both directions explicitly, including that a field mark at the top of its domain and a running mark at the bottom of its domain (both "the best possible mark") map to the *identical* pixelY. **If this function is ever touched, re-run these tests — this is the exact bug class the issue's acceptance criteria call out twice.**
+
+**Record territory zone geometry:** "fills everything better than the record" doesn't mean anything can literally be better than a #1-all-time mark — it means the zone spans from the very top of the plot (`PlotTop`) down to the record's line, visualizing the (currently empty, aspirational) territory an athlete would need to reach to break it. `ShowRecordZone` is `false` whenever the viewed athlete already holds the record (`AllTimeRank == 1` on any of their performances in that event) — the "how much air is left" zone is meaningless once you *are* the top of it.
+
+**Record value is NOT derived from the athlete's own performances** — it's the *current* all-time-best for the event, which may belong to someone else entirely. New `IAthleteRepository.GetSchoolRecordsForEventsAsync(eventIds)` queries `Leaderboards.Rank = 1` directly (never `Performances.SchoolRecord`, per the sitewide rule — see the reliability table earlier in this file). Added to `IAthleteRepository` rather than introducing a new `ILeaderboardRepository` dependency on `AthleteService`, specifically to avoid touching `AthleteService`'s constructor shape and forcing every one of the ~20 existing `new AthleteService(mockRepo.Object)` test call sites to be updated.
+
+**Median/IQR band suppression — two independent gates, both must pass:** `!isRelay && markCount >= 10 && MedianValue.HasValue`. Relay events are suppressed unconditionally regardless of mark count (per the issue: "unstable population" — team composition changes meet to meet) — this is a stronger rule than the generic <10-marks floor `EventStatistics` already enforces, so relay suppression is checked explicitly in `AthleteService`, not left to `MedianValue` happening to be null.
+
+**`ClassYearCalculator` — extracted from `LeaderboardService`, not reimplemented:** the issue explicitly says "using the August school-year rule already implemented ... do not reimplement." That method was `private` on `LeaderboardService`, so it's now `CloverleafTrack.Services/ClassYearCalculator.cs` (a small static class), with `LeaderboardService` updated to call the extracted version too — a pure refactor, no behavior change, verified by the full existing `LeaderboardServiceTests` suite staying green.
+
+**Class-year tick positions are anchored to real data points, not computed calendar boundaries.** Each tick sits at the X position of the *first performance* in each class the athlete actually has marks in, labeled with that class's first two letters (Fr/So/Jr/Sr). This was a deliberate simplification over computing exact August 1st boundary dates: every tick this way is guaranteed to fall within the plotted date range and correspond to something real, rather than needing separate logic to reason about ticks that might fall before the first or after the last data point.
+
+**X-axis is true date-proportional spacing, not index-based.** This was necessary (not just nicer) specifically because class-year ticks only make sense positioned by real calendar time — index-based even-spacing would make ticks meaningless. Single-performance events center the lone point rather than dividing by a zero date range.
+
+**Mobile spec, satisfied without a separate responsive re-layout:**
+- "Drop to three Y-axis ticks below `sm`" — `CareerChartYTickViewModel.HiddenOnMobile` is `true` for 2 of the 5 generated ticks (the `i==1`/`i==3` quartile ticks), rendered with a `hidden sm:inline` class. No JS, no separate mobile SVG.
+- "Move the two zone labels into the legend" — the inline SVG record/median labels already carry `hidden sm:inline`; the legend below the chart (always visible, not just on mobile) already repeats the same `Record: X` / `Program median: X` text, so hiding the inline labels loses no information at any width.
+
+**SVG `<text>` collision — hit this bug again, third time in this codebase:** SVG's `<text>` element collides with Razor's own reserved `<text>` pseudo-tag, which forbids attributes (RZ1023). All four `<text>` elements in `_CareerProgressionSection.cshtml` (record label, median label, class-tick labels, Y-tick labels) are emitted via `@Html.Raw($"<text ...>{WebUtility.HtmlEncode(label)}</text>")` rather than literal markup — see [C32]/attempt-series' BRAIN entry for the first occurrence. **If a future SVG-in-Razor change hits RZ1023 on a `<text>` element, this is always why.**
+
+**Legend, not color-alone:** the athlete's own marks are a solid line + circles; career-best gets a larger ringed circle (shape, not just size); record/median are dashed lines + filled zones. Up to 5 legend entries (Your marks, Career best, Record, Program median, Middle 50%), fewer when record/median are suppressed for that event — never a phantom legend entry for a zone that isn't rendered.
+
+**Not yet done / needs manual verification:** the acceptance criteria call for verifying the chart visually in a browser for both event types and at mobile width, and there's no automated way to verify actual SVG pixel rendering from this environment — the geometry math is unit-tested (the part that's easy to get subtly wrong), but a human should still eyeball a real field-event chart and a real running-event chart before calling this fully done.
+
+**Key files:**
+- `CloverleafTrack.Services/CareerChartGeometry.cs` (NEW) — pure, tested Y-axis mapping + domain computation
+- `CloverleafTrack.Services/ClassYearCalculator.cs` (NEW) — extracted from `LeaderboardService`
+- `CloverleafTrack.Services/AthleteService.cs` — `BuildCareerCharts`, `FormatDelta`
+- `CloverleafTrack.Services/LeaderboardService.cs` — updated to call the extracted `ClassYearCalculator`
+- `CloverleafTrack.DataAccess/Dtos/EventRecordDto.cs` (NEW)
+- `CloverleafTrack.DataAccess/Dtos/AthletePerformanceDto.cs` — `MedianValue`, `Q1Value`, `Q3Value`
+- `CloverleafTrack.DataAccess/Interfaces/IAthleteRepository.cs`, `Repositories/AthleteRepository.cs` — `GetSchoolRecordsForEventsAsync`; existing query switched from scalar `EventMarkCount` subquery to a `LEFT JOIN EventStatistics`
+- `CloverleafTrack.ViewModels/Athletes/CareerChartViewModel.cs` (NEW)
+- `CloverleafTrack.ViewModels/Athletes/AthleteDetailsViewModel.cs` — `CareerCharts`
+- `CloverleafTrack.Web/Views/Shared/_CareerProgressionSection.cshtml` (NEW)
+- `CloverleafTrack.Web/Views/Roster/Details.cshtml` — section placed before "Performance by Season," never hidden
+- `CloverleafTrack.Tests/Unit/Services/CareerChartGeometryTests.cs` (NEW) — 10 tests, the axis-inversion trap specifically
+- `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` — 7 new tests covering the suppression rules and career-best selection
+
+---
