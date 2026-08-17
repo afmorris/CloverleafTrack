@@ -844,4 +844,70 @@ public class AthleteServiceTests
         result!.CareerCharts.Should().HaveCount(2);
         result.CareerCharts.Select(c => c.EventId).Should().BeEquivalentTo(new[] { 1, 2 });
     }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_CareerChart_ClassTickLabels_UseJrAndSr_NotJuAndSe()
+    {
+        // Regression test: a raw [..2] substring on "Junior"/"Senior" produces "Ju"/"Se",
+        // not the intended "Jr"/"Sr" — caught from a real production screenshot.
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2024, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            // Jan 2023, graduationYear 2024 → Junior year
+            new() { PerformanceId = 1, EventId = 1, EventName = "Shot Put", DistanceInches = 400,
+                    MeetName = "Meet 1", MeetDate = new DateTime(2023, 1, 15),
+                    SeasonName = "2022-2023", SeasonStartDate = new DateTime(2023, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            // Jan 2024, graduationYear 2024 → Senior year
+            new() { PerformanceId = 2, EventId = 1, EventName = "Shot Put", DistanceInches = 420,
+                    MeetName = "Meet 2", MeetDate = new DateTime(2024, 1, 15),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        var labels = result!.CareerCharts.Single().ClassTicks.Select(t => t.Label).ToList();
+        labels.Should().Contain("Jr").And.Contain("Sr");
+        labels.Should().NotContain("Ju").And.NotContain("Se");
+    }
+
+    [Fact]
+    public async Task GetAthleteDetailsAsync_CareerChart_PointsAreEvenlySpaced_NotClusteredByCalendarDate()
+    {
+        // Regression test: date-proportional X spacing crushed all meaningful points into a
+        // few dense clusters separated by months-long off-season gaps — confirmed against a
+        // real chart screenshot. Spacing must be by chronological ORDER, not by date delta.
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { PerformanceId = 1, EventId = 1, EventName = "100m", TimeSeconds = 13.0,
+                    MeetName = "Meet 1", MeetDate = new DateTime(2023, 3, 1), // day 0
+                    SeasonName = "2022-2023", SeasonStartDate = new DateTime(2023, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            new() { PerformanceId = 2, EventId = 1, EventName = "100m", TimeSeconds = 12.8,
+                    MeetName = "Meet 2", MeetDate = new DateTime(2023, 3, 3), // 2 days later — dense cluster
+                    SeasonName = "2022-2023", SeasonStartDate = new DateTime(2023, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+            new() { PerformanceId = 3, EventId = 1, EventName = "100m", TimeSeconds = 12.4,
+                    MeetName = "Meet 3", MeetDate = new DateTime(2024, 5, 1), // ~14 months later — long off-season gap
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
+                    Environment = Environment.Outdoor, RelayAthletes = null },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        var xs = result!.CareerCharts.Single().Points.Select(p => p.PixelX).ToList();
+        var gap1 = xs[1] - xs[0];
+        var gap2 = xs[2] - xs[1];
+        gap1.Should().BeApproximately(gap2, 0.01, "spacing must be uniform by chronological order regardless of the wildly uneven real date gaps between these three performances");
+    }
 }

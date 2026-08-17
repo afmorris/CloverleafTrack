@@ -1719,3 +1719,22 @@ The gender filter chip's existing `data-filterable data-gender="boys|girls"` con
 - `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` — 7 new tests covering the suppression rules and career-best selection
 
 ---
+
+### [C40] Career Chart Fixes From a Real Screenshot — Supersedes Two Claims in [C39]
+
+**What changed:**
+[C39]'s career progression chart shipped with three real bugs, all caught from a production screenshot (not caught by the unit tests, which only covered the axis-inversion math and suppression rules — none of them rendered or inspected actual coordinates/labels):
+
+1. **X-axis spacing was clustering, not "correctly calendar-accurate."** [C39] deliberately chose true date-proportional spacing over index-based spacing, reasoning that class-year ticks "only make sense positioned by real calendar time." That reasoning was wrong in practice: this program's meets cluster into short in-season windows separated by months-long off-seasons, so date-proportional spacing crushed every meaningful point into a few dense clusters and burned most of the plot width on empty off-season gaps. **Switched to spacing by chronological order (index-based), not calendar date.** Class-year ticks still work correctly with no separate change needed — they're derived from each point's already-computed `PixelX`, not recomputed from dates independently.
+
+2. **Class-tick labels showed "Ju"/"Se" instead of "Jr"/"Sr."** The original code took `ClassAtTime![..2]` (first two characters) to abbreviate the class name — this happens to work for "Freshman"→"Fr" and "Sophomore"→"So", but "Junior"[..2] is "Ju" and "Senior"[..2] is "Se", not "Jr"/"Sr". Replaced with an explicit `ClassAbbreviation(string)` switch expression. **Watch out:** this is a reminder that "the first two/three letters happen to abbreviate correctly" is not a pattern that generalizes across a whole word list without checking every entry — it should have been an explicit map from the start.
+
+3. **Y-axis labels were clipping off the left edge of the SVG.** Full-precision labels like `9' 4.82"` are ~9-10 characters at font-size 9, wide enough that with `PlotLeft = 40` and `text-anchor="end"`, long labels extended past `x=0` and were clipped by the SVG viewport — visible in the screenshot as leading digits going missing (`51' 9.94"` rendering as `1' 9.94"`). Fixed two ways together: `PlotLeft` increased from 40 to 68 (more margin), and Y-axis tick *labels* (not data-point labels, which keep full precision) now round to a whole inch (field) or one decimal second (running) before formatting — the gridline position itself still uses the exact unrounded fractional value, only the displayed text is shortened.
+
+**Why none of this was caught before shipping:** the unit tests added in [C39] were deliberately scoped to the parts most likely to have subtle logic bugs (axis inversion, suppression rules) — they never asserted on label *content* or *spacing uniformity*, and nothing in this environment could render actual SVG to a screen to catch a visual clipping or clustering problem. Two new regression tests now lock in the specific failures a screenshot caught: `ClassTickLabels_UseJrAndSr_NotJuAndSe` and `PointsAreEvenlySpaced_NotClusteredByCalendarDate`. **Watch out:** passing unit tests for the parts you thought to test does not mean the feature is visually correct — this is the second time in this session a "the math is tested, therefore it's probably fine" claim needed a real screenshot to falsify (the first was implicit in how much [C39] hedged about needing manual verification).
+
+**Key files:**
+- `CloverleafTrack.Services/AthleteService.cs` — `BuildCareerCharts` (X spacing, `PlotLeft`, Y-tick label rounding), new `ClassAbbreviation` helper
+- `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` — 2 new regression tests
+
+---

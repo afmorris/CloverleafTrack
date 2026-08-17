@@ -491,7 +491,7 @@ public class AthleteService(
     /// </summary>
     private async Task<List<CareerChartViewModel>> BuildCareerCharts(List<AthletePerformanceDto> performances, int graduationYear)
     {
-        const double plotLeft = 40, plotRight = 580, plotTop = 20, plotBottom = 220;
+        const double plotLeft = 68, plotRight = 580, plotTop = 20, plotBottom = 220;
 
         var eventIds = performances.Select(p => p.EventId).Distinct().ToList();
         var records = await repository.GetSchoolRecordsForEventsAsync(eventIds) ?? new List<EventRecordDto>();
@@ -535,18 +535,20 @@ public class AthleteService(
 
             double PixelY(double raw) => CareerChartGeometry.MapValueToPixelY(raw, domainMin, domainMax, plotTop, plotBottom, isFieldEvent);
 
-            // X positions: true date-proportional spacing (not index-based) so class-year tick
-            // marks land at real calendar positions, not evenly-spaced fabricated ones.
-            var minDate = eventPerfs.Min(p => p.MeetDate);
-            var maxDate = eventPerfs.Max(p => p.MeetDate);
-            var dateRangeDays = Math.Max(1, (maxDate - minDate).TotalDays);
-            double PixelX(DateTime date) => eventPerfs.Count == 1
+            // X positions: evenly spaced by chronological order, NOT true calendar-date spacing.
+            // Date-proportional spacing was the original design (see BRAIN.md [C39]) but in
+            // practice competitions cluster into short in-season windows separated by months-long
+            // off-seasons, so true date scaling crushed every meaningful point into a few dense
+            // clusters and wasted most of the plot width on empty gaps — confirmed against a real
+            // chart, not just reasoned about. Class-year ticks still land correctly because they're
+            // derived from each point's already-computed PixelX below, not recomputed separately.
+            double PixelX(int index) => eventPerfs.Count == 1
                 ? (plotLeft + plotRight) / 2
-                : plotLeft + (date - minDate).TotalDays / dateRangeDays * (plotRight - plotLeft);
+                : plotLeft + (double)index / (eventPerfs.Count - 1) * (plotRight - plotLeft);
 
-            var points = eventPerfs.Select(p => new CareerChartPointViewModel
+            var points = eventPerfs.Select((p, index) => new CareerChartPointViewModel
             {
-                PixelX = PixelX(p.MeetDate),
+                PixelX = PixelX(index),
                 PixelY = PixelY(RawValue(p)),
                 Formatted = FormatPerformance(p.TimeSeconds, p.DistanceInches),
                 Date = p.MeetDate,
@@ -554,25 +556,33 @@ public class AthleteService(
                 IsCareerBest = p.PerformanceId == careerBest.PerformanceId
             }).ToList();
 
-            // Class-year ticks: position at the first performance date for each class actually
-            // represented, rather than computing exact August-boundary dates — every tick this
-            // way is anchored to a real data point, never extrapolated past the plotted range.
+            // Class-year ticks: position at the first performance (in plotted order) for each
+            // class actually represented, rather than computing exact August-boundary dates —
+            // every tick this way is anchored to a real data point, never extrapolated past the
+            // plotted range. Abbreviation is an explicit map, not a [..2] substring — "Junior"
+            // and "Senior" do NOT start with "Jr"/"Sr" (that bug shipped once already; verified
+            // against a real screenshot showing "Ju"/"Se" before this fix).
             var classTicks = points
                 .Where(p => p.ClassAtTime != null)
                 .GroupBy(p => p.ClassAtTime)
                 .Select(g => g.OrderBy(p => p.Date).First())
                 .OrderBy(p => p.Date)
-                .Select(p => new ClassYearTickViewModel { PixelX = p.PixelX, Label = p.ClassAtTime![..2] })
+                .Select(p => new ClassYearTickViewModel { PixelX = p.PixelX, Label = ClassAbbreviation(p.ClassAtTime!) })
                 .ToList();
 
             var yTicks = new List<CareerChartYTickViewModel>();
             for (var i = 0; i <= 4; i++)
             {
                 var raw = domainMin + (domainMax - domainMin) * i / 4.0;
+                // Gridline position uses the exact fractional value; the LABEL is rounded to a
+                // shorter form (whole inch / one decimal second) so it fits in the left margin
+                // without clipping — full-precision labels like `9' 4.82"` were wide enough to
+                // overflow past x=0 and get clipped by the SVG viewport (confirmed via screenshot).
+                var roundedForLabel = isFieldEvent ? Math.Round(raw) : Math.Round(raw, 1);
                 yTicks.Add(new CareerChartYTickViewModel
                 {
                     PixelY = PixelY(raw),
-                    Label = FormatPerformance(isFieldEvent ? null : raw, isFieldEvent ? raw : null),
+                    Label = FormatPerformance(isFieldEvent ? null : roundedForLabel, isFieldEvent ? roundedForLabel : null),
                     HiddenOnMobile = i == 1 || i == 3
                 });
             }
@@ -620,6 +630,16 @@ public class AthleteService(
             .OrderByDescending(c => c.Points.Count)
             .ToList();
     }
+
+    /// <summary>"Freshman"/"Sophomore"/"Junior"/"Senior" → "Fr"/"So"/"Jr"/"Sr". An explicit map, not a [..2] substring — "Junior"[..2] is "Ju", not "Jr".</summary>
+    private static string ClassAbbreviation(string className) => className switch
+    {
+        "Freshman" => "Fr",
+        "Sophomore" => "So",
+        "Junior" => "Jr",
+        "Senior" => "Sr",
+        _ => className
+    };
 
     /// <summary>Formats an unsigned magnitude delta with an explicit sign — "+2' 6.25&quot;"/"-0.43s" for an improvement, "2' 6.25&quot;"/"0.43s" (no sign) for a gap-to-record.</summary>
     private static string FormatDelta(double delta, bool isField, bool improvement)
