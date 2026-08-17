@@ -1738,3 +1738,24 @@ The gender filter chip's existing `data-filterable data-gender="boys|girls"` con
 - `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` — 2 new regression tests
 
 ---
+
+### [C41] Career Chart — Indoor/Outdoor Disambiguation (Second Screenshot Round on Issue #26)
+
+**What changed:**
+A second real screenshot caught a fourth bug from the [C39] career chart, distinct from [C40]'s three: **indoor and outdoor versions of the same event (e.g. "Shot Put") get separate charts — correctly, since they're different `EventId`s — but both tabs just said "Shot Put" with no way to tell which was which.** Worse, the two same-named tabs weren't even adjacent in the tab bar (sorted purely by point count), so a user had no reason to connect them as a pair at all.
+
+**Fix, two parts:**
+1. `CareerChartViewModel` gained an `Environment` field, populated from the DTO row's existing `Environment` column (already present per-performance, just never surfaced on the chart). Both the tab button and a new panel-level `<h3>` heading now show `"{EventName} — {Outdoor|Indoor}"`.
+2. Chart ordering changed from a flat `OrderByDescending(Points.Count)` to `GroupBy(EventName)` → order groups by total point count → within each group, Outdoor before Indoor (matching the sitewide Outdoor-first convention already established for every other Indoor/Outdoor tab pair on the site). Same-named charts now always sit next to each other.
+
+**Also fixed in passing:** there was previously **no visible event name at all** inside a chart panel when an athlete only had one event (the tab bar — the only place `EventName` was shown — is suppressed via `@if (Model.Count > 1)` for a single-chart athlete). The new panel heading renders unconditionally, so this gap is closed as a side effect, not a separately-scoped fix.
+
+**Watch out:** this is the second bug-fix round on the same chart from two separate screenshots ([C40], then this one) — a strong signal that this feature's actual failure modes are almost entirely things unit tests can't catch (label content, disambiguation, information architecture) rather than the math bugs the original test suite was built to catch. If more screenshot-driven fixes land on this chart, consider whether a lightweight visual/snapshot test (even a manual checklist in the PR template) would catch more of this class of bug earlier than another round of unit tests would.
+
+**Key files:**
+- `CloverleafTrack.ViewModels/Athletes/CareerChartViewModel.cs` — `Environment` field
+- `CloverleafTrack.Services/AthleteService.cs` — sets `Environment` per chart; grouped/ordered chart list
+- `CloverleafTrack.Web/Views/Shared/_CareerProgressionSection.cshtml` — environment shown on tab + new panel heading
+- `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` — 1 new test covering both the `Environment` field and the adjacent-grouping order
+
+---

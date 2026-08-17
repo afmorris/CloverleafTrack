@@ -1,3 +1,5 @@
+using Environment = CloverleafTrack.Models.Enums.Environment;
+
 namespace CloverleafTrack.ViewModels.Athletes;
 
 /// <summary>
@@ -9,6 +11,9 @@ public class CareerChartViewModel
 {
     public int EventId { get; set; }
     public string EventName { get; set; } = string.Empty;
+
+    /// <summary>Indoor and outdoor versions of the same event name (e.g. "Shot Put") are different EventIds and get separate charts — this is what lets the UI tell them apart, since EventName alone is ambiguous.</summary>
+    public Environment Environment { get; set; }
     public bool IsFieldEvent { get; set; }
     public bool IsRelay { get; set; }
 

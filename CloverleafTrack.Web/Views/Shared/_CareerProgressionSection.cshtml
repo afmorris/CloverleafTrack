@@ -15,6 +15,13 @@
     <section class="mb-8">
         <h2 class="text-xl font-bold mb-3 text-gray-900 dark:text-white">Career Progression</h2>
 
+        @{
+            // Indoor and outdoor versions of the same event (e.g. "Shot Put") are different
+            // EventIds and get separate charts — EventName alone can't tell them apart, so every
+            // tab and panel header shows the environment explicitly. See BRAIN.md [C41].
+            string EnvLabel(CareerChartViewModel c) => c.Environment == CloverleafTrack.Models.Enums.Environment.Outdoor ? "Outdoor" : "Indoor";
+        }
+
         @if (Model.Count > 1)
         {
             <div class="flex flex-wrap gap-2 mb-4" role="tablist" aria-label="Event selector">
@@ -22,7 +29,7 @@
                 {
                     <button type="button" onclick="showCareerChart(@i)" id="career-tab-@i"
                             class="pill-tab @(i == 0 ? "pill-tab-active" : "")">
-                        @Model[i].EventName
+                        @Model[i].EventName <span class="text-xs opacity-70">— @EnvLabel(Model[i])</span>
                     </button>
                 }
             </div>
@@ -31,9 +38,14 @@
         @for (var i = 0; i < Model.Count; i++)
         {
             var chart = Model[i];
+            var envLabel = EnvLabel(chart);
             var zoneWidth = chart.PlotRight - chart.PlotLeft;
             <div id="career-panel-@i" class="career-chart-panel bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 @(i == 0 ? "" : "hidden")">
-                <svg viewBox="0 0 620 280" class="w-full h-auto" role="img" aria-label="Career progression chart for @chart.EventName">
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                    @chart.EventName
+                    <span class="font-normal text-gray-500 dark:text-gray-400">— @envLabel</span>
+                </h3>
+                <svg viewBox="0 0 620 280" class="w-full h-auto" role="img" aria-label="Career progression chart for @chart.EventName, @envLabel">
                     @if (chart.ShowRecordZone)
                     {
                         <rect x="@chart.PlotLeft.ToString("0.##")" y="@chart.RecordZoneTopPixelY?.ToString("0.##")" width="@zoneWidth.ToString("0.##")" height="@((chart.RecordZoneBottomPixelY - chart.RecordZoneTopPixelY)?.ToString("0.##"))" fill="#f0a92b" opacity="0.10" />
