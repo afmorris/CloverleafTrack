@@ -130,13 +130,17 @@ public static class SeoHelper
     }
 
     public static string BuildBreadcrumbJsonLd(IReadOnlyList<SeoBreadcrumbViewModel> breadcrumbs, string baseUrl)
+        => BuildBreadcrumbJsonLd(breadcrumbs, path => baseUrl + path);
+
+    /// <param name="pageUrl">Maps a breadcrumb's relative path to its absolute public URL (see ISeoUrlBuilder.PageUrl).</param>
+    public static string BuildBreadcrumbJsonLd(IReadOnlyList<SeoBreadcrumbViewModel> breadcrumbs, Func<string, string> pageUrl)
     {
         var items = breadcrumbs.Select((b, i) => new Dictionary<string, object?>
         {
             ["@type"] = "ListItem",
             ["position"] = i + 1,
             ["name"] = b.Name,
-            ["item"] = baseUrl + b.Path
+            ["item"] = pageUrl(b.Path)
         }).ToList();
 
         var obj = new Dictionary<string, object?>
