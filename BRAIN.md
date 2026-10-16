@@ -1898,3 +1898,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Why:** Readers had no way to learn what the score meant. Native `<dialog>` avoids a new JS dependency, which suits the static export.
 
 **Watch out:** The modal copy hardcodes the weights (45/25/30), counts (top 5 / top 40) and the 2020-21 cutoff — update it if `MeetScoreCalculator` constants change. Styles are plain CSS (`.meetscore-dialog*`) in `input.css` and `site.css`, no Tailwind rebuild needed.
+
+---
+
+## [C50] MeetScore info modal shows the formulas and this meet's worked numbers
+
+**What changed:** The modal ([C49]) has a "The math" section (Score, Peak, Depth, Improvement formulas, plus how Expected PRs is derived) and a "This meet" block that plugs the meet's real values in, branching on `MeetScoreBasis` (Full shows both lines; PeakOnly/ImprovementOnly show Score = Peak / Improvement with no weighting).
+
+**Why:** Percentages alone didn't let readers reproduce a score.
+
+**Watch out:** `MeetService` now rounds `MeetScoreViewModel.ExpectedPRs` to 2 decimals (was 1) — at 1 decimal the displayed Improvement arithmetic didn't match the displayed result (e.g. 50+100×(10−10.3)/50 = 49.4 vs the true 49.5). Formulas in the modal are hardcoded copy; keep in sync with `MeetScoreCalculator` ([C49] note applies).

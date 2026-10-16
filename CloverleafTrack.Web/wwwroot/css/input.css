@@ -286,3 +286,9 @@ details[open] .details-arrow {
 .dark .meetscore-dialog-body p{color:#d1d5db}
 .meetscore-dialog-body h3{margin:.75rem 0 0;font-size:.875rem;font-weight:700}
 .meetscore-dialog-body h3 span{margin-left:.375rem;font-size:.75rem;font-weight:600;color:#6b7280}
+
+.meetscore-math{margin:.375rem 0 .75rem;padding:.625rem .75rem;border-radius:.5rem;background:#f3f4f6;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.75rem;line-height:1.5;color:#1f2937}
+.dark .meetscore-math{background:#111827;color:#e5e7eb}
+.meetscore-math-line+.meetscore-math-line{margin-top:.375rem}
+.dark .meetscore-dialog-body .meetscore-math-title{color:#e5e7eb}
+.meetscore-dialog-body .meetscore-math-title{margin:.75rem 0 0;font-weight:700;color:#111827}

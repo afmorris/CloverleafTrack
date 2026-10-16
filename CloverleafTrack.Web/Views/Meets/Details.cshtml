@@ -1,3 +1,4 @@
+@using CloverleafTrack.Models
 @using Slugify
 @using CloverleafTrack.Models.Enums
 @using CloverleafTrack.ViewModels.Shared
@@ -155,6 +156,31 @@
                     <p>The average percentile of the top 40 athlete-event bests, so a meet with strong marks across the whole team scores higher than one carried by a few athletes. A relay counts once.</p>
                     <h3>Improvement <span>30%</span></h3>
                     <p>How many athletes set personal records compared with how many would be expected, given how many meets they had already run. 50 means about as many PRs as expected; higher means more. Individual events only.</p>
+                    <h3>The math</h3>
+                    <div class="meetscore-math">
+                        <div class="meetscore-math-line"><b>Score</b> = 0.45 &times; Peak + 0.25 &times; Depth + 0.30 &times; Improvement</div>
+                        <div class="meetscore-math-line"><b>Peak</b> = average percentile of the 5 best marks</div>
+                        <div class="meetscore-math-line"><b>Depth</b> = average percentile of the 40 best athlete-event bests (all of them if fewer than 40)</div>
+                        <div class="meetscore-math-line"><b>Improvement</b> = 50 + 100 &times; (PRs &minus; Expected PRs) &divide; (Eligible + 10), kept between 0 and 100</div>
+                    </div>
+                    <p>Expected PRs is the sum, over every athlete-event with prior history, of how often athletes with that many earlier meets historically set a PR. A PR means the meet&rsquo;s best mark beat every mark from earlier-dated meets.</p>
+                    <p class="meetscore-math-title">This meet</p>
+                    <div class="meetscore-math">
+                        @if (ms.Basis == MeetScoreBasis.Full)
+                        {
+                            <div class="meetscore-math-line">Improvement = 50 + 100 &times; (@ms.PRs &minus; @ms.ExpectedPRs.ToString("0.00")) &divide; (@ms.EligibleAthleteEvents + 10) = @ms.Improvement!.Value.ToString("0.0")</div>
+                            <div class="meetscore-math-line">Score = 0.45 &times; @ms.Peak!.Value.ToString("0.0") + 0.25 &times; @ms.Depth!.Value.ToString("0.0") + 0.30 &times; @ms.Improvement!.Value.ToString("0.0") = <b>@ms.Score.ToString("0.0")</b></div>
+                        }
+                        else if (ms.Basis == MeetScoreBasis.PeakOnly)
+                        {
+                            <div class="meetscore-math-line">Score = Peak = <b>@ms.Score.ToString("0.0")</b> (no weighting; only Peak is available for this era)</div>
+                        }
+                        else
+                        {
+                            <div class="meetscore-math-line">Improvement = 50 + 100 &times; (@ms.PRs &minus; @ms.ExpectedPRs.ToString("0.00")) &divide; (@ms.EligibleAthleteEvents + 10) = @ms.Improvement!.Value.ToString("0.0")</div>
+                            <div class="meetscore-math-line">Score = Improvement = <b>@ms.Score.ToString("0.0")</b> (JV meets use no weighting)</div>
+                        }
+                    </div>
                     <h3>Reading the score</h3>
                     <p>Scores are only comparable between meets scored the same way. A <b>*</b> marks a partial score: meets before the 2020&ndash;21 season only have scoring performances recorded (Peak only), and JV meets are scored on Improvement only because percentiles compare against varsity marks. Meets with too few results to score fairly show no MeetScore.</p>
                 </div>
