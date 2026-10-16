@@ -1797,3 +1797,22 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 - `CloverleafTrack.Tests/Unit/Services/AthleteServiceTests.cs` — 3 new tests (Top Event percentile selection + fallback, season trend ordering/best-per-season)
 
 ---
+
+---
+
+### [C43] Meets.MeetLevel (Varsity/JV) + MeetScore Design Findings (groundwork — MeetScore itself not yet built)
+
+**What changed:** Added `MeetLevel` enum (`Varsity=1`, `JV=2`), `Meet.MeetLevel` (default Varsity), a `Meets.MeetLevel SMALLINT NOT NULL DEFAULT 1` column, and a Meet Level select on the admin Create/Edit meet form. The public `MeetRepository` queries (explicit column lists + GROUP BY) were deliberately NOT updated — add `m.MeetLevel` there when MeetScore is displayed.
+
+**Why:** MeetScore (a per-meet quality metric built on `PerformancePercentiles`) must treat JV meets (Smithie Frosh-Soph Invitational, Stars of Track and Field) differently: percentiles compare against all-time *varsity* history, so JV meets always look weak on Peak/Depth even when the team performed well. Plan: JV meets are scored on Improvement only.
+
+**Deploy order:** run `docs/migration_meet_level.sql` against the DB BEFORE deploying — `AdminMeetRepository` INSERT/UPDATE now write `MeetLevel` and will fail without the column. The script also backfills the known JV meets by name.
+
+**MeetScore design decisions reached in discussion (nothing implemented yet):**
+- Three components: **Peak** (mean of top-5 percentiles), **Depth** (mean of the top-40 athlete-event bests — NOT a mean of all marks, which punished 190-athlete dual meets: Depth ~37 vs ~85 at a conference meet), **Improvement** (PRs vs. expected PRs). Draft weights 45/25/30; calibrate against meets the owner ranks by gut.
+- **Data completeness:** only seasons from 2020-21 onward (Seasons Id 38,31,16,4,27,47) have full results. Older meets are scoring-performances only, so Peak/Depth skew high and "PRs" are inflated/unreliable (prior marks missing). Pre-2020 meets are to be scored on **Peak only**. `Seasons.Status = Complete` is NOT a reliable signal — 2003-04 is marked Complete but has ~28 performances/meet (scoring-only data).
+- **Improvement must be baseline-adjusted by number of prior meets** for that athlete-event: empirical PR rate by prior-meet count (complete era) is 61% (1 prior), 40%, 37%, 32%, 29%, 24% (6+). Unadjusted PR rate wildly favors early-season dual meets. Count only priors from the complete-data era. Score = `50 + 100*(PRs - Expected)/(Eligible + 10)` (50 = par). A PR is per athlete-event: any mark at the meet beating the athlete's best from strictly earlier meets.
+- Don't use `PersonalBest`/`SeasonBest` flags for this — they mark only the current best, not "was a PR at the time". Compute from dates.
+- School records *set at the time* (beat every earlier mark in the event) can be computed in C#, as `LeaderboardService` does; `Leaderboards.Rank = 1` only shows *current* records. The two MAC championships the owner calls exceptional (2024, 2025) set zero records — they stand out on Depth, so a record bonus alone won't capture them.
+
+**Watch out:** Relays are excluded from Improvement in the prototype. `Meets.MeetLevel` has no effect on anything yet. First-complete-season (2020-21) PR rates are inflated by COVID-lost 2020 and missing priors.

@@ -17,6 +17,7 @@ public class Meet
     public int SeasonId { get; set; }
     public MeetEntryStatus EntryStatus { get; set; }
     public MeetType MeetType { get; set; }
+    public MeetLevel MeetLevel { get; set; } = MeetLevel.Varsity;
     public int? ScoringTemplateId { get; set; }
 
     public List<Performance> Performances { get; set; } = new();

@@ -86,6 +86,7 @@ CREATE TABLE [dbo].[Meets] (
     [SeasonId]    INT            NOT NULL,
     [EntryStatus] INT            DEFAULT ((0)) NOT NULL,   -- See MeetEntryStatus enum above
     [EntryNotes]  NVARCHAR (MAX) NULL,
+    [MeetLevel]   SMALLINT       DEFAULT ((1)) NOT NULL,   -- See MeetLevel enum: 1=Varsity, 2=JV
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Meets_Seasons]   FOREIGN KEY ([SeasonId])   REFERENCES [dbo].[Seasons]   ([Id]),
     CONSTRAINT [FK_Meets_Locations] FOREIGN KEY ([LocationId]) REFERENCES [dbo].[Locations] ([Id])

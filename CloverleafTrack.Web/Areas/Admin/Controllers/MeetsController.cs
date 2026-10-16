@@ -104,6 +104,7 @@ public class MeetsController(
             EntryStatus = model.EntryStatus,
             EntryNotes = model.EntryNotes,
             MeetType = model.MeetType,
+            MeetLevel = model.MeetLevel,
             ScoringTemplateId = model.ScoringTemplateId
         };
 
@@ -141,6 +142,7 @@ public class MeetsController(
             EntryStatus = meet.EntryStatus,
             EntryNotes = meet.EntryNotes,
             MeetType = meet.MeetType,
+            MeetLevel = meet.MeetLevel,
             ScoringTemplateId = meet.ScoringTemplateId,
             ExistingParticipants = participants,
             ParticipantSchoolIds = participants.Select(p => p.SchoolId).ToList(),
@@ -178,6 +180,7 @@ public class MeetsController(
             EntryStatus = model.EntryStatus,
             EntryNotes = model.EntryNotes,
             MeetType = model.MeetType,
+            MeetLevel = model.MeetLevel,
             ScoringTemplateId = model.ScoringTemplateId
         };
 
@@ -226,6 +229,7 @@ public class MeetsController(
             SeasonId = meet.SeasonId,
             EntryStatus = MeetEntryStatus.NotAvailable,
             MeetType = meet.MeetType,
+            MeetLevel = meet.MeetLevel,
             ScoringTemplateId = meet.ScoringTemplateId,
             ParticipantSchoolIds = participants.Select(p => p.SchoolId).ToList()
         };
