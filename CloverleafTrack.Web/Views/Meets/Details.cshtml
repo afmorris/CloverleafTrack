@@ -98,29 +98,36 @@
     {
         var ms = Model.MeetScore;
         <!-- MeetScore -->
-        <div class="mb-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 flex flex-col sm:flex-row sm:items-center gap-4">
-            <div class="flex flex-col items-center sm:pr-6 sm:border-r border-gray-200 dark:border-gray-700">
-                <span class="text-5xl font-bold tabular-nums text-gray-900 dark:text-white">@ms.Score.ToString("0.0")</span>
-                <span class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mt-0.5">MeetScore@(ms.IsPartial ? "*" : "")</span>
+        <div class="meetscore-card">
+            <div class="meetscore-hero">
+                <span class="meetscore-number" style="color:@ms.AccentColor">@ms.Score.ToString("0")</span>
+                <span class="meetscore-caption">MeetScore@(ms.IsPartial ? "*" : "")</span>
             </div>
-            <div class="flex-1">
-                <div class="grid grid-cols-3 gap-2 text-center">
-                    @foreach (var (label, value) in new[] { ("Peak", ms.Peak), ("Depth", ms.Depth), ("Improvement", ms.Improvement) })
-                    {
-                        <div>
-                            <div class="text-xl font-semibold tabular-nums @(value.HasValue ? "text-gray-900 dark:text-white" : "text-gray-300 dark:text-gray-600")">@(value.HasValue ? value.Value.ToString("0.0") : "—")</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">@label</div>
+            <div class="meetscore-body">
+                @foreach (var (label, hint, value) in new[] { ("Peak", "Top 5 marks", ms.Peak), ("Depth", "Top 40 athlete-event bests", ms.Depth), ("Improvement", ms.PRs + " PRs vs. " + ms.ExpectedPRs.ToString("0.0") + " expected", ms.Improvement) })
+                {
+                    <div class="meetscore-row">
+                        <div class="meetscore-row-label">
+                            <span class="font-semibold text-gray-900 dark:text-white">@label</span>
+                            <span class="meetscore-row-hint">@hint</span>
                         </div>
-                    }
-                </div>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-3">
+                        <div class="meetscore-track">
+                            @if (value.HasValue)
+                            {
+                                <div class="meetscore-fill" style="width:@(Math.Clamp(value.Value, 0, 100).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture))%;background-color:@ms.AccentColor"></div>
+                            }
+                        </div>
+                        <span class="meetscore-row-value @(value.HasValue ? "" : "opacity-40")">@(value.HasValue ? value.Value.ToString("0") : "—")</span>
+                    </div>
+                }
+                <p class="meetscore-note">
                     @if (ms.IsPartial)
                     {
                         <span class="font-semibold">* @ms.BasisLabel.</span> @ms.BasisExplanation
                     }
                     else
                     {
-                        <text>Peak: top 5 marks. Depth: top 40 athlete-event bests. Improvement: @ms.PRs PRs vs. @ms.ExpectedPRs.ToString("0.0") expected across @ms.EligibleAthleteEvents athlete-events with prior history. Percentiles compare each mark against every mark ever recorded in that event.</text>
+                        <text>Each sub-score is 0–100. Percentiles compare every mark against all marks ever recorded in that event; Improvement counts PRs across the @ms.EligibleAthleteEvents athlete-events with prior history.</text>
                     }
                 </p>
             </div>

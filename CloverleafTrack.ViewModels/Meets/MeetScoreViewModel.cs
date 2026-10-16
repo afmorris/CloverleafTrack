@@ -33,9 +33,18 @@ public class MeetScoreViewModel
     /// <summary>Tailwind classes for the score badge, tiered by score.</summary>
     public string BadgeClasses => Score switch
     {
-        >= 85 => "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
-        >= 75 => "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
-        >= 60 => "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
-        _ => "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+        >= 85 => "meetscore-badge-gold",
+        >= 75 => "meetscore-badge-green",
+        >= 60 => "meetscore-badge-blue",
+        _ => "meetscore-badge-gray"
+    };
+
+    /// <summary>Accent color (hex) for the score number and bars, tiered to match <see cref="BadgeClasses"/>.</summary>
+    public string AccentColor => Score switch
+    {
+        >= 85 => "#f59e0b",
+        >= 75 => "#10b981",
+        >= 60 => "#3b82f6",
+        _ => "#9ca3af"
     };
 }
