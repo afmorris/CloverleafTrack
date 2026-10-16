@@ -192,7 +192,7 @@ public class MeetService(
                 Depth = kv.Value.Depth.HasValue ? Math.Round(kv.Value.Depth.Value, 1) : null,
                 Improvement = kv.Value.Improvement.HasValue ? Math.Round(kv.Value.Improvement.Value, 1) : null,
                 PRs = kv.Value.PRs,
-                ExpectedPRs = Math.Round(kv.Value.ExpectedPRs, 1),
+                ExpectedPRs = Math.Round(kv.Value.ExpectedPRs, 2),
                 EligibleAthleteEvents = kv.Value.EligibleAthleteEvents
             });
     }
