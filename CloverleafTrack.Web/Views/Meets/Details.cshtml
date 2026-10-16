@@ -126,6 +126,14 @@
                 {
                     <div class="metric-cell" title="@tip">
                         <span class="metric-value @(value.HasValue ? "" : "opacity-40")">@(value.HasValue ? value.Value.ToString("0") : "—")</span>
+                        <div class="pct-bar-track" style="width:80%;margin:.4rem 0 .3rem">
+                            @if (value.HasValue)
+                            {
+                                var pct = (int)Math.Round(Math.Clamp(value.Value, 0, 100));
+                                <div class="pct-bar-fill" style="width:@(pct)%;background-color:@PercentileHelper.GetFillColor(pct)"></div>
+                                <div class="pct-bar-median-tick"></div>
+                            }
+                        </div>
                         <span class="metric-label">@label</span>
                     </div>
                 }

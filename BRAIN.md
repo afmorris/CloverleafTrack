@@ -1880,3 +1880,11 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Key files:** `Views/Meets/Details.cshtml`, `wwwroot/css/input.css`, `wwwroot/css/site.css`.
 
 **Watch out:** The strip is `grid-cols-4` by design, so it must keep exactly four cells.
+
+---
+
+## [C48] MeetScore strip: Peak/Depth/Improvement shown as percentile bars
+
+**What changed:** In the MeetScore strip ([C47]) the three sub-score cells now show the number plus a horizontal `.pct-bar-track`/`.pct-bar-fill`/`.pct-bar-median-tick` bar (80% of cell width), filled with `PercentileHelper.GetFillColor` so colors match the roster and event pages.
+
+**Watch out:** Improvement is not a percentile (it is a 0-100 PR-vs-expected index centered on 50), but it reuses the same percentile palette and median tick for visual consistency — the tick at 50 happens to mean "met expectations" there.
