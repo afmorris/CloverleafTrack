@@ -17,7 +17,6 @@
     var meetDescription = CloverleafTrack.Web.Utilities.SeoHelper.Truncate(
         $"{Model.Name} — {Model.Date:MMM d, yyyy}{meetLocationPart}. {Model.TotalPerformances} performance{(Model.TotalPerformances == 1 ? "" : "s")}, {Model.TotalPRs} PR{(Model.TotalPRs == 1 ? "" : "s")}, {Model.TotalSchoolRecords} school record{(Model.TotalSchoolRecords == 1 ? "" : "s")}.");
 
-    var meetBaseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     var meetPath = Context.Request.Path.Value ?? "/meets";
 
     ViewData["Seo"] = new SeoMetadataViewModel
@@ -33,7 +32,7 @@
         JsonLdBlocks = new List<string>
         {
             CloverleafTrack.Web.Utilities.SeoHelper.BuildSportsEventJsonLd(
-                Model.Name, Model.Date, meetBaseUrl + meetPath, Model.LocationName, Model.LocationCity, Model.LocationState)
+                Model.Name, Model.Date, SeoUrls.PageUrl(meetPath), Model.LocationName, Model.LocationCity, Model.LocationState)
         }
     };
 }

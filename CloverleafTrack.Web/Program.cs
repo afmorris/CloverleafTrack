@@ -16,6 +16,12 @@ builder.Services.AddSession(options => {
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+// Generate lowercase links (asp-controller/asp-action): the static export saves each URL as its own file, so a
+// '/Meets' link next to '/meets' would produce a duplicate page (Meets.html and meets.html).
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddHttpContextAccessor();
+builder.Services.Configure<CloverleafTrack.Web.Utilities.SeoUrlOptions>(builder.Configuration.GetSection("Seo"));
+builder.Services.AddScoped<CloverleafTrack.Web.Utilities.ISeoUrlBuilder, CloverleafTrack.Web.Utilities.SeoUrlBuilder>();
 builder.Services.AddScoped<IDbConnectionFactory>(_ => new SqlConnectionFactory(connectionString ?? string.Empty));
 builder.Services.AddScoped<IAthleteRepository, AthleteRepository>();
 builder.Services.AddScoped<ISeasonRepository, SeasonRepository>();

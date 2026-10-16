@@ -2,12 +2,10 @@
 @{
     var seo = ViewData["Seo"] as SeoMetadataViewModel ?? new SeoMetadataViewModel();
 
-    var request = Context.Request;
-    var baseUrl = $"{request.Scheme}://{request.Host}";
-    var currentPath = request.Path.Value ?? "/";
+    var currentPath = Context.Request.Path.Value ?? "/";
     var canonicalPath = string.IsNullOrEmpty(seo.CanonicalPath) ? currentPath : seo.CanonicalPath;
-    var canonicalUrl = baseUrl + canonicalPath;
-    var imageUrl = baseUrl + (string.IsNullOrEmpty(seo.ImagePath) ? "/img/hero-home.jpg" : seo.ImagePath);
+    var canonicalUrl = SeoUrls.PageUrl(canonicalPath);
+    var imageUrl = SeoUrls.AssetUrl(string.IsNullOrEmpty(seo.ImagePath) ? "/img/hero-home.jpg" : seo.ImagePath);
 
     var pageTitle = ViewData["Title"]?.ToString() ?? "";
     var socialTitle = string.IsNullOrWhiteSpace(pageTitle)
@@ -37,7 +35,7 @@
 <meta name="twitter:description" content="@description" />
 <meta name="twitter:image" content="@imageUrl" />
 
-<script type="application/ld+json">@Html.Raw(CloverleafTrack.Web.Utilities.SeoHelper.BuildBreadcrumbJsonLd(breadcrumbs, baseUrl))</script>
+<script type="application/ld+json">@Html.Raw(CloverleafTrack.Web.Utilities.SeoHelper.BuildBreadcrumbJsonLd(breadcrumbs, SeoUrls.PageUrl))</script>
 @foreach (var block in seo.JsonLdBlocks)
 {
     <script type="application/ld+json">@Html.Raw(block)</script>
