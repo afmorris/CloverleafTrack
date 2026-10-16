@@ -1816,3 +1816,23 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 - School records *set at the time* (beat every earlier mark in the event) can be computed in C#, as `LeaderboardService` does; `Leaderboards.Rank = 1` only shows *current* records. The two MAC championships the owner calls exceptional (2024, 2025) set zero records — they stand out on Depth, so a record bonus alone won't capture them.
 
 **Watch out:** Relays are excluded from Improvement in the prototype. `Meets.MeetLevel` has no effect on anything yet. First-complete-season (2020-21) PR rates are inflated by COVID-lost 2020 and missing priors.
+
+
+---
+
+### [C44] MeetScore — Implemented (builds on [C43])
+
+**What changed:** Per-meet 0-100 quality score, computed on read. `MeetScoreCalculator` (Services, pure static) + `MeetScoreMark`/`MeetScoreResult`/`MeetScoreBasis` (Models) + `IMeetRepository.GetMeetScoreMarksAsync()` (single query over all Performances joined to Meets/Seasons/Events/PerformancePercentiles/EventStatistics) + `MeetScoreViewModel`. Hero card on meet details (score + Peak/Depth/Improvement), badge on the meets index (`*` marks partial-basis scores). Formula, weights (45/25/30), era rule (season start >= 2020-12-01, derived from data not ids), JV rule and expected-PR-rate method are exactly as decided in [C43].
+
+**Decisions made here:**
+- **No school-record bonus.** A record is already a ~100th-percentile mark so Peak captures it; records are rare, so a bonus would mostly reorder state-level meets; and the owner's exceptional MACs (2024, 2025) set none. Records still show in the hero strip. Revisit only if gut-ranking disagrees.
+- **Depth for meets with < 40 athlete-events averages what exists** (no zero padding). This reproduced the prototype's numbers (2024 MAC 86.1 vs prototype 86.2; 2025 MAC 81.1 = 81.1).
+- **Legacy beats JV:** a pre-era meet is Peak-only regardless of level (no Improvement data exists for it).
+- PR comparison is by meet *date* (strictly earlier); same-day meets don't count as priors for each other. Expected-rate buckets fall back to the overall rate if a bucket is empty. A meet with no eligible athlete-events scores Improvement 50 (par).
+- All meets are always scored together: the index and details pages both load every performance (~13k rows) per request. Fine for the nightly wget crawl; if it ever becomes slow, cache the `Calculate` result.
+
+**Calibration (production data, Oct 2026, 118 full-basis meets):** top: 2024 OHSAA D-I State 87.6, 2022 D-I Regional 87.4, 2023 State 87.2, **2024 MAC 86.1 (#4)**, ... **2023 MAC 85.2 (#7)**, 2022 MAC 83.4 (#12), 2021 MAC 81.1 (#19), **2025 MAC 81.1 (#20)**, 2026 MAC 78.2 (#32). The earlier "#1/#2/#10" ranks came from a prototype that did not rank state/regional/district meets above them; relative MAC order is unchanged. Early-season double duals rank high on Improvement (2025 Norton-Springfield 84.0, 2024 Woodridge 84.0). Known quirk: tiny meets (a few athletes, e.g. a state meet with 1-3 qualifiers, or a 2-athlete indoor open) can score extreme because Peak/Depth average very few marks; consider a minimum-athlete threshold later. JV: 2024 Stars 52.4, 2023 Stars 47.0, 2021 Smithie 36.4.
+
+**Watch out:** `Meet.PRCount` (PersonalBest flag count) and MeetScore's PRs differ by design — the latter is computed from dates. Percentiles are as of the last `sp_RebuildLeaderboards`, so scores drift slightly as new marks enter the all-time population. Relays count in Peak/Depth but not Improvement.
+
+**Key files:** `CloverleafTrack.Services/MeetScoreCalculator.cs`, `MeetService.cs`, `CloverleafTrack.DataAccess/Repositories/MeetRepository.cs`, `CloverleafTrack.Models/MeetScore*.cs`, `Views/Meets/Details.cshtml`, `Views/Shared/_MeetListItem.cshtml`, `CloverleafTrack.Tests/Unit/Services/MeetScoreCalculatorTests.cs`.

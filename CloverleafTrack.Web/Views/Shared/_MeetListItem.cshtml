@@ -18,6 +18,11 @@
             <a asp-controller="Meets" asp-action="Details" asp-route-slug="@Model.Slug"
                class="font-medium text-gray-900 dark:text-white hover:underline"
                onclick="event.stopPropagation()">@Model.Name</a>
+            @if (Model.MeetScore != null)
+            {
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-semibold leading-none @Model.MeetScore.BadgeClasses"
+                      title="MeetScore@(Model.MeetScore.IsPartial ? $" ({Model.MeetScore.BasisLabel})" : "")">@Model.MeetScore.Score.ToString("0")@(Model.MeetScore.IsPartial ? "*" : "")</span>
+            }
             @if (Model.IsUpcoming)
             {
                 var daysUntil = (Model.Date.Date - DateTime.Today).Days;

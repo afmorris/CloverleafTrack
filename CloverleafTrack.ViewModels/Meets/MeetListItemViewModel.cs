@@ -20,6 +20,7 @@ public class MeetListItemViewModel
     public int SchoolRecordCount { get; set; }
 
     public MeetType MeetType { get; set; }
+    public MeetScoreViewModel? MeetScore { get; set; }
     public TeamResultViewModel? TeamResult { get; set; }
 
     public bool IsUpcoming => Date > DateTime.Now;
