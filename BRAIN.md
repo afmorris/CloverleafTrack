@@ -1868,3 +1868,15 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Key files:** `Views/Meets/Details.cshtml`, `Views/Shared/_MeetListItem.cshtml`, `CloverleafTrack.ViewModels/Meets/MeetScoreViewModel.cs`, `wwwroot/css/input.css`, `wwwroot/css/site.css`.
 
 **Watch out:** The `.meetscore-*` rules are plain CSS (not `@apply`), appended identically to `input.css` and `site.css`, so a Tailwind rebuild keeps them. Any *new* utility class used in a view needs a Tailwind rebuild before it exists in `site.css` — verify in the browser, don't assume. The `ctf-web` launch config now sets `ASPNETCORE_ENVIRONMENT=Development`; under Production, static assets aren't mapped and pages render unstyled.
+
+---
+
+## [C47] MeetScore hero card replaced by a full-width metric strip (supersedes the card in [C46])
+
+**What changed:** Removed the large MeetScore card. `Views/Meets/Details.cshtml` now renders a second `.metric-strip` directly under the Performances/PRs/Records/Top-10 strip: MeetScore (tier-colored) | Peak | Depth | Improvement. Sub-score explanations moved to `title` tooltips; the partial-basis (`*`) explanation stays as a one-line note beneath. The `.meetscore-card`/hero/bar CSS was deleted; only the `.meetscore-badge*` list-badge CSS remains.
+
+**Why:** The owner wanted MeetScore to look like the other stat badges, not a giant block. Reusing `metric-strip`/`metric-cell` means no new CSS.
+
+**Key files:** `Views/Meets/Details.cshtml`, `wwwroot/css/input.css`, `wwwroot/css/site.css`.
+
+**Watch out:** The strip is `grid-cols-4` by design, so it must keep exactly four cells.

@@ -258,30 +258,7 @@ details[open] .details-arrow {
     .roster-table td.col-trend { display: none; }
 }
 
-/* MeetScore (Meets/Details hero card + list badge). Plain CSS so it works without a Tailwind rebuild. */
-.meetscore-card{display:flex;flex-direction:column;gap:1.25rem;margin-bottom:1rem;padding:1.25rem;border-radius:.5rem;border:1px solid #e5e7eb;background:#fff}
-.dark .meetscore-card{border-color:#374151;background:#1f2937}
-.meetscore-hero{display:flex;flex-direction:row;align-items:baseline;justify-content:center;gap:.75rem;flex-shrink:0}
-.meetscore-number{font-size:3.75rem;line-height:1;font-weight:700;font-variant-numeric:tabular-nums}
-.meetscore-caption{font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#6b7280}
-.dark .meetscore-caption,.dark .meetscore-row-hint,.dark .meetscore-note{color:#9ca3af}
-.meetscore-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:.75rem}
-.meetscore-row{display:grid;grid-template-columns:1fr 2rem;align-items:center;column-gap:.75rem;row-gap:.25rem}
-.meetscore-row-label{grid-column:span 2;display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.5rem;font-size:.875rem}
-.meetscore-row-hint{font-size:.75rem;color:#6b7280}
-.meetscore-track{height:.5rem;border-radius:9999px;background:#e5e7eb;overflow:hidden}
-.dark .meetscore-track{background:#374151}
-.meetscore-fill{height:100%;border-radius:9999px}
-.meetscore-row-value{font-size:.875rem;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;color:#111827}
-.dark .meetscore-row-value{color:#fff}
-.meetscore-note{margin-top:.25rem;font-size:.75rem;color:#6b7280}
-@media (min-width:640px){
-.meetscore-card{flex-direction:row;gap:2rem}
-.meetscore-hero{flex-direction:column;align-items:center;gap:.25rem;width:9rem;padding-right:2rem;border-right:1px solid #e5e7eb}
-.dark .meetscore-hero{border-right-color:#374151}
-.meetscore-row{grid-template-columns:16rem 1fr 2rem}
-.meetscore-row-label{grid-column:span 1}
-}
+/* MeetScore list badge. Plain CSS so it works without a Tailwind rebuild. */
 .meetscore-badge{display:inline-flex;align-items:center;padding:.125rem .375rem;border-radius:.25rem;font-size:.75rem;line-height:1;font-weight:700;font-variant-numeric:tabular-nums}
 .meetscore-badge-gold{background:#fef3c7;color:#92400e}
 .meetscore-badge-green{background:#d1fae5;color:#065f46}
