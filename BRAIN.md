@@ -1888,3 +1888,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **What changed:** In the MeetScore strip ([C47]) the three sub-score cells now show the number plus a horizontal `.pct-bar-track`/`.pct-bar-fill`/`.pct-bar-median-tick` bar (80% of cell width), filled with `PercentileHelper.GetFillColor` so colors match the roster and event pages.
 
 **Watch out:** Improvement is not a percentile (it is a 0-100 PR-vs-expected index centered on 50), but it reuses the same percentile palette and median tick for visual consistency — the tick at 50 happens to mean "met expectations" there.
+
+---
+
+## [C49] MeetScore strip: vertically centered cell + info modal
+
+**What changed:** The MeetScore cell (`.meetscore-cell`) is vertically centered in the strip (it has no bar, so it floated at the top). Its label is now a button ("MeetScore ⓘ") that opens a native `<dialog id="meetscore-info">` explaining Peak/Depth/Improvement, their weights, and the `*` partial-basis cases. Closes via ×, Esc, or backdrop click (inline `onclick`, no JS file).
+
+**Why:** Readers had no way to learn what the score meant. Native `<dialog>` avoids a new JS dependency, which suits the static export.
+
+**Watch out:** The modal copy hardcodes the weights (45/25/30), counts (top 5 / top 40) and the 2020-21 cutoff — update it if `MeetScoreCalculator` constants change. Styles are plain CSS (`.meetscore-dialog*`) in `input.css` and `site.css`, no Tailwind rebuild needed.
