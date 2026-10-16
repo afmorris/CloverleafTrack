@@ -151,4 +151,21 @@ public class SeoHelperTests
         items[2].GetProperty("name").GetString().Should().Be("Ethan Gray");
         items[2].GetProperty("item").GetString().Should().Be("https://cloverleaftrack.com/roster/ethan-gray");
     }
+
+    [Fact]
+    public void BuildBreadcrumbJsonLd_WithPageUrlFunc_UsesItForEveryItem()
+    {
+        var breadcrumbs = new List<SeoBreadcrumbViewModel>
+        {
+            new() { Name = "Home", Path = "/" },
+            new() { Name = "Meets", Path = "/meets" }
+        };
+
+        var json = SeoHelper.BuildBreadcrumbJsonLd(breadcrumbs, path => "https://x.test" + (path == "/" ? "/" : path + ".html"));
+        using var doc = JsonDocument.Parse(json);
+        var items = doc.RootElement.GetProperty("itemListElement").EnumerateArray().ToList();
+
+        items[0].GetProperty("item").GetString().Should().Be("https://x.test/");
+        items[1].GetProperty("item").GetString().Should().Be("https://x.test/meets.html");
+    }
 }

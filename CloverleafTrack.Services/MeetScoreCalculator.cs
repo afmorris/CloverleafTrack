@@ -4,7 +4,7 @@ using CloverleafTrack.Models.Enums;
 namespace CloverleafTrack.Services;
 
 /// <summary>
-/// Pure maths for MeetScore (BRAIN.md [C43], [C44]). Computed on read from raw marks; nothing is stored.
+/// Pure maths for MeetScore (BRAIN.md [C43], [C45]). Computed on read from raw marks; nothing is stored.
 /// </summary>
 public static class MeetScoreCalculator
 {
@@ -17,6 +17,18 @@ public static class MeetScoreCalculator
 
     /// <summary>Events with fewer recorded marks than this have unstable percentiles and are ignored for Peak/Depth.</summary>
     public const int MinEventMarkCount = 10;
+
+    /// <summary>
+    /// Minimum athlete-event bests for a Full score. A state or regional meet where 4 athletes qualified averages
+    /// to a near-perfect Peak and Depth (selection bias, not a great meet), so tiny meets get no score at all.
+    /// </summary>
+    public const int MinUnitsForFull = 15;
+
+    /// <summary>Minimum scorable marks for a Peak-only score (Peak is the mean of the top 5).</summary>
+    public const int MinMarksForPeakOnly = 5;
+
+    /// <summary>Minimum eligible athlete-events for an Improvement-only (JV) score; with none, "par" would be a made-up number.</summary>
+    public const int MinEligibleForImprovementOnly = 10;
 
     /// <summary>Seasons starting on/after this date have complete results (not just scoring performances). Seasons.Status is NOT reliable for this.</summary>
     public static readonly DateTime CompleteDataEraStart = new(2020, 12, 1);
@@ -45,6 +57,7 @@ public static class MeetScoreCalculator
 
             if (!complete)
             {
+                if (Scorable(meetMarks).Count() < MinMarksForPeakOnly) continue;
                 peak = Peak(meetMarks);
                 if (peak == null) continue;
                 score = peak.Value;
@@ -52,12 +65,14 @@ public static class MeetScoreCalculator
             }
             else if (first.MeetLevel == MeetLevel.JV)
             {
-                improvementScore = imp?.Score ?? 50;
+                if (imp == null || imp.Eligible < MinEligibleForImprovementOnly) continue;
+                improvementScore = imp.Score;
                 score = improvementScore.Value;
                 basis = MeetScoreBasis.ImprovementOnly;
             }
             else
             {
+                if (AthleteEventBests(meetMarks).Count < MinUnitsForFull) continue;
                 peak = Peak(meetMarks);
                 depth = Depth(meetMarks);
                 if (peak == null || depth == null) continue;
@@ -101,14 +116,18 @@ public static class MeetScoreCalculator
     /// </summary>
     public static double? Depth(IEnumerable<MeetScoreMark> meetMarks)
     {
-        var bests = Scorable(meetMarks)
+        var bests = AthleteEventBests(meetMarks).Take(DepthCount).ToList();
+        return bests.Count == 0 ? null : bests.Average();
+    }
+
+    /// <summary>Best percentile per athlete per event (each relay performance once), best first.</summary>
+    private static List<double> AthleteEventBests(IEnumerable<MeetScoreMark> meetMarks) =>
+        Scorable(meetMarks)
             .GroupBy(m => m.AthleteId.HasValue
                 ? $"a{m.AthleteId}:{m.EventId}"
                 : $"r{m.PerformanceId}")
             .Select(g => (double)g.Max(m => m.Percentile!.Value))
-            .OrderByDescending(p => p).Take(DepthCount).ToList();
-        return bests.Count == 0 ? null : bests.Average();
-    }
+            .OrderByDescending(p => p).ToList();
 
     private sealed record ImprovementDetail(double Score, int PRs, double Expected, int Eligible);
 

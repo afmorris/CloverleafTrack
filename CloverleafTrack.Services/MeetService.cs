@@ -177,7 +177,7 @@ public class MeetService(
 
     /// <summary>
     /// MeetScore needs every mark in the database (PR detection compares against all earlier meets), so scores are
-    /// always computed for all meets together and looked up by meet id. See MeetScoreCalculator / BRAIN.md [C44].
+    /// always computed for all meets together and looked up by meet id. See MeetScoreCalculator / BRAIN.md [C45].
     /// </summary>
     private async Task<Dictionary<int, MeetScoreViewModel>> GetMeetScoresAsync()
     {

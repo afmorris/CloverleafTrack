@@ -1,5 +1,6 @@
 using System.Text;
 using CloverleafTrack.Services.Interfaces;
+using CloverleafTrack.Web.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloverleafTrack.Web.Controllers;
@@ -10,14 +11,12 @@ namespace CloverleafTrack.Web.Controllers;
 /// enumerates athletes/meets/events for the site search overlay) and ISeasonService rather than adding new
 /// repository queries. robots.txt (wwwroot/robots.txt) points crawlers at this route.
 /// </summary>
-public class SitemapController(ISearchService searchService, ISeasonService seasonService) : Controller
+public class SitemapController(ISearchService searchService, ISeasonService seasonService, ISeoUrlBuilder seoUrls) : Controller
 {
     [HttpGet("/sitemap.xml")]
     [ResponseCache(Duration = 3600, VaryByHeader = "Accept-Encoding")]
     public async Task<IActionResult> Index()
     {
-        var baseUrl = $"{Request.Scheme}://{Request.Host}";
-
         var paths = new List<string>
         {
             "/",
@@ -38,7 +37,7 @@ public class SitemapController(ISearchService searchService, ISeasonService seas
         sb.Append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
         foreach (var path in paths.Distinct())
         {
-            sb.Append("  <url><loc>").Append(XmlEscape(baseUrl + path)).Append("</loc></url>\n");
+            sb.Append("  <url><loc>").Append(XmlEscape(seoUrls.PageUrl(path))).Append("</loc></url>\n");
         }
         sb.Append("</urlset>\n");
 

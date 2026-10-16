@@ -14,7 +14,6 @@
     var athleteDescription = CloverleafTrack.Web.Utilities.SeoHelper.Truncate(
         $"{Model.FullName}, Class of {Model.GraduationYear} — Cloverleaf Track & Field.{athleteEventPart} {Model.TotalPRs} personal record{(Model.TotalPRs == 1 ? "" : "s")}, {Model.TotalSchoolRecords} school record{(Model.TotalSchoolRecords == 1 ? "" : "s")}.");
 
-    var athleteBaseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     var athletePath = Context.Request.Path.Value ?? "/roster";
     var athleteAwards = individualRecords
         .Where(r => r.IsSchoolRecord)
@@ -34,7 +33,7 @@
         JsonLdBlocks = new List<string>
         {
             CloverleafTrack.Web.Utilities.SeoHelper.BuildPersonJsonLd(
-                Model.FullName, athleteBaseUrl + athletePath, athleteDescription, athleteGenderLabel, athleteAwards)
+                Model.FullName, SeoUrls.PageUrl(athletePath), athleteDescription, athleteGenderLabel, athleteAwards)
         }
     };
 }

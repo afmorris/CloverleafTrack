@@ -458,7 +458,8 @@ A 0-100 quality score per meet, **computed on read** (no stored column) by the p
 - **Peak** (45%) = mean of the top 5 `PerformancePercentiles` in the meet. **Depth** (25%) = mean of the top 40 athlete-event bests (relay perf counts once). Both ignore marks with no percentile or whose event has `EventMarkCount < 10`.
 - **Improvement** (30%) = `50 + 100*(PRs - Expected)/(Eligible + 10)`, clamped 0-100. Individuals only. PR = meet's best beats best from strictly earlier-dated meets (complete-era marks only). Expected uses the empirical PR rate per prior-meet count (buckets 1..6+), derived from the data each call. Never uses `PersonalBest`/`SeasonBest` flags.
 - **Basis** (`MeetScoreBasis`): `Full` (above); `PeakOnly` for meets in seasons starting before 2020-12-01 (scoring-only data; shown with `*`, not comparable); `ImprovementOnly` for `MeetLevel.JV` in the complete era.
-- No school-record bonus (deliberate — see BRAIN.md [C44]).
+- **Minimum size, otherwise no score** (the meet shows no badge): `Full` needs >= 15 athlete-event bests (`MinUnitsForFull`); `PeakOnly` needs >= 5 scorable marks; `ImprovementOnly` needs >= 10 eligible athlete-events. Without this, a state meet with 4 elite qualifiers averages to a near-perfect score. Constants live on `MeetScoreCalculator`.
+- No school-record bonus (deliberate — see BRAIN.md [C45]).
 
 ---
 
@@ -494,6 +495,7 @@ A 0-100 quality score per meet, **computed on read** (no stored column) by the p
 
 Every public page (not the admin area, which has its own `_Layout.cshtml`) renders a data-derived `<meta name="description">`, Open Graph + Twitter Card tags, and schema.org JSON-LD.
 
+- **All absolute SEO URLs (canonical, og:url, og:image, twitter:image, JSON-LD, `/sitemap.xml`) come from `ISeoUrlBuilder` (`Web/Utilities/SeoUrlBuilder.cs`), never from `Request.Host`** — the public site is a static export crawled from an internal host, so the request host is wrong in production. Configured by the `Seo` section of `appsettings.json` (`CanonicalBaseUrl`, `HtmlExtension`); injected into all views via `_ViewImports.cshtml` as `SeoUrls`. Routing uses `LowercaseUrls = true`. See BRAIN.md [C44].
 - `CloverleafTrack.ViewModels/Shared/SeoMetadataViewModel.cs` — `Description`, `CanonicalPath` (defaults to the current request path), `OgType`, `ImagePath` (defaults to `/img/hero-home.jpg` — there is no per-page OG image generation, see BRAIN.md C28), `Breadcrumbs`, `JsonLdBlocks` (pre-serialized JSON strings).
 - `CloverleafTrack.Web/Utilities/SeoHelper.cs` — `Truncate` (word-boundary-safe, ~160 char budget) and JSON-LD builders (`BuildOrganizationJsonLd`, `BuildPersonJsonLd`, `BuildSportsEventJsonLd`, `BuildBreadcrumbJsonLd`), built on `Dictionary<string, object?>` so `"@type"`/`"@context"` keys serialize correctly.
 - Each Details/Index view sets `ViewData["Seo"] = new SeoMetadataViewModel {...}` from data already on its own ViewModel (same convention as `ViewData["Title"]`); `Views/Shared/_Layout.cshtml` renders `Views/Shared/_SeoMetadata.cshtml` once in `<head>`, which reads `ViewData["Seo"]` and falls back to a generic sitewide description when a page hasn't set one.
