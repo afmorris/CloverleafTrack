@@ -18,6 +18,7 @@ public class MeetService(
     public async Task<MeetsIndexViewModel> GetMeetsIndexAsync()
     {
         var allMeets = await meetRepository.GetAllMeetsWithStatsAsync();
+        var scores = await GetMeetScoresAsync();
 
         // Group by season
         var seasonGroups = allMeets
@@ -72,6 +73,7 @@ public class MeetService(
                     PRCount = meet.PRCount,
                     SchoolRecordCount = meet.SchoolRecordCount,
                     MeetType = meet.MeetType,
+                    MeetScore = scores.GetValueOrDefault(meet.Id),
                     TeamResult = teamResult.HasResult ? teamResult : null
                 });
             }
@@ -139,6 +141,7 @@ public class MeetService(
         var teamResultsTask = meetRepository.GetTeamResultsForMeetsAsync(new List<int> { meet.Id });
         await teamResultsTask;
         var teamResult = BuildTeamResult(meet, teamResultsTask.Result);
+        var scores = await GetMeetScoresAsync();
 
         return new MeetDetailsViewModel
         {
@@ -151,6 +154,7 @@ public class MeetService(
             HandTimed = meet.HandTimed,
             SeasonName = meet.Season.Name,
             MeetType = meet.MeetType,
+            MeetScore = scores.GetValueOrDefault(meet.Id),
             Participants = participants,
             HasScoring = placings.Count > 0,
             TeamResult = teamResult.HasResult ? teamResult : null,
@@ -169,6 +173,28 @@ public class MeetService(
             GirlsEvents = girlsEvents,
             MixedEvents = mixedEvents
         };
+    }
+
+    /// <summary>
+    /// MeetScore needs every mark in the database (PR detection compares against all earlier meets), so scores are
+    /// always computed for all meets together and looked up by meet id. See MeetScoreCalculator / BRAIN.md [C45].
+    /// </summary>
+    private async Task<Dictionary<int, MeetScoreViewModel>> GetMeetScoresAsync()
+    {
+        var marks = await meetRepository.GetMeetScoreMarksAsync() ?? new List<MeetScoreMark>();
+        return MeetScoreCalculator.Calculate(marks).ToDictionary(
+            kv => kv.Key,
+            kv => new MeetScoreViewModel
+            {
+                Score = Math.Round(kv.Value.Score, 1),
+                Basis = kv.Value.Basis,
+                Peak = kv.Value.Peak.HasValue ? Math.Round(kv.Value.Peak.Value, 1) : null,
+                Depth = kv.Value.Depth.HasValue ? Math.Round(kv.Value.Depth.Value, 1) : null,
+                Improvement = kv.Value.Improvement.HasValue ? Math.Round(kv.Value.Improvement.Value, 1) : null,
+                PRs = kv.Value.PRs,
+                ExpectedPRs = Math.Round(kv.Value.ExpectedPRs, 1),
+                EligibleAthleteEvents = kv.Value.EligibleAthleteEvents
+            });
     }
 
     private static TeamResultViewModel BuildTeamResult(Meet meet, List<MeetTeamResult> teamResults)

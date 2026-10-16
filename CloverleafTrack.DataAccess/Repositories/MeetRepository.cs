@@ -300,4 +300,33 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
 
           return results.ToList();
      }
+
+    public async Task<List<MeetScoreMark>> GetMeetScoreMarksAsync()
+    {
+        using var connection = connectionFactory.CreateConnection();
+        const string sql = """
+                           SELECT
+                                p.Id AS PerformanceId,
+                                p.MeetId,
+                                m.Date AS MeetDate,
+                                m.MeetLevel,
+                                s.StartDate AS SeasonStartDate,
+                                p.EventId,
+                                p.AthleteId,
+                                CAST(CASE WHEN e.EventType IN (0, 2, 4, 5) THEN 1 ELSE 0 END AS BIT) AS IsFieldEvent,
+                                CASE WHEN e.EventType IN (0, 2, 4, 5) THEN p.DistanceInches ELSE p.TimeSeconds END AS Value,
+                                pp.Percentile,
+                                COALESCE(es.EventMarkCount, 0) AS EventMarkCount
+                           FROM
+                                Performances p
+                                INNER JOIN Meets m ON m.Id = p.MeetId
+                                INNER JOIN Seasons s ON s.Id = m.SeasonId
+                                INNER JOIN Events e ON e.Id = p.EventId
+                                LEFT JOIN PerformancePercentiles pp ON pp.PerformanceId = p.Id
+                                LEFT JOIN EventStatistics es ON es.EventId = p.EventId
+                           """;
+
+        var marks = await connection.QueryAsync<MeetScoreMark>(sql);
+        return marks.ToList();
+    }
 }

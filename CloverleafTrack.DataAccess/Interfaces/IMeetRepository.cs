@@ -13,4 +13,7 @@ public interface IMeetRepository
     Task<int> GetPerformanceCountForMeetAsync(int meetId);
     Task<List<MeetParticipant>> GetParticipantsForMeetAsync(int meetId);
     Task<List<MeetTeamResult>> GetTeamResultsForMeetsAsync(List<int> meetIds);
+
+    /// <summary>Every performance in the database with the meet/season/percentile context MeetScore needs (history is required to detect PRs).</summary>
+    Task<List<MeetScoreMark>> GetMeetScoreMarksAsync();
 }

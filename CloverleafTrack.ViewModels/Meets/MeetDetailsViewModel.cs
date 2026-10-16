@@ -16,6 +16,8 @@ public class MeetDetailsViewModel
     public string SeasonName { get; set; } = string.Empty;
     public MeetType MeetType { get; set; }
 
+    public MeetScoreViewModel? MeetScore { get; set; }
+
     public int TotalPerformances { get; set; }
     public int TotalPRs { get; set; }
     public int TotalSchoolRecords { get; set; }

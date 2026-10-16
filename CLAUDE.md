@@ -130,6 +130,7 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 | `ScoringTemplatePlace` | Id, ScoringTemplateId, Place, Points |
 | `MeetParticipant` | Id, MeetId, SchoolName, SortOrder |
 | `MeetEventScoringOverride` | Id, MeetId, EventId, ScoringTemplateId |
+| `MeetScoreMark` / `MeetScoreResult` | Not tables. Flattened per-performance input to, and result of, `MeetScoreCalculator` (see MeetScore section) |
 | `MeetEntry` | Id, MeetId, EventId, AthleteId? (null for relay), PerformanceId? (null until result entered), Athletes (relay junction) |
 | `MeetEntryAthlete` | Id, MeetEntryId, AthleteId |
 | `MeetPlacing` | Id, MeetId, PerformanceId, MeetParticipantId? (null for invitational), Place, FullPoints, SplitPoints |
@@ -447,6 +448,18 @@ SQL Server's NULL != NULL behavior in unique indexes means these two filtered in
 
 ### Meet details page badges
 `Views/Meets/Details.cshtml` Notes column now shows placing badges (🥇🥈🥉 or ordinal "4th", "5th", etc.) when `perf.HasPlacing` is true. One badge per `PerformancePlacingViewModel` in `perf.Placings`. Badge includes opponent school name for Dual/DoubleDual (`vs. School`), bare emoji for Invitational.
+
+---
+
+## MeetScore
+
+A 0-100 quality score per meet, **computed on read** (no stored column) by the pure static `CloverleafTrack.Services/MeetScoreCalculator.cs`. `MeetService.GetMeetScoresAsync` calls `IMeetRepository.GetMeetScoreMarksAsync()` (one query: every performance + meet date/level, season start, percentile, `EventStatistics.EventMarkCount`) and scores **all** meets together — PR detection needs full history — then looks up the requested meet(s). Surfaced as `MeetScoreViewModel` on `MeetDetailsViewModel.MeetScore` (hero card on `Views/Meets/Details.cshtml` with Peak/Depth/Improvement sub-scores) and `MeetListItemViewModel.MeetScore` (badge in `_MeetListItem.cshtml`). No new pages.
+
+- **Peak** (45%) = mean of the top 5 `PerformancePercentiles` in the meet. **Depth** (25%) = mean of the top 40 athlete-event bests (relay perf counts once). Both ignore marks with no percentile or whose event has `EventMarkCount < 10`.
+- **Improvement** (30%) = `50 + 100*(PRs - Expected)/(Eligible + 10)`, clamped 0-100. Individuals only. PR = meet's best beats best from strictly earlier-dated meets (complete-era marks only). Expected uses the empirical PR rate per prior-meet count (buckets 1..6+), derived from the data each call. Never uses `PersonalBest`/`SeasonBest` flags.
+- **Basis** (`MeetScoreBasis`): `Full` (above); `PeakOnly` for meets in seasons starting before 2020-12-01 (scoring-only data; shown with `*`, not comparable); `ImprovementOnly` for `MeetLevel.JV` in the complete era.
+- **Minimum size, otherwise no score** (the meet shows no badge): `Full` needs >= 15 athlete-event bests (`MinUnitsForFull`); `PeakOnly` needs >= 5 scorable marks; `ImprovementOnly` needs >= 10 eligible athlete-events. Without this, a state meet with 4 elite qualifiers averages to a near-perfect score. Constants live on `MeetScoreCalculator`.
+- No school-record bonus (deliberate — see BRAIN.md [C45]).
 
 ---
 
