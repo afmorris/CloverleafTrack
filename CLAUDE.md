@@ -103,6 +103,8 @@ enum SeasonStatus
     Draft = 1, Importing = 2, Partial = 3, RecordOnly = 4, Complete = 5
 }
 
+enum MeetLevel : short { Varsity = 1, JV = 2 }  // JV = e.g. Frosh-Soph invitationals
+
 enum MeetType : short
 {
     Dual = 1,       // two teams (us vs. one opponent)
@@ -123,7 +125,7 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 | Model | Key fields |
 |---|---|
 | `Season` | Id, Name, StartDate, EndDate, IsCurrentSeason, Status, ScoringEnabled, Meets |
-| `Meet` | Id, Name, Date, Environment, HandTimed, LocationId, SeasonId, EntryStatus, MeetType, ScoringTemplateId?, Participants, Slug (computed via Slugify), ResultsUrl |
+| `Meet` | Id, Name, Date, Environment, HandTimed, LocationId, SeasonId, EntryStatus, MeetType, MeetLevel (Varsity/JV — JV meets are excluded from percentile-based MeetScore components), ScoringTemplateId?, Participants, Slug (computed via Slugify), ResultsUrl |
 | `ScoringTemplate` | Id, Name, IsBuiltIn, Places |
 | `ScoringTemplatePlace` | Id, ScoringTemplateId, Place, Points |
 | `MeetParticipant` | Id, MeetId, SchoolName, SortOrder |

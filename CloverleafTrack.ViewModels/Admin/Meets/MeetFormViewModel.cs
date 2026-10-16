@@ -40,6 +40,9 @@ public class MeetFormViewModel
     [Display(Name = "Meet Type")]
     public MeetType MeetType { get; set; } = MeetType.Dual;
 
+    [Display(Name = "Meet Level")]
+    public MeetLevel MeetLevel { get; set; } = MeetLevel.Varsity;
+
     [Display(Name = "Scoring Template")]
     public int? ScoringTemplateId { get; set; }
 
