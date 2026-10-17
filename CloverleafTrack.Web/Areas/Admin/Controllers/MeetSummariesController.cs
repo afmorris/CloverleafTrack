@@ -12,8 +12,7 @@ public class MeetSummariesController(
     IAdminSeasonRepository seasonRepository,
     IMeetSummaryRepository summaryRepository,
     IMeetSummaryService summaryService,
-    IMeetSummaryLinkService linkService,
-    ILogger<MeetSummariesController> logger) : Controller
+    IMeetSummaryLinkService linkService) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(int? seasonId)
@@ -59,54 +58,38 @@ public class MeetSummariesController(
         });
     }
 
-    /// <summary>Generates a draft for one meet (force = regenerate even if the fact sheet is unchanged).</summary>
-    [HttpPost]
-    public async Task<IActionResult> Generate(int meetId, int seasonId, bool force = true)
+    /// <summary>
+    /// The season's meets with their summary state, as JSON, so a Claude Code session can enumerate what to write.
+    /// Pass seasonId or seasonName (e.g. "2025-2026"); defaults to the current season.
+    /// </summary>
+    [HttpGet]
+    public async Task<IActionResult> List(int? seasonId, string? seasonName)
     {
-        try
-        {
-            var outcome = await summaryService.GenerateAsync(meetId, force);
-            TempData["SuccessMessage"] = outcome switch
-            {
-                SummaryGenerationOutcome.Generated => "Draft generated.",
-                SummaryGenerationOutcome.UpToDate => "Summary is already up to date with the meet's data.",
-                _ => "That meet has no performances to summarize."
-            };
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Summary generation failed for meet {MeetId}", meetId);
-            TempData["ErrorMessage"] = $"Generation failed: {ex.Message}";
-        }
-        return RedirectToAction(nameof(Index), new { seasonId });
-    }
+        var seasons = await seasonRepository.GetAllAsync();
+        var season = seasons.FirstOrDefault(s => seasonId.HasValue ? s.Id == seasonId : seasonName != null ? s.Name == seasonName : s.IsCurrentSeason);
+        if (season == null) return NotFound("Season not found.");
 
-    /// <summary>Generates drafts for every meet in the season that has none yet. Sequential; can take a minute or two.</summary>
-    [HttpPost]
-    public async Task<IActionResult> GenerateMissing(int seasonId, CancellationToken cancellationToken)
-    {
-        var meets = await meetRepository.GetFilteredAsync(null, seasonId, null, null);
-        var existing = (await summaryRepository.GetForMeetsAsync(meets.Select(m => m.Id))).Select(s => s.MeetId).ToHashSet();
-
-        int generated = 0, skipped = 0;
-        var failures = new List<string>();
-        foreach (var meet in meets.Where(m => !existing.Contains(m.Id)).OrderBy(m => m.Date))
+        var meets = (await meetRepository.GetFilteredAsync(null, season.Id, null, null)).OrderBy(m => m.Date).ToList();
+        var summaries = (await summaryRepository.GetForMeetsAsync(meets.Select(m => m.Id))).ToDictionary(s => s.MeetId);
+        return Json(new
         {
-            try
+            seasonId = season.Id,
+            seasonName = season.Name,
+            meets = meets.Select(m =>
             {
-                var outcome = await summaryService.GenerateAsync(meet.Id, force: false, cancellationToken);
-                if (outcome == SummaryGenerationOutcome.Generated) generated++; else skipped++;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Summary generation failed for meet {MeetId}", meet.Id);
-                failures.Add($"{meet.Name}: {ex.Message}");
-            }
-        }
-
-        TempData["SuccessMessage"] = $"Generated {generated} draft(s); {skipped} skipped (no performances).";
-        if (failures.Count > 0) TempData["ErrorMessage"] = "Failed: " + string.Join(" | ", failures);
-        return RedirectToAction(nameof(Index), new { seasonId });
+                summaries.TryGetValue(m.Id, out var s);
+                return new
+                {
+                    meetId = m.Id,
+                    name = m.Name,
+                    date = m.Date.ToString("yyyy-MM-dd"),
+                    level = m.MeetLevel.ToString(),
+                    hasSummary = s != null,
+                    status = s?.Status.ToString(),
+                    model = s?.Model
+                };
+            })
+        });
     }
 
     /// <summary>Raw fact sheet JSON for a meet — lets a Claude Code session (or you) read exactly what the model is given.</summary>

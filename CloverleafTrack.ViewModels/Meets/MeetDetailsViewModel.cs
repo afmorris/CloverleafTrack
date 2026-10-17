@@ -18,6 +18,12 @@ public class MeetDetailsViewModel
 
     public MeetScoreViewModel? MeetScore { get; set; }
 
+    /// <summary>Approved AI recap, plain text. Null unless a reviewer approved it.</summary>
+    public string? SummaryText { get; set; }
+
+    /// <summary>SummaryText HTML-encoded with athlete and event names linked. Safe for Html.Raw.</summary>
+    public string? SummaryHtml { get; set; }
+
     public int TotalPerformances { get; set; }
     public int TotalPRs { get; set; }
     public int TotalSchoolRecords { get; set; }

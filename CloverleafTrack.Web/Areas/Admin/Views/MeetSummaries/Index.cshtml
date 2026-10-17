@@ -46,10 +46,6 @@
                 }
             </select>
         </form>
-        <form asp-action="GenerateMissing" method="post" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').textContent = 'Generating… (can take a minute or two)';">
-            <input type="hidden" name="seasonId" value="@Model.SeasonId" />
-            <button type="submit" class="btn btn-green">Generate missing drafts</button>
-        </form>
     </div>
 </div>
 
@@ -95,10 +91,6 @@
                         <button class="btn btn-green">Approve</button>
                     </form>
                 }
-                <form asp-action="Generate" method="post" onsubmit="return confirm('Regenerate? This replaces the current text with a new draft.');">
-                    <input type="hidden" name="meetId" value="@row.MeetId" /><input type="hidden" name="seasonId" value="@Model.SeasonId" />
-                    <button class="btn">Regenerate</button>
-                </form>
                 <form asp-action="Delete" method="post" onsubmit="return confirm('Delete this summary?');">
                     <input type="hidden" name="id" value="@row.SummaryId" /><input type="hidden" name="seasonId" value="@Model.SeasonId" />
                     <button class="btn btn-red">Delete</button>
@@ -115,12 +107,7 @@
         }
         else
         {
-            <div class="actions">
-                <form asp-action="Generate" method="post">
-                    <input type="hidden" name="meetId" value="@row.MeetId" /><input type="hidden" name="seasonId" value="@Model.SeasonId" />
-                    <button class="btn">Generate draft</button>
-                </form>
-            </div>
+            <div class="meta">No summary yet. Ask Claude in chat to write one.</div>
         }
     </div>
 }

@@ -18,6 +18,11 @@
     var meetDescription = CloverleafTrack.Web.Utilities.SeoHelper.Truncate(
         $"{Model.Name} — {Model.Date:MMM d, yyyy}{meetLocationPart}. {Model.TotalPerformances} performance{(Model.TotalPerformances == 1 ? "" : "s")}, {Model.TotalPRs} PR{(Model.TotalPRs == 1 ? "" : "s")}, {Model.TotalSchoolRecords} school record{(Model.TotalSchoolRecords == 1 ? "" : "s")}.");
 
+    if (!string.IsNullOrWhiteSpace(Model.SummaryText))
+    {
+        meetDescription = CloverleafTrack.Web.Utilities.SeoHelper.Truncate(Model.SummaryText);
+    }
+
     var meetPath = Context.Request.Path.Value ?? "/meets";
 
     ViewData["Seo"] = new SeoMetadataViewModel
@@ -94,6 +99,11 @@
             </div>
         }
     </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.SummaryHtml))
+    {
+        <p class="mb-6 text-base leading-relaxed text-gray-700 dark:text-gray-300" style="max-width:65ch">@Html.Raw(Model.SummaryHtml)</p>
+    }
 
     <!-- Impact strip -->
     <div class="mb-8">
