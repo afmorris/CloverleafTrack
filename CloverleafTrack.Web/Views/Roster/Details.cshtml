@@ -53,7 +53,9 @@
         </div>
         @if (!string.IsNullOrWhiteSpace(Model.SummaryHtml))
         {
-            <p class="mb-5 text-base leading-relaxed text-gray-700 dark:text-gray-300" style="max-width:65ch">@Html.Raw(Model.SummaryHtml)</p>
+            <div class="mb-5 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 px-5 py-4">
+                <p class="text-base leading-relaxed text-gray-700 dark:text-gray-300">@Html.Raw(Model.SummaryHtml)</p>
+            </div>
         }
         <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
             <div class="metric-strip">
