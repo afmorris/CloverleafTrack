@@ -55,6 +55,15 @@ builder.Services.AddScoped<IAdminMeetPlacingRepository, AdminMeetPlacingReposito
 builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 builder.Services.AddScoped<IAdminSchoolRepository, AdminSchoolRepository>();
 builder.Services.AddScoped<IAdminMeetTeamResultRepository, AdminMeetTeamResultRepository>();
+builder.Services.AddScoped<IMeetSummaryRepository, MeetSummaryRepository>();
+
+// AI meet summaries. The API key comes from user-secrets (Anthropic:ApiKey) or the ANTHROPIC_API_KEY env var — never appsettings.json.
+builder.Services.AddSingleton(new ClaudeOptions(
+    builder.Configuration["Anthropic:ApiKey"] ?? Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY"),
+    builder.Configuration["Anthropic:Model"] ?? "claude-opus-5-5"));
+builder.Services.AddHttpClient<ISummaryTextGenerator, ClaudeSummaryTextGenerator>(c => c.Timeout = TimeSpan.FromMinutes(2));
+builder.Services.AddScoped<IMeetSummaryService, MeetSummaryService>();
+builder.Services.AddScoped<IMeetSummaryLinkService, MeetSummaryLinkService>();
 
 var app = builder.Build();
 

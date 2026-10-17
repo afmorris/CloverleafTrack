@@ -97,6 +97,7 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    p.Id as PerformanceId,
                                    e.Id as EventId,
                                    e.Name as EventName,
+                                   e.EventKey as EventKey,
                                    e.SortOrder as EventSortOrder,
                                    e.EventCategory,
                                    e.Gender as EventGender,

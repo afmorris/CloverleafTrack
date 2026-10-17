@@ -7,6 +7,7 @@ public class MeetPerformanceDto
     public int PerformanceId { get; set; }
     public int EventId { get; set; }
     public string EventName { get; set; } = string.Empty;
+    public string EventKey { get; set; } = string.Empty;
     public int EventSortOrder { get; set; }
     public EventCategory EventCategory { get; set; }
     public Gender EventGender { get; set; }

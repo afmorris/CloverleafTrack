@@ -224,9 +224,10 @@ public class MeetService(
         Dictionary<int, List<MeetPlacing>> placingLookup,
         Dictionary<int, PerformanceAttemptSeriesViewModel> attemptLookup)
     {
-        // Separate relays from non-relays based on event name
-        var relays = performances.Where(p => IsRelay(p.EventName)).ToList();
-        var nonRelays = performances.Where(p => !IsRelay(p.EventName)).ToList();
+        // Separate relays from non-relays. EventType is authoritative: medley relays ("800M Sprint Medley") have no
+        // "Relay"/"4x" in their names and were silently dropped when classification was name-only (see BRAIN.md [C48]).
+        var relays = performances.Where(IsRelay).ToList();
+        var nonRelays = performances.Where(p => !IsRelay(p)).ToList();
 
         // Group relays by their type
         var runningRelays = relays.Where(p => IsRunningRelay(p.EventType)).ToList();
@@ -354,6 +355,10 @@ public class MeetService(
 
         return vm;
     }
+
+    private static bool IsRelay(MeetPerformanceDto p) =>
+        p.EventType is EventType.RunningRelay or EventType.FieldRelay or EventType.JumpRelay or EventType.ThrowsRelay
+        || IsRelay(p.EventName);
 
     private static bool IsRelay(string eventName)
     {

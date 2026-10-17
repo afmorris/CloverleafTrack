@@ -15,7 +15,7 @@ This repository uses two files to give AI assistants full context:
 
 ### How to use these files
 
-**When starting a new session:** Read `CLAUDE.md` first for the full architectural picture, then read `BRAIN.md` to understand decisions and gotchas that are not obvious from reading the code alone.
+**When starting a new session:** Read `CLAUDE.md` first — it has the architecture, conventions, and the **Active Gotchas** section at the end. Do **not** read `BRAIN.md` end to end (it is ~1,900 lines of history). Treat it as an archive: `grep -n "keyword" BRAIN.md` for the area you are about to touch (a table, SP, view, JS module, or an entry id like `[C31]`) and read only the matching entries. Each Active Gotcha cites the `[C#]` entry with the full story.
 
 **When completing a change:** Every accepted change that is not self-evident from reading the current code **must** be logged in `BRAIN.md` before the session ends. This includes:
 - Bug fixes where the root cause was non-obvious
@@ -23,6 +23,8 @@ This repository uses two files to give AI assistants full context:
 - Architectural decisions and the reasons behind them
 - Patterns established to avoid a class of bugs
 - Any "watch out" knowledge a future AI would need to avoid re-introducing a problem
+
+If the entry's watch-out is a trap that will keep applying (not just a one-time explanation), also add a one-line item to **Active Gotchas** at the end of this file, citing the `[C#]`. Remove gotchas there when they stop being true.
 
 Each `BRAIN.md` entry must include: **what changed**, **why**, **key files**, and **watch out** notes. Entries are never deleted — the log is append-only and cumulative. If a later change supersedes an earlier one, add a new entry that references and overrides it rather than editing the old one.
 
@@ -182,6 +184,7 @@ Slug generation uses the `Slugify` NuGet package (`SlugHelper`). `Meet.Slug` is 
 | `SeasonsController` | `/Admin/Seasons` | CRUD seasons (now includes ScoringEnabled) |
 | `ScoringTemplatesController` | `/Admin/ScoringTemplates` | CRUD scoring templates + places; built-in templates cannot be deleted |
 | `MeetEntriesController` | `/Admin/MeetEntries` | Pre-meet entry tracking + post-meet result/placing entry |
+| `MeetSummariesController` | `/Admin/MeetSummaries` | Review/generate/approve AI meet recaps (`MeetSummaries` table; not yet shown publicly — see BRAIN.md [C48]) |
 
 Admin area has **no authentication** — it is expected to be protected at the infrastructure layer.
 
@@ -573,3 +576,41 @@ See `docs/testing.md` for full test strategy and coverage details.
 - For placing/scoring: use `FullPoints` / `SplitPoints` from `MeetPlacings` — do not recompute points in application code. `GetTemplatePointsAsync` handles the resolution chain.
 - `MeetEntry.AthleteId` is NULL for relay entries. Relay athletes are in `MeetEntryAthletes`. The 4-event limit check uses `GetAthleteEventCountForMeetAsync` which counts both individual entries and relay team memberships via UNION ALL.
 - When adding new DI registrations to `Program.cs`, follow the existing grouping: public repos first, then admin repos, then services.
+
+---
+
+## Active Gotchas
+
+Curated traps that still apply. Full context for each lives in `BRAIN.md` under the cited entry; when a gotcha stops being true, delete it here (BRAIN.md stays as history).
+
+**Data & SQL**
+- `AllTimeRank` and `Percentile` on `Performance` are C#-only properties, `null` unless the query adds the `Leaderboards` / `PerformancePercentiles` subquery or join. In Dapper multi-mapping the subquery column must sit **after `p.*` and before the next model's `Id` split column**, or it maps to the wrong type. `null` does not mean "no data". [C22, C24, C31]
+- `p.SchoolRecord`, and relay `PersonalBest`, are stale/unreliable — use `AllTimeRank == 1` and best-per-event. `sp_RebuildLeaderboards` fully truncates and rebuilds `Leaderboards`, `PerformancePercentiles`, `EventStatistics`; never update them incrementally. [C8, C9, C17, C19, C31]
+- `AthleteRepository` UNION ALL: both branches must select `SeasonStartDate` (outer ORDER BY needs it). [C7]
+- `SaveAttemptSeriesAsync` is delete-then-insert for the whole series — never pass a partial series. `IsFieldEventType` (controller) intentionally differs from the JS/Razor `isFieldEvent` toggle (excludes `FieldRelay`). [C32]
+- Single-mark events get percentile 100 on purpose; `Tests/TestSupport/PercentileMath.cs` is a test-only mirror of the SQL and must be updated with it. [C31]
+- T-SQL changes (SP, schema) have historically not been run against a real SQL Server in the dev sandbox — verify manually. [C31, C32]
+
+**Routing, SEO & static export**
+- Public site is a static export (`ctf` script, not live ASP.NET). Absolute URLs come only from `SeoUrls` (`ISeoUrlBuilder`), never `Request.Host`. Anything not linked from HTML (`/sitemap.xml`, `/img/hero-home.jpg`, `/favicon.ico`) is not exported unless the export script requests it. Season pages are intentionally excluded from the public export. [C44]
+- An action with an explicit `[HttpGet("...")]` no longer matches the conventional route; legacy redirects are separate actions. `/leaderboard` → `/events`. [C28]
+- JSON-LD builders must stay `Dictionary<string, object?>` — `@type`/`@context` can't be C# identifiers. `robots.txt` hard-codes the production domain. [C30]
+
+**Razor & frontend**
+- `ScopeValue`-style values interpolated into inline JS must be rebuilt from validated parts, never echoed from the query string (Razor `@` encoding is HTML-safe, not JS-string-safe). [C33]
+- Inline `<script>` that touches `window.CtfFilters` must wait for `DOMContentLoaded` (`filters.js` is `defer`). Layout overrides of `window.applyFilters` must load after `filters.js`. [C17, C33, C42]
+- Razor: don't nest `@{ }` inside an open code block (RZ1010); don't put tag helpers inside a local `void` function (CS4033) — use an outer `@foreach`. [C22, C38]
+- Chart.js in hidden panels: lazy-initialize on first open (0×0 canvas otherwise). `RawValue` goes to the chart as-is; the axis uses `reverse: !isField`, don't negate. [C15, C24]
+- Tailwind: new classes only exist after rebuilding `wwwroot/css/site.css` (`pnpm run dev` / build). Stale `site.css` silently drops new classes. [C16, C24, C29]
+- Don't hand-author sort buttons/carets — `sortable-tables.js` generates them from `data-sort-col`. [C29]
+- Mobile table→card layouts use flexbox on `<tr>`, never CSS Grid. For layout verification trust CDP-measured `getBoundingClientRect()` over `chrome --headless --screenshot`. [C42]
+- Explicit abbreviation maps, not `[..2]` slicing (`Junior`→`Ju` bug). Unit tests don't catch visual/label bugs on charts. [C40, C41]
+
+**Services & tests**
+- AI summaries: bump `MeetSummaryPrompt.Version` when the prompt/fact sheet changes; the model must only see the fact sheet (corrected flags), and only `Approved` text may render publicly. Needs `Anthropic:ApiKey` / `ANTHROPIC_API_KEY`. [C48]
+- `LeaderboardService` needs `ISeasonRepository` in test setup; `MeetService` needs `IMeetPlacingRepository` mocked to return an empty list (not null) or `GroupBy` NREs. [C25, C33]
+- `GetCurrentSeasonAsync()` returns a year, not an Id. `SeasonProgressViewModel.PercentComplete` truncates by design. [C13, C14]
+- `MeetScore` PRs are date-derived and differ from `Meet.PRCount` (flag-based) by design; percentiles drift as the all-time population grows. [C45]
+
+**Build & deploy**
+- Docker `ARG`s are not inherited across stages; redeclare per stage. The footer no longer shows a build SHA ([C46]); `BuildMetadataHelper` and the `SourceRevisionId` csproj properties are unused leftovers. [C34, C46]

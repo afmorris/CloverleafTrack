@@ -1,6 +1,6 @@
 # BRAIN.md — AI-Readable Accepted Changes Log
 
-This file documents all accepted, shipped changes to CloverleafTrack that are not obvious from reading the current code. It is written for future AI assistants to load alongside CLAUDE.md. Read CLAUDE.md first for architecture context, then use this file to understand what changed from the original implementation and why.
+This file documents all accepted, shipped changes to CloverleafTrack that are not obvious from reading the current code. It is written for future AI assistants to load alongside CLAUDE.md. Read CLAUDE.md first for architecture context and its **Active Gotchas** section. This file is an archive: do not read it end to end — grep it for the area you are touching (or an entry id like `[C31]`) to see what changed from the original implementation and why.
 
 ---
 
@@ -1856,3 +1856,52 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** `Meet.PRCount` (PersonalBest flag count) and MeetScore's PRs differ by design — the latter is computed from dates. Percentiles are as of the last `sp_RebuildLeaderboards`, so scores drift slightly as new marks enter the all-time population. Relays count in Peak/Depth but not Improvement.
 
 **Key files:** `CloverleafTrack.Services/MeetScoreCalculator.cs`, `MeetService.cs`, `CloverleafTrack.DataAccess/Repositories/MeetRepository.cs`, `CloverleafTrack.Models/MeetScore*.cs`, `Views/Meets/Details.cshtml`, `Views/Shared/_MeetListItem.cshtml`, `CloverleafTrack.Tests/Unit/Services/MeetScoreCalculatorTests.cs`.
+
+### [C46] Footer Build Version Removed
+
+**What changed:** The footer no longer renders `· v<commit sha>` after "Made with ♥ by Coach Tony". The `BuildMetadataHelper` call was dropped from `Views/Shared/_Layout.cshtml`.
+
+**Why:** Owner request — the version identifier isn't wanted on the public site (see [C27] and its follow-up fix for the history of the `vunknown` footer bug).
+
+**Watch out:** `BuildMetadataHelper` and the `.csproj` `SourceRevisionId`/`InformationalVersion` properties are left in place, now unused by any view. Remove them in a separate cleanup if desired.
+
+**Key files:** `CloverleafTrack.Web/Views/Shared/_Layout.cshtml`.
+
+### [C47] BRAIN.md Demoted to a Grep-On-Demand Archive; Active Gotchas Added to CLAUDE.md
+
+**What changed:** CLAUDE.md no longer tells sessions to read this file at start. It now has an **Active Gotchas** section (~30 one-line traps, each citing the `[C#]` entry here) and says to grep BRAIN.md for the area being touched. This file's header was updated to match. No entries were edited or removed.
+
+**Why:** BRAIN.md reached ~1,900 lines; reading it every session cost far more than it returned, and superseded entries (e.g. the `vunknown` footer saga, [C27]/[C34]/[C46]) read as current behavior. Memory was rejected as the home for this knowledge: it isn't checked in, so it wouldn't reach other machines or contributors.
+
+**Watch out:** Active Gotchas is a hand-curated digest — when a change adds a lasting trap, add a line there as well as logging here; when a gotcha stops being true, delete it from CLAUDE.md (history stays here). Gotchas were compiled from the "Watch out" blocks of C2–C46; entries with only one-time context were deliberately left out.
+
+**Key files:** `CLAUDE.md`, `BRAIN.md`.
+
+### [C48] AI Meet Summaries — Admin Review Slice (meets only, not yet public)
+
+**What changed:** New `MeetSummaries` table (`docs/migration_meet_summaries.sql`, also appended to `docs/schema.sql`; one row per meet, `Status` Draft/Approved, `InputHash`, `Model`). `MeetSummaryPrompt` (Services) builds a JSON fact sheet from `MeetDetailsViewModel` and holds the system prompt; `MeetSummaryService` regenerates only when the fact-sheet hash changes (or `force`); `ClaudeSummaryTextGenerator` calls the Anthropic Messages API over plain `HttpClient` behind `ISummaryTextGenerator`. Admin review page at `/Admin/MeetSummaries` (per-season list, public-page/edit-meet/entries links, generate/regenerate/approve/edit/delete, "generate missing drafts"). Nothing public reads summaries yet.
+
+**Why:** Owner wants AI-written recaps, reviewed by a human before publishing. Generation is offline/admin-triggered, not per-request, because the public site is a static export ([C44]).
+
+**Decisions:** The model sees only the fact sheet, using the corrected flags (school record = `AllTimeRank == 1`; relay rows never get `pr`; `allTimeRank` only if <= 10) so stale `SchoolRecord`/relay `PersonalBest` flags cannot leak into text. The prompt forbids quoting MeetScore. Editing text or regenerating resets to Draft; only Approved should ever render publicly. API key: `Anthropic:ApiKey` (user-secrets) or `ANTHROPIC_API_KEY`; model `Anthropic:Model`, default `claude-opus-5-5` (owner decision, 2026-10-16: use Opus for all summaries, after a blind Sonnet-vs-Opus comparison on 7 meets where Opus had no unsupported claims and Sonnet had one).
+
+**Medley-relay bug found and fixed along the way:** `MeetService.BuildOrderedEventGroups` classified relays by event *name* ("Relay"/"4x"), so medley relays ("800M Sprint Medley", "4K Distance Medley", "1600M/2400M Intermediate Medley") fell into no bucket and were silently dropped from the public meet page (e.g. 2026 Fairview Warrior Relays lost 8 of 47 performances, incl. 4 school records). Relay-ness now also keys off `EventType` (RunningRelay/FieldRelay/JumpRelay/ThrowsRelay). Meet-page `TotalPerformances`/`TotalSchoolRecords` come from raw rows, so a mismatch with listed results is the tell for this class of bug.
+
+**Manual authoring path:** `GET /Admin/MeetSummaries/FactSheet?meetId=` returns the exact fact-sheet JSON and `POST /Admin/MeetSummaries/Import` saves externally written text as a Draft (hash computed from the current fact sheet) — used to write the 2025-2026 drafts from a Claude Code session without an API key. Drafts written that way carry Model "claude-sonnet-5-5 (written in Claude Code)".
+
+**Linking:** the review page renders summaries through `SummaryLinkifier` (Services, pure) via `MeetSummaryLinkService`: athlete names -> `/roster/{slug}`, event names -> `/events/{eventkey}`. Stored text stays plain; linking happens at render, so the same code can serve the public page later. Athletes/events come from that meet's own performances (`MeetPerformanceDto.EventKey` was added for this). A bare surname links only when it is unique among the meet's athletes ("Gray" with Adam and Ethan stays plain). Events exist per gender, so each mention is resolved by the closer of (a nearest "boys"/"girls"/"mixed" earlier in the sentence) and (the nearest named athlete's gender), else the only gender the meet has that event for, else left unlinked. Bare relay names ("4x100M, 4x200M and 4x400M relays") link only when followed by a comma, "and", or "relay(s)". Open question for the public page: link `target`/`rel` (the admin view sets new-tab via script).
+
+**Current data (prompt Version 2):** all 21 2025-2026 meet summaries are Opus-written Drafts (Model label "claude-opus (written by subagent in Claude Code)"), imported via the Import endpoint rather than the API. **Prompt v2 (event names):** `MeetSummaryPrompt` now requires events to be named exactly as in the fact sheet ("800M", "100M Hurdles", "4x400M Relay") with "boys"/"girls" before the first event in a clause, so `SummaryLinkifier` can link them. All 21 drafts were regenerated with Opus under Version "2": 156 event links and every athlete mention link on the review page, no unlinked mentions, event gender spot-verified. Without this rule models write "800 meters"/"100 hurdles" and event links silently fail to attach.
+
+**Watch out:** `MeetSummaryPrompt.Version` must be bumped when the prompt or fact-sheet shape changes. `System.Text.Json` `DefaultIgnoreCondition` does NOT drop null *dictionary* values — the fact sheet strips nulls explicitly. No staleness indicator on the review page yet (hash is only checked at generation). Run the migration before opening the page.
+
+**Key files:** `CloverleafTrack.Services/MeetSummary*.cs`, `ClaudeSummaryTextGenerator.cs`, `DataAccess/Repositories/MeetSummaryRepository.cs`, `Web/Areas/Admin/Controllers/MeetSummariesController.cs`, `Views/MeetSummaries/Index.cshtml`, `Tests/Unit/Services/MeetSummaryTests.cs`.
+
+### [C49] Search Hotkey Hint Is Platform-Aware
+
+**What changed:** The desktop search input's placeholder no longer hard-codes "(⌘K)". `search.js` sets it at load: `⌘K` on Mac/iOS, `Ctrl+K` elsewhere, and no hint on hover-less (touch-only) devices.
+**Why:** ⌘ is meaningless on Windows/Linux. The keydown handler already accepted both `ctrlKey` and `metaKey`, so only the label was wrong.
+**Key files:** `Views/Shared/_Layout.cshtml`, `wwwroot/js/search.js`.
+**Watch out:** The static export's HTML has the plain "Search…" placeholder; the hint appears only after JS runs (platform can't be known server-side).
+
+**[C49] addendum:** Removed the admin layout footer hint "Press Ctrl+/ for keyboard shortcuts" — no handler for Ctrl+/ exists anywhere, so it advertised a nonexistent feature.
