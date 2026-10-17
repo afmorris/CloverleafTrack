@@ -20,8 +20,9 @@ public record LinkableEvent(string Name, string Key, Gender Gender);
 /// </summary>
 public static class SummaryLinkifier
 {
-    public static string Linkify(string text, IReadOnlyList<LinkableAthlete> athletes, IReadOnlyList<LinkableEvent> events)
+    public static string Linkify(string text, IReadOnlyList<LinkableAthlete> athletes, IReadOnlyList<LinkableEvent> events, string? linkClass = null)
     {
+        var classAttr = string.IsNullOrEmpty(linkClass) ? string.Empty : $" class=\"{WebUtility.HtmlEncode(linkClass)}\"";
         if (string.IsNullOrEmpty(text)) return string.Empty;
 
         // Phrase -> athlete. Full names always; a bare surname only when it identifies exactly one athlete in the meet.
@@ -74,12 +75,12 @@ public static class SummaryLinkifier
             if (athleteByPhrase.TryGetValue(m.Value, out var athlete))
             {
                 if (athlete.Gender != null) { lastAthleteGender = athlete.Gender; lastAthletePos = m.Index; }
-                sb.Append($"<a href=\"/roster/{WebUtility.HtmlEncode(athlete.Slug)}\">{WebUtility.HtmlEncode(m.Value)}</a>");
+                sb.Append($"<a href=\"/roster/{WebUtility.HtmlEncode(athlete.Slug)}\"{classAttr}>{WebUtility.HtmlEncode(m.Value)}</a>");
             }
             else if (eventsByPhrase.TryGetValue(m.Value, out var candidates) &&
                      Resolve(candidates, text, m.Index, sentenceStart, lastAthleteGender, lastAthletePos) is { } evt)
             {
-                sb.Append($"<a href=\"/events/{WebUtility.HtmlEncode(evt.Key.ToLowerInvariant())}\">{WebUtility.HtmlEncode(m.Value)}</a>");
+                sb.Append($"<a href=\"/events/{WebUtility.HtmlEncode(evt.Key.ToLowerInvariant())}\"{classAttr}>{WebUtility.HtmlEncode(m.Value)}</a>");
             }
             else
             {

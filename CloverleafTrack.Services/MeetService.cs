@@ -13,7 +13,8 @@ namespace CloverleafTrack.Services;
 public class MeetService(
     IMeetRepository meetRepository,
     IMeetPlacingRepository meetPlacingRepository,
-    IPerformanceAttemptRepository? attemptRepository = null) : IMeetService
+    IPerformanceAttemptRepository? attemptRepository = null,
+    IMeetSummaryRepository? summaryRepository = null) : IMeetService
 {
     public async Task<MeetsIndexViewModel> GetMeetsIndexAsync()
     {
@@ -143,6 +144,10 @@ public class MeetService(
         var teamResult = BuildTeamResult(meet, teamResultsTask.Result);
         var scores = await GetMeetScoresAsync();
 
+        // Only reviewed text is ever shown publicly: a Draft summary must not reach the page.
+        var summary = summaryRepository != null ? await summaryRepository.GetForMeetAsync(meet.Id) : null;
+        var approvedSummary = summary is { Status: SummaryStatus.Approved } ? summary : null;
+
         return new MeetDetailsViewModel
         {
             Name = meet.Name,
@@ -155,6 +160,9 @@ public class MeetService(
             SeasonName = meet.Season.Name,
             MeetType = meet.MeetType,
             MeetScore = scores.GetValueOrDefault(meet.Id),
+            SummaryText = approvedSummary?.SummaryText,
+            SummaryHtml = approvedSummary == null ? null
+                : MeetSummaryLinkService.Linkify(approvedSummary.SummaryText, performances, "text-blue-600 dark:text-blue-400 hover:underline"),
             Participants = participants,
             HasScoring = placings.Count > 0,
             TeamResult = teamResult.HasResult ? teamResult : null,

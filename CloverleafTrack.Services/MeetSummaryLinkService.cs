@@ -1,3 +1,4 @@
+using CloverleafTrack.DataAccess.Dtos;
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models.Enums;
 using Slugify;
@@ -12,9 +13,12 @@ public interface IMeetSummaryLinkService
 
 public class MeetSummaryLinkService(IMeetRepository meetRepository) : IMeetSummaryLinkService
 {
-    public async Task<string> LinkifyAsync(int meetId, string text)
+    public async Task<string> LinkifyAsync(int meetId, string text) =>
+        Linkify(text, await meetRepository.GetPerformancesForMeetAsync(meetId));
+
+    /// <summary>Links a summary using a meet's already-loaded performances (no extra query).</summary>
+    public static string Linkify(string text, IReadOnlyList<MeetPerformanceDto> performances, string? linkClass = null)
     {
-        var performances = await meetRepository.GetPerformancesForMeetAsync(meetId);
         var slugs = new SlugHelper();
 
         var athletes = new Dictionary<string, LinkableAthlete>(StringComparer.Ordinal);
@@ -39,6 +43,6 @@ public class MeetSummaryLinkService(IMeetRepository meetRepository) : IMeetSumma
             .DistinctBy(e => e.Key)
             .ToList();
 
-        return SummaryLinkifier.Linkify(text, athletes.Values.ToList(), events);
+        return SummaryLinkifier.Linkify(text, athletes.Values.ToList(), events, linkClass);
     }
 }
