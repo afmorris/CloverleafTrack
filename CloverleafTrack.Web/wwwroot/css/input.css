@@ -257,3 +257,38 @@ details[open] .details-arrow {
     .roster-table td.col-pct { flex: 1 1 100%; order: 3; }
     .roster-table td.col-trend { display: none; }
 }
+
+/* MeetScore list badge. Plain CSS so it works without a Tailwind rebuild. */
+.meetscore-badge{display:inline-flex;align-items:center;padding:.125rem .375rem;border-radius:.25rem;font-size:.75rem;line-height:1;font-weight:700;font-variant-numeric:tabular-nums}
+.meetscore-badge-gold{background:#fef3c7;color:#92400e}
+.meetscore-badge-green{background:#d1fae5;color:#065f46}
+.meetscore-badge-blue{background:#dbeafe;color:#1e40af}
+.meetscore-badge-gray{background:#f3f4f6;color:#4b5563}
+.dark .meetscore-badge-gold{background:rgba(245,158,11,.22);color:#fcd34d}
+.dark .meetscore-badge-green{background:rgba(16,185,129,.22);color:#6ee7b7}
+.dark .meetscore-badge-blue{background:rgba(59,130,246,.25);color:#93c5fd}
+.dark .meetscore-badge-gray{background:#374151;color:#d1d5db}
+
+/* MeetScore info modal + strip cell. Plain CSS so it works without a Tailwind rebuild. */
+.meetscore-cell{justify-content:center}
+.meetscore-info-btn{background:none;border:0;padding:0;cursor:pointer;text-transform:uppercase}
+.meetscore-info-btn:hover{text-decoration:underline}
+.meetscore-dialog{width:min(32rem,calc(100vw - 2rem));max-height:calc(100vh - 4rem);padding:0;border:1px solid #e5e7eb;border-radius:.75rem;background:#fff;color:#111827;overflow:hidden}
+.meetscore-dialog[open]{display:flex;flex-direction:column}
+.meetscore-dialog::backdrop{background:rgba(0,0,0,.55)}
+.dark .meetscore-dialog{background:#1f2937;border-color:#374151;color:#e5e7eb}
+.meetscore-dialog-head{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.25rem;border-bottom:1px solid #e5e7eb}
+.dark .meetscore-dialog-head{border-bottom-color:#374151}
+.meetscore-dialog-head h2{margin:0;font-size:1.125rem;font-weight:700}
+.meetscore-dialog-close{background:none;border:0;cursor:pointer;font-size:1.5rem;line-height:1;color:#6b7280}
+.meetscore-dialog-body{padding:1rem 1.25rem 1.25rem;overflow-y:auto;font-size:.875rem;line-height:1.5}
+.meetscore-dialog-body p{margin:.25rem 0 .75rem;color:#4b5563}
+.dark .meetscore-dialog-body p{color:#d1d5db}
+.meetscore-dialog-body h3{margin:.75rem 0 0;font-size:.875rem;font-weight:700}
+.meetscore-dialog-body h3 span{margin-left:.375rem;font-size:.75rem;font-weight:600;color:#6b7280}
+
+.meetscore-math{margin:.375rem 0 .75rem;padding:.625rem .75rem;border-radius:.5rem;background:#f3f4f6;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.75rem;line-height:1.5;color:#1f2937}
+.dark .meetscore-math{background:#111827;color:#e5e7eb}
+.meetscore-math-line+.meetscore-math-line{margin-top:.375rem}
+.dark .meetscore-dialog-body .meetscore-math-title{color:#e5e7eb}
+.meetscore-dialog-body .meetscore-math-title{margin:.75rem 0 0;font-weight:700;color:#111827}
