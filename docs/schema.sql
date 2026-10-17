@@ -1045,3 +1045,21 @@ CREATE TABLE [dbo].[EventStatistics] (
     CONSTRAINT [FK_EventStatistics_Events]
         FOREIGN KEY ([EventId]) REFERENCES [dbo].[Events] ([Id])
 );
+
+
+-- ============================================================
+-- SCHEMA ADDITIONS — AI Meet Summaries (see docs/migration_meet_summaries.sql)
+-- ============================================================
+CREATE TABLE [dbo].[MeetSummaries] (
+    [Id]          INT            IDENTITY (1, 1) NOT NULL,
+    [MeetId]      INT            NOT NULL,
+    [SummaryText] NVARCHAR (MAX) NOT NULL,
+    [InputHash]   VARCHAR (64)   NOT NULL,   -- SHA-256 hex of fact sheet + prompt version
+    [Model]       VARCHAR (64)   NOT NULL,
+    [Status]      SMALLINT       NOT NULL,   -- 1 = Draft, 2 = Approved (SummaryStatus enum)
+    [GeneratedAt] DATETIME2 (7)  NOT NULL CONSTRAINT [DF_MeetSummaries_GeneratedAt] DEFAULT (GETUTCDATE()),
+    [ReviewedAt]  DATETIME2 (7)  NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_MeetSummaries_Meets] FOREIGN KEY ([MeetId]) REFERENCES [dbo].[Meets] ([Id]),
+    CONSTRAINT [UQ_MeetSummaries_MeetId] UNIQUE NONCLUSTERED ([MeetId])
+);

@@ -184,6 +184,7 @@ Slug generation uses the `Slugify` NuGet package (`SlugHelper`). `Meet.Slug` is 
 | `SeasonsController` | `/Admin/Seasons` | CRUD seasons (now includes ScoringEnabled) |
 | `ScoringTemplatesController` | `/Admin/ScoringTemplates` | CRUD scoring templates + places; built-in templates cannot be deleted |
 | `MeetEntriesController` | `/Admin/MeetEntries` | Pre-meet entry tracking + post-meet result/placing entry |
+| `MeetSummariesController` | `/Admin/MeetSummaries` | Review/generate/approve AI meet recaps (`MeetSummaries` table; not yet shown publicly — see BRAIN.md [C50]) |
 
 Admin area has **no authentication** — it is expected to be protected at the infrastructure layer.
 
@@ -606,6 +607,7 @@ Curated traps that still apply. Full context for each lives in `BRAIN.md` under 
 - Explicit abbreviation maps, not `[..2]` slicing (`Junior`→`Ju` bug). Unit tests don't catch visual/label bugs on charts. [C40, C41]
 
 **Services & tests**
+- AI summaries: bump `MeetSummaryPrompt.Version` when the prompt/fact sheet changes; the model must only see the fact sheet (corrected flags), and only `Approved` text may render publicly. Needs `Anthropic:ApiKey` / `ANTHROPIC_API_KEY`. [C50]
 - `LeaderboardService` needs `ISeasonRepository` in test setup; `MeetService` needs `IMeetPlacingRepository` mocked to return an empty list (not null) or `GroupBy` NREs. [C25, C33]
 - `GetCurrentSeasonAsync()` returns a year, not an Id. `SeasonProgressViewModel.PercentComplete` truncates by design. [C13, C14]
 - `MeetScore` PRs are date-derived and differ from `Meet.PRCount` (flag-based) by design; percentiles drift as the all-time population grows. [C45]

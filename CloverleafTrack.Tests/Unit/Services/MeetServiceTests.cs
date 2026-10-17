@@ -140,6 +140,21 @@ public class MeetServiceTests
     }
 
     [Fact]
+    public async Task GetMeetDetailsAsync_IncludesMedleyRelaysWhoseNamesLackRelayOr4x()
+    {
+        var meet = BuildMeet();
+        var performances = new List<MeetPerformanceDto>
+        {
+            BuildPerf(1, "800M Sprint Medley", Gender.Female, EventCategory.Relays, EventType.RunningRelay, athleteName: "A|~|B|~|C|~|D")
+        };
+        SetupMeetDetails(meet, performances);
+
+        var result = await _service.GetMeetDetailsAsync("spring-invitational");
+
+        result!.GirlsEvents.Should().ContainSingle(g => g.EventName == "800M Sprint Medley");
+    }
+
+    [Fact]
     public async Task GetMeetDetailsAsync_CountsSchoolRecordsCorrectly()
     {
         var meet = BuildMeet();
