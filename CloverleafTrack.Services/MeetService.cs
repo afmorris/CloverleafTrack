@@ -192,7 +192,7 @@ public class MeetService(
                 Depth = kv.Value.Depth.HasValue ? Math.Round(kv.Value.Depth.Value, 1) : null,
                 Improvement = kv.Value.Improvement.HasValue ? Math.Round(kv.Value.Improvement.Value, 1) : null,
                 PRs = kv.Value.PRs,
-                ExpectedPRs = Math.Round(kv.Value.ExpectedPRs, 1),
+                ExpectedPRs = Math.Round(kv.Value.ExpectedPRs, 2),
                 EligibleAthleteEvents = kv.Value.EligibleAthleteEvents
             });
     }
@@ -225,7 +225,7 @@ public class MeetService(
         Dictionary<int, PerformanceAttemptSeriesViewModel> attemptLookup)
     {
         // Separate relays from non-relays. EventType is authoritative: medley relays ("800M Sprint Medley") have no
-        // "Relay"/"4x" in their names and were silently dropped when classification was name-only (see BRAIN.md [C48]).
+        // "Relay"/"4x" in their names and were silently dropped when classification was name-only (see BRAIN.md [C50]).
         var relays = performances.Where(IsRelay).ToList();
         var nonRelays = performances.Where(p => !IsRelay(p)).ToList();
 
