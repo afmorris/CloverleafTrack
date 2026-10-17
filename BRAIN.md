@@ -1856,3 +1856,12 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** `Meet.PRCount` (PersonalBest flag count) and MeetScore's PRs differ by design — the latter is computed from dates. Percentiles are as of the last `sp_RebuildLeaderboards`, so scores drift slightly as new marks enter the all-time population. Relays count in Peak/Depth but not Improvement.
 
 **Key files:** `CloverleafTrack.Services/MeetScoreCalculator.cs`, `MeetService.cs`, `CloverleafTrack.DataAccess/Repositories/MeetRepository.cs`, `CloverleafTrack.Models/MeetScore*.cs`, `Views/Meets/Details.cshtml`, `Views/Shared/_MeetListItem.cshtml`, `CloverleafTrack.Tests/Unit/Services/MeetScoreCalculatorTests.cs`.
+
+### [C49] Search Hotkey Hint Is Platform-Aware
+
+**What changed:** The desktop search input's placeholder no longer hard-codes "(⌘K)". `search.js` sets it at load: `⌘K` on Mac/iOS, `Ctrl+K` elsewhere, and no hint on hover-less (touch-only) devices.
+**Why:** ⌘ is meaningless on Windows/Linux. The keydown handler already accepted both `ctrlKey` and `metaKey`, so only the label was wrong.
+**Key files:** `Views/Shared/_Layout.cshtml`, `wwwroot/js/search.js`.
+**Watch out:** The static export's HTML has the plain "Search…" placeholder; the hint appears only after JS runs (platform can't be known server-side).
+
+**[C49] addendum:** Removed the admin layout footer hint "Press Ctrl+/ for keyboard shortcuts" — no handler for Ctrl+/ exists anywhere, so it advertised a nonexistent feature.

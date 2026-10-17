@@ -171,7 +171,14 @@
         });
     }
 
-    // ── Global ⌘K shortcut ────────────────────────────────────────────────────
+    // ── Global search shortcut (⌘K on Apple platforms, Ctrl+K elsewhere) ─────
+    var navPlatform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+    var isApple = /Mac|iPhone|iPad|iPod/i.test(navPlatform);
+    if (desktopInput && !isTouchOnly()) {
+        desktopInput.placeholder = 'Search… (' + (isApple ? '\u2318K' : 'Ctrl+K') + ')';
+    }
+    function isTouchOnly() { return window.matchMedia && window.matchMedia('(hover: none)').matches; }
+
     document.addEventListener('keydown', function (e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
             e.preventDefault();
