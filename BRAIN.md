@@ -1917,3 +1917,23 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** The static export's HTML has the plain "Search…" placeholder; the hint appears only after JS runs (platform can't be known server-side).
 
 **[C49] addendum:** Removed the admin layout footer hint "Press Ctrl+/ for keyboard shortcuts" — no handler for Ctrl+/ exists anywhere, so it advertised a nonexistent feature.
+
+### [C46] Footer Build Version Removed
+
+**What changed:** The footer no longer renders `· v<commit sha>` after "Made with ♥ by Coach Tony". The `BuildMetadataHelper` call was dropped from `Views/Shared/_Layout.cshtml`.
+
+**Why:** Owner request — the version identifier isn't wanted on the public site (see [C27] and its follow-up fix for the history of the `vunknown` footer bug).
+
+**Watch out:** `BuildMetadataHelper` and the `.csproj` `SourceRevisionId`/`InformationalVersion` properties are left in place, now unused by any view. Remove them in a separate cleanup if desired.
+
+**Key files:** `CloverleafTrack.Web/Views/Shared/_Layout.cshtml`.
+
+### [C47] BRAIN.md Demoted to a Grep-On-Demand Archive; Active Gotchas Added to CLAUDE.md
+
+**What changed:** CLAUDE.md no longer tells sessions to read this file at start. It now has an **Active Gotchas** section (~30 one-line traps, each citing the `[C#]` entry here) and says to grep BRAIN.md for the area being touched. This file's header was updated to match. No entries were edited or removed.
+
+**Why:** BRAIN.md reached ~1,900 lines; reading it every session cost far more than it returned, and superseded entries (e.g. the `vunknown` footer saga, [C27]/[C34]/[C46]) read as current behavior. Memory was rejected as the home for this knowledge: it isn't checked in, so it wouldn't reach other machines or contributors.
+
+**Watch out:** Active Gotchas is a hand-curated digest — when a change adds a lasting trap, add a line there as well as logging here; when a gotcha stops being true, delete it from CLAUDE.md (history stays here). Gotchas were compiled from the "Watch out" blocks of C2–C46; entries with only one-time context were deliberately left out.
+
+**Key files:** `CLAUDE.md`, `BRAIN.md`.
