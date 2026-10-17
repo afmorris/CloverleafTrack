@@ -11,6 +11,12 @@ public class AthleteDetailsViewModel
     public int GraduationYear { get; set; }
     public Gender Gender { get; set; }
     public string Class { get; set; } = string.Empty;
+
+    /// <summary>Approved AI career recap, plain text. Null unless a reviewer approved it.</summary>
+    public string? SummaryText { get; set; }
+
+    /// <summary>SummaryText HTML-encoded with athlete, meet and event names linked. Safe for Html.Raw.</summary>
+    public string? SummaryHtml { get; set; }
     
     // Hero Stats
     public AthleteTopEventViewModel? TopSprintEvent { get; set; }

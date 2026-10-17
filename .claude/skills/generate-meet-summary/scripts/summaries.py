@@ -16,8 +16,13 @@ NAME = re.compile(r"\b([A-Z][a-z]+(?:-[A-Z][a-z]+)? [A-Z][a-z]+(?:-[A-Z][a-z]+)?
 
 
 def get(url):
-    with urllib.request.urlopen(url, timeout=120) as r:
-        return r.read().decode()
+    try:
+        with urllib.request.urlopen(url, timeout=120) as r:
+            return r.read().decode()
+    except urllib.error.URLError as e:
+        if isinstance(e, urllib.error.HTTPError):
+            raise
+        sys.exit(f"Cannot reach {url}\n({e.reason}). Is the web app running? Start it, e.g.: dotnet run --project CloverleafTrack.Web --urls http://localhost:5101 --no-launch-profile")
 
 
 def rows_of(fs):

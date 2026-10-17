@@ -64,6 +64,10 @@ builder.Services.AddSingleton(new ClaudeOptions(
 builder.Services.AddHttpClient<ISummaryTextGenerator, ClaudeSummaryTextGenerator>(c => c.Timeout = TimeSpan.FromMinutes(2));
 builder.Services.AddScoped<IMeetSummaryService, MeetSummaryService>();
 builder.Services.AddScoped<IMeetSummaryLinkService, MeetSummaryLinkService>();
+builder.Services.AddScoped<IAthleteSummaryRepository, AthleteSummaryRepository>();
+builder.Services.AddScoped<IAthleteSummaryService, AthleteSummaryService>();
+builder.Services.AddScoped<IAthleteSummaryLinker, AthleteSummaryLinker>();
+builder.Services.AddScoped<IAthleteSummaryLinkService, AthleteSummaryLinkService>();
 
 var app = builder.Build();
 

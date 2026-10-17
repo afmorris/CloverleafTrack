@@ -42,12 +42,6 @@ public static class MeetSummaryPrompt
         - Write 70 to 120 words as a single paragraph. Output only the paragraph.
         """;
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-        WriteIndented = false
-    };
-
     public static string BuildFactSheet(MeetDetailsViewModel meet, MeetLevel level)
     {
         var sheet = new Dictionary<string, object?>
@@ -85,24 +79,7 @@ public static class MeetSummaryPrompt
             ["mixed"] = meet.MixedEvents.Count > 0 ? BuildEvents(meet.MixedEvents) : null
         };
 
-        // DefaultIgnoreCondition does not apply to dictionary entries, so strip nulls explicitly (saves tokens, avoids "pr":null noise).
-        var node = JsonSerializer.SerializeToNode(sheet, JsonOptions)!;
-        StripNulls(node);
-        return node.ToJsonString(JsonOptions);
-    }
-
-    private static void StripNulls(JsonNode? node)
-    {
-        switch (node)
-        {
-            case JsonObject obj:
-                foreach (var key in obj.Where(kv => kv.Value is null).Select(kv => kv.Key).ToList()) obj.Remove(key);
-                foreach (var value in obj.Select(kv => kv.Value)) StripNulls(value);
-                break;
-            case JsonArray arr:
-                foreach (var item in arr) StripNulls(item);
-                break;
-        }
+        return FactSheetJson.Serialize(sheet);
     }
 
     /// <summary>MeetType defaults to Dual, so a dual with no opponent and no team result is really an open/qualifier meet.</summary>
@@ -117,11 +94,7 @@ public static class MeetSummaryPrompt
     public static string BuildUserPrompt(string factSheet) =>
         "Fact sheet:\n" + factSheet + "\n\nWrite the recap.";
 
-    public static string ComputeHash(string factSheet)
-    {
-        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(Version + "\n" + SystemPrompt + "\n" + factSheet));
-        return Convert.ToHexString(bytes).ToLowerInvariant();
-    }
+    public static string ComputeHash(string factSheet) => FactSheetJson.Hash(Version, SystemPrompt, factSheet);
 
     private static List<Dictionary<string, object?>> BuildEvents(List<MeetEventGroupViewModel> groups) =>
         groups.Select(g => new Dictionary<string, object?>

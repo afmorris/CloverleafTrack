@@ -14,6 +14,11 @@
     var athleteDescription = CloverleafTrack.Web.Utilities.SeoHelper.Truncate(
         $"{Model.FullName}, Class of {Model.GraduationYear} — Cloverleaf Track & Field.{athleteEventPart} {Model.TotalPRs} personal record{(Model.TotalPRs == 1 ? "" : "s")}, {Model.TotalSchoolRecords} school record{(Model.TotalSchoolRecords == 1 ? "" : "s")}.");
 
+    if (!string.IsNullOrWhiteSpace(Model.SummaryText))
+    {
+        athleteDescription = CloverleafTrack.Web.Utilities.SeoHelper.Truncate(Model.SummaryText);
+    }
+
     var athletePath = Context.Request.Path.Value ?? "/roster";
     var athleteAwards = individualRecords
         .Where(r => r.IsSchoolRecord)
@@ -46,6 +51,10 @@
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white">@Model.FullName</h1>
             <p class="text-gray-500 dark:text-gray-400 mt-1 text-sm">@Model.Class · @(Model.Gender == Gender.Male ? "Boys" : "Girls")</p>
         </div>
+        @if (!string.IsNullOrWhiteSpace(Model.SummaryHtml))
+        {
+            <p class="mb-5 text-base leading-relaxed text-gray-700 dark:text-gray-300" style="max-width:65ch">@Html.Raw(Model.SummaryHtml)</p>
+        }
         <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
             <div class="metric-strip">
                 @if (Model.TopSprintEvent != null)

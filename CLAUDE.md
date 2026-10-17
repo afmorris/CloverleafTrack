@@ -185,6 +185,7 @@ Slug generation uses the `Slugify` NuGet package (`SlugHelper`). `Meet.Slug` is 
 | `ScoringTemplatesController` | `/Admin/ScoringTemplates` | CRUD scoring templates + places; built-in templates cannot be deleted |
 | `MeetEntriesController` | `/Admin/MeetEntries` | Pre-meet entry tracking + post-meet result/placing entry |
 | `MeetSummariesController` | `/Admin/MeetSummaries` | Review/approve/edit/delete AI meet recaps (`MeetSummaries` table) + `List`/`FactSheet`/`Import` endpoints used by the generate-*-summaries skills. Approved text shows on `/meets/{slug}` — see BRAIN.md [C50], [C51] |
+| `AthleteSummariesController` | `/Admin/AthleteSummaries` | Review/approve/edit/delete AI athlete career recaps by graduation class (`AthleteSummaries` table; default = last graduated class; lists only athletes who competed in their senior school year) + `List`/`FactSheet`/`Import` for the `generate-athlete-summary` skill. Approved text shows on `/roster/{slug}` — see BRAIN.md [C52], [C54] |
 
 Admin area has **no authentication** — it is expected to be protected at the infrastructure layer.
 
@@ -607,7 +608,8 @@ Curated traps that still apply. Full context for each lives in `BRAIN.md` under 
 - Explicit abbreviation maps, not `[..2]` slicing (`Junior`→`Ju` bug). Unit tests don't catch visual/label bugs on charts. [C40, C41]
 
 **Services & tests**
-- AI summaries are written in chat by Opus subagents via the `generate-meet-summary` / `generate-season-summaries` skills (`.claude/skills/`), imported as Drafts, approved by the owner in `/Admin/MeetSummaries`. Bump `MeetSummaryPrompt.Version` when the prompt/fact sheet changes; the model sees only the fact sheet (corrected flags); only `Approved` text may render publicly (`MeetService` enforces it). Events must be written with site names or links silently fail. The API path (`ClaudeSummaryTextGenerator`, `Anthropic:ApiKey`) is no longer used by any UI. [C50, C51]
+- `PersonalBest` flags (and so athlete `TotalPRs` / `SeasonPerformanceViewModel.PRCount`, and a meet's `pr` fact-sheet flag) are only populated for the 2025-26 season; earlier seasons have none. Do not quote PR counts or infer "not a PR" from a missing flag on older data. School records (`AllTimeRank == 1`) are reliable. [C52]
+- AI summaries are written in chat by Opus subagents via the `generate-meet-summary` / `generate-season-summaries` skills (`.claude/skills/`: `generate-meet-summary`, `generate-season-summaries`, `generate-athlete-summary`), imported as Drafts, approved by the owner in `/Admin/MeetSummaries`. Bump `MeetSummaryPrompt.Version` when the prompt/fact sheet changes; the model sees only the fact sheet (corrected flags); only `Approved` text may render publicly (`MeetService` enforces it). Events must be written with site names or links silently fail. The API path (`ClaudeSummaryTextGenerator`, `Anthropic:ApiKey`) is no longer used by any UI. [C50, C51]
 - `LeaderboardService` needs `ISeasonRepository` in test setup; `MeetService` needs `IMeetPlacingRepository` mocked to return an empty list (not null) or `GroupBy` NREs. [C25, C33]
 - `GetCurrentSeasonAsync()` returns a year, not an Id. `SeasonProgressViewModel.PercentComplete` truncates by design. [C13, C14]
 - `MeetScore` PRs are date-derived and differ from `Meet.PRCount` (flag-based) by design; percentiles drift as the all-time population grows. [C45]

@@ -1,0 +1,135 @@
+@model AthleteSummariesIndexViewModel
+@using CloverleafTrack.ViewModels.Admin.AthleteSummaries
+@using CloverleafTrack.Models.Enums
+@{
+    ViewData["Title"] = "Athlete Summaries";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .header form { display: flex; gap: 10px; align-items: center; }
+    .btn { background: #0066cc; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-block; }
+    .btn-green { background: #28a745; }
+    .btn-gray { background: #6c757d; }
+    .btn-red { background: #dc3545; }
+    .card { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 16px; padding: 18px 20px; }
+    .card-top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+    .card h3 { font-size: 16px; }
+    .meta { font-size: 12px; color: #777; margin-top: 3px; }
+    .links { display: flex; gap: 12px; font-size: 13px; }
+    .links a { color: #0066cc; text-decoration: none; }
+    .summary { font-size: 15px; line-height: 1.55; background: #f8f9fa; border-left: 3px solid #0066cc; padding: 12px 14px; border-radius: 4px; margin: 10px 0; }
+    .summary a { color: #0b57b0; text-decoration: underline dotted; }
+    .summary a:hover { text-decoration: underline; }
+    .summary.approved { border-left-color: #28a745; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-left: 6px; }
+    .badge-draft { background: #fff3cd; color: #856404; }
+    .badge-approved { background: #e8f5e9; color: #388e3c; }
+    .badge-none { background: #f5f5f5; color: #757575; }
+    .badge-jv { background: #e1f5fe; color: #01579b; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .actions form { display: inline; }
+    details summary { cursor: pointer; font-size: 13px; color: #0066cc; }
+    details textarea { width: 100%; min-height: 110px; margin: 8px 0; padding: 8px; font: inherit; font-size: 14px; }
+</style>
+
+<div class="header">
+    <div>
+        <h1>Athlete Summaries</h1>
+        <div class="meta">
+            @Model.WithSummary of @Model.Rows.Count athletes have a summary · @Model.Approved approved
+            @if (Model.ExcludedCount > 0)
+            {
+                <text> · </text>
+                if (Model.IncludeAll)
+                {
+                    <a asp-action="Index" asp-route-graduationYear="@Model.GraduationYear">Hide the @Model.ExcludedCount who didn't compete as seniors</a>
+                }
+                else
+                {
+                    <a asp-action="Index" asp-route-graduationYear="@Model.GraduationYear" asp-route-includeAll="true">@Model.ExcludedCount hidden (no senior season): show</a>
+                }
+            }
+        </div>
+    </div>
+    <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <form method="get">
+            <select name="graduationYear" onchange="this.form.submit()">
+                @foreach (var y in Model.GraduationYears)
+                {
+                    <option value="@y" selected="@(y == Model.GraduationYear)">Class of @y</option>
+                }
+            </select>
+        </form>
+    </div>
+</div>
+
+@foreach (var row in Model.Rows)
+{
+    <div class="card" id="athlete-@row.AthleteId">
+        <div class="card-top">
+            <div>
+                <h3>
+                    @row.Name
+                    <span class="badge badge-jv">@row.Team</span>
+                    @if (!row.CompetedSenior) { <span class="badge badge-none">No senior season</span> }
+                    @if (row.Status == SummaryStatus.Approved) { <span class="badge badge-approved">Approved</span> }
+                    else if (row.Status == SummaryStatus.Draft) { <span class="badge badge-draft">Draft</span> }
+                    else { <span class="badge badge-none">No summary</span> }
+                </h3>
+                <div class="meta">
+                    Class of @Model.GraduationYear
+                    @if (row.GeneratedAt.HasValue) { <text> · generated @row.GeneratedAt.Value.ToString("MMM d h:mm tt") UTC by @row.Model</text> }
+                </div>
+            </div>
+            <div class="links">
+                <a href="@row.PublicUrl" target="_blank">Public athlete page ↗</a>
+                <a asp-controller="Athletes" asp-action="Edit" asp-route-id="@row.AthleteId">Edit athlete</a>
+            </div>
+        </div>
+
+        @if (row.SummaryId.HasValue)
+        {
+            <div class="summary @(row.Status == SummaryStatus.Approved ? "approved" : "")">@Html.Raw(row.SummaryHtml)</div>
+            <div class="actions">
+                @if (row.Status == SummaryStatus.Approved)
+                {
+                    <form asp-action="Approve" method="post">
+                        <input type="hidden" name="id" value="@row.SummaryId" /><input type="hidden" name="graduationYear" value="@Model.GraduationYear" /><input type="hidden" name="includeAll" value="@(Model.IncludeAll ? "true" : "false")" /><input type="hidden" name="approved" value="false" />
+                        <button class="btn btn-gray">Unapprove</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-action="Approve" method="post">
+                        <input type="hidden" name="id" value="@row.SummaryId" /><input type="hidden" name="graduationYear" value="@Model.GraduationYear" /><input type="hidden" name="includeAll" value="@(Model.IncludeAll ? "true" : "false")" /><input type="hidden" name="approved" value="true" />
+                        <button class="btn btn-green">Approve</button>
+                    </form>
+                }
+                <form asp-action="Delete" method="post" onsubmit="return confirm('Delete this summary?');">
+                    <input type="hidden" name="id" value="@row.SummaryId" /><input type="hidden" name="graduationYear" value="@Model.GraduationYear" /><input type="hidden" name="includeAll" value="@(Model.IncludeAll ? "true" : "false")" />
+                    <button class="btn btn-red">Delete</button>
+                </form>
+            </div>
+            <details style="margin-top:10px;">
+                <summary>Edit text</summary>
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" name="id" value="@row.SummaryId" /><input type="hidden" name="graduationYear" value="@Model.GraduationYear" /><input type="hidden" name="includeAll" value="@(Model.IncludeAll ? "true" : "false")" />
+                    <textarea name="text">@row.SummaryText</textarea>
+                    <button class="btn">Save (returns to Draft)</button>
+                </form>
+            </details>
+        }
+        else
+        {
+            <div class="meta">No summary yet. Ask Claude in chat to write one.</div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        // Review aid: open linked athlete, meet and event pages in a new tab so the review position is kept.
+        document.querySelectorAll('.summary a').forEach(function (a) { a.target = '_blank'; a.rel = 'noopener'; });
+    </script>
+}

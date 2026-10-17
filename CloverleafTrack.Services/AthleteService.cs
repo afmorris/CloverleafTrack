@@ -13,7 +13,9 @@ namespace CloverleafTrack.Services;
 
 public class AthleteService(
     IAthleteRepository repository,
-    IPerformanceAttemptRepository? attemptRepository = null) : IAthleteService
+    IPerformanceAttemptRepository? attemptRepository = null,
+    IAthleteSummaryRepository? summaryRepository = null,
+    IAthleteSummaryLinker? summaryLinker = null) : IAthleteService
 {
     public async Task<List<AthleteViewModel>> GetActiveAthletesAsync(int currentSeason)
     {
@@ -366,6 +368,23 @@ public class AthleteService(
     }
 
     public async Task<AthleteDetailsViewModel?> GetAthleteDetailsAsync(string slug, int currentSeason)
+    {
+        var details = await BuildAthleteDetailsAsync(slug, currentSeason);
+        if (details == null || summaryRepository == null) return details;
+
+        // Only reviewed text is ever shown publicly: a Draft summary must not reach the page.
+        var summary = await summaryRepository.GetForAthleteAsync(details.AthleteId);
+        if (summary is { Status: SummaryStatus.Approved })
+        {
+            details.SummaryText = summary.SummaryText;
+            details.SummaryHtml = summaryLinker == null ? null
+                : await summaryLinker.LinkifyAsync(details, summary.SummaryText, "text-blue-600 dark:text-blue-400 hover:underline");
+        }
+
+        return details;
+    }
+
+    private async Task<AthleteDetailsViewModel?> BuildAthleteDetailsAsync(string slug, int currentSeason)
     {
         // Get athlete basic info
         var athlete = await repository.GetBySlugWithBasicInfoAsync(slug);
