@@ -14,4 +14,7 @@ public interface IAdminAthleteRepository
     Task<List<Athlete>> GetSimilarAthletesAsync(string firstName, string lastName);
     Task<int> GetPerformanceCountAsync(int athleteId);
     Task<List<Athlete>> GetAthletesForMeetAsync(int meetId, Gender? gender);
+
+    /// <summary>Ids of athletes with at least one performance (individual or relay) at a meet dated in [startInclusive, endExclusive).</summary>
+    Task<HashSet<int>> GetAthleteIdsWithPerformancesBetweenAsync(DateTime startInclusive, DateTime endExclusive);
 }

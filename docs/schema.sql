@@ -1063,3 +1063,21 @@ CREATE TABLE [dbo].[MeetSummaries] (
     CONSTRAINT [FK_MeetSummaries_Meets] FOREIGN KEY ([MeetId]) REFERENCES [dbo].[Meets] ([Id]),
     CONSTRAINT [UQ_MeetSummaries_MeetId] UNIQUE NONCLUSTERED ([MeetId])
 );
+
+
+-- ============================================================
+-- SCHEMA ADDITIONS — AI Athlete Summaries (see docs/migration_athlete_summaries.sql)
+-- ============================================================
+CREATE TABLE [dbo].[AthleteSummaries] (
+    [Id]          INT            IDENTITY (1, 1) NOT NULL,
+    [AthleteId]   INT            NOT NULL,
+    [SummaryText] NVARCHAR (MAX) NOT NULL,
+    [InputHash]   VARCHAR (64)   NOT NULL,   -- SHA-256 hex of fact sheet + prompt version
+    [Model]       VARCHAR (64)   NOT NULL,
+    [Status]      SMALLINT       NOT NULL,   -- 1 = Draft, 2 = Approved (SummaryStatus enum)
+    [GeneratedAt] DATETIME2 (7)  NOT NULL CONSTRAINT [DF_AthleteSummaries_GeneratedAt] DEFAULT (GETUTCDATE()),
+    [ReviewedAt]  DATETIME2 (7)  NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_AthleteSummaries_Athletes] FOREIGN KEY ([AthleteId]) REFERENCES [dbo].[Athletes] ([Id]),
+    CONSTRAINT [UQ_AthleteSummaries_AthleteId] UNIQUE NONCLUSTERED ([AthleteId])
+);

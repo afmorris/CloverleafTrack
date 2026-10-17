@@ -150,4 +150,21 @@ public class AdminAthleteRepository(IDbConnectionFactory connectionFactory) : IA
         var athletes = await connection.QueryAsync<Athlete>(sql, parameters);
         return athletes.ToList();
     }
+
+    public async Task<HashSet<int>> GetAthleteIdsWithPerformancesBetweenAsync(DateTime startInclusive, DateTime endExclusive)
+    {
+        using var connection = connectionFactory.CreateConnection();
+        const string sql = @"
+            SELECT p.AthleteId
+            FROM Performances p INNER JOIN Meets m ON m.Id = p.MeetId
+            WHERE p.AthleteId IS NOT NULL AND m.Date >= @Start AND m.Date < @End
+            UNION
+            SELECT pa.AthleteId
+            FROM PerformanceAthletes pa
+            INNER JOIN Performances p ON p.Id = pa.PerformanceId
+            INNER JOIN Meets m ON m.Id = p.MeetId
+            WHERE m.Date >= @Start AND m.Date < @End";
+        var ids = await connection.QueryAsync<int>(sql, new { Start = startInclusive, End = endExclusive });
+        return ids.ToHashSet();
+    }
 }

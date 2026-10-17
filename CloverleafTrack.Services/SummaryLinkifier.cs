@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using CloverleafTrack.Models.Enums;
+using Environment = CloverleafTrack.Models.Enums.Environment;
 
 namespace CloverleafTrack.Services;
 
@@ -9,7 +10,11 @@ public record LinkableAthlete(string FullName, string Slug, Gender? Gender);
 
 /// <param name="Name">Display name as it appears in text, e.g. "4x400M Relay".</param>
 /// <param name="Key">Event key as used in /events/{key}, e.g. BOYS_OUTDOOR_4X400M_RELAY.</param>
-public record LinkableEvent(string Name, string Key, Gender Gender);
+public record LinkableEvent(string Name, string Key, Gender Gender, Environment? Environment = null);
+
+/// <param name="Name">Meet name as written in text, e.g. "2026 Fairview Warrior Relays".</param>
+/// <param name="Slug">Meet slug as used in /meets/{slug}.</param>
+public record LinkableMeet(string Name, string Slug);
 
 /// <summary>
 /// Turns plain summary text into HTML with athlete names linked to /roster/{slug} and event names linked to
@@ -20,7 +25,8 @@ public record LinkableEvent(string Name, string Key, Gender Gender);
 /// </summary>
 public static class SummaryLinkifier
 {
-    public static string Linkify(string text, IReadOnlyList<LinkableAthlete> athletes, IReadOnlyList<LinkableEvent> events, string? linkClass = null)
+    public static string Linkify(string text, IReadOnlyList<LinkableAthlete> athletes, IReadOnlyList<LinkableEvent> events, string? linkClass = null,
+        IReadOnlyList<LinkableMeet>? meets = null, Gender? fallbackGender = null)
     {
         var classAttr = string.IsNullOrEmpty(linkClass) ? string.Empty : $" class=\"{WebUtility.HtmlEncode(linkClass)}\"";
         if (string.IsNullOrEmpty(text)) return string.Empty;
@@ -48,7 +54,11 @@ public static class SummaryLinkifier
             }
         }
 
-        var alternatives = athleteByPhrase.Keys.Concat(eventsByPhrase.Keys)
+        // Meet names link to /meets/{slug}; matched whole, longest first, so event words inside a meet name are not linked separately.
+        var meetByPhrase = new Dictionary<string, LinkableMeet>(StringComparer.OrdinalIgnoreCase);
+        foreach (var m in meets ?? Array.Empty<LinkableMeet>()) meetByPhrase.TryAdd(m.Name, m);
+
+        var alternatives = athleteByPhrase.Keys.Concat(eventsByPhrase.Keys).Concat(meetByPhrase.Keys)
             .Distinct(StringComparer.Ordinal)
             .OrderByDescending(p => p.Length)
             .Select(p => aliasPhrases.Contains(p) && !athleteByPhrase.ContainsKey(p)
@@ -77,8 +87,12 @@ public static class SummaryLinkifier
                 if (athlete.Gender != null) { lastAthleteGender = athlete.Gender; lastAthletePos = m.Index; }
                 sb.Append($"<a href=\"/roster/{WebUtility.HtmlEncode(athlete.Slug)}\"{classAttr}>{WebUtility.HtmlEncode(m.Value)}</a>");
             }
+            else if (meetByPhrase.TryGetValue(m.Value, out var meet))
+            {
+                sb.Append($"<a href=\"/meets/{WebUtility.HtmlEncode(meet.Slug)}\"{classAttr}>{WebUtility.HtmlEncode(m.Value)}</a>");
+            }
             else if (eventsByPhrase.TryGetValue(m.Value, out var candidates) &&
-                     Resolve(candidates, text, m.Index, sentenceStart, lastAthleteGender, lastAthletePos) is { } evt)
+                     Resolve(candidates, text, m.Index, sentenceStart, lastAthleteGender, lastAthletePos, fallbackGender) is { } evt)
             {
                 sb.Append($"<a href=\"/events/{WebUtility.HtmlEncode(evt.Key.ToLowerInvariant())}\"{classAttr}>{WebUtility.HtmlEncode(m.Value)}</a>");
             }
@@ -99,15 +113,28 @@ public static class SummaryLinkifier
     }
 
     private static LinkableEvent? Resolve(List<LinkableEvent> candidates, string text, int index, int sentenceStart,
-        Gender? athleteGender, int athletePos)
+        Gender? athleteGender, int athletePos, Gender? fallbackGender)
     {
-        if (candidates.Count == 1) return candidates[0]; // the meet has this event for only one gender
+        if (candidates.Count == 1) return candidates[0]; // only one event has this name
 
         // Whichever cue sits closer to the event wins: "the girls 100M" (gender word right before it), or
         // "..., and Amelia Ryncarz (discus)" where a named athlete is nearer than an earlier "boys".
         var (word, wordPos) = GenderWordBefore(text, index, sentenceStart);
-        Gender? wanted = wordPos >= athletePos ? word ?? athleteGender : athleteGender ?? word;
-        return wanted is { } g ? candidates.FirstOrDefault(c => c.Gender == g) : null;
+        Gender? wanted = (wordPos >= athletePos ? word ?? athleteGender : athleteGender ?? word) ?? fallbackGender;
+        var pool = wanted is { } g ? candidates.Where(c => c.Gender == g).ToList() : candidates;
+        if (pool.Count == 1) return pool[0];
+
+        // Indoor and outdoor versions share names ("1600M"): take the nearest "indoor"/"outdoor" earlier in the sentence.
+        if (pool.Any(c => c.Environment != null) && EnvironmentWordBefore(text, index, sentenceStart) is { } env)
+            pool = pool.Where(c => c.Environment == env).ToList();
+        return pool.Count == 1 ? pool[0] : null;
+    }
+
+    private static Environment? EnvironmentWordBefore(string text, int index, int sentenceStart)
+    {
+        var matches = Regex.Matches(text[sentenceStart..index], @"\b(indoor|outdoor)\b", RegexOptions.IgnoreCase);
+        if (matches.Count == 0) return null;
+        return matches[^1].Value.Equals("indoor", StringComparison.OrdinalIgnoreCase) ? Environment.Indoor : Environment.Outdoor;
     }
 
     /// <summary>The nearest "boys"/"girls"/"mixed" earlier in the same sentence, with its position (-1 when none).</summary>

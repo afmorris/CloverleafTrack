@@ -27,4 +27,12 @@ public static class ClassYearCalculator
             _ => null
         };
     }
+
+    /// <summary>
+    /// The school year that ends in <paramref name="graduationYear"/>: August 1 of the previous year up to (not including)
+    /// August 1 of the graduation year. Same boundary as <see cref="GetClassAtTimeOfPerformance"/>, so a class's senior
+    /// season is exactly the meets for which that method returns "Senior".
+    /// </summary>
+    public static (DateTime StartInclusive, DateTime EndExclusive) GetSeniorSchoolYear(int graduationYear) =>
+        (new DateTime(graduationYear - 1, 8, 1), new DateTime(graduationYear, 8, 1));
 }
