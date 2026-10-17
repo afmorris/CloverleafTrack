@@ -1908,3 +1908,12 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Why:** Percentages alone didn't let readers reproduce a score.
 
 **Watch out:** `MeetService` now rounds `MeetScoreViewModel.ExpectedPRs` to 2 decimals (was 1) — at 1 decimal the displayed Improvement arithmetic didn't match the displayed result (e.g. 50+100×(10−10.3)/50 = 49.4 vs the true 49.5). Formulas in the modal are hardcoded copy; keep in sync with `MeetScoreCalculator` ([C49] note applies).
+
+### [C49] Search Hotkey Hint Is Platform-Aware
+
+**What changed:** The desktop search input's placeholder no longer hard-codes "(⌘K)". `search.js` sets it at load: `⌘K` on Mac/iOS, `Ctrl+K` elsewhere, and no hint on hover-less (touch-only) devices.
+**Why:** ⌘ is meaningless on Windows/Linux. The keydown handler already accepted both `ctrlKey` and `metaKey`, so only the label was wrong.
+**Key files:** `Views/Shared/_Layout.cshtml`, `wwwroot/js/search.js`.
+**Watch out:** The static export's HTML has the plain "Search…" placeholder; the hint appears only after JS runs (platform can't be known server-side).
+
+**[C49] addendum:** Removed the admin layout footer hint "Press Ctrl+/ for keyboard shortcuts" — no handler for Ctrl+/ exists anywhere, so it advertised a nonexistent feature.
