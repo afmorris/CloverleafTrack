@@ -2129,3 +2129,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** `MeetService.FormatPerformance` is now `internal` (the fact sheet reuses it so marks match the meet page; the validator checks marks against the raw JSON). The generation skill needs the app running against the live DB (`ctf-web-summaries` config) with this branch's code. The other 20 approved summaries were written under v2; they are unchanged and still correct, regenerate only if you want the richer detail.
 
 **Key files:** `CloverleafTrack.Services/MeetSummaryPrompt.cs`, `MeetService.cs`, `Tests/Unit/Services/MeetSummaryTests.cs`.
+
+### [C66] site.css Is Now Cache-Busted (asp-append-version)
+
+**What changed:** `Views/Shared/_Layout.cshtml` links `~/css/site.css` with `asp-append-version="true"` (the JS files already did), so the URL carries a content hash (`site.css?v=...`).
+
+**Why:** `/css/site.css` is served with a ~11 h `Cache-Control: max-age` and had a bare URL. After the bar-ladder deploy ([C60]) the server and static export had the new rules, but browsers holding the old stylesheet rendered `.bar-chip` as plain inline text until the cache expired.
+
+**Watch out:** a new CSS rule only reaches already-visited browsers once the page HTML that links the new hash is also served — fine for the live app; the static export picks it up on the next `ctf` run. The admin layout does not link `site.css` through this tag.
+
+**Key files:** `CloverleafTrack.Web/Views/Shared/_Layout.cshtml`.
