@@ -400,7 +400,7 @@ public class MeetService(
     private static bool IsHttpUrl(string? url) =>
         Uri.TryCreate(url, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
 
-    private static string FormatPerformance(double? timeSeconds, double? distanceInches)
+    internal static string FormatPerformance(double? timeSeconds, double? distanceInches)
     {
         if (distanceInches.HasValue)
         {

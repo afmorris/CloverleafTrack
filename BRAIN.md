@@ -2109,3 +2109,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** MileSplit raw text varies by timing software: events with blank event names (older HY-TEK / Lynx exports) and rows with seed marks mixed in (e.g. `10:24.09 9:49.27`) cannot be parsed safely and were not imported; only the 2023 MAC had explicit event headers. Re-running is idempotent (each block deletes then inserts that performance's rounds). `Prelims` on older athletic.net meets are real preliminary heats; the "Finals" row is the stored mark.
 
 **Key files:** `scripts/crawl/{an-rounds.txt,prepare_round_inputs.py,ms-542137.txt}`, `scripts/athleticnet/build_rounds_sql.py`, `docs/imports/2005-2025-rounds.sql`.
+
+### [C62] Meet Summary Fact Sheet Now Includes Rounds, Attempt Series and Bar Ladders (prompt v3)
+
+**What changed:** `MeetSummaryPrompt.BuildFactSheet` adds, per result and only when recorded: `rounds` (e.g. `["Prelim 4:02.05","Final 3:55.68"]`), `attempts` (formatted marks, `F` foul, `P` pass) with `bestOnAttempt`, and `bars` (height + how it went, e.g. `4' 4" cleared on the 3rd attempt`) with `bestBar`. The system prompt got a rule allowing them to be used sparingly for a standout result and forbidding invented detail; the writer may call a final faster/slower only by comparing the two given times. `MeetSummaryPrompt.Version` is now "3" (was "2"), so every stored fact-sheet hash differs and all existing summaries read as stale/old-rules.
+
+**Also:** the approved 2026 State summary quoted Clear Fork's 3:55.05 as our school record ([C61]); it was regenerated with this fact sheet (Opus) and imported as a **Draft** — it needs re-approval in `/Admin/MeetSummaries` before it shows publicly again.
+
+**Watch out:** `MeetService.FormatPerformance` is now `internal` (the fact sheet reuses it so marks match the meet page; the validator checks marks against the raw JSON). The generation skill needs the app running against the live DB (`ctf-web-summaries` config) with this branch's code. The other 20 approved summaries were written under v2; they are unchanged and still correct, regenerate only if you want the richer detail.
+
+**Key files:** `CloverleafTrack.Services/MeetSummaryPrompt.cs`, `MeetService.cs`, `Tests/Unit/Services/MeetSummaryTests.cs`.
