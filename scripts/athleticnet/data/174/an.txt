@@ -1,0 +1,16 @@
+OHSAA D2 Northeast District - Orville
+m/1/100m|Finals I 6.~11~Zack Munchick~11.55a~Cloverleaf~8373672
+m/1/100m|Prelims I 3.~11~Zack Munchick~11.15aPB~Cloverleaf~8373672
+m/1/800m|Finals I 1.~11~Tristan Vaughn~2:02.70a~Cloverleaf~8373669
+m/1/800m|Prelims I 8.~11~Tristan Vaughn~2:18.46a~Cloverleaf~8373669
+f/1/200m|Finals I 5.~11~Sara Keener~27.90aSB~Cloverleaf~8453808
+f/1/200m|Prelims I 3.~11~Sara Keener~28.15a~Cloverleaf~8453808
+f/1/800m|Finals I 2.~10~Jenna Oliver~2:25.58aSB~Cloverleaf~8657719
+f/1/800m|Finals I 3.~10~Tommie Kurtz~2:26.43aSB~Cloverleaf~8657721
+f/1/800m|Prelims I 1.~10~Tommie Kurtz~2:31.91a~Cloverleaf~8657721
+f/1/800m|Prelims I 2.~10~Jenna Oliver~2:33.65a~Cloverleaf~8657719
+f/1/100mh|Finals I 2.~12~Zana Ross~16.35a~Cloverleaf~8373658
+f/1/100mh|Prelims I 1.~12~Zana Ross~16.47a~Cloverleaf~8373658
+f/1/300mh|Finals I 1.~12~Zana Ross~48.37a~Cloverleaf~8373658
+f/1/300mh|Prelims I 1.~12~Zana Ross~48.74a~Cloverleaf~8373658
+#SERIES {}

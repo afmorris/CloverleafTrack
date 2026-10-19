@@ -1,0 +1,8 @@
+OHSAA Division 1 NE District - North Canton
+f/1/100m|Finals I 7.~11~Taylor Detwiler~12.99aPB~Cloverleaf~1224223
+f/1/100m|Prelims I 8.~11~Taylor Detwiler~13.27a~Cloverleaf~1224223
+f/1/200m|Finals I 6.~12~Janelle Shaffer~27.12a~Cloverleaf~1224205
+f/1/200m|Prelims I 6.~12~Janelle Shaffer~26.58aPB~Cloverleaf~1224205
+f/1/100mh|Finals I 2.~12~Jennifer Foster~15.10aPB~Cloverleaf~1172088
+f/1/100mh|Prelims I 2.~12~Jennifer Foster~15.34a~Cloverleaf~1172088
+#SERIES {}

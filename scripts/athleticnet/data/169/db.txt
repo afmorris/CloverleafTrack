@@ -1,0 +1,49 @@
+104|2|Long Jump|Madison Horner|NULL|178|0
+601|1|Shot Put|Tom Wangler|NULL|587.5|0
+969|1|Long Jump|Nick Fricke|NULL|213.25|0
+1243|2|Discus|Abegayle Keener|NULL|621|0
+1247|1|Discus|Tom Wangler|NULL|1407|0
+1384|1|Pole Vault|James Reinhart|NULL|120|0
+1469|2|Shot Put|Katelyn Young|NULL|376|0
+1486|2|Long Jump|Adiyana Trevino|NULL|146.75|0
+1498|2|Pole Vault|Natalie Martz|NULL|108|0
+1706|2|Discus|Katelyn Young|NULL|1195|0
+1790|2|Pole Vault|Maddie Brandt|NULL|114|0
+1860|2|Shot Put|Abegayle Keener|NULL|222|0
+2949|1|Discus|Kyle Arend|NULL|1535|0
+3191|1|Pole Vault|Sean Brown|NULL|132|0
+3222|1|Long Jump|Andrew Podolak|NULL|209.25|0
+4424|2|300M Hurdles|Maddie Brandt|51.5|NULL|0
+4622|2|400M|Hannah Swain|60.1|NULL|0
+5180|1|400M|Andrew Podolak|55.3|NULL|0
+5200|2|100M|Cassie Grabowski|13.52|NULL|0
+5306|1|1600M|Andrew Jarrett|283.22|NULL|0
+5675|1|100M|Jon Nespeca|12.52|NULL|0
+5931|2|3200M|Ashley Murray|683.62|NULL|0
+6339|2|100M Hurdles|Cassie Grabowski|16.8|NULL|0
+6455|1|100M|Ryan Powell|12.1|NULL|0
+6458|2|300M Hurdles|Megan Brandt|54.3|NULL|0
+6511|1|1600M|Darren Egner|296.61|NULL|0
+6628|2|400M|Erian Hamilton|62.8|NULL|0
+6648|2|1600M|Vanessa Rivera|345.6|NULL|0
+6788|1|200M|Ryan Powell|24.7|NULL|0
+6912|1|3200M|Cameron Billy|667.25|NULL|0
+7408|1|800M|Dakota Duncan|123.82|NULL|0
+7496|2|800M|Riley Freeland|146.67000000000002|NULL|0
+7557|2|3200M|Anna Winnicki|765.87|NULL|0
+7674|2|800M|Erian Hamilton|145.66|NULL|0
+7708|2|100M Hurdles|Maddie Brandt|16.65|NULL|0
+7854|1|400M|Nate Watkins|56.8|NULL|0
+8633|2|1600M|Ashley Murray|310.3|NULL|0
+8647|2|100M|Zoe Riddile|14.42|NULL|0
+8796|1|200M|Diego Rivera|25.4|NULL|0
+9029|2|200M|Kaylee Gutschow|28.3|NULL|0
+12115|1|4x400M Relay|Dakota Duncan/Darren Egner/Andrew Jarrett/Nate Watkins|231.42000000000002|NULL|0
+12253|1|4x100M Relay|Ryan Powell/Jon Nespeca/Diego Rivera/Zach Witmer|48.38|NULL|0
+12372|2|4x400M Relay|Hannah Swain/Kaylee Gutschow/Erian Hamilton/Riley Freeland|249.2|NULL|0
+12392|2|4x800M Relay|Riley Freeland/Erian Hamilton/Ashley Murray/Vanessa Rivera|594.2|NULL|0
+12536|1|4x200M Relay|Nate Watkins/Diego Rivera/Andrew Podolak/Ryan Powell|101.74000000000001|NULL|0
+12637|1|4x800M Relay|Dakota Duncan/Darren Egner/Andrew Jarrett/Eric VanMeter|511.69|NULL|0
+12936|2|4x200M Relay|Megan Brandt/Madison Horner/Hannah Swain/Emily Meckley|123.6|NULL|0
+13304|2|4x100M Relay|Maddie Brandt/Megan Brandt/Cassie Grabowski/Zoe Riddile|53.88|NULL|0
+

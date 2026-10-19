@@ -1,0 +1,6 @@
+Oberlin College HS Grand Prix Series
+m/1/60m|Finals I 8.~11~Zack Munchick~7.42a~Cloverleaf~8373672
+m/1/60m|Prelims I 9.~11~Zack Munchick~7.42aPB~Cloverleaf~8373672
+f/1/60mh|Finals I 5.~12~Zana Ross~10.20aPB~Cloverleaf~8373658
+f/1/60mh|Prelims I 8.~12~Zana Ross~10.40a~Cloverleaf~8373658
+#SERIES {}

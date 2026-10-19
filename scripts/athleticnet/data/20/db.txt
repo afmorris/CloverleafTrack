@@ -1,0 +1,22 @@
+2792|2|Shot Put|Megan VanMeter|NULL|289.5|0
+3882|1|800M|Andrew Hibler|137.52|NULL|0
+4102|2|60M|Arabella Polen|9.63|NULL|0
+4180|1|400M|Jimmy Yagersz|67.1|NULL|0
+4405|1|3200M|Ethan Vaughn|798.84|NULL|0
+4996|1|3200M|Max Gucker|603.29|NULL|0
+5154|2|400M|Alyssa Stoner|69.36|NULL|0
+5183|1|60M|Ray Farnham|8.56|NULL|0
+5331|1|400M|Hunter Stallings|60.57|NULL|0
+5514|1|60M|Patrick McConnell|8.24|NULL|0
+6137|2|200M|Arabella Polen|31.97|NULL|0
+6492|1|200M|Ray Farnham|28.66|NULL|0
+6798|2|60M|Paige Munchick|8.84|NULL|0
+7020|2|800M|Sophia Spencer|162.46|NULL|0
+7495|1|800M|Alex Derhammer|141.21|NULL|0
+7522|1|800M|Brett Gucker|140.53|NULL|0
+7991|2|200M|Paige Munchick|29.68|NULL|0
+8420|1|400M|Vova Herdman|64.97|NULL|0
+8519|2|200M|Liberty Ridenour|34.44|NULL|0
+8533|1|800M|Cole Yagersz|139.65|NULL|0
+8922|1|200M|Patrick McConnell|27.65|NULL|0
+

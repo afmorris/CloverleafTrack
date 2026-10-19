@@ -1,0 +1,9 @@
+1256|2|High Jump|Ashley Sigmon|NULL|61|0
+4960|1|800M|Andrew Hibler|117.81|NULL|0
+4988|2|200M|Riley Evans|25.48|NULL|0
+7108|2|3200M|Alyssa Stoner|667.98|NULL|0
+8130|2|400M|Riley Evans|56.99|NULL|0
+12059|1|4x400M Relay|Philly Hamilton/Vova Herdman/Nolan Freeland/Andrew Hibler|209.48|NULL|0
+12738|1|4x800M Relay|Nolan Freeland/Vova Herdman/Andrew Hibler/Hunter Stallings|478.7|NULL|0
+13098|2|4x200M Relay|Julia Armogida/Riley Evans/Paige Munchick/Ashley Sigmon|104.75999999999999|NULL|0
+

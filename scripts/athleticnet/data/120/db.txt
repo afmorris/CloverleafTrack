@@ -1,0 +1,33 @@
+481|2|Shot Put|Mariel Leatherman|NULL|189|0
+608|1|Shot Put|Cory Starman|NULL|380|0
+1149|1|Shot Put|Jake Kemp|NULL|448.75|0
+1421|1|Shot Put|Tommy Sword|NULL|414.75|0
+3599|1|Shot Put|Nathan Szymczak|NULL|279.25|0
+3958|1|1600M|Andrew Vasel|363.4|NULL|0
+4006|1|3200M|Joey Kurtz|851.53|NULL|0
+4310|2|400M|Paige Munchick|68.9|NULL|0
+4326|2|200M|Ashley Kizzen|31.34|NULL|0
+4344|1|60M|Patrick McConnell|8.35|NULL|0
+4749|1|60M|DeAnte Taylor|7.7|NULL|0
+4841|1|200M|Jacob Nau|26.92|NULL|0
+4875|1|200M|Michael Williams|25.75|NULL|0
+4901|2|400M|Sara Naples|74.22|NULL|0
+4912|2|800M|Emma Nagel|193.41|NULL|0
+5048|1|200M|Patrick McConnell|28.38|NULL|0
+5529|1|800M|Jack Szklarz|152.29|NULL|0
+5721|2|1600M|Maria Porras|365.25|NULL|0
+5853|2|800M|Tommie Kurtz|157.19|NULL|0
+5976|1|60M|Jacob Nau|8.23|NULL|0
+6013|1|60M|Mike Burkey|8.1|NULL|0
+6528|1|400M|TJ Corbett|69.6|NULL|0
+6852|1|1600M|Brett Gucker|328.9|NULL|0
+6906|1|1600M|Joey Kurtz|421.21|NULL|0
+7068|1|3200M|Max Gucker|624.68|NULL|0
+7299|1|200M|TJ Corbett|28.6|NULL|0
+7675|1|200M|DeAnte Taylor|26.34|NULL|0
+7691|2|60M|Ashley Kizzen|9.16|NULL|0
+7888|1|1600M|Alex Derhammer|305.5|NULL|0
+8131|1|1600M|Andrew Hibler|324.43|NULL|0
+8284|1|60M|Michael Williams|7.57|NULL|0
+9084|1|400M|Cole Yagersz|64.89|NULL|0
+

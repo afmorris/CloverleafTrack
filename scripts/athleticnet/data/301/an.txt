@@ -1,0 +1,23 @@
+OHSAA Division 1 Northeast District - North Canton
+m/1/800m|Finals I 14.~12~Kyle Nehrenz~2:10.40a~Cloverleaf~32586054
+m/1/800m|Prelims I 7.~12~Kyle Nehrenz~2:09.02aPB~Cloverleaf~32586054
+m/1/110mh|Semi-Finals I 8.~11~Greg Hill~16.90~Cloverleaf~32586048
+m/1/110mh|Prelims I 3.~11~Greg Hill~15.80PB~Cloverleaf~32586048
+m/1/110mh|Prelims I 3.~12~Mike Fuentes~15.90PB~Cloverleaf~32585795
+m/1/110mh|Semi-Finals I --~12~Mike Fuentes~DQ~Cloverleaf~32585795
+m/1/300mh|Finals I 2.~12~Mike Fuentes~39.84aPB~Cloverleaf~32585795
+m/1/300mh|Prelims I 3.~12~Mike Fuentes~42.32a~Cloverleaf~32585795
+f/1/100m|Semi-Finals I 7.~12~Morgan O'Rourke~13.70~Cloverleaf~32584296
+f/1/100m|Prelims I 4.~12~Morgan O'Rourke~13.50SB~Cloverleaf~32584296
+f/1/800m|Finals I 15.~12~Betsy Reedy~2:38.36aSB~Cloverleaf~32586037
+f/1/800m|Prelims I 8.~12~Betsy Reedy~2:40.10a~Cloverleaf~32586037
+f/1/100mh|Finals I 5.~12~Jenny Rupp~15.76aPB~Cloverleaf~32585794
+f/1/100mh|Semi-Finals I 3.~12~Jenny Rupp~16.20~Cloverleaf~32585794
+f/1/100mh|Semi-Finals I 7.~10~Stephanie Foster~17.50~Cloverleaf~649720
+f/1/100mh|Prelims I 2.~12~Jenny Rupp~16.40~Cloverleaf~32585794
+f/1/100mh|Prelims I 4.~10~Stephanie Foster~17.40SB~Cloverleaf~649720
+f/1/300mh|Finals I 3.~12~Jenny Rupp~46.64aPB~Cloverleaf~32585794
+f/1/300mh|Finals I 4.~11~Heidi Santelmann~47.05aPB~Cloverleaf~32585793
+f/1/300mh|Prelims I 2.~12~Jenny Rupp~48.92a~Cloverleaf~32585794
+f/1/300mh|Prelims I 1.~11~Heidi Santelmann~49.47a~Cloverleaf~32585793
+#SERIES {}

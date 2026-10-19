@@ -1,0 +1,49 @@
+10|2|Discus|Lisa Wangler|NULL|994|0
+282|1|Long Jump|Jimmy Fazio|NULL|209.25|0
+457|2|High Jump|Vickie Andrews|NULL|58|0
+611|2|Shot Put|Harper Owens|NULL|343.5|0
+1024|2|Long Jump|Madison Horner|NULL|178|0
+1357|1|Shot Put|Dylan Craig|NULL|421|0
+1700|2|Long Jump|Brianna Gallagher|NULL|151.5|0
+1923|1|Shot Put|Corey Jenkin|NULL|460|0
+1980|2|Discus|Harper Owens|NULL|808|0
+2651|1|Long Jump|Austin Greer|NULL|204|0
+2882|2|Shot Put|Lisa Wangler|NULL|399.5|0
+2915|1|Discus|Dylan Craig|NULL|1077|0
+2936|1|Discus|Corey Jenkin|NULL|1057|0
+4495|1|200M|Diego Rivera|25.23|NULL|0
+4921|1|100M|Ryan Powell|11.96|NULL|0
+5005|2|300M Hurdles|Katelyn Malena|56.68|NULL|0
+5113|1|110M Hurdles|Tate Surrarrer|19.8|NULL|0
+5394|1|200M|Tyler Slavens|24.6|NULL|0
+5597|2|100M Hurdles|Katelyn Malena|19.7|NULL|0
+5769|1|800M|Jacob Haschak|138.7|NULL|0
+5823|1|100M|Diego Rivera|11.97|NULL|0
+5905|1|3200M|Andrew Jarrett|650.4|NULL|0
+6096|2|200M|Lauren Frank|29.25|NULL|0
+6173|1|400M|Tristan Vaughan|57|NULL|0
+6560|2|1600M|Vanessa Rivera|352.4|NULL|0
+6925|1|800M|Michael Martin|137.7|NULL|0
+7066|2|400M|Erian Hamilton|64.43|NULL|0
+7080|2|400M|Hannah Swain|61.86|NULL|0
+7169|2|800M|Riley Freeland|151.99|NULL|0
+7170|2|1600M|Riley Freeland|326.39|NULL|0
+7689|1|300M Hurdles|Tate Surrarrer|46.91|NULL|0
+7702|2|3200M|Vanessa Rivera|765.42|NULL|0
+7800|2|100M|Cassie Grabowski|13.7|NULL|0
+8149|1|400M|Ryan Powell|56.19|NULL|0
+8197|2|3200M|Anna Winnicki|783.4|NULL|0
+8287|2|800M|Adriana Jeziorski|153.3|NULL|0
+8332|1|1600M|Andrew Jarrett|292.77|NULL|0
+8578|2|100M|Taylor Napholz|14.3|NULL|0
+8841|1|3200M|Darren Egner|651.35|NULL|0
+9086|2|200M|Hannah Swain|29.7|NULL|0
+11918|1|4x200M Relay|Zack Munchick/Tyler Slavens/Ryan Powell/Diego Rivera|97.42|NULL|0
+12104|1|4x400M Relay|Tyler Slavens/Tristan Vaughan/Michael Martin/Ryan Powell|227.66|NULL|0
+12201|1|4x800M Relay|Darren Egner/Jacob Haschak/Andrew Jarrett/Michael Martin|539.62|NULL|0
+12350|1|4x100M Relay|Austin Greer/Zack Munchick/Jon Nespeca/Diego Rivera|48.2|NULL|0
+12518|2|4x100M Relay|Cassie Grabowski/Madison Horner/Abegayle Keener/Taylor Napholz|55.2|NULL|0
+12569|2|4x400M Relay|Lauren Frank/Riley Freeland/Erian Hamilton/Adriana Jeziorski|260.34|NULL|0
+12765|2|4x200M Relay|Lauren Frank/Greg Miller/Taylor Napholz/Hannah Swain|115.3|NULL|0
+13365|2|4x800M Relay|Riley Freeland/Erian Hamilton/Adriana Jeziorski/Vanessa Rivera|608.31|NULL|0
+
