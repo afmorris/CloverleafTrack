@@ -2185,3 +2185,15 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Why:** the strip already shows every attempt (F / P / marks, best highlighted); the chart repeated it. The partial is kept as a thin wrapper so both pages keep a single call site.
 
 **Key files:** `CloverleafTrack.Web/Views/Shared/_AttemptSeriesExpanded.cshtml`.
+
+### [C71] Missing Northeast Division I District Meets (2005, 2006, 2008, 2009, 2010) From baumspage.com
+
+**What changed:** `docs/imports/ne-district-2005-2010.sql` creates five meets that existed only on the web (`<year> Division I District Track Meet`, Hoover High School / North Canton, outdoor, season-matched, `MeetType` 1 like the 2003/2004/2007/2011 district rows) and their Cloverleaf results: 41 + 42 + 56 + 47 + 38 performances (individual and relay), 88 prelim/semi/final chains (`PerformanceRounds`), 4 ResultStatus rows, and two new athletes (Amber Hansen, Morgan O'Rourke, both class of 2007). Source: baumspage.com Hy-Tek result pages `tf/ne/YYYY/ncanton/res*.htm` (saved as `scripts/crawl/baumspage/ne-YYYY-res.txt`), parsed by `scripts/crawl/parse_hytek.py`, SQL built by `scripts/crawl/build_district_sql.py`. athletic.net's district pages for 2005, 2006, 2009 and 2010 were scanned and agree with baumspage on every mark and athlete; they supplied the relay legs that baumspage omits for some rows.
+
+**Rules:** the meet date is the LAST day of the meet (the DB's existing district rows use it). One Cloverleaf relay per event: rounds are merged and the leg names come from whichever round lists all four. A Cloverleaf relay with no named legs in any source (2006 boys 4x400, 3:39.97) is skipped, because a relay Performance needs its athletes. Athlete names are matched exactly with a small alias table (Cassy->Cassandra Maxwell, Rick->Richard Morrison, Brittany->Brittani Pekar, William->Billy Simpson, ...). Billy Simpson's DB graduation year (2007) looks wrong: he competed through 2008.
+
+**Top-8-only field events:** in most district field events only the top ~8 (plus ties) have a recorded distance/height and everyone else shows `ND`/`NH`: that is "not recorded", NOT a no-mark result, so those rows are skipped (the builder's `unrecorded_events`: <= 10 rows with a mark and >= 2 without). Events where nearly everyone has a mark (2008 boys discus 23 marked / 3 ND) keep their ND/NH as real no-mark results. Without this rule 51 false NM/NH rows would have been created. The earlier MileSplit/athletic.net no-mark imports ([C68], [C69]) were re-checked for the same trap (e.g. 2021 Orrville discus has 13 marks and 2 ND, so Ben Kott's ND is real) and stand.
+
+**Watch out:** the SQL bakes in athlete Ids for existing athletes but references the two new athletes by name; regenerate against a DB without them. Each year is skipped if a meet with that name and date already exists. Other district years still missing sources: 2008 has no athletic.net page.
+
+**Key files:** `docs/imports/ne-district-2005-2010.sql`, `scripts/crawl/{parse_hytek.py,build_district_sql.py,baumspage/}`.
