@@ -2047,6 +2047,35 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 
 **Key files:** `Views/Meets/Details.cshtml`, `Views/Shared/_RoundStrip.cshtml`, `Views/Shared/_AttemptStrip.cshtml`, `wwwroot/css/site.css`.
 
+### [C59] Handwritten Scorer-Sheet Scans → Attempt Series for Four Older Duals
+
+**What changed:** Four scanned PDFs of handwritten scorer sheets (`~/Downloads/scan_ggucker_*`) were matched to DB meets by the date/opponent written on the sheets: 2024-04-23 → Field-Coventry Double Dual (meet 254); 2025-04-15 → Woodridge Dual (3); 2025-04-22 → Norton-Springfield Double Dual (68); 2025-05-07 scan → New London Dual (275, sheets are dated 5/6/2025). Shot put, discus and long jump attempt series for Cloverleaf athletes were transcribed into `scripts/athleticnet/data/<meetId>/sheets.txt` and turned into `docs/imports/2024-2025-dual-attempts.sql` by `scripts/athleticnet/build_scan_sql.py`: 218 attempt series. Applied to the local SQL Server copy only.
+
+**Why:** Owner wanted the full meet detail from the paper sheets. Track-event sheets only repeat marks already in the DB (no rounds in duals), so only field attempts add information.
+
+**Watch out:**
+- Matching is by (gender, event, DB athlete name) and every block asserts the sheet's best attempt equals the stored `Performances.DistanceInches`; a misread best skips the athlete (listed as `NOTE` lines at the end of the SQL: 7 for Woodridge — Kaiden Stone shot, Preston Stark / Dominic Nau / Dylan Wittman discus and Izzy Messmore discus disagree with the DB; Collin Bohley and Ethan Gray have no DB mark). Only the best attempt is cross-checked; the non-best attempts are read from faint pencil and are not independently verified (a few were disambiguated using the DB best, e.g. Blake Thorne 26-1, Jack Chonko 35-0).
+- Blank inches on a sheet ("35-") are 0 inches; a lone "—" attempt is stored as not taken; series with fewer than two recorded attempts are skipped.
+- High jump and pole vault sheets (bar heights with X/O) are not imported: `PerformanceAttempts` stores distances only.
+- Double-dual throws sheets only have 2 attempts per athlete; the 2025 Norton-Springfield sheets use attempts 1-4 with 1 and 3 mostly fouls.
+- PDF rendering without poppler: a Swift/PDFKit script (kept in the session scratchpad only) rendered pages; scans are rotated inconsistently, so check orientation per page.
+
+**Key files:** `scripts/athleticnet/build_scan_sql.py`, `scripts/athleticnet/data/{254,3,68,275}/sheets.txt`, `docs/imports/2024-2025-dual-attempts.sql`.
+
+### [C60] High Jump / Pole Vault Bar Ladder (`PerformanceBars`)
+
+**What changed:** New additive table `PerformanceBars` (PerformanceId, HeightInches, Outcome; cascade delete; unique per height; CHECK on the seven valid outcomes) for individual high jump and pole vault. `Performances.DistanceInches` stays the best cleared height, so PRs, ranks, percentiles and scoring are unchanged. Display: `Views/Shared/_BarLadder.cshtml` (chip per bar, best cleared bar highlighted; renders nothing without rows) on the meet page (above the attempt/round strips, under the athlete name) and athlete page. Admin Create/Edit show a "Bars" textarea for HJ/PV events (one `4'4" XXO` per line; `BarLadderParser` validates and an empty box clears the ladder); the attempt-series toggle is hidden for these events. Import: `scripts/athleticnet/build_bars_sql.py` + `data/<meet>/bars.txt` → `docs/imports/2024-2025-dual-bars.sql` (24 ladders for the four scanned duals, applied to the local DB only; 2 of 26 skipped on a mark mismatch). Migration `docs/migration_performance_bars.sql` must run before deploying the code (services query the table).
+
+**Why:** `PerformanceAttempts` only stores distances, which can't represent bar heights with X/O/P outcomes. Same sibling-table design as [C55].
+
+**Watch out:**
+- Normalise notation before storing: several sheets (Norton-Springfield HJ, Woodridge HJ) use the inverted notation (X = clear, O = miss; "O = Misses" is written at the bottom). The pole vault sheets use check marks for clears.
+- Not imported: Kinsey Bayer and Emily Ellebruch at Norton-Springfield (sheet bests 4'6"/4'4" vs DB 4'8"/4'6" — the DB or the sheet is off; the generator's mark assertion skipped them), Payten Shetterly at Woodridge (single illegible bar), Payten's final bar at New London, athletes with no height (not in the DB).
+- Pass-only and single-bar ladders are valid; a ladder with no clear never updates `DistanceInches`.
+- `site.css` is hand-appended with the `.bar-chip*` rules (same text as in `input.css`) because no node toolchain is available; a Tailwind rebuild regenerates from `input.css`.
+
+**Key files:** `Models/PerformanceBar.cs`, `DataAccess/Repositories/PerformanceBarRepository.cs`, `AdminPerformanceRepository.cs`, `Services/PerformanceBarSeriesBuilder.cs`, `Web/Utilities/BarLadderParser.cs`, `Views/Shared/_BarLadder.cshtml`, `Areas/Admin/Views/Performances/{Create,Edit}.cshtml`, `docs/migration_performance_bars.sql`, `docs/mockups/vertical-jump-bars.html`, `Tests/Unit/Models/PerformanceBarTests.cs`.
+
 ### [C63] Meets.OfficialResultsUrl — Link to Externally Hosted Official Results
 
 **What changed:** New nullable `Meets.OfficialResultsUrl NVARCHAR(500)` (`docs/migration_meet_official_results_url.sql`, already run on live and local). Admin Create/Edit has an "Official Results URL" field (validated `[Url]`, http/https only, blank → null via `MeetsController.NormalizeUrl`; the "copy meet" action deliberately does not copy it). The public meet page shows an "Official results on <host> ↗" chip (`target=_blank rel="noopener noreferrer"`); `MeetService` only passes through http/https links, so a stored `javascript:` value can never render.

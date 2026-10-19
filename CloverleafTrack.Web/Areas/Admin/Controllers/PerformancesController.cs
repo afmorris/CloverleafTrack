@@ -124,6 +124,14 @@ public class PerformancesController(
             }
         }
 
+        // Optional high jump / pole vault bar ladder
+        List<PerformanceBar>? bars = null;
+        if (BarLadderParser.IsVerticalJump(evt?.Name))
+        {
+            bars = BarLadderParser.Parse(model.BarsInput, out var barErrors);
+            foreach (var error in barErrors) ModelState.AddModelError(nameof(model.BarsInput), error);
+        }
+
         if (!ModelState.IsValid)
         {
             // Reload dropdowns
@@ -197,6 +205,11 @@ public class PerformancesController(
             {
                 await performanceRepository.SaveAttemptSeriesAsync(performanceId, attempts);
             }
+        }
+
+        if (bars is { Count: > 0 })
+        {
+            await performanceRepository.SaveBarsAsync(performanceId, bars);
         }
 
         // Optional prelim/semi/final times for running events; see SaveRoundsAsync.
@@ -304,6 +317,12 @@ public class PerformancesController(
             viewModel.RelayAthleteIds = await performanceRepository.GetAthleteIdsForPerformanceAsync(id);
         }
 
+        // Load any previously recorded bar ladder so the form can pre-populate it
+        if (BarLadderParser.IsVerticalJump(evt?.Name))
+        {
+            viewModel.BarsInput = BarLadderParser.Format(await performanceRepository.GetBarsForPerformanceAsync(id));
+        }
+
         // Load any previously recorded rounds so the form can pre-populate them
         foreach (var round in await performanceRepository.GetRoundsForPerformanceAsync(id))
         {
@@ -358,6 +377,14 @@ public class PerformancesController(
             {
                 ModelState.Remove(key);
             }
+        }
+
+        // Optional high jump / pole vault bar ladder (an empty box clears a stored ladder)
+        List<PerformanceBar>? bars = null;
+        if (BarLadderParser.IsVerticalJump(evt?.Name))
+        {
+            bars = BarLadderParser.Parse(model.BarsInput, out var barErrors);
+            foreach (var error in barErrors) ModelState.AddModelError(nameof(model.BarsInput), error);
         }
 
         if (!ModelState.IsValid)
@@ -436,6 +463,11 @@ public class PerformancesController(
             {
                 await performanceRepository.SaveAttemptSeriesAsync(model.Id, attempts);
             }
+        }
+
+        if (bars != null)
+        {
+            await performanceRepository.SaveBarsAsync(model.Id, bars);
         }
 
         // Optional prelim/semi/final times for running events. Fewer than two filled in clears any stored rounds.

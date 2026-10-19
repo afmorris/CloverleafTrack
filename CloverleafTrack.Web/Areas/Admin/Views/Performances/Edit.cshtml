@@ -1,3 +1,4 @@
+@using CloverleafTrack.Web.Utilities
 @model PerformanceEntryViewModel
 @{
     ViewData["Title"] = "Edit Performance";
@@ -153,7 +154,14 @@
                 </div>
             </div>
 
-            <div id="recordSeriesToggleGroup" style="@(isFieldEvent ? "" : "display: none;")">
+            <div class="form-group" id="barsGroup" style="@(BarLadderParser.IsVerticalJump(Model.EventName) ? "" : "display: none;")">
+                <label asp-for="BarsInput">Bars</label>
+                <textarea asp-for="BarsInput" class="form-control" rows="6" placeholder="4'0&quot; O&#10;4'2&quot; XO&#10;4'4&quot; XXO&#10;4'6&quot; XXX"></textarea>
+                <div class="hint">One bar per line: height, then O (cleared), X (miss) or P (pass) in order &mdash; O, XO, XXO, XXX, P, XP, XXP. The highest cleared bar becomes the mark.</div>
+                <span asp-validation-for="BarsInput" class="text-danger"></span>
+            </div>
+
+            <div id="recordSeriesToggleGroup" style="@(isFieldEvent && !BarLadderParser.IsVerticalJump(Model.EventName) ? "" : "display: none;")">
                 <label class="record-series-toggle">
                     <input type="checkbox" asp-for="RecordFullSeries" id="recordFullSeries" />
                     Record full attempt series (fouls, passes, all 6 marks)
@@ -239,6 +247,16 @@
                     } else {
                         $('#timeGroup').show();
                         $('#distanceGroup').hide();
+                        $('#recordSeriesToggleGroup').hide();
+                        $('#recordFullSeries').prop('checked', false);
+                        $('#attemptSeriesSection').hide();
+                    }
+
+                    // High jump / pole vault take a bar ladder instead of an attempt series
+                    var evtText = selectedOption.text();
+                    var isVertical = /(High Jump|Pole Vault)/i.test(evtText) && !/Relay/i.test(evtText);
+                    $('#barsGroup').toggle(isVertical);
+                    if (isVertical) {
                         $('#recordSeriesToggleGroup').hide();
                         $('#recordFullSeries').prop('checked', false);
                         $('#attemptSeriesSection').hide();

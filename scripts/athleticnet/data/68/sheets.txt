@@ -1,0 +1,64 @@
+# 2025 Norton-Springfield Double Dual (4/22/2025) - scorer sheets scan_ggucker_2025-04-22. gender|event|DB athlete name|attempts
+2|Shot Put|Issy Mlckovsky|F;13-5;F;13-11
+2|Shot Put|Izzy Messmore|F;17-0;F;16-4
+2|Shot Put|Anna Naftzger|F;25-3;F;24-1.5
+2|Shot Put|Delaney Ishler|F;26-9;F;24-4
+2|Shot Put|Jayce Kreider|F;25-11;;26-10
+2|Shot Put|Berkeley Craddock|F;28-2.5;F;28-1.5
+2|Shot Put|Amelia Ryncarz|F;32-9;F;30-0.5
+2|Shot Put|Presly McConnell|F;38-7;F;38-0
+1|Shot Put|Gunnar Surrarrer|26-7;25-9.5
+1|Shot Put|Preston Stark|27-10;28-5
+1|Shot Put|Blake Thorne|26-5.5;26-1
+1|Shot Put|Isaac Montgomery|28-1;28-6
+1|Shot Put|Kaiden Stone|27-10;27-10.5
+1|Shot Put|Braylon Lade|29-7;30-2
+1|Shot Put|Jacob Atkinson|32-2;31-4
+1|Shot Put|Jake Schaefer|33-5;32-11.25
+1|Shot Put|Dylan Wittman|32-10.5;34-6.5
+1|Shot Put|Adam Gray|35-2.5;34-5.75
+1|Shot Put|Jack Chonko|35-0;35-0.75
+1|Shot Put|Hunter Brooks|34-4;34-0
+1|Shot Put|JJ Johnson|33-6;F
+1|Shot Put|Ethan Martin|36-6;34-10
+1|Shot Put|Dominic Nau|40-7;39-2.5
+1|Shot Put|Royce Zirkle|38-7;39-2
+1|Shot Put|Clay Combs|45-11;51-1.5
+2|Discus|Issy Mlckovsky|23-0;30-10
+2|Discus|Izzy Messmore|48-9;50-8
+2|Discus|Anna Naftzger|53-9;57-6
+2|Discus|Delaney Ishler|76-9;70-6
+2|Discus|Addi Reho|89-11;88-3
+2|Discus|Berkeley Craddock|92-9;67-6
+2|Discus|Jayce Kreider|;90-1
+2|Discus|Amelia Ryncarz|79-0;82-1
+2|Discus|Presly McConnell|99-2;108-7
+1|Discus|Jake Schaefer|73-2;73-1
+1|Discus|Preston Stark|80-4;71-1
+1|Discus|Isaac Montgomery|67-9;65-4
+1|Discus|Blake Thorne|65-0;69-8
+1|Discus|Braylon Lade|72-3;69-2
+1|Discus|Gunnar Surrarrer|77-4;86-6
+1|Discus|Kaiden Stone|74-10;71-0
+1|Discus|Dominic Nau|81-0;76-1
+1|Discus|Royce Zirkle|94-10;93-9
+1|Discus|Jack Chonko|93-0;95-6
+1|Discus|Dylan Wittman|94-0;82-8
+1|Discus|Ethan Martin|92-8;112-8
+1|Discus|JJ Johnson|63-8;79-8
+1|Discus|Jacob Atkinson|87-5;105-10
+1|Discus|Hunter Brooks|116-5;116-7
+1|Discus|Adam Gray|116-7;117-7
+1|Discus|Clay Combs|142-5;129-5
+1|Long Jump|Ty Kovach|17-3;17-9.5;F;18-6.5
+1|Long Jump|Elliot Jordan|17-8.25;17-9.75;17-11.75;17-6
+1|Long Jump|Grady Pamer|F;16-5.5;17-6;F
+1|Long Jump|Collin Saksa|15-1.5;15-5.25;17-1.75;15-10
+1|Long Jump|Clayton Sewalish|14-5;15-5;16-0.75;16-9
+1|Long Jump|Jackson Morris|14-11;14-6;14-2.5;15-3.5
+2|Long Jump|Abigail Reinhardt|14-5.5;15-5.5;F;16-2.5
+2|Long Jump|Kinsey Bayer|14-5;F;14-6;15-8.25
+2|Long Jump|Lilly Southam|10-11.5;9-9.5;11-1;10-7
+2|Long Jump|Katelin Yagersz|11-3;F;F;F
+2|Long Jump|Tessa Bogucki|13-6.25;13-10.75;13-5.25;13-9
+2|Long Jump|KK Campbell|14-10;F;15-11.5;16-2.5

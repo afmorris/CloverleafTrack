@@ -38,4 +38,13 @@ public interface IAdminPerformanceRepository
     /// TimeSeconds untouched.
     /// </summary>
     Task SaveRoundsAsync(int performanceId, List<PerformanceRound> rounds);
+
+    /// <summary>Loads the bar ladder for a single high jump / pole vault performance, ordered by height. Empty list if none.</summary>
+    Task<List<PerformanceBar>> GetBarsForPerformanceAsync(int performanceId);
+
+    /// <summary>
+    /// Replaces the full bar ladder for a performance, sets Performances.DistanceInches to the best cleared
+    /// height (when any bar was cleared) and calls sp_RebuildLeaderboards. An empty list just clears the ladder.
+    /// </summary>
+    Task SaveBarsAsync(int performanceId, List<PerformanceBar> bars);
 }

@@ -1,0 +1,7 @@
+# 2024 Field-Coventry (4/23/2024), scan_ggucker_2024-04-23 pages 2 and 13. Standard notation (X miss, O clear, P pass).
+1|High Jump|Nathan Tomes|5-0:XXO;5-2:XXX
+1|High Jump|Logan Forbes|5-0:O;5-2:P;5-4:XXX
+1|High Jump|Zach Brownson|5-0:O;5-2:XXO;5-4:XXX
+2|High Jump|Grace Goldsberry|4-0:XO;4-2:O;4-4:XXO;4-6:XXX
+2|High Jump|Abigail Reinhardt|4-0:O;4-2:O;4-4:XXO;4-6:XXX
+2|High Jump|Payten Shetterly|4-0:O;4-2:XXX
