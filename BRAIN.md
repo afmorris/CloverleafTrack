@@ -2047,6 +2047,16 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 
 **Key files:** `Views/Meets/Details.cshtml`, `Views/Shared/_RoundStrip.cshtml`, `Views/Shared/_AttemptStrip.cshtml`, `wwwroot/css/site.css`.
 
+### [C61] 2026 State Girls 4x400 — Wrong Final Time (Clear Fork's) and Missing Prelim
+
+**What changed:** Performance 16487 (2026 OHSAA D3 State, girls 4x400) was stored as 3:55.05, which is Clear Fork's 2nd-place time; Cloverleaf was 3rd in 3:55.68 with a 4:02.05 prelim (athletic.net splits sum correctly for both). `docs/imports/2026-state-4x400-fix.sql` corrects `TimeSeconds` to 235.68, adds the prelim/final `PerformanceRounds`, and re-runs `sp_RebuildLeaderboards`. It stays the school record (old best 4:01.96).
+
+**Why found:** the athletic.net import ([C57]) asserts every stored mark and refused to attach the chain ("UNMATCHED rounds … 235.68"); the mismatch was the data error, not the scrape.
+
+**Watch out:** this is a correction of existing data, not an additive import; it was run on the live DB. Boys 4x800 at State was finals-only (8:04.00, 10th); Kayla Shook's individual 400 was prelims-only (1:00.79, 16th) — no chains for either. (Entries [C59]/[C60] live in PR 66.)
+
+**Key files:** `docs/imports/2026-state-4x400-fix.sql`.
+
 ### [C59] Handwritten Scorer-Sheet Scans → Attempt Series for Four Older Duals
 
 **What changed:** Four scanned PDFs of handwritten scorer sheets (`~/Downloads/scan_ggucker_*`) were matched to DB meets by the date/opponent written on the sheets: 2024-04-23 → Field-Coventry Double Dual (meet 254); 2025-04-15 → Woodridge Dual (3); 2025-04-22 → Norton-Springfield Double Dual (68); 2025-05-07 scan → New London Dual (275, sheets are dated 5/6/2025). Shot put, discus and long jump attempt series for Cloverleaf athletes were transcribed into `scripts/athleticnet/data/<meetId>/sheets.txt` and turned into `docs/imports/2024-2025-dual-attempts.sql` by `scripts/athleticnet/build_scan_sql.py`: 218 attempt series. Applied to the local SQL Server copy only.
