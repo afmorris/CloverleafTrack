@@ -2177,3 +2177,11 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** the `NM` token on athletic.net pages is also the initials of athletes like Noah Mion and Natasha Messmore (false positive; filtered by hand). `DNS` (did not start) is intentionally not imported. Not covered: athletic.net running-event DQ/DNF before 2026, JV pages, the 2026 State meet, relay DQ/DNF, meets whose names did not match a DB meet, and `scr` (scratch) rows for events with no result. The browser pane must be visible during athletic.net scans ([C68]); they take roughly 1-2 minutes per meet.
 
 **Key files:** `scripts/crawl/{build_no_mark_sql.py,ms-no-marks-raw.txt,an-no-marks-raw.txt}`, `docs/imports/no-marks-2005-2025.sql`.
+
+### [C70] Removed the "Show attempt chart" Disclosure
+
+**What changed:** `Views/Shared/_AttemptSeriesExpanded.cshtml` now renders only `_AttemptStrip`; the `<details>` "Show attempt chart" with the inline-SVG bar chart (athlete page and event page, e.g. Will Rogalski's senior-year shot put) is gone. Supersedes the disclosure described in the attempt-series entry ([C32]).
+
+**Why:** the strip already shows every attempt (F / P / marks, best highlighted); the chart repeated it. The partial is kept as a thin wrapper so both pages keep a single call site.
+
+**Key files:** `CloverleafTrack.Web/Views/Shared/_AttemptSeriesExpanded.cshtml`.
