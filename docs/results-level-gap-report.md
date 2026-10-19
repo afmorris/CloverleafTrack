@@ -40,21 +40,20 @@ Same athlete and event, within 3.5% (times) or 6 inches (field). The DB value sh
 | 2017-05-10 2017 PTC Track Championships | Girls 300M Hurdles | Zana Ross | 48.70 | 49.04 |
 | 2017-05-10 2017 PTC Track Championships | Girls 200M | Jenna Oliver | 28.19 | 28.60 |
 
-## Large differences (12): check against the official sheet
-| Meet | Event | Athlete | DB | MileSplit |
-|---|---|---|---|---|
-| 2025-04-26 2025 Green Twilight Relays | Girls Discus | Presly McConnell | 96' 5.00" | 69' 5.00" |
-| 2025-05-03 2025 Nikki Reynolds Invitational | Boys Discus | Clay Combs | 157' 10.00" | 157' 0.00" |
-| 2025-05-12 2025 Stars of Track and Field | Boys Long Jump | Collin Saksa | 15' 8.25" | 18' 5.25" |
-| 2024-05-03 2024 Fairless Twilight Invitational | Girls Discus | Karoline Kreider | 85' 1.00" | 78' 10.00" |
-| 2024-05-06 2024 Stars of Track and Field | Boys Discus | Dylan Wittman | 103' 3.00" | 100' 8.00" |
-| 2024-05-24 2024 Division I Regional Track Meet | Girls 100M | Riley Evans | 12.25 | 12.78 |
-| 2024-05-24 2024 Division I Regional Track Meet | Boys Discus | Tim Shores | 128' 6.00" | 129' 7.00" |
-| 2023-04-04 2023 Ravenna-Streetsboro Double Dual | Boys Shot Put | Dominic Nau | 31' 0.00" | 38' 2.00" |
-| 2018-04-27 2018 Orange Relays | Girls 1600M | Sara Naples | 6:17.24 | 12:48.68 |
-| 2018-04-27 2018 Orange Relays | Boys 1600M | Dillon West | 5:12.55 | 10:01.05 |
-| 2018-05-09 2018 PTC Track Championships | Boys 400M | Blake Wilson | 54.88 | 57.50 |
-| 2017-05-20 2017 Division II District Track Meet | Boys 800M | Nick Bailey | 2:18.46 | 2:12.94 |
+## Large differences (12): reviewed one by one with the owner
+| Meet | Event | Athlete | DB (before) | MileSplit | Decision |
+|---|---|---|---|---|---|
+| 2025-04-26 Green Twilight Relays | Girls Discus | Presly McConnell | 96' 5" | 69' 5" | Keep ours (MileSplit digits swapped) |
+| 2025-05-03 Nikki Reynolds | Boys Discus | Clay Combs | 157' 10" | 157' 0" | Official: 157' 0" |
+| 2025-05-12 Stars (JV) | Boys Long Jump | Collin Saksa | 15' 8.25" | 18' 5.25" | Keep ours |
+| 2024-05-03 Fairless Twilight | Girls Discus | Karoline Kreider | 85' 1" | 78' 10" | Keep ours: the official results swapped the Kreider sisters; Karoline threw 85' 1", Jayce 78' 10" (the DB already has Jayce at 78' 10") |
+| 2024-05-06 Stars (JV) | Boys Discus | Dylan Wittman | 103' 3" | 100' 8" | Official: 100' 8" |
+| 2024-05-24 Regional | Girls 100M | Riley Evans | 12.25 | 12.78 | Keep ours (MileSplit has her prelim) |
+| 2024-05-24 Regional | Boys Discus | Timmy Shores | 128' 6" | 129' 7" | Official: 129' 7" |
+| 2023-04-04 Ravenna-Streetsboro | Boys Shot Put | Dominic Nau | 31' 0" | 38' 2" | Keep ours |
+| 2018-04-27 Orange Relays | 1600M | Sara Naples / Dillon West | 6:17.24 / 5:12.55 | 12:48.68 / 10:01.05 | Keep the 1600s; the MileSplit times are their 3200M runs, added as 3200M results |
+| 2018-05-09 PTC | Boys 400M | Blake Wilson | 54.88 | 57.50 | Keep ours |
+| 2017-05-20 Division II District | Boys 800M | Nick Bailey | 2:18.46 | 2:12.94 | Mark is 2:12.94 (prelim); chain prelim 2:12.94 -> final 2:18.46 |
 
 ## Relay times that differ
 | Meet | Relay | DB | MileSplit |

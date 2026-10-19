@@ -619,6 +619,8 @@ Curated traps that still apply. Full context for each lives in `BRAIN.md` under 
 - Mobile table→card layouts use flexbox on `<tr>`, never CSS Grid. For layout verification trust CDP-measured `getBoundingClientRect()` over `chrome --headless --screenshot`. [C42]
 - Explicit abbreviation maps, not `[..2]` slicing (`Junior`→`Ju` bug). Unit tests don't catch visual/label bugs on charts. [C40, C41]
 
+- `Meets.Date` carries a time of day on 23 meets (e.g. 2024-05-06 16:00:00): never match a meet with `Date = 'YYYY-MM-DD'` (silently finds nothing); use `CAST(Date AS date)`. [C77]
+
 **Services & tests**
 - `PersonalBest` flags (and so athlete `TotalPRs` / `SeasonPerformanceViewModel.PRCount`, and a meet's `pr` fact-sheet flag) are only populated for the 2025-26 season; earlier seasons have none. Do not quote PR counts or infer "not a PR" from a missing flag on older data. School records (`AllTimeRank == 1`) are reliable. [C52]
 - AI summaries are written in chat by Opus subagents via the `generate-meet-summary` / `generate-season-summaries` skills (`.claude/skills/`: `generate-meet-summary`, `generate-season-summaries`, `generate-athlete-summary`), imported as Drafts, approved by the owner in `/Admin/MeetSummaries`. Bump `MeetSummaryPrompt.Version` when the prompt/fact sheet changes; the model sees only the fact sheet (corrected flags); only `Approved` text may render publicly (`MeetService` enforces it). Events must be written with site names or links silently fail. The API path (`ClaudeSummaryTextGenerator`, `Anthropic:ApiKey`) is no longer used by any UI. [C50, C51]
