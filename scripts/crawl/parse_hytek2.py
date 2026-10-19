@@ -5,7 +5,7 @@ yields BOTH rounds."""
 import re
 from parse_hytek import norm_event, parse_mark
 
-EVH = re.compile(r'^(?:Event\s+\d+\s+)?(Girls|Boys|Women|Men)\s+((?:\d|4x).*?|High Jump|Long Jump|Pole Vault|Shot Put|Discus.*|Triple Jump|Shot Put.*)\s*$')
+EVH = re.compile(r'^(?:Event\s+\d+\s+)?(Girls|Boys|Women|Men)\s+((?:\d|4x).*?|(?:High Jump|Long Jump|Pole Vault|Shot Put|Discus|Triple Jump|Javelin|Hammer)(?:\s.*)?)\s*$')
 COLH = re.compile(r'^\s*(Name\s+Year\s+School|School)\s+(?P<cols>.*\S)\s*$')
 SCHOOL = r"(?:Cloverleaf|Lodi Cloverl\w*|Lodi Clover\w*)(?:\s+'[A-Z]')?"
 ROW = re.compile(r'^\s*(?P<pl>\d+|--)\s+(?P<name>.+?)\s+(?:(?P<yr>\d{1,2})\s+)?(?P<school>' + SCHOOL + r')\s+(?P<cols>\S.*?)\s*$')
@@ -14,6 +14,8 @@ MEMBER = re.compile(r'(\d)\)\s+(.+?)(?:\s+(\d{1,2}))?(?=\s{2,}|\s*$|\s+\d\))')
 ROUND_OF = {'prelims': 'prelim', 'preliminaries': 'prelim', 'semis': 'semi', 'semi-finals': 'semi', 'finals': 'final'}
 
 def flip(name):
+    name = re.sub(r'#\s*\d+', ' ', name)
+    name = re.sub(r'\s+(FR|SO|JR|SR)\s+', ' ', name + ' ').strip()
     if ',' in name:
         last, first = [x.strip() for x in name.split(',', 1)]
         return f'{first} {last}'

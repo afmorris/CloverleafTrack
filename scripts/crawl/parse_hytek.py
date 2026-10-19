@@ -11,6 +11,8 @@ MEMBER = re.compile(r'(\d)\)\s+(.+?)\s+(\d{1,2})(?=\s{2,}|\s*$|\s+\d\))')
 
 def norm_event(name):
     n = name.lower()
+    n = re.sub(r'\b\d{2}"|\(.*?\)|\b(varsity|jv|metro|footed|open|prelims?|finals?|division \d.*)\b', ' ', n)   # hurdle heights, qualifiers
+    n = re.sub(r'(\d)m\b', r'\1', n)
     n = re.sub(r'\bmeter\b|\bmeters\b', '', n); n = re.sub(r'\s+', ' ', n).strip()
     table = {'100 hurdles': '100M Hurdles', '110 hurdles': '110M Hurdles', '300 hurdles': '300M Hurdles', '100 dash': '100M', '200 dash': '200M',
              '400 dash': '400M', '800 run': '800M', '1600 run': '1600M', '3200 run': '3200M', 'high jump': 'High Jump', 'long jump': 'Long Jump',
@@ -18,8 +20,14 @@ def norm_event(name):
              '4x100 relay': '4x100M Relay', '4x200 relay': '4x200M Relay', '4x400 relay': '4x400M Relay', '4x800 relay': '4x800M Relay'}
     for k, v in table.items():
         if n == k: return v
-    m = re.fullmatch(r'(100|200|400|800|1600|3200)\s*(dash|run)?', n)
+    m = re.fullmatch(r'(60|100|200|400|800|1600|3200)\s*(dash|run)?', n)
     if m: return m.group(1) + 'M'
+    if re.fullmatch(r'(60|100|110) hurdles', n): return n.split()[0] + 'M Hurdles'
+    if n in ('300 hurdles', '400 hurdles'): return n.split()[0] + 'M Hurdles'
+    if re.fullmatch(r'(4000m? )?distance medley( relay)?|dmr|4k distance medley', n): return '4K Distance Medley'
+    if re.fullmatch(r'(800m? )?sprint medley( relay)?|smr', n): return '800M Sprint Medley'
+    m = re.fullmatch(r'(4x\d+)\s*(?:shuttle hurdles?(?: relay)?)', n)
+    if m: return m.group(1) + 'M Shuttle Hurdles'
     m = re.fullmatch(r'(4x\d+)\s*(relay|shuttle hurdles?)', n)
     if m: return m.group(1) + 'M ' + ('Relay' if m.group(2) == 'relay' else 'Shuttle Hurdles')
     return name.strip()

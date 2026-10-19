@@ -2223,3 +2223,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** `parse_an.unrecorded` uses marked/no-mark counts computed in the browser (8-10 marked and >=2 no-mark, or 6-10 marked and >= 3x as many no-mark). athletic.net marks carry an `a`/`h` suffix that is stripped; field marks are `F-I.ii`.
 
 **Key files:** `scripts/athleticnet/scan_an_rows.js`, `scripts/crawl/{parse_an.py,build_hytek_sql.py,an-rows/}`.
+
+### [C74] Results-Level Comparison: MileSplit vs the DB
+
+**What changed:** `scripts/crawl/compare_ms_vs_db.py` compares, for every DB meet matched to a MileSplit meet (125 with raw text), each Cloverleaf row in MileSplit's Hy-Tek text with the DB result for the same meet+event+athlete (relays by event+time; tolerance 0.06 s / 0.3 in; fuzzy athlete matching: same last name (edit distance <=1) and a compatible first name, unique only). 2,771 results agree. `docs/imports/results-missing-ms.sql` (built by `build_missing_sql.py`) inserts the 32 results MileSplit has that the DB lacked (24 individuals incl. Will Rogalski's 2022 Fairless shot put and Brooklynn Crist's 2019 Cowen Redbird results, plus 8 Oberlin 2017-2020 relays with four named legs). The rest is in `docs/results-level-gap-report.md`: 39 individual and 14 relay marks that differ (to verify), 54 unplaced athlete rows and 92 rows in events the DB does not model.
+
+**Artifacts (do not "fix" the DB for these):** Hy-Tek prints hand-timed tenths as hundredths (`27.06` = 27.6); the 2022 Early Bird relay times in MileSplit are rounded to whole seconds. **Bug fixed on the way:** the event-header regex in `parse_hytek2.py` required the event name to end right after `Shot Put`/`High Jump`, so a header like `Boys Shot Put Varsity` was skipped and its rows were attributed to the previous event (Discus); qualifiers (`Varsity`, `METRO`, hurdle heights `39"`, `Footed`) are now allowed and removed by `norm_event`. The earlier imports ([C71]-[C73]) were re-parsed with both regexes and are unaffected (only relay-type events differed, and those are skipped).
+
+**Watch out:** the download loop is not in the repo: for each id, `curl -sL -A <browser UA> https://oh.milesplit.com/meets/<id>/results`, take the first `/results/<rid>/raw` link, curl it and strip tags from the `<pre>`; save as `/tmp/msraw/ms-<id>.txt` plus `/tmp/msraw/ids.txt` (`<msId> <dbMeetId>` pairs from `matches.tsv`). Mismatches are leads only: either source may be wrong, and the comparison uses the best mark across rounds.
+
+**Key files:** `scripts/crawl/{compare_ms_vs_db.py,build_missing_sql.py}`, `docs/imports/results-missing-ms.sql`, `docs/results-level-gap-report.md`.
