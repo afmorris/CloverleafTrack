@@ -28,6 +28,7 @@ ALIAS = {'Cassy Maxwell': 'Cassandra Maxwell', 'Neil Berentz': 'Neal Berentz', '
          'Brittany Pekar': 'Brittani Pekar', 'William Simpson': 'Billy Simpson', 'Garrett Livengood': 'Garrett Livingood', 'Garrett Livingood': 'Garrett Livingood', 'Jeff Sharrat': 'Jeff Sharratt',
          'Joe Bruening': 'Joey Bruening', 'Mackenna Huff': 'Mckenna Huff', 'R.J. Bechtel': 'RJ Bechtel', 'RJ Becthel': 'RJ Bechtel', 'Vinnie Kacinari': 'Vincent Kacinari',
          'Katelyn Donnelly': 'Katlyn Donnelly', 'Taylor Sachleban': 'Taylor Sachleben', 'T.J. Corbett': 'TJ Corbett'}
+BYNAME = {'Amber Hansen', "Morgan O'Rourke"}   # created by an earlier import SQL, so their Ids differ between databases: always reference by name
 FIELD = ('High Jump', 'Long Jump', 'Pole Vault', 'Shot Put', 'Discus', 'Triple Jump')
 
 def q(sql):
@@ -95,6 +96,9 @@ for name, date, yend, loc, season, path, url, mtype, mlevel in MEETS:
             grade = grade or grades.get(nm)
             full_name = ALIAS.get(nm, nm)
             c = ath.get((full_name.lower(), g), [])
+            if len(c) == 1 and full_name in BYNAME:
+                f_, _, l_ = full_name.partition(' ')
+                refs.append(f"(SELECT Id FROM Athletes WHERE FirstName = '{esc(f_)}' AND LastName = '{esc(l_)}' AND Gender = {g})"); continue
             if len(c) == 1: refs.append(str(c[0])); used_ids[c[0]] = full_name; continue
             if grade or nm in gy_global:
                 gy = yend + 12 - grade if grade else gy_global[nm]

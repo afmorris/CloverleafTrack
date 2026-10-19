@@ -2210,4 +2210,6 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 - Still missing: Nordonia Knight Relays 2011 (baumspage has only score sheets), Optimist 2012/2016/2024 and Mansfield Mehock 2009 (athletic.net only), 2018 Triway (MileSplit raw has girls only), Green Twilight Relays 2023 (no raw results), Jim Hauser / Kent State / Oberlin / Rust Buster / Rubber City / OATCCC / Extreme Vault indoor meets (1-2 Cloverleaf rows each, mostly vaulters), 2024 New Balance Nationals.
 - The Hy-Tek text on MileSplit sometimes carries the wrong year in its header (2019 New London says 4/7/2018): the meet date comes from the MileSplit/athletic.net listing and the licence stamp.
 
+**Watch out (Ids):** the local test DB and live assign different Ids to athletes created by an earlier import SQL, so `build_hytek_sql.py` must reference those by name (`BYNAME`), and the generated `.sql` must be built from a database that does not yet contain the batch's own new athletes (rebuilding after applying bakes their local Ids). The Id assertion at the top of each file caught exactly this on the first live run (nothing was written).
+
 **Key files:** `scripts/crawl/{parse_hytek2.py,build_hytek_sql.py}`, `docs/imports/{baumspage-meets-2007-2011,ms-meets-2017-2019}.sql`.
