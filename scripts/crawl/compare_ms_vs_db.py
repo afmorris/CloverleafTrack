@@ -12,10 +12,12 @@ def q(sql):
                          input='SET NOCOUNT ON;' + sql, capture_output=True, text=True).stdout
     return [l.split('|') for l in out.strip().split('\n') if l.strip()]
 
-ALIAS = {'cassy maxwell': 'cassandra maxwell', 'neil berentz': 'neal berentz', 'rick morrison': 'richard morrison', 'ricky morrison': 'richard morrison', 'stacy porter': 'stacey porter',
+ALIAS = {'hilar y hewit': 'hillary hewit', 'cassy maxwell': 'cassandra maxwell', 'neil berentz': 'neal berentz', 'rick morrison': 'richard morrison', 'ricky morrison': 'richard morrison', 'stacy porter': 'stacey porter',
          'brittany pekar': 'brittani pekar', 'william simpson': 'billy simpson', 'garrett livengood': 'garrett livingood', 'jeff sharrat': 'jeff sharratt', 'joe bruening': 'joey bruening',
          'mackenna huff': 'mckenna huff', 'r.j. bechtel': 'rj bechtel', 'rj becthel': 'rj bechtel', 'vinnie kacinari': 'vincent kacinari', 'katelyn donnelly': 'katlyn donnelly', 't.j. corbett': 'tj corbett', 'bryce neil': 'bryce neill', 'asa gyn': 'asa gynn', 'isaiah curt': 'isaiah kurtz', 'josh bohemian': 'josh bowman', 'jacob knau': 'jacob nau', 'meagan van meter': 'megan van meter'}
-def norm(n): return re.sub(r'[^a-z ]', '', ALIAS.get(n.lower().strip(), n.lower().strip())).strip()
+def norm(n):
+    n = re.sub(r'\s+', ' ', re.sub(r'\b\d+\b', ' ', n)).strip()   # Hy-Tek bib numbers glued into names ('Vinnie 570 Kacinari')
+    return re.sub(r'[^a-z ]', '', ALIAS.get(n.lower().strip(), n.lower().strip())).strip()
 
 events = {(int(e), int(g), n): int(i) for i, n, g, e in q("SELECT Id, Name, Gender, Environment FROM Events")}
 ev_name = {i: (e, g, n) for (e, g, n), i in events.items()}
@@ -83,6 +85,10 @@ for msid, dbid in pairs:
         cand = perf.get((dbid, eid), [])
         aid, how = resolve(who[0], g)
         if aid is None and evname.startswith('Seated'): aid, how = resolve(who[0], 3 - g)   # mixed-gender wheelchair fields are labelled Boys
+        if aid is None and how == 'ambiguous':   # duplicate athlete records (same normalised name): use the one that has a result in this meet/event
+            dup = ath.get((norm(who[0]), g), [])
+            hit = [a for a in dup if any(c[0] == a for c in cand)]
+            if len(hit) >= 1: aid, how = hit[0], 'dup'
         if aid is None: unres += 1; rows_out.append((dbid, msid, 'ATHLETE?', gender, evname, who[0], v, how)); continue
         mine = [c for c in cand if c[0] == aid]
         if not mine:
