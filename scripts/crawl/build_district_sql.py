@@ -54,6 +54,7 @@ def unrecorded_events(path):
         r = ROWR.match(l)
         if ev and r and ev[1] in FIELD: cnt[ev][1 if r.group(5).lstrip('J') in ('ND', 'NH', 'NM', 'DNF', 'NT', 'FS') else 0] += 1
     return {k for k, (marked, nomark) in cnt.items() if marked <= 10 and nomark >= 2}
+used_ids = {}
 stats = {}
 for year, (date, season, url) in YEARS.items():
     rows = parse(f'baumspage/ne-{year}-res.txt')
@@ -103,6 +104,8 @@ for year, (date, season, url) in YEARS.items():
             col_t = col_d = 'NULL'
             rs_status = {'NM': 1, 'ND': 1, 'NH': 2, 'DNF': 3, 'DQ': 4}[status]
             if (status in ('ND',) and not isfield) or (status == 'NH' and evname not in ('High Jump', 'Pole Vault')): review.append(f'{year}: odd status {status} for {evname} {names}')
+        for a, nm, raw in ids:
+            if a is not None: used_ids[a] = nm
         athcol = 'NULL' if kind == 'relay' else ref(*ids[0])
         who = ' / '.join(i[2] for i in ids)
         body.append(f"-- {gender} {evname}: {who}  " + (', '.join(f'{k} {v}' for k, v in vals.items()) if vals else status))
@@ -125,6 +128,8 @@ BEGIN"""]
     head.append(f"INSERT INTO Meets (Name, Date, LocationId, Environment, HandTimed, SeasonId, EntryStatus, MeetLevel, MeetType, OfficialResultsUrl) VALUES ('{meetname}', '{date}', 24, 1, 0, {season}, 3, 1, 1, '{url}');\nSET @m = SCOPE_IDENTITY();")
     out += head + body + ['END', '']
     stats[year] = (n_perf, n_nm, n_rounds, n_skip)
+chk = ' OR '.join(f"(Id = {i} AND FirstName = '{sql_esc(n.split(' ', 1)[0])}' AND LastName = '{sql_esc(n.split(' ', 1)[1])}')" for i, n in sorted(used_ids.items()))
+out.insert(out.index('DECLARE @m INT, @p INT;') + 1, f"-- every baked-in athlete Id must still be the same person (guards against running on a DB whose Ids differ)\nIF (SELECT COUNT(*) FROM Athletes WHERE {chk}) <> {len(used_ids)} THROW 50010, 'Athlete Ids do not match this database', 1;\n")
 out += ['EXEC sp_RebuildLeaderboards;', 'COMMIT TRANSACTION;', '']
 open('../../docs/imports/ne-district-2005-2010.sql', 'w').write('\n'.join(out))
 for y, s in stats.items(): print(y, 'marks %d, no-mark %d, rounds %d, skipped %d' % s)
