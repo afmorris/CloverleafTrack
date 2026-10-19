@@ -1,0 +1,6 @@
+OHSAA D3 Regional R9 - Austintown
+f/1/400m|Finals I 5.~12~Kayla Shook~59.36aPB~CloverleafQ~23036772
+f/1/400m|Prelims I 4.~12~Kayla Shook~1:00.29a~Cloverleaf~23036772
+f/1/4x400m|Finals R 1. 4:03.74a Cloverleaf - A Q
+f/1/4x400m|Prelims R 2. 4:04.67a Cloverleaf - A
+#SERIES {}

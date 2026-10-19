@@ -355,6 +355,7 @@
                                                         </div>
                                                     }
                                                     @await Html.PartialAsync("_AttemptSeriesExpanded", perf.AttemptSeries)
+@await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Compact", true } })
                                                 </td>
                                                 <td class="px-4 py-2.5 text-gray-500 dark:text-gray-400 hidden sm:table-cell">@perf.Date.ToString("MMM d")</td>
                                                 <td class="px-4 py-2.5 text-gray-700 dark:text-gray-300">

@@ -224,9 +224,9 @@
                                 <table class="w-full text-sm" data-sortable>
                                     <thead class="text-[10px] uppercase tracking-wide text-gray-400 dark:text-gray-500">
                                         <tr>
-                                            <th class="px-4 py-1 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">Athlete</th>
-                                            <th class="px-4 py-1 text-right font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(eventGroup.IsFieldEvent ? "desc" : "asc")">Mark</th>
-                                            <th class="px-4 py-1 text-right font-medium">Result</th>
+                                            <th class="px-2 sm:px-4 py-1 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">Athlete</th>
+                                            <th class="px-2 sm:px-4 py-1 text-right font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(eventGroup.IsFieldEvent ? "desc" : "asc")">Mark</th>
+                                            <th class="px-2 sm:px-4 py-1 text-right font-medium">Result</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -234,7 +234,7 @@
                                         {
                                             var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsPersonalBest ? "row-pr" : "");
                                             <tr class="@rowClass hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                                                <td class="px-4 py-2" data-sort="@perf.AthleteName">
+                                                <td class="px-2 sm:px-4 py-2 align-middle" data-sort="@perf.AthleteName">
                                                     @if (IsRelay(perf.AthleteName))
                                                     {
                                                         <div class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -267,12 +267,13 @@
                                                             <span class="text-gray-900 dark:text-white">@perf.AthleteName</span>
                                                         }
                                                     }
-                                                </td>
-                                                <td class="px-4 py-2 text-right whitespace-nowrap" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
-                                                    <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
                                                     @await Html.PartialAsync("_AttemptStrip", perf.AttemptSeries)
+                                                    @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                                 </td>
-                                                <td class="px-4 py-2 text-right">
+                                                <td class="px-2 sm:px-4 py-2 text-right whitespace-nowrap align-middle" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
+                                                    <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
+                                                </td>
+                                                <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                     <div class="flex items-center justify-end gap-1 flex-wrap">
                                                         @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
                                                         @if (perf.IsPersonalBest) { <span class="chip-pr" title="Personal Best">PR</span> }
@@ -325,9 +326,9 @@
                                 <table class="w-full text-sm" data-sortable>
                                     <thead class="text-[10px] uppercase tracking-wide text-gray-400 dark:text-gray-500">
                                         <tr>
-                                            <th class="px-4 py-1 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">Athlete</th>
-                                            <th class="px-4 py-1 text-right font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(eventGroup.IsFieldEvent ? "desc" : "asc")">Mark</th>
-                                            <th class="px-4 py-1 text-right font-medium">Result</th>
+                                            <th class="px-2 sm:px-4 py-1 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">Athlete</th>
+                                            <th class="px-2 sm:px-4 py-1 text-right font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(eventGroup.IsFieldEvent ? "desc" : "asc")">Mark</th>
+                                            <th class="px-2 sm:px-4 py-1 text-right font-medium">Result</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -335,7 +336,7 @@
                                         {
                                             var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsPersonalBest ? "row-pr" : "");
                                             <tr class="@rowClass hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                                                <td class="px-4 py-2" data-sort="@perf.AthleteName">
+                                                <td class="px-2 sm:px-4 py-2 align-middle" data-sort="@perf.AthleteName">
                                                     @if (IsRelay(perf.AthleteName))
                                                     {
                                                         <div class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -368,12 +369,13 @@
                                                             <span class="text-gray-900 dark:text-white">@perf.AthleteName</span>
                                                         }
                                                     }
-                                                </td>
-                                                <td class="px-4 py-2 text-right whitespace-nowrap" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
-                                                    <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
                                                     @await Html.PartialAsync("_AttemptStrip", perf.AttemptSeries)
+                                                    @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                                 </td>
-                                                <td class="px-4 py-2 text-right">
+                                                <td class="px-2 sm:px-4 py-2 text-right whitespace-nowrap align-middle" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
+                                                    <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
+                                                </td>
+                                                <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                     <div class="flex items-center justify-end gap-1 flex-wrap">
                                                         @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
                                                         @if (perf.IsPersonalBest) { <span class="chip-pr" title="Personal Best">PR</span> }
@@ -426,9 +428,9 @@
                             <table class="w-full text-sm" data-sortable>
                                 <thead class="text-[10px] uppercase tracking-wide text-gray-400 dark:text-gray-500">
                                     <tr>
-                                        <th class="px-4 py-1 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">Athlete</th>
-                                        <th class="px-4 py-1 text-right font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(eventGroup.IsFieldEvent ? "desc" : "asc")">Mark</th>
-                                        <th class="px-4 py-1 text-right font-medium">Result</th>
+                                        <th class="px-2 sm:px-4 py-1 text-left font-medium" data-sort-col="athlete" data-sort-type="str" data-sort-dir="asc">Athlete</th>
+                                        <th class="px-2 sm:px-4 py-1 text-right font-medium" data-sort-col="mark" data-sort-type="num" data-sort-dir="@(eventGroup.IsFieldEvent ? "desc" : "asc")">Mark</th>
+                                        <th class="px-2 sm:px-4 py-1 text-right font-medium">Result</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -436,7 +438,7 @@
                                     {
                                         var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsPersonalBest ? "row-pr" : "");
                                         <tr class="@rowClass hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                                            <td class="px-4 py-2" data-sort="@perf.AthleteName">
+                                            <td class="px-2 sm:px-4 py-2 align-middle" data-sort="@perf.AthleteName">
                                                 @if (IsRelay(perf.AthleteName))
                                                 {
                                                     <div class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -469,12 +471,13 @@
                                                         <span class="text-gray-900 dark:text-white">@perf.AthleteName</span>
                                                     }
                                                 }
-                                            </td>
-                                            <td class="px-4 py-2 text-right whitespace-nowrap" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
-                                                <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
                                                 @await Html.PartialAsync("_AttemptStrip", perf.AttemptSeries)
+                                                @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                             </td>
-                                            <td class="px-4 py-2 text-right">
+                                            <td class="px-2 sm:px-4 py-2 text-right whitespace-nowrap align-middle" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
+                                                <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
+                                            </td>
+                                            <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                 <div class="flex items-center justify-end gap-1 flex-wrap">
                                                     @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
                                                     @if (perf.IsPersonalBest) { <span class="chip-pr" title="Personal Best">PR</span> }

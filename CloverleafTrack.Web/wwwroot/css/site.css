@@ -34,3 +34,6 @@
 .meetscore-math-line+.meetscore-math-line{margin-top:.375rem}
 .dark .meetscore-dialog-body .meetscore-math-title{color:#e5e7eb}
 .meetscore-dialog-body .meetscore-math-title{margin:.75rem 0 0;font-weight:700;color:#111827}
+.gap-x-1{-moz-column-gap:.25rem;column-gap:.25rem}
+.align-middle{vertical-align:middle}
+@media (min-width:640px){.sm\:px-4{padding-left:1rem;padding-right:1rem}}

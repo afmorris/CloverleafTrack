@@ -199,6 +199,16 @@ public class PerformancesController(
             }
         }
 
+        // Optional prelim/semi/final times for running events; see SaveRoundsAsync.
+        if (!IsFieldEventType(evt?.EventType) && evt?.EventType != EventType.FieldRelay)
+        {
+            var rounds = ParseRoundInputs(model);
+            if (rounds.Count >= 2)
+            {
+                await performanceRepository.SaveRoundsAsync(performanceId, rounds);
+            }
+        }
+
         TempData["SuccessMessage"] = "Performance added successfully!";
 
         if (saveAndAddAnother)
@@ -292,6 +302,18 @@ public class PerformancesController(
         if (!performance.AthleteId.HasValue && evt?.AthleteCount > 1)
         {
             viewModel.RelayAthleteIds = await performanceRepository.GetAthleteIdsForPerformanceAsync(id);
+        }
+
+        // Load any previously recorded rounds so the form can pre-populate them
+        foreach (var round in await performanceRepository.GetRoundsForPerformanceAsync(id))
+        {
+            var text = PerformanceFormatHelper.FormatTime(round.TimeSeconds);
+            switch ((RoundType)round.Round)
+            {
+                case RoundType.Prelim: viewModel.PrelimInput = text; break;
+                case RoundType.Semifinal: viewModel.SemiInput = text; break;
+                case RoundType.Final: viewModel.FinalInput = text; break;
+            }
         }
 
         // Load any previously recorded attempt series so the form can pre-populate it
@@ -414,6 +436,13 @@ public class PerformancesController(
             {
                 await performanceRepository.SaveAttemptSeriesAsync(model.Id, attempts);
             }
+        }
+
+        // Optional prelim/semi/final times for running events. Fewer than two filled in clears any stored rounds.
+        if (!IsFieldEventType(evt?.EventType) && evt?.EventType != EventType.FieldRelay)
+        {
+            var rounds = ParseRoundInputs(model);
+            await performanceRepository.SaveRoundsAsync(model.Id, rounds.Count >= 2 ? rounds : new List<PerformanceRound>());
         }
 
         TempData["SuccessMessage"] = "Performance updated successfully!";
@@ -630,6 +659,25 @@ public class PerformancesController(
     /// </summary>
     private static bool IsFieldEventType(EventType? eventType) =>
         eventType is EventType.Field or EventType.ThrowsRelay or EventType.JumpRelay;
+
+    /// <summary>Parses the prelim/semi/final inputs with PerformanceFormatHelper.ParseTime; blank or unparseable inputs are skipped.</summary>
+    private static List<PerformanceRound> ParseRoundInputs(PerformanceEntryViewModel model)
+    {
+        var rounds = new List<PerformanceRound>();
+        void Add(RoundType type, string? input)
+        {
+            var seconds = PerformanceFormatHelper.ParseTime(input);
+            if (seconds.HasValue)
+            {
+                rounds.Add(new PerformanceRound { Round = (byte)type, TimeSeconds = seconds.Value });
+            }
+        }
+
+        Add(RoundType.Prelim, model.PrelimInput);
+        Add(RoundType.Semifinal, model.SemiInput);
+        Add(RoundType.Final, model.FinalInput);
+        return rounds;
+    }
 
     /// <summary>
     /// Parses the 6 attempt-input slots into PerformanceAttempt rows using

@@ -4,6 +4,7 @@ namespace CloverleafTrack.ViewModels.Meets;
 
 public class MeetPerformanceViewModel
 {
+    public int PerformanceId { get; set; }
     public string AthleteName { get; set; } = string.Empty;
     public string? AthleteSlug { get; set; }
     public string Performance { get; set; } = string.Empty;
@@ -14,6 +15,9 @@ public class MeetPerformanceViewModel
 
     /// <summary>Empty (HasAttempts == false) unless PerformanceAttempts rows exist for this performance.</summary>
     public PerformanceAttemptSeriesViewModel AttemptSeries { get; set; } = new();
+
+    /// <summary>Prelim → final chain; HasRounds is false unless the athlete ran at least two rounds.</summary>
+    public PerformanceRoundSeriesViewModel RoundSeries { get; set; } = new();
 
     /// <summary>Raw numeric value for client-side sorting: DistanceInches for field events, TimeSeconds for running events. Never use the formatted Performance string as a sort key.</summary>
     public double? RawValue { get; set; }

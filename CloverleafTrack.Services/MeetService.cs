@@ -14,7 +14,8 @@ public class MeetService(
     IMeetRepository meetRepository,
     IMeetPlacingRepository meetPlacingRepository,
     IPerformanceAttemptRepository? attemptRepository = null,
-    IMeetSummaryRepository? summaryRepository = null) : IMeetService
+    IMeetSummaryRepository? summaryRepository = null,
+    IPerformanceRoundRepository? roundRepository = null) : IMeetService
 {
     public async Task<MeetsIndexViewModel> GetMeetsIndexAsync()
     {
@@ -133,6 +134,16 @@ public class MeetService(
         var boysEvents = BuildOrderedEventGroups(boysPerformances, placingLookup, attemptLookup);
         var girlsEvents = BuildOrderedEventGroups(girlsPerformances, placingLookup, attemptLookup);
         var mixedEvents = BuildOrderedEventGroups(mixedPerformances, placingLookup, attemptLookup);
+
+        // Attach prelim → final chains (absent for performances with a single round)
+        var rounds = roundRepository != null
+            ? await roundRepository.GetRoundsForPerformancesAsync(performances.Select(p => p.PerformanceId))
+            : new List<PerformanceRound>();
+        var roundLookup = PerformanceRoundSeriesBuilder.BuildLookup(rounds);
+        foreach (var perf in boysEvents.Concat(girlsEvents).Concat(mixedEvents).SelectMany(g => g.Performances))
+        {
+            perf.RoundSeries = roundLookup.GetValueOrDefault(perf.PerformanceId) ?? new PerformanceRoundSeriesViewModel();
+        }
         var mappedPerformances = boysEvents
             .Concat(girlsEvents)
             .Concat(mixedEvents)
@@ -336,6 +347,7 @@ public class MeetService(
 
         var vm = new MeetPerformanceViewModel
         {
+            PerformanceId = p.PerformanceId,
             AthleteName = p.AthleteName,
             AthleteSlug = isIndividual ? slugHelper.GenerateSlug(p.AthleteName) : null,
             Performance = FormatPerformance(p.TimeSeconds, p.DistanceInches),

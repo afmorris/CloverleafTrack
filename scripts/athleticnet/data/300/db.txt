@@ -1,0 +1,4 @@
+16485|1|4x800M Relay|Caleb Neville/Noah Mion/Gavin Forbes/Matthew Jenkins|484|NULL|0
+16486|2|400M|Kayla Shook|60.79|NULL|0
+16487|2|4x400M Relay|Adriana Akers/Samantha Porter/Lily Dluzynski/Kayla Shook|235.05|NULL|0
+

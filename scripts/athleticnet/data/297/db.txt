@@ -1,0 +1,57 @@
+16152|2|100M Hurdles|Julia Reusch|19.13|NULL|0
+16153|2|4x800M Relay|Lily Dluzynski/Leah Monhemius/Kelsey Hall/Elise Mion|652.95|NULL|0
+16154|2|Long Jump|Abigail Reinhardt|NULL|196|6
+16155|2|Long Jump|Keegan Wittman|NULL|164.25|6
+16156|2|Pole Vault|Payten Shetterly|NULL|108|0
+16157|2|Pole Vault|Taylor Thur|NULL|96|0
+16158|2|Discus|Amelia Ryncarz|NULL|966|3
+16159|1|100M|Grady Pamer|12.29|NULL|0
+16160|1|100M|Josh Powers|12.34|NULL|0
+16161|1|200M|Grady Pamer|24.29|NULL|0
+16162|1|200M|Josh Powers|24.21|NULL|0
+16163|1|400M|Caleb Burke|59.55|NULL|0
+16164|1|3200M|Gavin Forbes|593.63|NULL|0
+16165|1|3200M|Caleb Neville|582.07|NULL|0
+16166|1|110M Hurdles|Lincoln Baltic|19.1|NULL|0
+16167|1|110M Hurdles|Reilly Maloney|19.8|NULL|0
+16168|1|300M Hurdles|Lincoln Baltic|46.83|NULL|0
+16169|1|300M Hurdles|Reilly Maloney|47.18|NULL|0
+16170|1|4x800M Relay|Caleb Neville/Noah Mion/Matthew Jenkins/Gavin Forbes|491.14|NULL|0
+16171|1|Pole Vault|Lincoln Baltic|NULL|132|0
+16172|1|Pole Vault|Reilly Maloney|NULL|96|0
+16173|1|Shot Put|Trent Amheiser|NULL|456.25|6
+16174|1|Shot Put|Jake Schaefer|NULL|486|6
+16175|2|3200M|Elise Mion|780.38|NULL|0
+16176|2|3200M|Leah Monhemius|747.54|NULL|0
+16177|1|Discus|Adam Gray|NULL|1369|6
+16178|1|Discus|Ethan Martin|NULL|1301|3
+16179|2|Shot Put|Berkeley Craddock|NULL|377|6
+16180|2|Shot Put|Amelia Ryncarz|NULL|415|6
+16181|1|Long Jump|Elliot Jordan|NULL|223.5|3
+16182|1|Long Jump|Grady Pamer|NULL|235|6
+16183|2|High Jump|Abigail Reinhardt|NULL|58|0
+16184|2|High Jump|Keegan Wittman|NULL|48|0
+16185|2|100M Hurdles|Kiersyn Berry|17.44|NULL|0
+16186|2|100M|Adriana Akers|13.1|NULL|0
+16187|2|4x200M Relay|Kiersyn Berry/Samantha Porter/Keegan Wittman/Lily Dluzynski|112.03999999999999|NULL|0
+16188|1|4x200M Relay|Ethan Gray/Josh Powers/Elliot Jordan/Clayton Sewalish|96.77000000000001|NULL|0
+16189|2|1600M|Leah Monhemius|348.06|NULL|0
+16190|2|1600M|Elise Mion|358.74|NULL|0
+16191|1|1600M|Gavin Forbes|273.53|NULL|0
+16192|1|1600M|Caleb Neville|262.19|NULL|0
+16193|2|4x100M Relay|Kiersyn Berry/Kayla Shook/Adriana Akers/Samantha Porter|50.71|NULL|0
+16194|1|4x100M Relay|Adam Gray/Josh Powers/Elliot Jordan/Clayton Sewalish|46.95|NULL|0
+16195|2|400M|Kayla Shook|61.55|NULL|0
+16196|2|400M|Samantha Porter|63.19|NULL|0
+16197|1|400M|Ethan Gray|53.58|NULL|0
+16198|2|300M Hurdles|Julia Reusch|50.77|NULL|0
+16199|2|300M Hurdles|Kiersyn Berry|51.93|NULL|0
+16200|1|800M|Matthew Jenkins|122.53|NULL|0
+16201|1|800M|Caleb Neville|121.26|NULL|0
+16202|1|4x400M Relay|Ethan Gray/Matthew Jenkins/Noah Mion/Gavin Forbes|215.75|NULL|0
+16203|2|200M|Adriana Akers|26.52|NULL|0
+16204|2|200M|Kayla Shook|26.21|NULL|0
+16205|2|800M|Lily Dluzynski|153.32999999999998|NULL|0
+16206|2|800M|Leah Monhemius|167.65|NULL|0
+16207|2|4x400M Relay|Adriana Akers/Samantha Porter/Lily Dluzynski/Kayla Shook|247.3|NULL|0
+

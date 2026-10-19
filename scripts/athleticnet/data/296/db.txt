@@ -1,0 +1,44 @@
+16109|2|100M|Alli Franz|15.04|NULL|0
+16110|2|200M|Alli Franz|31.64|NULL|0
+16111|2|200M|Ciara Kremer|30.43|NULL|0
+16112|2|1600M|Paisley Spencer|427.24|NULL|0
+16113|2|100M Hurdles|Macie Huegel|21.18|NULL|0
+16114|2|100M Hurdles|Ciara Kremer|22.02|NULL|0
+16115|2|300M Hurdles|Macie Huegel|65.48|NULL|0
+16116|2|Long Jump|Alli Franz|NULL|151|0
+16117|2|Shot Put|Ciara Kremer|NULL|319.5|0
+16118|2|Shot Put|Anna Naftzger|NULL|302.5|0
+16119|2|Discus|Macie Huegel|NULL|757|0
+16120|2|Discus|Delaney Ishler|NULL|948|0
+16121|2|Discus|Vienna Polen|NULL|665|0
+16122|1|Discus|Gunnar Surrarrer|NULL|942|0
+16123|1|Discus|Preston Stark|NULL|926|0
+16124|1|Discus|Evan Croft|NULL|1103|0
+16125|1|Discus|Jack Chonko|NULL|1158|0
+16126|1|Discus|Scout Atsma|NULL|970|0
+16127|1|Shot Put|Gordy Surrarrer|NULL|367|0
+16128|1|Shot Put|Preston Stark|NULL|375.25|0
+16129|1|Shot Put|Braylon Lade|NULL|407.75|0
+16130|1|Shot Put|Evan Croft|NULL|422|0
+16131|1|Shot Put|Jack Chonko|NULL|454|0
+16132|1|Long Jump|Collin Saksa|NULL|180.5|0
+16133|1|Long Jump|Weston Miller|NULL|143.5|0
+16134|1|1600M|Antonio Ortega|312.55|NULL|0
+16135|1|1600M|Clay Gucker|293.27|NULL|0
+16136|1|1600M|Gavin Ferrone|302.12|NULL|0
+16137|1|1600M|Clayton Cornett|339.8|NULL|0
+16138|1|1600M|Mason Clapp|287.89|NULL|0
+16139|1|800M|Levi Saksa|144.15|NULL|0
+16140|1|800M|Matthew Wilk|155.45|NULL|0
+16141|1|800M|Kael Niemczura|190.37|NULL|0
+16142|1|800M|Luke Evans|158.56|NULL|0
+16143|1|400M|Jackson Murray-Garver|58.06|NULL|0
+16144|1|200M|Jackson Murray-Garver|26.47|NULL|0
+16145|1|200M|Weston Miller|30.59|NULL|0
+16146|1|200M|Phillip Bloomfield|30.03|NULL|0
+16147|1|100M|Chris Gilliland|13.24|NULL|0
+16148|1|100M|Phillip Bloomfield|14.33|NULL|0
+16149|1|100M|Thomas Dalton|14.66|NULL|0
+16150|1|100M|Weston Miller|14.53|NULL|0
+16151|1|100M|Bradyn Robinson|14.01|NULL|0
+

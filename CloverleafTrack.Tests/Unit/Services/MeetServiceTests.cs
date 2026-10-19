@@ -439,4 +439,39 @@ public class MeetServiceTests
         vm.AttemptSeries.ValidAttemptCount.Should().Be(2);
         vm.AttemptSeries.Attempts.Single(a => a.IsBest).DistanceInches.Should().Be(480);
     }
+
+    [Fact]
+    public async Task GetMeetDetailsAsync_Performance_HasRoundSeries_WhenRoundsRecorded()
+    {
+        var mockRoundRepo = new Mock<IPerformanceRoundRepository>();
+        var service = new MeetService(_mockRepo.Object, _mockPlacingRepo.Object, null, null, mockRoundRepo.Object);
+
+        var meet = BuildMeet();
+        var perf = BuildPerf(1, "100 Meter Dash", Gender.Male, EventCategory.Sprints, EventType.Running, timeSeconds: 10.94);
+        SetupMeetDetails(meet, new List<MeetPerformanceDto> { perf });
+        mockRoundRepo.Setup(r => r.GetRoundsForPerformancesAsync(It.IsAny<IEnumerable<int>>()))
+            .ReturnsAsync(new List<PerformanceRound>
+            {
+                new() { PerformanceId = 1, Round = 1, TimeSeconds = 11.08 },
+                new() { PerformanceId = 1, Round = 3, TimeSeconds = 10.94 },
+            });
+
+        var result = await service.GetMeetDetailsAsync("spring-invitational");
+
+        var vm = result!.BoysEvents.Single().Performances.Single();
+        vm.RoundSeries.HasRounds.Should().BeTrue();
+        vm.RoundSeries.Rounds.Single(r => r.IsBest).Round.Should().Be(3);
+    }
+
+    [Fact]
+    public async Task GetMeetDetailsAsync_Performance_HasNoRoundSeries_WhenNoneRecorded()
+    {
+        var meet = BuildMeet();
+        var perf = BuildPerf(1, "100 Meter Dash", Gender.Male, EventCategory.Sprints, EventType.Running, timeSeconds: 10.94);
+        SetupMeetDetails(meet, new List<MeetPerformanceDto> { perf });
+
+        var result = await _service.GetMeetDetailsAsync("spring-invitational");
+
+        result!.BoysEvents.Single().Performances.Single().RoundSeries.HasRounds.Should().BeFalse();
+    }
 }

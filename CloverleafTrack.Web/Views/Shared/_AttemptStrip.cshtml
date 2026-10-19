@@ -3,7 +3,7 @@
 @model PerformanceAttemptSeriesViewModel
 
 @*
-    Compact attempt-series strip: up to 6 small boxes plus valid-count/average/spread.
+    Compact attempt-series strip: up to 6 small boxes.
     Renders NOTHING (not even an empty wrapper) when Model.HasAttempts is false — this
     keeps the 45 years of history without a recorded series looking exactly as it does
     today. Used standalone on the Meet recap page (no disclosure at all) and as the first
@@ -12,7 +12,7 @@
 @if (Model.HasAttempts)
 {
     <div class="flex items-center gap-2 mt-1 flex-wrap">
-        <div class="flex gap-1" role="img" aria-label="Attempt series">
+        <div class="flex flex-wrap gap-1" role="img" aria-label="Attempt series">
             @foreach (var attempt in Model.Attempts)
             {
                 if (attempt.IsFoul)
@@ -36,16 +36,5 @@
                 }
             }
         </div>
-        <span class="text-[11px] text-gray-400 dark:text-gray-500 whitespace-nowrap">
-            @Model.ValidAttemptCount valid
-            @if (Model.AverageValidInches.HasValue)
-            {
-                <text> &middot; avg @PerformanceFormatHelper.FormatDistance(Model.AverageValidInches.Value)</text>
-            }
-            @if (Model.SpreadInches.HasValue)
-            {
-                <text> &middot; spread @PerformanceFormatHelper.FormatDistance(Model.SpreadInches.Value)</text>
-            }
-        </span>
     </div>
 }

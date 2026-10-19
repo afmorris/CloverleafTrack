@@ -19,4 +19,7 @@ public class IndividualPerformanceViewModel
 
     /// <summary>Empty (HasAttempts == false) unless PerformanceAttempts rows exist for this performance.</summary>
     public PerformanceAttemptSeriesViewModel AttemptSeries { get; set; } = new();
+
+    /// <summary>Prelim → final chain; HasRounds is false unless the athlete ran at least two rounds.</summary>
+    public PerformanceRoundSeriesViewModel RoundSeries { get; set; } = new();
 }
