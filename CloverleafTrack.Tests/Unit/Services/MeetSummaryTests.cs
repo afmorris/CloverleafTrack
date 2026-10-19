@@ -1,3 +1,4 @@
+using CloverleafTrack.ViewModels.Shared;
 using CloverleafTrack.DataAccess.Interfaces;
 using CloverleafTrack.Models;
 using CloverleafTrack.Models.Enums;
@@ -40,6 +41,54 @@ public class MeetSummaryTests
         json.Should().NotContain("allTimeRank\":14");
         // relay row must not carry a pr flag even though its PersonalBest flag was set
         json.Split("relayTeam")[1].Should().NotContain("\"pr\"");
+    }
+
+    [Fact]
+    public void FactSheet_includes_rounds_attempts_and_bars_only_when_recorded()
+    {
+        var details = BuildDetails();
+        var results = details.BoysEvents[0].Performances;
+        var plain = results[0];
+        var relay = results[1];
+        relay.RoundSeries = new PerformanceRoundSeriesViewModel
+        {
+            Rounds = new List<PerformanceRoundViewModel>
+            {
+                new() { Round = 1, TimeSeconds = 242.05 },
+                new() { Round = 3, TimeSeconds = 235.68, IsBest = true }
+            }
+        };
+        plain.AttemptSeries = new PerformanceAttemptSeriesViewModel
+        {
+            Attempts = new List<PerformanceAttemptViewModel>
+            {
+                new() { AttemptNumber = 1, IsFoul = true },
+                new() { AttemptNumber = 2, DistanceInches = 235, IsBest = true },
+                new() { AttemptNumber = 3, IsPass = true }
+            }
+        };
+        plain.BarSeries = new PerformanceBarSeriesViewModel
+        {
+            Bars = new List<PerformanceBarViewModel>
+            {
+                new() { HeightInches = 52, Outcome = "XXO", IsBest = true },
+                new() { HeightInches = 54, Outcome = "XXX" }
+            }
+        };
+
+        var json = MeetSummaryPrompt.BuildFactSheet(details, MeetLevel.Varsity);
+
+        json.Should().Contain("\"rounds\":[\"Prelim 4:02.05\",\"Final 3:55.68\"]");
+        json.Should().Contain("\"attempts\":[\"F\",\"19\\u0027 7\\u0022\",\"P\"]").And.Contain("\"bestOnAttempt\":2");
+        json.Should().Contain("4\\u0027 4\\u0022 cleared on the 3rd attempt").And.Contain("\"bestBar\":\"4\\u0027 4\\u0022\"");
+        json.Should().Contain("4\\u0027 6\\u0022 three misses");
+    }
+
+    [Fact]
+    public void FactSheet_omits_extra_detail_fields_when_nothing_recorded()
+    {
+        var json = MeetSummaryPrompt.BuildFactSheet(BuildDetails(), MeetLevel.Varsity);
+        json.Should().NotContain("\"rounds\"").And.NotContain("\"attempts\"").And.NotContain("\"bars\"").And.NotContain("bestBar").And.NotContain("bestOnAttempt");
     }
 
     [Fact]
