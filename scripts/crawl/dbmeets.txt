@@ -1,0 +1,308 @@
+17|1962-05-01|1|1962 Unknown Meet
+249|1962-05-25|1|1962 Class AA State Championships
+23|1975-05-01|1|1975 Unknown Meet
+212|1976-05-01|1|1976 Unknown Meet
+149|1979-05-01|1|1979 Unknown Meet
+100|1980-05-01|1|1980 Unknown Meet
+84|1982-05-01|1|1982 Unknown Meet
+90|1986-05-01|1|1986 Unknown Meet
+218|1987-05-01|1|1987 Unknown Meet
+144|1988-05-04|1|1988 Midpark-Medina Triangular
+145|1989-03-11|2|1989 Baldwin-Wallace Indoor Meet
+248|1989-04-15|2|1989 Lakota Optimist Relays
+16|1989-04-22|1|1989 Amherst Comet Relays
+203|1989-05-03|1|1989 Midpark-Medina Triangular
+246|1989-05-13|1|1989 Pioneer Conference Championships
+217|1989-05-20|1|1989 Class AAA District Track Meet
+36|1989-05-27|1|1989 Class AAA Regional Track Meet
+221|1990-05-01|1|1990 Unknown Meet
+253|1990-05-04|1|1990 Ellet Orange Bowl Relays
+24|1990-06-01|1|1990 OHSAA Division I State Track and Field Championships
+173|1991-06-08|1|1991 OHSAA Division I State Track and Field Championships
+40|1992-06-06|1|1992 OHSAA Division I State Track and Field Championships
+112|1993-05-01|1|1993 Unknown Meet
+110|1993-06-05|1|1993 OHSAA Division I State Track and Field Championships
+99|1994-06-04|1|1994 OHSAA Division I State Track and Field Championships
+139|1995-06-03|1|1995 OHSAA Division I State Track and Field Championships
+306|1996-04-17|1|1996 Brecksville Dual
+308|1996-04-20|1|1996 Amherst Comet Relays
+307|1996-05-04|1|1996 Medina County Championships
+304|1996-05-11|1|1996 Pioneer Conference Tournament
+305|1996-05-18|1|1996 Division I District Track Meet
+33|1999-04-22|1|1999 Revere Dual
+4|1999-05-01|1|1999 Unknown Meet
+39|2000-05-01|1|2000 Unknown Meet
+164|2000-05-27|1|2000 Division I Regional Track Meet
+116|2000-06-03|1|2000 OHSAA Division I State Track and Field Championships
+200|2001-05-01|1|2001 Unknown Meet
+189|2001-05-26|1|2001 Division I Regional Track Meet
+59|2002-05-01|1|2002 Unknown Meet
+13|2002-05-30|1|2002 Division I Regional Track Meet
+45|2002-06-07|1|2002 OHSAA Division I State Track and Field Championships
+181|2003-04-01|1|2003 Revere Dual
+142|2003-04-05|1|2003 Medina County Championships
+261|2003-04-12|1|2003 Elk Relays
+238|2003-05-02|1|2003 Berea Relays
+95|2003-05-05|1|2003 Norton Dual
+208|2003-05-06|1|2003 Copley Dual
+195|2003-05-09|1|2003 Shelby Relays
+265|2003-05-17|1|2003 Suburban League Championships
+157|2003-05-22|1|2003 Division I District Track Meet
+156|2003-05-29|1|2003 Division I Regional Track Meet
+251|2003-06-06|1|2003 OHSAA Division I State Track and Field Championships
+119|2004-04-10|1|2004 Elk Relays
+1|2004-04-13|1|2004 Medina Highland Dual
+89|2004-04-15|1|2004 Tallmadge Dual
+175|2004-04-20|1|2004 Copley Dual
+171|2004-04-22|1|2004 Wadsworth Dual
+198|2004-04-24|1|2004 Amherst Comet Relays
+129|2004-04-27|1|2004 Green Dual
+165|2004-05-01|1|2004 Berea Relays
+210|2004-05-04|1|2004 Norton Dual
+74|2004-05-08|1|2004 Shelby Relays
+121|2004-05-15|1|2004 Suburban League Championships
+231|2004-05-20|1|2004 Division I District Track Meet
+268|2004-05-27|1|2004 Division I Regional Track Meet
+47|2004-06-06|1|2004 OHSAA Division I State Track and Field Championships
+176|2005-05-01|1|2005 Unknown Meet
+159|2005-05-12|1|2005 Suburban League Championships
+9|2005-05-26|1|2005 Division I Regional Track Meet
+263|2005-06-03|1|2005 OHSAA Division I State Track and Field Championships
+163|2006-04-22|1|2006 Amherst Comet Relays
+205|2006-04-29|1|2006 Kimberly Relays
+76|2006-05-01|1|2006 Unknown Meet
+190|2006-05-13|1|2006 Suburban League Championships
+182|2006-05-24|1|2006 Division I Regional Track Meet
+79|2007-03-30|1|2007 Wolverine Invitational
+27|2007-04-21|1|2007 Amherst Comet Relays
+155|2007-04-28|1|2007 Kimberly Relays
+234|2007-05-01|1|2007 Unknown Meet
+266|2007-05-12|1|2007 Suburban League Championships
+301|2007-05-18|1|2007 Division I District Track Meet
+302|2007-05-26|1|2007 Division I Regional Track Meet
+303|2007-06-16|1|2007 OHSAA Division I State Track and Field Championships
+65|2008-04-19|1|2008 Husky Invitational
+245|2008-04-26|1|2008 Amherst Comet Relays
+262|2008-05-17|1|2008 Suburban League Championships
+227|2008-06-06|1|2008 OHSAA Division I State Track and Field Championships
+92|2009-04-04|1|2009 Kimberly Relays
+130|2009-04-08|1|2009 Husky Invitational
+52|2009-04-25|1|2009 Amherst Comet Relays
+260|2009-05-01|1|2009 Unknown Meet
+215|2009-05-16|1|2009 Suburban League Championships
+219|2009-05-27|1|2009 Division I Regional Track Meet
+8|2009-06-05|1|2009 OHSAA Division I State Track and Field Championships
+207|2010-03-27|1|2010 Elk Relays
+240|2010-04-03|1|2010 Kimberly Relays
+128|2010-04-17|1|2010 Husky Invitational
+81|2010-04-27|1|2010 Amherst Comet Relays
+67|2010-05-15|1|2010 Suburban League Championships
+192|2010-05-26|1|2010 Division I Regional Track Meet
+98|2010-06-04|1|2010 OHSAA Division I State Track and Field Championships
+257|2011-03-26|1|2011 Elk Relays
+242|2011-04-15|1|2011 Mansfield Mehock Relays
+244|2011-04-16|1|2011 Husky Invitational
+58|2011-04-23|1|2011 Amherst Comet Relays
+158|2011-05-01|1|2011 Unknown Meet
+18|2011-05-14|1|2011 Suburban League Championships
+102|2011-05-18|1|2011 Division I District Track Meet
+152|2011-05-25|1|2011 Division I Regional Track Meet
+232|2011-06-03|1|2011 OHSAA Division I State Track and Field Championships
+63|2012-02-05|2|2012 Mount Union HS Open #1
+30|2012-02-26|2|2012 Oberlin HS Invitational #3
+88|2012-03-17|2|2012 OATCCC Indoor State Championship
+38|2012-04-21|1|2012 Amherst Comet Relays
+223|2012-05-12|1|2012 Suburban League Championships
+118|2012-05-16|1|2012 Division I District Track Meet
+42|2012-05-23|1|2012 Division I Regional Track Meet
+77|2013-02-24|2|2013 Oberlin HS Invitational #3
+250|2013-03-02|2|2013 Kent State HS Open #3
+107|2013-03-10|2|2013 Oberlin HS Invitational #4
+180|2013-04-27|1|2013 Amherst Comet Relays
+213|2013-05-01|1|2013 Unknown Meet
+69|2013-05-11|1|2013 Bob Knoll Invitational
+82|2013-05-18|1|2013 Suburban League Championships
+222|2013-05-22|1|2013 Division I District Track Meet
+34|2013-05-29|1|2013 Division I Regional Track Meet
+113|2013-06-07|1|2013 OHSAA Division I State Track and Field Championships
+204|2014-04-26|1|2014 Triway Invitational
+169|2014-05-17|1|2014 Suburban League Championships
+22|2014-05-21|1|2014 Division I District Track Meet
+148|2014-05-28|1|2014 Division I Regional Track Meet
+12|2014-06-06|1|2014 OHSAA Division I State Track and Field Championships
+216|2015-04-16|1|2015 Ontario Relays
+104|2015-04-25|1|2015 Triway Invitational
+93|2015-05-01|1|2015 Orange Relays
+135|2015-05-15|1|2015 Suburban League Championships
+179|2015-05-20|1|2015 Division I District Track Meet
+235|2016-02-06|2|2016 Oberlin #3
+196|2016-04-16|1|2016 Mansfield Mehock Relays
+134|2016-04-23|1|2016 Triway Invitational
+48|2016-04-29|1|2016 Orange Relays
+44|2016-05-11|1|2016 PTC Track Championships
+264|2016-05-18|1|2016 Division II District Track Meet
+91|2016-05-28|1|2016 Division II Regional Track Meet
+184|2016-06-03|1|2016 OHSAA Division II State Track and Field Championships
+32|2017-02-04|2|2017 Oberlin College Grand Prix Series #3
+49|2017-04-15|1|2017 Mansfield Mehock Relays
+161|2017-04-28|1|2017 Orange Relays
+123|2017-05-01|1|2017 Unknown Meet
+108|2017-05-10|1|2017 PTC Track Championships
+174|2017-05-20|1|2017 Division II District Track Meet
+220|2017-05-27|1|2017 Division II Regional Track Meet
+187|2017-06-02|1|2017 OHSAA Division II State Track and Field Championships
+15|2018-02-03|2|2018 Oberlin College Grand Prix Series #3
+125|2018-04-14|1|2018 Cowen Redbird Invitational
+61|2018-04-26|1|2018 Western Reserve Relays
+186|2018-04-27|1|2018 Orange Relays
+127|2018-04-28|1|2018 Nikki Reynolds Invitational
+14|2018-05-09|1|2018 PTC Track Championships
+160|2018-05-17|1|2018 Division II District Track Meet
+256|2018-05-26|1|2018 Division II Regional Track Meet
+2|2018-06-01|1|2018 OHSAA Seated Division State Track and Field Championships
+83|2018-06-01|1|2018 OHSAA Division II State Track and Field Championships
+267|2019-01-27|2|2019 BW High School Indoor Meet
+120|2019-02-02|2|2019 Oberlin College High School Meet #3
+105|2019-02-03|2|2019 Mount Union HS Qualifier #1
+94|2019-02-10|2|2019 Kent State University High School Meet #3
+19|2019-02-23|2|2019 Oberlin College High School Meet #4
+78|2019-04-13|1|2019 Cowen Redbird Invitational
+237|2019-04-26|1|2019 Orange Relays
+21|2019-04-27|1|2019 Nikki Reynolds Invitational
+183|2019-05-08|1|2019 PTC Track Championships
+26|2019-05-16|1|2019 Division II District Track Meet
+252|2019-05-23|1|2019 Division II Regional Track Meet
+28|2019-05-31|1|2019 OHSAA Division II State Track and Field Championships
+126|2019-05-31|1|2019 OHSAA Seated Division State Track and Field Championships
+20|2020-01-11|2|2020 Oberlin College High School Meet #1
+66|2020-02-22|2|2020 Akron Rubber City Open
+224|2020-02-29|2|2020 Ohio Inter-Club Pole Vault Championship
+229|2020-03-07|2|2020 OATCCC D1 Indoor State Championships
+214|2020-12-29|2|2021 Jackets Holiday Indoor
+177|2021-01-30|2|2021 SPIRE Ohio Championship Preview Meet
+206|2021-02-15|2|2021 Cloverleaf Indoor Meet 1
+209|2021-02-20|2|2021 Youngstown State Open/High School Meet #4
+73|2021-03-06|2|2021 OATCCC D1 Indoor Finale
+154|2021-04-03|1|2021 April Fools Triangular
+236|2021-04-06|1|2021 Ravenna-Streetsboro Double Dual
+46|2021-04-10|1|2021 Tom Fasko Medina Relays
+193|2021-04-13|1|2021 Woodridge Dual
+194|2021-04-17|1|2021 Orrville Invitational
+170|2021-04-20|1|2021 Norton-Springfield Double Dual
+241|2021-04-23|1|2021 Green Twilight Relays
+114|2021-04-27|1|2021 Field-Coventry Double Dual
+51|2021-05-01|1|2021 Nikki Reynolds Invitational
+243|2021-05-04|1|2021 Black River Dual
+185|2021-05-07|1|2021 Fairless Twilight Invitational
+60|2021-05-10|1|2021 Smithie Frosh-Soph Invitational
+141|2021-05-13|1|2021 Metro Athletic Conference Championships
+54|2021-05-21|1|2021 Division I District Track Meet	
+10|2021-05-26|1|2021 Division I Regional Track Meet
+211|2021-06-05|1|2021 OHSAA Seated Division State Track and Field Championship
+197|2021-06-05|1|2021 OHSAA Division I State Track and Field Championships
+103|2022-01-08|2|2022 Akron Pole Vault Convention
+5|2022-01-22|2|2022 Kent State High School Meet #1
+150|2022-02-06|2|2022 Ashland University HS Indoor
+166|2022-02-19|2|2022 Akron Rubber City HS Open
+6|2022-02-26|2|2022 OHIAA Indoor State Pole Vault Championship
+111|2022-03-04|2|2022 OATCCC D1 Indoor State Meet
+124|2022-03-26|1|2022 Cloverleaf Early Bird Relays
+53|2022-04-05|1|2022 Ravenna-Streetsboro Double Dual
+168|2022-04-09|1|2022 Tom Fasko Medina Relays
+199|2022-04-12|1|2022 Woodridge Dual
+132|2022-04-16|1|2022 Orrville Invitational
+55|2022-04-19|1|2022 Norton-Springfield Double Dual
+43|2022-04-22|1|2022 Green Twilight Relays
+97|2022-04-26|1|2022 Field-Coventry Double Dual
+143|2022-04-29|1|2022 Tom Lantz Invitational
+85|2022-05-04|1|2022 Black River Dual
+225|2022-05-06|1|2022 Fairless Twilight Invitational
+122|2022-05-09|1|2022 Smithie Frosh-Soph Invitational
+239|2022-05-12|1|2022 Metro Athletic Conference Championships
+255|2022-05-20|1|2022 Division I District Track Meet
+230|2022-05-27|1|2022 Division I Regional Track Meet
+29|2022-06-04|1|2022 OHSAA Division I State Track and Field Championships
+228|2023-02-04|2|2023 Oberlin College High School Meet #3
+162|2023-02-14|2|2023 Cloverleaf Indoor Meet
+191|2023-02-18|2|2023 Akron Rubber City HS Open
+138|2023-03-04|2|2023 OATCCC D1 Indoor State Meet
+96|2023-03-25|1|2023 Cloverleaf Early Bird Relays
+70|2023-04-04|1|2023 Ravenna-Streetsboro Double Dual
+86|2023-04-08|1|2023 Tom Fasko Medina Relays
+151|2023-04-11|1|2023 Woodridge Dual
+11|2023-04-15|1|2023 Cowen Redbird Invitational
+31|2023-04-18|1|2023 Norton-Springfield Double Dual
+201|2023-04-25|1|2023 Field-Coventry Double Dual
+106|2023-04-29|1|2023 Nikki Reynolds Invitational
+178|2023-05-03|1|2023 New London Dual
+259|2023-05-05|1|2023 Fairless Twilight Invitational
+115|2023-05-08|1|2023 Stars of Track and Field
+57|2023-05-11|1|2023 Metro Athletic Conference Championships
+153|2023-05-19|1|2023 Division I District Track Meet
+62|2023-05-26|1|2023 Division I Regional Track Meet
+35|2023-06-03|1|2023 OHSAA Division I State Track and Field Championships
+7|2024-01-20|2|2024 Kent State High School Meet #3
+71|2024-01-28|2|2024 Mount Union High School Qualifier #1
+101|2024-02-03|2|2024 Oberlin College High School Meet #3
+75|2024-02-11|2|2024 SPIRE High School Indoor Games
+146|2024-02-17|2|2024 Akron Rubber City High School Open
+202|2024-03-01|2|2024 OATCCC D1 Indoor State Meet
+37|2024-03-23|1|2024 Cloverleaf Early Bird Relays
+172|2024-04-06|1|2024 Tom Fasko Medina Relays
+167|2024-04-09|1|2024 Woodridge Dual
+64|2024-04-13|1|2024 Cowen Redbird Invitational
+226|2024-04-16|1|2024 Norton-Springfield Double Dual
+109|2024-04-18|1|2024 Ravenna-Streetsboro Double Dual
+50|2024-04-19|1|2024 Green Twilight Relays
+254|2024-04-23|1|2024 Field-Coventry Double Dual
+136|2024-04-27|1|2024 Nikki Reynolds Invitational
+56|2024-04-29|1|2024 New London Dual
+25|2024-05-03|1|2024 Fairless Twilight Invitational
+233|2024-05-06|1|2024 Stars of Track and Field
+140|2024-05-10|1|2024 Metro Athletic Conference Championships
+133|2024-05-17|1|2024 Division I District Track Meet
+87|2024-05-24|1|2024 Division I Regional Track Meet
+117|2024-06-01|1|2024 OHSAA Division I State Track and Field Championships
+131|2024-12-28|2|2025 Extreme Vault Club HS Qualifier & Open
+137|2025-02-01|2|2025 Jerome Fields HS Open
+41|2025-02-22|2|2025 University of Findlay Dave's Running High School Open
+80|2025-03-08|2|2025 OATCCC D2 Indoor State Meet
+258|2025-03-29|1|2025 Cloverleaf Early Bird Relays
+72|2025-04-04|1|2025 Jim Hauser Pirate Relays
+188|2025-04-12|1|2025 Mary Kay Hajek Chippewa Invitational
+3|2025-04-15|1|2025 Woodridge Dual
+147|2025-04-19|1|2025 Bay Rocket Invitational
+68|2025-04-22|1|2025 Norton-Springfield Double Dual
+247|2025-04-26|1|2025 Green Twilight Relays
+270|2025-04-29|1|2025 Field-Coventry Double Dual
+271|2025-05-03|1|2025 Nikki Reynolds Invitational
+272|2025-05-05|1|2025 Ravenna-Streetsboro Double Dual
+275|2025-05-06|1|2025 New London Dual
+273|2025-05-09|1|2025 Fairless Twilight Invitational
+274|2025-05-12|1|2025 Stars of Track and Field
+276|2025-05-17|1|2025 Metro Athletic Conference Championships
+269|2025-05-24|1|2025 Division II District Track Meet
+277|2025-05-31|1|2025 Division II Regional Track Meet
+278|2025-06-06|1|2025 OHSAA Division II State Track and Field Championships
+279|2026-01-31|2|2026 Heidelberg HS Qualifier
+280|2026-02-07|2|2026 Ohio State High School Qualifier #4
+281|2026-02-10|2|2026 Cloverleaf Indoor Meet
+282|2026-02-21|2|2026 Jerome Fields HS Open
+284|2026-03-28|1|2026 Cloverleaf Early Bird Relays
+285|2026-04-03|1|2026 Jim Hauser Pirate Relays
+286|2026-04-08|1|2026 Ravenna-Streetsboro Double Dual
+287|2026-04-10|1|2026 Fairview Warrior Relays
+288|2026-04-14|1|2026 Woodridge Dual
+289|2026-04-18|1|2026 Bay Rocket Invitational
+290|2026-04-21|1|2026 Norton-Springfield Double Dual
+291|2026-04-24|1|2026 Keystone Invitational
+292|2026-04-28|1|2026 Field-Coventry Double Dual
+293|2026-05-02|1|2026 Nikki Reynolds Invitational
+294|2026-05-05|1|2026 New London Dual
+295|2026-05-08|1|2026 Fairless Twilight Invitational
+296|2026-05-11|1|2026 Stars of Track and Field
+297|2026-05-16|1|2026 Metro Athletic Conference Championships
+298|2026-05-23|1|2026 Division III District Track Meet
+299|2026-05-30|1|2026 Division III Regional Track Meet
+300|2026-06-06|1|2026 OHSAA Division III State Track and Field Championships
+

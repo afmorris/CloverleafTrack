@@ -2046,3 +2046,25 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** The Athlete page (`Roster/Details.cshtml`) still uses the strips in the mark cell with `Compact` labels. `wwwroot/css/site.css` is a tracked, minified build: with no node toolchain available I hand-appended the Tailwind rules for `.gap-x-1`, `.align-middle` and `.sm:px-4` exactly as Tailwind emits them; a future `pnpm run dev` will regenerate them from the markup, so nothing to undo. Razor views are precompiled, so restart a running dev server after editing them.
 
 **Key files:** `Views/Meets/Details.cshtml`, `Views/Shared/_RoundStrip.cshtml`, `Views/Shared/_AttemptStrip.cshtml`, `wwwroot/css/site.css`.
+
+### [C63] Meets.OfficialResultsUrl — Link to Externally Hosted Official Results
+
+**What changed:** New nullable `Meets.OfficialResultsUrl NVARCHAR(500)` (`docs/migration_meet_official_results_url.sql`, already run on live and local). Admin Create/Edit has an "Official Results URL" field (validated `[Url]`, http/https only, blank → null via `MeetsController.NormalizeUrl`; the "copy meet" action deliberately does not copy it). The public meet page shows an "Official results on <host> ↗" chip (`target=_blank rel="noopener noreferrer"`); `MeetService` only passes through http/https links, so a stored `javascript:` value can never render.
+
+**Why:** Owner wants each meet to link to wherever its official results live (athletic.net, oh.milesplit.com, timing companies). Used by the athletic.net/MileSplit crawl to attach links to matched meets.
+
+**Watch out:** Run the migration before deploying code that reads it (`m.*` queries and the Admin INSERT/UPDATE reference the column). One link per meet; if a meet is on both sites, prefer athletic.net (it has splits and field series) unless the owner says otherwise.
+
+**Key files:** `Models/Meet.cs`, `ViewModels/Admin/Meets/MeetFormViewModel.cs`, `Web/Areas/Admin/Controllers/MeetsController.cs`, `AdminMeetRepository.cs`, `Services/MeetService.cs`, `Views/Meets/Details.cshtml`, `Areas/Admin/Views/Meets/Create.cshtml`.
+
+### [C64] Crawl of athletic.net and oh.milesplit.com — Meet Matching and Official Results Links
+
+**What changed:** `scripts/crawl/` holds the crawled meet lists (`athleticnet-meets.txt`: 143 meets from team 7859 calendars 2005-2026, indoor+outdoor; `milesplit-meets-raw.txt`: 163 meets from MileSplit team 9826, `/api/v1/teams/9826/schedules?season=&year=` JSON), `match_meets.py` (matches each crawled meet to a DB meet by environment, date ±3 days for multi-day championships, and name similarity; tuned to reject same-date different-name pairs) and the output `matches.tsv` (every crawled meet with its DB match and score, for review) plus `official-results-links.sql` (copied to `docs/imports/2026-official-results-links.sql`). It sets `Meets.OfficialResultsUrl` for **153 of 307 DB meets** (116 athletic.net, 37 MileSplit; athletic.net preferred); run on live and local. `UPDATE … WHERE OfficialResultsUrl IS NULL` so manual links are never overwritten.
+
+**Coverage reality:** neither site lists most dual/double-dual meets, so ~154 DB meets stay unlinked; both sites have many indoor/other meets we don't track (listed as "NO DB MEET" by the matcher). athletic.net team calendars only list meets with a results link.
+
+**Source quirks:** athletic.net's API 403s, so the pages are scraped via iframes (results list is virtualized; scroll and use `textContent`). MileSplit's `/results/<id>/raw` is one plain-text document per meet (prelim/semi sections included, relay members listed, **no field attempt series**), but its layout varies by timing software (HY-TEK `====` blocks, tab-delimited blocks, Finish Lynx, split two-line headers); older meets (≈2016-2022) often lose event names and mix seed marks into rows, so only 2023+ MileSplit round data is trustworthy without manual review. Both sites independently confirmed the State 4x400 correction ([C61]).
+
+**Watch out:** matches are heuristic — spot-check `matches.tsv` rows with score < 1.3. MileSplit schedule year = season start year (`year=2025` is the 2025-26 season); athletic.net `outdoor2026`/`indoor2026` are the 2026 / 2025-26 seasons.
+
+**Key files:** `scripts/crawl/match_meets.py`, `scripts/crawl/matches.tsv`, `docs/imports/2026-official-results-links.sql`.
