@@ -1,0 +1,56 @@
+12264|2|4x400M Relay|Erian Hamilton/Tommie Kurtz/Jenna Oliver/Anna Winnicki|254.46|NULL|0
+12527|1|4x200M Relay|Jacob Scheck/Jimmy Fazio/Zack Munchick/Robert Rivera|97.92|NULL|0
+12640|2|4x100M Relay|Sara Keener/Taylor Napholz/Zoe Riddile/Kirsten Wilson|52.52|NULL|0
+12714|2|4x800M Relay|Tommie Kurtz/Vanessa Rivera/Jenna Oliver/Riley Freeland|585.42|NULL|0
+12840|1|4x400M Relay|Jimmy Fazio/Michael Martin/Robert Rivera/Tristan Vaughan|218.61|NULL|0
+13041|2|4x200M Relay|Sara Keener/Zana Ross/Erian Hamilton/Lauren Frank|110.11|NULL|0
+13327|1|4x800M Relay|Michael Martin/Joe Nespeca/Robert Rivera/Tristan Vaughan|508.11|NULL|0
+13349|1|4x100M Relay|Chase Combs/Austin Greer/Jacob Scheck/Matt Stoner|48.37|NULL|0
+5026|2|800M|Tommie Kurtz|141.43|NULL|0
+4923|1|1600M|Estevan Ortega|299.55|NULL|0
+8900|1|3200M|Estevan Ortega|672.87|NULL|0
+6299|1|400M|Jimmy Fazio|55.21|NULL|0
+6714|2|200M|Lauren Frank|27.94|NULL|0
+4403|2|400M|Lauren Frank|62.9|NULL|0
+8417|2|100M|Lauren Frank|13.37|NULL|0
+3753|2|100M|Kirsten Wilson|13.84|NULL|0
+8177|2|800M|Jenna Oliver|141.48|NULL|0
+7074|1|800M|Joe Nespeca|128.7|NULL|0
+7234|2|200M|Sara Keener|28.42|NULL|0
+8702|2|1600M|Vanessa Rivera|324.76|NULL|0
+5889|2|3200M|Vanessa Rivera|698.73|NULL|0
+8190|1|3200M|Dillon West|683.69|NULL|0
+5924|2|100M Hurdles|Alayna Richmond|19.6|NULL|0
+6793|2|300M Hurdles|Alayna Richmond|55.7|NULL|0
+4977|1|200M|Zack Munchick|24.48|NULL|0
+8362|1|100M|Zack Munchick|11.71|NULL|0
+8529|1|200M|Jacob Scheck|25.62|NULL|0
+2716|1|Pole Vault|Matt Butt|NULL|108|0
+6394|2|100M Hurdles|Zana Ross|16.15|NULL|0
+7397|2|300M Hurdles|Zana Ross|48.72|NULL|0
+203|2|Pole Vault|Maddie Grey|NULL|84|0
+3218|1|Long Jump|Adam Oren|NULL|223.75|0
+2555|2|High Jump|Vickie Andrews|NULL|62|0
+887|2|Long Jump|Julia Webb|NULL|170|0
+6328|1|1600M|Nick Bailey|302.93|NULL|0
+3590|2|Discus|Katelyn Young|NULL|1387|0
+1039|2|Shot Put|Katelyn Young|NULL|439.25|0
+1212|2|Long Jump|Abby Andrews|NULL|154.5|0
+7107|1|800M|Michael Martin|128.42|NULL|0
+3954|2|3200M|Riley Freeland|703.17|NULL|0
+4309|2|1600M|Riley Freeland|320.41|NULL|0
+5244|1|400M|Tristan Vaughan|55.53|NULL|0
+2710|2|Discus|Lisa Wangler|NULL|1231|0
+1837|2|Shot Put|Lisa Wangler|NULL|428.75|0
+4450|1|300M Hurdles|Rick Patton|52.48|NULL|0
+6288|1|110M Hurdles|Rick Patton|21.19|NULL|0
+1988|1|Discus|Corey Jenkin|NULL|1221|0
+241|1|Shot Put|Corey Jenkin|NULL|498.5|0
+6071|1|100M|Chase Combs|12.86|NULL|0
+8350|2|400M|Erian Hamilton|61.38|NULL|0
+688|1|Discus|Dylan Craig|NULL|1179|0
+3367|1|Shot Put|Dylan Craig|NULL|447.25|0
+4316|1|300M Hurdles|Dakota Bukszar|48.18|NULL|0
+1222|1|Long Jump|Dakota Bukszar|NULL|209.75|0
+7862|1|110M Hurdles|Dakota Bukszar|19.69|NULL|0
+

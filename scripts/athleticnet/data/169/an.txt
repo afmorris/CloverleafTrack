@@ -1,0 +1,12 @@
+Akron Suburban League Championships
+f/1/100m|Finals I 8.~11~Cassie Grabowski~13.80a (-1.2)~Cloverleaf~7060342
+f/1/100m|Prelims I 7.~11~Cassie Grabowski~13.52a (-2.8)~Cloverleaf~7060342
+f/1/400m|Finals I 7.~11~Hannah Swain~1:03.46a~Cloverleaf~5848870
+f/1/400m|Prelims I 4.~11~Hannah Swain~1:00.10aSB~Cloverleaf~5848870
+f/1/100mh|Finals I 5.~11~Cassie Grabowski~16.80a (-0.6)PB~Cloverleaf~7060342
+f/1/100mh|Finals I 6.~12~Maddie Brandt~16.80a (-0.6)~Cloverleaf~7060350
+f/1/100mh|Prelims I 4.~12~Maddie Brandt~16.65a (-3.0)~Cloverleaf~7060350
+f/1/100mh|Prelims I 6.~11~Cassie Grabowski~17.05a (-2.6)~Cloverleaf~7060342
+f/1/300mh|Finals I 6.~12~Maddie Brandt~51.05aPB~Cloverleaf~7060350
+f/1/300mh|Prelims I 7.~12~Maddie Brandt~51.30a~Cloverleaf~7060350
+#SERIES {}

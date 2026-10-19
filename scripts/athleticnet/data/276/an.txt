@@ -1,0 +1,26 @@
+Metro Athletic HS Conference Championships
+m/1/400m|Finals I 5.~10~Isaac Smith~53.19a~Cloverleaf~25194329
+m/1/400m|Prelims I 4.~10~Isaac Smith~52.79aPB~Cloverleaf~25194329
+m/1/300mh|Finals I 8.~9~Nolan Thompson~46.10a~Cloverleaf~28837880
+m/1/300mh|Prelims I 8.~9~Nolan Thompson~45.21aPB~Cloverleaf~28837880
+f/1/100m|Finals I 1.~12~Sarah Kelly~12.72a~Cloverleaf~20500162
+f/1/100m|Finals I 8.~9~Taylor Munchick~13.34a~Cloverleaf~29075261
+f/1/100m|Prelims I 1.~12~Sarah Kelly~12.57aPB~Cloverleaf~20500162
+f/1/100m|Prelims I 6.~9~Taylor Munchick~13.12aPB~Cloverleaf~29075261
+f/1/200m|Finals I 3.~12~Sarah Kelly~26.29a~Cloverleaf~20500162
+f/1/200m|Finals I 4.~11~Kayla Shook~26.47aSB~Cloverleaf~23036772
+f/1/200m|Prelims I 2.~12~Sarah Kelly~26.22aPB~Cloverleaf~20500162
+f/1/200m|Prelims I 5.~11~Kayla Shook~26.93a~Cloverleaf~23036772
+f/1/400m|Finals I 5.~12~Brooklyn Cavey~1:01.82aPB~Cloverleaf~20360549
+f/1/400m|Finals I 8.~9~Katie Wershing~1:03.38a~Cloverleaf~29075259
+f/1/400m|Prelims I 5.~9~Katie Wershing~1:01.32aPB~Cloverleaf~29075259
+f/1/400m|Prelims I 7.~12~Brooklyn Cavey~1:02.72a~Cloverleaf~20360549
+f/1/100mh|Finals I 3.~12~Kierston Campbell~16.73aPB~Cloverleaf~20360553
+f/1/100mh|Finals I 6.~10~Kiersyn Berry~17.19aPB~Cloverleaf~25697941
+f/1/100mh|Prelims I 4.~12~Kierston Campbell~16.89a~Cloverleaf~20360553
+f/1/100mh|Prelims I 5.~10~Kiersyn Berry~17.31a~Cloverleaf~25697941
+f/1/300mh|Finals I 3.~10~Kiersyn Berry~49.16aPB~Cloverleaf~25697941
+f/1/300mh|Finals I 6.~9~Julia Reusch~51.55aSB~Cloverleaf~28837877
+f/1/300mh|Prelims I 3.~10~Kiersyn Berry~50.69a~Cloverleaf~25697941
+f/1/300mh|Prelims I 7.~9~Julia Reusch~51.58a~Cloverleaf~28837877
+#SERIES {}

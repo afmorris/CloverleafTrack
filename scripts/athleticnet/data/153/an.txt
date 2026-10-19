@@ -1,0 +1,38 @@
+OHSAA Division 1 District - Brunswick
+m/1/800m|Finals I 2.~12~Vova Herdman~1:55.08a~Cloverleaf~26586108
+m/1/800m|Finals I 9.~12~Hunter Stallings~2:02.08aPB~Cloverleaf~15759361
+m/1/800m|Prelims I 3.~12~Vova Herdman~2:08.52a~Cloverleaf~26586108
+m/1/800m|Prelims I 14.~12~Hunter Stallings~2:13.55a~Cloverleaf~15759361
+m/1/110mh|Finals I 5.~11~Chase Young~16.68a~Cloverleaf~17562730
+m/1/110mh|Finals I 8.~11~Isaac Baltic~17.32a~Cloverleaf~27012639
+m/1/110mh|Prelims I 6.~11~Chase Young~16.35aSB~Cloverleaf~17562730
+m/1/110mh|Prelims I 8.~11~Isaac Baltic~16.39aPB~Cloverleaf~27012639
+m/1/300mh|Finals I 6.~11~Chase Young~42.53a~Cloverleaf~17562730
+m/1/300mh|Prelims I 6.~11~Chase Young~42.45aPB~Cloverleaf~17562730
+m/1/4x100m|Finals R 8. 45.19a Cloverleaf 
+m/1/4x100m|Prelims R 7. 44.98a Cloverleaf 
+m/1/4x200m|Finals R 8. 1:35.88a Cloverleaf 
+m/1/4x200m|Prelims R 8. 1:35.29a Cloverleaf 
+m/1/4x400m|Finals R 6. 3:29.74a Cloverleaf 
+m/1/4x400m|Prelims R 6. 3:33.29a Cloverleaf 
+f/1/100m|Finals I 1.~11~Riley Evans~12.54a~Cloverleaf~17537508
+f/1/100m|Finals I 4.~10~Sarah Kelly~13.11a~Cloverleaf~20500162
+f/1/100m|Prelims I 1.~11~Riley Evans~12.48a~Cloverleaf~17537508
+f/1/100m|Prelims I 7.~10~Sarah Kelly~13.01aSB~Cloverleaf~20500162
+f/1/200m|Finals I 1.~11~Riley Evans~26.05a~Cloverleaf~17537508
+f/1/200m|Prelims I 3.~11~Riley Evans~26.71a~Cloverleaf~17537508
+f/1/400m|Finals I 1.~11~Riley Evans~57.99a~Cloverleaf~17537508
+f/1/400m|Prelims I 1.~11~Riley Evans~59.01a~Cloverleaf~17537508
+f/1/800m|Finals I 7.~11~Reese Barnett~2:28.13aPB~Cloverleaf~20360554
+f/1/800m|Finals I 13.~11~Lauren Jensch~2:35.75a~Cloverleaf~26495635
+f/1/800m|Prelims I 5.~11~Reese Barnett~2:33.35a~Cloverleaf~20360554
+f/1/800m|Prelims I 9.~11~Lauren Jensch~2:33.82a~Cloverleaf~26495635
+f/1/100mh|Finals I 6.~10~Kierston Campbell~17.30a~Cloverleaf~20360553
+f/1/100mh|Prelims I 8.~10~Kierston Campbell~16.92aSB~Cloverleaf~20360553
+f/1/4x100m|Finals R 4. 51.14a Cloverleaf 
+f/1/4x100m|Prelims R 6. 51.75a Cloverleaf 
+f/1/4x200m|Finals R 3. 1:46.63a Cloverleaf 
+f/1/4x200m|Prelims R 1. 1:48.12a Cloverleaf 
+f/1/4x400m|Finals R 8. 4:22.19a Cloverleaf 
+f/1/4x400m|Prelims R 8. 4:24.03a Cloverleaf 
+#SERIES {}

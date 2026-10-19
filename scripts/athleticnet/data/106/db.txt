@@ -1,0 +1,51 @@
+6|2|High Jump|Emma Malikowski|NULL|54|0
+149|2|Discus|Presly McConnell|NULL|1120|0
+225|1|Pole Vault|Isaac Baltic|NULL|162|0
+292|2|High Jump|Grace Goldsberry|NULL|52|0
+616|1|Discus|Timmy Shores|NULL|1390|0
+1041|1|Long Jump|Will Jerome|NULL|227.75|0
+1137|2|Long Jump|Reese Barnett|NULL|183.5|0
+2348|2|Long Jump|Emma Malikowski|NULL|194.75|0
+2371|1|Long Jump|Oakley Kemp|NULL|251.5|0
+2647|2|Shot Put|Presly McConnell|NULL|363|0
+2868|2|Discus|Karoline Kreider|NULL|1175|0
+2886|2|Shot Put|Karoline Kreider|NULL|295.25|0
+2929|2|Pole Vault|Brooklyn Cavey|NULL|78|0
+3406|1|Pole Vault|Jace Peacock|NULL|126|0
+3832|1|1600M|Brett Gucker|283.85|NULL|0
+3993|2|100M|Leah Houk|15|NULL|0
+4090|2|400M|Julia Armogida|67.43|NULL|0
+4372|2|800M|Reese Barnett|150.39|NULL|0
+5025|2|300M Hurdles|Grace Friedhoff|52.71|NULL|0
+5142|1|300M Hurdles|Gage Hankins|45.93|NULL|0
+5269|2|100M Hurdles|Grace Friedhoff|19.68|NULL|0
+5548|1|3200M|Caleb Neville|633.98|NULL|0
+6160|1|1600M|Hunter Stallings|288.31|NULL|0
+6286|2|400M|Lauren Jensch|66.43|NULL|0
+6493|2|1600M|Madison Snyder|344.69|NULL|0
+6580|1|200M|Yuri Himes|25.36|NULL|0
+6639|2|3200M|Alyssa Stoner|685.7|NULL|0
+6687|1|200M|Isaiah Kurtz|25.6|NULL|0
+6688|2|3200M|Vanessa Monhemius|774.76|NULL|0
+6720|1|100M|Oakley Kemp|11.88|NULL|0
+7227|1|800M|Vova Herdman|120.9|NULL|0
+7432|1|3200M|Gavin Forbes|637.61|NULL|0
+7503|1|300M Hurdles|Chase Young|44.37|NULL|0
+7844|2|200M|Brooklyn Cavey|29.68|NULL|0
+7909|1|400M|Tristan Craddock|58.4|NULL|0
+8187|2|200M|Sarah Kelly|27.98|NULL|0
+8204|2|800M|Emma Hibler|156.25|NULL|0
+8230|2|100M|Sarah Kelly|13.44|NULL|0
+8390|1|100M|Tristin Bogucki|12.37|NULL|0
+8433|1|800M|Jackson James|130.51|NULL|0
+8554|1|110M Hurdles|Chase Young|16.88|NULL|0
+9077|2|1600M|Brooke Gucker|359.69|NULL|0
+12075|2|4x400M Relay|Reese Barnett/Brooklyn Cavey/Grace Friedhoff/Lauren Jensch|269.5|NULL|0
+12123|2|4x800M Relay|Emma Hibler/Madison Snyder/Alyssa Stoner/Allison Yagersz|623.45|NULL|0
+12137|1|4x100M Relay|Tristin Bogucki/Yuri Himes/Oakley Kemp/Isaiah Kurtz|46.22|NULL|0
+12220|1|4x800M Relay|Brett Gucker/Ben Myers/Hunter Stallings/Vova Herdman|503.37|NULL|0
+12286|1|4x400M Relay|Ethan Gray/Brett Gucker/Vova Herdman/Hunter Stallings|217.48|NULL|0
+12417|2|4x200M Relay|Julia Armogida/Brooklyn Cavey/Emma Malikowski/Kayla Shook|114.38|NULL|0
+12457|1|4x200M Relay|Tristan Craddock/Ethan Gray/Yuri Himes/Isaiah Kurtz|98.53999999999999|NULL|0
+12686|2|4x100M Relay|KK Campbell/Callee Gibson/Leah Houk/Kayla Shook|53.67|NULL|0
+

@@ -1,0 +1,22 @@
+OHSAA D2 Northeast District (Orrville)
+m/1/100m|Finals I 7.~10~Zack Munchick~11.71a (-1.6)~Cloverleaf~8373672
+m/1/100m|Prelims I 8.~10~Zack Munchick~11.90a (-9.9)~Cloverleaf~8373672
+m/1/200m|Finals I 6.~10~Zack Munchick~24.66a (-3.2)~Cloverleaf~8373672
+m/1/200m|Prelims I 7.~10~Zack Munchick~24.48a~Cloverleaf~8373672
+f/1/100m|Finals I 4.~12~Lauren Frank~13.37a (-1.2)~Cloverleaf~8373652
+f/1/100m|Prelims I 6.~12~Lauren Frank~13.54a (-5.9)~Cloverleaf~8373652
+f/1/200m|Finals I 3.~10~Sara Keener~28.42a (-4.2)~Cloverleaf~8453808
+f/1/200m|Finals I 7.~12~Lauren Frank~29.01a (-4.2)~Cloverleaf~8373652
+f/1/200m|Prelims I 3.~12~Lauren Frank~27.94a (-6.1)~Cloverleaf~8373652
+f/1/200m|Prelims I 7.~10~Sara Keener~28.77a (-9.9)~Cloverleaf~8453808
+f/1/400m|Finals I 1.~12~Erian Hamilton~1:01.38aPB~Cloverleaf~5848868
+f/1/400m|Finals I 2.~12~Lauren Frank~1:02.26a~Cloverleaf~8373652
+f/1/400m|Prelims I 1.~12~Erian Hamilton~1:02.07a~Cloverleaf~5848868
+f/1/400m|Prelims I 2.~12~Lauren Frank~1:02.09a~Cloverleaf~8373652
+f/1/800m|Finals I 1.~9~Tommie Kurtz~2:21.43a~Cloverleaf~8657721
+f/1/800m|Finals I 2.~9~Jenna Oliver~2:21.48a~Cloverleaf~8657719
+f/1/800m|Prelims I 1.~9~Tommie Kurtz~2:26.07a~Cloverleaf~8657721
+f/1/800m|Prelims I 2.~9~Jenna Oliver~2:34.71a~Cloverleaf~8657719
+f/1/100mh|Finals I 2.~11~Zana Ross~16.15a (-2.2)~Cloverleaf~8373658
+f/1/100mh|Prelims I 2.~11~Zana Ross~16.18a (-1.1)~Cloverleaf~8373658
+#SERIES {}

@@ -1,0 +1,63 @@
+12032|2|4x400M Relay|Julia Armogida/Meghan Cavey/Riley Evans/Paige Munchick|258.8|NULL|0
+12053|1|4x800M Relay|Nolan Freeland/Andrew Hibler/Hunter Stallings/Cole Yagersz|539.7|NULL|0
+12235|1|4x100M Relay|Ben Kott/Jacob Nau/Michael Williams/Luke Yuravak|46|NULL|0
+12562|2|4x800M Relay|Lauren Jensch/Maria Porras/Madison Snyder/Allison Yagersz|648.2|NULL|0
+12901|2|4x200M Relay|Paige Munchick/Emily Romano/Julia Armogida/Riley Evans|109.4|NULL|0
+12954|1|4x200M Relay|Kevin Bittaker/Philly Hamilton/Jacob Nau/Luke Yuravak|97|NULL|0
+12988|1|4x400M Relay|Kevin Bittaker/Philly Hamilton/Nolan McNeal/Cole Yagersz|225.9|NULL|0
+13067|2|4x100M Relay|Meghan Cavey/Leah Houk/Gabriella Petrocci/McKenna Tabor|56.6|NULL|0
+2630|1|Shot Put|Zach Greer|NULL|399|0
+6799|1|800M|Andrew Hibler|125.9|NULL|0
+2095|1|Pole Vault|Luke Malena|NULL|120|0
+3666|1|3200M|Luke Malena|619|NULL|0
+5839|1|100M|Michael Williams|11.8|NULL|0
+6757|1|400M|Cole Yagersz|55.6|NULL|0
+2518|1|Discus|Tommy Sword|NULL|1604|0
+4698|2|200M|Meghan Cavey|28.7|NULL|0
+941|2|Long Jump|Meghan Cavey|NULL|167|0
+1661|2|High Jump|Ashley Sigmon|NULL|62|0
+8993|2|100M|Paige Munchick|13.7|NULL|0
+1331|2|Pole Vault|Cassidy Smith|NULL|91|0
+2806|2|Seated Shot Put|Brooklynn Crist|NULL|180|0
+4694|2|Seated 100M|Brooklynn Crist|22.8|NULL|0
+8977|2|Seated 400M|Brooklynn Crist|84.5|NULL|0
+8843|1|300M Hurdles|Nolan McNeal|46.9|NULL|0
+6576|2|100M Hurdles|Vicki Brandt|20.2|NULL|0
+4275|2|300M Hurdles|Vicki Brandt|56.2|NULL|0
+6948|1|1600M|Brett Gucker|294.5|NULL|0
+7799|1|3200M|Brett Gucker|636.2|NULL|0
+1233|2|Discus|Karoline Kreider|NULL|978.5|0
+1101|2|Shot Put|Karoline Kreider|NULL|306.5|0
+5255|2|100M Hurdles|Natalie Bailey|18.9|NULL|0
+8097|2|300M Hurdles|Natalie Bailey|53|NULL|0
+2237|1|Pole Vault|Isaac Baltic|NULL|96|0
+8254|2|800M|Allison Yagersz|161|NULL|0
+1524|2|Pole Vault|Laurell Brown|NULL|85|0
+1106|2|Long Jump|Laurell Brown|NULL|179.75|0
+3499|2|High Jump|Laurell Brown|NULL|54|0
+4655|2|3200M|Maria Porras|740.1|NULL|0
+4100|2|100M|Riley Evans|13|NULL|0
+1172|2|Discus|DeLayna Harvey|NULL|1001.5|0
+569|2|Shot Put|DeLayna Harvey|NULL|332|0
+7516|2|1600M|Alyssa Stoner|323.9|NULL|0
+5950|2|800M|Alyssa Stoner|148.5|NULL|0
+7130|1|400M|Kaleb Baker|58.7|NULL|0
+7193|1|110M Hurdles|Kaleb Baker|18.8|NULL|0
+8293|1|100M|Jacob Nau|12.7|NULL|0
+1505|1|Long Jump|Jacob Nau|NULL|225.5|0
+3856|2|400M|Madison Snyder|75.7|NULL|0
+4459|2|3200M|Maddie Moore|799.4|NULL|0
+5397|1|200M|Kevin Bittaker|25.3|NULL|0
+4918|2|400M|Julia Armogida|65.6|NULL|0
+6344|2|200M|Emily Romano|27.5|NULL|0
+4284|1|1600M|Ethan Vaughn|334.3|NULL|0
+7493|1|800M|Vova Herdman|127.8|NULL|0
+5569|1|300M Hurdles|Ray Farnham|50.9|NULL|0
+5653|1|110M Hurdles|Ray Farnham|19.7|NULL|0
+2980|1|Shot Put|Luke Yuravak|NULL|481|0
+6661|1|200M|Luke Yuravak|24.3|NULL|0
+8488|2|1600M|Brooke Gucker|356.1|NULL|0
+1012|1|High Jump|Ben Kott|NULL|62|0
+300|1|Long Jump|Philly Hamilton|NULL|224|0
+1686|1|High Jump|Philly Hamilton|NULL|66|0
+

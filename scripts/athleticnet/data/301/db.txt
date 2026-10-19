@@ -1,0 +1,39 @@
+14993|2|100M Hurdles|Stephanie Foster|17.4|NULL|0
+14994|2|100M Hurdles|Jenny Rupp|15.76|NULL|0
+14995|1|110M Hurdles|Greg Hill|15.8|NULL|0
+14996|1|110M Hurdles|Mike Fuentes|15.9|NULL|0
+14997|2|100M|Caitlyn Kilkenny|13.7|NULL|0
+14998|2|100M|Morgan ORourke|13.5|NULL|0
+14999|1|100M|Cody Roberts|12.4|NULL|0
+15000|1|100M|Devon Neal|12.2|NULL|0
+15001|2|4x200M Relay|Morgan ORourke/Heidi Santelmann/Rachel Gokey/Caitlyn Kilkenny|113.03999999999999|NULL|0
+15002|1|4x200M Relay|Tyler Goins/Zane Hemming/Jerry Chidsey/Dan Kline|103.56|NULL|0
+15003|2|1600M|Leah Geissman|341.04|NULL|0
+15004|1|1600M|Jon Walkup|270.01|NULL|0
+15005|2|4x100M Relay|Morgan ORourke/Amber Hanson/Katlyn Henderson/Caitlyn Kilkenny|53.29|NULL|0
+15006|1|4x100M Relay|Cody Roberts/Dylan Varga/Kyle Sirl/Devon Neal|47.33|NULL|0
+15007|2|400M|Rachel Gokey|68.39|NULL|0
+15008|2|400M|Francesca Luppino|66.47|NULL|0
+15009|1|400M|Taylor Riggs|56.95|NULL|0
+15010|1|400M|Jerry Chidsey|58.21|NULL|0
+15011|2|300M Hurdles|Jenny Rupp|46.64|NULL|0
+15012|2|300M Hurdles|Heidi Santelmann|47.05|NULL|0
+15013|1|300M Hurdles|Greg Hill|45.49|NULL|0
+15014|1|300M Hurdles|Mike Fuentes|39.84|NULL|0
+15015|2|800M|Betsy Reedy|158.36|NULL|0
+15016|1|800M|Kyle Nehrenz|129.02|NULL|0
+15017|2|200M|Brittani Pekar|29.2|NULL|0
+15018|2|200M|Caitlyn Kilkenny|28.6|NULL|0
+15019|1|200M|Cody Roberts|25|NULL|0
+15020|1|200M|Devon Neal|25.4|NULL|0
+15021|2|3200M|Ariel Talabac|745.9|NULL|0
+15022|2|3200M|Kayla Bergstrom|748.45|NULL|0
+15023|1|3200M|Bret Nehrenz|666.66|NULL|0
+15024|2|4x400M Relay|Heidi Santelmann/Leah Geissman/Morgan ORourke/Jenny Rupp|256.36|NULL|0
+15025|2|Discus|Cassandra Maxwell|NULL|1331|0
+15026|2|Long Jump|Jenny Rupp|NULL|191|0
+15027|1|Long Jump|Cody Roberts|NULL|240.25|0
+15028|2|Pole Vault|Stephanie Foster|NULL|126|0
+15029|2|Pole Vault|Amber Hanson|NULL|108|0
+15030|1|Pole Vault|Josh Newcomer|NULL|150|0
+

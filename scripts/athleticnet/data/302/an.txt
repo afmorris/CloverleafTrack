@@ -1,0 +1,4 @@
+OHSAA Division 1 Regional Track Meet
+f/1/300mh|Finals I 6.~12~Jenny Rupp~47.30a~Cloverleaf~32585794
+f/1/300mh|Prelims I 7.~12~Jenny Rupp~46.90a~Cloverleaf~32585794
+#SERIES {}

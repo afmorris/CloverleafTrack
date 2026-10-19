@@ -1,0 +1,55 @@
+45|2|Discus|Karoline Kreider|NULL|1158|0
+116|2|Discus|DeLayna Harvey|NULL|995|0
+215|1|Shot Put|Zach Greer|NULL|450.5|0
+415|2|Long Jump|Ashley Sigmon|NULL|190.5|0
+795|2|High Jump|Emma Malikowski|NULL|56|0
+1583|2|Shot Put|Karoline Kreider|NULL|331.25|0
+1621|2|High Jump|Ashley Sigmon|NULL|58|0
+1694|1|Discus|Ben Kott|NULL|1559|0
+1904|2|Pole Vault|Cassidy Smith|NULL|108|0
+1997|1|Long Jump|Oakley Kemp|NULL|228.75|0
+2063|1|High Jump|Philly Hamilton|NULL|68|0
+2420|2|Shot Put|DeLayna Harvey|NULL|317.25|0
+2610|1|Discus|Tommy Sword|NULL|1205|0
+2804|2|Long Jump|Emma Malikowski|NULL|197|0
+2928|1|Shot Put|Tommy Sword|NULL|472.75|0
+3350|1|Pole Vault|Isaac Baltic|NULL|138|0
+3901|1|3200M|Brett Gucker|615.81|NULL|0
+3971|1|110M Hurdles|Chase Young|18.4|NULL|0
+4216|2|100M Hurdles|Natalie Bailey|18.2|NULL|0
+4452|1|1600M|Nolan Freeland|283.99|NULL|0
+4693|2|300M Hurdles|Vicki Brandt|54.4|NULL|0
+5029|2|400M|Riley Evans|58.13|NULL|0
+5268|1|300M Hurdles|Kaleb Baker|43.76|NULL|0
+5379|2|100M|Laurell Brown|14.32|NULL|0
+5494|2|200M|Meghan Cavey|28.77|NULL|0
+5717|1|200M|Philly Hamilton|24.46|NULL|0
+5773|2|200M|Emily Romano|26.66|NULL|0
+5790|1|100M|Oakley Kemp|12.31|NULL|0
+5807|2|1600M|Alyssa Stoner|316.23|NULL|0
+5908|2|1600M|Brooke Gucker|345.72|NULL|0
+6419|1|100M|Zach Mollohan|12.18|NULL|0
+6732|2|800M|Allison Yagersz|155.84|NULL|0
+6861|1|400M|Blake Wilson|50.71|NULL|0
+6883|1|3200M|Luke Malena|616.17|NULL|0
+7064|1|1600M|Nathan Naples|305.77|NULL|0
+7289|1|300M Hurdles|Zach Mollohan|41.86|NULL|0
+7305|2|3200M|Maria Porras|746.61|NULL|0
+7746|1|110M Hurdles|Zach Mollohan|17.4|NULL|0
+7988|2|100M Hurdles|Vicki Brandt|18.39|NULL|0
+8010|1|800M|Vova Herdman|125.11|NULL|0
+8129|2|400M|Julia Armogida|65.27|NULL|0
+8408|2|100M|Meghan Cavey|13.84|NULL|0
+8439|2|800M|Alyssa Stoner|150.4|NULL|0
+8570|2|3200M|Sophia Spencer|682.15|NULL|0
+8606|1|800M|Andrew Hibler|117.32|NULL|0
+8697|1|400M|Kevin Bittaker|56.53|NULL|0
+12011|1|4x100M Relay|Kevin Bittaker/Cade Cass/Ben Kott/Jacob Nau|46.57|NULL|0
+12036|1|4x800M Relay|Brett Gucker/Vova Herdman/Andrew Hibler/Luke Malena|497.14|NULL|0
+12277|2|4x100M Relay|Julia Armogida/Meghan Cavey/Emma Malikowski/Paige Munchick|51.74|NULL|0
+12394|2|4x200M Relay|Julia Armogida/Riley Evans/Paige Munchick/Emily Romano|104.72999999999999|NULL|0
+12656|2|4x400M Relay|Riley Evans/Emma Malikowski/Paige Munchick/Emily Romano|250.85|NULL|0
+12873|2|4x800M Relay|Maria Porras/Sophia Spencer/Alyssa Stoner/Allison Yagersz|605.69|NULL|0
+13037|1|4x200M Relay|Kevin Bittaker/Cade Cass/Philly Hamilton/Ben Kott|96.6|NULL|0
+13363|1|4x400M Relay|Cade Cass/Andrew Hibler/Blake Wilson/Cole Yagersz|206.4|NULL|0
+

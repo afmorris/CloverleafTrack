@@ -1,0 +1,4 @@
+Mansfield Mehock relays
+f/1/100mh|Finals I 9.~12~Zana Ross~16.00aSB~Cloverleaf~8373658
+f/1/100mh|Prelims I 7.~12~Zana Ross~16.40a~Cloverleaf~8373658
+#SERIES {}

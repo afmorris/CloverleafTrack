@@ -1,0 +1,26 @@
+OHSAA D2 Northeast District - Orrville
+m/1/100m|Finals I 2.~10~Mike Williams~11.26aPB~Cloverleaf~14429654
+m/1/100m|Finals I 4.~10~Blake Wilson~11.47aSB~Cloverleaf~19369950
+m/1/100m|Prelims I 4.~10~Mike Williams~11.70a~Cloverleaf~14429654
+m/1/100m|Prelims I 7.~10~Blake Wilson~11.93a~Cloverleaf~19369950
+m/1/200m|Finals I 2.~10~Blake Wilson~23.39a~Cloverleaf~19369950
+m/1/200m|Finals I 5.~10~Mike Williams~23.80aPB~Cloverleaf~14429654
+m/1/200m|Prelims I 2.~10~Blake Wilson~23.29aPB~Cloverleaf~19369950
+m/1/200m|Prelims I 7.~10~Mike Williams~24.05a~Cloverleaf~14429654
+m/1/400m|Finals I 8.~12~Frank Stepp~55.31a~Cloverleaf~8657726
+m/1/400m|Prelims I 4.~12~Frank Stepp~53.42aSB~Cloverleaf~8657726
+m/1/110mh|Finals I 5.~11~DeAnte Taylor~16.65aPB~Cloverleaf~11964406
+m/1/110mh|Prelims I 6.~11~DeAnte Taylor~16.79a~Cloverleaf~11964406
+m/1/300mh|Finals I 7.~9~Austin Ebaugh~44.37aPB~Cloverleaf~15101871
+m/1/300mh|Prelims I 7.~9~Austin Ebaugh~44.58a~Cloverleaf~15101871
+f/1/100m|Finals I 2.~11~Nyah Hansen~13.07aPB~Cloverleaf~11648741
+f/1/100m|Finals I 3.~12~Maddie Boltz~13.28a~Cloverleaf~9800050
+f/1/100m|Prelims I 2.~12~Maddie Boltz~13.25a~Cloverleaf~9800050
+f/1/100m|Prelims I 3.~11~Nyah Hansen~13.30a~Cloverleaf~11648741
+f/1/200m|Finals I 3.~10~Emily Romano~26.64a~Cloverleaf~13354077
+f/1/200m|Finals I 6.~9~Ashley Kizzen~28.09aPB~Cloverleaf~14429650
+f/1/200m|Prelims I 3.~10~Emily Romano~26.64aPB~Cloverleaf~13354077
+f/1/200m|Prelims I 8.~9~Ashley Kizzen~28.65a~Cloverleaf~14429650
+f/1/300mh|Finals I 3.~9~Paige Munchick~48.58aPB~Cloverleaf~21637204
+f/1/300mh|Prelims I 3.~9~Paige Munchick~48.73a~Cloverleaf~21637204
+#SERIES {}

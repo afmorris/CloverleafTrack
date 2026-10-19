@@ -1,0 +1,59 @@
+11923|2|4x200M Relay|Julia Armogida/Riley Evans/Sarah Kelly/KK Campbell|109.1|NULL|0
+12140|2|4x100M Relay|Riley Evans/Callee Gibson/Sarah Kelly/Kayla Shook|51.53|NULL|0
+12564|1|4x400M Relay|Brett Gucker/Vova Herdman/Tristan Craddock/Hunter Stallings|211.38|NULL|0
+12610|1|4x100M Relay|Tristin Bogucki/Oakley Kemp/Isaiah Kurtz/Emmanuel Medina|45.58|NULL|0
+12679|2|4x800M Relay|Emma Hibler/Reese Barnett/Allison Yagersz/Alyssa Stoner|604.86|NULL|0
+12876|1|4x800M Relay|Vova Herdman/Hunter Stallings/Ben Myers/Brett Gucker|494.14|NULL|0
+12917|1|4x200M Relay|Isaiah Kurtz/Ethan Gray/Emmanuel Medina/Yuri Himes|95.82|NULL|0
+13215|2|4x400M Relay|Reese Barnett/Emma Hibler/Emma Malikowski/Kayla Shook|263.8|NULL|0
+3612|1|High Jump|Emmanuel Medina|NULL|62|0
+5174|1|3200M|Caleb Neville|622.86|NULL|0
+2715|1|High Jump|Will Jerome|NULL|62|0
+8469|1|400M|Will Jerome|55.59|NULL|0
+6745|1|100M|Tristin Bogucki|11.82|NULL|0
+2821|1|Discus|Timmy Shores|NULL|1411|0
+2913|1|Shot Put|Timmy Shores|NULL|461|0
+6448|1|800M|Hunter Stallings|125.66|NULL|0
+2785|1|Shot Put|Clay Combs|NULL|526.5|0
+400|1|Discus|Clay Combs|NULL|1534|0
+6701|2|100M Hurdles|Grace Friedhoff|18.7|NULL|0
+7394|2|300M Hurdles|Grace Friedhoff|51.79|NULL|0
+530|1|Pole Vault|Jace Peacock|NULL|132|0
+9019|2|200M|Leah Houk|30.26|NULL|0
+4357|2|800M|Emma Hibler|151.15|NULL|0
+6471|1|300M Hurdles|Chase Young|43.31|NULL|0
+7539|1|110M Hurdles|Chase Young|16.87|NULL|0
+2865|2|High Jump|Grace Goldsberry|NULL|56|0
+6278|1|200M|Isaiah Kurtz|24.85|NULL|0
+1168|2|Long Jump|Emma Malikowski|NULL|189|0
+1304|2|High Jump|Emma Malikowski|NULL|58|0
+7901|2|100M Hurdles|Vicki Brandt|18.14|NULL|0
+6057|1|1600M|Brett Gucker|279.44|NULL|0
+3276|2|Discus|Karoline Kreider|NULL|961|0
+3365|2|Shot Put|Karoline Kreider|NULL|370|0
+1999|1|Pole Vault|Isaac Baltic|NULL|162|0
+6295|1|300M Hurdles|Isaac Baltic|43.66|NULL|0
+4881|1|110M Hurdles|Isaac Baltic|16.91|NULL|0
+8741|2|400M|Riley Evans|60.29|NULL|0
+5594|1|400M|Ethan Gray|53.76|NULL|0
+4285|2|3200M|Alyssa Stoner|680.82|NULL|0
+7014|2|100M|Callee Gibson|13.74|NULL|0
+9075|2|200M|Callee Gibson|28.81|NULL|0
+4847|2|800M|Lauren Jensch|152.24|NULL|0
+831|2|Discus|Presly McConnell|NULL|1099|0
+2224|2|Shot Put|Presly McConnell|NULL|405.5|0
+3990|2|3200M|Madison Snyder|750|NULL|0
+4619|2|400M|Julia Armogida|65.22|NULL|0
+8744|2|1600M|Vanessa Monhemius|361.48|NULL|0
+4763|1|3200M|Gavin Forbes|622.9|NULL|0
+4663|1|1600M|Ethan Vaughn|301.95|NULL|0
+8939|1|800M|Vova Herdman|121.58|NULL|0
+1664|2|Long Jump|KK Campbell|NULL|196|0
+3845|2|300M Hurdles|KK Campbell|50.51|NULL|0
+7146|2|1600M|Brooke Gucker|353.9|NULL|0
+4351|2|100M|Kayla Shook|14.11|NULL|0
+5432|1|100M|Oakley Kemp|11.92|NULL|0
+6327|1|200M|Oakley Kemp|24.11|NULL|0
+587|1|Long Jump|Oakley Kemp|NULL|243.75|0
+663|2|Pole Vault|Payten Shetterly|NULL|78|0
+

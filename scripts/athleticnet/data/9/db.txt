@@ -1,0 +1,9 @@
+635|2|Discus|Allison Early|NULL|1362|0
+739|1|Pole Vault|Luke Anderson|NULL|156|0
+3997|2|800M|Hillary Hewit|137.62|NULL|0
+4551|1|1600M|Sean Hutson|264.53|NULL|0
+4552|1|300M Hurdles|Cory Beebe|38.51|NULL|0
+7972|1|110M Hurdles|Cory Beebe|15.84|NULL|0
+8479|2|3200M|Catie Coleman|690.79|NULL|0
+12022|2|4x800M Relay|Catie Coleman/Hillary Hewit/Jenny Rupp/Heidi Santelmann|583.78|NULL|0
+

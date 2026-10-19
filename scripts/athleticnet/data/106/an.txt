@@ -1,0 +1,8 @@
+Nikki Reynolds Invitational
+m/1/110mh|Finals I 8.~11~Chase Young~31.34a~Cloverleaf~17562730
+m/1/110mh|Prelims I 8.~11~Chase Young~16.88a~Cloverleaf~17562730
+f/1/100m|Finals I 5.~10~Sarah Kelly~13.46a~Cloverleaf~20500162
+f/1/100m|Prelims I 2.~10~Sarah Kelly~13.44a~Cloverleaf~20500162
+f/1/200m|Finals I 8.~10~Sarah Kelly~28.60a~Cloverleaf~20500162
+f/1/200m|Prelims I 6.~10~Sarah Kelly~27.98aSB~Cloverleaf~20500162
+#SERIES {}

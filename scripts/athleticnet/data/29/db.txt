@@ -1,0 +1,6 @@
+3944|2|200M|Riley Evans|25.9|NULL|0
+7282|2|400M|Riley Evans|55.99|NULL|0
+9068|2|3200M|Alyssa Stoner|661.85|NULL|0
+12165|2|4x200M Relay|Ashley Sigmon/Riley Evans/Julia Armogida/Paige Munchick|105.47|NULL|0
+12848|1|4x800M Relay|Andrew Hibler/Vova Herdman/Hunter Stallings/Nolan Freeland|488.32|NULL|0
+

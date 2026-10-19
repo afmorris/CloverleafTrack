@@ -1,0 +1,14 @@
+1228|2|Discus|Lisa Wangler|NULL|1310|0
+3531|2|Discus|Katelyn Young|NULL|1484|0
+3824|2|1600M|Riley Freeland|303.89|NULL|0
+3857|2|300M Hurdles|Zana Ross|47.83|NULL|0
+6021|2|800M|Jenna Oliver|145.84|NULL|0
+7002|1|800M|Tristan Vaughan|124.2|NULL|0
+7990|2|3200M|Bailey Freeland|785.52|NULL|0
+8084|2|3200M|Riley Freeland|676.29|NULL|0
+8470|2|100M Hurdles|Zana Ross|16.31|NULL|0
+8881|2|800M|Tommie Kurtz|147.49|NULL|0
+12287|2|4x800M Relay|Bailey Freeland/Riley Freeland/Tommie Kurtz/Jenna Oliver|578.19|NULL|0
+12770|2|4x400M Relay|Riley Freeland/Tommie Kurtz/Jenna Oliver/Zana Ross|249.64|NULL|0
+12932|2|4x200M Relay|Maddie Boltz/Sara Keener/Jenna Oliver/Zana Ross|110.15|NULL|0
+

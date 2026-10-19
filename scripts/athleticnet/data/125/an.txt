@@ -1,0 +1,14 @@
+Loudonville - Cowen Invite
+m/1/100m|Finals I 4.~12~Zack Munchick~11.68a~Cloverleaf~8373672
+m/1/100m|Prelims I 6.~12~Zack Munchick~11.88a~Cloverleaf~8373672
+m/1/200m|Finals I 4.~12~Zack Munchick~24.26a~Cloverleaf~8373672
+m/1/200m|Prelims I 7.~12~Zack Munchick~24.62a~Cloverleaf~8373672
+f/1/100m|Finals I 5.~11~Maddie Boltz~13.72aSB~Cloverleaf~9800050
+f/1/100m|Finals I 6.~12~Sara Keener~13.82a~Cloverleaf~8453808
+f/1/100m|Prelims I 3.~12~Sara Keener~13.70aSB~Cloverleaf~8453808
+f/1/100m|Prelims I 8.~11~Maddie Boltz~13.87a~Cloverleaf~9800050
+f/1/200m|Finals I 4.~12~Sara Keener~29.15a~Cloverleaf~8453808
+f/1/200m|Finals I 6.~10~Nyah Hansen~29.42aPB~Cloverleaf~11648741
+f/1/200m|Prelims I 3.~12~Sara Keener~28.88aSB~Cloverleaf~8453808
+f/1/200m|Prelims I 7.~10~Nyah Hansen~29.68a~Cloverleaf~11648741
+#SERIES {}

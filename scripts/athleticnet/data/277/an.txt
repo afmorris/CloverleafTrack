@@ -1,0 +1,10 @@
+OHSAA D2 Region 5
+m/1/4x400m|Finals R 8. 3:29.65a Cloverleaf 
+m/1/4x400m|Prelims R 8. 3:28.82a Cloverleaf 
+f/1/4x100m|Finals R 3. 50.14a Cloverleaf 
+f/1/4x100m|Prelims R 4. 50.39a Cloverleaf 
+f/1/4x200m|Finals R 3. 1:46.10a Cloverleaf 
+f/1/4x200m|Prelims R 6. 1:46.64a Cloverleaf 
+f/1/4x400m|Finals R 5. 4:06.03a Cloverleaf 
+f/1/4x400m|Prelims R 6. 4:07.61a Cloverleaf 
+#SERIES {}

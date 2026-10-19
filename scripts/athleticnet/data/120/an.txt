@@ -1,0 +1,6 @@
+Oberlin College HS Meet #3
+m/1/60m|Finals I 11.~SO~Mike Williams~7.64a~Cloverleaf~14429654
+m/1/60m|Finals I 12.~JR~DeAnte Taylor~7.76a~Cloverleaf~11964406
+m/1/60m|Prelims I 7.~SO~Mike Williams~7.57aPB~Cloverleaf~14429654
+m/1/60m|Prelims I 12.~JR~DeAnte Taylor~7.70aPB~Cloverleaf~11964406
+#SERIES {}

@@ -1,0 +1,8 @@
+OHSAA D1 Region 2 - Port Clinton
+f/1/100m|Finals I 4.~12~Riley Evans~12.25a~Cloverleaf~17537508
+f/1/100m|Prelims I 7.~12~Riley Evans~12.78a~Cloverleaf~17537508
+f/1/400m|Finals I 1.~12~Riley Evans~56.44a~Cloverleaf~17537508
+f/1/400m|Prelims I 3.~12~Riley Evans~57.88a~Cloverleaf~17537508
+f/1/4x200m|Finals R 2. 1:42.75a Cloverleaf 
+f/1/4x200m|Prelims R 5. 1:44.61a Cloverleaf 
+#SERIES {}
