@@ -1,0 +1,144 @@
+15736|1|4x800M Relay||513.6|NULL|0
+15737|1|4x800M Relay||605|NULL|0
+15738|2|4x800M Relay||651.1|NULL|0
+15739|1|110M Hurdles|Reilly Maloney|19.83|NULL|0
+15740|1|110M Hurdles|Lincoln Baltic|18.8|NULL|0
+15741|2|100M Hurdles|Kiersyn Berry|17.7|NULL|0
+15742|2|100M Hurdles|Macie Huegel|23.7|NULL|0
+15743|1|100M|Bradyn Robinson|13.9|NULL|0
+15744|1|100M|Weston Miller|14|NULL|0
+15745|1|100M|Thomas Dalton|14.08|NULL|0
+15746|1|100M|Phillip Bloomfield|14.2|NULL|0
+15747|1|100M|Chris Gilliland|12.58|NULL|0
+15748|1|100M|Jackson Morris|12.96|NULL|0
+15749|1|100M|Isaac Montgomery|13.37|NULL|0
+15750|1|100M|Elliot Jordan|12.3|NULL|0
+15751|1|100M|Jackson Murray-Garver|12.5|NULL|0
+15752|1|100M|Collin Saksa|13|NULL|0
+15753|1|100M|Bryce Neill|11.7|NULL|0
+15754|1|100M|Josh Powers|11.72|NULL|0
+15755|2|100M|Samantha Porter|13.8|NULL|0
+15756|2|100M|Adriana Akers|13.46|NULL|0
+15757|2|100M|Kayla Shook|13.05|NULL|0
+15758|2|100M|Ciara Kremer|14.76|NULL|0
+15759|1|4x200M Relay||97.1|NULL|0
+15760|2|4x200M Relay||112.7|NULL|0
+15761|1|1600M|Caleb Neville|272.2|NULL|0
+15762|1|1600M|Gavin Forbes|279.2|NULL|0
+15763|1|1600M|Noah Mion|288.6|NULL|0
+15764|1|1600M|Gavin Ferrone|297.6|NULL|0
+15765|1|1600M|Clay Gucker|297.9|NULL|0
+15766|1|1600M|Mason Clapp|298.4|NULL|0
+15767|1|1600M|Antonio Ortega|317.7|NULL|0
+15768|1|1600M|Clayton Cornett|341.6|NULL|0
+15769|1|1600M|Kael Niemczura|441.7|NULL|0
+15770|2|1600M|Leah Monhemius|354.6|NULL|0
+15771|2|1600M|Elise Mion|367.9|NULL|0
+15772|1|4x100M Relay||46.4|NULL|0
+15773|2|4x100M Relay||52.7|NULL|0
+15774|1|400M|Clayton Sewalish|58.4|NULL|0
+15775|1|400M|Jackson Murray-Garver|60.3|NULL|0
+15776|1|400M|Landon Huth|63.7|NULL|0
+15777|1|400M|Thomas Dalton|65.1|NULL|0
+15778|1|400M|Ethan Gray|56.22|NULL|0
+15779|1|400M|Caleb Burke|58.72|NULL|0
+15780|1|400M|Levi Saksa|60.4|NULL|0
+15781|2|400M|Samantha Porter|62|NULL|0
+15782|2|400M|Kayla Shook|63|NULL|0
+15783|1|300M Hurdles|Lincoln Baltic|47.4|NULL|0
+15784|1|300M Hurdles|Reilly Maloney|49.13|NULL|0
+15785|2|300M Hurdles|Kiersyn Berry|54.99|NULL|0
+15786|2|300M Hurdles|Macie Huegel|61.29|NULL|0
+15787|1|800M|Caleb Neville|121.5|NULL|0
+15788|1|800M|Matthew Jenkins|126.5|NULL|0
+15789|1|800M|Gavin Forbes|128.9|NULL|0
+15790|1|800M|Noah Mion|129.1|NULL|0
+15791|1|800M|Mason Clapp|135|NULL|0
+15792|1|800M|Antonio Ortega|144.4|NULL|0
+15793|1|800M|Yousef Fekieh|145.8|NULL|0
+15794|1|800M|Luke Evans|155.9|NULL|0
+15795|1|800M|Clayton Cornett|159.2|NULL|0
+15796|2|800M|Lily Dluzynski|151.2|NULL|0
+15797|2|800M|Kelsey Hall|168.3|NULL|0
+15798|1|200M|Jackson Morris|27.85|NULL|0
+15799|1|200M|Phillip Bloomfield|28.79|NULL|0
+15800|1|200M|Bradyn Robinson|28.95|NULL|0
+15801|1|200M|Weston Miller|29.92|NULL|0
+15802|1|200M|Elliot Jordan|25.2|NULL|0
+15803|1|200M|Clayton Sewalish|25.9|NULL|0
+15804|1|200M|Chris Gilliland|26.7|NULL|0
+15805|1|200M|Jackson Murray-Garver|26.2|NULL|0
+15806|1|200M|Josh Powers|24.3|NULL|0
+15807|1|200M|Bryce Neill|24.4|NULL|0
+15808|2|200M|Adriana Akers|27.9|NULL|0
+15809|2|200M|Ciara Kremer|31.09|NULL|0
+15810|2|200M|Abigail Reinhardt|29.85|NULL|0
+15811|2|200M|Kayla Shook|27.4|NULL|0
+15812|1|3200M|Gavin Forbes|660|NULL|0
+15813|1|3200M|Gavin Ferrone|674|NULL|0
+15814|1|3200M|Matthew Wilk|772.2|NULL|0
+15815|2|3200M|Leah Monhemius|799|NULL|0
+15816|2|3200M|Paisley Spencer|947|NULL|0
+15817|2|4x400M Relay||261.2|NULL|0
+15818|1|4x400M Relay||220.4|NULL|0
+15819|1|4x400M Relay||257.7|NULL|0
+15820|2|Pole Vault|Taylor Thur|NULL|78|0
+15821|1|Pole Vault|Lincoln Baltic|NULL|108|0
+15822|2|High Jump|Abigail Reinhardt|NULL|58|0
+15823|2|High Jump|Keegan Wittman|NULL|51|0
+15824|1|Long Jump|Elliot Jordan|NULL|231|0
+15825|1|Long Jump|Weston Miller|NULL|157|0
+15826|1|Long Jump|Jackson Morris|NULL|186.5|0
+15827|1|Long Jump|Grady Pamer|NULL|238.5|0
+15828|1|Long Jump|Collin Saksa|NULL|192|0
+15829|1|Long Jump|Clayton Sewalish|NULL|216.75|0
+15830|2|Long Jump|Abigail Reinhardt|NULL|186.75|0
+15831|2|Long Jump|Keegan Wittman|NULL|168.25|0
+15832|2|Shot Put|Vienna Polen|NULL|208|0
+15833|2|Shot Put|Macie Huegel|NULL|294|0
+15834|2|Shot Put|Ciara Kremer|NULL|306|0
+15835|2|Shot Put|Anna Naftzger|NULL|298|0
+15836|2|Shot Put|Addi Reho|NULL|321|0
+15837|2|Shot Put|Berkeley Craddock|NULL|357|0
+15838|2|Shot Put|Amelia Ryncarz|NULL|382|0
+15839|2|Discus|Berkeley Craddock|NULL|1101|0
+15840|2|Discus|Macie Huegel|NULL|788|0
+15841|2|Discus|Ciara Kremer|NULL|689|0
+15842|2|Discus|Anna Naftzger|NULL|714|0
+15843|2|Discus|Vienna Polen|NULL|580|0
+15844|2|Discus|Addi Reho|NULL|1180|0
+15845|2|Discus|Amelia Ryncarz|NULL|1091|0
+15846|1|Shot Put|Jordan Lavelle|NULL|276.5|0
+15847|1|Shot Put|Everett Ryncarz|NULL|333|0
+15848|1|Shot Put|Dayton Clutter|NULL|368.5|0
+15849|1|Shot Put|Scout Atsma|NULL|344|0
+15850|1|Shot Put|Preston Stark|NULL|360|0
+15851|1|Shot Put|Gordy Surrarrer|NULL|369.5|0
+15852|1|Shot Put|Gage Groetz|NULL|366|0
+15853|1|Shot Put|Isaac Montgomery|NULL|340.5|0
+15854|1|Shot Put|Braylon Lade|NULL|393|0
+15855|1|Shot Put|Jacob Atkinson|NULL|438.5|0
+15856|1|Shot Put|Jack Chonko|NULL|460|0
+15857|1|Shot Put|Ethan Martin|NULL|446|0
+15858|1|Shot Put|Evan Croft|NULL|447.5|0
+15859|1|Shot Put|Dominic Nau|NULL|494|0
+15860|1|Shot Put|Jake Schaefer|NULL|507|0
+15861|1|Shot Put|Trent Amheiser|NULL|505|0
+15862|1|Shot Put|Adam Gray|NULL|481|0
+15863|1|Discus|Gordy Surrarrer|NULL|845|0
+15864|1|Discus|Preston Stark|NULL|1051|0
+15865|1|Discus|Jake Schaefer|NULL|992|0
+15866|1|Discus|Everett Ryncarz|NULL|717|0
+15867|1|Discus|Dominic Nau|NULL|1121|0
+15868|1|Discus|Isaac Montgomery|NULL|968|0
+15869|1|Discus|Ethan Martin|NULL|1403|0
+15870|1|Discus|Jordan Lavelle|NULL|414|0
+15871|1|Discus|Braylon Lade|NULL|1084|0
+15872|1|Discus|Gage Groetz|NULL|872|0
+15873|1|Discus|Adam Gray|NULL|1512|0
+15874|1|Discus|Evan Croft|NULL|1125|0
+15875|1|Discus|Dayton Clutter|NULL|1098|0
+15876|1|Discus|Jack Chonko|NULL|1146|0
+15877|1|Discus|Scout Atsma|NULL|880|0
+15878|1|Discus|Jacob Atkinson|NULL|1254|0
+15879|1|Discus|Trent Amheiser|NULL|1234|0
