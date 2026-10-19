@@ -5,16 +5,23 @@ yields BOTH rounds."""
 import re
 from parse_hytek import norm_event, parse_mark
 
-EVH = re.compile(r'^(?:Event\s+\d+\s+)?(Girls|Boys|Women|Men)\s+((?:\d|4x).*?|(?:High Jump|Long Jump|Pole Vault|Shot Put|Discus|Triple Jump|Javelin|Hammer)(?:\s.*)?)\s*$')
-COLH = re.compile(r'^\s*(Name\s+Year\s+School|School)\s+(?P<cols>.*\S)\s*$')
+EVH_PREFIXED = re.compile(r'^Event\s+\d+\s+(Girls|Boys|Women|Men)\s+(.+?)\s*$')       # "Event 41  Girls Weight Throw Wheelchair METRO": any event name
+EVH_PLAIN = re.compile(r'^(Girls|Boys|Women|Men)\s+((?:\d|4x).*?|(?:High Jump|Long Jump|Pole Vault|Shot Put|Discus|Triple Jump|Javelin|Hammer|Weight)(?:\s.*)?|(?:\w+\s+)?(?:Distance|Sprint|Intermediate)?\s*Medley.*|.*Shuttle Hurdle.*|.*Steeple.*)\s*$')
+class _EV:
+    def match(self, s): return EVH_PREFIXED.match(s) or EVH_PLAIN.match(s)
+EVH = _EV()
+COLH = re.compile(r'^\s*(?:Name\s+(?:Year|Grade|Yr|Gr)\s+(?:School|Team)|NAME\s+(?:YR|GR)\s+TEAM|School|Team)\s+(?P<cols>.*\S)\s*$', re.I)
 SCHOOL = r"(?:Cloverleaf|Lodi Cloverl\w*|Lodi Clover\w*)(?:\s+'[A-Z]')?"
 ROW = re.compile(r'^\s*(?P<pl>\d+|--)\s+(?P<name>.+?)\s+(?:(?P<yr>\d{1,2})\s+)?(?P<school>' + SCHOOL + r')\s+(?P<cols>\S.*?)\s*$')
 RELAY = re.compile(r'^\s*(?P<pl>\d+|--)\s+(?P<school>' + SCHOOL + r')\s+(?P<cols>\S.*?)\s*$')
 MEMBER = re.compile(r'(\d)\)\s+(.+?)(?:\s+(\d{1,2}))?(?=\s{2,}|\s*$|\s+\d\))')
-ROUND_OF = {'prelims': 'prelim', 'preliminaries': 'prelim', 'semis': 'semi', 'semi-finals': 'semi', 'finals': 'final'}
+ROUND_OF = {'prelims': 'prelim', 'preliminaries': 'prelim', 'semis': 'semi', 'semi-finals': 'semi', 'finals': 'final', 'mark': 'final', 'time': 'final', 'result': 'final'}   # 'Seed' is never a result
 
 def flip(name):
     name = re.sub(r'#\s*\d+', ' ', name)
+    name = re.sub(r'\(wheeled\)|\(wheelchair\)', ' ', name, flags=re.I)
+    name = re.sub(r'\(([A-Za-z]+)\)', ' ', name)                 # nickname in parentheses: 'Jacob (Jake) Schaefer'
+    name = re.sub(r'\b[WM]\d{1,2}\b|\b\d{1,2}\s*[fm]\b', ' ', name)   # age-group tokens: 'Brooklynn W12 Crist', 'Payten Shetterly 11 f'
     name = re.sub(r'\s+(FR|SO|JR|SR)\s+', ' ', name + ' ').strip()
     if ',' in name:
         last, first = [x.strip() for x in name.split(',', 1)]
@@ -33,7 +40,7 @@ def parse(path):
         b = re.fullmatch(r'(?:Heat\s+\d+\s+|Section\s+\d+\s+)?(Preliminaries|Prelims|Semi-?Finals|Semis|Finals)', s, re.I)
         if b: t = b.group(1).lower(); section = 'prelim' if t.startswith('prelim') else 'semi' if t.startswith('semi') else 'final'; continue
         if not ev or not re.search(r'clover', l, re.I): continue
-        relay = ev[1].startswith('4x')
+        relay = ev[1].startswith('4x') or 'Medley' in ev[1]
         r = (RELAY if relay else ROW).match(l)
         if not r: continue
         toks = r.group('cols').split()
