@@ -36,7 +36,7 @@ SELECT
     (SELECT pp.Percentile FROM PerformancePercentiles pp WHERE pp.PerformanceId = p.Id) AS Percentile,
     se.StartDate AS SeasonStartDate, se.Name AS SeasonName
 FROM Athletes a
-INNER JOIN Performances p ON p.AthleteId = a.Id
+INNER JOIN Performances p ON p.AthleteId = a.Id AND p.ResultStatus = 0
 INNER JOIN Events e ON e.Id = p.EventId
 INNER JOIN Meets m ON m.Id = p.MeetId
 INNER JOIN Seasons se ON se.Id = m.SeasonId
@@ -51,7 +51,7 @@ SELECT
     se.StartDate AS SeasonStartDate, se.Name AS SeasonName
 FROM Athletes a
 INNER JOIN PerformanceAthletes pa ON pa.AthleteId = a.Id
-INNER JOIN Performances p ON p.Id = pa.PerformanceId AND p.AthleteId IS NULL
+INNER JOIN Performances p ON p.Id = pa.PerformanceId AND p.AthleteId IS NULL AND p.ResultStatus = 0
 INNER JOIN Events e ON e.Id = p.EventId
 INNER JOIN Meets m ON m.Id = p.MeetId
 INNER JOIN Seasons se ON se.Id = m.SeasonId
@@ -152,6 +152,7 @@ ORDER BY a.LastName, a.FirstName;
                                     LEFT JOIN EventStatistics es ON es.EventId = e.Id
                             WHERE
                                     p.AthleteId = @AthleteId
+                                    AND p.ResultStatus = 0
 
                             UNION ALL
 
@@ -197,6 +198,7 @@ ORDER BY a.LastName, a.FirstName;
                             WHERE
                                     pa.AthleteId = @AthleteId
                                     AND p.AthleteId IS NULL
+                                    AND p.ResultStatus = 0
                         ) AS combined
                         ORDER BY
                                 SeasonStartDate DESC,
@@ -206,6 +208,46 @@ ORDER BY a.LastName, a.FirstName;
         
         var performances = await connection.QueryAsync<AthletePerformanceDto>(sql, new { AthleteId = athleteId });
         return performances.ToList();
+    }
+
+    public async Task<List<AthletePerformanceDto>> GetNoMarkResultsForAthleteAsync(int athleteId)
+    {
+        using var connection = connectionFactory.CreateConnection();
+
+        const string sql = """
+                        SELECT
+                                p.Id as PerformanceId,
+                                e.Id as EventId,
+                                e.Name as EventName,
+                                e.EventCategorySortOrder,
+                                e.SortOrder as EventSortOrder,
+                                e.EventType,
+                                e.Environment,
+                                p.ResultStatus,
+                                m.Date as MeetDate,
+                                m.Name as MeetName,
+                                s.Name as SeasonName,
+                                s.StartDate as SeasonStartDate,
+                                CASE WHEN p.AthleteId IS NULL THEN
+                                    (SELECT STRING_AGG(a2.FirstName + ' ' + a2.LastName, '|~|')
+                                     FROM PerformanceAthletes pa2
+                                     INNER JOIN Athletes a2 ON a2.Id = pa2.AthleteId
+                                     WHERE pa2.PerformanceId = p.Id)
+                                END as RelayAthletes
+                        FROM
+                                Performances p
+                                INNER JOIN Events e ON e.Id = p.EventId
+                                INNER JOIN Meets m ON m.Id = p.MeetId
+                                INNER JOIN Seasons s ON s.Id = m.SeasonId
+                        WHERE
+                                p.ResultStatus <> 0
+                                AND (p.AthleteId = @AthleteId
+                                     OR (p.AthleteId IS NULL AND EXISTS (SELECT 1 FROM PerformanceAthletes pa WHERE pa.PerformanceId = p.Id AND pa.AthleteId = @AthleteId)))
+                        ORDER BY m.Date DESC
+                        """;
+
+        var results = await connection.QueryAsync<AthletePerformanceDto>(sql, new { AthleteId = athleteId });
+        return results.ToList();
     }
 
     public async Task<List<EventRecordDto>> GetSchoolRecordsForEventsAsync(IEnumerable<int> eventIds)

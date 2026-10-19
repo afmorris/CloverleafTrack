@@ -1,3 +1,4 @@
+using CloverleafTrack.Models.Enums;
 using CloverleafTrack.ViewModels.Shared;
 
 namespace CloverleafTrack.ViewModels.Meets;
@@ -8,6 +9,10 @@ public class MeetPerformanceViewModel
     public string AthleteName { get; set; } = string.Empty;
     public string? AthleteSlug { get; set; }
     public string Performance { get; set; } = string.Empty;
+    /// <summary>NM / NH / DNF / DQ rows carry the abbreviation in <see cref="Performance"/> and no RawValue.</summary>
+    public ResultStatus ResultStatus { get; set; }
+    public bool HasMark => ResultStatus == ResultStatus.Mark;
+    public string ResultDescription => ResultStatus.Description();
     public bool IsPersonalBest { get; set; }
     public bool IsSchoolRecord { get; set; }
     public bool IsSeasonBest { get; set; }

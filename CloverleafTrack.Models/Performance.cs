@@ -1,4 +1,6 @@
-﻿namespace CloverleafTrack.Models;
+﻿using CloverleafTrack.Models.Enums;
+
+namespace CloverleafTrack.Models;
 
 public class Performance
 {
@@ -9,6 +11,8 @@ public class Performance
     public bool SchoolRecord { get; set; }
     public bool SeasonBest { get; set; }
     public bool PersonalBest { get; set; }
+    /// <summary>Mark = normal. NM / NH / DNF / DQ rows have no TimeSeconds or DistanceInches. See BRAIN.md [C67].</summary>
+    public ResultStatus ResultStatus { get; set; }
     /// <summary>Populated by queries that join Leaderboards. Null when not loaded.</summary>
     public int? AllTimeRank { get; set; }
     /// <summary>

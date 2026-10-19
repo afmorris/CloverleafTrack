@@ -132,6 +132,8 @@ public class PerformancesController(
             foreach (var error in barErrors) ModelState.AddModelError(nameof(model.BarsInput), error);
         }
 
+        var resultStatus = ResolveResultStatus(model, evt, bars);
+
         if (!ModelState.IsValid)
         {
             // Reload dropdowns
@@ -179,6 +181,7 @@ public class PerformancesController(
             AthleteId = isRelay ? null : model.AthleteId,
             TimeSeconds = timeSeconds,
             DistanceInches = distanceInches,
+            ResultStatus = resultStatus,
             SchoolRecord = false, // TODO: Calculate
             SeasonBest = false, // TODO: Calculate
             PersonalBest = false // TODO: Calculate
@@ -261,7 +264,8 @@ public class PerformancesController(
             EventType = evt?.EventType ?? CloverleafTrack.Models.Enums.EventType.Running,
             EventGender = evt?.Gender,
             EventAthleteCount = evt?.AthleteCount ?? 1,
-            AthleteId = performance.AthleteId
+            AthleteId = performance.AthleteId,
+            ResultStatus = performance.ResultStatus
         };
 
         // Format the current value for display
@@ -387,6 +391,8 @@ public class PerformancesController(
             foreach (var error in barErrors) ModelState.AddModelError(nameof(model.BarsInput), error);
         }
 
+        var resultStatus = ResolveResultStatus(model, evt, bars);
+
         if (!ModelState.IsValid)
         {
             // Reload meet and event details
@@ -436,6 +442,7 @@ public class PerformancesController(
             AthleteId = model.AthleteId,
             TimeSeconds = timeSeconds,
             DistanceInches = distanceInches,
+            ResultStatus = resultStatus,
             SchoolRecord = false, // TODO: Recalculate
             SeasonBest = false,
             PersonalBest = false
@@ -691,6 +698,49 @@ public class PerformancesController(
     /// </summary>
     private static bool IsFieldEventType(EventType? eventType) =>
         eventType is EventType.Field or EventType.ThrowsRelay or EventType.JumpRelay;
+
+    /// <summary>
+    /// Decides the row's <see cref="ResultStatus"/> and validates it against the typed marks. A non-Mark status must
+    /// have blank time/distance; a Mark with no time/distance is only legal when the recorded attempt series is all
+    /// fouls/passes (inferred NM) or the bar ladder has no cleared height (inferred NH). Adds ModelState errors.
+    /// </summary>
+    private ResultStatus ResolveResultStatus(PerformanceEntryViewModel model, Event? evt, List<PerformanceBar>? bars)
+    {
+        var hasMark = !string.IsNullOrWhiteSpace(model.TimeInput) || !string.IsNullOrWhiteSpace(model.DistanceInput);
+
+        if (model.ResultStatus != ResultStatus.Mark)
+        {
+            if (hasMark)
+            {
+                ModelState.AddModelError(nameof(model.ResultStatus),
+                    $"{model.ResultStatus.Abbreviation()} has no mark — clear the time / distance, or set Result back to Mark.");
+            }
+            return model.ResultStatus;
+        }
+
+        if (hasMark)
+        {
+            return ResultStatus.Mark;
+        }
+
+        if (model.RecordFullSeries && IsFieldEventType(evt?.EventType))
+        {
+            var attempts = ParseAttemptInputs(model.Attempts);
+            if (attempts.Count > 0 && PerformanceAttemptSeries.BestValidDistance(attempts) == null)
+            {
+                return ResultStatus.NoMark;
+            }
+        }
+
+        if (bars is { Count: > 0 } && PerformanceBarSeries.BestClearedHeight(bars) == null)
+        {
+            return ResultStatus.NoHeight;
+        }
+
+        ModelState.AddModelError(nameof(model.ResultStatus),
+            "Enter a time / distance, or choose a result: NM, NH, DNF or DQ.");
+        return ResultStatus.Mark;
+    }
 
     /// <summary>Parses the prelim/semi/final inputs with PerformanceFormatHelper.ParseTime; blank or unparseable inputs are skipped.</summary>
     private static List<PerformanceRound> ParseRoundInputs(PerformanceEntryViewModel model)

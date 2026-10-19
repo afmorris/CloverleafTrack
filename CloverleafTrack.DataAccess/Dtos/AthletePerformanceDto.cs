@@ -17,6 +17,8 @@ public class AthletePerformanceDto
     public bool PersonalBest { get; set; }
     public bool SchoolRecord { get; set; }
     public bool SeasonBest { get; set; }
+    /// <summary>Only non-Mark values come from <c>GetNoMarkResultsForAthleteAsync</c>; the main performance query returns marks only.</summary>
+    public ResultStatus ResultStatus { get; set; }
     public int? AllTimeRank { get; set; }
     public byte? Percentile { get; set; }
     public int? EventMarkCount { get; set; }

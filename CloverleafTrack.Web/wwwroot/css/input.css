@@ -309,3 +309,5 @@ details[open] .details-arrow {
 .bar-chip.is-out .bar-chip-o{color:#dc2626}
 .dark .bar-chip.is-out .bar-chip-o{color:#f87171}
 .bar-chip.is-pass .bar-chip-o{color:#6b7280;font-weight:600}
+.chip-nomark{display:inline-block;padding:1px 8px;border-radius:999px;border:1px solid #d1d5db;background:#f3f4f6;color:#6b7280;font-size:.75rem;font-weight:700;letter-spacing:.04em;line-height:1.4}
+.dark .chip-nomark{border-color:#374151;background:#1f2333;color:#9ca3af}

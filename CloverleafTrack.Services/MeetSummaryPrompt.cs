@@ -17,7 +17,7 @@ namespace CloverleafTrack.Services;
 public static class MeetSummaryPrompt
 {
     /// <summary>Bump when the system prompt or fact-sheet shape changes so every summary is treated as stale.</summary>
-    public const string Version = "3";
+    public const string Version = "4";
 
     public const string SystemPrompt = """
         You write short recaps of high school track & field meets for the Cloverleaf track & field results website.
@@ -35,6 +35,9 @@ public static class MeetSummaryPrompt
           was the mark. "bars" lists a high jump or pole vault ladder with how each height went, and "bestBar" is the mark. Use this
           detail sparingly for a standout result (a comeback on a late attempt, a final-round improvement); never list every attempt.
           Never invent attempts, rounds or bars that are not listed.
+        - A result with a "result" field and no "mark" had no mark: "no mark (fouled out)", "no height", "did not finish" or
+          "disqualified". Mention one only when it is notable (a favorite who fouled out), never as a list, never as a personal
+          failing, and never guess a reason. It has no place and is not part of the scoring.
         - "meetScore" is a 0-100 rating of the meet's overall performance level. Use it only as a loose hint for tone
           (75 or higher can be called "a strong day"). Never quote it, and never rank this meet against other meets.
         - Report team results exactly as given (scores, places, opponent names). If there are none, say nothing about team results.
@@ -124,7 +127,8 @@ public static class MeetSummaryPrompt
                 return new Dictionary<string, object?>
                 {
                     [isRelay ? "relayTeam" : "athlete"] = isRelay ? p.AthleteName.Split("|~|") : p.AthleteName,
-                    ["mark"] = p.Performance,
+                    ["mark"] = p.HasMark ? p.Performance : null,
+                    ["result"] = p.HasMark ? null : p.ResultStatus.Phrase(),
                     ["pr"] = !isRelay && p.IsPersonalBest ? true : null,
                     ["sr"] = p.IsSchoolRecord ? true : null,
                     ["seasonBest"] = p.IsSeasonBest ? true : null,
