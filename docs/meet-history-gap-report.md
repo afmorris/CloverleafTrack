@@ -108,9 +108,9 @@ regional and Suburban League results at athlete level.
 
 - 21 meets are named "Unknown Meet" (dated May 1 of 1962, 1975, 1976, 1979, 1980, 1982, 1986, 1987, 1990, 1993, 1999, 2000,
   2001, 2002, 2005, 2006, 2007, 2009, 2011, 2013, 2017) with 1-4 results each: the date and meet are unknown.
-- 56 meets have fewer than 10 results; most are state/regional/indoor-state meets (1-9 results, as only a few athletes qualify) and the
-  early indoor meets of 2012-2013 (1-3 results each).
-- Seasons with unusually few meets: 2005 (4), 2006 (5), 2008 (4), 2014 (5), 2015 (5).
+- 109 meets (88 not counting the placeholders) have fewer than 10 results. Many are state/regional/indoor-state meets, where only a few
+  athletes qualify, but a large share are pre-2003 meets and the early indoor meets of 2012-2013 (1-3 results each).
+- Seasons with unusually few meets: 2005 (4), 2006 (5), 2008 (4), 2014 (5), 2015 (5), 2020 (5).
 
 ## 5. Performance-level suspects (MileSplit rows vs DB results)
 
