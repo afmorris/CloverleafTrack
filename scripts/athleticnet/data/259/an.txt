@@ -1,0 +1,18 @@
+Fairless Twilight Invitational
+m/1/100m|Finals I 4.~12~Oakley Kemp~11.94a~Cloverleaf~24091560
+m/1/100m|Finals I 5.~10~Tristan Bogucki~12.04a~Cloverleaf~20865621
+m/1/100m|Prelims I 5.~10~Tristan Bogucki~11.82a~Cloverleaf~20865621
+m/1/100m|Prelims I 7.~12~Oakley Kemp~11.92a~Cloverleaf~24091560
+m/1/110mh|Finals I 4.~11~Chase Young~16.87a~Cloverleaf~17562730
+m/1/110mh|Finals I 6.~11~Isaac Baltic~16.93a~Cloverleaf~27012639
+m/1/110mh|Prelims I 5.~11~Isaac Baltic~16.91a~Cloverleaf~27012639
+m/1/110mh|Prelims I 6.~11~Chase Young~16.96a~Cloverleaf~17562730
+f/1/100m|Finals I 5.~10~Callee Gibson~13.74aSB~Cloverleaf~20360550
+f/1/100m|Finals I 8.~9~Kayla Shook~14.13a~Cloverleaf~23036772
+f/1/100m|Prelims I 6.~10~Callee Gibson~13.83a~Cloverleaf~20360550
+f/1/100m|Prelims I 8.~9~Kayla Shook~14.11aSB~Cloverleaf~23036772
+f/1/100mh|Finals I 4.~9~Grace Friedhoff~18.07aPB~Cloverleaf~21219584
+f/1/100mh|Finals I 5.~11~Vickie Brandt~18.14aPB~Cloverleaf~18001923
+f/1/100mh|Prelims I 5.~11~Vickie Brandt~18.37a~Cloverleaf~18001923
+f/1/100mh|Prelims I 6.~9~Grace Friedhoff~18.41a~Cloverleaf~21219584
+#SERIES {}

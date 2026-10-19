@@ -2068,3 +2068,15 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** matches are heuristic — spot-check `matches.tsv` rows with score < 1.3. MileSplit schedule year = season start year (`year=2025` is the 2025-26 season); athletic.net `outdoor2026`/`indoor2026` are the 2026 / 2025-26 seasons.
 
 **Key files:** `scripts/crawl/match_meets.py`, `scripts/crawl/matches.tsv`, `docs/imports/2026-official-results-links.sql`.
+
+### [C65] Multi-Year athletic.net / MileSplit Prelim → Final Imports (2005–2025)
+
+**What changed:** The detail crawl of the 106 matched athletic.net meets (iframe scraper + parallel workers; see [C64]) and 128 matched MileSplit meets produced `scripts/crawl/an-rounds.txt` (multi-round Cloverleaf rows only, 44 athletic.net meets) and `ms-542137.txt` (2023 MAC from MileSplit, which athletic.net lacks). `scripts/crawl/prepare_round_inputs.py` maps them to DB meets via `matches.tsv` and writes `scripts/athleticnet/data/<dbMeetId>/{an.txt,db.txt}`; `build_rounds_sql.py` (now skipping field events and disambiguating ties by athlete name) generated `docs/imports/2005-2025-rounds.sql`: **209 prelim/semi/final chains across 45 DB meets**, applied to live and local (460 round rows live total with the 2026 imports). Every chain re-asserts that the best round equals the stored `Performances.TimeSeconds`.
+
+**Skipped (safe):** 21 chains whose best round did not equal the stored mark (DB stores a different round's time or a typo; listed as `NOTE` lines in the SQL) and all field-event prelim/final marks (field rounds are attempts, [C32]).
+
+**Not found:** athletic.net's field-series pages had no Cloverleaf series for any meet outside the 2026 ones already imported — older meets only have best marks. MileSplit has no attempt data at all.
+
+**Watch out:** MileSplit raw text varies by timing software: events with blank event names (older HY-TEK / Lynx exports) and rows with seed marks mixed in (e.g. `10:24.09 9:49.27`) cannot be parsed safely and were not imported; only the 2023 MAC had explicit event headers. Re-running is idempotent (each block deletes then inserts that performance's rounds). `Prelims` on older athletic.net meets are real preliminary heats; the "Finals" row is the stored mark.
+
+**Key files:** `scripts/crawl/{an-rounds.txt,prepare_round_inputs.py,ms-542137.txt}`, `scripts/athleticnet/build_rounds_sql.py`, `docs/imports/2005-2025-rounds.sql`.

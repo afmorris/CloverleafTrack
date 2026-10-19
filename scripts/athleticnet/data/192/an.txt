@@ -1,0 +1,4 @@
+OHSAA Division I Track Championships - Region 1 - Youngstown
+f/1/100mh|Finals I 6.~11~Jennifer Foster~15.61a (-0.6)SB~Cloverleaf~1172088
+f/1/100mh|Prelims I 8.~11~Jennifer Foster~16.05a (-0.5)~Cloverleaf~1172088
+#SERIES {}

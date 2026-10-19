@@ -1,0 +1,24 @@
+Fairless Twilight Invitational
+m/1/100m|Finals I 1.~12~Blake Wilson~11.41aPB~Cloverleaf~19369950
+m/1/100m|Finals I 5.~11~Luke Yuravak~11.74a~Cloverleaf~15101876
+m/1/100m|Prelims I 1.~12~Blake Wilson~11.48a~Cloverleaf~19369950
+m/1/100m|Prelims I 4.~11~Luke Yuravak~11.72aPB~Cloverleaf~15101876
+m/1/200m|Finals I 5.~11~Kevin Bittaker~24.66a~Cloverleaf~18001922
+m/1/200m|Finals I 6.~11~Cade Cass~24.79aPB~Cloverleaf~15101872
+m/1/200m|Prelims I 5.~11~Kevin Bittaker~24.60aPB~Cloverleaf~18001922
+m/1/200m|Prelims I 7.~11~Cade Cass~24.82a~Cloverleaf~15101872
+m/1/110mh|Finals I 4.~12~Kaleb Baker~17.73aPB~Cloverleaf~17606876
+m/1/110mh|Finals I 7.~9~Chase Young~18.34aSB~Cloverleaf~17562730
+m/1/110mh|Prelims I 6.~12~Kaleb Baker~18.00a~Cloverleaf~17606876
+m/1/110mh|Prelims I 8.~9~Chase Young~18.77a~Cloverleaf~17562730
+f/1/100m|Finals I 1.~9~Riley Evans~12.64a~Cloverleaf~17537508
+f/1/100m|Prelims I 1.~9~Riley Evans~12.58aSB~Cloverleaf~17537508
+f/1/200m|Finals I 1.~9~Riley Evans~26.28aSB~Cloverleaf~17537508
+f/1/200m|Finals I 5.~10~Emma Malikowski~28.44a~Cloverleaf~18001907
+f/1/200m|Prelims I 1.~9~Riley Evans~26.43a~Cloverleaf~17537508
+f/1/200m|Prelims I 5.~10~Emma Malikowski~27.88aPB~Cloverleaf~18001907
+f/1/100mh|Finals I 4.~11~Paige Munchick~17.54a~Cloverleaf~21637204
+f/1/100mh|Finals I 6.~11~Natalie Bailey~17.72aPB~Cloverleaf~15101870
+f/1/100mh|Prelims I 4.~11~Paige Munchick~17.54aPB~Cloverleaf~21637204
+f/1/100mh|Prelims I 5.~11~Natalie Bailey~17.79a~Cloverleaf~15101870
+#SERIES {}

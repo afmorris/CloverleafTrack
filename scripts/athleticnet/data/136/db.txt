@@ -1,0 +1,58 @@
+12258|2|4x800M Relay|Megan Knapp/Lauren Jensch/Reese Barnett/Emma Hibler|607.93|NULL|0
+12432|1|4x800M Relay|Gavin Forbes/Jackson James/Ben Myers/Caleb Neville|491.83|NULL|0
+12451|2|4x100M Relay|KK Campbell/Riley Evans/Callee Gibson/Kayla Shook|50.06|NULL|0
+12532|2|4x200M Relay|Callee Gibson/Kayla Shook/Sarah Kelly/Riley Evans|106.96000000000001|NULL|0
+12803|2|4x400M Relay|Brooklyn Cavey/Riley Evans/Hannah Hopek/Kayla Shook|256.73|NULL|0
+13028|1|4x400M Relay|Thomas Blaha/Tristan Craddock/Ethan Gray/Jackson James|224.01|NULL|0
+13085|1|4x200M Relay|Isaiah Kurtz/Ethan Gray/Emmanuel Medina/Jeris Miller|95.22999999999999|NULL|0
+13247|1|4x100M Relay|Tristin Bogucki/Isaiah Kurtz/Emmanuel Medina/Jeris Miller|45.61|NULL|0
+7159|1|200M|Emmanuel Medina|25.11|NULL|0
+7209|1|3200M|Caleb Neville|606.39|NULL|0
+6271|1|110M Hurdles|Gage Hankins|17.68|NULL|0
+3346|1|Long Jump|Tristin Bogucki|NULL|240|0
+7065|1|100M|Jeris Miller|12.38|NULL|0
+3478|1|Shot Put|Timmy Shores|NULL|521|0
+617|1|Discus|Timmy Shores|NULL|1559|0
+7131|1|400M|Tristan Craddock|57.48|NULL|0
+6261|1|800M|Jackson James|125.31|NULL|0
+574|1|Discus|Clay Combs|NULL|1603|0
+1635|1|Shot Put|Clay Combs|NULL|543.75|0
+6811|2|1600M|Megan Knapp|329.74|NULL|0
+5324|1|800M|Matthew Jenkins|137.27|NULL|0
+6593|2|3200M|Emma Hibler|749.67|NULL|0
+5891|1|300M Hurdles|Chase Young|42.89|NULL|0
+3691|1|110M Hurdles|Chase Young|17.63|NULL|0
+766|2|High Jump|Grace Goldsberry|NULL|54|0
+7917|2|300M Hurdles|Grace Goldsberry|60.76|NULL|0
+7979|2|100M Hurdles|Grace Goldsberry|19.32|NULL|0
+4887|1|200M|Isaiah Kurtz|23.92|NULL|0
+6770|1|100M|Isaiah Kurtz|11.78|NULL|0
+2154|2|Discus|Karoline Kreider|NULL|1114|0
+3292|1|Pole Vault|Isaac Baltic|NULL|186|0
+5668|1|300M Hurdles|Isaac Baltic|43.99|NULL|0
+6823|2|800M|Allison Yagersz|157.68|NULL|0
+6090|2|800M|Reese Barnett|154.62|NULL|0
+2526|2|Long Jump|Reese Barnett|NULL|172|0
+6001|2|400M|Riley Evans|59.93|NULL|0
+2681|2|High Jump|Abigail Reinhardt|NULL|50|0
+770|2|Long Jump|Abigail Reinhardt|NULL|180.5|0
+7086|2|200M|Brooklyn Cavey|28.59|NULL|0
+7415|1|1600M|Noah Mion|328.68|NULL|0
+7840|2|300M Hurdles|Kiersyn Berry|54.12|NULL|0
+4943|2|100M Hurdles|Kiersyn Berry|18.68|NULL|0
+9078|2|400M|Hannah Hopek|66.46|NULL|0
+1084|2|Shot Put|Amelia Ryncarz|NULL|396|0
+1647|1|Long Jump|Ethan Gray|NULL|204.75|0
+5312|1|400M|Ethan Gray|53.17|NULL|0
+7642|2|100M|Callee Gibson|13.53|NULL|0
+281|2|Shot Put|Presly McConnell|NULL|364.25|0
+911|2|Discus|Presly McConnell|NULL|1123|0
+4091|2|3200M|Madison Snyder|779.38|NULL|0
+4144|2|100M|Sarah Kelly|13.15|NULL|0
+6428|1|1600M|Landon Southam|327.11|NULL|0
+4410|1|3200M|Gavin Forbes|604.21|NULL|0
+4419|2|1600M|Brooke Gucker|354.45|NULL|0
+582|1|High Jump|Logan Forbes|NULL|64|0
+7422|2|200M|Kayla Shook|27.86|NULL|0
+3524|2|Pole Vault|Payten Shetterly|NULL|102|0
+

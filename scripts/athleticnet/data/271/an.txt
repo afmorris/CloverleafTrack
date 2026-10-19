@@ -1,0 +1,12 @@
+Nikki Reynolds Invitational
+f/1/100m|Finals I 1.~12~Sarah Kelly~12.98a~Cloverleaf~20500162
+f/1/100m|Finals I 5.~11~Kayla Shook~13.34aSB~Cloverleaf~23036772
+f/1/100m|Prelims I 1.~12~Sarah Kelly~12.95a~Cloverleaf~20500162
+f/1/100m|Prelims I 7.~11~Kayla Shook~13.48a~Cloverleaf~23036772
+f/1/200m|Finals I 5.~11~Kayla Shook~28.16a~Cloverleaf~23036772
+f/1/200m|Prelims I 3.~11~Kayla Shook~27.55a~Cloverleaf~23036772
+f/1/100mh|Finals I 7.~12~Kierston Campbell~17.39a~Cloverleaf~20360553
+f/1/100mh|Finals I 8.~10~Kiersyn Berry~17.54a~Cloverleaf~25697941
+f/1/100mh|Prelims I 7.~12~Kierston Campbell~17.38a~Cloverleaf~20360553
+f/1/100mh|Prelims I 8.~10~Kiersyn Berry~17.86a~Cloverleaf~25697941
+#SERIES {}

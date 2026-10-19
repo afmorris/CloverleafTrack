@@ -1,0 +1,6 @@
+OHSAA D2 Region 6
+f/1/100mh|Finals I 7.~12~Zana Ross~16.41a (1.0)~Cloverleaf~8373658
+f/1/100mh|Prelims I 7.~12~Zana Ross~16.31a (0.7)~Cloverleaf~8373658
+f/1/300mh|Finals I 4.~12~Zana Ross~47.83aPB~Cloverleaf~8373658
+f/1/300mh|Prelims I 5.~12~Zana Ross~47.98a~Cloverleaf~8373658
+#SERIES {}

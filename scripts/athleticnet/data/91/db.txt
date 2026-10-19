@@ -1,0 +1,17 @@
+1879|2|Discus|Katelyn Young|NULL|1432|0
+2448|2|High Jump|Vickie Andrews|NULL|60|0
+2736|2|Shot Put|Katelyn Young|NULL|465|0
+3214|2|Shot Put|Lisa Wangler|NULL|422.75|0
+5066|2|3200M|Vanessa Rivera|691.64|NULL|0
+6147|2|400M|Erian Hamilton|61.69|NULL|0
+6578|2|800M|Jenna Oliver|140.98|NULL|0
+6790|2|100M|Lauren Frank|13.27|NULL|0
+6923|2|100M Hurdles|Zana Ross|15.85|NULL|0
+7070|2|1600M|Riley Freeland|308.63|NULL|0
+7126|2|200M|Sara Keener|27.8|NULL|0
+8819|2|800M|Tommie Kurtz|135.45|NULL|0
+12436|1|4x800M Relay|Robert Rivera/Joe Nespeca/Tristan Vaughan/Michael Martin|524.52|NULL|0
+12892|2|4x400M Relay|Lauren Frank/Riley Freeland/Erian Hamilton/Jenna Oliver|241.96|NULL|0
+13019|2|4x800M Relay|Riley Freeland/Tommie Kurtz/Jenna Oliver/Vanessa Rivera|566.32|NULL|0
+13226|2|4x200M Relay|Lauren Frank/Erian Hamilton/Sara Keener/Zana Ross|107.92|NULL|0
+

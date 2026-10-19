@@ -1,0 +1,18 @@
+Orrville Invitational
+m/1/200m|Finals I 2.~12~Phillip Hamilton~24.7~Cloverleaf~18001911
+m/1/200m|Prelims I 2.~12~Phillip Hamilton~23.9PB~Cloverleaf~18001911
+m/1/110mh|Finals I 5.~10~Chase Young~18.1~Cloverleaf~17562730
+m/1/110mh|Finals I 6.~12~Ray Farnham~18.4~Cloverleaf~15101877
+m/1/110mh|Prelims I 3.~10~Chase Young~18.1~Cloverleaf~17562730
+m/1/110mh|Prelims I 8.~12~Ray Farnham~19.4~Cloverleaf~15101877
+f/1/100m|Finals I 1.~10~Riley Evans~12.9~Cloverleaf~17537508
+f/1/100m|Finals I 7.~9~Kierston Campbell~14.0~Cloverleaf~20360553
+f/1/100m|Prelims I 1.~10~Riley Evans~12.9~Cloverleaf~17537508
+f/1/100m|Prelims I 7.~9~Kierston Campbell~14.0~Cloverleaf~20360553
+f/1/200m|Finals I 1.~10~Riley Evans~26.3~Cloverleaf~17537508
+f/1/200m|Finals I 8.~9~Brooklyn Cavey~28.9SB~Cloverleaf~20360549
+f/1/200m|Prelims I 1.~10~Riley Evans~26.4~Cloverleaf~17537508
+f/1/200m|Prelims I 8.~9~Brooklyn Cavey~29.2~Cloverleaf~20360549
+f/1/100mh|Finals I 3.~12~Paige Munchick~17.3SB~Cloverleaf~21637204
+f/1/100mh|Prelims I 2.~12~Paige Munchick~17.7~Cloverleaf~21637204
+#SERIES {}

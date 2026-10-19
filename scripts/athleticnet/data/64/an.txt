@@ -1,0 +1,18 @@
+Cowen Invitational
+m/1/100m|Finals I 5.~10~Isaiah Kurtz~11.59a~Cloverleaf~22615211
+m/1/100m|Prelims I 2.~10~Isaiah Kurtz~11.57aPB~Cloverleaf~22615211
+m/1/200m|Finals I 5.~10~Ethan Gray~24.04aPB~Cloverleaf~22615210
+m/1/200m|Prelims I 7.~10~Ethan Gray~24.18a~Cloverleaf~22615210
+m/1/110mh|Finals I 1.~12~Chase Young~16.33aPB~Cloverleaf~17562730
+m/1/110mh|Finals I 5.~10~Gage Hankins~17.38aPB~Cloverleaf~23036774
+m/1/110mh|Prelims I 3.~12~Chase Young~17.07a~Cloverleaf~17562730
+m/1/110mh|Prelims I 6.~10~Gage Hankins~17.79a~Cloverleaf~23036774
+f/1/100m|Finals I 3.~10~Kayla Shook~13.50aSB~Cloverleaf~23036772
+f/1/100m|Finals I 4.~11~Callee Gibson~13.72a~Cloverleaf~20360550
+f/1/100m|Prelims I 3.~10~Kayla Shook~13.56a~Cloverleaf~23036772
+f/1/100m|Prelims I 4.~11~Callee Gibson~13.56a~Cloverleaf~20360550
+f/1/200m|Finals I 1.~10~Kayla Shook~27.75aSB~Cloverleaf~23036772
+f/1/200m|Finals I 6.~9~Samantha Porter~29.55aSB~Cloverleaf~30966069
+f/1/200m|Prelims I 1.~10~Kayla Shook~27.95a~Cloverleaf~23036772
+f/1/200m|Prelims I 8.~9~Samantha Porter~29.85a~Cloverleaf~30966069
+#SERIES {}

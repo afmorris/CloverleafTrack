@@ -1,0 +1,4 @@
+OHSAA D1 State Track & Field Championships
+f/1/400m|Finals I 6.~11~Riley Evans~55.68aSB~Cloverleaf~17537508
+f/1/400m|Prelims I 7.~11~Riley Evans~57.21a~Cloverleaf~17537508
+#SERIES {}

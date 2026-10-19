@@ -1,0 +1,55 @@
+362|2|Shot Put|Katelyn Young|NULL|415.75|0
+644|1|Long Jump|Austin Greer|NULL|221|0
+805|1|Shot Put|Dylan Craig|NULL|415|0
+879|2|Long Jump|Madison Horner|NULL|191.5|0
+1462|1|High Jump|Tyler Slavens|NULL|62|0
+1577|1|Discus|Jacob Scheck|NULL|1308|0
+1717|2|Discus|Katelyn Young|NULL|1364|0
+1938|2|High Jump|Vickie Andrews|NULL|59|0
+2236|1|Discus|Mark Andrews|NULL|1092|0
+2429|1|Pole Vault|Jacob Scheck|NULL|96|0
+2468|1|Pole Vault|Matt Butt|NULL|96|0
+2535|2|Discus|Lisa Wangler|NULL|1067|0
+2797|2|Pole Vault|Cassie Grabowski|NULL|84|0
+2830|1|Long Jump|Jimmy Fazio|NULL|229.25|0
+2863|1|Shot Put|Corey Jenkin|NULL|492.5|0
+3001|2|Shot Put|Lisa Wangler|NULL|355.25|0
+3389|2|Long Jump|Brianna Gallagher|NULL|175.75|0
+3885|2|200M|Hannah Swain|28.83|NULL|0
+4113|1|100M|Ryan Powell|11.89|NULL|0
+4521|1|800M|Andrew Jarrett|140.25|NULL|0
+4647|1|100M|Diego Rivera|12.48|NULL|0
+4949|1|110M Hurdles|Tate Surrarrer|19|NULL|0
+5069|2|100M Hurdles|Cassie Grabowski|16.89|NULL|0
+5428|1|3200M|Darren Egner|661.32|NULL|0
+5445|1|300M Hurdles|Tate Surrarrer|48.45|NULL|0
+5457|2|100M Hurdles|Zana Ross|16.48|NULL|0
+5682|2|1600M|Vanessa Rivera|326.54|NULL|0
+5699|2|1600M|Riley Freeland|323.8|NULL|0
+5729|2|100M|Madison Horner|13.84|NULL|0
+6028|1|200M|Tyler Slavens|24.19|NULL|0
+6054|2|800M|Erian Hamilton|148.28|NULL|0
+6801|1|3200M|Estevan Ortega|725.88|NULL|0
+6986|1|400M|Michael Martin|56.81|NULL|0
+7132|2|400M|Lauren Frank|65.3|NULL|0
+7164|1|1600M|Andrew Jarrett|284.90999999999997|NULL|0
+7253|2|400M|Hannah Swain|58.75|NULL|0
+7363|2|300M Hurdles|Zana Ross|50.86|NULL|0
+7373|1|200M|Ryan Powell|24.7|NULL|0
+7399|1|800M|Joe Nespeca|130.11|NULL|0
+7486|2|3200M|Vanessa Rivera|736.2|NULL|0
+7753|1|400M|Tristan Vaughan|58|NULL|0
+7924|2|200M|Taylor Napholz|29.64|NULL|0
+8253|2|300M Hurdles|Katelyn Malena|54.59|NULL|0
+8282|2|800M|Riley Freeland|147.44|NULL|0
+8492|1|1600M|Darren Egner|297.76|NULL|0
+8981|2|100M|Cassie Grabowski|13.4|NULL|0
+8983|2|3200M|Kristen Napholz|771.32|NULL|0
+12071|2|4x100M Relay|Megan Brandt/Cassie Grabowski/Madison Horner/Zana Ross|52.68|NULL|0
+12081|1|4x200M Relay|Jacob Scheck/Diego Rivera/Zack Munchick/Tyler Slavens|97.71000000000001|NULL|0
+12294|2|4x400M Relay|Lauren Frank/Riley Freeland/Erian Hamilton/Hannah Swain|247.6|NULL|0
+12480|1|4x100M Relay|Austin Greer/Zack Munchick/Diego Rivera/Jacob Scheck|46.39|NULL|0
+12792|1|4x400M Relay|Michael Martin/Ryan Powell/Tyler Slavens/Tristan Vaughan|218.92000000000002|NULL|0
+12796|1|4x800M Relay|Darren Egner/Andrew Jarrett/Michael Martin/Eric VanMeter|534.33|NULL|0
+12832|2|4x800M Relay|Riley Freeland/Erian Hamilton/Adriana Jeziorski/Vanessa Rivera|610.59|NULL|0
+

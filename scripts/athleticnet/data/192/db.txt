@@ -1,0 +1,8 @@
+1637|2|High Jump|Jennifer Foster|NULL|66|0
+1703|1|Discus|Cody Furr|NULL|1795|0
+2345|2|Pole Vault|Jennifer Foster|NULL|132|0
+6206|2|100M Hurdles|Megan Rybacki|16.9|NULL|0
+7009|2|300M Hurdles|Megan Rybacki|47.84|NULL|0
+8321|2|100M Hurdles|Jennifer Foster|15.61|NULL|0
+12344|2|4x200M Relay|Taylor Detwiler/Janelle Shaffer/Jenna Elswick/Kelani Nuckols|107.96000000000001|NULL|0
+

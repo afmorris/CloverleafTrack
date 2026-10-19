@@ -1,0 +1,54 @@
+233|2|Shot Put|Logan Stewart|NULL|382|0
+414|1|Discus|Cory Starman|NULL|979|0
+585|2|Shot Put|Lisa Wangler|NULL|433|0
+786|1|High Jump|Ryan Curtis|NULL|62|0
+997|2|Discus|Lisa Wangler|NULL|1198|0
+1419|1|Shot Put|Jake Kemp|NULL|452|0
+1428|1|Long Jump|John Manzuk|NULL|211.75|0
+1665|1|Shot Put|Tommy Sword|NULL|415|0
+2064|2|Discus|Logan Stewart|NULL|1011|0
+2198|1|Pole Vault|Ben Daniels|NULL|114|0
+2401|1|Discus|Jake Kemp|NULL|1096|0
+2404|1|Long Jump|Jacob Nau|NULL|196|0
+2933|2|Long Jump|Maddie Boltz|NULL|188.5|0
+3341|2|Seated Shot Put|Bridgette Donohue|NULL|82|0
+3597|1|Pole Vault|Nate Brown|NULL|84|0
+3679|2|1600M|Jenna Oliver|355.56|NULL|0
+3955|2|100M|Sara Keener|13.7|NULL|0
+4239|1|3200M|Kyle Chudzinski|659.31|NULL|0
+4282|2|200M|Nyah Hansen|29.42|NULL|0
+4335|1|800M|Tristan Vaughan|124.86|NULL|0
+4812|1|400M|Blake Wilson|52.91|NULL|0
+4933|2|300M Hurdles|Katelyn Malena|61.33|NULL|0
+5047|2|Seated 400M|Bridgette Donohue|206.55|NULL|0
+5155|1|100M|Zack Munchick|11.68|NULL|0
+5302|1|200M|Jake Arnold|26.28|NULL|0
+5624|2|Seated 100M|Bridgette Donohue|49.85|NULL|0
+5846|2|100M|Maddie Boltz|13.72|NULL|0
+5945|2|800M|Emma Nagel|172.66|NULL|0
+6061|2|200M|Sara Keener|28.88|NULL|0
+6378|2|3200M|Bailey Freeland|816.29|NULL|0
+6478|1|3200M|Max Gucker|623.64|NULL|0
+6869|1|300M Hurdles|Jacob Nau|51.57|NULL|0
+6885|2|800M|Tommie Kurtz|142.94|NULL|0
+6982|1|300M Hurdles|DeAnte Taylor|48.11|NULL|0
+7122|1|400M|Frank Stepp|52.9|NULL|0
+7181|2|1600M|Sara Naples|384.82|NULL|0
+7240|2|100M Hurdles|Katelyn Malena|20.21|NULL|0
+7336|1|800M|Ryan Curtis|139.1|NULL|0
+7389|2|400M|Liv Wells|77.31|NULL|0
+7570|1|1600M|Max Gucker|301.7|NULL|0
+7756|2|400M|Juliet Pintos|74.68|NULL|0
+8299|1|110M Hurdles|DeAnte Taylor|18.92|NULL|0
+8360|2|3200M|Maria Porras|797.54|NULL|0
+8713|1|200M|Zack Munchick|24.26|NULL|0
+8849|1|100M|John Manzuk|12.67|NULL|0
+12352|2|4x200M Relay|Sara Ayesteran/Nyah Hansen/Juliet Pintos/Kirsten Wilson|128.23|NULL|0
+12461|2|4x100M Relay|Nyah Hansen/Sara Keener/Emily Romano/Kirsten Wilson|54.94|NULL|0
+12632|1|4x100M Relay|Ryan Curtis/John Manzuk/Zack Munchick/Blake Wilson|46.64|NULL|0
+12718|2|4x400M Relay|Maddie Boltz/Sara Keener/Tommie Kurtz/Jenna Oliver|270.88|NULL|0
+12737|1|4x800M Relay|Nick Bailey/Frank Stepp/Tristan Vaughan/Dillon West|525.51|NULL|0
+12768|1|4x200M Relay|Jake Arnold/Cooper Flora/Cameron McNeal/Jacob Nau|106.34|NULL|0
+12992|1|4x400M Relay|Ryan Curtis/Frank Stepp/Tristan Vaughan/Blake Wilson|221.59|NULL|0
+13377|2|4x800M Relay|Bailey Freeland/Jenna Oliver/Maria Porras/Tommie Kurtz|622.73|NULL|0
+

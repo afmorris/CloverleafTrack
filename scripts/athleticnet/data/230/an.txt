@@ -1,0 +1,6 @@
+OHSAA D1 Region 2
+f/1/200m|Finals I 2.~10~Riley Evans~25.48a (0.0)SB~Cloverleaf~17537508
+f/1/200m|Prelims I 4.~10~Riley Evans~25.91a~Cloverleaf~17537508
+f/1/400m|Finals I 3.~10~Riley Evans~56.99a~Cloverleaf~17537508
+f/1/400m|Prelims I 2.~10~Riley Evans~57.34a~Cloverleaf~17537508
+#SERIES {}

@@ -1,0 +1,58 @@
+246|1|Discus|Timmy Shores|NULL|1437|0
+387|2|High Jump|Emma Malikowski|NULL|56|0
+474|2|Shot Put|Presly McConnell|NULL|408.5|0
+1195|2|High Jump|Grace Goldsberry|NULL|54|0
+1429|1|High Jump|Will Jerome|NULL|66|0
+1863|1|Long Jump|Will Jerome|NULL|240.75|0
+2319|2|Shot Put|Karoline Kreider|NULL|361.25|0
+2341|2|Discus|Presly McConnell|NULL|1142|0
+2530|1|Discus|Clay Combs|NULL|1552|0
+2572|1|Long Jump|Oakley Kemp|NULL|253|0
+2633|2|Discus|Karoline Kreider|NULL|1224|0
+2679|2|Long Jump|Emma Malikowski|NULL|191|0
+3030|1|Pole Vault|Jace Peacock|NULL|129|0
+3272|1|Pole Vault|Isaac Baltic|NULL|165|0
+3404|1|Shot Put|Timmy Shores|NULL|512.75|0
+3408|1|Shot Put|Clay Combs|NULL|492.5|0
+3471|2|Long Jump|KK Campbell|NULL|197.75|0
+3768|1|400M|Ethan Gray|54.49|NULL|0
+3871|2|100M|Riley Evans|12.67|NULL|0
+3926|2|300M Hurdles|KK Campbell|50.46|NULL|0
+4132|1|110M Hurdles|Chase Young|16.36|NULL|0
+4292|1|300M Hurdles|Chase Young|42.72|NULL|0
+4379|1|1600M|Caleb Neville|289.98|NULL|0
+4414|2|3200M|Alyssa Stoner|702.29|NULL|0
+4468|1|1600M|Brett Gucker|269.55|NULL|0
+4503|1|3200M|Gavin Forbes|636.75|NULL|0
+4538|2|100M|Sarah Kelly|13.8|NULL|0
+4646|1|200M|Oakley Kemp|23.16|NULL|0
+4800|2|3200M|Madison Snyder|739.57|NULL|0
+5064|1|100M|Tristin Bogucki|11.8|NULL|0
+5328|1|800M|Vova Herdman|116.8|NULL|0
+5475|1|200M|Isaiah Kurtz|24.63|NULL|0
+5725|2|400M|Riley Evans|56.74|NULL|0
+5939|2|1600M|Alyssa Stoner|315.86|NULL|0
+6086|2|200M|Sarah Kelly|27.1|NULL|0
+6185|1|300M Hurdles|Isaac Baltic|42.66|NULL|0
+6189|2|1600M|Emma Hibler|336.73|NULL|0
+6275|1|400M|Will Jerome|54.7|NULL|0
+6946|2|100M Hurdles|KK Campbell|16.8|NULL|0
+7017|1|800M|Hunter Stallings|120.74|NULL|0
+7158|2|800M|Reese Barnett|144.49|NULL|0
+7436|2|100M Hurdles|Grace Friedhoff|18.52|NULL|0
+7457|2|800M|Lauren Jensch|154.65|NULL|0
+7647|2|400M|Julia Armogida|66.29|NULL|0
+7849|2|200M|Riley Evans|26.7|NULL|0
+8329|1|100M|Oakley Kemp|11.41|NULL|0
+8349|2|300M Hurdles|Grace Friedhoff|50.88|NULL|0
+8486|1|3200M|Caleb Neville|646.9|NULL|0
+9000|1|110M Hurdles|Isaac Baltic|16.78|NULL|0
+12067|2|4x100M Relay|(relay)|51.71|NULL|0
+12299|2|4x400M Relay|(relay)|256.1|NULL|0
+12458|1|4x400M Relay|(relay)|209.98|NULL|0
+12574|1|4x100M Relay|(relay)|45.15|NULL|0
+13095|1|4x800M Relay|(relay)|488.7|NULL|0
+13153|1|4x200M Relay|(relay)|94.89|NULL|0
+13345|2|4x800M Relay|(relay)|595.22|NULL|0
+13387|2|4x200M Relay|(relay)|109.58|NULL|0
+

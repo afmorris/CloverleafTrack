@@ -22,10 +22,12 @@ meets = sys.argv[3:]
 EVENTS = {'100m': '100M', '200m': '200M', '400m': '400M', '800m': '800M', '1600m': '1600M', '3200m': '3200M',
           '110mh': '110M Hurdles', '100mh': '100M Hurdles', '300mh': '300M Hurdles',
           '4x100m': '4x100M Relay', '4x200m': '4x200M Relay', '4x400m': '4x400M Relay', '4x800m': '4x800M Relay',
-          'shot': 'Shot Put', 'discus': 'Discus', 'lj': 'Long Jump', 'tj': 'Triple Jump'}
+          'shot': 'Shot Put', 'discus': 'Discus', 'lj': 'Long Jump', 'tj': 'Triple Jump',
+          '60m': '60M', '60mh': '60M Hurdles'}
 ROUND = {'Prelims': 1, 'Semi-Finals': 2, 'Finals': 3}
 RNAME = {1: 'Prelim', 2: 'Semi', 3: 'Final'}
 RELAY_CODES = {'4x100m', '4x200m', '4x400m', '4x800m'}
+FIELD_CODES = {'shot', 'discus', 'lj', 'tj'}  # field prelims/finals are attempts, not PerformanceRounds
 
 def secs(s):
     m = re.match(r'\s*([\d:.]+)', s)
@@ -79,9 +81,10 @@ for mid in meets:
         path, sub = head.split('|')
         g = gender(path[0]); code = path.split('/')[-1]
         if g is None or sub not in ROUND or code not in EVENTS:
+            if sub in ROUND and code not in EVENTS: notes.append(f"UNSUPPORTED EVENT in {mid}: {code}")
             continue
         if kind == 'I':
-            if code in RELAY_CODES: continue
+            if code in RELAY_CODES or code in FIELD_CODES: continue
             f = rest.split('~'); t = secs(f[3]) if len(f) >= 6 else None
             if t is None: continue
             ind[(g, code, f[-1])][ROUND[sub]] = t; names[f[-1]] = f[2]
@@ -92,9 +95,9 @@ for mid in meets:
             if t is None: continue
             rel[(g, code, re.sub(r'\s*Q$', '', m.group(2)))][ROUND[sub]] = t
 
-    def emit_chain(label, g, ev, rounds):
+    def emit_chain(label, g, ev, rounds, hint_ok=False):
         global tot_chain
-        best = min(rounds.values()); p = find(g, ev, time=best)
+        best = min(rounds.values()); p = find(g, ev, time=best, hint=(label if hint_ok else None))
         if p is None or p == 'AMBIG':
             notes.append(f"{'AMBIGUOUS' if p else 'UNMATCHED'} rounds in {mid}: {label} {ev} best={best}"); return
         tot_chain += 1
@@ -106,13 +109,15 @@ for mid in meets:
         lines.append("")
 
     for (g, code, aid), rounds in sorted(ind.items()):
-        if len(rounds) >= 2: emit_chain(names[aid], g, EVENTS[code], rounds)
+        if len(rounds) >= 2: emit_chain(names[aid], g, EVENTS[code], rounds, hint_ok=True)
     for (g, code, team), rounds in sorted(rel.items()):
         if len(rounds) >= 2: emit_chain(team, g, EVENTS[code], rounds)
 
     for href, athletes in series.items():
         g = gender(href[0]); code = href.split('/')[-1]
-        if g is None or code not in EVENTS: continue
+        if g is None or code not in EVENTS:
+            if code not in EVENTS: notes.append(f"UNSUPPORTED EVENT in {mid}: {code}")
+            continue
         ev = EVENTS[code]
         for a in athletes:
             att = ['Foul' if x.upper() == 'FOUL' else ('Pass' if x.upper() == 'PASS' else x) for x in a['att']]

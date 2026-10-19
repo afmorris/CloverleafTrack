@@ -1,0 +1,16 @@
+Orrville Invitational
+m/1/100m|Finals I 4.~12~Mike Williams~11.9~Cloverleaf~14429654
+m/1/100m|Prelims I 2.~12~Mike Williams~11.8SB~Cloverleaf~14429654
+m/1/200m|Finals I 6.~11~Luke Yuravak~24.3~Cloverleaf~15101876
+m/1/200m|Prelims I 4.~11~Luke Yuravak~24.3~Cloverleaf~15101876
+m/1/110mh|Finals I 7.~12~Kaleb Baker~18.8~Cloverleaf~17606876
+m/1/110mh|Prelims I 8.~12~Kaleb Baker~18.9~Cloverleaf~17606876
+f/1/100m|Finals I 1.~9~Riley Evans~13.0~Cloverleaf~17537508
+f/1/100m|Finals I 6.~11~Paige Munchick~13.7PB~Cloverleaf~21637204
+f/1/100m|Prelims I 1.~9~Riley Evans~13.2~Cloverleaf~17537508
+f/1/100m|Prelims I 7.~11~Paige Munchick~14.0~Cloverleaf~21637204
+f/1/200m|Finals I 2.~12~Emily Romano~27.5~Cloverleaf~13354077
+f/1/200m|Finals I 7.~10~Meghan Cavey~29.2~Cloverleaf~18001933
+f/1/200m|Prelims I 1.~12~Emily Romano~27.5~Cloverleaf~13354077
+f/1/200m|Prelims I 8.~10~Meghan Cavey~28.7~Cloverleaf~18001933
+#SERIES {}
