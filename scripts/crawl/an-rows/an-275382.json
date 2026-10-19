@@ -1,0 +1,326 @@
+[
+{
+"u": "f/1/100m",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "ind",
+"place": "24",
+"name": "Lauren Frank",
+"mark": "13.62a",
+"info": "Yr: 12 \u2022 1.8m/s",
+"sec": "Prelims"
+},
+{
+"k": "ind",
+"place": "27",
+"name": "Kirsten Wilson",
+"mark": "13.69a",
+"info": "PB \u2022 Yr: 9 \u2022 1.7m/s",
+"sec": "Prelims"
+}
+]
+},
+{
+"u": "f/1/200m",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "ind",
+"place": "22",
+"name": "Lauren Frank",
+"mark": "27.72a",
+"info": "Yr: 12 \u2022 2.3m/s",
+"sec": "Prelims"
+},
+{
+"k": "ind",
+"place": "25",
+"name": "Sara Keener",
+"mark": "28.01a",
+"info": "Yr: 10 \u2022 1.7m/s",
+"sec": "Prelims"
+}
+]
+},
+{
+"u": "f/1/400m",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "ind",
+"place": "12",
+"name": "Erian Hamilton",
+"mark": "1:03.20a",
+"info": "Yr: 12",
+"sec": "Prelims"
+},
+{
+"k": "ind",
+"place": "19",
+"name": "Anna Winnicki",
+"mark": "1:05.73a",
+"info": "PB \u2022 Yr: 12",
+"sec": "Prelims"
+}
+]
+},
+{
+"u": "f/1/800m",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "ind",
+"place": "8",
+"name": "Jenna Oliver",
+"mark": "2:29.43a",
+"info": "Yr: 9 \u2022 +1pts",
+"sec": "Finals"
+},
+{
+"k": "ind",
+"place": "12",
+"name": "Vanessa Rivera",
+"mark": "2:31.25a",
+"info": "PB \u2022 Yr: 12",
+"sec": "Finals"
+}
+]
+},
+{
+"u": "f/1/1600m",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "ind",
+"place": "5",
+"name": "Riley Freeland",
+"mark": "5:33.01a",
+"info": "Yr: 11 \u2022 +4pts",
+"sec": "Finals"
+},
+{
+"k": "ind",
+"place": "10",
+"name": "Tommie Kurtz",
+"mark": "5:43.90a",
+"info": "Yr: 9",
+"sec": "Finals"
+}
+]
+},
+{
+"u": "f/1/3200m",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "ind",
+"place": "2",
+"name": "Vanessa Rivera",
+"mark": "11:42.72a",
+"info": "Yr: 12 \u2022 +8pts",
+"sec": "Finals"
+},
+{
+"k": "ind",
+"place": "9",
+"name": "Bailey Freeland",
+"mark": "12:42.75a",
+"info": "SB \u2022 Yr: 9",
+"sec": "Finals"
+}
+]
+},
+{
+"u": "f/1/100mh",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "ind",
+"place": "10",
+"name": "Zana Ross",
+"mark": "16.41a",
+"info": "Yr: 11 \u2022 2.3m/s",
+"sec": "Prelims"
+},
+{
+"k": "ind",
+"place": "25",
+"name": "Alayna Richmond",
+"mark": "19.25a",
+"info": "Yr: 9 \u2022 1.4m/s",
+"sec": "Prelims"
+}
+]
+},
+{
+"u": "f/1/300mh",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "ind",
+"place": "9",
+"name": "Zana Ross",
+"mark": "48.84a",
+"info": "Yr: 11",
+"sec": "Prelims"
+},
+{
+"k": "ind",
+"place": "27",
+"name": "Alayna Richmond",
+"mark": "54.67a",
+"info": "PB \u2022 Yr: 9",
+"sec": "Prelims"
+}
+]
+},
+{
+"u": "f/1/4x100m",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "relay",
+"place": "13",
+"mark": "53.21a",
+"legs": "Zoe Riddile, Sara Keener, Taylor Napholz, Kirsten Wilson",
+"sec": "Finals"
+}
+]
+},
+{
+"u": "f/1/4x200m",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "relay",
+"place": "13",
+"mark": "1:55.06a",
+"legs": "PBZoe Riddile, Sara Keener, Zana Ross, Lauren Frank",
+"sec": "Finals"
+}
+]
+},
+{
+"u": "f/1/4x400m",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "relay",
+"place": "6",
+"mark": "4:18.56a",
+"legs": "PB \u2022 +3ptsErian Hamilton, Lauren Frank, Tommie Kurtz, Riley Freeland",
+"sec": "Finals"
+}
+]
+},
+{
+"u": "f/1/4x800m",
+"marked": 0,
+"nomark": 0,
+"rows": [
+{
+"k": "relay",
+"place": "1",
+"mark": "9:52.52a",
+"legs": "PB \u2022 +10ptsJenna Oliver, Tommie Kurtz, Erian Hamilton, Riley Freeland",
+"sec": "Finals"
+}
+]
+},
+{
+"u": "f/1/shot",
+"marked": 37,
+"nomark": 0,
+"rows": [
+{
+"k": "ind",
+"place": "3",
+"name": "Katelyn Young",
+"mark": "36-06.50",
+"info": "Yr: 11 \u2022 +6pts",
+"sec": "Finals"
+},
+{
+"k": "ind",
+"place": "11",
+"name": "Lisa Wangler",
+"mark": "32-09.25",
+"info": "Yr: 10",
+"sec": "Finals"
+}
+]
+},
+{
+"u": "f/1/discus",
+"marked": 33,
+"nomark": 0,
+"rows": [
+{
+"k": "ind",
+"place": "6",
+"name": "Katelyn Young",
+"mark": "122-06",
+"info": "Yr: 11 \u2022 +3pts",
+"sec": "Finals"
+},
+{
+"k": "ind",
+"place": "19",
+"name": "Lisa Wangler",
+"mark": "95-02",
+"info": "Yr: 10",
+"sec": "Finals"
+}
+]
+},
+{
+"u": "f/1/hj",
+"marked": 24,
+"nomark": 3,
+"rows": [
+{
+"k": "ind",
+"place": "7",
+"name": "Vickie Andrews",
+"mark": "5-00.00",
+"info": "Yr: 12 \u2022 +2pts",
+"sec": "Finals"
+}
+]
+},
+{
+"u": "f/1/lj",
+"marked": 34,
+"nomark": 0,
+"rows": [
+{
+"k": "ind",
+"place": "15",
+"name": "Abby Andrews",
+"mark": "14-03.25",
+"info": "PB \u2022 Yr: 10",
+"sec": "Finals"
+},
+{
+"k": "ind",
+"place": "22",
+"name": "Maddie Boltz",
+"mark": "13-00.50",
+"info": "SB \u2022 Yr: 9",
+"sec": "Finals"
+}
+]
+}
+]
