@@ -229,6 +229,42 @@ public class AdminPerformanceRepository(IDbConnectionFactory connectionFactory) 
         await connection.ExecuteAsync("EXEC sp_RebuildLeaderboards");
     }
 
+    public async Task<List<PerformanceRound>> GetRoundsForPerformanceAsync(int performanceId)
+    {
+        using var connection = connectionFactory.CreateConnection();
+        var rounds = await connection.QueryAsync<PerformanceRound>(
+            "SELECT * FROM PerformanceRounds WHERE PerformanceId = @PerformanceId ORDER BY Round",
+            new { PerformanceId = performanceId });
+        return rounds.ToList();
+    }
+
+    public async Task SaveRoundsAsync(int performanceId, List<PerformanceRound> rounds)
+    {
+        using var connection = connectionFactory.CreateConnection();
+
+        await connection.ExecuteAsync("DELETE FROM PerformanceRounds WHERE PerformanceId = @PerformanceId", new { PerformanceId = performanceId });
+
+        const string insertSql = @"
+            INSERT INTO PerformanceRounds (PerformanceId, Round, TimeSeconds)
+            VALUES (@PerformanceId, @Round, @TimeSeconds)";
+
+        foreach (var round in rounds)
+        {
+            round.PerformanceId = performanceId;
+            await connection.ExecuteAsync(insertSql, round);
+        }
+
+        var best = PerformanceRoundSeries.BestTime(rounds);
+        if (best.HasValue)
+        {
+            await connection.ExecuteAsync(
+                "UPDATE Performances SET TimeSeconds = @TimeSeconds WHERE Id = @Id",
+                new { TimeSeconds = best.Value, Id = performanceId });
+        }
+
+        await connection.ExecuteAsync("EXEC sp_RebuildLeaderboards");
+    }
+
     public async Task<List<Performance>> GetPerformancesForMeetAsync(int meetId)
     {
         using var connection = connectionFactory.CreateConnection();

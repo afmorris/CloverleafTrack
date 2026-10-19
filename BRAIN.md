@@ -1999,3 +1999,50 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** Pages only change after the next image deploy and `ctf` export. The athlete page's own meta description used to quote `TotalPRs`, which undercounts older careers ([C52]); with an approved summary it is replaced by the summary text. `GetAthleteDetailsAsync` is also used by the admin fact-sheet/link paths, so those now do one extra summary lookup (cheap).
 
 **Key files:** `CloverleafTrack.Services/AthleteService.cs`, `AthleteSummaryLinker.cs`, `AthleteSummaryLinkService.cs`, `Views/Roster/Details.cshtml`, `ViewModels/Athletes/AthleteDetailsViewModel.cs`, `Tests/Unit/Services/AthleteServiceSummaryTests.cs`.
+
+### [C55] Performance Rounds — Prelim / Semifinal / Final Times (sibling table, not a Round column)
+
+**What changed:** New additive table `PerformanceRounds` (PerformanceId, Round 1=Prelim/2=Semifinal/3=Final, TimeSeconds; `ON DELETE CASCADE`, unique per (PerformanceId, Round)) for running and running-relay performances that went through rounds. `Performances.TimeSeconds` stays the single best (min) round time. Meet and athlete pages show a `Prelim 11.08 → Final 10.94` chip chain (`Views/Shared/_RoundStrip.cshtml`) only when an athlete ran **two or more** rounds; an athlete who did not advance shows only their mark. Field-event prelim/final throws and jumps are just more attempts in the existing `PerformanceAttempts` series (`AttemptNumber` has no upper CHECK) — no new UI. Admin Create/Edit have optional Prelim/Semi/Final inputs for running events (`PerformancesController.ParseRoundInputs` → `IAdminPerformanceRepository.SaveRoundsAsync`).
+
+**Why:** The first design was a `Round` column on `Performances` (multiple rows per athlete/meet/event) with `sp_RebuildLeaderboards` changes. Rejected: ~43 queries read `Performances` (home stats, PR/SB counts, meet athlete counts, scoring/placings via `MeetPlacings.PerformanceId`, MeetScore, percentiles/`EventStatistics` which count every row) and each would need a "best per athlete-event-meet" collapse; a missed one silently double-counts. The sibling table mirrors [C32] so none of that changes: one counting row per athlete-event-meet, rounds are display-only child data.
+
+**Watch out:**
+- `PerformanceRounds` is display data; never read it for PRs, ranks, or percentiles. The counting mark is `Performances.TimeSeconds` (= min of rounds, recomputed in `SaveRoundsAsync`).
+- `SaveRoundsAsync` is replace-all (like `SaveAttemptSeriesAsync`). Passing an empty list deletes rounds and leaves `TimeSeconds` alone; the admin Edit form clears rounds when fewer than two are filled in.
+- Place/points (`MeetPlacings`) still attach to the single Performance row; there is no per-round placing.
+- Run `docs/migration_performance_rounds.sql` before deploying code that reads it (`MeetService`/`AthleteService` query the table). T-SQL not run against a real SQL Server in the dev sandbox.
+- Best-round ties display the later round as best.
+
+**Key files:** `docs/migration_performance_rounds.sql`, `docs/schema.sql`, `Models/PerformanceRound.cs`, `Models/Enums/RoundType.cs`, `DataAccess/Repositories/PerformanceRoundRepository.cs`, `AdminPerformanceRepository.cs`, `Services/PerformanceRoundSeriesBuilder.cs`, `ViewModels/Shared/PerformanceRoundSeriesViewModel.cs`, `Views/Shared/_RoundStrip.cshtml`, `Views/Meets/Details.cshtml`, `Views/Roster/Details.cshtml`, `docs/mockups/multi-performance-rounds.html`.
+
+### [C56] Attempt Strip No Longer Shows "N valid · avg · spread" (amends [C32] display)
+
+**What changed:** `Views/Shared/_AttemptStrip.cshtml` renders only the attempt boxes; the trailing "5 valid · avg … · spread …" summary was removed at the owner's request (seen while reviewing [C55] locally). `PerformanceAttemptSeriesViewModel.ValidAttemptCount/AverageValidInches/SpreadInches` still exist (and are unit tested) but are now unused by views.
+
+**Watch out:** Razor views are precompiled into the running app, so a running dev server keeps the old markup until restarted.
+
+**Key files:** `Views/Shared/_AttemptStrip.cshtml`.
+
+### [C57] athletic.net Import — 2026 Outdoor Rounds & Attempt Series (reviewable SQL, not yet run on live)
+
+**What changed:** `scripts/athleticnet/` (scraper notes + `build_rounds_sql.py`) and per-meet scraped data in `scripts/athleticnet/data/<dbMeetId>/{an.txt,db.txt}` produce `docs/imports/2026-outdoor-rounds.sql`: 20 prelim/semi→final chains (individual and relay) and 132 field attempt series across 9 of the 17 2026 outdoor meets. Applied only to a local SQL Server copy so far; **never run on `svp01sql01`**. Early Bird, Hauser, Bay, Wooster had no rounds and no recorded series; the 4 dual meets (Ravenna-Streetsboro, Norton-Springfield, Field-Coventry, New London) are not on athletic.net's calendar.
+
+**Why:** Owner wanted full meet info (prelim vs final times, full throws series). Our DB keeps one best-mark row per athlete-event-meet ([C55]); this adds the surrounding rounds/attempts as child rows.
+
+**Watch out:**
+- Each block re-asserts the expected mark (matched by gender + event + best mark) and the script is one transaction; a mismatch aborts everything. Ties are disambiguated with `data/<id>/names.json` (athletic.net athlete id → substring of our athlete name).
+- Our relay rosters are authoritative (situational replacements); athletic.net rosters differ and are never imported — relay chains are matched by event + best time only.
+- Known source disagreements, left unimported: State girls 4x400 final is 3:55.68 on athletic.net vs 3:55.05 in our DB (SR); Fairview men's shot, Jake Schaefer best 36' 10" on athletic.net vs 37' 10" in our DB.
+- athletic.net quirks: the API 403s without a page token; the results list is virtualized and renders only after the tab is painted; header text needs `textContent`; field-series pages only have data when the meet recorded series (many relay/invitational meets only have best marks). High jump / pole vault series are bar heights, unsupported.
+
+**Key files:** `scripts/athleticnet/README.md`, `scripts/athleticnet/build_rounds_sql.py`, `docs/imports/2026-outdoor-rounds.sql`.
+
+### [C58] Meet Page Layout — Round Chain and Attempt Strip Moved Under the Athlete Cell (amends [C55]/[C56])
+
+**What changed:** On `Views/Meets/Details.cshtml` the `_AttemptStrip` and `_RoundStrip` now render under the athlete / relay names (left-aligned) instead of under the mark. The Mark column holds only the mark, so it stays narrow and the long relay names keep their width. All performance-table cells got `align-middle` so mark and result chips center against the taller athlete cell, and `px-2 sm:px-4` cell padding so the athlete column has room on phones. `_RoundStrip` now keeps each arrow attached to the chip after it (no dangling arrows), takes `ViewData["Left"]`, and shows `S`/`F` labels below `sm` and `Semi`/`Final` from `sm` up. `_AttemptStrip` boxes wrap (`flex-wrap`).
+
+**Why:** In the two-column desktop layout the Mark column was ~90px, so the chain wrapped into "Semi 1:36.90 →" / "Final 1:36.51" and relay names squeezed to 3 lines; long-jump strips overflowed the card.
+
+**Watch out:** The Athlete page (`Roster/Details.cshtml`) still uses the strips in the mark cell with `Compact` labels. `wwwroot/css/site.css` is a tracked, minified build: with no node toolchain available I hand-appended the Tailwind rules for `.gap-x-1`, `.align-middle` and `.sm:px-4` exactly as Tailwind emits them; a future `pnpm run dev` will regenerate them from the markup, so nothing to undo. Razor views are precompiled, so restart a running dev server after editing them.
+
+**Key files:** `Views/Meets/Details.cshtml`, `Views/Shared/_RoundStrip.cshtml`, `Views/Shared/_AttemptStrip.cshtml`, `wwwroot/css/site.css`.

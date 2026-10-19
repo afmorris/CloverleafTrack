@@ -1081,3 +1081,22 @@ CREATE TABLE [dbo].[AthleteSummaries] (
     CONSTRAINT [FK_AthleteSummaries_Athletes] FOREIGN KEY ([AthleteId]) REFERENCES [dbo].[Athletes] ([Id]),
     CONSTRAINT [UQ_AthleteSummaries_AthleteId] UNIQUE NONCLUSTERED ([AthleteId])
 );
+
+
+-- ============================================================
+-- SCHEMA ADDITIONS — Performance Rounds (Prelim / Semifinal / Final)
+-- See docs/migration_performance_rounds.sql (idempotent, run before deploy).
+-- One extra row per round for running/relay performances that went through
+-- rounds. Performances.TimeSeconds remains the best (min) round mark.
+-- Athletes who ran only one round have NO rounds rows.
+-- ============================================================
+CREATE TABLE [dbo].[PerformanceRounds] (
+    [Id]            INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [PerformanceId] INT        NOT NULL,
+    [Round]         TINYINT    NOT NULL,      -- 1 = Prelim, 2 = Semifinal, 3 = Final
+    [TimeSeconds]   FLOAT(53)  NOT NULL,
+    CONSTRAINT [FK_PerformanceRounds_Performances]
+        FOREIGN KEY ([PerformanceId]) REFERENCES [dbo].[Performances]([Id]) ON DELETE CASCADE,
+    CONSTRAINT [UQ_PerformanceRounds_Performance_Round] UNIQUE ([PerformanceId], [Round]),
+    CONSTRAINT [CK_PerformanceRounds_Round] CHECK ([Round] BETWEEN 1 AND 3)
+);

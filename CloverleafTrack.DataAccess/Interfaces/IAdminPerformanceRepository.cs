@@ -28,4 +28,14 @@ public interface IAdminPerformanceRepository
     /// replace it with. See BRAIN.md for the full reasoning.
     /// </summary>
     Task SaveAttemptSeriesAsync(int performanceId, List<PerformanceAttempt> attempts);
+
+    /// <summary>Loads the round rows (prelim/semi/final) for a single performance, ordered by Round. Empty list if none.</summary>
+    Task<List<PerformanceRound>> GetRoundsForPerformanceAsync(int performanceId);
+
+    /// <summary>
+    /// Replaces the full round set for a performance, sets Performances.TimeSeconds to the best (min)
+    /// round time, and calls sp_RebuildLeaderboards. An empty list just clears the rounds and leaves
+    /// TimeSeconds untouched.
+    /// </summary>
+    Task SaveRoundsAsync(int performanceId, List<PerformanceRound> rounds);
 }

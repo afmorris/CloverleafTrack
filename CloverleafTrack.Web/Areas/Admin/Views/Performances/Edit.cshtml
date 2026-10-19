@@ -144,6 +144,13 @@
                 <input asp-for="TimeInput" type="text" class="form-control" placeholder="e.g., 11.24, 1:23.45" />
                 <div class="hint">Accepts: 11.24, 11.24s, 1:23.45, 1m23.45s</div>
                 <span asp-validation-for="TimeInput" class="text-danger"></span>
+
+                <div class="hint" style="margin-top: .75rem;"><b>Rounds</b> (optional; fill in at least two — the best time becomes the performance's mark)</div>
+                <div style="display: flex; gap: .5rem; flex-wrap: wrap;">
+                    <input asp-for="PrelimInput" type="text" class="form-control" style="max-width: 9rem;" placeholder="Prelim" />
+                    <input asp-for="SemiInput" type="text" class="form-control" style="max-width: 9rem;" placeholder="Semifinal" />
+                    <input asp-for="FinalInput" type="text" class="form-control" style="max-width: 9rem;" placeholder="Final" />
+                </div>
             </div>
 
             <div id="recordSeriesToggleGroup" style="@(isFieldEvent ? "" : "display: none;")">

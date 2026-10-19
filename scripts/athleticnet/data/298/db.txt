@@ -1,0 +1,49 @@
+16208|2|Long Jump|Abigail Reinhardt|NULL|182.25|0
+16209|2|Pole Vault|Payten Shetterly|NULL|108|0
+16210|2|Pole Vault|Taylor Thur|NULL|90|0
+16211|2|Shot Put|Berkeley Craddock|NULL|371.25|0
+16212|2|Shot Put|Amelia Ryncarz|NULL|397.25|0
+16213|2|Discus|Addi Reho|NULL|935|0
+16214|2|Discus|Amelia Ryncarz|NULL|1096|0
+16215|2|High Jump|Abigail Reinhardt|NULL|60|0
+16216|2|4x800M Relay|Lily Dluzynski/Leah Monhemius/Elise Mion/Keegan Wittman|634.51|NULL|0
+16217|2|4x400M Relay|Adriana Akers/Samantha Porter/Lily Dluzynski/Kayla Shook|242.78|NULL|0
+16218|2|4x200M Relay|Kiersyn Berry/Julia Reusch/Adriana Akers/Samantha Porter|110.28|NULL|0
+16219|2|4x100M Relay|Kayla Shook/Adriana Akers/Samantha Porter/Kiersyn Berry|51.34|NULL|0
+16220|2|300M Hurdles|Julia Reusch|51.23|NULL|0
+16221|2|3200M|Elise Mion|770.98|NULL|0
+16222|2|3200M|Leah Monhemius|769.4|NULL|0
+16223|2|1600M|Elise Mion|352.56|NULL|0
+16224|2|1600M|Leah Monhemius|352.29|NULL|0
+16225|2|800M|Lily Dluzynski|150.6|NULL|0
+16226|2|400M|Kayla Shook|60.41|NULL|0
+16227|2|200M|Adriana Akers|27.25|NULL|0
+16228|2|200M|Kayla Shook|27.06|NULL|0
+16229|1|100M|Elliot Jordan|12.39|NULL|0
+16230|1|100M|Clayton Sewalish|12.51|NULL|0
+16231|1|200M|Josh Powers|24.54|NULL|0
+16232|1|400M|Caleb Burke|56.42|NULL|0
+16233|1|400M|Ethan Gray|53.71|NULL|0
+16234|1|800M|Mason Clapp|128.8|NULL|0
+16235|1|800M|Matthew Jenkins|121.17|NULL|0
+16236|1|1600M|Gavin Forbes|267.06|NULL|0
+16237|1|1600M|Caleb Neville|264.94|NULL|0
+16238|1|3200M|Gavin Forbes|586.1|NULL|0
+16239|1|3200M|Caleb Neville|569.91|NULL|0
+16240|1|110M Hurdles|Lincoln Baltic|18.79|NULL|0
+16241|1|110M Hurdles|Reilly Maloney|19.63|NULL|0
+16242|1|300M Hurdles|Lincoln Baltic|47.66|NULL|0
+16243|1|300M Hurdles|Reilly Maloney|47.74|NULL|0
+16244|1|4x100M Relay|Adam Gray/Josh Powers/Elliot Jordan/Clayton Sewalish|47.47|NULL|0
+16245|1|4x200M Relay|Ethan Gray/Josh Powers/Clayton Sewalish/Bryce Neill|96.50999999999999|NULL|0
+16246|1|4x400M Relay|Ethan Gray/Matthew Jenkins/Gavin Forbes/Caleb Neville|214.77|NULL|0
+16247|1|4x800M Relay|Caleb Neville/Gavin Forbes/Noah Mion/Matthew Jenkins|489.06|NULL|0
+16248|1|Long Jump|Elliot Jordan|NULL|222|0
+16249|1|Long Jump|Grady Pamer|NULL|238|0
+16250|1|Pole Vault|Lincoln Baltic|NULL|138|0
+16251|1|Pole Vault|Reilly Maloney|NULL|108|0
+16252|1|Shot Put|Trent Amheiser|NULL|425|0
+16253|1|Shot Put|Jake Schaefer|NULL|478.25|0
+16254|1|Discus|Adam Gray|NULL|1482|0
+16255|1|Discus|Ethan Martin|NULL|1442|0
+

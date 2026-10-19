@@ -1,0 +1,30 @@
+@using CloverleafTrack.ViewModels.Shared
+@using CloverleafTrack.Web.Utilities
+@model PerformanceRoundSeriesViewModel
+
+@*
+    Prelim -> (Semi ->) Final chain. Renders NOTHING unless the athlete ran at least two rounds
+    (HasRounds), so an athlete who did not advance shows only their mark.
+    ViewData["Compact"] = true  -> single-letter labels (P / S / F) for the narrower Athlete page table.
+    ViewData["Left"]    = true  -> left-aligned (Meet page puts the chain under the athlete / relay names,
+                                  where there is room, instead of in the narrow Mark column).
+    Each arrow travels with the chip that follows it, so a wrap never leaves a dangling arrow.
+*@
+@if (Model.HasRounds)
+{
+    var compact = ViewData["Compact"] as bool? ?? false;
+    var left = compact || (ViewData["Left"] as bool? ?? false);
+    <div class="flex items-center gap-x-1 gap-y-1 mt-1 flex-wrap @(left ? "" : "justify-end") text-[11px] text-gray-500 dark:text-gray-400" role="img" aria-label="Round results">
+        @for (var i = 0; i < Model.Rounds.Count; i++)
+        {
+            var r = Model.Rounds[i];
+            var chip = r.IsBest
+                ? "border-amber-500 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 font-semibold"
+                : "border-gray-300 dark:border-gray-600";
+            <span class="inline-flex items-center gap-1 whitespace-nowrap">
+                @if (i > 0) { <span class="text-gray-400 dark:text-gray-600">&rarr;</span> }
+                <span class="px-1.5 py-0.5 rounded-full border tabular-nums @chip">@if (compact) { <text>@r.ShortLabel</text> } else { <span class="sm:hidden">@r.ShortLabel</span><span class="hidden sm:inline">@r.Label</span> } @PerformanceFormatHelper.FormatTime(r.TimeSeconds)</span>
+            </span>
+        }
+    </div>
+}

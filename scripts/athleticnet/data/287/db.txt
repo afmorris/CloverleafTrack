@@ -1,0 +1,48 @@
+15304|1|1600M|Caleb Neville|274.38|NULL|0
+15305|1|1600M|Gavin Forbes|277.64|NULL|0
+15306|1|110M Hurdles|Lincoln Baltic|19.47|NULL|0
+15307|1|4x100M Relay|Jackson Murray-Garver/Elliot Jordan/Chris Gilliland/Clayton Sewalish|51.43|NULL|0
+15308|1|4x200M Relay|Reilly Maloney/Josh Powers/Chris Gilliland/Clayton Sewalish|103.32|NULL|0
+15309|1|4x400M Relay|Ethan Gray/Matthew Jenkins/Bryce Neill/Caleb Neville|219.02|NULL|0
+15310|1|4x800M Relay|Caleb Neville/Gavin Forbes/Noah Mion/Matthew Jenkins|531.98|NULL|0
+15311|1|800M Sprint Medley|Adam Gray/Grady Pamer/Ethan Gray/Bryce Neill|105.03|NULL|0
+15312|1|4K Distance Medley|Mason Clapp/Antonio Ortega/Gavin Ferrone/Clay Gucker|729.27|NULL|0
+15313|1|1600M Intermediate Medley|Bryce Neill/Grady Pamer/Ethan Gray/Matthew Jenkins|237.87|NULL|0
+15314|1|2400M Intermediate Medley|Gavin Forbes/Isaac Baltic/Reilly Maloney/Noah Mion|387.74|NULL|0
+15315|1|Shot Put|Adam Gray|NULL|453|0
+15316|1|Shot Put|Jake Schaefer|NULL|454|0
+15317|1|Shot Put|Trent Amheiser|NULL|429|0
+15318|1|3-Person Shot Put Relay|Jake Schaefer/Adam Gray/Trent Amheiser|NULL|1336|0
+15319|1|Discus|Jacob Atkinson|NULL|1320|0
+15320|1|Discus|Adam Gray|NULL|1317|0
+15321|1|Discus|Ethan Martin|NULL|1164|0
+15322|1|3-Person Discus Relay|Jacob Atkinson/Adam Gray/Ethan Martin|NULL|3801|0
+15323|1|Long Jump|Grady Pamer|NULL|224|0
+15324|1|Long Jump|Elliot Jordan|NULL|211|0
+15325|1|Long Jump|Clayton Sewalish|NULL|187|0
+15326|1|3-Person Long Jump Relay|Grady Pamer/Elliot Jordan/Clayton Sewalish|NULL|622|0
+15327|1|High Jump|Grady Pamer|NULL|66|0
+15328|2|1600M|Elise Mion|362.62|NULL|0
+15329|2|100M Hurdles|Kiersyn Berry|18.49|NULL|0
+15330|2|100M Hurdles|Julia Reusch|21.3|NULL|0
+15331|2|4x100M Relay|Kiersyn Berry/Kayla Shook/Taylor Munchick/Adriana Akers|52.97|NULL|0
+15332|2|4x200M Relay|Abigail Reinhardt/Julia Reusch/Keegan Wittman/Kelsey Hall|122.45|NULL|0
+15333|2|4x400M Relay|Samantha Porter/Keegan Wittman/Adriana Akers/Kayla Shook|262.74|NULL|0
+15334|2|4x800M Relay|Lily Dluzynski/Samantha Porter/Kelsey Hall/Leah Monhemius|683.5|NULL|0
+15335|2|800M Sprint Medley|Kiersyn Berry/Adriana Akers/Kayla Shook/Taylor Munchick|123.89|NULL|0
+15336|2|1600M Intermediate Medley|Samantha Porter/Kayla Shook/Lily Dluzynski/Leah Monhemius|273.94|NULL|0
+15337|2|2400M Intermediate Medley|Leah Monhemius/Julia Reusch/Addi Reho/Lily Dluzynski|494.19|NULL|0
+15338|2|4K Distance Medley|Kelsey Hall/Ciara Kremer/Emily Myers/Elise Mion|935.31|NULL|0
+15339|2|Shot Put|Amelia Ryncarz|NULL|350|0
+15340|2|Shot Put|Berkeley Craddock|NULL|328|0
+15341|2|Shot Put|Anna Naftzger|NULL|310|0
+15342|2|3-Person Shot Put Relay|Amelia Ryncarz/Berkeley Craddock/Anna Naftzger|NULL|988|0
+15343|2|3-Person Discus Relay|Addi Reho/Amelia Ryncarz/Berkeley Craddock|NULL|2743|0
+15344|2|Discus|Addi Reho|NULL|983|0
+15345|2|Discus|Amelia Ryncarz|NULL|920|0
+15346|2|Discus|Berkeley Craddock|NULL|840|0
+15347|2|3-Person Long Jump Relay|Abigail Reinhardt/Keegan Wittman/Macie Huegel|NULL|455.5|0
+15348|2|Long Jump|Abigail Reinhardt|NULL|170|0
+15349|2|Long Jump|Keegan Wittman|NULL|160.5|0
+15350|2|Long Jump|Macie Huegel|NULL|125|0
+

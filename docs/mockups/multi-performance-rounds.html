@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup — Rounds (Prelim / Final) on Meet and Athlete pages</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background:#111318; color:#e5e7eb; font-family:ui-sans-serif,system-ui,sans-serif; }
+  .card { background:#1a1d27; border:1px solid #2a2d3a; border-radius:.5rem; }
+  .hdr { background:linear-gradient(to right,#d97706,#f59e0b); color:#fff; }
+  .cat { background:#1f2333; color:#9ca3af; font-size:.75rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; }
+  th { font-size:.7rem; text-transform:uppercase; color:#6b7280; letter-spacing:.05em; font-weight:600; }
+  td { border-top:1px solid #1f2333; }
+  .mark { font-variant-numeric:tabular-nums; }
+  .chip { font-size:.6rem; font-weight:700; padding:1px 5px; border-radius:3px; }
+  .chip-pr { background:#15803d; } .chip-sb { background:#1d4ed8; } .chip-sr { background:#b45309; }
+  .chip-rank { background:#374151; }
+  .rnd { display:inline-flex; gap:.25rem; align-items:center; font-size:.7rem; color:#9ca3af; margin-top:2px; flex-wrap:wrap; }
+  .rnd .r { padding:1px 6px; border-radius:999px; border:1px solid #2f3447; background:#151823; font-variant-numeric:tabular-nums; }
+  .rnd .r.best { border-color:#f59e0b; color:#fbbf24; background:rgba(245,158,11,.08); }
+  .rnd .r.dq { color:#f87171; border-color:#5b2b2b; }
+  .rnd .arrow { color:#4b5563; }
+  .att { display:inline-flex; gap:.25rem; font-size:.7rem; margin-top:2px; font-variant-numeric:tabular-nums; }
+  .att span { padding:1px 5px; border-radius:3px; background:#151823; border:1px solid #2f3447; color:#9ca3af; }
+  .att .best { color:#fbbf24; border-color:#f59e0b; background:rgba(245,158,11,.08); }
+  .att .foul { color:#6b7280; text-decoration:line-through; }
+  .row-pr { box-shadow:inset 3px 0 0 #22c55e; background:rgba(34,197,94,.05); }
+  .row-sr { box-shadow:inset 3px 0 0 #f59e0b; background:rgba(245,158,11,.07); }
+  .note { background:#1c2030; border-left:3px solid #6366f1; padding:.75rem 1rem; font-size:.8rem; color:#c7cbe0; border-radius:.25rem; }
+  .tab { padding:.4rem .9rem; border-radius:.4rem; font-size:.8rem; font-weight:600; background:#1f2333; color:#9ca3af; }
+  .tab.on { background:linear-gradient(to right,#d97706,#f59e0b); color:#fff; }
+  .sub { color:#6b7280; font-size:.75rem; }
+</style>
+</head>
+<body class="p-6">
+<div class="max-w-5xl mx-auto space-y-12">
+
+  <header>
+    <h1 class="text-2xl font-bold">Rounds &amp; full series — mockup</h1>
+    <p class="text-gray-400 text-sm mt-1">
+      One row per athlete per event showing the best mark. Athletes who advanced show a prelim → final strip; field events show all attempts.
+    </p>
+  </header>
+
+  <!-- ===================== MEET DETAIL ===================== -->
+  <section>
+    <h2 class="text-lg font-bold mb-1">1 · Meet detail — <span class="text-amber-400">Boys</span> events</h2>
+    <p class="sub mb-3">/meets/{slug} — Notes column unchanged; Mark cell gains the strip.</p>
+
+    <div class="card overflow-hidden">
+      <div class="hdr px-4 py-2 font-bold text-sm">Boys · 2026 Medina Invitational (Outdoor)</div>
+
+      <div class="cat px-4 py-1.5">Sprints</div>
+      <div class="px-4 py-2 text-sm font-semibold bg-[#181b26]">100 Meter Dash</div>
+      <table class="w-full text-sm">
+        <thead><tr><th class="px-4 py-1 text-left">Athlete</th><th class="px-4 py-1 text-right">Mark</th><th class="px-4 py-1 text-left">Notes</th></tr></thead>
+        <tbody>
+          <tr class="row-pr">
+            <td class="px-4 py-2">Jake Miller <span class="sub">· Sr</span></td>
+            <td class="px-4 py-2 text-right">
+              <div class="mark font-bold text-green-400">10.94</div>
+              <div class="rnd"><span class="r">Prelim 11.08</span><span class="arrow">→</span><span class="r best">Final 10.94</span></div>
+            </td>
+            <td class="px-4 py-2"><span class="chip chip-pr">PR</span> <span class="chip chip-rank">#4</span> 🥇</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">Owen Park <span class="sub">· Jr</span></td>
+            <td class="px-4 py-2 text-right">
+              <div class="mark font-bold">11.21</div>
+              <div class="rnd"><span class="r best">Prelim 11.21</span><span class="arrow">→</span><span class="r">Final 11.30</span></div>
+            </td>
+            <td class="px-4 py-2">🥉</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">Dylan Cruz <span class="sub">· So</span></td>
+            <td class="px-4 py-2 text-right">
+              <div class="mark font-bold">11.55</div>
+              
+            </td>
+            <td class="px-4 py-2"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="cat px-4 py-1.5 mt-2">Jumps</div>
+      <div class="px-4 py-2 text-sm font-semibold bg-[#181b26]">Long Jump</div>
+      <table class="w-full text-sm">
+        <tbody>
+          <tr class="row-sr">
+            <td class="px-4 py-2">Ethan Ross <span class="sub">· Sr</span></td>
+            <td class="px-4 py-2 text-right">
+              <div class="mark font-bold text-amber-400">22' 4.5"</div>
+              <div class="att"><span>21' 9"</span><span class="foul">F</span><span class="best">22' 4.5"</span><span>22' 1"</span><span class="foul">F</span><span>pass</span></div>
+            </td>
+            <td class="px-4 py-2"><span class="chip chip-sr">SR</span> <span class="chip chip-pr">PR</span> 🥇</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="cat px-4 py-1.5 mt-2">Relays</div>
+      <div class="px-4 py-2 text-sm font-semibold bg-[#181b26]">4x100 Meter Relay</div>
+      <table class="w-full text-sm">
+        <tbody>
+          <tr>
+            <td class="px-4 py-2">Cloverleaf A<div class="sub">Miller / Park / Ross / Cruz</div></td>
+            <td class="px-4 py-2 text-right">
+              <div class="mark font-bold">43.12</div>
+              <div class="rnd"><span class="r">Prelim 43.80</span><span class="arrow">→</span><span class="r best">Final 43.12</span></div>
+            </td>
+            <td class="px-4 py-2">🥈</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== ATHLETE DETAIL ===================== -->
+  <section>
+    <h2 class="text-lg font-bold mb-1">2 · Athlete detail — Performance by Season</h2>
+    <p class="sub mb-3">/roster/{slug} — rows are still one per meet+event; rounds fold under the mark.</p>
+
+    <div class="card overflow-hidden">
+      <div class="hdr px-4 py-2 font-bold text-sm flex justify-between"><span>2026 Outdoor</span><span class="text-xs opacity-80">24 marks · 6 PR · 1 SR</span></div>
+
+      <div class="px-4 py-2 text-sm font-semibold bg-[#181b26] flex justify-between">
+        <span>100 Meter Dash</span><span class="sub">Best 10.94 · 9 races</span>
+      </div>
+      <table class="w-full text-sm">
+        <thead><tr><th class="px-4 py-1 text-left">Date</th><th class="px-4 py-1 text-left">Meet</th><th class="px-4 py-1 text-right">Mark</th><th class="px-4 py-1 text-left">Notes</th></tr></thead>
+        <tbody>
+          <tr class="row-pr">
+            <td class="px-4 py-2 sub">May 9</td>
+            <td class="px-4 py-2">Medina Invitational</td>
+            <td class="px-4 py-2 text-right">
+              <div class="mark font-bold text-green-400">10.94</div>
+              <div class="rnd"><span class="r">P 11.08</span><span class="arrow">→</span><span class="r best">F 10.94</span></div>
+            </td>
+            <td class="px-4 py-2"><span class="chip chip-pr">PR</span> <span class="chip chip-rank">#4</span></td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 sub">May 2</td>
+            <td class="px-4 py-2">Lorain County Meet</td>
+            <td class="px-4 py-2 text-right"><div class="mark font-bold">11.12</div></td>
+            <td class="px-4 py-2"><span class="chip chip-sb">SB</span> 🥈</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 sub">Apr 18</td>
+            <td class="px-4 py-2">vs. Wellington</td>
+            <td class="px-4 py-2 text-right"><div class="mark font-bold">11.27</div></td>
+            <td class="px-4 py-2">🥇 vs. Wellington</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="px-4 py-2 text-sm font-semibold bg-[#181b26] flex justify-between mt-2">
+        <span>Shot Put</span><span class="sub">Best 48' 2"</span>
+      </div>
+      <table class="w-full text-sm">
+        <tbody>
+          <tr class="row-pr">
+            <td class="px-4 py-2 sub w-20">May 9</td>
+            <td class="px-4 py-2">Medina Invitational</td>
+            <td class="px-4 py-2 text-right">
+              <div class="mark font-bold text-green-400">48' 2"</div>
+              <div class="att"><span>46' 1"</span><span>47' 3"</span><span class="foul">F</span><span class="best">48' 2"</span><span>47' 10"</span><span class="foul">F</span></div>
+            </td>
+            <td class="px-4 py-2"><span class="chip chip-pr">PR</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== DESIGN NOTES ===================== -->
+  <section>
+    <h2 class="text-lg font-bold mb-2">3 · Underlying data model (proposal)</h2>
+    <div class="card p-4 text-sm space-y-2">
+      <div><code class="text-amber-400">Performances.Round TINYINT NOT NULL DEFAULT 0</code> — 0 = Final/only, 1 = Prelim, 2 = Semifinal, 3 = Heat (time-seeded, no advancement). Default keeps all existing rows valid.</div>
+      <div><code>UNIQUE (MeetId, EventId, AthleteId, Round) WHERE AthleteId IS NOT NULL</code> — one mark per athlete per round; relays use <code>SortedAthleteHash</code> in place of AthleteId.</div>
+      <div><b>sp_RebuildLeaderboards:</b> PB/SB/rank already use best-per-athlete (ROW_NUMBER / RANK), so they stay correct. Needs change: percentiles + <code>EventStatistics</code> currently count <i>every</i> row, so a prelim and a final from one runner would count as two marks and skew the population. Proposal: compute percentile population from each athlete's best mark per event only (then still assign each row its own percentile).</div>
+      <div><b>MeetScore:</b> Peak/Depth already take athlete-event bests; Improvement uses meet-best per athlete-event. Verify no step double-counts rounds.</div>
+      <div><b>Placing:</b> <code>MeetPlacings</code> attaches to the final round's performance when one exists.</div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

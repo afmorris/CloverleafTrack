@@ -1,0 +1,10 @@
+16256|1|4x800M Relay|Caleb Neville/Gavin Forbes/Noah Mion/Matthew Jenkins|483.7|NULL|0
+16257|2|400M|Kayla Shook|59.36|NULL|0
+16258|2|300M Hurdles|Julia Reusch|51.9|NULL|0
+16259|2|4x100M Relay|Abigail Reinhardt/Julia Reusch/Adriana Akers/Samantha Porter|52.7|NULL|0
+16260|2|4x200M Relay|Adriana Akers/Samantha Porter/Lily Dluzynski/Kayla Shook|106.91|NULL|0
+16261|2|4x400M Relay|Adriana Akers/Samantha Porter/Lily Dluzynski/Kayla Shook|243.74|NULL|0
+16262|2|4x800M Relay|Lily Dluzynski/Leah Monhemius/Elise Mion/Keegan Wittman|615.69|NULL|0
+16263|2|High Jump|Abigail Reinhardt|NULL|58|0
+16264|2|Pole Vault|Payten Shetterly|NULL|112|0
+

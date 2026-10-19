@@ -37,6 +37,17 @@ public class PerformanceEntryViewModel
         .Select(n => new PerformanceAttemptInputViewModel { AttemptNumber = n })
         .ToList();
 
+    // Running/relay rounds — optional, additive. When at least two are filled in, Time above is
+    // overwritten with the best (min) round time. Leave all blank for the normal single-mark path.
+    [Display(Name = "Prelim time")]
+    public string? PrelimInput { get; set; }
+
+    [Display(Name = "Semifinal time")]
+    public string? SemiInput { get; set; }
+
+    [Display(Name = "Final time")]
+    public string? FinalInput { get; set; }
+
     // For display
     public string MeetName { get; set; } = string.Empty;
     public DateTime MeetDate { get; set; }
