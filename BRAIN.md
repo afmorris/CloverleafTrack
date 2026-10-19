@@ -2273,3 +2273,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** relay event names are `4x400M Relay` / `4x1600M Relay`. Seven relay performances still lack four named legs (2021 SPIRE and Cloverleaf Indoor #1, 2025 D2 District boys 4x800): athletic.net's results pages only show a collapsed "Relay Team" toggle, so the legs are not in the page text and need the toggle expanded or another source.
 
 **Key files:** `docs/imports/relay-fixes.sql`.
+
+### [C79] SPIRE 2021 Boys 4x400 Relay Legs; Other Missing Relays Not Resolvable
+
+**What changed:** imported the 2021 SPIRE Ohio Championship Preview boys 4x400M Relay (4:08.95, 9th) with legs Alexander Baughman, Patrick McConnell, Cole Yagersz, Chase Young (`docs/imports/spire-2021-boys-4x400.sql`).
+
+**Why:** the "7 relays without four resolvable legs" in the results-level report were never imported (they are absent from the DB, not leg-less rows). The owner supplied these legs from the meet video; leg 3 (Yagersz) is a best guess, and the order is as seen on video.
+
+**Watch out:** neither athletic.net (relay rows are just a "Relay Team" label with no athletes) nor MileSplit (Hy-Tek lists no legs for Cloverleaf) names legs for the 2021 SPIRE/Cloverleaf Indoor #1 or 2025 D2 District boys 4x800 relays. They stay un-imported until the legs are known.
+
+**Key files:** `docs/imports/spire-2021-boys-4x400.sql`.
