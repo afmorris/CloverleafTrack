@@ -2283,3 +2283,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** neither athletic.net (relay rows are just a "Relay Team" label with no athletes) nor MileSplit (Hy-Tek lists no legs for Cloverleaf) names legs for the 2021 SPIRE/Cloverleaf Indoor #1 or 2025 D2 District boys 4x800 relays. They stay un-imported until the legs are known.
 
 **Key files:** `docs/imports/spire-2021-boys-4x400.sql`.
+
+### [C80] Seated Shot Put Marks in the Wrong Column; Missing Donahue Wheelchair Results
+
+**What changed:** `docs/imports/seated-donahue-fixes.sql` (1) moves 5 `Seated Shot Put` marks (Donahue 2019 Triway/Nikki Reynolds, 2021 Medina/Nikki Reynolds; Crist 2019 Triway) from `TimeSeconds` to `DistanceInches`, and (2) imports 7 missing Bridgette Donahue seated results: 2018 Cowen Redbird 100M 49.85 / 400M 3:26.55 / shot 6' 10"; 2018 PTC 100M 42.78 / 400M 3:29.46 / shot 7' 0.75"; 2021 Medina Relays 100M 34.61.
+
+**Why:** the results-level comparison left 17 "unplaced" rows. 9 were team-score lines and 2 are Savannah Reho (ignored on purpose). 6 were Donahue wheelchair rows whose names MileSplit lists as "Donahue (wheeled)" or "Donahue, Bridgette" with a `W` grade. The 5 misplaced marks were found while checking her rows: a field mark in `TimeSeconds` is invisible to ranks, leaderboards and percentiles.
+
+**Watch out:** two Green Twilight 2025 relays (Mixed 4x200 1:51.20, 8th; a 9:59.12 relay, 5th) are on MileSplit with no leg names, so they are still not imported. The SQL aborts unless exactly 5 mis-stored seated shot put rows exist. Check with `Performances` joined to `Events` where `EventType` is a field type and `TimeSeconds IS NOT NULL`.
+
+**Key files:** `docs/imports/seated-donahue-fixes.sql`.
