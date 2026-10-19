@@ -1,0 +1,800 @@
+Licensed to Finish Timing                                  12/14/2025 9:05:23 AM
+
+                   University of Akron Rust Buster HS Open Meet
+                                 December 13, 2025
+                       Stile Fieldhouse, University of Akron
+
+Event 1  Girls 60 Meter Dash Prelim 
+==================================================================================
+Advance:  Top 8 Times
+    Name                         Year School                            Prelims H#
+==================================================================================
+Prelims
+  1 Patilla, Marcella              11 Ohio Speed Academy TFC               7.65  6 
+  2 Hartgrove, Journee             12 Wester. South                        7.70  5 7.691
+  3 White, Ric'Keya                12 New Albany                           7.70  1 7.696
+  4 Wright, Brionna                11 Gah. Lincoln                         7.71  5 
+  5 Dixon, Moriah                  10 Gah. Lincoln                         7.82  2 
+  6 Bennett, Aliyah                12 Gah. Lincoln                         7.87  3 
+  7 Brittman, Skylar               11 Wester. Central                      7.88  8 
+  8 Reiter, Leah                   11 Big Walnut                           7.91  3 
+  9 Freeman, Latorian              10 Gah. Lincoln                         7.93  4 
+ 10 Bradhurst, Raegan              11 Ohio Speed Academy TFC               8.05  7 
+ 11 Jewett, Lindsey                12 Col. DeSales                         8.06  4 
+ 12 Lafontant, Alayna              25 Unattached                           8.08  3 8.071
+ 13 Newton, Janelle                10 El1te Spr1nt Athlet1cs               8.08  6 8.078
+ 14 Pusateri, Amelia               12 Col. DeSales                         8.09  1 
+ 15 Brown, Masyn                   12 Gah. Lincoln                         8.11  3 8.102
+ 16 Anderson, Paris                10 Northland                            8.11  5 8.105
+ 17 Hutchinson, Celeste            12 Beechcroft                           8.12  7 
+ 18 Douglas, Brittany              10 Beechcroft                           8.15  6 
+ 19 Clark, Elise                   10 Ohio Speed Academy TFC               8.26  7 
+ 20 Evans, Mabyn                   11 Ohio Speed Academy TFC               8.28  8 8.274
+ 21 Meyer, Hailey                  11 Plus 2 University- TCC               8.28  5 8.279
+ 22 Jones-Bailey, Ashlynn          10 Gah. Lincoln                         8.29  2 8.284
+ 22 Hopkins-Hunt, Alteiona         12 Hartley                              8.29  1 8.284
+ 24 Bouldin, Abrianna              10 Mercy McAuley                        8.31  7 
+ 25 Harris, Cori                   10 Hartley                              8.34  2 
+ 26 Barnes, Clayesha                9 Richmond Hts.                        8.37  4 
+ 27 DeLong, Aubree                 12 Philo                                8.40  4 
+ 28 McCullough-Taylor, Gabrielle   10 Bedford                              8.41  3 
+ 29 Wheatley, Elliana Ellie        10 Wor. Kilbourne                       8.53  5 
+ 30 Afriyie, Chelsea               12 Wor. Kilbourne                       8.57  2 
+ 31 Leindecker, Isabelle           12 Unattached                           8.59  4 
+ 32 Everhart, Gabriela              9 CF Northwest                         8.68  5 
+ 33 Gilbert, Emilea                12 Wester. Central                      8.70  8 
+ 34 Kelly, Kennedy                  7 Unattached                           8.71  8 
+ 35 Theodosopoulos, Jaylee          9 Ohio Speed Academy TFC               8.95  4 
+ 36 Iyer, Rhea                     10 Dub. Jerome                          9.13  3 
+ 37 Woods, Linda                   11 Ravenna                              9.17  8 
+ 38 Massey, Myjael                 10 Ak. North                            9.20  5 
+ 39 Kerens, Haley                  12 Chardon NDCL                         9.24  8 
+ 40 lewis, nyla                     9 John Hay                             9.26  1 
+ 41 Williford, Mia                  9 Richmond Hts.                        9.27  2 
+ 42 Livingstone, Roniesha          10 John Hay                             9.33  3 
+ 43 jackson, aliccia                9 John Hay                             9.55  8 
+ 44 Wright, Joslyn                 12 CF Northwest                         9.82  1 
+ 45 Randall, Kyleigh                9 Wor. Kilbourne                      10.11  7 
+ 46 Minor, Trinity                  9 Ak. North                           11.27  7 
+
+Event 1  Girls 60 Meter Dash 
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+Finals
+  1 White, Ric'Keya                12 New Albany                           7.50  1 
+  2 Patilla, Marcella              11 Ohio Speed Academy TFC               7.55  1 
+  3 Dixon, Moriah                  10 Gah. Lincoln                         7.70  1 
+  4 Hartgrove, Journee             12 Wester. South                        7.72  1 
+  5 Bennett, Aliyah                12 Gah. Lincoln                         7.86  1 
+  6 Reiter, Leah                   11 Big Walnut                           7.94  1 
+  7 Brittman, Skylar               11 Wester. Central                      8.00  1 
+
+Event 2  Boys 60 Meter Dash Prelim 
+==================================================================================
+Advance:  Top 8 Times
+    Name                         Year School                            Prelims H#
+==================================================================================
+Prelims
+  1 Young, Robert                  12 Wester. Central                      7.07  2 
+  2 Newton, Jonathan               10 El1te Spr1nt Athlet1cs               7.08  2 
+  3 Forrest, Tahj                  11 Dub. Jerome                          7.09  5 
+  4 Kerr, Jay'Vier                 12 Glenville                            7.12  7 
+  5 Harris, Kendell                12 Unattached                           7.13  1 
+  6 Bonsu, Elijah                  12 Dub. Jerome                          7.14  5 
+  7 Perrine, Jayden                12 Bay                                  7.16  3 
+  8 Rafferty, Peter                12 Ohio Speed Academy TFC               7.19  4 
+  9 Mahon, Aidan                   12 Philo                                7.20  6 
+ 10 Swartwout, Silas               11 Colerain                             7.22  7 
+ 11 Bosley, Kwame                  12 Dub. Jerome                          7.30  2 
+ 12 Foster, Yannick                11 Hartley                              7.31  1 
+ 13 Tran, David                    11 Ohio Speed Academy TFC               7.32  8 
+ 14 Stokes, Jahmari                12 Hartley                              7.34  2 
+ 15 Bihnmyer, Griffin              12 Dub. Jerome                          7.36  6 
+ 16 Smith, Anthony                 11 Ohio Speed Academy TFC               7.40  6 
+ 17 Johhnson, TaeVeion              9 Bedford                              7.45  8 
+ 18 Williams, Keon                 11 Wester. Central                      7.46  4 
+ 19 Kamara, Sheiku                 11 Wester. Central                      7.49  3 
+ 20 Stone, Walker                  11 Nelsonville-York                     7.50  1 
+ 21 Williams Jr., Joel             12 Dub. Jerome                          7.52  4 7.511
+ 22 Jones, Riley                   12 Berea-Midpark                        7.52  5 7.517
+ 23 LeFlore, Nicholas              10 Hartley                              7.54  8 
+ 24 Benton, Triston                 9 Bedford                              7.68  4 7.673
+ 25 Mishra, Sush                   12 Dub. Jerome                          7.68  5 7.674
+ 26 Promise) Achank, Akawung       12 Northland                            7.69  4 7.683
+ 27 Ehler, Max                     12 Ohio Speed Academy TFC               7.69  3 7.686
+ 28 Savage, Jacob                  12 Philo                                7.74  1 
+ 29 Dunbar, Alex                    9 Wester. Central                      7.76  8 
+ 30 Mabra-Callahan, Amir           11 Dub. Jerome                          7.80  7 
+ 31 Gordon, Ben                     9 Ohio Speed Academy TFC               7.81  5 
+ 32 Ozodue, Kendrick               12 Dub. Jerome                          7.83  3 
+ 33 Mahon, Colton                   9 Philo                                7.91  4 7.907
+ 34 McDougald, Malachi             12 Hartley                              7.91  6 7.909
+ 35 Knott, Jason                   10 Beechcroft                           7.95  3 
+ 36 Klaber, Kamryn                 11 Dub. Jerome                          7.96  6 
+ 37 Charlton, Isaiah                9 Benedictine                          8.02  3 
+ 38 Mitchell, Nick                 10 Hartley                              8.04  7 
+ 39 Totten, Gavyn                   8 Ohio Speed Academy TFC               8.05  2 
+ 40 Walker II, Lawrence            10 Hartley                              8.06  8 
+ 41 Jewett, Ben                    10 Col. DeSales                         8.07  5 
+ 42 CARPENTER, Nash                10 Philo                                8.14  8 
+ 43 Miller, Beckett                11 Philo                                8.17  1 
+ 44 Miller, Marshall               10 Wor. Kilbourne                       8.23  8 
+ 45 Newsom, Robert                 12 Wor. Kilbourne                       8.28  7 
+ 46 Thornton, Landon               10 Hartley                              8.33  6 
+ 47 Walton, Henry                   8 Ohio Speed Academy TFC               8.37  1 
+ 48 Hedges, James                  11 Philo                                8.42  4 
+ 49 Maple, Aiden                   11 Philo                                8.44  3 
+ 50 Tamene, Amanuel                11 Hartley                              8.46  2 
+ 51 Gliha, Grady                    9 Chardon NDCL                         9.08  6 
+
+Event 2  Boys 60 Meter Dash 
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+Finals
+  1 Young, Robert                  12 Wester. Central                      7.03  1 
+  2 Forrest, Tahj                  11 Dub. Jerome                          7.04  1 
+  3 Perrine, Jayden                12 Bay                                  7.05  1 
+  4 Newton, Jonathan               10 El1te Spr1nt Athlet1cs               7.06  1 
+  5 Kerr, Jay'Vier                 12 Glenville                            7.08  1 
+  6 Rafferty, Peter                12 Ohio Speed Academy TFC               7.11  1 
+  7 Harris, Kendell                12 Unattached                           7.15  1 
+  8 Bonsu, Elijah                  12 Dub. Jerome                          7.16  1 
+
+Event 3  Girls 60 Meter Hurdles Prelim 
+==================================================================================
+Advance:  Top 8 Times
+    Name                         Year School                            Prelims H#
+==================================================================================
+Prelims
+  1 White, Ric'Keya                12 New Albany                           8.75  1 
+  2 Davis, Avery                   12 Brookside                            9.21  1 
+  3 Freeman, Latorian              10 Gah. Lincoln                         9.26  2 
+  4 Jones-Bailey, Ashlynn          10 Gah. Lincoln                         9.44  4 9.431
+  5 Reiter, Leah                   11 Big Walnut                           9.44  3 9.432
+  6 Hicks, Kylee                   12 Pick. North                          9.52  1 
+  7 DeLong, Aubree                 12 Philo                                9.59  3 
+  8 Douglas, Brittany              10 Beechcroft                           9.64  3 9.631
+  9 Nolletti, Brooke               11 Unattached                           9.64  4 9.635
+ 10 Delvecchio, Jenna              12 EOSAA Track Club                     9.76  2 
+ 11 Deister, Kara                  12 West Geauga                          9.81  4 
+ 12 Gonya, Averie                  11 Col. DeSales                         9.83  4 
+ 13 Buckley, Sam                   10 Amanda-Clearcreek                    9.85  2 
+ 14 Brim, Imani                    10 Ohio Speed Academy TFC               9.91  3 
+ 15 Weber, Julia                    9 Hartley                             10.01  1 
+ 16 Pope, Ivy                      11 Wor. Kilbourne                      10.69  4 
+ 17 stewart, amirah                12 Northland                           10.86  3 
+ 18 Hood, J'Me                     11 Lorain                              11.16  4 
+
+Event 3  Girls 60 Meter Hurdles 
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+Finals
+  1 White, Ric'Keya                12 New Albany                           8.50  1 
+  2 Freeman, Latorian              10 Gah. Lincoln                         9.03  1 
+  3 Douglas, Brittany              10 Beechcroft                           9.04  1 
+  4 Hicks, Kylee                   12 Pick. North                          9.45  1 
+  5 Jones-Bailey, Ashlynn          10 Gah. Lincoln                         9.46  1 
+  6 Davis, Avery                   12 Brookside                            9.49  1 
+  7 DeLong, Aubree                 12 Philo                                9.54  1 
+  8 Reiter, Leah                   11 Big Walnut                           9.58  1 
+
+Event 4  Boys 60 Meter Hurdles Prelim 
+==================================================================================
+Advance:  Top 8 Times
+    Name                         Year School                            Prelims H#
+==================================================================================
+Prelims
+  1 Price Jr, Roy                  10 Plus 2 University- TCC               8.44  2 
+  2 McDowell, Allan                11 Berea-Midpark                        8.51  2 
+  3 McNeill, Collin                11 Wor. Kilbourne                       8.52  4 
+  4 Lichter, Taurian               11 Plus 2 University- TCC               8.54  3 
+  5 Smith, Anthony                 11 Ohio Speed Academy TFC               8.59  1 
+  6 Bergsten, Chase                10 Ohio Speed Academy TFC               8.61  3 
+  7 Myers, Cy                      12 Hil. Bradley                         8.64  1 
+  8 Laubacher, Evan                12 Mass. Perry                          8.95  4 
+  9 Donatelli, Salvatore           11 Unattached                           8.97  4 
+ 10 Stanford, Remy                 13 Unattached                           9.02  3 
+ 11 Williams, Diaz                 11 Beachwood                            9.23  1 
+ 12 Keener, Noah                   11 Ohio Speed Academy TFC               9.49  3 
+ 13 Dunbar, Alex                    9 Wester. Central                      9.66  4 
+ 14 Spraggins, Camren              11 Lorain                               9.99  4 
+ 15 Sepelak, Andrew                11 Chardon NDCL                        10.10  1 
+ 16 CARPENTER, Nash                10 Philo                               10.48  1 
+ 17 Silva, Max                     12 Berea-Midpark                       10.52  4 10.511
+ 18 Meek, Alex                     10 Wor. Kilbourne                      10.52  3 10.520
+ 19 Dawson, James                  11 CF Northwest                        10.60  2 
+ 20 Mahon, Colton                   9 Philo                               10.66  4 
+ 21 Wang, Max                      11 Wor. Kilbourne                      10.76  1 
+ 22 DiPasquale, Brandon            11 Chardon NDCL                        10.90  2 
+ 23 McPeak, Kohen                  11 Ravenna                             11.13  3 
+ 24 Miller, Beckett                11 Philo                               11.33  2 
+
+Event 4  Boys 60 Meter Hurdles 
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+Finals
+  1 Price Jr, Roy                  10 Plus 2 University- TCC               8.23  1 
+  2 McNeill, Collin                11 Wor. Kilbourne                       8.39  1 
+  3 Bergsten, Chase                10 Ohio Speed Academy TFC               8.55  1 
+  4 McDowell, Allan                11 Berea-Midpark                        8.57  1 
+  5 Lichter, Taurian               11 Plus 2 University- TCC               8.58  1 
+  6 Smith, Anthony                 11 Ohio Speed Academy TFC               8.61  1 
+  7 Laubacher, Evan                12 Mass. Perry                          8.77  1 
+
+Event 5  Girls 1600 Meter Run 
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+  1 Kitsmiller, Caroline           11 Hartley                           5:28.41  1 
+  2 Kheyfets, Alexandra            12 Beachwood                         5:30.62  1 
+  3 Vonderwell, Sydney             11 Hartley                           5:34.71  1 
+  4 Hershner, Gwen                 10 Mount Gilead                      5:38.77  1 
+  5 Dugan, Arriana                 10 Maumee                            5:50.08  1 
+  6 Killian, Maggie                10 North Catholic 07                 5:53.76  1 
+  7 Driehorst, Tessa               12 North Catholic 07                 6:01.32  1 
+  8 Niasse, Kadija                 10 Bedford                           6:42.98  1 
+  9 Ruic, Elizabeth                12 Lorain                            7:32.67  1 
+ 10 Scott, Celeste                 10 John Hay                          7:43.14  1 
+ 11 Walker, Aaryn                  10 John Hay                          8:08.80  1 
+ 12 price, laila                   11 John Hay                         10:09.91  1 
+
+Event 6  Boys 1600 Meter Run 
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+  1 Roberts, Lucas                 12 Berea-Midpark                     4:39.48  1 
+  2 Bartlett, Henry                10 Mount Gilead                      4:39.94  1 
+  3 Sparks, Micah                  10 Maplewood                         4:42.24  1 
+  4 Burgos-Perez, Jonathan         11 Unattached                        4:45.19  1 
+  5 Stalnaker, Liam                11 Mount Gilead                      4:49.31  1 
+  6 Nedved, Kyle                   11 Chardon NDCL                      4:50.49  1 
+  7 McPeak, Tyler                  10 Maplewood                         4:57.50  1 
+  8 Shaw, Rowan                    11 Mount Gilead                      4:58.27  1 
+  9 Milk, Tyler                    11 Chardon NDCL                      5:02.49  1 
+ 10 Ward, Leo                      10 AEC XC Club                       5:05.14  2 
+ 11 Powell, Aaron                  10 Maumee                            5:07.58  2 
+ 12 Danielski, Bryson              10 Maumee                            5:11.94  2 
+ 13 Timko, Jake                    12 Berea-Midpark                     5:18.35  2 
+ 14 Consuegra, Tyson               10 Plum 07                           5:21.43  2 
+ 15 McLain, Aiden                   9 Mount Gilead                      5:33.68  1 
+ 16 Gil, Esteban                   10 Lorain                            5:55.28  2 
+ 17 Main, Alexander                10 Wor. Kilbourne                    6:02.33  2 
+ 18 Sieberth, Brennan              11 Wor. Kilbourne                    6:02.76  2 
+ 19 Thear, Zachary                 10 North Catholic 07                 6:02.92  2 
+ 20 Chim, Steven                   11 Richmond Hts.                     6:03.24  2 
+ 21 Curson, Eithan                  9 Maumee                            6:17.19  2 
+ 22 Reith, Lincoln                  7 Providence Pastures Running Cl        6:17.81  2 
+ 23 Eskridge, Micah                12 Lorain                            6:20.43  1 
+ 24 Engler, August                 10 Wor. Kilbourne                    6:24.33  2 
+ 25 Gladd, Logan                   10 Maplewood                         6:26.24  1 
+
+Event 7  Girls 400 Meter Dash   
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+  1 Wile, Anna                     12 Hil. Davidson                       55.69  1 
+  2 Antrum, Jayla                  12 Avon                                58.79  2 
+  3 Lundine, Sarah                 12 Wor. Kilbourne                      59.20  1 
+  4 Lafontant, Alayna               9 Elizabeth Forward 07                59.42  1 
+  5 Spalding, Morgan               11 Ohio Speed Academy TFC            1:01.69  1 
+  6 Davis, Avery                   12 Brookside                         1:03.01  7 
+  7 Savage, Abby                   12 Delta                             1:03.42  2 
+  8 Kelly, Kennedy                  7 Unattached                        1:03.61  2 
+  9 Wright, Brionna                11 Gah. Lincoln                      1:03.68  1 
+ 10 Cavin, Evelyn                   9 Wor. Kilbourne                    1:04.34  3 
+ 11 Raleigh, Kristin                9 Gah. Lincoln                      1:04.90  3 
+ 12 Tubaugh, Addison               10 Plus 2 University- TCC            1:04.96  3 
+ 13 Edger, Lucy                    10 Chardon NDCL                      1:05.07  4 
+ 14 Owens, Izzy                     9 Richmond Hts.                     1:06.17  5 
+ 15 Barry, Audri                   12 Col. DeSales                      1:06.19  4 
+ 16 Everhart, Gabriela              9 CF Northwest                      1:06.60  4 
+ 17 Carter, Aloni                  10 Hartley                           1:08.17  4 
+ 18 Chavez, Viviana                11 Lorain                            1:08.40  3 
+ 19 Mumin, Samirah                 11 John Hay                          1:08.94  3 
+ 20 Barnes, Clayesha                9 Richmond Hts.                     1:10.07  4 
+ 21 Sullivan, Kendall              12 Bedford                           1:10.95  4 
+ 22 Mumins, Saniyah                10 John Hay                          1:12.11  5 
+ 23 Jackson, Anivea                 9 Richmond Hts.                     1:12.95  4 1:12.945
+ 24 Iyer, Rhea                     10 Dub. Jerome                       1:12.95  6 1:12.950
+ 25 Willams, Logan                 12 John Hay                          1:13.06  5 
+ 26 mason, aniyha                   9 John Hay                          1:17.43  6 
+ 27 lewis, nyla                     9 John Hay                          1:19.41  6 
+ 28 brooks, miracle                 9 John Hay                          1:19.86  7 
+ 29 cadette, neveah                 9 John Hay                          1:20.08  5 
+ 30 munns, amayah                   9 John Hay                          1:25.22  5 
+ 31 fuqua, mya                      9 John Hay                          1:31.84  7 
+ 32 Monroe, Jaice                   9 John Hay                          1:45.87  6 
+ 33 jackson, aliccia                9 John Hay                          1:51.48  6 
+
+Event 8  Boys 400 Meter Dash   
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+  1 Dufrenot, Karl                 12 Upper Arlington                     49.98  1 
+  2 Taylor JR., Fernado            12 Glenville                           51.90  1 
+  3 Ahmed, Amjad                   12 Wester. Central                     52.22  1 
+  4 Donatelli, Salvatore           11 Unattached                          53.04  4 
+  5 Gallagher, Collin              10 Berea-Midpark                       53.53  3 
+  6 LeFlore, Nicholas              10 Hartley                             53.77  3 
+  7 Stanford, Remy                 13 Unattached                          53.94  7 
+  8 Moultrie, Braylon              11 Unattached                          53.97  1 
+  9 Alten, Ethan                   12 Berea-Midpark                       54.03  2 
+ 10 Fedor, Emory                   12 Unattached                          54.17  3 
+ 11 Wagner, Noah                   10 Maumee                              54.68  2 
+ 12 Peterson, Elias                11 Calvary Christian                   54.77  2 
+ 13 Shaffer, Kaden                 12 Mineral Ridge                       55.35  7 
+ 14 Dunbar, Alex                    9 Wester. Central                     55.47  3 
+ 15 Busse, Chandler                10 Mineral Ridge                       55.48  6 
+ 16 Wimberly, Logan                11 Berea-Midpark                       56.41  2 
+ 17 Masters, Jack                  10 Ravenna                             56.49  5 
+ 18 Tarry, Braden                  10 Unattached                          56.74  6 
+ 19 Williams, Diaz                 11 Beachwood                           57.21  4 
+ 20 Benton, Triston                 9 Bedford                             57.40  4 
+ 21 Kerr, Marquis                  10 Cle. Heights                        57.41  7 
+ 22 Brown, Tristan                 12 Beachwood                           57.46  7 
+ 23 Lewis, Javion                  10 Berea-Midpark                       57.75  4 
+ 24 Thompson, Issac                10 Ravenna                             57.78  7 
+ 25 Wilson, Darius                 11 Ravenna                             57.80  6 
+ 26 Mitchell, Nick                 10 Hartley                             58.03  4 
+ 27 McWilliams, Nicholas            9 Richmond Hts.                       58.69  5 
+ 28 smith, jihad                   10 Ak. North                           58.86  5 
+ 29 Powell, Aaron                  10 Maumee                            1:01.19  5 
+ 30 Purnell, Ahmad                 10 Unattached                        1:01.79  1 
+ 31 Loppe, Maurice                 10 Lorain                            1:02.16  6 
+ 32 Askew, Latavius                 9 Ravenna                           1:02.73  6 
+ 33 Del Balso, Joey                11 Chardon NDCL                      1:02.82  5 
+ 34 terry, quincy                  10 Ak. North                         1:03.00  5 
+ 35 Spraggins, Camren              11 Lorain                            1:03.03  5 
+ 36 Jones, Samuel                   9 Wor. Kilbourne                    1:03.40  5 
+ 37 bryant, Nicholas               10 Ak. North                         1:04.51  6 
+ 38 Maple, Aiden                   11 Philo                             1:04.97  5 
+ 39 wilson, Tony                    9 Ak. North                         1:10.18  7 
+ 40 Gayles, Zy'on                   9 Ak. North                         1:12.98  7 
+ 41 atkinson, bryan                11 Ak. North                         1:20.13  7 
+
+Event 9  Girls 800 Meter Run   
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+  1 Crabtree, Nora                  9 Dub. Coffman                      2:22.93  1 
+  2 Abdul-Basser, Meena            10 Beachwood                         2:23.07  1 
+  3 Mordhorst, Ava                 12 Ohio Speed Academy TFC            2:25.32  1 
+  4 Eiferman, Abigail              11 Dub. Coffman                      2:28.36  1 
+  5 Richard, Tateum                10 Minerva                           2:29.35  1 
+  6 Neely, Lindy                   11 Ohio Speed Academy TFC            2:29.76  1 
+  7 Haunn, Maria                   11 Col. DeSales                      2:31.92  1 
+  8 Widmer, Eilash                 10 Wayne County Track Club           2:34.35  1 
+  9 Hershner, Gwen                 10 Mount Gilead                      2:36.35  1 
+ 10 Driehorst, Tessa               12 North Catholic 07                 2:39.81  1 
+ 11 Burks, Selene                  11 Gah. Lincoln                      2:42.14  2 
+ 12 Killian, Maggie                10 North Catholic 07                 2:44.60  1 
+ 13 Ohl, Kate                       9 Gah. Lincoln                      2:51.91  1 
+ 14 Niasse, Kadija                 10 Bedford                           2:55.98  2 
+ 15 Ruic, Elizabeth                12 Lorain                            3:10.01  2 
+ 16 Finley, Ja'el                   7 Richmond Hts.                     3:16.98  2 
+ 17 Wishart, Anna                   9 North Catholic 07                 3:18.25  2 
+ 18 Lindsey, Jayla                 12 John Hay                          3:28.32  2 
+ 19 Safo, Deahana                   9 Richmond Hts.                     3:49.28  2 
+ 20 nelson, jerelle                12 John Hay                          4:19.48  2 
+ 21 price, laila                   11 John Hay                          4:27.51  2 
+
+Event 10  Boys 800 Meter Run   
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+  1 Foisset, Ryan                  12 Wor. Kilbourne                    2:03.40  1 
+  2 Chapman, Josiah                11 Bedford                           2:04.34  1 
+  3 Mehalic, Zander                11 Ravenna                           2:12.53  2 
+  4 McKamey, Ethan                 10 Ravenna                           2:20.68  2 
+  5 McWilliams, Nicholas            9 Richmond Hts.                     2:21.39  1 
+  6 McSears, Drew                  11 Richmond Hts.                     2:21.48  1 
+  7 Maxwell, Hayden                10 Midview                           2:22.75  2 
+  8 Wagner, Noah                   10 Maumee                            2:26.16  1 
+  9 Danielski, Bryson              10 Maumee                            2:27.05  1 
+ 10 Tarry, Braden                  10 Unattached                        2:27.84  2 
+ 11 Jamison, Bryce                 10 Midview                           2:29.11  2 
+ 12 Rivera, Abimelec               11 Lorain                            2:33.29  2 
+ 13 Purnell, Ahmad                 10 Unattached                        2:38.34  2 
+ 14 echols, justin                 11 Ak. North                         2:39.72  2 
+ 15 Hicks, Eziah                   11 Ravenna                           2:41.80  2 
+ 16 Stubbs, Gavin                  11 Ak. North                         2:43.20  2 
+ 17 Thear, Zachary                 10 North Catholic 07                 2:45.16  2 
+ 18 Sieberth, Brennan              11 Wor. Kilbourne                    2:47.21  2 
+ 19 Engler, August                 10 Wor. Kilbourne                    2:59.79  2 
+
+Event 11  Girls 200 Meter Dash   
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+  1 Patilla, Marcella              11 Ohio Speed Academy TFC              25.04  1 
+  2 Bennett, Aliyah                12 Gah. Lincoln                        25.26  1 
+  3 Hartgrove, Journee             12 Ohio Speed Academy TFC              25.75  2 
+  4 Pusateri, Amelia               12 Col. DeSales                        25.86  2 
+  5 Schomer, Samantha              11 Del. Hayes                          25.90  3 
+  6 Bradhurst, Raegan              11 Ohio Speed Academy TFC              26.09  1 
+  7 Reiter, Leah                   11 Big Walnut                          26.28  4 
+  8 Hutchinson, Celeste            12 Beechcroft                          26.36  3 
+  9 Newton, Janelle                10 El1te Spr1nt Athlet1cs              26.43  4 
+ 10 Anderson, Paris                10 Northland                           26.48  3 
+ 11 Jewett, Lindsey                12 Col. DeSales                        26.70  1 
+ 12 Meyer, Hailey                  11 Plus 2 University- TCC              26.81  2 
+ 13 Evans, Mabyn                   11 Ohio Speed Academy TFC              26.83  3 
+ 14 Harris, Cori                   10 Hartley                             27.13  4 
+ 15 Pennington, Sam                11 Logan                               27.21  3 
+ 16 Hicks, Kylee                   12 Pick. North                         27.31  2 
+ 17 Bouldin, Abrianna              10 Mercy McAuley                       27.49  2 
+ 18 Brim, Imani                    10 Ohio Speed Academy TFC              27.60  5 
+ 19 Clark, Elise                   10 Ohio Speed Academy TFC              27.62  5 
+ 20 Leindecker, Isabelle           12 Unattached                          27.67  6 
+ 21 Conner, Ja'Niya                11 Bedford                             27.80  7 
+ 22 Savage, Abby                   12 Delta                               27.91  5 
+ 23 Afriyie, Chelsea               12 Wor. Kilbourne                      28.14  6 
+ 24 Buckley, Sam                   10 Amanda-Clearcreek                   28.16  7 
+ 25 McCullough-Taylor, Gabrielle   10 Bedford                             28.29  5 
+ 26 Hopkins-Hunt, Alteiona         12 Hartley                             28.44  6 
+ 27 Kelly, Kennedy                  7 Unattached                          28.47  2 
+ 28 DeLong, Aubree                 12 Philo                               28.62  7 
+ 29 Brown, Aubrey                   9 Wor. Kilbourne                      29.41  7 
+ 30 Milanova, Daniela              10 Wor. Kilbourne                      29.44  7 
+ 31 Chavez, Viviana                11 Lorain                              29.63  8 
+ 32 Baker, Lauren                  10 Gah. Lincoln                        29.79  8 
+ 33 Sullivan, Kendall              12 Bedford                             30.48  8 
+ 34 Carter, Aloni                  10 Hartley                             30.83  9 
+ 35 brooks, miracle                 9 John Hay                            31.28  9 
+ 36 Henderson, Laila                9 Chardon NDCL                        31.40 10 
+ 37 Bender, Avery                   9 Chardon NDCL                        32.43  9 
+ 38 Nunley, Jerminnie               9 Richmond Hts.                       33.00  8 
+ 39 Dubeansky, Emily                9 Chardon NDCL                        33.38 10 
+ 40 Woods, Linda                   11 Ravenna                             33.51 10 
+ 41 Null, Kensie                    9 Chardon NDCL                        36.49 10 
+
+Event 12  Boys 200 Meter Dash   
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+  1 Perrine, Jayden                12 Bay                                 22.05  1 
+  2 Mahon, Aidan                   12 Philo                               22.56  2 22.553
+  3 Newton, Jonathan               10 El1te Spr1nt Athlet1cs              22.56 10 22.556
+  4 Bonsu, Elijah                  12 Dub. Jerome                         22.60  2 
+  5 Swartwout, Silas               11 Colerain                            22.75  1 
+  6 Harris, Kendell                12 Unattached                          23.12  3 
+  7 Stokes, Jahmari                12 Hartley                             23.16  3 
+  8 Tran, David                    11 Ohio Speed Academy TFC              23.26 11 
+  9 Thompson, Nicholas             12 Hartley                             23.36  1 
+ 10 Forrest, Tahj                  11 Dub. Jerome                         23.38  2 
+ 11 Bihnmyer, Griffin              12 Dub. Jerome                         23.45  1 23.442
+ 12 Rafferty, Peter                12 Ohio Speed Academy TFC              23.45  2 23.447
+ 13 Moore, Jazion                  11 Lorain                              23.56  5 
+ 14 McNeill, Collin                11 Wor. Kilbourne                      23.57  6 
+ 15 Smith, Anthony                 11 Ohio Speed Academy TFC              23.66  9 
+ 16 Foster, Yannick                11 Hartley                             23.75  4 
+ 17 Johnston, Javon                10 Unattached                          23.81  7 
+ 18 Kern, Tyler                    10 Wor. Kilbourne                      24.03  6 
+ 19 Peterson, Elias                11 Calvary Christian                   24.25  5 
+ 20 Johhnson, TaeVeion              9 Bedford                             24.36  5 
+ 21 Ehler, Max                     12 Ohio Speed Academy TFC              24.54  4 
+ 22 Williams Jr., Joel             12 Dub. Jerome                         24.59  2 
+ 23 Williams, Keon                 11 Wester. Central                     24.69  3 
+ 24 Wagner, Noah                   10 Maumee                              24.71  3 
+ 25 Keener, Noah                   11 Ohio Speed Academy TFC              24.94  5 
+ 26 Gordon, Ben                     9 Ohio Speed Academy TFC              24.95  6 
+ 27 Mazar, Kristian                12 Chardon NDCL                        25.09 10 
+ 28 Savage, Jacob                  12 Philo                               25.30  6 
+ 29 Masters, Jack                  10 Ravenna                             25.32  9 
+ 30 Bosley, Kwame                  12 Dub. Jerome                         25.37  2 
+ 31 Mitchell, Nick                 10 Hartley                             25.52  7 
+ 32 Mabra-Callahan, Amir           11 Dub. Jerome                         25.78  5 
+ 33 McDougald, Malachi             12 Hartley                             25.89  8 
+ 34 Sunnyway, Roland               10 Hartley                             25.98  8 
+ 35 Promise) Achank, Akawung       12 Northland                           26.18  7 
+ 36 Jewett, Ben                    10 Col. DeSales                        26.24  8 
+ 37 Benton, Triston                 9 Bedford                             26.28  5 
+ 38 Mahon, Colton                   9 Philo                               26.46  8 
+ 39 Thompson, Issac                10 Ravenna                             26.53  9 
+ 40 Walker II, Lawrence            10 Hartley                             26.57  7 
+ 41 Askew, Latavius                 9 Ravenna                             26.64  9 
+ 42 Miller, Marshall               10 Wor. Kilbourne                      26.67  8 
+ 43 Ozodue, Kendrick               12 Dub. Jerome                         26.78  4 
+ 44 CARPENTER, Nash                10 Philo                               26.99  9 
+ 45 Walton, Henry                   8 Ohio Speed Academy TFC              27.65 10 
+ 46 Totten, Gavyn                   8 Ohio Speed Academy TFC              27.78 10 
+ 47 Maple, Aiden                   11 Philo                               28.22  8 
+ 48 Geralis, Jimmy                 12 Chardon NDCL                        28.45 11 
+ 49 Gliha, Grady                    9 Chardon NDCL                        31.97 10 
+
+Event 13  Girls 3200 Meter Run   
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+  1 Dunn, Sydney                   12 North Catholic 07                11:58.22  1 
+  2 Dugan, Arriana                 10 Maumee                           13:23.23  1 
+  3 Opiela, Caroline                9 North Catholic 07                13:31.55  1 
+  4 Verdin, Melanie                11 Lorain                           16:08.98  1 
+  5 Walker, Aaryn                  10 John Hay                         18:05.91  1 
+  6 Scott, Celeste                 10 John Hay                         18:36.95  1 
+  7 cadette, neveah                 9 John Hay                         19:23.76  1 
+
+Event 14  Boys 3200 Meter Run   
+==================================================================================
+    Name                         Year School                             Finals H#
+==================================================================================
+  1 Fuller, Brice                  10 Fairless                          9:06.23  1 
+  2 Reith, Sean                    10 Providence Pastures Running Cl        9:15.14  1 
+  3 Steineman, Jack                10 North Catholic 07                 9:28.54  1 
+  4 Hershner, Owen                 12 Mount Gilead                      9:45.67  1 
+  5 Carroll, Tyler                 12 North Catholic 07                 9:49.14  1 
+  6 Reith, Reagan                   9 Providence Pastures Running Cl        9:57.35  1 
+  7 Bartlett, Henry                10 Mount Gilead                     10:21.77  1 
+  8 Staats, Chace                  11 Mount Gilead                     10:42.92  1 
+  9 Turner, Ethan                  11 Mount Gilead                     10:52.93  1 
+ 10 Shaw, Rowan                    11 Mount Gilead                     11:12.95  1 
+ 11 Powell, Aaron                  10 Maumee                           11:28.18  1 
+ 12 Eskridge, Micah                12 Lorain                           11:34.00  1 
+ 13 Consuegra, Tyson               10 Plum 07                          12:06.21  1 
+ 14 Curson, Eithan                  9 Maumee                           14:20.07  1 
+
+Event 17  Girls 4x200 Meter Relay  
+=============================================
+    School                             Finals
+=============================================
+  1 Hartley                           1:50.03 
+  2 John Hay                          1:54.83 
+  3 John Hay 'B'                      2:00.30 
+  4 Wor. Kilbourne                    2:00.35 
+  5 Richmond Hts.                     2:05.42 
+  6 Chardon NDCL 'B'                  2:08.40 
+  7 Chardon NDCL                      2:11.65 
+  8 Wor. Kilbourne 'B'                2:15.96 
+
+Event 18  Boys 4x200 Meter Relay  
+=============================================
+    School                             Finals
+=============================================
+  1 Dub. Jerome                       1:33.75 
+  2 Plus 2 University- TCC            1:34.05 
+  3 Wester. Central                   1:36.64 
+  4 Richmond Hts.                     1:41.09 
+  5 Wor. Kilbourne                    1:43.00 
+  6 Chardon NDCL                      1:43.38 
+  7 Chardon NDCL 'B'                  1:43.71 
+  8 Hartley 'B'                       1:44.54 
+
+Event 19  Girls 4x400 Meter Relay  
+=============================================
+    School                             Finals
+=============================================
+  1 John Hay                          4:34.47 
+  2 Chardon NDCL 'B'                  4:42.35 
+  3 Chardon NDCL                      4:56.56 
+  4 John Hay 'B'                      5:01.28 
+
+Event 20  Boys 4x400 Meter Relay  
+=============================================
+    School                             Finals
+=============================================
+  1 Mount Gilead                      3:44.75 
+  2 Chardon NDCL                      3:54.97 
+  3 Ravenna 'B'                       3:58.60 
+  4 Ravenna                           4:00.32 
+  5 Richmond Hts.                     4:04.26 
+  6 Chardon NDCL 'B'                  4:19.22 
+
+Event 21  Girls 4x800 Meter Relay  
+=============================================
+    School                             Finals
+=============================================
+  1 Wayne County Track Club          10:54.77 
+  2 John Hay 'B'                     11:55.64 
+
+Event 22  Boys 4x800 Meter Relay  
+=============================================
+    School                             Finals
+=============================================
+  1 Richmond Hts.                     9:56.98 
+  2 Lorain                            9:58.08 
+
+Event 23  Girls High Jump 
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Locklear, Patience             12 Hartley                           5-08.00         1.72m  1 
+  2 Jewett, Lindsey                12 Col. DeSales                      5-02.00         1.57m  1 
+  3 Perryman, Pennie               11 Gah. Lincoln                      5-02.00         1.57m  1 
+  4 Oldham, Olivia                 11 Gah. Lincoln                      5-00.00         1.52m  1 
+  5 Wilkes, Zoe                    12 Plum 07                           5-00.00         1.52m  1 
+  6 Galloway, Talia                10 Hartley                           4-09.00         1.44m  1 
+  7 Stergis, Laila                 12 John Hay                          4-06.00         1.37m  1 
+  8 Durig, Leah                     9 Wor. Kilbourne                    4-06.00         1.37m  1 
+  9 Bernardi, Sienna               12 Unattached                        4-06.00         1.37m  1 
+
+Event 24  Boys High Jump 
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Harris, Elijah                 12 Wester. Central                   6-06.00         1.98m  1 
+  2 Wheatley, Landon               11 EOSAA Track Club                  6-06.00         1.98m  1 
+  3 Jones, Riley                   12 Berea-Midpark                     6-06.00         1.98m  1 
+  4 Mahon, Aidan                   12 Philo                             6-04.00         1.93m  1 
+  5 Karmelyuk, Matvii              11 Unattached                        6-02.00         1.87m  1 
+  6 Fant, Isaac                    12 Unattached                        6-02.00         1.87m  1 
+  7 Hartsough, Layton              10 Unattached                        6-00.00         1.82m  1 
+  8 Ruffin, Savon                  11 Unattached                        5-09.00         1.75m  1 
+  9 Bryant, Demetrius              12 Glenville                         5-09.00         1.75m  1 
+ 10 Bailey, Dontrelle              11 Berea-Midpark                     5-09.00         1.75m  1 
+ 11 Dawson, James                  11 CF Northwest                      5-09.00         1.75m  1 
+ 12 Helmick, Colton                11 CF Northwest                      5-06.00         1.67m  1 
+ 13 Mahon, Colton                   9 Philo                             5-06.00         1.67m  1 
+ 14 Frizzell, Cooper               10 Wester. Central                   5-06.00         1.67m  1 
+ 15 Mosley, Jaden                  10 Lorain                            5-00.00         1.52m  1 
+
+Event 25  Girls Long Jump 
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Bouldin, Abrianna              10 Mercy McAuley                    17-08.00         5.38m  2 
+  2 Spooner, Gabby                 12 Unattached                       16-11.00         5.15m  2 
+  3 Liotta, Lily                   10 Unattached                       16-09.00         5.10m  2 
+  4 Bernardi, Sienna               12 Unattached                       15-10.00         4.82m  2 
+  5 Weber, Julia                    9 Hartley                          15-09.00         4.80m  1 
+  6 Deister, Kara                  12 West Geauga                      15-06.00         4.72m  2 
+  7 Tubaugh, Addison               10 Plus 2 University- TCC           15-02.00         4.62m  2 
+  8 Milanova, Daniela              10 Wor. Kilbourne                   15-00.00         4.57m  2 
+  9 Malleske, Samantha             10 Wor. Kilbourne                   14-08.00         4.47m  2 
+ 10 Kelly, Kennedy                  7 Unattached                       14-06.00         4.41m  2 
+ 11 Papacostas, Moriah              5 Ohio Heat                        13-09.00         4.19m  1 
+ 12 Woods, Linda                   11 Ravenna                          13-06.00         4.11m  1 
+ 13 Balles, Lara                   10 Wor. Kilbourne                   13-03.00         4.03m  1 
+ 14 Hood, J'Me                     11 Lorain                           12-08.00         3.86m  1 
+ 15 Wright, Joslyn                 12 CF Northwest                     12-03.00         3.73m  1 
+
+Event 26  Boys Long Jump 
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Johnston, Javon                10 Unattached                       22-00.00         6.70m  3 
+  2 Moore, Jazion                  11 Lorain                           21-04.00         6.50m  3 
+  3 Stucchio, Jonah                12 Unattached                       21-00.50         6.41m  2 
+  4 Gargasz, Lucca                 11 Unattached                       20-10.50         6.36m  3 
+  5 Mahon, Aidan                   12 Philo                            20-07.50         6.28m  3 
+  6 Hartsough, Layton              10 Unattached                       20-03.00         6.17m  3 
+  7 Johhnson, TaeVeion              9 Bedford                          19-10.50         6.05m  3 
+  8 Laubacher, Evan                12 Mass. Perry                      19-08.50         6.00m  3 
+  9 Meek, Alex                     10 Wor. Kilbourne                   19-05.50         5.93m  2 
+ 10 Silva, Max                     12 Berea-Midpark                    19-00.50         5.80m  3 
+ 11 Purnell, Ahmad                 10 Unattached                       19-00.00         5.79m  3 
+ 12 Stone, Walker                  11 Nelsonville-York                 18-10.00         5.74m  3 
+ 13 Helmick, Colton                11 CF Northwest                     18-09.00         5.71m  2 
+ 14 Savage, Jacob                  12 Philo                            18-08.00         5.68m  2 
+ 15 McKamey, Ethan                 10 Ravenna                          18-02.50         5.54m  1 
+ 16 CARPENTER, Nash                10 Philo                            18-01.00         5.51m  1 
+ 17 Knott, Jason                   10 Beechcroft                       17-11.00         5.46m  1 
+ 18 Dawson, James                  11 CF Northwest                     17-10.00         5.43m  2 
+ 19 Collier, Aaron                  8 Unattached                       17-10.00         5.43m  2 
+ 20 Brown, Tristan                 12 Beachwood                        17-10.00         5.43m  2 
+ 21 Johnston, Jaedyn                9 Unattached                       17-09.50         5.42m  2 
+ 22 Loppe, Maurice                 10 Lorain                           17-07.00         5.35m  2 
+ 23 Charlton, Isaiah                9 Benedictine                      17-07.00         5.35m  2 
+ 24 Shaffer, Kaden                 12 Mineral Ridge                    17-05.00         5.30m  2 
+ 25 Newsom, Robert                 12 Wor. Kilbourne                   16-11.00         5.15m  2 
+ 26 Sunnyway, Roland               10 Hartley                          16-04.50         4.99m  1 
+ 27 Thornton, Landon               10 Hartley                          16-02.50         4.94m  2 
+ 28 Hedges, James                  11 Philo                            15-03.50         4.66m  1 
+ 29 Tamene, Amanuel                11 Hartley                          14-11.00         4.54m  1 
+
+Event 27  Girls Pole Vault 
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Morgante, Aleah                   Unattached                       12-00.00         3.65m  1 
+  2 Whalen, Gabby                  11 Mass. Jackson                    12-00.00         3.65m  1 
+  3 Shetterly, Payten              12 Cloverleaf                       10-06.00         3.20m  1 
+  4 Helmick, Evelyn                 9 CF Northwest                      8-06.00         2.59m  1 
+  5 Palomo, Gabriella               9 Fre. St. Joseph C.C.              8-00.00         2.43m  1 
+
+Event 28  Boys Pole Vault 
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Carr, Braden                   12 Loudonville                      14-06.00         4.41m  1 
+  2 Smart, Joseph                  12 Hoover                           14-06.00         4.41m  1 
+  3 Wilson, Alex                   11 Karns City 09                    13-06.00         4.11m  1 
+  4 Race, Caden                    12 Orrville                         13-00.00         3.96m  1 
+  5 Roudebush, Jacob               10 Garaway                          12-00.00         3.65m  1 
+  6 Jennings, Owen                 10 Maumee                           11-06.00         3.50m  1 
+
+Event 29  Girls Shot Put 
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Schirg, Gabriella              12 Perkins                          41-01.00        12.52m  2 
+  2 Scarvelli, Rileigh             10 Avon Lake                        41-00.00        12.49m  2 
+  3 Shon, Ava                      10 Dub. Jerome                      35-09.00        10.89m  2 
+  4 stewart, amirah                12 Northland                        35-00.00        10.66m  2 
+  5 Rickman, Raegan                12 Hartley                          34-01.00        10.38m  2 
+  6 Sims, Nia                      12 Garrett Morgan                   32-04.00         9.85m  2 
+  7 Thress, Sydney                 11 Hil. Bradley                     32-01.00         9.77m  2 
+  8 Ivory-Keys, Carmen             11 John Hay                         30-10.00         9.39m  2 
+  9 Foster, Kate                   10 Dub. Jerome                      30-10.00         9.39m  2 
+ 10 Hill, Zaria                    11 Bard Early College               24-10.00         7.56m  1 
+ 11 Balles, Lara                   10 Wor. Kilbourne                   23-11.00         7.28m  2 
+ 12 Johnson, Alise                 12 Hartley                          23-08.00         7.21m  1 
+ 13 Slocon, Elizabeth              12 Bard Early College               23-00.00         7.01m  1 
+ 14 Patterson, Niylah              12 John Hay                         22-03.00         6.78m  1 
+ 15 Whitner, Jemerra               10 John Hay                         21-11.00         6.68m  1 
+ 16 Knopf, Josephine               10 Unattached                       21-05.00         6.52m  1 
+ 17 Nagyhetenyi, Lyla              10 Wor. Kilbourne                   19-01.00         5.81m  2 
+ 18 Lindsey, Jayla                 12 John Hay                         18-03.00         5.56m  1 
+
+Event 30  Boys Shot Put 
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Boanes, DeLathian              12 Unattached                       53-07.00        16.33m  1 
+  2 Scott, Eric                    11 Beachwood                        44-02.75        13.48m  1 
+  3 Garber, Jakob                  11 CF Northwest                     41-10.50        12.76m  1 
+  4 Pizzato, Asher                 10 Maumee                           41-07.75        12.69m  1 
+  5 Stephenson, Connor             11 CF Northwest                     40-11.25        12.47m  1 
+  6 Terry, James                   10 Hartley                          40-03.50        12.28m  1 
+  7 Anderson, Cory                 11 Hartley                          40-00.50        12.20m  1 
+  8 Morrison, Jacob                10 Dub. Jerome                      39-08.75        12.10m  1 
+  9 Yarberry, Paul                 11 Maumee                           38-10.75        11.85m  1 
+ 10 Feckner, Aiden                 11 Berea-Midpark                    37-04.75        11.39m  1 
+ 11 Ahijevych, Adam                10 Dub. Jerome                      35-07.00        10.84m  1 
+ 12 Pogula, Yashwin                10 Dub. Jerome                      34-07.50        10.55m  1 
+ 13 Johnson, Jules                  9 Richmond Hts.                    32-01.75         9.79m  1 
+ 14 Starkey, Thomas                 9 Bedford                          27-04.25         8.33m  1 
+ 15 Renneker, Luke                 10 Wor. Kilbourne                   18-09.00         5.71m  1 
+ 16 Seawright, Dominic              9 Richmond Hts.                    17-05.50         5.32m  1 
+
+Event 31  Girls Weight Throw   
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Scarvelli, Rileigh             10 Avon Lake                        48-11.75        14.92m  1 
+  2 Rickman, Raegan                12 Hartley                          40-07.00        12.36m  1 
+  3 Foster, Kate                   10 Dub. Jerome                      38-05.00        11.70m  1 
+  4 Shon, Ava                      10 Dub. Jerome                      35-05.00        10.79m  1 
+  5 Hill, Zaria                    11 Bard Early College               31-02.00         9.49m  1 
+  6 Slocon, Elizabeth              12 Bard Early College               23-04.00         7.11m  1 
+
+Event 32  Boys Weight Throw   
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Hosafros, Tanner               12 Lancaster                        57-09.00        17.60m  1 
+  2 Morrison, Jacob                10 Dub. Jerome                      50-11.25        15.52m  1 
+  3 Anderson, Cory                 11 Hartley                          42-11.50        13.09m  1 
+  4 Scott, Eric                    11 Beachwood                        39-02.50        11.95m  1 
+  5 Pogula, Yashwin                10 Dub. Jerome                      38-10.75        11.85m  1 
+  6 Ahijevych, Adam                10 Dub. Jerome                      38-04.00        11.68m  1 
+  7 Terry, James                   10 Hartley                          32-02.75         9.82m  1 
+  8 Feckner, Aiden                 11 Berea-Midpark                    29-08.50         9.05m  1 
+
+Event 33  Girls Triple Jump   
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Pennington, Sam                11 Logan                            37-09.00        11.50m  1 
+  2 Gonya, Averie                  11 Col. DeSales                     35-07.00        10.84m  1 
+  3 Bernardi, Sienna               12 Unattached                       34-10.00        10.61m  1 
+  4 Liotta, Lily                   10 Unattached                       34-05.50        10.50m  1 
+  5 Deister, Kara                  12 West Geauga                      34-05.00        10.49m  1 
+  6 Locklear, Patience             12 Hartley                          33-06.00        10.21m  1 
+  7 Stergis, Laila                 12 John Hay                         31-05.50         9.58m  1 
+  8 Oldham, Olivia                 11 Gah. Lincoln                     30-08.00         9.34m  1 
+  9 Wilkes, Zoe                    12 Plum 07                          29-10.00         9.09m  1 
+
+Event 34  Boys Triple Jump   
+=================================================================================================
+    Name                         Year School                             Finals               H#
+=================================================================================================
+  1 Harris, Elijah                 12 Wester. Central                  50-00.00        15.24m  1 
+  2 Johnston, Javon                10 Unattached                       44-10.00        13.66m  1 
+  3 Fant, Isaac                    12 Unattached                       43-00.50        13.11m  1 
+  4 Stucchio, Jonah                12 Unattached                       40-11.00        12.47m  1 
+  5 Hartsough, Layton              10 Unattached                       40-01.00        12.21m  1 
+  6 Tamene, Amanuel                11 Hartley                          31-00.00         9.44m  1

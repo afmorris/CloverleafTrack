@@ -53,7 +53,7 @@ def unrecorded_events(path):
         if m: ev = (m.group(1), norm(m.group(2))); continue
         r = ROWR.match(l)
         if ev and r and ev[1] in FIELD: cnt[ev][1 if r.group(5).lstrip('J') in ('ND', 'NH', 'NM', 'DNF', 'NT', 'FS') else 0] += 1
-    return {k for k, (marked, nomark) in cnt.items() if marked <= 10 and nomark >= 2}
+    return {k for k, (marked, nomark) in cnt.items() if 8 <= marked <= 10 and nomark >= 2}
 used_ids = {}
 stats = {}
 for year, (date, season, url) in YEARS.items():

@@ -18,6 +18,10 @@ def norm_event(name):
              '4x100 relay': '4x100M Relay', '4x200 relay': '4x200M Relay', '4x400 relay': '4x400M Relay', '4x800 relay': '4x800M Relay'}
     for k, v in table.items():
         if n == k: return v
+    m = re.fullmatch(r'(100|200|400|800|1600|3200)\s*(dash|run)?', n)
+    if m: return m.group(1) + 'M'
+    m = re.fullmatch(r'(4x\d+)\s*(relay|shuttle hurdles?)', n)
+    if m: return m.group(1) + 'M ' + ('Relay' if m.group(2) == 'relay' else 'Shuttle Hurdles')
     return name.strip()
 
 def parse_mark(tok):
