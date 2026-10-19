@@ -4,7 +4,8 @@ Unmatched athletes are created only when the page gives a grade (graduation year
 Usage: python3 -I build_hytek_sql.py <out.sql>   (edit MEETS)"""
 import re, subprocess, sys, collections
 sys.path.insert(0, '.')
-from parse_hytek2 import parse
+from parse_hytek2 import parse as parse_txt
+import parse_an
 from parse_hytek import parse_mark
 
 BAUMS = [  # name, date, season end year, location id, season id, text file, source url, meet type, meet level
@@ -23,7 +24,20 @@ MS = [  # location is an id or a (name, city) tuple created by the SQL
     ('2019 Triway Invitational', '2019-04-20', 2019, 52, 15, 'milesplit-raw/ms-357355.txt', 'https://oh.milesplit.com/meets/357355', 3, 1),
     ('2019 Smithie Frosh-Soph Invitational', '2019-05-06', 2019, 48, 15, 'milesplit-raw/ms-359347.txt', 'https://oh.milesplit.com/meets/359347', 3, 2),
 ]
-MEETS = {'baums': BAUMS, 'ms': MS}[sys.argv[2] if len(sys.argv) > 2 else 'baums']
+AN = [
+    ('2009 Mansfield Mehock Relays', '2009-04-17', 2009, 32, 20, 'an-rows/an-444526.json', 'https://www.athletic.net/TrackAndField/meet/444526', 3, 1),
+    ('2012 Optimist Meet', '2012-05-05', 2012, 4, 17, 'an-rows/an-157758.json', 'https://www.athletic.net/TrackAndField/meet/157758', 3, 1),
+    ('2016 Optimist Meet', '2016-05-07', 2016, 4, 5, 'an-rows/an-275382.json', 'https://www.athletic.net/TrackAndField/meet/275382', 3, 1),
+    ('2024 Optimist Meet', '2024-05-04', 2024, 4, 4, 'milesplit-raw/ms-582440.txt', 'https://oh.milesplit.com/meets/582440', 3, 1),
+]
+INDOOR = [  # environment 2
+    ('2025 Kent State HS Meet #5', '2025-02-23', 2025, 28, 27, 'an-rows/an-587896.json', 'https://www.athletic.net/TrackAndField/meet/587896', 3, 1, 2),
+    ('2025 Akron Rust Buster HS Open', '2025-12-13', 2026, 1, 47, 'an-rows/an-626478.json', 'https://www.athletic.net/TrackAndField/meet/626478', 3, 1, 2),
+    ('2026 Akron Rubber City HS Open', '2026-01-17', 2026, 1, 47, 'an-rows/an-631604.json', 'https://www.athletic.net/TrackAndField/meet/631604', 3, 1, 2),
+    ('2026 Kent State HS Meet #1', '2026-01-24', 2026, 28, 47, 'an-rows/an-632988.json', 'https://www.athletic.net/TrackAndField/meet/632988', 3, 1, 2),
+    ('2026 Ashland University HS Light Giver Open', '2026-02-08', 2026, 3, 47, 'an-rows/an-636245.json', 'https://www.athletic.net/TrackAndField/meet/636245', 3, 1, 2),
+]
+MEETS = {'baums': BAUMS, 'ms': MS, 'an': AN, 'indoor': INDOOR}[sys.argv[2] if len(sys.argv) > 2 else 'baums']
 ALIAS = {'Cassy Maxwell': 'Cassandra Maxwell', 'Neil Berentz': 'Neal Berentz', 'Rick Morrison': 'Richard Morrison', 'Ricky Morrison': 'Richard Morrison', 'Stacy Porter': 'Stacey Porter',
          'Brittany Pekar': 'Brittani Pekar', 'William Simpson': 'Billy Simpson', 'Garrett Livengood': 'Garrett Livingood', 'Garrett Livingood': 'Garrett Livingood', 'Jeff Sharrat': 'Jeff Sharratt',
          'Joe Bruening': 'Joey Bruening', 'Mackenna Huff': 'Mckenna Huff', 'R.J. Bechtel': 'RJ Bechtel', 'RJ Becthel': 'RJ Bechtel', 'Vinnie Kacinari': 'Vincent Kacinari',
@@ -31,12 +45,15 @@ ALIAS = {'Cassy Maxwell': 'Cassandra Maxwell', 'Neil Berentz': 'Neal Berentz', '
 BYNAME = {'Amber Hansen', "Morgan O'Rourke"}   # created by an earlier import SQL, so their Ids differ between databases: always reference by name
 FIELD = ('High Jump', 'Long Jump', 'Pole Vault', 'Shot Put', 'Discus', 'Triple Jump')
 
+def parse(path):
+    return parse_an.parse(path) if path.endswith('.json') else parse_txt(path)
+
 def q(sql):
     out = subprocess.run(['docker', 'exec', '-i', 'ctf-local-sql', '/opt/mssql-tools18/bin/sqlcmd', '-C', '-I', '-S', 'localhost', '-d', 'ctf', '-U', 'sa', '-P', 'Local#Dev1234', '-W', '-s', '|', '-h', '-1'],
                          input='SET NOCOUNT ON;' + sql, capture_output=True, text=True).stdout
     return [l.split('|') for l in out.strip().split('\n') if l.strip()]
 
-events = {(int(g), n): int(i) for i, n, g in q("SELECT Id, Name, Gender FROM Events WHERE Environment = 1 AND Gender IN (1,2)")}
+events = {(int(e), int(g), n): int(i) for i, n, g, e in q("SELECT Id, Name, Gender, Environment FROM Events WHERE Gender IN (1,2)")}
 ath = collections.defaultdict(list)
 for i, f, l, g in q("SELECT Id, FirstName, LastName, Gender FROM Athletes"): ath[(f.lower() + ' ' + l.lower(), int(g))].append(int(i))
 esc = lambda s: s.replace("'", "''")
@@ -55,16 +72,17 @@ def unrecorded(path):
     return {k for k, (marked, nomark) in cnt.items() if 8 <= marked <= 10 and nomark >= 2}
 
 gy_global = {}   # (name) -> graduation year, from any meet in this run that gives the athlete's grade
-for _n, _d, _y, _l, _s, _p, _u, _t, _lv in MEETS:
+for _n, _d, _y, _l, _s, _p, _u, _t, _lv, *_ in MEETS:
     for _r in parse(_p):
         for _nm, _gr in _r['athletes']:
             if _gr and _nm not in gy_global: gy_global[_nm] = _y + 12 - _gr
 review, out, stats = [], ["-- Single-day meets from baumspage Hy-Tek results (BRAIN.md [C72]); Cloverleaf rows only. Each meet is skipped if a meet with that name and date exists.\n-- Rules as in ne-district-2005-2010.sql. Athlete Ids are asserted before anything is inserted.\nSET XACT_ABORT ON;\nBEGIN TRANSACTION;\nDECLARE @m INT, @p INT;\n"], {}
 used_ids, newathletes = {}, {}
 body_all = []
-for name, date, yend, loc, season, path, url, mtype, mlevel in MEETS:
+for name, date, yend, loc, season, path, url, mtype, mlevel, *rest in MEETS:
+    env = rest[0] if rest else 1
     rows = parse(path)
-    unrec = unrecorded(path)
+    unrec = parse_an.unrecorded(path) if path.endswith('.json') else unrecorded(path)
     grades = {}   # a grade given for an athlete in any row of the meet is used for all of their rows
     for r in rows:
         for nm_, gr_ in r['athletes']:
@@ -77,7 +95,7 @@ for name, date, yend, loc, season, path, url, mtype, mlevel in MEETS:
     newhere = {}
     for (gender, evname, who, kind), rs in groups.items():
         g = 2 if gender == 'Girls' else 1
-        eid = events.get((g, evname))
+        eid = events.get((env, g, evname))
         if not eid: review.append(f'{name}: no event for {gender} {evname}'); continue
         isfield = evname in FIELD
         vals, status = {}, None
@@ -134,7 +152,7 @@ for name, date, yend, loc, season, path, url, mtype, mlevel in MEETS:
         head.append(f"IF NOT EXISTS (SELECT 1 FROM Locations WHERE Name = '{esc(loc[0])}') INSERT INTO Locations (Name, City, State, Country) VALUES ('{esc(loc[0])}', '{esc(loc[1])}', 'OH', 'USA');")
         locsql = f"(SELECT Id FROM Locations WHERE Name = '{esc(loc[0])}')"
     else: locsql = str(loc)
-    head.append(f"INSERT INTO Meets (Name, Date, LocationId, Environment, HandTimed, SeasonId, EntryStatus, MeetLevel, MeetType, OfficialResultsUrl) VALUES ('{name}', '{date}', {locsql}, 1, 0, {season}, 3, {mlevel}, {mtype}, '{url}');\nSET @m = SCOPE_IDENTITY();")
+    head.append(f"INSERT INTO Meets (Name, Date, LocationId, Environment, HandTimed, SeasonId, EntryStatus, MeetLevel, MeetType, OfficialResultsUrl) VALUES ('{name}', '{date}', {locsql}, {env}, 0, {season}, 3, {mlevel}, {mtype}, '{url}');\nSET @m = SCOPE_IDENTITY();")
     body_all += head + body + ['END', '']
     stats[name] = (n_marks, n_nm, n_rounds, n_skip)
 chk = ' OR '.join(f"(Id = {i} AND FirstName = '{esc(n.split(' ', 1)[0])}' AND LastName = '{esc(n.split(' ', 1)[1])}')" for i, n in sorted(used_ids.items()))

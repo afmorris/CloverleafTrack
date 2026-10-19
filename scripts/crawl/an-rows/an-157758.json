@@ -1,0 +1,48 @@
+[
+{
+"u": "m/1/shot",
+"marked": 39,
+"nomark": 1,
+"rows": [
+{
+"k": "ind",
+"place": "7",
+"name": "Brian Livingstone",
+"mark": "48-08.75",
+"info": "SB \u2022 Yr: 12 \u2022 +2pts",
+"sec": "Finals"
+},
+{
+"k": "ind",
+"place": "14",
+"name": "Austin Roberts",
+"mark": "46-00.50",
+"info": "PB \u2022 Yr: 11",
+"sec": "Finals"
+}
+]
+},
+{
+"u": "m/1/discus",
+"marked": 34,
+"nomark": 3,
+"rows": [
+{
+"k": "ind",
+"place": "14",
+"name": "Brian Livingstone",
+"mark": "133-08",
+"info": "SB \u2022 Yr: 12",
+"sec": "Finals"
+},
+{
+"k": "ind",
+"place": "19",
+"name": "Austin Roberts",
+"mark": "122-04",
+"info": "PB \u2022 Yr: 11",
+"sec": "Finals"
+}
+]
+}
+]

@@ -2213,3 +2213,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out (Ids):** the local test DB and live assign different Ids to athletes created by an earlier import SQL, so `build_hytek_sql.py` must reference those by name (`BYNAME`), and the generated `.sql` must be built from a database that does not yet contain the batch's own new athletes (rebuilding after applying bakes their local Ids). The Id assertion at the top of each file caught exactly this on the first live run (nothing was written).
 
 **Key files:** `scripts/crawl/{parse_hytek2.py,build_hytek_sql.py}`, `docs/imports/{baumspage-meets-2007-2011,ms-meets-2017-2019}.sql`.
+
+### [C73] Missing athletic.net-Only Meets and Indoor Meets (2009-2026)
+
+**What changed:** `docs/imports/an-meets-2009-2024.sql` (2009 Mansfield Mehock Relays 1 result, 2012 Optimist Meet 4, 2016 Optimist Meet 27 incl. 4 relays, 2024 Optimist Meet 1) and `docs/imports/indoor-meets-2025-2026.sql` (Environment 2: 2025 Kent State HS Meet #5, 2025 Akron Rust Buster, 2026 Akron Rubber City, 2026 Kent State HS Meet #1, 2026 Ashland Light Giver; one pole vaulter each, two of them NH). New scraper `scripts/athleticnet/scan_an_rows.js` captures structured Cloverleaf rows from athletic.net event pages into `scripts/crawl/an-rows/an-<meetId>.json`; `scripts/crawl/parse_an.py` turns them into the common row format so `build_hytek_sql.py an|indoor` handles them (per-meet optional 10th tuple element = Environment). athletic.net rows keep prelim/final via the page section header.
+
+**Not imported (checked, nothing to import):** the 2019 OATCCC D2/3 Indoor State (only a 4x800 relay whose legs are "Relay Team"), Mount Union 2026 and Kent State #3 2026 (the vaulter was DNS), Tiffin 2021, Kent State #3 2022, Conversion Time 2017, Oberlin Run-Jump-Throw, Extreme Vault Club, YSU #3, Ashland High Performance Invite and OATCCC D2 2026: the MileSplit raw results contain no Cloverleaf rows at all, so Cloverleaf was listed but did not compete or is not in the data. The second Mansfield Mehock athletic.net listing (65012) has no results. The 2009 Mansfield discus ND (7 marked, 47 no-mark rows) is "not recorded", not a no-mark.
+
+**Watch out:** `parse_an.unrecorded` uses marked/no-mark counts computed in the browser (8-10 marked and >=2 no-mark, or 6-10 marked and >= 3x as many no-mark). athletic.net marks carry an `a`/`h` suffix that is stripped; field marks are `F-I.ii`.
+
+**Key files:** `scripts/athleticnet/scan_an_rows.js`, `scripts/crawl/{parse_an.py,build_hytek_sql.py,an-rows/}`.
