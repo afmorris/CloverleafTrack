@@ -2263,3 +2263,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Bug found:** 23 meets have a time of day in `Meets.Date` (e.g. 2024 Stars `2024-05-06 16:00:00`). The guards in `marks-from-milesplit.sql` and `marks-review-12.sql` that matched meets with `Date = 'YYYY-MM-DD'` silently updated nothing for those meets: 2 of the 22 [C76] updates and 2 of the 4 review updates were missed on the first live run and caught by checking the values. The files now use `CAST(Date AS date)` and were re-run (idempotent, guarded by the old value). The earlier import SQL files only used the equality inside `IF NOT EXISTS` (new meets) or assertions that would have failed loudly.
 
 **Key files:** `docs/imports/{marks-review-12,orange-2018-3200m,marks-from-milesplit}.sql`, `docs/results-level-gap-report.md`.
+
+### [C78] Relay Mark Fixes From the Results-Level Comparison
+
+**What changed:** two real relay errors fixed in `docs/imports/relay-fixes.sql`. (1) 2025 Green Twilight Relays boys 4x1600M Relay (perf 13289): 1542.98 (25:42.98, the girls' time) -> 1196.86 (19:56.86). (2) 2024 Division I District girls 4x400M Relay (perf 12463): 255.93 (4:15.93, the prelim) -> 250.33 (4:10.33, the final), with `PerformanceRounds` prelim 255.93 / final 250.33. The other three relay mismatches were parse artifacts (DB already matches the official final): Green Twilight 2025 boys 4x100, D2 District 2025 boys 4x400, 2024 Regional girls 4x200.
+
+**Why:** the relay rows of the MileSplit comparison; the old values are above so they can be reverted.
+
+**Watch out:** relay event names are `4x400M Relay` / `4x1600M Relay`. Seven relay performances still lack four named legs (2021 SPIRE and Cloverleaf Indoor #1, 2025 D2 District boys 4x800): athletic.net's results pages only show a collapsed "Relay Team" toggle, so the legs are not in the page text and need the toggle expanded or another source.
+
+**Key files:** `docs/imports/relay-fixes.sql`.
