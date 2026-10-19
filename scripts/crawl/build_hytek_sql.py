@@ -41,7 +41,7 @@ MEETS = {'baums': BAUMS, 'ms': MS, 'an': AN, 'indoor': INDOOR}[sys.argv[2] if le
 ALIAS = {'Cassy Maxwell': 'Cassandra Maxwell', 'Neil Berentz': 'Neal Berentz', 'Rick Morrison': 'Richard Morrison', 'Ricky Morrison': 'Richard Morrison', 'Stacy Porter': 'Stacey Porter',
          'Brittany Pekar': 'Brittani Pekar', 'William Simpson': 'Billy Simpson', 'Garrett Livengood': 'Garrett Livingood', 'Garrett Livingood': 'Garrett Livingood', 'Jeff Sharrat': 'Jeff Sharratt',
          'Joe Bruening': 'Joey Bruening', 'Mackenna Huff': 'Mckenna Huff', 'R.J. Bechtel': 'RJ Bechtel', 'RJ Becthel': 'RJ Bechtel', 'Vinnie Kacinari': 'Vincent Kacinari',
-         'Katelyn Donnelly': 'Katlyn Donnelly', 'Taylor Sachleban': 'Taylor Sachleben', 'T.J. Corbett': 'TJ Corbett'}
+         'Katelyn Donnelly': 'Katlyn Donnelly', 'Taylor Sachleban': 'Taylor Sachleben', 'T.J. Corbett': 'TJ Corbett', 'Bryce Neil': 'Bryce Neill', 'Asa Gyn': 'Asa Gynn', 'Isaiah Curt': 'Isaiah Kurtz', 'Josh Bohemian': 'Josh Bowman', 'Jacob Knau': 'Jacob Nau', 'Meagan Van Meter': 'Megan Van Meter'}
 BYNAME = {'Amber Hansen', "Morgan O'Rourke"}   # created by an earlier import SQL, so their Ids differ between databases: always reference by name
 FIELD = ('High Jump', 'Long Jump', 'Pole Vault', 'Shot Put', 'Discus', 'Triple Jump')
 
@@ -88,8 +88,16 @@ for name, date, yend, loc, season, path, url, mtype, mlevel, *rest in MEETS:
         for nm_, gr_ in r['athletes']:
             if gr_: grades[nm_] = gr_
     groups = collections.OrderedDict()
+    teams = collections.defaultdict(set)     # (gender, event) -> {frozenset(legs)} : a school can enter several relay teams in one event
     for r in rows:
-        key = (r['gender'], r['event'], 'RELAY', 'relay') if r['kind'] == 'relay' else (r['gender'], r['event'], r['athletes'][0][0], 'ind')
+        if r['kind'] == 'relay' and len(r['athletes']) == 4: teams[(r['gender'], r['event'])].add(frozenset(a[0] for a in r['athletes']))
+    for r in rows:
+        if r['kind'] == 'relay':
+            legs = frozenset(a[0] for a in r['athletes']) if len(r['athletes']) == 4 else None
+            t = teams.get((r['gender'], r['event']), set())
+            if legs is None and len(t) == 1: legs = next(iter(t))        # a round without leg names belongs to the event's only known team
+            key = (r['gender'], r['event'], 'RELAY' + ('' if legs is None else '|' + '|'.join(sorted(legs))), 'relay')
+        else: key = (r['gender'], r['event'], r['athletes'][0][0], 'ind')
         groups.setdefault(key, []).append(r)
     body, n_marks, n_nm, n_rounds, n_skip = [], 0, 0, 0, 0
     newhere = {}
