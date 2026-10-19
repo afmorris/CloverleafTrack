@@ -464,6 +464,28 @@ public class MeetServiceTests
     }
 
     [Fact]
+    public async Task GetMeetDetailsAsync_NoMarkResult_ShowsAbbreviation_HasNoRawValue_AndIsNotCountedAsAMark()
+    {
+        var meet = BuildMeet();
+        var mark = BuildPerf(1, "Discus", Gender.Female, EventCategory.Throws, EventType.Field, timeSeconds: null, distanceInches: 900, athleteName: "Jane Doe");
+        var nm = BuildPerf(1, "Discus", Gender.Female, EventCategory.Throws, EventType.Field, timeSeconds: null, distanceInches: null, athleteName: "Addi Reho");
+        nm.PerformanceId = 2;
+        nm.ResultStatus = ResultStatus.NoMark;
+        SetupMeetDetails(meet, new List<MeetPerformanceDto> { mark, nm });
+
+        var result = await _service.GetMeetDetailsAsync("spring-invitational");
+
+        var rows = result!.GirlsEvents.Single().Performances;
+        var row = rows.Single(p => p.AthleteName == "Addi Reho");
+        row.Performance.Should().Be("NM");
+        row.HasMark.Should().BeFalse();
+        row.RawValue.Should().BeNull();
+        row.IsPersonalBest.Should().BeFalse();
+        rows.Single(p => p.AthleteName == "Jane Doe").HasMark.Should().BeTrue();
+        result.TotalPerformances.Should().Be(1, "a no-mark result is not a mark");
+    }
+
+    [Fact]
     public async Task GetMeetDetailsAsync_Performance_HasNoRoundSeries_WhenNoneRecorded()
     {
         var meet = BuildMeet();

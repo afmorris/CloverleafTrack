@@ -23,6 +23,12 @@ public class PerformanceEntryViewModel
     
     [Display(Name = "Distance")]
     public string? DistanceInput { get; set; }
+
+    // NM / NH / DNF / DQ — competed but no mark. Mark (0) is the normal path. When not Mark, the time and distance
+    // inputs must be blank; attempts / bars may still be recorded. Inferred as NM / NH when an attempt series is all
+    // fouls or a bar ladder has no cleared height. See BRAIN.md [C67].
+    [Display(Name = "Result")]
+    public ResultStatus ResultStatus { get; set; }
     
     // Relay athletes
     public List<int> RelayAthleteIds { get; set; } = new();

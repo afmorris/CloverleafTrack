@@ -15,6 +15,9 @@ public interface IAthleteRepository
     Task<Athlete?> GetBySlugWithBasicInfoAsync(string slug);
     Task<List<AthletePerformanceDto>> GetAllPerformancesForAthleteAsync(int athleteId);
 
+    /// <summary>NM / NH / DNF / DQ results (no mark) for this athlete, individual and relay, newest first. Kept apart from <see cref="GetAllPerformancesForAthleteAsync"/> so PR / chart / hero code never sees a row without a mark.</summary>
+    Task<List<AthletePerformanceDto>> GetNoMarkResultsForAthleteAsync(int athleteId);
+
     /// <summary>Current all-time-best value per event (Leaderboards.Rank = 1), for the given EventIds. Used by the career chart (issue #26) — never derive this from Performances.SchoolRecord, which is a stale snapshot.</summary>
     Task<List<EventRecordDto>> GetSchoolRecordsForEventsAsync(IEnumerable<int> eventIds);
 }

@@ -59,7 +59,7 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                                COALESCE(l.State, '') AS LocationState,
                                (SELECT COUNT(*)
                                 FROM Performances p
-                                WHERE p.MeetId = lm.Id) AS TotalPerformances,
+                                WHERE p.MeetId = lm.Id AND p.ResultStatus = 0) AS TotalPerformances,
                                (SELECT COUNT(*)
                                 FROM Performances p
                                 WHERE p.MeetId = lm.Id
@@ -112,6 +112,7 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                            INNER JOIN Athletes a ON a.Id = p.AthleteId
                            INNER JOIN Meets m ON m.Id = p.MeetId
                            WHERE MONTH(m.Date) = @Month AND DAY(m.Date) = @Day
+                             AND p.ResultStatus = 0
                            ORDER BY
                                CASE WHEN (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) = 1 THEN 0 ELSE 1 END,
                                CASE WHEN (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) <= 3 THEN 0 ELSE 1 END,
@@ -145,6 +146,7 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                                  WHERE m.SeasonId = @SeasonId
                                    AND e.Environment = @Environment
                                    AND m.Date >= DATEADD(day, -7, GETDATE())
+                                   AND p.ResultStatus = 0
                                  ORDER BY
                                      CASE WHEN (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) = 1 THEN 0 ELSE 1 END,
                                      p.PersonalBest DESC,
@@ -206,6 +208,7 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                                INNER JOIN Meets m ON m.Id = p.MeetId
                                WHERE m.SeasonId = @SeasonId
                                  AND e.Environment = @Environment
+                                 AND p.ResultStatus = 0
                                GROUP BY p.AthleteId, p.EventId, e.Name, e.EventType, e.Environment, a.FirstName, a.LastName
                            ),
                            PreviousSeasonBests AS (
@@ -219,6 +222,7 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                                INNER JOIN Meets m ON m.Id = p.MeetId
                                WHERE m.SeasonId < @SeasonId
                                  AND e.Environment = @Environment
+                                 AND p.ResultStatus = 0
                                GROUP BY p.AthleteId, p.EventId
                            )
                            SELECT TOP 1

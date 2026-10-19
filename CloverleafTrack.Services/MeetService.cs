@@ -186,7 +186,7 @@ public class MeetService(
             TeamResult = teamResult.HasResult ? teamResult : null,
 
             // Stats
-            TotalPerformances = performances.Count,
+            TotalPerformances = performances.Count(p => p.ResultStatus == ResultStatus.Mark),
             TotalPRs = performances.Count(p => p.PersonalBest),
             TotalSchoolRecords = performances.Count(p => p.AllTimeRank == 1),
             UniqueAthletes = uniqueAthletes,
@@ -357,7 +357,10 @@ public class MeetService(
             PerformanceId = p.PerformanceId,
             AthleteName = p.AthleteName,
             AthleteSlug = isIndividual ? slugHelper.GenerateSlug(p.AthleteName) : null,
-            Performance = FormatPerformance(p.TimeSeconds, p.DistanceInches),
+            Performance = p.ResultStatus == ResultStatus.Mark
+                ? FormatPerformance(p.TimeSeconds, p.DistanceInches)
+                : p.ResultStatus.Abbreviation(),
+            ResultStatus = p.ResultStatus,
             IsPersonalBest = p.PersonalBest,
             IsSchoolRecord = p.AllTimeRank == 1,
             IsSeasonBest = p.SeasonBest,

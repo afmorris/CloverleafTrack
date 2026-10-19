@@ -140,27 +140,48 @@ public class AdminMeetEntryRepository(IDbConnectionFactory connectionFactory) : 
         return ids.ToList();
     }
 
+    /// <summary>
+    /// Distinct events this athlete is entered in OR has a recorded result for at this meet (individual or relay).
+    /// Counts NM / NH / DNF / DQ results: the 4-event limit is about events competed in, not marks earned.
+    /// </summary>
     public async Task<int> GetAthleteEventCountForMeetAsync(int meetId, int athleteId)
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
             SELECT COUNT(*) FROM (
                 -- Individual entries
-                SELECT me.Id
+                SELECT me.EventId
                 FROM MeetEntries me
                 WHERE me.MeetId = @MeetId
                   AND me.AthleteId = @AthleteId
                   AND me.Deleted = 0
 
-                UNION ALL
+                UNION
 
                 -- Relay entries where athlete is on the relay team
-                SELECT me.Id
+                SELECT me.EventId
                 FROM MeetEntries me
                 INNER JOIN MeetEntryAthletes mea ON mea.MeetEntryId = me.Id
                 WHERE me.MeetId = @MeetId
                   AND mea.AthleteId = @AthleteId
                   AND me.Deleted = 0
+
+                UNION
+
+                -- Recorded individual results, any ResultStatus (Mark, NM, NH, DNF, DQ)
+                SELECT p.EventId
+                FROM Performances p
+                WHERE p.MeetId = @MeetId
+                  AND p.AthleteId = @AthleteId
+
+                UNION
+
+                -- Recorded relay results the athlete ran on
+                SELECT p.EventId
+                FROM Performances p
+                INNER JOIN PerformanceAthletes pa ON pa.PerformanceId = p.Id
+                WHERE p.MeetId = @MeetId
+                  AND pa.AthleteId = @AthleteId
             ) AS combined";
         return await connection.ExecuteScalarAsync<int>(sql, new { MeetId = meetId, AthleteId = athleteId });
     }

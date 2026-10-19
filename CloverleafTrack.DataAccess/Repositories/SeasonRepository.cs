@@ -28,7 +28,7 @@ public class SeasonRepository(IDbConnectionFactory connectionFactory) : ISeasonR
                                a.*
                            FROM Seasons s
                            LEFT JOIN Meets m ON m.SeasonId = s.Id
-                           LEFT JOIN Performances p ON p.MeetId = m.Id
+                           LEFT JOIN Performances p ON p.MeetId = m.Id AND p.ResultStatus = 0
                            LEFT JOIN Events e ON e.Id = p.EventId
                            LEFT JOIN Athletes a ON a.Id = p.AthleteId
                            ORDER BY s.StartDate DESC, m.Date

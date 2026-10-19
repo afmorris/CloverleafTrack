@@ -277,7 +277,7 @@
                                                     @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                                 </td>
                                                 <td class="px-2 sm:px-4 py-2 text-right whitespace-nowrap align-middle" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
-                                                    <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
+                                                    @if (perf.HasMark) { <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
                                                 </td>
                                                 <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                     <div class="flex items-center justify-end gap-1 flex-wrap">
@@ -380,7 +380,7 @@
                                                     @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                                 </td>
                                                 <td class="px-2 sm:px-4 py-2 text-right whitespace-nowrap align-middle" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
-                                                    <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
+                                                    @if (perf.HasMark) { <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
                                                 </td>
                                                 <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                     <div class="flex items-center justify-end gap-1 flex-wrap">
@@ -483,7 +483,7 @@
                                                 @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                             </td>
                                             <td class="px-2 sm:px-4 py-2 text-right whitespace-nowrap align-middle" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
-                                                <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span>
+                                                @if (perf.HasMark) { <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
                                             </td>
                                             <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                 <div class="flex items-center justify-end gap-1 flex-wrap">

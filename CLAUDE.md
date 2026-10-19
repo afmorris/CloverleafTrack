@@ -105,6 +105,11 @@ enum SeasonStatus
     Draft = 1, Importing = 2, Partial = 3, RecordOnly = 4, Complete = 5
 }
 
+enum ResultStatus : byte  // Performances.ResultStatus
+{
+    Mark = 0, NoMark = 1 /*NM*/, NoHeight = 2 /*NH*/, DidNotFinish = 3 /*DNF*/, Disqualified = 4 /*DQ*/
+}
+
 enum MeetLevel : short { Varsity = 1, JV = 2 }  // JV = e.g. Frosh-Soph invitationals
 
 enum MeetType : short
@@ -139,7 +144,7 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 | `Location` | Id, Name, City, State, ZipCode, Country |
 | `Event` | Id, Name, EventKey, EventType, EventCategory, Gender, Environment, AthleteCount, SortOrder, EventCategorySortOrder |
 | `Athlete` | Id, FirstName, LastName, Gender, GraduationYear, IsActive |
-| `Performance` | Id, AthleteId (null for relay), EventId, MeetId, TimeSeconds, DistanceInches, SortedAthleteHash, SchoolRecord, SeasonBest, PersonalBest, AllTimeRank (nullable int, not a DB column — populated by queries that join Leaderboards), Percentile (nullable byte, not a DB column — populated by queries that join PerformancePercentiles) |
+| `Performance` | Id, AthleteId (null for relay), EventId, MeetId, TimeSeconds, DistanceInches, ResultStatus (Mark/NM/NH/DNF/DQ — non-Mark rows have **no** mark, see below), SortedAthleteHash, SchoolRecord, SeasonBest, PersonalBest, AllTimeRank (nullable int, not a DB column — populated by queries that join Leaderboards), Percentile (nullable byte, not a DB column — populated by queries that join PerformancePercentiles) |
 | `PerformanceAthlete` | Id, PerformanceId, AthleteId — relay junction table |
 | `PerformanceRound` | Id, PerformanceId, Round (1 Prelim / 2 Semi / 3 Final), TimeSeconds — optional display-only child rows for running/relay performances that ran rounds; `Performance.TimeSeconds` is the best (min). Chain shows only with ≥2 rounds. Field-event rounds are just attempts in `PerformanceAttempts`. See BRAIN.md [C55] |
 | `PerformanceBar` | Id, PerformanceId, HeightInches, Outcome (`O`/`XO`/`XXO`/`XXX`/`P`/`XP`/`XXP`; X miss, O clear, P pass) — optional display-only bar ladder for individual high jump / pole vault; `Performance.DistanceInches` is the best cleared bar. Shown by `_BarLadder.cshtml`. See BRAIN.md [C60] |
@@ -149,6 +154,8 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 **Important caveat about performance flags:** The `PersonalBest` and `SchoolRecord` flags on relay `Performance` rows are **not reliably set** by the admin entry flow. Additionally, `SchoolRecord` on **any** Performance row (individual or relay) is a snapshot — it is **not cleared** when a newer performance supersedes the record. `sp_RebuildLeaderboards` keeps the `Leaderboards` table current but does NOT retroactively clear old `SchoolRecord` flags. Do not depend on `p.SchoolRecord` to mean "is currently the school record." Instead:
 - Relay "PR" per event = best time (MIN TimeSeconds) or best distance (MAX DistanceInches) across all performances for that event
 - School record (individual or relay) = AllTimeRank == 1 on the Leaderboards table
+
+**No-mark results (NM / NH / DNF / DQ):** `Performance.ResultStatus != Mark` means the athlete competed but has no time or distance — both `TimeSeconds` and `DistanceInches` are NULL (`CK_Performances_MarkOrStatus`). They are display-only: `sp_RebuildLeaderboards` already filters every rank/PB/SB/percentile/statistics step on `<mark> IS NOT NULL`, so they never rank or count toward percentiles; they earn no `MeetPlacing`/points; they appear on the meet page and the athlete's season lists as a muted `NM`/`NH`/`DNF`/`DQ` pill (`.chip-nomark`) with any attempt series/bars; and they count toward the 4-events-per-meet check. `AthleteRepository.GetAllPerformancesForAthleteAsync` deliberately returns marks only — no-mark rows come from `GetNoMarkResultsForAthleteAsync` and are merged in by `AthleteService` for the season lists alone. See BRAIN.md [C67].
 
 **Field vs. running determination:**
 ```csharp
@@ -592,6 +599,7 @@ Curated traps that still apply. Full context for each lives in `BRAIN.md` under 
 - `AthleteRepository` UNION ALL: both branches must select `SeasonStartDate` (outer ORDER BY needs it). [C7]
 - `SaveAttemptSeriesAsync` is delete-then-insert for the whole series — never pass a partial series. `IsFieldEventType` (controller) intentionally differs from the JS/Razor `isFieldEvent` toggle (excludes `FieldRelay`). [C32]
 - `PerformanceBars` is display-only too (same rule as rounds/attempts): the counting mark stays `Performances.DistanceInches` = highest cleared bar. Scorer sheets sometimes use the inverted notation (X clear, O miss, "O = misses" written on the sheet) — normalise to X miss / O clear before storing. [C60]
+- No-mark rows (`ResultStatus <> 0`, both marks NULL) exist now: any **new** query that reads `Performances` for marks, counts, rankings or best-per-athlete must add `AND p.ResultStatus = 0` (or already filter `<mark> IS NOT NULL`); only meet pages, athlete season lists and the 4-event count should see them. `IAdminPerformanceRepository.SaveAttemptSeriesAsync`/`SaveBarsAsync` leave the mark NULL when nothing is valid/cleared. [C67]
 - `PerformanceRounds` is display-only: PRs, ranks, percentiles, and scoring still use the one `Performances` row per athlete-event-meet (`TimeSeconds` = best round). Do not add multiple Performance rows per athlete-event-meet. [C55]
 - Single-mark events get percentile 100 on purpose; `Tests/TestSupport/PercentileMath.cs` is a test-only mirror of the SQL and must be updated with it. [C31]
 - T-SQL changes (SP, schema) have historically not been run against a real SQL Server in the dev sandbox — verify manually. [C31, C32]

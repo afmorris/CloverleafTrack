@@ -386,6 +386,50 @@ public class AthleteServiceTests
     }
 
     [Fact]
+    public async Task GetAthleteDetailsAsync_NoMarkResults_AppearInSeasonLists_ButNeverInPRsOrCounts()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            new() { PerformanceId = 1, EventId = 1, EventName = "Discus", EventType = EventType.Field, DistanceInches = 900, PersonalBest = true,
+                    MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1), Environment = Environment.Outdoor },
+        };
+        var noMarks = new List<AthletePerformanceDto>
+        {
+            // same event: fouled out at a later meet
+            new() { PerformanceId = 2, EventId = 1, EventName = "Discus", EventType = EventType.Field, ResultStatus = ResultStatus.NoMark,
+                    MeetName = "MAC", MeetDate = new DateTime(2024, 5, 9),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1), Environment = Environment.Outdoor },
+            // an event she never recorded a mark in
+            new() { PerformanceId = 3, EventId = 2, EventName = "100m", EventType = EventType.Running, ResultStatus = ResultStatus.Disqualified,
+                    MeetName = "MAC", MeetDate = new DateTime(2024, 5, 9),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1), Environment = Environment.Outdoor },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+        mockRepo.Setup(r => r.GetNoMarkResultsForAthleteAsync(1)).ReturnsAsync(noMarks);
+
+        var service = new AthleteService(mockRepo.Object);
+        var result = await service.GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.PersonalRecords.Should().HaveCount(1);
+        result.PersonalRecords.Single().Performance.Should().Be("75' 0\"");
+        var season = result.Seasons.Single();
+        season.PRCount.Should().Be(1);
+        var discus = season.EventGroups.Single(g => g.EventName == "Discus");
+        discus.IsFieldEvent.Should().BeTrue();
+        discus.PersonalRecordPerformance.Should().Be("75' 0\"", "the season best ignores the no-mark row");
+        discus.Performances.Select(p => p.Performance).Should().Contain(new[] { "75' 0\"", "NM" });
+        discus.Performances.Single(p => p.ResultStatus == ResultStatus.NoMark).RawValue.Should().BeNull();
+        var dash = season.EventGroups.Single(g => g.EventName == "100m");
+        dash.IsFieldEvent.Should().BeFalse();
+        dash.PersonalRecordPerformance.Should().BeEmpty();
+        dash.Performances.Single().Performance.Should().Be("DQ");
+    }
+
+    [Fact]
     public async Task GetAthleteDetailsAsync_RelayPRs_UseBestPerEvent_NotPersonalBestFlag()
     {
         var mockRepo = new Mock<IAthleteRepository>();

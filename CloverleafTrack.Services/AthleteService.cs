@@ -468,22 +468,27 @@ public class AthleteService(
             .ThenByDescending(pr => pr.Percentile ?? 0)
             .FirstOrDefault();
 
+        // NM / NH / DNF / DQ results have no mark, so they are deliberately NOT in `performances` (PRs, charts and
+        // hero stats all assume a mark). They are merged in here, for the per-season lists only. See BRAIN.md [C67].
+        var noMarkResults = await repository.GetNoMarkResultsForAthleteAsync(athlete.Id) ?? new List<AthletePerformanceDto>();
+        var seasonSource = performances.Concat(noMarkResults).ToList();
+
         // Build a lookup: PerformanceId → attempt series (empty/absent for performances with no recorded series)
         var attempts = attemptRepository != null
-            ? await attemptRepository.GetAttemptsForPerformancesAsync(performances.Select(p => p.PerformanceId))
+            ? await attemptRepository.GetAttemptsForPerformancesAsync(seasonSource.Select(p => p.PerformanceId))
             : new List<PerformanceAttempt>();
         var attemptLookup = PerformanceAttemptSeriesBuilder.BuildLookup(attempts);
         var rounds = roundRepository != null
-            ? await roundRepository.GetRoundsForPerformancesAsync(performances.Select(p => p.PerformanceId))
+            ? await roundRepository.GetRoundsForPerformancesAsync(seasonSource.Select(p => p.PerformanceId))
             : new List<PerformanceRound>();
         var roundLookup = PerformanceRoundSeriesBuilder.BuildLookup(rounds);
         var bars = barRepository != null
-            ? await barRepository.GetBarsForPerformancesAsync(performances.Select(p => p.PerformanceId))
+            ? await barRepository.GetBarsForPerformancesAsync(seasonSource.Select(p => p.PerformanceId))
             : new List<PerformanceBar>();
         var barLookup = PerformanceBarSeriesBuilder.BuildLookup(bars);
 
         // Group by season (ordered most recent first)
-        var seasons = performances
+        var seasons = seasonSource
             .GroupBy(p => new { p.SeasonName, p.SeasonStartDate })
             .OrderByDescending(g => g.Key.SeasonStartDate)
             .Select(seasonGroup => new SeasonPerformanceViewModel
@@ -497,7 +502,9 @@ public class AthleteService(
                     .ThenBy(eg => eg.Key.EventSortOrder)
                     .Select(eventGroup =>
                     {
-                        var isFieldEvent = eventGroup.First().DistanceInches.HasValue;
+                        var firstMark = eventGroup.FirstOrDefault(p => p.ResultStatus == ResultStatus.Mark);
+                        var isFieldEvent = firstMark?.DistanceInches.HasValue
+                            ?? eventGroup.First().EventType is EventType.Field or EventType.FieldRelay or EventType.JumpRelay or EventType.ThrowsRelay;
 
                         // Season best (used for accordion summary label + Δ column baseline)
                         var seasonBest = isFieldEvent
@@ -519,7 +526,10 @@ public class AthleteService(
                                 .OrderByDescending(p => p.MeetDate)
                                 .Select(p => new IndividualPerformanceViewModel
                                 {
-                                    Performance = FormatPerformance(p.TimeSeconds, p.DistanceInches),
+                                    Performance = p.ResultStatus == ResultStatus.Mark
+                                        ? FormatPerformance(p.TimeSeconds, p.DistanceInches)
+                                        : p.ResultStatus.Abbreviation(),
+                                    ResultStatus = p.ResultStatus,
                                     Date = p.MeetDate,
                                     MeetName = p.MeetName,
                                     IsPersonalBest = p.PersonalBest,

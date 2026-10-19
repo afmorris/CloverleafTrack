@@ -142,6 +142,18 @@
                                    Model.EventType.ToString().Contains("Throw");
             }
             
+            <div class="form-group" id="resultStatusGroup">
+                <label asp-for="ResultStatus">Result</label>
+                <select asp-for="ResultStatus" class="form-control" id="resultStatus" style="max-width: 24rem;">
+                    <option value="0">Mark (time / distance)</option>
+                    <option value="1">NM — no mark (fouled every attempt)</option>
+                    <option value="2">NH — no height</option>
+                    <option value="3">DNF — did not finish</option>
+                    <option value="4">DQ — disqualified</option>
+                </select>
+                <div class="hint">Anything other than Mark records that the athlete competed but has no mark; leave time / distance blank. Fouling every attempt or clearing no bar is detected automatically when you record the series / bars.</div>
+            </div>
+
             <div class="form-group" id="distanceGroup" style="@(isFieldEvent ? "" : "display: none;")">
                 <label asp-for="DistanceInput">Distance</label>
                 <input asp-for="DistanceInput" type="text" class="form-control" placeholder="e.g., 19'4, 19-04, 234.5" />
@@ -210,6 +222,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('#resultStatus').change(function () {
+                var noMark = $(this).val() !== '0';
+                $('#DistanceInput, #TimeInput').prop('readonly', noMark).css('opacity', noMark ? 0.5 : 1);
+                if (noMark) { $('#DistanceInput, #TimeInput').val(''); }
+            }).trigger('change');
+
             // Meet selection changes - load events via AJAX
             $('#meetSelect').change(function() {
                 var meetId = $(this).val();

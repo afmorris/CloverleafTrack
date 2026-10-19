@@ -168,14 +168,17 @@ CREATE TABLE [dbo].[Performances] (
     [SchoolRecord]      BIT        DEFAULT ((0)) NOT NULL,
     [SeasonBest]        BIT        DEFAULT ((0)) NOT NULL,
     [PersonalBest]      BIT        DEFAULT ((0)) NOT NULL,
+    [ResultStatus]      TINYINT    DEFAULT ((0)) NOT NULL,  -- 0 Mark, 1 NM, 2 NH, 3 DNF, 4 DQ (see migration_performance_result_status.sql)
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Performances_Athletes] FOREIGN KEY ([AthleteId]) REFERENCES [dbo].[Athletes] ([Id]),
     CONSTRAINT [FK_Performances_Meets]    FOREIGN KEY ([MeetId])    REFERENCES [dbo].[Meets]    ([Id]),
     CONSTRAINT [FK_Performances_Events]   FOREIGN KEY ([EventId])   REFERENCES [dbo].[Events]   ([Id]),
-    CONSTRAINT [CK_Performances_DistanceOrTime]
+    CONSTRAINT [CK_Performances_MarkOrStatus]
         CHECK (
-            ([DistanceInches] IS NOT NULL AND [TimeSeconds] IS NULL)
-            OR ([DistanceInches] IS NULL AND [TimeSeconds] IS NOT NULL)
+            ([ResultStatus] = 0 AND (
+                ([DistanceInches] IS NOT NULL AND [TimeSeconds] IS NULL)
+                OR ([DistanceInches] IS NULL AND [TimeSeconds] IS NOT NULL)))
+            OR ([ResultStatus] BETWEEN 1 AND 4 AND [DistanceInches] IS NULL AND [TimeSeconds] IS NULL)
         )
 );
 

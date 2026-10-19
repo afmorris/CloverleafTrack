@@ -332,7 +332,7 @@
                                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 @tRowClass">
                                                 <td class="px-4 py-2.5">
                                                     <div class="flex items-center gap-1.5 flex-wrap">
-                                                        <span class="mark font-bold text-gray-900 dark:text-gray-100">@perf.Performance</span>
+                                                        @if (perf.HasMark) { <span class="mark font-bold text-gray-900 dark:text-gray-100">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
                                                         @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
                                                         @if (perf.IsPersonalBest) { <span class="chip-pr">PR</span> }
                                                         @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10)

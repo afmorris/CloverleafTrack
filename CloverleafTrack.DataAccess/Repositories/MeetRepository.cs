@@ -118,6 +118,7 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    p.PersonalBest,
                                    p.SchoolRecord,
                                    p.SeasonBest,
+                                   p.ResultStatus,
                                    (
                                     SELECT MIN(lb.Rank) 
                                     FROM Leaderboards lb 
@@ -246,7 +247,7 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
           const string sql = """
                               SELECT COUNT(*)
                               FROM Performances p
-                              WHERE p.MeetId = @MeetId
+                              WHERE p.MeetId = @MeetId AND p.ResultStatus = 0
                               """;
 
           return await connection.ExecuteScalarAsync<int>(sql, new { MeetId = meetId });
@@ -325,6 +326,7 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                 INNER JOIN Events e ON e.Id = p.EventId
                                 LEFT JOIN PerformancePercentiles pp ON pp.PerformanceId = p.Id
                                 LEFT JOIN EventStatistics es ON es.EventId = p.EventId
+                           WHERE p.ResultStatus = 0
                            """;
 
         var marks = await connection.QueryAsync<MeetScoreMark>(sql);

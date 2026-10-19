@@ -2139,3 +2139,19 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** a new CSS rule only reaches already-visited browsers once the page HTML that links the new hash is also served — fine for the live app; the static export picks it up on the next `ctf` run. The admin layout does not link `site.css` through this tag.
 
 **Key files:** `CloverleafTrack.Web/Views/Shared/_Layout.cshtml`.
+
+### [C67] No-Mark Results: ResultStatus (NM / NH / DNF / DQ)
+
+**What changed:** `Performances.ResultStatus TINYINT NOT NULL DEFAULT 0` (`Models/Enums/ResultStatus.cs`: Mark, NoMark, NoHeight, DidNotFinish, Disqualified). `CK_Performances_DistanceOrTime` was replaced by `CK_Performances_MarkOrStatus`: status 0 needs exactly one of time/distance, status 1-4 needs both NULL. Migration `docs/migration_performance_result_status.sql` (additive; run before deploying). Triggered by Addi Reho fouling all three discus throws at the 2026 MAC — athletic.net shows place `ND` + `Foul/Foul/Foul`; before this there was no row to hang the series on.
+
+**Why a Performance row, not a new table:** every child table (attempts, bars, rounds) and the meet/athlete pages hang off a Performance, so a no-mark Performance gets the foul series / `XXX` bar ladder for free. `sp_RebuildLeaderboards` needed **no change**: all its ranking, PB/SB, percentile and EventStatistics steps already had `<mark> IS NOT NULL` filters, so NM/NH/DNF/DQ never rank and never skew percentiles.
+
+**Where the rows are visible:** meet page (muted pill + series/bars, sorted last by the existing ORDER BY, no PR/SB/SR/placing), athlete page season lists (merged by `AthleteService` from `GetNoMarkResultsForAthleteAsync`), the meet-summary fact sheet (`"result":"no mark (fouled out)"`, prompt v4), and the 4-events-per-meet count (`GetAthleteEventCountForMeetAsync` now unions entries and recorded results, any status, distinct events). Everything else filters `p.ResultStatus = 0`: `MeetRepository` (score marks, performance count), `HomeRepository` (counts, on-this-day, recent highlights, improvement CTEs), `LeaderboardRepository` event page, `SeasonRepository`, `AthleteRepository` roster/athlete performance queries. `MeetService.TotalPerformances` counts marks only; unique-athlete counts still include no-mark athletes ("competed in").
+
+**Admin entry:** a Result dropdown on Create/Edit. Non-Mark requires blank time/distance (validation error otherwise); a Mark with no value is inferred NM when the recorded attempt series is all fouls/passes, NH when the bar ladder has no cleared bar, otherwise a validation error (the CHECK would have rejected it anyway). Pre-meet `MeetEntries` "Enter Result" does not yet offer a status.
+
+**Watch out:** any new query over `Performances` that needs a mark must add `p.ResultStatus = 0` — a NULL-mark row breaks `isFieldEvent = DistanceInches.HasValue`-style logic. `AthleteService` keeps no-mark rows out of PRs/charts/hero stats on purpose. DNF/DQ for relays are stored the same way (AthleteId NULL + PerformanceAthletes) but the athlete page only merges rows via the repository query's relay branch.
+
+**Data:** `docs/imports/2026-mac-addi-reho-nm.sql` (NM + F/F/F for athlete 529, meet 297, event 24). A systematic backfill of other NM/NH/DNF/DQ rows from athletic.net / MileSplit has not been done; athletic.net field-series pages mark them `ND`/`NH`, results pages `NM`/`DNF`/`DQ`.
+
+**Key files:** `Models/Enums/ResultStatus.cs`, `docs/migration_performance_result_status.sql`, `AthleteRepository.cs`, `MeetRepository.cs`, `HomeRepository.cs`, `AdminMeetEntryRepository.cs`, `MeetService.cs`, `AthleteService.cs`, `MeetSummaryPrompt.cs`, `PerformancesController.cs`, `_Layout`-independent `.chip-nomark` in `input.css`/`site.css`.

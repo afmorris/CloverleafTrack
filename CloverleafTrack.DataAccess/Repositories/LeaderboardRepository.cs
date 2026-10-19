@@ -107,6 +107,7 @@ public class LeaderboardRepository(IDbConnectionFactory connectionFactory) : ILe
                            LEFT JOIN EventStatistics es ON es.EventId = e.Id
                            WHERE
                                e.EventKey = @EventKey
+                               AND p.ResultStatus = 0
                                AND (@SeasonId IS NULL OR m.SeasonId = @SeasonId)
                            ORDER BY
                                -- For running events (time-based), order by time ascending (fastest first)

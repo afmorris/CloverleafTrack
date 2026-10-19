@@ -117,9 +117,9 @@ public class AdminPerformanceRepository(IDbConnectionFactory connectionFactory) 
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
-            INSERT INTO Performances (AthleteId, MeetId, EventId, DistanceInches, TimeSeconds, SortedAthleteHash, SchoolRecord, SeasonBest, PersonalBest)
+            INSERT INTO Performances (AthleteId, MeetId, EventId, DistanceInches, TimeSeconds, SortedAthleteHash, SchoolRecord, SeasonBest, PersonalBest, ResultStatus)
             OUTPUT INSERTED.Id
-            VALUES (@AthleteId, @MeetId, @EventId, @DistanceInches, @TimeSeconds, @SortedAthleteHash, @SchoolRecord, @SeasonBest, @PersonalBest)";
+            VALUES (@AthleteId, @MeetId, @EventId, @DistanceInches, @TimeSeconds, @SortedAthleteHash, @SchoolRecord, @SeasonBest, @PersonalBest, @ResultStatus)";
         
         var performanceId = await connection.ExecuteScalarAsync<int>(sql, performance);
         
@@ -142,7 +142,8 @@ public class AdminPerformanceRepository(IDbConnectionFactory connectionFactory) 
                 SortedAthleteHash = @SortedAthleteHash,
                 SchoolRecord = @SchoolRecord,
                 SeasonBest = @SeasonBest,
-                PersonalBest = @PersonalBest
+                PersonalBest = @PersonalBest,
+                ResultStatus = @ResultStatus
             WHERE Id = @Id";
         
         var rowsAffected = await connection.ExecuteAsync(sql, performance);

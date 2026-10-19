@@ -85,6 +85,22 @@ public class MeetSummaryTests
     }
 
     [Fact]
+    public void FactSheet_describes_no_mark_results_without_a_mark()
+    {
+        var details = BuildDetails();
+        details.BoysEvents[0].Performances.Add(new MeetPerformanceViewModel
+        {
+            AthleteName = "Pat Thrower", AthleteSlug = "pat-thrower", Performance = "NM", ResultStatus = ResultStatus.NoMark
+        });
+
+        var json = MeetSummaryPrompt.BuildFactSheet(details, MeetLevel.Varsity);
+
+        var nm = json.Split("Pat Thrower")[1];
+        nm.Should().Contain("\"result\":\"no mark (fouled out)\"").And.NotContain("\"mark\"");
+        MeetSummaryPrompt.Version.Should().Be("4");
+    }
+
+    [Fact]
     public void FactSheet_omits_extra_detail_fields_when_nothing_recorded()
     {
         var json = MeetSummaryPrompt.BuildFactSheet(BuildDetails(), MeetLevel.Varsity);
