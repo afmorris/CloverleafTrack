@@ -15,3 +15,11 @@ Pilot: Metro Athletic Conference Championships 2026 (athletic.net meet 637822 = 
 
 Only athletes with 2+ rounds get a chain (a lone semifinal is not stored). High jump / pole vault series are
 bar heights, not distances, and are not supported by `PerformanceAttempts`.
+
+## No-mark results (NM / NH / DNF / DQ)
+
+`scan_no_marks.js` (see its header) scans a meet's varsity event pages for Cloverleaf rows that have no mark. athletic.net shows
+`ND` in the place column of a field-series page when every attempt was a foul, `NH` for a high jump / pole vault with no cleared
+bar, and `DNF` / `DQ` / `DNS` after the team on running results. Output is turned into `docs/imports/2026-no-marks.sql` by hand
+(a handful of rows): assert athlete + event, insert a `ResultStatus` Performance only if the athlete has no row for that event at
+that meet. DNS (did not start) is deliberately not imported. The browser pane must be visible while it runs.

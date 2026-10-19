@@ -2155,3 +2155,15 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Data:** `docs/imports/2026-mac-addi-reho-nm.sql` (NM + F/F/F for athlete 529, meet 297, event 24). A systematic backfill of other NM/NH/DNF/DQ rows from athletic.net / MileSplit has not been done; athletic.net field-series pages mark them `ND`/`NH`, results pages `NM`/`DNF`/`DQ`.
 
 **Key files:** `Models/Enums/ResultStatus.cs`, `docs/migration_performance_result_status.sql`, `AthleteRepository.cs`, `MeetRepository.cs`, `HomeRepository.cs`, `AdminMeetEntryRepository.cs`, `MeetService.cs`, `AthleteService.cs`, `MeetSummaryPrompt.cs`, `PerformancesController.cs`, `_Layout`-independent `.chip-nomark` in `input.css`/`site.css`.
+
+### [C68] No-Mark Backfill From athletic.net (2026 Meets) — Method and Gaps
+
+**What changed:** After [C67], scanned the 2026 athletic.net meets (MAC 637822, District 649905, Regional 651387, Early Bird 644596, Fairview 648714, Woodridge dual 641579, Keystone 651598, Fairless 653339, Stars 637734) for Cloverleaf rows with `ND`/`NM`/`NH`/`DNF`/`DQ`. Found and imported (`docs/imports/2026-mac-addi-reho-nm.sql`, `docs/imports/2026-no-marks.sql`): Addi Reho NM (MAC discus, F-F-F), Adriana Akers DQ (Fairless 100m), and NH for Taylor Thur (Keystone PV), Yousef Fekieh and Clayton Sewalish (Fairview HJ), Delaney Ishler and Ciara Kremer (Fairview PV). Scanner: `scripts/athleticnet/scan_no_marks.js`.
+
+**Watch out:**
+- The Browser pane must be *visible* (`show_pane preview`) or athletic.net's SPA never paints and every page is empty; iframes must run **one at a time** (overlapping iframes starve each other of paint) and a tool call is capped at 45 s, so run the loop as a background promise and poll.
+- The athlete's initials line precedes the name ("NM" for Noah Mion): the `NM` token is a false positive unless it is in the place column. Running results put the status after the team; field series put `ND`/`NH` in the place column.
+- Not covered: JV/other-division pages (only `m/1`, `f/1`), the 2026 State meet (many division pages), pages that did not render or had no Cloverleaf row (reported as `bad`; several HJ/PV pages), MileSplit, and all pre-2026 meets. DNS is not imported. NH rows have no bar ladder (starting height not captured); an NM with a field series needs the series imported separately (Addi's was in the SQL).
+- A DQ/DNF in a *later* round after a legal earlier round is NOT a no-mark row: that athlete already has a mark (e.g. Mike Fuentes 2007 semi DQ).
+
+**Key files:** `scripts/athleticnet/scan_no_marks.js`, `docs/imports/2026-no-marks.sql`.
