@@ -1,0 +1,60 @@
+738840|Boys Varsity High Jump Finals|-- Yousef Fekieh 10 Cloverleaf ND
+749055|Boys High School High Jump Finals|-- Yousef Fekieh 10 Cloverleaf NH
+749055|Boys High School High Jump Finals|-- Clayton Sewalish 10 Cloverleaf NH
+749055|Girls High School Pole Vault Finals|-- Delaney Ishler 10 Cloverleaf NH
+749055|Girls High School Pole Vault Finals|-- Ciara Kremer 12 Cloverleaf NH
+757741|Girls Varsity Pole Vault|-- Payten Shetterly 12 Cloverleaf NH
+754116|Girls High School Pole Vault Finals|-- Taylor Thur 11 Cloverleaf NH
+760322|Girls High School 100 Meters|-- Adriana Akers 9 Cloverleaf DQ
+763691|Girls Varsity Discus|-- Addison Reho 10 Cloverleaf ND
+642009|Girls Pole Vault|-- Thur, Taylor 10 Cloverleaf 6-00.00 NH
+642009|Girls Pole Vault|-- Shetterly, Payten 11 Cloverleaf 9-02.00 NH
+642009|Boys High Jump|-- Kilgore, Reed 10 Cloverleaf 5-04.00 NH
+642009|Boys Pole Vault|-- Baltic, Lincoln 9 Cloverleaf 7-00.00 NH
+686929|Girls Pole Vault|-- Taylor Thur 10 Cloverleaf 7-00.00 NH
+686929|Boys High Jump|-- Nathan Tomes 11 Cloverleaf 5-00.00 NH
+597587|Event 28 Boys High Jump|-- Nathan Tomes 10 Cloverleaf NH
+597587|Event 33 Girls Pole Vault|-- Payten Shetterly 10 Cloverleaf 8-06.00 NH
+613912|Event 27 Girls High Jump|-- Shetterly, Payten Cloverleaf NH
+510383|Girls Pole Vault|CAVEY, Brooklyn Cloverleaf NH
+510383|Girls Pole Vault|SHETTERLY, Payten Cloverleaf NH
+542137|Girls Pole Vault Prelims|scr Brooklyn Cavey 10 Cloverleaf NH 1
+538043|Event 27 Girls Pole Vault|-- Payten Shetterly 9 Cloverleaf NH
+476055|Girls Pole Vault|-- Laurell Brown 12 Cloverleaf NH
+476055|Boys High Jump|-- Will Jerome 11 Cloverleaf NH
+483356|Event 30 Boys Pole Vault|-- Perman, Dylan 10 Cloverleaf NH
+429940|Event 28 Boys High Jump|-- Nolan McNeal 12 Cloverleaf 5-00.00 NH
+422637|Boys Discus Throw|-- Kott, Ben 11 Cloverleaf 123-00 ND 2
+430306|Event 28 Boys High Jump|-- Nolan McNeal 12 Cloverleaf 5-00.00 NH
+426765|Event 28 Boys High Jump|-- Nolan McNeal 12 Cloverleaf NH
+426765|Event 33 Girls Pole Vault|-- Laurell Brown 11 Cloverleaf NH
+354269|Event 31 Boys High Jump|-- Kott, Ben Cloverleaf 5-00.00 NH
+354269|Event 31 Boys High Jump|-- Taylor, DeAnte Cloverleaf 5-00.00 NH
+357828|Boys High Jump METRO|-- Kott, Ben Cloverleaf 5-00.00 NH
+357412|Event 27 Girls Pole Vault|-- Corina Cass 11 Cloverleaf NH
+357412|Event 27 Girls Pole Vault|-- Cassidy Smith 9 Cloverleaf NH
+357412|Event 25 Girls High Jump|-- Cydnei Miller 9 Cloverleaf NH
+357412|Event 26 Boys High Jump|-- Ben Kott 9 Cloverleaf NH
+357412|Event 26 Boys High Jump|-- Daniel Sommers 12 Cloverleaf NH
+357920|Girls High Jump|--- Miller, Cydnei 9 Cloverleaf NH
+357920|Girls Pole Vault|--- Cass, Corina 11 Cloverleaf NH
+357920|Boys High Jump|--- Nau, Jacob 10 Cloverleaf NH
+357920|Boys High Jump|--- Kott, Ben 9 Cloverleaf NH
+314786|Event 28 Girls Pole Vault|-- # 532 Marshall, Maddie Cloverleaf 6-00.00 NH
+314786|Event 31 Boys High Jump|-- # 555 Bailey, Nick Cloverleaf 5-00.00 NH
+318138|Girls 1600 Meter Run|--- Porras, Maria Cloverleaf DNF
+318138|Girls High Jump|--- Wangler, Lisa Cloverleaf NH
+318138|Boys 1600 Meter Run|--- Gucker, Max Cloverleaf DNF
+318138|Boys High Jump|--- Oren, Adam Cloverleaf NH
+318138|Boys High Jump|--- Cass, Caleb Cloverleaf NH
+321959|Boys High Jump|--- Oren, Adam 12 Cloverleaf NH
+321959|Boys High Jump|--- Curtis, Ryan 12 Cloverleaf NH
+273003|Event 25 Boys Pole Vault|-- Matt Butt 12 Cloverleaf 9-00.00 NH
+273003|Event 25 Boys Pole Vault|-- Ben Daniels 10 Cloverleaf 9-00.00 NH
+273003|Event 26 Girls Pole Vault|-- Maddie Grey 10 Cloverleaf 8-00.00 NH
+279585|Girls High Jump|-- Licursi, Lexi Cloverleaf NH
+279585|Girls Pole Vault|-- Grey, Maddie Cloverleaf NH
+279585|Boys High Jump|-- Craig, Dylan Cloverleaf NH
+282278|Girls High Jump|-- Brianna Gallagher 11 Cloverleaf NH
+282278|Girls Pole Vault|-- Maddie Grey 10 Cloverleaf NH
+282278|Boys Pole Vault|-- Ben Daniels 10 Cloverleaf NH
