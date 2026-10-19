@@ -142,6 +142,7 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 | `Performance` | Id, AthleteId (null for relay), EventId, MeetId, TimeSeconds, DistanceInches, SortedAthleteHash, SchoolRecord, SeasonBest, PersonalBest, AllTimeRank (nullable int, not a DB column — populated by queries that join Leaderboards), Percentile (nullable byte, not a DB column — populated by queries that join PerformancePercentiles) |
 | `PerformanceAthlete` | Id, PerformanceId, AthleteId — relay junction table |
 | `PerformanceRound` | Id, PerformanceId, Round (1 Prelim / 2 Semi / 3 Final), TimeSeconds — optional display-only child rows for running/relay performances that ran rounds; `Performance.TimeSeconds` is the best (min). Chain shows only with ≥2 rounds. Field-event rounds are just attempts in `PerformanceAttempts`. See BRAIN.md [C55] |
+| `PerformanceBar` | Id, PerformanceId, HeightInches, Outcome (`O`/`XO`/`XXO`/`XXX`/`P`/`XP`/`XXP`; X miss, O clear, P pass) — optional display-only bar ladder for individual high jump / pole vault; `Performance.DistanceInches` is the best cleared bar. Shown by `_BarLadder.cshtml`. See BRAIN.md [C60] |
 
 **Relay performances** set `AthleteId = null` on `Performance` and link athletes via `PerformanceAthletes` table. `SortedAthleteHash` is a nullable string on `Performance` (no NOT NULL constraint enforced at app layer).
 
@@ -590,6 +591,7 @@ Curated traps that still apply. Full context for each lives in `BRAIN.md` under 
 - `p.SchoolRecord`, and relay `PersonalBest`, are stale/unreliable — use `AllTimeRank == 1` and best-per-event. `sp_RebuildLeaderboards` fully truncates and rebuilds `Leaderboards`, `PerformancePercentiles`, `EventStatistics`; never update them incrementally. [C8, C9, C17, C19, C31]
 - `AthleteRepository` UNION ALL: both branches must select `SeasonStartDate` (outer ORDER BY needs it). [C7]
 - `SaveAttemptSeriesAsync` is delete-then-insert for the whole series — never pass a partial series. `IsFieldEventType` (controller) intentionally differs from the JS/Razor `isFieldEvent` toggle (excludes `FieldRelay`). [C32]
+- `PerformanceBars` is display-only too (same rule as rounds/attempts): the counting mark stays `Performances.DistanceInches` = highest cleared bar. Scorer sheets sometimes use the inverted notation (X clear, O miss, "O = misses" written on the sheet) — normalise to X miss / O clear before storing. [C60]
 - `PerformanceRounds` is display-only: PRs, ranks, percentiles, and scoring still use the one `Performances` row per athlete-event-meet (`TimeSeconds` = best round). Do not add multiple Performance rows per athlete-event-meet. [C55]
 - Single-mark events get percentile 100 on purpose; `Tests/TestSupport/PercentileMath.cs` is a test-only mirror of the SQL and must be updated with it. [C31]
 - T-SQL changes (SP, schema) have historically not been run against a real SQL Server in the dev sandbox — verify manually. [C31, C32]

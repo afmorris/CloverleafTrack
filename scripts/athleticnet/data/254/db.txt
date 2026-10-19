@@ -1,0 +1,62 @@
+166|1|Discus|Timmy Shores|NULL|1415|0
+280|1|Discus|Will Rogalski|NULL|1258|0
+2430|1|Discus|Clay Combs|NULL|1255|0
+3309|1|Discus|Hunter Brooks|NULL|1222|0
+1890|1|Discus|Collin McNeal|NULL|1218|0
+388|1|Discus|Dylan Wittman|NULL|1019|0
+3322|1|Discus|Dominic Nau|NULL|1007|0
+3258|1|Discus|Royce Zirkle|NULL|999|0
+1294|1|Discus|Anthony Artwell|NULL|965|0
+431|1|Discus|Ethan Martin|NULL|865|0
+3370|1|Discus|Jack Chonko|NULL|752|0
+931|1|Discus|Preston Stark|NULL|679|0
+1323|1|Discus|Isaac Montgomery|NULL|604|0
+3203|1|Long Jump|Tristin Bogucki|NULL|238.25|0
+3429|1|Long Jump|Ethan Gray|NULL|199.5|0
+2534|1|Long Jump|David Hunter|NULL|182.5|0
+1893|1|Long Jump|Collin Saksa|NULL|161.75|0
+2877|1|Shot Put|Clay Combs|NULL|565|0
+3193|1|Shot Put|Timmy Shores|NULL|533.5|0
+552|1|Shot Put|Royce Zirkle|NULL|486.5|0
+930|1|Shot Put|Will Rogalski|NULL|466.5|0
+3210|1|Shot Put|Hunter Brooks|NULL|432|0
+860|1|Shot Put|Dominic Nau|NULL|429.5|0
+1933|1|Shot Put|Collin McNeal|NULL|412|0
+3418|1|Shot Put|Ethan Martin|NULL|393.5|0
+3125|1|Shot Put|Dylan Wittman|NULL|357|0
+3338|1|Shot Put|Jack Chonko|NULL|355.5|0
+1976|1|Shot Put|Anthony Artwell|NULL|350|0
+604|1|Shot Put|Brayden Beier|NULL|323|0
+1584|1|Shot Put|Preston Stark|NULL|308.5|0
+3267|1|Shot Put|Isaac Montgomery|NULL|305|0
+825|2|Discus|Presly McConnell|NULL|1188|0
+3245|2|Discus|Karoline Kreider|NULL|1140|0
+1659|2|Discus|Jayce Kreider|NULL|1085|0
+1402|2|Discus|Amelia Ryncarz|NULL|863|0
+3040|2|Discus|Berkeley Craddock|NULL|846|0
+1618|2|Discus|Avery Kott|NULL|818|0
+1705|2|Discus|Sarah Naftzger|NULL|782|0
+1768|2|Discus|Bailey Kehoe|NULL|762|0
+2632|2|Discus|Maclaine Bell|NULL|578|0
+2846|2|Long Jump|KK Campbell|NULL|185.75|0
+1396|2|Long Jump|Reese Barnett|NULL|180.5|0
+1342|2|Long Jump|Abigail Reinhardt|NULL|179.25|0
+1696|2|Long Jump|Grace Goldsberry|NULL|157|0
+193|2|Long Jump|Katelin Yagersz|NULL|132|0
+2431|2|Shot Put|Karoline Kreider|NULL|382|0
+2593|2|Shot Put|Presly McConnell|NULL|369|0
+1408|2|Shot Put|Amelia Ryncarz|NULL|363|0
+2251|2|Shot Put|Avery Kott|NULL|302.5|0
+2729|2|Shot Put|Berkeley Craddock|NULL|286|0
+2175|2|Shot Put|Bailey Kehoe|NULL|279.5|0
+1937|2|Shot Put|Jayce Kreider|NULL|278.5|0
+55|2|Shot Put|Sarah Naftzger|NULL|275|0
+2556|2|Shot Put|Gabriella Izzo|NULL|255|0
+683|2|Shot Put|Maclaine Bell|NULL|248|0
+
+230|2|High Jump|Payten Shetterly|NULL|48|0
+436|1|High Jump|Zach Brownson|NULL|62|0
+738|2|High Jump|Grace Goldsberry|NULL|52|0
+2544|1|High Jump|Logan Forbes|NULL|60|0
+3130|2|High Jump|Abigail Reinhardt|NULL|52|0
+3566|1|High Jump|Nathan Tomes|NULL|60|0

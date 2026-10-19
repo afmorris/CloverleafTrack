@@ -1,0 +1,71 @@
+2995|1|Discus|Clay Combs|NULL|1709|0
+96|1|Discus|Adam Gray|NULL|1411|0
+1681|1|Discus|Hunter Brooks|NULL|1399|0
+3400|1|Discus|Ethan Martin|NULL|1352|0
+740|1|Discus|Jacob Atkinson|NULL|1270|0
+470|1|Discus|Jack Chonko|NULL|1146|0
+2829|1|Discus|Royce Zirkle|NULL|1138|0
+1682|1|Discus|Dylan Wittman|NULL|1128|0
+2407|1|Discus|Gunnar Surrarrer|NULL|1038|0
+3498|1|Discus|Dominic Nau|NULL|972|0
+1525|1|Discus|Preston Stark|NULL|964|0
+664|1|Discus|JJ Johnson|NULL|956|0
+2200|1|Discus|Kaiden Stone|NULL|898|0
+452|1|Discus|Jake Schaefer|NULL|878|0
+972|1|Discus|Braylon Lade|NULL|867|0
+2443|1|Discus|Blake Thorne|NULL|836|0
+1479|1|Discus|Isaac Montgomery|NULL|813|0
+814|1|Long Jump|Ty Kovach|NULL|222.5|0
+162|1|Long Jump|Elliot Jordan|NULL|215.75|0
+74|1|Long Jump|Grady Pamer|NULL|210|0
+1316|1|Long Jump|Collin Saksa|NULL|205.75|0
+2512|1|Long Jump|Clayton Sewalish|NULL|201|0
+3369|1|Long Jump|Jackson Morris|NULL|183.5|0
+2072|1|Shot Put|Clay Combs|NULL|613.5|0
+3162|1|Shot Put|Dominic Nau|NULL|487|0
+190|1|Shot Put|Royce Zirkle|NULL|470|0
+3317|1|Shot Put|Ethan Martin|NULL|438|0
+2704|1|Shot Put|Adam Gray|NULL|422.5|0
+191|1|Shot Put|Jack Chonko|NULL|420.75|0
+3012|1|Shot Put|Dylan Wittman|NULL|414.5|0
+2230|1|Shot Put|Hunter Brooks|NULL|412|0
+2406|1|Shot Put|JJ Johnson|NULL|402|0
+3523|1|Shot Put|Jake Schaefer|NULL|401|0
+1162|1|Shot Put|Jacob Atkinson|NULL|386|0
+1418|1|Shot Put|Braylon Lade|NULL|362|0
+605|1|Shot Put|Isaac Montgomery|NULL|342|0
+423|1|Shot Put|Preston Stark|NULL|341|0
+1840|1|Shot Put|Kaiden Stone|NULL|334.5|0
+1354|1|Shot Put|Gunnar Surrarrer|NULL|319|0
+1146|1|Shot Put|Blake Thorne|NULL|317.5|0
+504|2|Discus|Presly McConnell|NULL|1303|0
+294|2|Discus|Berkeley Craddock|NULL|1113|0
+3076|2|Discus|Jayce Kreider|NULL|1081|0
+410|2|Discus|Addi Reho|NULL|1079|0
+3516|2|Discus|Amelia Ryncarz|NULL|985|0
+1377|2|Discus|Delaney Ishler|NULL|921|0
+487|2|Discus|Anna Naftzger|NULL|690|0
+3561|2|Discus|Izzy Messmore|NULL|608|0
+2515|2|Discus|Issy Mlckovsky|NULL|370|0
+2233|2|Long Jump|Abigail Reinhardt|NULL|194.5|0
+1230|2|Long Jump|KK Campbell|NULL|194.5|0
+254|2|Long Jump|Kinsey Bayer|NULL|188.25|0
+2881|2|Long Jump|Tessa Bogucki|NULL|166.75|0
+2727|2|Long Jump|Katelin Yagersz|NULL|135|0
+928|2|Long Jump|Lilly Southam|NULL|133|0
+217|2|Shot Put|Presly McConnell|NULL|463|0
+3169|2|Shot Put|Amelia Ryncarz|NULL|393|0
+2747|2|Shot Put|Berkeley Craddock|NULL|338.5|0
+2876|2|Shot Put|Jayce Kreider|NULL|322|0
+3541|2|Shot Put|Delaney Ishler|NULL|321|0
+93|2|Shot Put|Anna Naftzger|NULL|303|0
+916|2|Shot Put|Izzy Messmore|NULL|204|0
+454|2|Shot Put|Issy Mlckovsky|NULL|167|0
+
+880|2|High Jump|Emily Ellebruch|NULL|54|0
+1114|1|High Jump|Reed Kilgore|NULL|62|0
+1192|2|Pole Vault|Payten Shetterly|NULL|102|0
+1795|1|High Jump|Grady Pamer|NULL|62|0
+1963|2|Pole Vault|Taylor Thur|NULL|90|0
+2608|2|High Jump|Abigail Reinhardt|NULL|56|0
+3083|2|High Jump|Kinsey Bayer|NULL|56|0

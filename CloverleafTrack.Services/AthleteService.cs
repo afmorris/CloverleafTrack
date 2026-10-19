@@ -16,7 +16,8 @@ public class AthleteService(
     IPerformanceAttemptRepository? attemptRepository = null,
     IAthleteSummaryRepository? summaryRepository = null,
     IAthleteSummaryLinker? summaryLinker = null,
-    IPerformanceRoundRepository? roundRepository = null) : IAthleteService
+    IPerformanceRoundRepository? roundRepository = null,
+    IPerformanceBarRepository? barRepository = null) : IAthleteService
 {
     public async Task<List<AthleteViewModel>> GetActiveAthletesAsync(int currentSeason)
     {
@@ -476,6 +477,10 @@ public class AthleteService(
             ? await roundRepository.GetRoundsForPerformancesAsync(performances.Select(p => p.PerformanceId))
             : new List<PerformanceRound>();
         var roundLookup = PerformanceRoundSeriesBuilder.BuildLookup(rounds);
+        var bars = barRepository != null
+            ? await barRepository.GetBarsForPerformancesAsync(performances.Select(p => p.PerformanceId))
+            : new List<PerformanceBar>();
+        var barLookup = PerformanceBarSeriesBuilder.BuildLookup(bars);
 
         // Group by season (ordered most recent first)
         var seasons = performances
@@ -524,7 +529,8 @@ public class AthleteService(
                                     RawValue = p.DistanceInches ?? p.TimeSeconds,
                                     RelayAthletes = p.RelayAthletes,
                                     AttemptSeries = attemptLookup.GetValueOrDefault(p.PerformanceId) ?? new PerformanceAttemptSeriesViewModel(),
-                                    RoundSeries = roundLookup.GetValueOrDefault(p.PerformanceId) ?? new PerformanceRoundSeriesViewModel()
+                                    RoundSeries = roundLookup.GetValueOrDefault(p.PerformanceId) ?? new PerformanceRoundSeriesViewModel(),
+                                    BarSeries = barLookup.GetValueOrDefault(p.PerformanceId) ?? new PerformanceBarSeriesViewModel()
                                 })
                                 .ToList()
                         };

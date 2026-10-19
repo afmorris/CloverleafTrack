@@ -48,6 +48,11 @@ public class PerformanceEntryViewModel
     [Display(Name = "Final time")]
     public string? FinalInput { get; set; }
 
+    // High jump / pole vault bar ladder — optional, additive. One entry per line (or ';'): height then outcome,
+    // e.g. 4'4" XXO. The highest cleared bar overwrites the distance above. Blank = no ladder recorded.
+    [Display(Name = "Bars")]
+    public string? BarsInput { get; set; }
+
     // For display
     public string MeetName { get; set; } = string.Empty;
     public DateTime MeetDate { get; set; }

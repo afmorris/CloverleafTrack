@@ -267,6 +267,7 @@
                                                             <span class="text-gray-900 dark:text-white">@perf.AthleteName</span>
                                                         }
                                                     }
+                                                    @await Html.PartialAsync("_BarLadder", perf.BarSeries)
                                                     @await Html.PartialAsync("_AttemptStrip", perf.AttemptSeries)
                                                     @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                                 </td>
@@ -369,6 +370,7 @@
                                                             <span class="text-gray-900 dark:text-white">@perf.AthleteName</span>
                                                         }
                                                     }
+                                                    @await Html.PartialAsync("_BarLadder", perf.BarSeries)
                                                     @await Html.PartialAsync("_AttemptStrip", perf.AttemptSeries)
                                                     @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                                 </td>
@@ -471,6 +473,7 @@
                                                         <span class="text-gray-900 dark:text-white">@perf.AthleteName</span>
                                                     }
                                                 }
+                                                @await Html.PartialAsync("_BarLadder", perf.BarSeries)
                                                 @await Html.PartialAsync("_AttemptStrip", perf.AttemptSeries)
                                                 @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                             </td>

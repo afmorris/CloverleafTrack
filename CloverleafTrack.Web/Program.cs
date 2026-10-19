@@ -34,6 +34,7 @@ builder.Services.AddScoped<IMeetPlacingRepository, MeetPlacingRepository>();
 builder.Services.AddScoped<ISeasonScoringRepository, SeasonScoringRepository>();
 builder.Services.AddScoped<IPerformanceAttemptRepository, PerformanceAttemptRepository>();
 builder.Services.AddScoped<IPerformanceRoundRepository, PerformanceRoundRepository>();
+builder.Services.AddScoped<IPerformanceBarRepository, PerformanceBarRepository>();
 
 builder.Services.AddScoped<IAthleteService, AthleteService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();

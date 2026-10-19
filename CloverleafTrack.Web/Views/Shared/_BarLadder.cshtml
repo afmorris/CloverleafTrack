@@ -1,0 +1,22 @@
+@using CloverleafTrack.ViewModels.Shared
+@using CloverleafTrack.Web.Utilities
+@model PerformanceBarSeriesViewModel
+
+@*
+    High jump / pole vault bar ladder: one chip per height with its X / O / P outcome. Renders NOTHING when no
+    bar rows exist, so performances without a recorded ladder look exactly as they do today. The highest cleared
+    bar (the performance's mark) is highlighted.
+*@
+@if (Model.HasBars)
+{
+    <div class="bar-ladder" role="img" aria-label="Bar results">
+        @foreach (var bar in Model.Bars)
+        {
+            var state = bar.IsBest ? "is-clear is-best" : bar.IsCleared ? "is-clear" : bar.IsPass ? "is-pass" : "is-out";
+            <span class="bar-chip @state" title="@PerformanceFormatHelper.FormatDistance(bar.HeightInches): @bar.Outcome">
+                <span class="bar-chip-h">@PerformanceFormatHelper.FormatDistance(bar.HeightInches).Replace(" ", "")</span>
+                <span class="bar-chip-o">@bar.Outcome</span>
+            </span>
+        }
+    </div>
+}

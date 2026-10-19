@@ -1,0 +1,8 @@
+# 2025 Woodridge Dual (4/15/2025), scan_ggucker_2025-04-15 pages 20, 22, 23. Pages 22/23 used the inverted notation (X clear, O miss, "O = Misses" written on the sheet); converted here to standard notation.
+1|High Jump|Reed Kilgore|5-0:O;5-2:O;5-4:XXX
+1|High Jump|Nathan Tomes|5-0:XO;5-2:XXX
+1|High Jump|Grady Pamer|5-0:O;5-2:XXX
+2|High Jump|Emily Ellebruch|4-0:O;4-2:O;4-4:O;4-6:XXO;4-8:XXX
+2|High Jump|Kinsey Bayer|4-0:O;4-2:O;4-4:O;4-6:XO;4-8:XXX
+1|Pole Vault|Lincoln Baltic|7-0:XO;7-6:XXX
+2|Pole Vault|Taylor Thur|6-0:O;6-6:O;7-0:O;7-6:XXX

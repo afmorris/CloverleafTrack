@@ -265,6 +265,42 @@ public class AdminPerformanceRepository(IDbConnectionFactory connectionFactory) 
         await connection.ExecuteAsync("EXEC sp_RebuildLeaderboards");
     }
 
+    public async Task<List<PerformanceBar>> GetBarsForPerformanceAsync(int performanceId)
+    {
+        using var connection = connectionFactory.CreateConnection();
+        var bars = await connection.QueryAsync<PerformanceBar>(
+            "SELECT * FROM PerformanceBars WHERE PerformanceId = @PerformanceId ORDER BY HeightInches",
+            new { PerformanceId = performanceId });
+        return bars.ToList();
+    }
+
+    public async Task SaveBarsAsync(int performanceId, List<PerformanceBar> bars)
+    {
+        using var connection = connectionFactory.CreateConnection();
+
+        await connection.ExecuteAsync("DELETE FROM PerformanceBars WHERE PerformanceId = @PerformanceId", new { PerformanceId = performanceId });
+
+        const string insertSql = @"
+            INSERT INTO PerformanceBars (PerformanceId, HeightInches, Outcome)
+            VALUES (@PerformanceId, @HeightInches, @Outcome)";
+
+        foreach (var bar in bars)
+        {
+            bar.PerformanceId = performanceId;
+            await connection.ExecuteAsync(insertSql, bar);
+        }
+
+        var best = PerformanceBarSeries.BestClearedHeight(bars);
+        if (best.HasValue)
+        {
+            await connection.ExecuteAsync(
+                "UPDATE Performances SET DistanceInches = @DistanceInches WHERE Id = @Id",
+                new { DistanceInches = best.Value, Id = performanceId });
+        }
+
+        await connection.ExecuteAsync("EXEC sp_RebuildLeaderboards");
+    }
+
     public async Task<List<Performance>> GetPerformancesForMeetAsync(int meetId)
     {
         using var connection = connectionFactory.CreateConnection();
