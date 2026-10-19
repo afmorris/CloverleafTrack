@@ -127,7 +127,7 @@ using Environment = CloverleafTrack.Models.Enums.Environment;
 | Model | Key fields |
 |---|---|
 | `Season` | Id, Name, StartDate, EndDate, IsCurrentSeason, Status, ScoringEnabled, Meets |
-| `Meet` | Id, Name, Date, Environment, HandTimed, LocationId, SeasonId, EntryStatus, MeetType, MeetLevel (Varsity/JV — JV meets are excluded from percentile-based MeetScore components), ScoringTemplateId?, Participants, Slug (computed via Slugify), ResultsUrl |
+| `Meet` | Id, Name, Date, Environment, HandTimed, LocationId, SeasonId, EntryStatus, MeetType, MeetLevel (Varsity/JV — JV meets are excluded from percentile-based MeetScore components), ScoringTemplateId?, OfficialResultsUrl? (external official-results link, http/https only; shown on the meet page), Participants, Slug (computed via Slugify), ResultsUrl |
 | `ScoringTemplate` | Id, Name, IsBuiltIn, Places |
 | `ScoringTemplatePlace` | Id, ScoringTemplateId, Place, Points |
 | `MeetParticipant` | Id, MeetId, SchoolName, SortOrder |

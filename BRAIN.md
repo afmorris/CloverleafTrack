@@ -2046,3 +2046,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** The Athlete page (`Roster/Details.cshtml`) still uses the strips in the mark cell with `Compact` labels. `wwwroot/css/site.css` is a tracked, minified build: with no node toolchain available I hand-appended the Tailwind rules for `.gap-x-1`, `.align-middle` and `.sm:px-4` exactly as Tailwind emits them; a future `pnpm run dev` will regenerate them from the markup, so nothing to undo. Razor views are precompiled, so restart a running dev server after editing them.
 
 **Key files:** `Views/Meets/Details.cshtml`, `Views/Shared/_RoundStrip.cshtml`, `Views/Shared/_AttemptStrip.cshtml`, `wwwroot/css/site.css`.
+
+### [C63] Meets.OfficialResultsUrl — Link to Externally Hosted Official Results
+
+**What changed:** New nullable `Meets.OfficialResultsUrl NVARCHAR(500)` (`docs/migration_meet_official_results_url.sql`, already run on live and local). Admin Create/Edit has an "Official Results URL" field (validated `[Url]`, http/https only, blank → null via `MeetsController.NormalizeUrl`; the "copy meet" action deliberately does not copy it). The public meet page shows an "Official results on <host> ↗" chip (`target=_blank rel="noopener noreferrer"`); `MeetService` only passes through http/https links, so a stored `javascript:` value can never render.
+
+**Why:** Owner wants each meet to link to wherever its official results live (athletic.net, oh.milesplit.com, timing companies). Used by the athletic.net/MileSplit crawl to attach links to matched meets.
+
+**Watch out:** Run the migration before deploying code that reads it (`m.*` queries and the Admin INSERT/UPDATE reference the column). One link per meet; if a meet is on both sites, prefer athletic.net (it has splits and field series) unless the owner says otherwise.
+
+**Key files:** `Models/Meet.cs`, `ViewModels/Admin/Meets/MeetFormViewModel.cs`, `Web/Areas/Admin/Controllers/MeetsController.cs`, `AdminMeetRepository.cs`, `Services/MeetService.cs`, `Views/Meets/Details.cshtml`, `Areas/Admin/Views/Meets/Create.cshtml`.

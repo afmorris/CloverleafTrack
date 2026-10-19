@@ -474,4 +474,21 @@ public class MeetServiceTests
 
         result!.BoysEvents.Single().Performances.Single().RoundSeries.HasRounds.Should().BeFalse();
     }
+
+    [Theory]
+    [InlineData("https://www.athletic.net/TrackAndField/meet/637822", "https://www.athletic.net/TrackAndField/meet/637822")]
+    [InlineData("javascript:alert(1)", null)]
+    [InlineData("ftp://example.com/results", null)]
+    [InlineData("", null)]
+    [InlineData(null, null)]
+    public async Task GetMeetDetailsAsync_OfficialResultsUrl_IsOnlyPassedThroughForHttpLinks(string? stored, string? expected)
+    {
+        var meet = BuildMeet();
+        meet.OfficialResultsUrl = stored;
+        SetupMeetDetails(meet, new List<MeetPerformanceDto> { BuildPerf(1, "100M", Gender.Male, EventCategory.Sprints, EventType.Running, timeSeconds: 11.2) });
+
+        var result = await _service.GetMeetDetailsAsync("spring-invitational");
+
+        result!.OfficialResultsUrl.Should().Be(expected);
+    }
 }
