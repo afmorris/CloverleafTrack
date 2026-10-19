@@ -1,0 +1,240 @@
+dbMeet	msMeet	status	gender	event	who	sourceValue	dbValue
+280	709968	ATHLETE?	Girls	60M	Savannah Reho	9.31	none
+280	709968	ATHLETE?	Girls	200M	Savannah Reho	32.53	none
+280	712377	ATHLETE?	Boys	60M	Bryce Neil	7.83	none
+282	690133	ATHLETE?	Boys	60M	Bryce Neil	7.92	none
+80	650781	NOEVENT	Girls	Shot Put Div 2	('Presly McConnell',)	371.0	
+80	650781	NOEVENT	Boys	Shot Put Div 2	('Clay Combs',)	577.0	
+177	403945	RELAY-MISSING	Girls	4x800M Relay	[]	625.09	
+177	403945	RELAY-MISSING	Boys	4x400M Relay	[]	248.95	
+177	403945	RELAY-MISSING	Boys	4x800M Relay	[]	525.76	
+206	404310	RELAY-MISSING	Boys	4x200M Relay	[]	107.67	
+206	404310	RELAY-MISSING	Boys	4x800M Relay	[]	649.19	
+206	404310	RELAY-MISSING	Boys	4x400M Relay	[]	236.91	
+20	375103	RELAY-MISSING	Boys	4x800M Relay	['Max Gucker', 'Alex Derhammer', 'Brett Gucker', 'Andrew Hibler']	543.7	
+20	375103	ATHLETE?	Girls	Shot Put	Meagan Van Meter	289.5	ambiguous
+120	336444	RELAY-MISSING	Girls	4x400M Relay	['Tommie Kurtz', 'Sara Naples', 'Maria Porras', 'Paige Munchick']	287.19	
+120	336444	RELAY-MISSING	Boys	4x400M Relay	['Thomas Lormeau', 'Jacob Nau', 'Andrew Hibler', 'Alex Derhammer']	249.11	
+120	336444	RELAY-MISSING	Boys	4x800M Relay	['Thomas Lormeau', 'Max Gucker', 'Cole Yagerz', 'Alex Derhammer']	548.86	
+19	336445	RELAY-MISSING	Boys	4x800M Relay	['Thomas Lormeau', 'Max Gucker', 'Andrew Hibler', 'Alex Derhammer']	535.77	
+15	298344	RELAY-MISSING	Girls	4x800M Relay	['Tommie Kurtz', 'Sara Naples', 'Katelyn Malena', 'Lexi Licursi']	717.62	
+15	298344	ATHLETE?	Boys	400M	Asa Gyn	63.24	none
+15	298344	RELAY-MISSING	Boys	4x800M Relay	['Tristan Vaughan', 'Dillon West', 'Max Gucker', 'Asa Gyn']	562.38	
+32	257685	RELAY-MISSING	Girls	4x800M Relay	['Tommie Kurtz', 'Emma Nagel', 'Sara Naples', 'Ella Loth']	721.0	
+32	257685	RELAY-MISSING	Boys	4x800M Relay	['Tristan Vaughan', 'Dillon West', 'Estevan Ortega', 'Matt Grissom']	584.93	
+289	690173	ATHLETE?	Boys	100M	Bryce Neil	12.32	none
+289	690173	ATHLETE?	Boys	Shot Put	Jacob (Jake) Schaefer	475.25	none
+300	750758	NOEVENT	Girls	400m Division 3 - Prelims (Division 3) (Prelims)	('Kayla Shook',)	60.79	
+258	655975	ATHLETE?	Girls	4K Distance Medley		921.04	none
+258	655975	ATHLETE?	Boys	4K Distance Medley		778.64	none
+258	655975	ATHLETE?	Girls	800M Sprint Medley		127.13	none
+258	655975	ATHLETE?	Boys	800M Sprint Medley		113.27000000000001	none
+258	655975	ATHLETE?	Girls	Shot Put		82.99999976158142	none
+147	651785	MISSING	Girls	400M	Katie Wershing	65.8	exact
+247	652304	RELAY-MISMATCH	Boys	4x1600M Relay	[]	1196.86	[1542.98]
+247	652304	ATHLETE?	Girls	800M Sprint Medley		116.25	none
+247	652304	ATHLETE?	Boys	800M Sprint Medley		104.67	none
+247	652304	ATHLETE?	Girls	4K Distance Medley		921.77	none
+247	652304	ATHLETE?	Boys	4K Distance Medley		742.1	none
+247	652304	RELAY-MISMATCH	Boys	4x100M Relay	[]	44.00000002980232	[48.14]
+247	652304	MISMATCH	Girls	Discus	Presly McConnell	833.0	1157.0
+247	652304	ATHLETE?	Boys	Shot Put		111.2	none
+247	652304	ATHLETE?	Boys	300M Hurdles		599.12	none
+271	679505	MISMATCH	Boys	Discus	Clay Combs	1884.0	1894.0
+274	648529	MISMATCH	Boys	Long Jump	Collin Saksa	221.25	188.25
+276	686244	MISMATCH	Boys	400M	Isaac Smith	52.79	53.19
+276	686244	MISSING	Boys	400M	Reed Kilgore	53.48	exact
+276	686244	MISMATCH	Girls	400M	Katie Wershing	61.32	63.38
+276	686244	NOEVENT	Girls	Shot Put Seated	('',)	150.5	
+269	679901	MISSING	Boys	Shot Put	Royce Zirkle	461.5	exact
+269	679901	RELAY-MISSING	Boys	4x800M Relay	[]	507.37	
+269	679901	RELAY-MISMATCH	Boys	4x400M Relay	[]	128.5	[210.96]
+278	679882	ATHLETE?	Girls	Pole Vault	Payten Shetterly 11 f	120.0	none
+37	600237	ATHLETE?	Girls	4K Distance Medley		911.48	none
+37	600237	ATHLETE?	Boys	4K Distance Medley		820.62	none
+37	600237	ATHLETE?	Girls	800M Sprint Medley		133.03	none
+37	600237	ATHLETE?	Boys	800M Sprint Medley		110.22	none
+37	600237	ATHLETE?	Girls	Shot Put		102.99999952316284	none
+172	582665	ATHLETE?	Girls	800M Sprint Medley		111.61	none
+172	582665	ATHLETE?	Boys	800M Sprint Medley		102.68	none
+172	582665	ATHLETE?	Girls	4K Distance Medley		884.03	none
+172	582665	ATHLETE?	Boys	4K Distance Medley		797.56	none
+172	582665	ATHLETE?	Boys	200M		41.99999997019768	none
+50	584821	ATHLETE?	Girls	800M Sprint Medley		108.74000000000001	none
+50	584821	ATHLETE?	Boys	800M Sprint Medley		107.07	none
+50	584821	ATHLETE?	Girls	4K Distance Medley		911.3	none
+50	584821	ATHLETE?	Boys	4K Distance Medley		801.31	none
+50	584821	ATHLETE?	Boys	Shot Put		48.99999976158142	none
+25	597587	MISMATCH	Girls	Discus	Karoline Kreider	946.0	1021.0
+25	597587	MISMATCH	Boys	Discus	Tim Shores	1476.0	1477.0
+25	597587	MISMATCH	Girls	Shot Put	Karoline Kreider	386.5	391.0
+233	613912	MISMATCH	Boys	Discus	Dylan Wittman	1208.0	1239.0
+140	613915	MISMATCH	Girls	200M	Riley Evans	25.82	25.55
+133	607578	RELAY-MISMATCH	Girls	4x400M Relay	[]	250.33	[255.93]
+87	602433	MISMATCH	Girls	100M	Riley Evans	12.78	12.25
+87	602433	RELAY-MISMATCH	Girls	4x200M Relay	[]	104.61	[102.75]
+87	602433	MISMATCH	Girls	400M	Riley Evans	57.88	56.44
+87	602433	MISMATCH	Boys	Discus	Tim Shores	1555.0	1542.0
+96	530482	ATHLETE?	Girls	4K Distance Medley		952.53	none
+96	530482	ATHLETE?	Boys	4K Distance Medley		783.45	none
+96	530482	ATHLETE?	Girls	Shot Put		69.99999952316284	none
+70	536722	ATHLETE?	Boys	100M	Isaiah Curt	12.06	none
+70	536722	ATHLETE?	Boys	1600M	Josh Bohemian	346.07	none
+70	536722	MISMATCH	Boys	200M	Oakley Kemp	25.1	25.19
+70	536722	MISSING	Boys	200M	Alex Randall	27.48	exact
+70	536722	MISSING	Boys	3200M	Landon Southam	779.13	exact
+70	536722	MISMATCH	Boys	Shot Put	Dominic Nau	458.0	372.0
+70	536722	MISSING	Boys	Shot Put	John Artwell	333.0	exact
+86	520947	ATHLETE?	Girls	800M Sprint Medley		113.32	none
+86	520947	ATHLETE?	Boys	800M Sprint Medley		103.28999999999999	none
+86	520947	ATHLETE?	Girls	4K Distance Medley		862.49	none
+86	520947	ATHLETE?	Boys	4K Distance Medley		743.18	none
+86	520947	ATHLETE?	Boys	200M		75.0000005364418	none
+106	538043	MISSING	Boys	110M Hurdles	Isaac Baltic	18.67	exact
+259	545291	MISMATCH	Girls	Pole Vault	Payten Shetterly	72.0	78.0
+124	470013	NOEVENT	Girls	Discus Throw Relay	('Karoline Kreider',)	1015.0	
+124	470013	NOEVENT	Girls	Discus Throw Relay	('Cydnei Miller',)	859.0	
+124	470013	NOEVENT	Girls	Discus Throw Relay	('Sarah Kelly',)	771.0	
+124	470013	NOEVENT	Boys	Shot Put Relay	('Clay Combs',)	408.0	
+124	470013	NOEVENT	Boys	Shot Put Relay	('Will Rogalski',)	420.0	
+124	470013	NOEVENT	Boys	Shot Put Relay	('Gavin Buckles',)	379.5	
+124	470013	NOEVENT	Boys	Discus Throw Relay	('Ben Kott',)	1560.0	
+124	470013	NOEVENT	Boys	Discus Throw Relay	('Will Rogalski',)	1320.0	
+124	470013	NOEVENT	Boys	Discus Throw Relay	('Clay Combs',)	1440.0	
+124	470013	NOEVENT	Girls	Shot Put Relay	('Karoline Kreider',)	337.5	
+124	470013	NOEVENT	Girls	Shot Put Relay	('Sarah Kelly',)	321.25	
+124	470013	NOEVENT	Girls	Shot Put Relay	('Natasha Messmore',)	273.5	
+124	470013	RELAY-MISMATCH	Girls	4x100M Shuttle Hurdles	[['Vicki Brandt', 10], ['Hailey Strasser', 11], ['Liberty Ridenour', 12], ['Magaret Tolley', 9]]	90.0	[84.71]
+124	470013	RELAY-MISMATCH	Boys	4x110M Shuttle Hurdles	[['Chase Young', 10], ['Ray Farnham', 12], ['Colton Funai', 11], ['Dylan Perman', 10]]	82.0	[85.9]
+124	470013	RELAY-MISMATCH	Girls	4x100M Relay	[['Paige Munchick', 12], ['Ashley Sigmon', 12], ['Kierston Campbell', 9], ['Julia Armogida', 11]]	54.0	[53.31]
+124	470013	RELAY-MISMATCH	Boys	4x100M Relay	[['Oakley Kemp', 11], ['Ben Kott', 12], ['Emilio Rivera', 12], ['Phillip Hamilton', 12]]	48.0	[47.54]
+124	470013	RELAY-MISMATCH	Boys	4x800M Relay	[['Hunter Stallings', 11], ['Nolan Freeland', 12], ['Ben Myers', 9], ['Vova Herdman', 11]]	525.0	[538.44]
+124	470013	RELAY-MISMATCH	Girls	4x200M Relay	[['Paige Munchick', 12], ['Julia Armogida', 11], ['Callee Gibson', 9], ['Brooklyn Cavey', 9]]	115.0	[116.94]
+124	470013	RELAY-MISMATCH	Boys	4x200M Relay	[['Tristan Bogucki', 9], ['Yuri Himes', 11], ['Will Jerome', 11], ['Emilio Rivera', 12]]	100.0	[101.19]
+124	470013	RELAY-MISMATCH	Girls	4x400M Relay	[['Paige Munchick', 12], ['Emma Malikowski', 11], ['Emma Hibler', 9], ['Julia Armogida', 11]]	275.0	[282.15]
+124	470013	RELAY-MISMATCH	Boys	4x400M Relay	[['Vova Herdman', 11], ['Hunter Stallings', 11], ['Will Jerome', 11], ['Andrew Hibler', 12]]	220.0	[221.98]
+168	470920	NOEVENT	Girls	High Jump Relay	('Ashley Sigmon',)	61.0	
+168	470920	NOEVENT	Girls	High Jump Relay	('Laurell Brown',)	56.0	
+168	470920	NOEVENT	Girls	High Jump Relay	('Kierston Campbell',)	54.0	
+168	470920	NOEVENT	Boys	High Jump Relay	('Phillip Hamilton',)	68.0	
+168	470920	NOEVENT	Boys	High Jump Relay	('Will Jerome',)	63.0	
+168	470920	NOEVENT	Girls	Long Jump Relay	('Emma Malikowski',)	184.5	
+168	470920	NOEVENT	Girls	Long Jump Relay	('Laurell Brown',)	180.5	
+168	470920	NOEVENT	Girls	Long Jump Relay	('Reese Barnett',)	166.25	
+168	470920	NOEVENT	Boys	Long Jump Relay	('Oakley Kemp',)	239.75	
+168	470920	NOEVENT	Boys	Long Jump Relay	('Phillip Hamilton',)	218.0	
+168	470920	NOEVENT	Boys	Long Jump Relay	('Will Jerome',)	212.5	
+168	470920	NOEVENT	Girls	Discus Throw Relay	('Presly McConnell',)	999.0	
+168	470920	NOEVENT	Girls	Discus Throw Relay	('Cydnei Miller',)	981.0	
+168	470920	NOEVENT	Girls	Discus Throw Relay	('Sarah Kelly',)	738.0	
+168	470920	NOEVENT	Boys	Discus Throw Relay	('Ben Kott',)	1366.0	
+168	470920	NOEVENT	Boys	Discus Throw Relay	('Lakota Hagenbaugh',)	1071.0	
+168	470920	NOEVENT	Boys	Discus Throw Relay	('Luke Yuravak',)	1028.0	
+168	470920	NOEVENT	Girls	Shot Put Relay	('Presly McConnell',)	383.75	
+168	470920	NOEVENT	Girls	Shot Put Relay	('Karoline Kreider',)	356.75	
+168	470920	NOEVENT	Girls	Shot Put Relay	('Sarah Kelly',)	343.75	
+168	470920	NOEVENT	Boys	Shot Put Relay	('Luke Yuravak',)	534.75	
+168	470920	NOEVENT	Boys	Shot Put Relay	('Will Rogalski',)	441.75	
+168	470920	NOEVENT	Boys	Shot Put Relay	('Clay Combs',)	430.75	
+43	477158	ATHLETE?	Girls	800M Sprint Medley		113.28	none
+43	477158	ATHLETE?	Boys	800M Sprint Medley		102.07	none
+43	477158	ATHLETE?	Girls	4K Distance Medley		892.03	none
+43	477158	ATHLETE?	Boys	4K Distance Medley		693.82	none
+225	484209	MISSING	Boys	Shot Put	Will Rogalski	493.0	exact
+225	484209	MISSING	Boys	Pole Vault	Ray Farnham	96.0	exact
+122	483356	MISMATCH	Girls	800M	Brooke Gucker	162.56	162.65
+122	483356	MISSING	Boys	200M	Hayden Jarvis	27.94	exact
+122	483356	MISMATCH	Boys	Shot Put	Tim Shores	459.0	464.0
+122	483356	MISSING	Boys	Shot Put	Dylan Wittman	362.5	exact
+46	420054	ATHLETE?	Boys	100M	Brooklynn         W12 Crist	22.14	none
+46	420054	ATHLETE?	Boys	100M	Bridgette       W12 Donahue	34.61	none
+46	420054	NOEVENT	Girls	High Jump Relay	('Ashley Sigmon',)	63.0	
+46	420054	NOEVENT	Girls	High Jump Relay	('Emma Malikowski',)	58.0	
+46	420054	NOEVENT	Girls	High Jump Relay	('Grace Goldsberry',)	51.0	
+46	420054	NOEVENT	Boys	High Jump Relay	('Phillip Hamilton',)	68.0	
+46	420054	NOEVENT	Girls	Pole Vault Relay	('Cassidy Smith',)	96.0	
+46	420054	NOEVENT	Girls	Pole Vault Relay	('Laurell Brown',)	72.0	
+46	420054	NOEVENT	Boys	Pole Vault Relay	('Luke Malena',)	120.0	
+46	420054	NOEVENT	Girls	Long Jump Relay	('Emma Malikowski',)	185.0	
+46	420054	NOEVENT	Girls	Long Jump Relay	('Ashley Sigmon',)	184.75	
+46	420054	NOEVENT	Girls	Long Jump Relay	('Laurell Brown',)	174.0	
+46	420054	NOEVENT	Boys	Long Jump Relay	('Michael Williams',)	240.5	
+46	420054	NOEVENT	Boys	Long Jump Relay	('Jacob Nau',)	219.0	
+46	420054	NOEVENT	Boys	Long Jump Relay	('Phillip Hamilton',)	207.5	
+46	420054	NOEVENT	Girls	Discus Throw Relay	('Delayna Harvey',)	949.0	
+46	420054	NOEVENT	Girls	Discus Throw Relay	('Karoline Kreider',)	852.0	
+46	420054	NOEVENT	Girls	Discus Throw Relay	('Kayleigh Ethington',)	788.0	
+46	420054	NOEVENT	Boys	Discus Throw Relay	('Ben Kott',)	1507.0	
+46	420054	NOEVENT	Boys	Discus Throw Relay	('Tommy Sword',)	1438.0	
+46	420054	NOEVENT	Boys	Discus Throw Relay	('Michael Ribnikar',)	1299.0	
+46	420054	NOEVENT	Girls	Shot Put Relay	('Delayna Harvey',)	308.25	
+46	420054	NOEVENT	Girls	Shot Put Relay	('Karoline Kreider',)	307.0	
+46	420054	NOEVENT	Girls	Shot Put Relay	('Natasha Messmore',)	269.0	
+46	420054	NOEVENT	Boys	Shot Put Relay	('Luke Yuravak',)	473.0	
+46	420054	NOEVENT	Boys	Shot Put Relay	('Tommy Sword',)	426.25	
+46	420054	NOEVENT	Boys	Shot Put Relay	('Zach Greer',)	391.5	
+46	420054	NOEVENT	Girls	Shot Put Wheelchair	('Brooklynn Crist',)	185.0	
+46	420054	NOEVENT	Girls	Shot Put Wheelchair	('Bridgette Donahue',)	91.5	
+51	426606	NOEVENT	Girls	100 Meter Wheelchair	('Brooklynn Crist',)	22.41	
+51	426606	NOEVENT	Girls	100 Meter Wheelchair	('Bridgette Donahue',)	40.0	
+51	426606	NOEVENT	Girls	400 Meter Wheelchair	('Brooklynn Crist',)	85.34	
+51	426606	MISMATCH	Girls	800M	Alyssa Stoner	150.09	150.69
+51	426606	NOEVENT	Girls	800 Meter Wheelchair	('Brooklynn Crist',)	199.1	
+51	426606	NOEVENT	Girls	Shot Put Wheelchair	('Brooklynn Crist',)	184.75	
+51	426606	NOEVENT	Girls	Shot Put Wheelchair	('Bridgette Donahue',)	87.5	
+51	426606	MISMATCH	Boys	Shot Put	Luke Yuravak	497.25	493.25
+54	426765	MISMATCH	Boys	1600M	Nathan Naples	305.05	305.77
+54	426765	MISMATCH	Girls	800M	Allison Yagersz	155.73	155.84
+54	426765	NOEVENT	Girls	High Jump Ashley Sigmo	('Ashley Sigmon',)	58.0	
+54	426765	NOEVENT	Girls	High Jump Ashley Sigmo	('Emma Malikowski',)	56.0	
+78	354269	MISSING	Girls	100M	Brooklynn Crist	21.18	exact
+78	354269	MISSING	Girls	400M	Brooklynn Crist	80.52	exact
+78	354269	MISSING	Girls	800M	Brooklynn Crist	176.71	exact
+78	354269	ATHLETE?	Boys	200M	Jacob Knau	26.31	none
+78	354269	ATHLETE?	Boys	Long Jump	Jacob Knau	203.0	none
+78	354269	MISSING	Girls	Shot Put	Brooklynn Crist	180.0	exact
+21	357412	NOEVENT	Girls	Shot Put Wheelchair	('Bridgette Donahue',)	81.0	
+21	357412	MISSING	Boys	Shot Put	Tommy Sword	443.0	exact
+21	357412	MISSING	Boys	Shot Put	Cameron McNeal	411.0	exact
+21	357412	MISSING	Boys	Discus	Ben Kott	1328.0	exact
+21	357412	MISSING	Boys	Discus	Zach Greer	1180.0	exact
+21	357412	MISSING	Boys	Pole Vault	Nate Brown	126.0	exact
+21	357412	MISSING	Boys	Pole Vault	Nick Ziegler	114.0	exact
+21	357412	NOEVENT	Girls	100 Meter Dash Wheelchair	('Bridgette Donahue',)	43.45	
+183	357828	MISSING	Girls	Shot Put	Megan Van Meter	309.5	exact
+183	357828	MISSING	Girls	Shot Put	Brooklynn Crist	157.0	exact
+26	357920	MISSING	Girls	Shot Put	Megan Van Meter	314.75	exact
+125	314786	ATHLETE?	Girls	Shot Put	Donahue (wheeled)	82.0	none
+61	317775	NOEVENT	Girls	100 Meter Dash Wheelchair	('Brooklynn Crist',)	21.57	
+61	317775	NOEVENT	Girls	100 Meter Dash Wheelchair	('Bridgette Donahue',)	42.2	
+61	317775	NOEVENT	Girls	400 Meter Dash Wheelchair	('Brooklynn Crist',)	77.65	
+61	317775	NOEVENT	Girls	400 Meter Dash Wheelchair	('Bridgette Donahue',)	209.67000000000002	
+61	317775	NOEVENT	Girls	800 Meter Run Wheelchair	('Brooklynn Crist',)	168.31	
+61	317775	NOEVENT	Girls	800 Meter Run Wheelchair	('Bridgette Donahue',)	443.78	
+186	318138	MISMATCH	Girls	1600M	Sara Naples	768.68	377.24
+186	318138	MISMATCH	Boys	1600M	Dillon West	601.05	312.55
+127	308361	NOEVENT	Girls	100 Meter Dash Wheelchair	('Bridgette Donahue',)	48.91	
+127	308361	NOEVENT	Girls	200 Meter Dash Wheelchair	('Bridgette Donahue',)	120.81	
+127	308361	NOEVENT	Girls	400 Meter Dash Wheelchair	('Bridgette Donahue',)	253.41	
+14	320203	MISMATCH	Girls	100M	Maddie Boltz	13.59	13.53
+14	320203	MISMATCH	Girls	100M	Sara Keener	13.69	13.4
+14	320203	MISMATCH	Girls	200M	Emily Romano	27.61	27.51
+14	320204	NOEVENT	Girls	Shot Put COUNTY	('Brooklynn Crist',)	1404.0	
+14	320204	NOEVENT	Girls	Shot Put COUNTY	('Bridgette Donahue',)	84.75	
+14	320204	MISMATCH	Boys	100M	Zack Munchick	11.73	11.52
+14	320204	NOEVENT	Boys	100 Meter Dash COUNTY	('Brooklynn\tW Crist',)	22.47	
+14	320204	NOEVENT	Boys	100 Meter Dash COUNTY	('Bridgette\tW Donahue',)	42.78	
+14	320204	MISMATCH	Girls	400M	Tommie Kurtz	62.54	60.85
+14	320204	MISMATCH	Girls	400M	Maddie Boltz	65.93	65.72
+14	320204	MISMATCH	Boys	400M	Frank Stepp	52.42	52.12
+14	320204	MISMATCH	Boys	400M	Blake Wilson	57.5	54.88
+14	320204	NOEVENT	Boys	800 Meter Run COUNTY	('Brooklynn\tW Crist',)	179.64	
+49	273003	MISMATCH	Girls	1600M	Katelyn Malena	379.25	379.31
+161	279585	NOEVENT	Girls	4x103 Meter Relay Ironwoman		64.65	
+161	279585	NOEVENT	Boys	4x103 Meter Relay Ironman		56.48	
+161	279585	MISMATCH	Boys	Discus	Nate Clingan	1363.5	1363.0
+108	281480	MISMATCH	Girls	400M	Jenna Oliver	64.48	64.39
+108	281480	MISMATCH	Boys	400M	Ryan Curtis	55.92	55.11
+108	281480	MISMATCH	Girls	300M Hurdles	Zana Ross	49.04	48.7
+108	281480	MISMATCH	Girls	200M	Jenna Oliver	28.6	28.19
+174	282278	MISMATCH	Boys	800M	Nick Bailey	132.94	138.46
