@@ -2232,4 +2232,6 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 
 **Watch out:** the download loop is not in the repo: for each id, `curl -sL -A <browser UA> https://oh.milesplit.com/meets/<id>/results`, take the first `/results/<rid>/raw` link, curl it and strip tags from the `<pre>`; save as `/tmp/msraw/ms-<id>.txt` plus `/tmp/msraw/ids.txt` (`<msId> <dbMeetId>` pairs from `matches.tsv`). Mismatches are leads only: either source may be wrong, and the comparison uses the best mark across rounds.
 
+**Watch out (Ids):** athletes created by the earlier import SQLs ([C71]-[C73]) have different Ids on live and locally, so `build_missing_sql.py` references them by name (`BYNAME`); the first live run of the committed file was stopped by its Id assertion (Megan Van Meter 980 vs 978) before writing anything.
+
 **Key files:** `scripts/crawl/{compare_ms_vs_db.py,build_missing_sql.py}`, `docs/imports/results-missing-ms.sql`, `docs/results-level-gap-report.md`.
