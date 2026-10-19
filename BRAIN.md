@@ -2245,3 +2245,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** a wheelchair athlete can legitimately appear in a normal event (Brooklynn Crist's 21.18 100M at the 2019 Cowen Redbird is in the normal Girls 100M). The 12 "large difference" marks in `docs/results-level-gap-report.md` include source rows that are plainly wrong (Orange Relays 2018 "1600M" 12:48.68) as well as likely DB typos; the 27 small ones await the owner's go-ahead to take MileSplit's mark.
 
 **Key files:** `scripts/crawl/{parse_hytek.py,parse_hytek2.py,compare_ms_vs_db.py,build_missing_sql.py,build_hytek_sql.py}`, `docs/imports/results-missing-ms-{2,3,4}.sql`, `docs/results-level-gap-report.md`.
+
+### [C76] MileSplit Marks Applied to 22 Small Differences
+
+**What changed:** `docs/imports/marks-from-milesplit.sql` (built by `scripts/crawl/build_mark_updates_sql.py`) overwrote 22 DB marks with MileSplit's official mark, as decided by the owner ("prefer official results for marks"). Each UPDATE is guarded by the old value and skips rows that have `PerformanceRounds`; `sp_RebuildLeaderboards` re-ran. **Not changed:** 12 large differences (left for the owner, `docs/results-level-gap-report.md`) and 5 small ones (MileSplit only has a prelim row for Riley Evans 2024 MAC 200M, Maddie Boltz / Sara Keener / Emily Romano 2018 PTC; Riley Evans 2024 Regional 400M already has rounds).
+
+**Old -> new (seconds / inches):** 2025 MAC 400M Isaac Smith 53.19 -> 52.79, Katie Wershing 63.38 -> 61.32; 2024 Fairless Twilight discus Timmy Shores 1477 -> 1476, shot Karoline Kreider 391 -> 386.5; 2023 Ravenna-Streetsboro 200M Oakley Kemp 25.19 -> 25.10; 2023 Fairless Twilight PV Payten Shetterly 78 -> 72; 2022 Smithie 800M Brooke Gucker 162.65 -> 162.56, shot Timmy Shores 464 -> 459; 2021 Nikki Reynolds 800M Alyssa Stoner 150.69 -> 150.09, shot Luke Yuravak 493.25 -> 497.25; 2021 D1 District 1600M Nathan Naples 305.77 -> 305.05, 800M Allison Yagersz 155.84 -> 155.73; 2018 PTC 100M Zack Munchick 11.52 -> 11.73, 400M Tommie Kurtz 60.85 -> 62.54, Maddie Boltz 65.72 -> 65.93, Frank Stepp 52.12 -> 52.42; 2017 Mansfield Mehock 1600M Katelyn Malena 379.31 -> 379.25; 2017 Orange Relays discus Nate Clingan 1363 -> 1363.5; 2017 PTC 400M Jenna Oliver 64.39 -> 64.48, Ryan Curtis 55.11 -> 55.92, 300H Zana Ross 48.70 -> 49.04, 200M Jenna Oliver 28.19 -> 28.60.
+
+**Watch out:** several of these made a mark *slower/shorter* (e.g. PTC 2017/2018, Payten Shetterly's 6' 6" -> 6' 0"): the DB value may have been a different round or timing; revert from this log if the official sheet says otherwise.
+
+**Key files:** `scripts/crawl/build_mark_updates_sql.py`, `docs/imports/marks-from-milesplit.sql`.

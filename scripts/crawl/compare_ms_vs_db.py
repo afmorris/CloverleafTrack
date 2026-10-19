@@ -54,7 +54,7 @@ FIELD = ('High Jump', 'Long Jump', 'Pole Vault', 'Shot Put', 'Discus', 'Triple J
 
 MSDIR = os.environ.get('MSDIR', '/tmp/msraw')
 pairs = [l.split() for l in open(MSDIR + '/ids.txt')]
-rows_out, summary, inserts = [], [], []
+rows_out, summary, inserts, updates = [], [], [], []
 for msid, dbid in pairs:
     path = f'{MSDIR}/ms-{msid}.txt'
     if not os.path.exists(path): summary.append((int(dbid), msid, 'no raw', 0, 0, 0, 0, 0)); continue
@@ -64,6 +64,7 @@ for msid, dbid in pairs:
         if r['kind'] == 'ind' and r['event'].endswith(' Relay') and r['event'][:-6] in FIELD: r['event'] = r['event'][:-6]
     mentions = len(re.findall(r'(?i)clover', open(path, encoding='utf-8', errors='replace').read()))
     best = {}
+    seen_rounds = {}
     for r in src:
         k, v = parse_mark(r['mark'])
         if k not in ('time', 'dist'): continue
@@ -71,6 +72,7 @@ for msid, dbid in pairs:
         key = (r['gender'], r['event'], r['kind'], tuple(a[0] for a in r['athletes']))
         cur = best.get(key)
         isfield = r['event'] in FIELD
+        seen_rounds.setdefault(key, set()).add(r['round'])
         if cur is None or (v > cur[0] if isfield else v < cur[0]): best[key] = (v, r)
     ok = mis = miss = unres = 0
     for (gender, evname, kind, who), (v, r) in best.items():
@@ -90,7 +92,9 @@ for msid, dbid in pairs:
             c = mine[0]; dv = c[2] if c[2] is not None else c[1]
             alt = int(v) + round((v % 1) * 10, 1) if round(v * 100) % 10 != 0 and round(v * 100) % 100 < 10 and evname not in FIELD else None   # Hy-Tek prints hand-timed 27.6 as 27.06
             if dv is not None and (abs(dv - v) <= tol or (alt is not None and abs(dv - alt) <= tol)): ok += 1
-            else: mis += 1; rows_out.append((dbid, msid, 'MISMATCH', gender, evname, who[0], v, dv))
+            else:
+                mis += 1; rows_out.append((dbid, msid, 'MISMATCH', gender, evname, who[0], v, dv))
+                updates.append((dbid, eid, aid, v, dv, c[4], evname in FIELD, sorted(seen_rounds.get((gender, evname, kind, who), []))))
     # relays: one entry per Cloverleaf TEAM (grouped by the four leg names), matched one-to-one to the DB's relay rows by time
     teams = collections.defaultdict(dict)       # (gender, event) -> {legs|None: (best, athletes)}
     for r in src:
@@ -134,5 +138,6 @@ tot = collections.Counter(r[2] for r in rows_out)
 print(dict(tot), 'OK total', sum(s[4] for s in summary))
 
 import json
+json.dump(updates, open(os.environ.get('OUTUPD', 'results-mismatch-ms.json'), 'w'))
 json.dump(inserts, open(os.environ.get('OUTJSON', 'results-missing-ms.json'), 'w'))
 print(len(inserts), 'insertable missing rows ->', 'results-missing-ms.json')

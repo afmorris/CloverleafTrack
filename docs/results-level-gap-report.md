@@ -8,8 +8,8 @@ For every DB meet matched to a MileSplit meet (125 with raw results, plus the 11
 - Hy-Tek prints hand-timed tenths as hundredths (27.6 appears as `27.06`); the DB's tenths are right. The comparison treats `x.0y` as `x.y`.
 - Column handling bugs found and fixed while doing this: header rows with `Grade`/`Mark` instead of `Year`/`Finals` made the parser read the Seed column as the result; event headers with qualifiers (`Varsity`, `METRO`, `COUNTY`, `Div 2`), medley relays and `Weight Throw Wheelchair` were attributed to the previous event.
 
-## Small differences (27): recommended to take MileSplit's mark
-Same athlete and event, within 3.5% (times) or 6 inches (field). Awaiting your go-ahead; the DB value is shown first.
+## Small differences (27): MileSplit's mark applied to 22 (docs/imports/marks-from-milesplit.sql)
+Same athlete and event, within 3.5% (times) or 6 inches (field). The DB value shown is the OLD value. Five were not changed: four where MileSplit only has the athlete's prelim row (Riley Evans 2024 MAC 200M, Maddie Boltz / Sara Keener / Emily Romano 2018 PTC) and one where the DB row already has rounds (Riley Evans 2024 Regional 400M: DB prelim 57.88 / final 56.44).
 | Meet | Event | Athlete | DB | MileSplit |
 |---|---|---|---|---|
 | 2025-05-17 2025 Metro Athletic Conference Champions | Boys 400M | Isaac Smith | 53.19 | 52.79 |
