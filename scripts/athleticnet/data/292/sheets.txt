@@ -1,0 +1,56 @@
+# 2026 Field-Coventry double dual (4/28/26). Dashes on throws sheets = attempt not taken; the two throws are stored as attempts 1-2.
+1|Long Jump|Elliot Jordan|19-3;19-0.25;18-8.5;17-6
+1|Long Jump|Grady Pamer|19-6.25;19-1.5;19-7;19-10.5
+1|Long Jump|Collin Saksa|F;15-7;F;16-0
+1|Long Jump|Clayton Sewalish|18-0.75;17-2;17-8;17-1.5
+1|Long Jump|Jackson Morris|15-0.75;15-6.5;15-1.75;F
+1|Long Jump|Weston Miller|12-6.75;11-1;11-8;13-1
+2|Long Jump|Abigail Reinhardt|F;15-6;14-9;15-6.75
+2|Long Jump|Keegan Wittman|13-5;13-5;F;14-0.25
+2|Shot Put|Vienna Polen|16-9;17-4
+2|Shot Put|Macie Huegel|22-1;24-6
+2|Shot Put|Ciara Kremer|24-1;25-6
+2|Shot Put|Anna Naftzger|24-7;24-10
+2|Shot Put|Addi Reho|24-11;26-9
+2|Shot Put|Berkeley Craddock|29-9;28-7
+2|Shot Put|Amelia Ryncarz|31-10;30-7
+1|Shot Put|Jordan Lavelle|21-9;23-0.5
+1|Shot Put|Everett Ryncarz|26-4.5;27-9
+1|Shot Put|Dayton Clutter|30-8.5;29-11
+1|Shot Put|Scout Atsma|28-0;28-8
+1|Shot Put|Preston Stark|28-7.5;30-0
+1|Shot Put|Gordy Surrarrer|30-8.5;30-9.5
+1|Shot Put|Gage Groetz|30-3.5;30-6
+1|Shot Put|Isaac Montgomery|27-9.5;28-4.5
+1|Shot Put|Braylon Lade|32-9;30-4
+1|Shot Put|Jacob Atkinson|36-6.5;35-4.5
+1|Shot Put|Jack Chonko|38-4;37-4
+1|Shot Put|Ethan Martin|37-2;36-5.5
+1|Shot Put|Evan Croft|37-3.5;36-10
+1|Shot Put|Dominic Nau|41-2;40-6
+1|Shot Put|Jake Schaefer|36-1.5;42-3
+1|Shot Put|Trent Amheiser|41-4;42-1
+1|Shot Put|Adam Gray|39-10.5;40-1
+2|Discus|Vienna Polen|46-1;48-4
+2|Discus|Ciara Kremer|51-7;57-5
+2|Discus|Anna Naftzger|53-3;59-6
+2|Discus|Macie Huegel|59-3;65-8
+2|Discus|Berkeley Craddock|91-9;59-4
+2|Discus|Addi Reho|98-4;94-4
+1|Discus|Jordan Lavelle|32-9;34-6
+1|Discus|Everett Ryncarz|57-10;59-9
+1|Discus|Isaac Montgomery|74-5;80-8
+1|Discus|Gordy Surrarrer|66-9;70-5
+1|Discus|Braylon Lade|90-4;75-6
+1|Discus|Preston Stark|77-2;87-7
+1|Discus|Jake Schaefer|82-8;75-10
+1|Discus|Scout Atsma|73-4;70-11
+1|Discus|Dayton Clutter|89-2;91-6
+1|Discus|Dominic Nau|93-5;90-8
+1|Discus|Jack Chonko|95-6;90-5
+1|Discus|Trent Amheiser|102-10;91-7
+1|Discus|Gage Groetz|72-8;72-1
+1|Discus|Evan Croft|92-9;93-9
+1|Discus|Ethan Martin|116-11;77-7
+1|Discus|Jacob Atkinson|104-6;101-8
+1|Discus|Adam Gray|122-7;126-0

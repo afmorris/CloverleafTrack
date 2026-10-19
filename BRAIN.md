@@ -2293,3 +2293,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** two Green Twilight 2025 relays (Mixed 4x200 1:51.20, 8th; a 9:59.12 relay, 5th) are on MileSplit with no leg names, so they are still not imported. The SQL aborts unless exactly 5 mis-stored seated shot put rows exist. Check with `Performances` joined to `Events` where `EventType` is a field type and `TimeSeconds IS NOT NULL`.
 
 **Key files:** `docs/imports/seated-donahue-fixes.sql`.
+
+### [C81] 2026 Field-Coventry Double Dual: Attempt Series, Bar Ladders, Huegel Marks
+
+**What changed:** `docs/imports/2026-field-coventry-attempts.sql` (built by `scripts/athleticnet/build_scan_sql.py` / `build_bars_sql.py` from `scripts/athleticnet/data/292/`) adds 55 field-event attempt series (long jump, shot put, discus for Cloverleaf athletes) and 4 pole vault / high jump bar ladders for meet 292, transcribed from the scorer's hand-written sheets (PDF scan, 2026-04-28). It also corrects two marks the owner approved against the sheet: Macie Huegel shot put 24' 2" -> 24' 6" (290 -> 294) and discus 65' 6" -> 65' 8" (786 -> 788; her first discus throw reads 59'3" or 69'3").
+
+**Why:** the sheets record every attempt/bar. Every other mark on the sheets already matched the DB (all the builder asserts passed).
+
+**Watch out:** on the throws sheets most athletes have only two numbers across the four attempt columns (dashes elsewhere), so the dashes were treated as "not taken" and the two throws stored as attempts 1-2. Amelia Ryncarz's girls discus has one throw, so no series. Peyton Shetterly (women's PV, NH at 6'0") and Clayton Sewalish (boys HJ, NH at 5'0") have no DB row; no-height rows were not added. Lincoln Baltic's ladder includes a pass at 7'8" read from a hard-to-read opening-height header. The sheet's Perez at 100M is a Field athlete, not ours. The scans are sideways and upside down: rotate 180° at 150 dpi to read them.
+
+**Key files:** `docs/imports/2026-field-coventry-attempts.sql`, `scripts/athleticnet/data/292/`.
