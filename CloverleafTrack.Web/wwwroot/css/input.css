@@ -292,3 +292,20 @@ details[open] .details-arrow {
 .meetscore-math-line+.meetscore-math-line{margin-top:.375rem}
 .dark .meetscore-dialog-body .meetscore-math-title{color:#e5e7eb}
 .meetscore-dialog-body .meetscore-math-title{margin:.75rem 0 0;font-weight:700;color:#111827}
+
+/* High jump / pole vault bar ladder (_BarLadder.cshtml) */
+.bar-ladder{display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.25rem}
+.bar-chip{display:inline-flex;flex-direction:column;align-items:center;min-width:2.9rem;padding:2px 4px;border-radius:.3rem;border:1px solid #d1d5db;background:#fff;font-variant-numeric:tabular-nums;line-height:1.15}
+.dark .bar-chip{border-color:#374151;background:#151823}
+.bar-chip-h{font-size:.62rem;color:#6b7280}
+.dark .bar-chip-h{color:#9ca3af}
+.bar-chip-o{font-size:.8rem;letter-spacing:.08em;font-weight:700}
+.bar-chip.is-clear{border-color:#3b8f5a}
+.bar-chip.is-clear .bar-chip-o{color:#16a34a}
+.dark .bar-chip.is-clear .bar-chip-o{color:#4ade80}
+.bar-chip.is-best{border-color:#f59e0b;background:rgba(245,158,11,.1)}
+.bar-chip.is-best .bar-chip-h{color:#d97706}
+.dark .bar-chip.is-best .bar-chip-h{color:#fbbf24}
+.bar-chip.is-out .bar-chip-o{color:#dc2626}
+.dark .bar-chip.is-out .bar-chip-o{color:#f87171}
+.bar-chip.is-pass .bar-chip-o{color:#6b7280;font-weight:600}

@@ -1,0 +1,15 @@
+399|1|Discus|Clay Combs|NULL|1360|0
+920|1|Shot Put|Timmy Shores|NULL|608.75|0
+1175|2|Shot Put|Presly McConnell|NULL|408|0
+1602|1|Discus|Timmy Shores|NULL|1542|0
+2171|2|Long Jump|KK Campbell|NULL|191|0
+2606|1|Pole Vault|Isaac Baltic|NULL|189|0
+3928|2|200M|Riley Evans|26.47|NULL|0
+4415|2|400M|Riley Evans|56.44|NULL|0
+4818|2|100M|Riley Evans|12.25|NULL|0
+4985|2|200M|Sarah Kelly|26.98|NULL|0
+4986|1|3200M|Caleb Neville|585.85|NULL|0
+5203|2|100M|Sarah Kelly|12.9|NULL|0
+12047|2|4x200M Relay|Riley Evans/Callee Gibson/Sarah Kelly/Kayla Shook|102.75|NULL|0
+13078|2|4x100M Relay|Callee Gibson/Kayla Shook/KK Campbell/Sarah Kelly|50.19|NULL|0
+

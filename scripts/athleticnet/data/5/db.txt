@@ -1,0 +1,17 @@
+154|1|Pole Vault|Isaac Baltic|NULL|138|0
+2609|2|Shot Put|Presly McConnell|NULL|354|0
+3654|1|1600M|Luke Malena|291.31|NULL|0
+3874|2|60M Hurdles|Paige Munchick|11.36|NULL|0
+3936|2|60M Hurdles|Liberty Ridenour|13.41|NULL|0
+3980|1|800M|Andrew Hibler|123.83|NULL|0
+6660|2|1600M|Alyssa Stoner|336.46|NULL|0
+6748|2|400M|Riley Evans|61.54|NULL|0
+6931|2|60M Hurdles|Hailey Strasser|14.57|NULL|0
+7043|2|1600M|Allison Yagersz|404.99|NULL|0
+7115|1|1600M|Brett Gucker|305.39|NULL|0
+7362|1|60M|Yuri Himes|7.83|NULL|0
+8019|1|800M|Hunter Stallings|129.27|NULL|0
+8496|1|60M Hurdles|Chase Young|10.1|NULL|0
+8704|1|800M|Nolan Freeland|128.14|NULL|0
+8708|2|60M|Leah Houk|8.56|NULL|0
+

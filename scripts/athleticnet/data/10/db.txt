@@ -1,0 +1,7 @@
+836|2|High Jump|Ashley Sigmon|NULL|61|0
+6236|1|400M|Blake Wilson|50.55|NULL|0
+6780|2|400M|Riley Evans|57.91|NULL|0
+7390|1|800M|Andrew Hibler|124.12|NULL|0
+8640|2|3200M|Sophia Spencer|669.59|NULL|0
+12147|2|4x200M Relay|Riley Evans/Emily Romano/Julia Armogida/Paige Munchick|105.34|NULL|0
+

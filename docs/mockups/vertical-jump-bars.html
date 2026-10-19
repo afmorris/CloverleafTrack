@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup — High jump / pole vault bar results</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background:#111318; color:#e5e7eb; font-family:ui-sans-serif,system-ui,sans-serif; }
+  .card { background:#1a1d27; border:1px solid #2a2d3a; border-radius:.5rem; }
+  .hdr { background:linear-gradient(to right,#d97706,#f59e0b); color:#fff; }
+  th { font-size:.7rem; text-transform:uppercase; color:#6b7280; letter-spacing:.05em; font-weight:600; }
+  td { border-top:1px solid #1f2333; vertical-align:middle; }
+  .mark { font-variant-numeric:tabular-nums; }
+  .chip { font-size:.6rem; font-weight:700; padding:1px 5px; border-radius:3px; }
+  .chip-pr { background:#15803d; } .chip-place { background:#374151; }
+  .row-pr { box-shadow:inset 3px 0 0 #22c55e; background:rgba(34,197,94,.05); }
+  /* bar ladder */
+  .ladder { display:flex; flex-wrap:wrap; gap:.25rem; margin-top:.25rem; }
+  .bar { display:inline-flex; flex-direction:column; align-items:center; min-width:2.9rem; padding:2px 4px; border-radius:.3rem; border:1px solid #2f3447; background:#151823; font-variant-numeric:tabular-nums; line-height:1.15; }
+  .bar .h { font-size:.62rem; color:#9ca3af; }
+  .bar .o { font-size:.8rem; letter-spacing:.08em; font-weight:700; }
+  .bar.clear { border-color:#3b8f5a; } .bar.clear .o { color:#4ade80; }
+  .bar.best { border-color:#f59e0b; background:rgba(245,158,11,.1); } .bar.best .h { color:#fbbf24; }
+  .bar.out .o { color:#f87171; } .bar.pass .o { color:#9ca3af; font-weight:600; }
+  .sub { color:#6b7280; font-size:.75rem; }
+  code { color:#fbbf24; }
+</style>
+</head>
+<body class="p-6">
+<div class="max-w-5xl mx-auto space-y-10">
+
+  <header>
+    <h1 class="text-2xl font-bold">High jump / pole vault — bar ladder</h1>
+    <p class="text-gray-400 text-sm mt-1">One row per athlete as today; the strip under the name shows every bar height and how it went (O cleared, X miss, P pass). Best mark is the highest bar with an O.</p>
+  </header>
+
+  <section>
+    <h2 class="text-lg font-bold mb-2">1 · Meet detail — <span class="text-pink-400">Girls</span> High Jump</h2>
+    <div class="card overflow-hidden">
+      <div class="hdr px-4 py-2 font-bold text-sm">Girls · 2024 Field-Coventry Double Dual</div>
+      <table class="w-full text-sm">
+        <thead><tr><th class="px-4 py-1 text-left">Athlete</th><th class="px-4 py-1 text-right">Mark</th><th class="px-4 py-1 text-right">Result</th></tr></thead>
+        <tbody>
+          <tr class="row-pr">
+            <td class="px-4 py-2">
+              Abby Reinhardt
+              <div class="ladder">
+                <span class="bar clear"><span class="h">4'0"</span><span class="o">O</span></span>
+                <span class="bar clear"><span class="h">4'2"</span><span class="o">O</span></span>
+                <span class="bar clear best"><span class="h">4'4"</span><span class="o">XXO</span></span>
+                <span class="bar out"><span class="h">4'6"</span><span class="o">XXX</span></span>
+              </div>
+            </td>
+            <td class="px-4 py-2 text-right mark font-bold text-green-400">4' 4"</td>
+            <td class="px-4 py-2 text-right"><span class="chip chip-pr">PR</span> <span class="chip chip-place">1st</span></td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">
+              Grace Goldsberry
+              <div class="ladder">
+                <span class="bar clear"><span class="h">4'0"</span><span class="o">XO</span></span>
+                <span class="bar clear"><span class="h">4'2"</span><span class="o">O</span></span>
+                <span class="bar clear best"><span class="h">4'4"</span><span class="o">XXO</span></span>
+                <span class="bar out"><span class="h">4'6"</span><span class="o">XXX</span></span>
+              </div>
+            </td>
+            <td class="px-4 py-2 text-right mark font-bold">4' 4"</td>
+            <td class="px-4 py-2 text-right"><span class="chip chip-place">2nd</span></td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">
+              Tessa Bogucki
+              <div class="ladder">
+                <span class="bar clear"><span class="h">4'0"</span><span class="o">O</span></span>
+                <span class="bar pass"><span class="h">4'2"</span><span class="o">P</span></span>
+                <span class="bar clear best"><span class="h">4'4"</span><span class="o">XO</span></span>
+                <span class="bar out"><span class="h">4'6"</span><span class="o">XXX</span></span>
+              </div>
+            </td>
+            <td class="px-4 py-2 text-right mark font-bold">4' 4"</td>
+            <td class="px-4 py-2 text-right"><span class="chip chip-place">3rd</span></td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">
+              Katelin Yagersz
+              <div class="ladder">
+                <span class="bar clear best"><span class="h">4'0"</span><span class="o">XXO</span></span>
+                <span class="bar out"><span class="h">4'2"</span><span class="o">XXX</span></span>
+              </div>
+            </td>
+            <td class="px-4 py-2 text-right mark font-bold">4' 0"</td>
+            <td class="px-4 py-2 text-right"></td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">
+              Presly McConnell <span class="sub">· no height</span>
+              <div class="ladder">
+                <span class="bar out"><span class="h">4'0"</span><span class="o">XXX</span></span>
+              </div>
+            </td>
+            <td class="px-4 py-2 text-right mark font-bold text-gray-500">NH</td>
+            <td class="px-4 py-2 text-right"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-lg font-bold mb-2">2 · Meet detail — <span class="text-amber-400">Boys</span> Pole Vault (opening heights skipped)</h2>
+    <div class="card overflow-hidden">
+      <div class="hdr px-4 py-2 font-bold text-sm">Boys · 2026 Metro Athletic Conference Championships</div>
+      <table class="w-full text-sm">
+        <tbody>
+          <tr class="row-pr">
+            <td class="px-4 py-2 w-full">
+              Lincoln Baltic
+              <div class="ladder">
+                <span class="bar pass"><span class="h">9'0"</span><span class="o">P</span></span>
+                <span class="bar pass"><span class="h">9'6"</span><span class="o">P</span></span>
+                <span class="bar clear"><span class="h">10'0"</span><span class="o">O</span></span>
+                <span class="bar clear"><span class="h">10'6"</span><span class="o">XO</span></span>
+                <span class="bar clear best"><span class="h">11'0"</span><span class="o">XXO</span></span>
+                <span class="bar out"><span class="h">11'6"</span><span class="o">XXX</span></span>
+              </div>
+            </td>
+            <td class="px-4 py-2 text-right mark font-bold text-green-400 whitespace-nowrap">11' 0"</td>
+            <td class="px-4 py-2 text-right"><span class="chip chip-pr">PR</span> <span class="chip chip-place">2nd</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-lg font-bold mb-2">3 · Athlete detail — Performance by Season (phone width)</h2>
+    <div class="card overflow-hidden" style="max-width:380px">
+      <div class="hdr px-4 py-2 font-bold text-sm">2024 Outdoor · High Jump</div>
+      <div class="px-3 py-2 text-sm flex items-start justify-between gap-3">
+        <div>
+          <div class="text-gray-400 text-xs">Apr 23 · Field-Coventry</div>
+          <div class="ladder">
+            <span class="bar clear"><span class="h">4'0"</span><span class="o">O</span></span>
+            <span class="bar clear"><span class="h">4'2"</span><span class="o">O</span></span>
+            <span class="bar clear best"><span class="h">4'4"</span><span class="o">XXO</span></span>
+            <span class="bar out"><span class="h">4'6"</span><span class="o">XXX</span></span>
+          </div>
+        </div>
+        <div class="text-right"><div class="mark font-bold text-green-400">4' 4"</div><span class="chip chip-pr">PR</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-lg font-bold mb-2">4 · Storage</h2>
+    <div class="card p-4 text-sm space-y-2">
+      <div><code>PerformanceBars</code> — one row per bar height an athlete took: <code>PerformanceId</code> (FK, cascade), <code>HeightInches FLOAT</code>, <code>Outcome VARCHAR(3)</code> (<code>O</code>, <code>XO</code>, <code>XXO</code>, <code>XXX</code>, <code>XX</code> + pass, <code>P</code>), unique on (PerformanceId, HeightInches).</div>
+      <div><code>Performances.DistanceInches</code> stays the best cleared height (highest bar with an <code>O</code>), so leaderboards, PRs and percentiles are unchanged. No-height athletes keep today's handling.</div>
+      <div>Display and import mirror the throws/long-jump attempt strip: optional child rows, shown only when recorded.</div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

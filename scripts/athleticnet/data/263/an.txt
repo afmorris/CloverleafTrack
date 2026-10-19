@@ -1,0 +1,4 @@
+OHSAA D1 State Track & Field Championships
+m/1/300mh|Finals I 6.~12~Cory Beebe~38.68a~Cloverleaf~16751495
+m/1/300mh|Prelims I 8.~12~Cory Beebe~38.92a~Cloverleaf~16751495
+#SERIES {}

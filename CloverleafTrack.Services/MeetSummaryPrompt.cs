@@ -17,7 +17,7 @@ namespace CloverleafTrack.Services;
 public static class MeetSummaryPrompt
 {
     /// <summary>Bump when the system prompt or fact-sheet shape changes so every summary is treated as stale.</summary>
-    public const string Version = "2";
+    public const string Version = "3";
 
     public const string SystemPrompt = """
         You write short recaps of high school track & field meets for the Cloverleaf track & field results website.
@@ -29,6 +29,12 @@ public static class MeetSummaryPrompt
         - Only name athletes who appear in the JSON. Only describe an athlete as setting a personal best if "pr" is true,
           a school record if "sr" is true, and a top-10 all-time mark if "allTimeRank" is 10 or less.
         - Relay entries never carry a "pr" flag; do not claim a relay personal best.
+        - Some results carry extra detail. "rounds" lists a running or relay entry's prelim/semifinal/final times in order; you may say
+          an athlete or relay "ran X in prelims and Y in the final" and may call the final faster or slower only by comparing those
+          two given times. "attempts" lists a throw or jump series in order ("F" foul, "P" pass) and "bestOnAttempt" says which attempt
+          was the mark. "bars" lists a high jump or pole vault ladder with how each height went, and "bestBar" is the mark. Use this
+          detail sparingly for a standout result (a comeback on a late attempt, a final-round improvement); never list every attempt.
+          Never invent attempts, rounds or bars that are not listed.
         - "meetScore" is a 0-100 rating of the meet's overall performance level. Use it only as a loose hint for tone
           (75 or higher can be called "a strong day"). Never quote it, and never rank this meet against other meets.
         - Report team results exactly as given (scores, places, opponent names). If there are none, say nothing about team results.
@@ -96,6 +102,18 @@ public static class MeetSummaryPrompt
 
     public static string ComputeHash(string factSheet) => FactSheetJson.Hash(Version, SystemPrompt, factSheet);
 
+    private static string DescribeBar(string outcome) => outcome switch
+    {
+        "O" => "cleared on the 1st attempt",
+        "XO" => "cleared on the 2nd attempt",
+        "XXO" => "cleared on the 3rd attempt",
+        "XXX" => "three misses",
+        "P" => "passed",
+        "XP" => "passed after a miss",
+        "XXP" => "passed after two misses",
+        _ => outcome
+    };
+
     private static List<Dictionary<string, object?>> BuildEvents(List<MeetEventGroupViewModel> groups) =>
         groups.Select(g => new Dictionary<string, object?>
         {
@@ -111,6 +129,21 @@ public static class MeetSummaryPrompt
                     ["sr"] = p.IsSchoolRecord ? true : null,
                     ["seasonBest"] = p.IsSeasonBest ? true : null,
                     ["allTimeRank"] = p.AllTimeRank is <= 10 ? p.AllTimeRank : null,
+                    ["rounds"] = p.RoundSeries.HasRounds
+                        ? p.RoundSeries.Rounds.Select(r => $"{r.Label} {MeetService.FormatPerformance(r.TimeSeconds, null)}").ToList()
+                        : null,
+                    ["attempts"] = p.AttemptSeries.HasAttempts
+                        ? p.AttemptSeries.Attempts.Select(a => a.IsFoul ? "F" : a.IsPass ? "P" : MeetService.FormatPerformance(null, a.DistanceInches)).ToList()
+                        : null,
+                    ["bestOnAttempt"] = p.AttemptSeries.HasAttempts && p.AttemptSeries.Attempts.FirstOrDefault(a => a.IsBest) is { } best
+                        ? best.AttemptNumber
+                        : null,
+                    ["bars"] = p.BarSeries.HasBars
+                        ? p.BarSeries.Bars.Select(b => $"{MeetService.FormatPerformance(null, b.HeightInches)} {DescribeBar(b.Outcome)}").ToList()
+                        : null,
+                    ["bestBar"] = p.BarSeries.Bars.FirstOrDefault(b => b.IsBest) is { } bb
+                        ? MeetService.FormatPerformance(null, bb.HeightInches)
+                        : null,
                     ["places"] = p.HasPlacing
                         ? p.Placings.Select(pl => pl.OpponentSchoolName != null
                             ? $"{pl.PlaceLabel} vs. {pl.OpponentSchoolName}"

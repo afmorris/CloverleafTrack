@@ -2056,3 +2056,76 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** this is a correction of existing data, not an additive import; it was run on the live DB. Boys 4x800 at State was finals-only (8:04.00, 10th); Kayla Shook's individual 400 was prelims-only (1:00.79, 16th) — no chains for either. (Entries [C59]/[C60] live in PR 66.)
 
 **Key files:** `docs/imports/2026-state-4x400-fix.sql`.
+
+### [C59] Handwritten Scorer-Sheet Scans → Attempt Series for Four Older Duals
+
+**What changed:** Four scanned PDFs of handwritten scorer sheets (`~/Downloads/scan_ggucker_*`) were matched to DB meets by the date/opponent written on the sheets: 2024-04-23 → Field-Coventry Double Dual (meet 254); 2025-04-15 → Woodridge Dual (3); 2025-04-22 → Norton-Springfield Double Dual (68); 2025-05-07 scan → New London Dual (275, sheets are dated 5/6/2025). Shot put, discus and long jump attempt series for Cloverleaf athletes were transcribed into `scripts/athleticnet/data/<meetId>/sheets.txt` and turned into `docs/imports/2024-2025-dual-attempts.sql` by `scripts/athleticnet/build_scan_sql.py`: 218 attempt series. Applied to the local SQL Server copy only.
+
+**Why:** Owner wanted the full meet detail from the paper sheets. Track-event sheets only repeat marks already in the DB (no rounds in duals), so only field attempts add information.
+
+**Watch out:**
+- Matching is by (gender, event, DB athlete name) and every block asserts the sheet's best attempt equals the stored `Performances.DistanceInches`; a misread best skips the athlete (listed as `NOTE` lines at the end of the SQL: 7 for Woodridge — Kaiden Stone shot, Preston Stark / Dominic Nau / Dylan Wittman discus and Izzy Messmore discus disagree with the DB; Collin Bohley and Ethan Gray have no DB mark). Only the best attempt is cross-checked; the non-best attempts are read from faint pencil and are not independently verified (a few were disambiguated using the DB best, e.g. Blake Thorne 26-1, Jack Chonko 35-0).
+- Blank inches on a sheet ("35-") are 0 inches; a lone "—" attempt is stored as not taken; series with fewer than two recorded attempts are skipped.
+- High jump and pole vault sheets (bar heights with X/O) are not imported: `PerformanceAttempts` stores distances only.
+- Double-dual throws sheets only have 2 attempts per athlete; the 2025 Norton-Springfield sheets use attempts 1-4 with 1 and 3 mostly fouls.
+- PDF rendering without poppler: a Swift/PDFKit script (kept in the session scratchpad only) rendered pages; scans are rotated inconsistently, so check orientation per page.
+
+**Key files:** `scripts/athleticnet/build_scan_sql.py`, `scripts/athleticnet/data/{254,3,68,275}/sheets.txt`, `docs/imports/2024-2025-dual-attempts.sql`.
+
+### [C60] High Jump / Pole Vault Bar Ladder (`PerformanceBars`)
+
+**What changed:** New additive table `PerformanceBars` (PerformanceId, HeightInches, Outcome; cascade delete; unique per height; CHECK on the seven valid outcomes) for individual high jump and pole vault. `Performances.DistanceInches` stays the best cleared height, so PRs, ranks, percentiles and scoring are unchanged. Display: `Views/Shared/_BarLadder.cshtml` (chip per bar, best cleared bar highlighted; renders nothing without rows) on the meet page (above the attempt/round strips, under the athlete name) and athlete page. Admin Create/Edit show a "Bars" textarea for HJ/PV events (one `4'4" XXO` per line; `BarLadderParser` validates and an empty box clears the ladder); the attempt-series toggle is hidden for these events. Import: `scripts/athleticnet/build_bars_sql.py` + `data/<meet>/bars.txt` → `docs/imports/2024-2025-dual-bars.sql` (24 ladders for the four scanned duals, applied to the local DB only; 2 of 26 skipped on a mark mismatch). Migration `docs/migration_performance_bars.sql` must run before deploying the code (services query the table).
+
+**Why:** `PerformanceAttempts` only stores distances, which can't represent bar heights with X/O/P outcomes. Same sibling-table design as [C55].
+
+**Watch out:**
+- Normalise notation before storing: several sheets (Norton-Springfield HJ, Woodridge HJ) use the inverted notation (X = clear, O = miss; "O = Misses" is written at the bottom). The pole vault sheets use check marks for clears.
+- Not imported: Kinsey Bayer and Emily Ellebruch at Norton-Springfield (sheet bests 4'6"/4'4" vs DB 4'8"/4'6" — the DB or the sheet is off; the generator's mark assertion skipped them), Payten Shetterly at Woodridge (single illegible bar), Payten's final bar at New London, athletes with no height (not in the DB).
+- Pass-only and single-bar ladders are valid; a ladder with no clear never updates `DistanceInches`.
+- `site.css` is hand-appended with the `.bar-chip*` rules (same text as in `input.css`) because no node toolchain is available; a Tailwind rebuild regenerates from `input.css`.
+
+**Key files:** `Models/PerformanceBar.cs`, `DataAccess/Repositories/PerformanceBarRepository.cs`, `AdminPerformanceRepository.cs`, `Services/PerformanceBarSeriesBuilder.cs`, `Web/Utilities/BarLadderParser.cs`, `Views/Shared/_BarLadder.cshtml`, `Areas/Admin/Views/Performances/{Create,Edit}.cshtml`, `docs/migration_performance_bars.sql`, `docs/mockups/vertical-jump-bars.html`, `Tests/Unit/Models/PerformanceBarTests.cs`.
+
+### [C63] Meets.OfficialResultsUrl — Link to Externally Hosted Official Results
+
+**What changed:** New nullable `Meets.OfficialResultsUrl NVARCHAR(500)` (`docs/migration_meet_official_results_url.sql`, already run on live and local). Admin Create/Edit has an "Official Results URL" field (validated `[Url]`, http/https only, blank → null via `MeetsController.NormalizeUrl`; the "copy meet" action deliberately does not copy it). The public meet page shows an "Official results on <host> ↗" chip (`target=_blank rel="noopener noreferrer"`); `MeetService` only passes through http/https links, so a stored `javascript:` value can never render.
+
+**Why:** Owner wants each meet to link to wherever its official results live (athletic.net, oh.milesplit.com, timing companies). Used by the athletic.net/MileSplit crawl to attach links to matched meets.
+
+**Watch out:** Run the migration before deploying code that reads it (`m.*` queries and the Admin INSERT/UPDATE reference the column). One link per meet; if a meet is on both sites, prefer athletic.net (it has splits and field series) unless the owner says otherwise.
+
+**Key files:** `Models/Meet.cs`, `ViewModels/Admin/Meets/MeetFormViewModel.cs`, `Web/Areas/Admin/Controllers/MeetsController.cs`, `AdminMeetRepository.cs`, `Services/MeetService.cs`, `Views/Meets/Details.cshtml`, `Areas/Admin/Views/Meets/Create.cshtml`.
+
+### [C64] Crawl of athletic.net and oh.milesplit.com — Meet Matching and Official Results Links
+
+**What changed:** `scripts/crawl/` holds the crawled meet lists (`athleticnet-meets.txt`: 143 meets from team 7859 calendars 2005-2026, indoor+outdoor; `milesplit-meets-raw.txt`: 163 meets from MileSplit team 9826, `/api/v1/teams/9826/schedules?season=&year=` JSON), `match_meets.py` (matches each crawled meet to a DB meet by environment, date ±3 days for multi-day championships, and name similarity; tuned to reject same-date different-name pairs) and the output `matches.tsv` (every crawled meet with its DB match and score, for review) plus `official-results-links.sql` (copied to `docs/imports/2026-official-results-links.sql`). It sets `Meets.OfficialResultsUrl` for **153 of 307 DB meets** (116 athletic.net, 37 MileSplit; athletic.net preferred); run on live and local. `UPDATE … WHERE OfficialResultsUrl IS NULL` so manual links are never overwritten.
+
+**Coverage reality:** neither site lists most dual/double-dual meets, so ~154 DB meets stay unlinked; both sites have many indoor/other meets we don't track (listed as "NO DB MEET" by the matcher). athletic.net team calendars only list meets with a results link.
+
+**Source quirks:** athletic.net's API 403s, so the pages are scraped via iframes (results list is virtualized; scroll and use `textContent`). MileSplit's `/results/<id>/raw` is one plain-text document per meet (prelim/semi sections included, relay members listed, **no field attempt series**), but its layout varies by timing software (HY-TEK `====` blocks, tab-delimited blocks, Finish Lynx, split two-line headers); older meets (≈2016-2022) often lose event names and mix seed marks into rows, so only 2023+ MileSplit round data is trustworthy without manual review. Both sites independently confirmed the State 4x400 correction ([C61]).
+
+**Watch out:** matches are heuristic — spot-check `matches.tsv` rows with score < 1.3. MileSplit schedule year = season start year (`year=2025` is the 2025-26 season); athletic.net `outdoor2026`/`indoor2026` are the 2026 / 2025-26 seasons.
+
+**Key files:** `scripts/crawl/match_meets.py`, `scripts/crawl/matches.tsv`, `docs/imports/2026-official-results-links.sql`.
+
+### [C65] Multi-Year athletic.net / MileSplit Prelim → Final Imports (2005–2025)
+
+**What changed:** The detail crawl of the 106 matched athletic.net meets (iframe scraper + parallel workers; see [C64]) and 128 matched MileSplit meets produced `scripts/crawl/an-rounds.txt` (multi-round Cloverleaf rows only, 44 athletic.net meets) and `ms-542137.txt` (2023 MAC from MileSplit, which athletic.net lacks). `scripts/crawl/prepare_round_inputs.py` maps them to DB meets via `matches.tsv` and writes `scripts/athleticnet/data/<dbMeetId>/{an.txt,db.txt}`; `build_rounds_sql.py` (now skipping field events and disambiguating ties by athlete name) generated `docs/imports/2005-2025-rounds.sql`: **209 prelim/semi/final chains across 45 DB meets**, applied to live and local (460 round rows live total with the 2026 imports). Every chain re-asserts that the best round equals the stored `Performances.TimeSeconds`.
+
+**Skipped (safe):** 21 chains whose best round did not equal the stored mark (DB stores a different round's time or a typo; listed as `NOTE` lines in the SQL) and all field-event prelim/final marks (field rounds are attempts, [C32]).
+
+**Not found:** athletic.net's field-series pages had no Cloverleaf series for any meet outside the 2026 ones already imported — older meets only have best marks. MileSplit has no attempt data at all.
+
+**Watch out:** MileSplit raw text varies by timing software: events with blank event names (older HY-TEK / Lynx exports) and rows with seed marks mixed in (e.g. `10:24.09 9:49.27`) cannot be parsed safely and were not imported; only the 2023 MAC had explicit event headers. Re-running is idempotent (each block deletes then inserts that performance's rounds). `Prelims` on older athletic.net meets are real preliminary heats; the "Finals" row is the stored mark.
+
+**Key files:** `scripts/crawl/{an-rounds.txt,prepare_round_inputs.py,ms-542137.txt}`, `scripts/athleticnet/build_rounds_sql.py`, `docs/imports/2005-2025-rounds.sql`.
+
+### [C62] Meet Summary Fact Sheet Now Includes Rounds, Attempt Series and Bar Ladders (prompt v3)
+
+**What changed:** `MeetSummaryPrompt.BuildFactSheet` adds, per result and only when recorded: `rounds` (e.g. `["Prelim 4:02.05","Final 3:55.68"]`), `attempts` (formatted marks, `F` foul, `P` pass) with `bestOnAttempt`, and `bars` (height + how it went, e.g. `4' 4" cleared on the 3rd attempt`) with `bestBar`. The system prompt got a rule allowing them to be used sparingly for a standout result and forbidding invented detail; the writer may call a final faster/slower only by comparing the two given times. `MeetSummaryPrompt.Version` is now "3" (was "2"), so every stored fact-sheet hash differs and all existing summaries read as stale/old-rules.
+
+**Also:** the approved 2026 State summary quoted Clear Fork's 3:55.05 as our school record ([C61]); it was regenerated with this fact sheet (Opus) and imported as a **Draft** — it needs re-approval in `/Admin/MeetSummaries` before it shows publicly again.
+
+**Watch out:** `MeetService.FormatPerformance` is now `internal` (the fact sheet reuses it so marks match the meet page; the validator checks marks against the raw JSON). The generation skill needs the app running against the live DB (`ctf-web-summaries` config) with this branch's code. The other 20 approved summaries were written under v2; they are unchanged and still correct, regenerate only if you want the richer detail.
+
+**Key files:** `CloverleafTrack.Services/MeetSummaryPrompt.cs`, `MeetService.cs`, `Tests/Unit/Services/MeetSummaryTests.cs`.

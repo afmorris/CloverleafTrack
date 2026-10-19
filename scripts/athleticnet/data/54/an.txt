@@ -1,0 +1,18 @@
+OHSAA D1 Northeast District - Brunswick
+m/1/400m|Finals I 3.~12~Blake Wilson~50.71a~Cloverleaf~19369950
+m/1/400m|Prelims I 2.~12~Blake Wilson~51.73a~Cloverleaf~19369950
+m/1/800m|Finals I 3.~11~Andrew Hibler~1:57.32aPB~Cloverleaf~13978756
+m/1/800m|Finals I 11.~10~Vova Herdman~2:05.11aSB~Cloverleaf~26586108
+m/1/800m|Prelims I 11.~10~Vova Herdman~2:06.81a~Cloverleaf~26586108
+m/1/800m|Prelims I 10.~11~Andrew Hibler~2:17.01a~Cloverleaf~13978756
+m/1/300mh|Finals I 5.~10~Zach Mollohan~41.86aPB~Cloverleaf~17537511
+m/1/300mh|Prelims I 7.~10~Zach Mollohan~43.27a~Cloverleaf~17537511
+f/1/200m|Finals I 5.~12~Emily Romano~26.76a~Cloverleaf~13354077
+f/1/200m|Prelims I 6.~12~Emily Romano~26.66aSB~Cloverleaf~13354077
+f/1/400m|Finals I 3.~9~Riley Evans~58.13a~Cloverleaf~17537508
+f/1/400m|Prelims I 3.~9~Riley Evans~1:00.30a~Cloverleaf~17537508
+f/1/800m|Finals I 7.~10~Alyssa Stoner~2:30.04a~Cloverleaf~23946890
+f/1/800m|Finals I 11.~9~Allison Yagersz~2:35.84a~Cloverleaf~17288048
+f/1/800m|Prelims I 5.~10~Alyssa Stoner~2:30.79a~Cloverleaf~23946890
+f/1/800m|Prelims I 13.~9~Allison Yagersz~2:35.73aPB~Cloverleaf~17288048
+#SERIES {}

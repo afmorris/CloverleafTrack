@@ -1,0 +1,58 @@
+11626|2|3-Person Discus Relay|Tori Gershom/Jessica Pincombe/Katie Simpson|NULL|2660|0
+11649|2|3-Person Shot Put Relay|Tori Gershom/Jessica Pincombe/Katie Simpson|NULL|1007.75|0
+11650|2|3-Person Long Jump Relay|Morgan Eyring/Barbara Mooneyham/Kelani Nuckols|NULL|522.75|0
+11655|2|3-Person High Jump Relay|Jennifer Foster/Megan Rybacki/Morgan Siegler|NULL|169|0
+11679|2|3-Person Pole Vault Relay|Morgan Eyring/Jennifer Foster/Bridget Razem|NULL|288|0
+11714|1|3-Person Shot Put Relay|Adam Dove/Cody Furr/Brian Livingstone|NULL|1451.5|0
+11766|1|3-Person Long Jump Relay|Derek Daubenmire/Joe Hemperly/Zach Miglich|NULL|684.25|0
+11774|1|3-Person Discus Relay|James Crawford/Steve Dembowski/Cody Furr|NULL|4272|0
+11915|1|800M Sprint Medley|Garrett Livingood/Ryan Weir/Kori Davis/Bobby Ellis|105.12|NULL|0
+12234|1|4x400M Relay|Derek Daubenmire/Bobby Ellis/Joe Hemperly/Ryan Weir|226.85|NULL|0
+12267|2|4x100M Relay|Katy Dean/Taylor Detwiler/Jenna Elswick/Morgan Siegler|55.56|NULL|0
+12333|2|800M Sprint Medley|Katy Dean/Taylor Detwiler/Jenna Elswick/Morgan Eyring|123.47|NULL|0
+12374|2|4x200M Relay|Katy Dean/Taylor Detwiler/Jenna Elswick/Kelani Nuckols|115.99000000000001|NULL|0
+12470|2|4x800M Relay|Katlyn Donnelly/Lauren Eaken/Mckenna Huff/Sage Paxson|830.3|NULL|0
+12642|2|4x400M Relay|Jenna Elswick/Jennifer Foster/Kelani Nuckols/Megan Rybacki|265.49|NULL|0
+12652|1|4x200M Relay|Derek Daubenmire/Joe Hemperly/Zach Miglich/Ryan Weir|95.32|NULL|0
+12851|2|4K Distance Medley|Katlyn Donnelly/Lauren Eaken/Mckenna Huff/Allison Sheldon|979.88|NULL|0
+12887|2|4x100M Shuttle Hurdles|Jennifer Foster/Kelani Nuckols/Morgan Siegler/Megan Rybacki|67.18|NULL|0
+12910|1|4x800M Relay|Travis Connor/Josh Longsdorf/Chris Markeson/Jesse Troike|624.74|NULL|0
+12996|1|4x100M Relay|Kyle Clemenz/Bobby Ellis/Garrett Livingood/Zach Miglich|46.67|NULL|0
+13157|1|4x110M Shuttle Hurdles|Derek Daubenmire/Chandler Laux/Jake Sideris/Clay Vondriska|70.57|NULL|0
+13292|1|4K Distance Medley|Joey Bruening/Travis Connor/Paul Hissong/Will Luppino|719.4|NULL|0
+3402|2|High Jump|Megan Rybacki|NULL|54|0
+6893|2|100M Hurdles|Megan Rybacki|17.15|NULL|0
+1018|2|Shot Put|Tori Gershom|NULL|372.5|0
+2901|2|Discus|Tori Gershom|NULL|927|0
+6673|2|800M|Katlyn Donnelly|171.87|NULL|0
+2165|2|Discus|Katie Simpson|NULL|831|0
+1154|2|Shot Put|Katie Simpson|NULL|330.25|0
+2294|2|Long Jump|Kelani Nuckols|NULL|198.25|0
+1001|2|High Jump|Morgan Siegler|NULL|51|0
+4910|1|1600M|Will Luppino|292.74|NULL|0
+345|1|Long Jump|Derek Daubenmire|NULL|225.75|0
+6564|2|3200M|Ariel Talabac|826.36|NULL|0
+3357|1|Discus|Steve Dembowski|NULL|1332|0
+3776|1|110M Hurdles|Jake Sideris|16.93|NULL|0
+868|1|Shot Put|Cody Furr|NULL|548|0
+318|1|Discus|Cody Furr|NULL|1639|0
+7409|2|800M|Adrian Medina|139.2|NULL|0
+994|2|Long Jump|Barbara Mooneyham|NULL|160|0
+2124|1|Long Jump|Joe Hemperly|NULL|219.5|0
+3151|2|Pole Vault|Bridget Razem|NULL|72|0
+4532|2|100M|Taylor Detwiler|13.69|NULL|0
+966|2|Discus|Jessica Pincombe|NULL|902|0
+1433|2|Shot Put|Jessica Pincombe|NULL|305|0
+6075|1|3200M|RJ Bechtel|693.27|NULL|0
+3494|2|High Jump|Jennifer Foster|NULL|64|0
+3364|2|Pole Vault|Jennifer Foster|NULL|132|0
+2977|1|High Jump|Jesse Agnes|NULL|66|0
+3489|2|Long Jump|Morgan Eyring|NULL|164.5|0
+967|2|Pole Vault|Morgan Eyring|NULL|84|0
+2922|1|Shot Put|Adam Dove|NULL|448.75|0
+1595|1|Shot Put|Austin Roberts|NULL|454.75|0
+948|1|Long Jump|Zach Miglich|NULL|239|0
+4899|1|100M|Zach Miglich|12.15|NULL|0
+342|1|High Jump|Clay Vondriska|NULL|63|0
+3231|1|Discus|James Crawford|NULL|1301|0
+

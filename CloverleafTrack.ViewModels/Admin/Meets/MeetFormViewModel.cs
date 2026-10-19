@@ -43,6 +43,11 @@ public class MeetFormViewModel
     [Display(Name = "Meet Level")]
     public MeetLevel MeetLevel { get; set; } = MeetLevel.Varsity;
 
+    [StringLength(500)]
+    [Url]
+    [Display(Name = "Official Results URL")]
+    public string? OfficialResultsUrl { get; set; }
+
     [Display(Name = "Scoring Template")]
     public int? ScoringTemplateId { get; set; }
 

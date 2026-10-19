@@ -1,0 +1,163 @@
+2025i 12/13 708380 Oberlin College Track & Field Run-Jump-Throw Meet (HS/MS)
+2025i 12/13 708654 Akron Rust-Buster HS Open
+2025i 12/27 717257 Extreme Vault Club HS Qualifier & Open
+2025i 01/17 690117 Rubber City Invitational
+2025i 01/24 690203 Kent St. HS Meet #1
+2025i 01/31 698212 Heidelberg High School Open #3
+2025i 02/01 690142 Mount Union HS Qualifier #1
+2025i 02/07 712470 YSU High School Meet #3
+2025i 02/07 709968 Junior High State Qualifier
+2025i 02/07 712377 Ohio State High School Qualifier #4
+2025i 02/08 690179 Ashland University HS Light Giver Open
+2025i 02/20 690122 Ashland HS High Performance Invite
+2025i 02/21 690133 Jerome Fields HS Open
+2025i 02/22 690155 Kent St. HS Meet #3-Last Chance
+2025i 03/06 718840 2026 OATCCC D2 Indoor State Meet
+2024i 12/28 649613 Extreme Vault Club HS Qualifier & Open
+2024i 02/01 612249 Jerome Fields HS Open
+2024i 02/22 642052 Univ. of Findlay Dave's Running High School Open
+2024i 02/23 626029 Kent St. HS Meet #5-Last Chance
+2024i 03/08 650781 2025 OATCCC D2 Indoor State Meet
+2023i 01/20 562494 Kent St. HS Meet #3
+2023i 01/28 562489 Mount Union HS Qualifier #1
+2023i 02/03 576159 Oberlin College High School Track & Field Meet
+2023i 02/11 565228 SPIRE HS Indoor Games 2024
+2023i 02/17 562493 Akron Rubber City HS Open
+2023i 03/01 565237 2024 OATCCC D1 Indoor State Meet
+2022i 02/04 506352 Oberlin College High School Track & Field Meet
+2022i 02/18 500910 Akron Rubber City HS Open
+2021i 12/12 450488 Tiffin High School Open #1
+2021i 01/08 454459 Akron Pole Vault Convention
+2021i 01/22 453686 Youngstown State High School Meet #2
+2021i 01/22 452250 Kent St. HS Meet #1
+2021i 02/06 452357 Ashland University HS Indoor
+2021i 02/19 452355 Akron Rubber City HS Open
+2021i 02/26 461662 OHIAA INDOOR STATE POLE VAULT CHAMPIONSHIP
+2021i 02/27 452354 Kent St. HS Meet #3
+2021i 03/04 462109 OATCCC D1 Indoor State Meet
+2020i 12/29 404148 Jackets Holiday Indoor
+2020i 01/30 403945 SPIRE Ohio Championship Preview Meet
+2020i 02/15 404310 Cloverleaf Indoor Meet 1
+2020i 02/20 404776 Youngstown State Open/High School Meet
+2020i 03/06 403946 OATCCC D1 Indoor Finale
+2019i 01/11 375103 Oberlin College High School Meet #1
+2019i 02/22 375063 Akron Rubber City Open
+2019i 02/29 383888 Ohio Inter-Club Pole Vault Championship
+2019i 03/07 375960 OATCCC D1 Indoor State Championships
+2018i 01/27 340139 BW High School Indoor Meet
+2018i 02/02 336444 Oberlin College High School Meet #3
+2018i 02/03 335762 Mount Union HS Qualifier #1
+2018i 02/10 338551 Kent State University High School Meet
+2018i 02/23 336445 Oberlin College High School Meet #4 (Last Chance)
+2018i 03/02 341981 OATCCC D2/3 Indoor State Championships
+2017i 02/03 298344 Oberlin College Grand Prix Series #3
+2016i 02/04 257685 Oberlin College Grand Prix Series #3
+2016i 02/28 267603 Conversion Time
+2025o 03/28 738840 Cloverleaf Early Bird Relays
+2025o 04/03 712693 Jim Hauser Pirate Relays
+2025o 04/10 749055 Fairview Warrior Relays
+2025o 04/14 748359 Cloverleaf vs Woodridge Dual
+2025o 04/18 690173 Bay Rockets Invitational
+2025o 04/24 754116 Keystone Track & Field Festival
+2025o 05/02 757741 Wooster HS/Nikki Reynolds Track & Field Invitational
+2025o 05/08 760322 Fairless Falcon Twilight Invitational
+2025o 05/11 760941 Stars of Track and Field
+2025o 05/14 763691 Metro Athletic Conference Championship
+2025o 05/14 763717 Metro Athletic Conference Championship
+2025o 05/15 760501 Metro Athletic Conference (MAC) Championship
+2025o 05/16 763629 OHSAA 7th & 8th Grade State Track Championships
+2025o 05/21 765163 OHSAA D3 Districts - Woodridge
+2025o 05/28 766422 OHSAA D3 Regional R9 - Austintown
+2025o 06/04 750758 2026 OHSAA Outdoor Championships
+2024o 03/29 655975 Cloverleaf Early Bird Relays
+2024o 04/04 642009 Jim Hauser Pirate Relays
+2024o 04/08 663790 Streetsboro vs. Cloverleaf and Ravenna
+2024o 04/12 675851 Mary Kay Hajek Chippewa Invitational
+2024o 04/12 647556 Chippewa Invitational
+2024o 04/19 651785 Bay Rockets Invitational
+2024o 04/25 652304 Green Twilight Relays
+2024o 05/03 679505 Wooster HS Nikki Reynolds Invitational
+2024o 05/09 686929 Fairless Twilight Invitational
+2024o 05/12 648529 Woodridge Stars of Track & Field
+2024o 05/15 686244 Metro Athletic Conference (MAC) Championship
+2024o 05/22 679901 OHSAA Division 2 District - Orrville
+2024o 05/29 680244 OHSAA Division 2 Region 5 - Austintown
+2024o 06/06 679882 OHSAA Division 2 State Championships
+2023o 03/23 600237 Cloverleaf Early Bird Relays
+2023o 03/28 609733 AB Team Import
+2023o 04/06 582665 Medina Tom Fasko Relays
+2023o 04/13 610551 Cowen Invitational
+2023o 04/19 584821 Green Twilight Relays
+2023o 04/27 599694 Wooster HS Nikki Reynolds Invitational
+2023o 05/03 597587 Fairless Twilight Invitational
+2023o 05/04 582440 43rd Optimist Meet
+2023o 05/06 613912 Woodridge Stars of Track & Field
+2023o 05/08 613915 Metro Athletic Conference (MAC) Championship
+2023o 05/15 607578 OHSAA Division 1 District - Brunswick
+2023o 05/22 602433 OHSAA Division 1 Region 2 - Port Clinton
+2023o 05/31 568366 OHSAA Division 1 State Championships
+2023o 06/13 620513 New Balance Nationals Outdoor
+2022o 03/25 530482 Cloverleaf Early Bird Relays
+2022o 04/04 536722 Ravenna HS Double Dual vs. Cloverleaf
+2022o 04/08 520947 Medina Tom Fasko Relays
+2022o 04/15 510383 Cowen Invitational
+2022o 04/21 540855 Green Twilight Relays
+2022o 04/29 538043 Wooster HS Nikki Reynolds Invitational
+2022o 05/05 545291 Fairless Twilight Invitational
+2022o 05/08 540043 Woodridge Stars of Track & Field
+2022o 05/09 542137 Metro Athletic Conference (MAC) Championship
+2022o 05/17 544353 OHSAA Division 1 District - Brunswick
+2022o 05/24 537703 OHSAA Division 1 Region 2 - Amherst
+2022o 06/02 557755 OHSAA Division 1 State Championships
+2021o 03/26 470013 Cloverleaf Early Bird Relays
+2021o 04/09 470920 Medina Tom Fasko Relays
+2021o 04/16 477620 Orrville High School Invitational
+2021o 04/22 477158 Green Twilight Relays
+2021o 04/26 480653 Cloverleaf Early Bird Relays
+2021o 05/06 465324 Metro Athletic Conference Championship
+2021o 05/06 484209 Fairless Twilight
+2021o 05/07 482972 Ashland Holmes County Meet
+2021o 05/07 483092 Ashland & Holmes County MS Invite
+2021o 05/09 483356 Smithie Frosh/Soph
+2021o 05/18 476055 OHSAA Division 1 District - Brunswick
+2021o 05/25 485115 OHSAA Division 1 Region 2 - Findlay
+2021o 06/03 485679 OHSAA Div 1 State Track and Field Championships
+2020o 04/10 420054 Tom Fasko Medina Relays
+2020o 04/17 422637 Orrville Invitational
+2020o 05/01 426606 Wooster Nikki Reynolds Invitational
+2020o 05/07 429940 2021 Fairless Twilight
+2020o 05/07 430306 Fairless Twilight Invitational
+2020o 05/10 432200 Smithie Frosh, Sophomore Meet
+2020o 05/15 431602 OHSAA 7th and 8th Grade State Track & Field
+2020o 05/19 426765 OHSAA Division 1 District - Brunswick
+2020o 05/26 426612 Division 1 Region 2
+2020o 06/04 435512 OHSAA Division I State Track and Field
+2018o 04/06 352490 New London Relays
+2018o 04/13 354269 Cowen Redbird Invitational
+2018o 04/16 354958 Ravenna v Streetsboro v Cloverleaf
+2018o 04/20 357355 Triway Invitational
+2018o 04/27 357412 Wooster Nikki Reynolds Invitational
+2018o 05/06 359347 Smithie Frosh/Soph Invite
+2018o 05/08 357828 Portage Trail Conference Championships
+2018o 05/16 357920 OHSAA Division 2 District - Orrville
+2018o 05/23 357890 Division 2 Region 6
+2018o 05/31 348098 OHSAA State Track and Field Championships
+2017o 04/07 311971 New London Relays
+2017o 04/14 314786 Cowen Redbird Invitational
+2017o 04/21 317304 Triway Invitational
+2017o 04/26 317775 Western Reserve Relays
+2017o 04/27 318138 Orange Relays
+2017o 04/28 308361 Wooster Nikki Reynolds Invitational
+2017o 05/09 320203 Portage Trail Conference Championships
+2017o 05/11 320204 Portage Trail Conference-County Division
+2017o 05/17 321959 OHSAA Division 2 District - Orrville
+2017o 05/24 322226 Division 2 Region 6
+2017o 06/01 308915 OHSAA State Track and Field Championships
+2016o 04/15 273003 Mansfield Mehock Relays
+2016o 04/28 279585 Orange Relays
+2016o 05/05 280388 Dwight Schar Invitational
+2016o 05/05 280389 Jackson Twilight
+2016o 05/10 281480 Portage Trail Conference League Meet
+2016o 05/18 282278 OHSAA Division 2 District - Orrville
+2016o 05/25 267003 Division 2 Region 6
+2016o 06/02 267005 OHSAA State Track and Field Championships

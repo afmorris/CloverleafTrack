@@ -1,0 +1,61 @@
+13710|1|Discus|Clay Combs|NULL|1771|0
+13671|1|Discus|Ethan Martin|NULL|1244|0
+13861|1|Discus|Jack Chonko|NULL|1230|0
+13929|1|Discus|Hunter Brooks|NULL|1227|0
+13758|1|Discus|Dylan Wittman|NULL|1225|0
+13967|1|Discus|JJ Johnson|NULL|1213|0
+13804|1|Discus|Adam Gray|NULL|1205|0
+13950|1|Discus|Royce Zirkle|NULL|1199|0
+13867|1|Discus|Gunnar Surrarrer|NULL|1169|0
+13788|1|Discus|Dominic Nau|NULL|1077|0
+13736|1|Discus|Kaiden Stone|NULL|947|0
+13895|1|Discus|Jake Schaefer|NULL|879|0
+13945|1|Discus|Braylon Lade|NULL|876|0
+13640|1|Discus|Preston Stark|NULL|660|0
+13681|1|Long Jump|Ty Kovach|NULL|236.75|0
+13850|1|Long Jump|Elliot Jordan|NULL|227|0
+13697|1|Long Jump|Grady Pamer|NULL|218|0
+13614|1|Long Jump|Isaac Smith|NULL|209|0
+13751|1|Long Jump|Clayton Sewalish|NULL|197.25|0
+13716|1|Long Jump|Collin Saksa|NULL|195.25|0
+13735|1|Shot Put|Clay Combs|NULL|624|0
+13664|1|Shot Put|Dominic Nau|NULL|471|0
+13784|1|Shot Put|Royce Zirkle|NULL|462|0
+13670|1|Shot Put|Ethan Martin|NULL|447|0
+13805|1|Shot Put|JJ Johnson|NULL|442|0
+13641|1|Shot Put|Adam Gray|NULL|427|0
+13813|1|Shot Put|Jack Chonko|NULL|424|0
+13838|1|Shot Put|Jake Schaefer|NULL|403|0
+13797|1|Shot Put|Hunter Brooks|NULL|402|0
+13721|1|Shot Put|Dylan Wittman|NULL|399|0
+13822|1|Shot Put|Jacob Atkinson|NULL|397|0
+13840|1|Shot Put|Braylon Lade|NULL|370|0
+13746|1|Shot Put|Preston Stark|NULL|337|0
+13749|1|Shot Put|Kaiden Stone|NULL|318|0
+13692|1|Shot Put|Gunnar Surrarrer|NULL|303|0
+13932|2|Discus|Presly McConnell|NULL|1229|0
+13888|2|Discus|Jayce Kreider|NULL|1059|0
+13768|2|Discus|Addi Reho|NULL|1039|0
+13816|2|Discus|Amelia Ryncarz|NULL|1015|0
+13650|2|Discus|Berkeley Craddock|NULL|958|0
+13970|2|Discus|Delaney Ishler|NULL|906|0
+13742|2|Discus|Anna Naftzger|NULL|660|0
+13842|2|Discus|Izzy Messmore|NULL|550|0
+13824|2|Long Jump|Abigail Reinhardt|NULL|192.5|0
+13632|2|Long Jump|Tessa Bogucki|NULL|169.25|0
+13663|2|Long Jump|Katelin Yagersz|NULL|153.25|0
+13611|2|Long Jump|Lilly Southam|NULL|124|0
+13680|2|Shot Put|Presly McConnell|NULL|465|0
+13643|2|Shot Put|Amelia Ryncarz|NULL|364|0
+13695|2|Shot Put|Berkeley Craddock|NULL|333|0
+13620|2|Shot Put|Jayce Kreider|NULL|324|0
+13715|2|Shot Put|Delaney Ishler|NULL|314|0
+13621|2|Shot Put|Anna Naftzger|NULL|280|0
+13669|2|Shot Put|Izzy Messmore|NULL|193|0
+
+13629|1|Pole Vault|Lincoln Baltic|NULL|96|0
+13646|1|High Jump|Reed Kilgore|NULL|60|0
+13701|2|High Jump|Abigail Reinhardt|NULL|56|0
+13896|1|High Jump|Grady Pamer|NULL|60|0
+13898|2|Pole Vault|Payten Shetterly|NULL|120|0
+13980|2|Pole Vault|Taylor Thur|NULL|72|0

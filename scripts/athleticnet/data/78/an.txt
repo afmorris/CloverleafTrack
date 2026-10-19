@@ -1,0 +1,12 @@
+Loudonville - Cowen Invite
+m/1/100m|Finals I 5.~10~Blake Wilson~11.87a~Cloverleaf~19369950
+m/1/100m|Finals I 6.~10~Mike Williams~12.01a~Cloverleaf~14429654
+m/1/100m|Prelims I 5.~10~Blake Wilson~11.72a~Cloverleaf~19369950
+m/1/100m|Prelims I 6.~10~Mike Williams~11.78a~Cloverleaf~14429654
+m/1/110mh|Finals I 2.~11~DeAnte Taylor~17.04a~Cloverleaf~11964406
+m/1/110mh|Prelims I 1.~11~DeAnte Taylor~16.85a~Cloverleaf~11964406
+f/1/100m|Finals I 6.~11~Nyah Hansen~13.80a~Cloverleaf~11648741
+f/1/100m|Prelims I 6.~11~Nyah Hansen~13.85a~Cloverleaf~11648741
+f/1/200m|Finals I 4.~12~Maddie Boltz~28.29aPB~Cloverleaf~9800050
+f/1/200m|Prelims I 4.~12~Maddie Boltz~28.46a~Cloverleaf~9800050
+#SERIES {}

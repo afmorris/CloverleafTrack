@@ -1,0 +1,6 @@
+Oberlin College HS Track & Field Meet #3
+m/1/60mh|Finals I 4.~12~Chase Young~9.25a~Cloverleaf~17562730
+m/1/60mh|Prelims I 3.~12~Chase Young~9.10a~Cloverleaf~17562730
+f/1/60m|Finals I 5.~11~Sarah Kelly~8.45a~Cloverleaf~20500162
+f/1/60m|Prelims I 2.~11~Sarah Kelly~8.34aSB~Cloverleaf~20500162
+#SERIES {}

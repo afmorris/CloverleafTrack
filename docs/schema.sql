@@ -1100,3 +1100,21 @@ CREATE TABLE [dbo].[PerformanceRounds] (
     CONSTRAINT [UQ_PerformanceRounds_Performance_Round] UNIQUE ([PerformanceId], [Round]),
     CONSTRAINT [CK_PerformanceRounds_Round] CHECK ([Round] BETWEEN 1 AND 3)
 );
+
+
+-- ============================================================
+-- SCHEMA ADDITIONS — Performance Bars (high jump / pole vault ladder)
+-- See docs/migration_performance_bars.sql (idempotent, run before deploy).
+-- One row per bar height the athlete took. Performances.DistanceInches
+-- remains the best cleared height (highest bar whose Outcome ends in 'O').
+-- ============================================================
+CREATE TABLE [dbo].[PerformanceBars] (
+    [Id]            INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [PerformanceId] INT         NOT NULL,
+    [HeightInches]  FLOAT(53)   NOT NULL,
+    [Outcome]       VARCHAR(3)  NOT NULL,
+    CONSTRAINT [FK_PerformanceBars_Performances]
+        FOREIGN KEY ([PerformanceId]) REFERENCES [dbo].[Performances]([Id]) ON DELETE CASCADE,
+    CONSTRAINT [UQ_PerformanceBars_Performance_Height] UNIQUE ([PerformanceId], [HeightInches]),
+    CONSTRAINT [CK_PerformanceBars_Outcome] CHECK ([Outcome] IN ('O', 'XO', 'XXO', 'XXX', 'P', 'XP', 'XXP'))
+);

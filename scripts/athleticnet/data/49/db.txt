@@ -1,0 +1,43 @@
+235|2|Long Jump|Brianna Gallagher|NULL|162.5|0
+489|2|Shot Put|Katelyn Young|NULL|376.25|0
+658|1|Long Jump|Adam Oren|NULL|204|0
+1157|1|Discus|Nate Clingan|NULL|1235|0
+1687|2|Long Jump|Maddie Boltz|NULL|171|0
+1839|1|Long Jump|John Manzuk|NULL|208|0
+2245|1|Discus|Jake Kemp|NULL|1156|0
+2706|1|Shot Put|Tyler Pedmo|NULL|437|0
+2734|2|Discus|Katelyn Young|NULL|1610|0
+2765|2|Shot Put|Lisa Wangler|NULL|403|0
+3054|1|Shot Put|Nate Clingan|NULL|490|0
+3250|2|Discus|Lisa Wangler|NULL|1199|0
+3904|2|100M|Sara Keener|13.48|NULL|0
+4334|1|100M|Jacob Scheck|11.82|NULL|0
+4490|2|200M|Maddie Boltz|28.74|NULL|0
+4979|2|100M|Kirsten Wilson|14.41|NULL|0
+5022|2|300M Hurdles|Alayna Richmond|60.37|NULL|0
+5060|2|400M|Jenna Oliver|67.11|NULL|0
+5178|1|300M Hurdles|Bryce Betts|53.13|NULL|0
+5987|1|1600M|Estevan Ortega|313.81|NULL|0
+6156|2|3200M|Emma Nagel|836.86|NULL|0
+6196|1|3200M|Max Gucker|661.97|NULL|0
+6201|1|200M|Jacob Scheck|24.22|NULL|0
+6532|1|400M|Asa Gynn|60.22|NULL|0
+6918|2|100M Hurdles|Kyra Combs|19.6|NULL|0
+6991|2|1600M|Riley Freeland|321.86|NULL|0
+7239|2|100M Hurdles|Zana Ross|16|NULL|0
+7902|1|200M|Zack Munchick|24.57|NULL|0
+8174|2|3200M|Bailey Freeland|832.43|NULL|0
+8215|2|300M Hurdles|Zana Ross|50.22|NULL|0
+8325|2|800M|Riley Freeland|152.85|NULL|0
+8543|1|100M|Zack Munchick|11.8|NULL|0
+8786|2|200M|Sara Keener|29.24|NULL|0
+8898|1|800M|Tristan Vaughan|142.42000000000002|NULL|0
+8927|2|1600M|Katelyn Malena|379.31|NULL|0
+11942|1|4x100M Relay|Eli Haynes/John Manzuk/Zack Munchick/Jacob Scheck|46.82|NULL|0
+11963|1|4x400M Relay|Ryan Curtis/Adam Oren/Matt Stoner/Tristan Vaughan|229.1|NULL|0
+12342|1|4x200M Relay|Ryan Curtis/Eli Haynes/Zack Munchick/Jacob Scheck|98.28|NULL|0
+12841|1|4x800M Relay|Tristan Vaughan/Dillon West/Nick Bailey/Alex Derhammer|536.47|NULL|0
+13083|2|4x800M Relay|Bailey Freeland/Tommie Kurtz/Sara Naples/Jenna Oliver|650.69|NULL|0
+13106|2|4x400M Relay|Zana Ross/Jenna Oliver/Tommie Kurtz/Riley Freeland|275.26|NULL|0
+13156|2|4x100M Relay|Maddie Boltz/Nyah Hansen/Sara Keener/Kirsten Wilson|54.46|NULL|0
+

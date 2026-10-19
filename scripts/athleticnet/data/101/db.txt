@@ -1,0 +1,15 @@
+1045|2|Shot Put|Presly McConnell|NULL|382|0
+2739|1|Shot Put|Clay Combs|NULL|513.25|0
+3754|2|1600M|Allison Yagersz|363.95|NULL|0
+4364|2|60M|Reese Barnett|9.44|NULL|0
+5796|1|60M Hurdles|Chase Young|9.1|NULL|0
+6091|2|400M|Reese Barnett|71.3|NULL|0
+6149|2|60M|Sarah Kelly|8.34|NULL|0
+6833|1|400M|Austin McNeal|68.77|NULL|0
+7357|1|400M|Ben Myers|56.07|NULL|0
+7396|1|60M|Tristin Bogucki|7.7|NULL|0
+7629|2|1600M|Madison Snyder|361.23|NULL|0
+8337|1|60M|Chase Young|7.94|NULL|0
+12646|2|4x200M Relay|Reese Barnett/Sarah Kelly/Madison Snyder/Allison Yagersz|127.16|NULL|0
+13195|1|4x200M Relay|Tristin Bogucki/Austin McNeal/Ben Myers/Chase Young|109.61|NULL|0
+

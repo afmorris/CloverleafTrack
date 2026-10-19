@@ -15,7 +15,8 @@ public class MeetService(
     IMeetPlacingRepository meetPlacingRepository,
     IPerformanceAttemptRepository? attemptRepository = null,
     IMeetSummaryRepository? summaryRepository = null,
-    IPerformanceRoundRepository? roundRepository = null) : IMeetService
+    IPerformanceRoundRepository? roundRepository = null,
+    IPerformanceBarRepository? barRepository = null) : IMeetService
 {
     public async Task<MeetsIndexViewModel> GetMeetsIndexAsync()
     {
@@ -140,8 +141,13 @@ public class MeetService(
             ? await roundRepository.GetRoundsForPerformancesAsync(performances.Select(p => p.PerformanceId))
             : new List<PerformanceRound>();
         var roundLookup = PerformanceRoundSeriesBuilder.BuildLookup(rounds);
+        var bars = barRepository != null
+            ? await barRepository.GetBarsForPerformancesAsync(performances.Select(p => p.PerformanceId))
+            : new List<PerformanceBar>();
+        var barLookup = PerformanceBarSeriesBuilder.BuildLookup(bars);
         foreach (var perf in boysEvents.Concat(girlsEvents).Concat(mixedEvents).SelectMany(g => g.Performances))
         {
+            perf.BarSeries = barLookup.GetValueOrDefault(perf.PerformanceId) ?? new PerformanceBarSeriesViewModel();
             perf.RoundSeries = roundLookup.GetValueOrDefault(perf.PerformanceId) ?? new PerformanceRoundSeriesViewModel();
         }
         var mappedPerformances = boysEvents
@@ -170,6 +176,7 @@ public class MeetService(
             HandTimed = meet.HandTimed,
             SeasonName = meet.Season.Name,
             MeetType = meet.MeetType,
+            OfficialResultsUrl = IsHttpUrl(meet.OfficialResultsUrl) ? meet.OfficialResultsUrl : null,
             MeetScore = scores.GetValueOrDefault(meet.Id),
             SummaryText = approvedSummary?.SummaryText,
             SummaryHtml = approvedSummary == null ? null
@@ -390,7 +397,10 @@ public class MeetService(
     private static bool IsJumpRelay(EventType eventType) => eventType == EventType.JumpRelay;
     private static bool IsThrowsRelay(EventType eventType) => eventType == EventType.ThrowsRelay;
 
-    private static string FormatPerformance(double? timeSeconds, double? distanceInches)
+    private static bool IsHttpUrl(string? url) =>
+        Uri.TryCreate(url, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+
+    internal static string FormatPerformance(double? timeSeconds, double? distanceInches)
     {
         if (distanceInches.HasValue)
         {

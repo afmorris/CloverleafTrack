@@ -1,0 +1,8 @@
+# 2025 Norton-Springfield Double Dual (4/22/2025), scan_ggucker_2025-04-22 pages 1, 12, 13. HJ sheets used the inverted notation (X clear, O miss); converted to standard notation. Pole vault sheet uses check marks for clears.
+1|High Jump|Grady Pamer|5-0:O;5-2:XO;5-4:XXX
+1|High Jump|Reed Kilgore|5-0:O;5-2:XXO;5-4:XXX
+2|High Jump|Abigail Reinhardt|4-0:O;4-2:XO;4-4:XO;4-6:O;4-8:XXO;4-10:XXX
+2|High Jump|Emily Ellebruch|4-0:O;4-2:O;4-4:XXO;4-6:XXX
+2|High Jump|Kinsey Bayer|4-0:O;4-2:O;4-4:XO;4-6:XXO;4-8:XXX
+2|Pole Vault|Taylor Thur|6-0:O;6-6:O;7-0:O;7-6:XO;8-0:XXX
+2|Pole Vault|Payten Shetterly|8-6:XO

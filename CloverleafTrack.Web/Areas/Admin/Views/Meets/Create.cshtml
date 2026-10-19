@@ -100,6 +100,15 @@
         </div>
 
         <div class="form-group">
+            <label asp-for="OfficialResultsUrl">Official Results URL</label>
+            <input asp-for="OfficialResultsUrl" class="form-control" placeholder="https://www.athletic.net/TrackAndField/meet/..." />
+            <div style="font-size:12px;color:#888;margin-top:4px;">
+                Where the official results are hosted (athletic.net, oh.milesplit.com, ...). Shown as a link on the meet page. Leave blank if none.
+            </div>
+            <span asp-validation-for="OfficialResultsUrl" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
             <label asp-for="MeetLevel">Meet Level</label>
             <select asp-for="MeetLevel"
                     asp-items="Html.GetEnumSelectList<CloverleafTrack.Models.Enums.MeetLevel>()"

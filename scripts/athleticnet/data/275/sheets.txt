@@ -1,0 +1,55 @@
+# 2025 New London Dual (5/6/2025) - scorer sheets scan_ggucker_2025-05-07. gender|event|DB athlete name|attempts (F-I, F=foul, P=pass, empty=not taken)
+1|Shot Put|Gunnar Surrarrer|24-4;25-3
+1|Shot Put|Kaiden Stone|F;26-6
+1|Shot Put|Preston Stark|27-0;28-1
+1|Shot Put|Braylon Lade|30-10;28-9
+1|Shot Put|Jacob Atkinson|31-7.25;33-1
+1|Shot Put|Jake Schaefer|31-5;33-7
+1|Shot Put|Jack Chonko|35-4;35-0
+1|Shot Put|Adam Gray|35-4;35-7
+1|Shot Put|Ethan Martin|37-3;36-0
+1|Shot Put|JJ Johnson|36-10;34-3
+1|Shot Put|Dominic Nau|38-9.5;39-3
+1|Shot Put|Dylan Wittman|31-11;33-3
+1|Shot Put|Hunter Brooks|33-4;33-6
+1|Shot Put|Royce Zirkle|37-7.5;38-6
+1|Shot Put|Clay Combs|51-10;52-0
+1|Discus|Jake Schaefer|F;73-3
+1|Discus|Preston Stark|55-0;F
+1|Discus|Braylon Lade|65-10;73-0
+1|Discus|Kaiden Stone|74-4;78-11
+1|Discus|Jack Chonko|102-6;96-1
+1|Discus|Dominic Nau|83-2;89-9
+1|Discus|Gunnar Surrarrer|97-5;81-3
+1|Discus|JJ Johnson|101-1;84-6
+1|Discus|Ethan Martin|103-8;95-2
+1|Discus|Adam Gray|85-7;100-5
+1|Discus|Dylan Wittman|F;102-1
+1|Discus|Royce Zirkle|99-11;97-11
+1|Discus|Hunter Brooks|102-3;99-5
+1|Discus|Clay Combs|147-7;F
+2|Shot Put|Izzy Messmore|16-0;16-1
+2|Shot Put|Anna Naftzger|22-2;23-4
+2|Shot Put|Delaney Ishler|24-9.5;;26-2
+2|Shot Put|Jayce Kreider|27-0;;26-4.5
+2|Shot Put|Berkeley Craddock|27-9;26-4
+2|Shot Put|Amelia Ryncarz|30-4;28-0
+2|Shot Put|Presly McConnell|38-8;38-9
+2|Discus|Izzy Messmore|44-6;45-10
+2|Discus|Anna Naftzger|55-0;52-8
+2|Discus|Delaney Ishler|75-6;58-5
+2|Discus|Amelia Ryncarz|71-11;84-7
+2|Discus|Berkeley Craddock|67-10;79-10
+2|Discus|Addi Reho|83-6;86-7
+2|Discus|Jayce Kreider|88-0;88-3
+2|Discus|Presly McConnell|102-5;101-7
+1|Long Jump|Ty Kovach|F;19-4.25;F;19-8.75
+1|Long Jump|Elliot Jordan|17-11.5;F;18-11;F
+1|Long Jump|Grady Pamer|17-11.5;18-2;16-11.75;F
+1|Long Jump|Collin Saksa|15-10.5;16-0.5;16-3.25;15-3.5
+1|Long Jump|Clayton Sewalish|16-5.25;16-3.25;F;16-0.5
+1|Long Jump|Isaac Smith|F;F;17-0;17-5
+2|Long Jump|Abigail Reinhardt|15-6;15-9.5;16-0.5;15-0
+2|Long Jump|Lilly Southam|F;F;10-4;F
+2|Long Jump|Katelin Yagersz|F;12-5;F;12-9.25
+2|Long Jump|Tessa Bogucki|14-1.25;F;13-6;12-11.5
