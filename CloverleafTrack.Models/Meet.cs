@@ -20,6 +20,9 @@ public class Meet
     public MeetLevel MeetLevel { get; set; } = MeetLevel.Varsity;
     public int? ScoringTemplateId { get; set; }
 
+    /// <summary>Link to the official results when hosted externally (athletic.net, oh.milesplit.com, ...). Null when none.</summary>
+    public string? OfficialResultsUrl { get; set; }
+
     public List<Performance> Performances { get; set; } = new();
     public Location Location { get; set; }
     public Season Season { get; set; }

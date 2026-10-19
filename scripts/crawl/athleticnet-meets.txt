@@ -1,0 +1,143 @@
+outdoor2026|Mar 28|644596|Cloverleaf Early Bird Relays
+outdoor2026|Apr 3|631352|Jim Hauser Pirate Relays
+outdoor2026|Apr 10|648714|Fairview Warrior Relays
+outdoor2026|Apr 14|641579|Cloverleaf vs Woodridge Dual
+outdoor2026|Apr 18|631099|Bay Rockets Invitational
+outdoor2026|Apr 24|651598|Keystone Track & Field Festival
+outdoor2026|May 2|652638|Wooster HS/Nikki Reynolds Track & Field Invitational
+outdoor2026|May 8|653339|Fairless Falcon Twilight Invitational
+outdoor2026|May 11|637734|Woodridge Stars of Track & Field
+outdoor2026|May 14|637822|Metro Athletic Conference Championship
+outdoor2026|May 21|649905|OHSAA D3 Districts - Woodridge
+outdoor2026|May 28|651387|OHSAA D3 Regional R9 - Austintown
+outdoor2026|Jun 4|656920|OHSAA Jesse Owens Track & Field State Championships
+outdoor2025|Apr 25|660534|Green Twilight Relays
+outdoor2025|May 3|611746|Nikki Reynolds Invitational
+outdoor2025|May 15|614395|Metro Athletic HS Conference Championships
+outdoor2025|May 29|615668|OHSAA D2 Region 5
+outdoor2025|Jun 6|615793|OHSAA D2 State Track & Field Championships
+outdoor2024|Apr 6|551076|Tom Fasko Relays
+outdoor2024|Apr 13|554436|Cowen Invitational
+outdoor2024|Apr 19|557678|Green Twilight Relays
+outdoor2024|Apr 27|558712|Wooster Nikki Reynolds Invitational
+outdoor2024|May 4|560701|Optimist Meet
+outdoor2024|May 22|563783|OHSAA D1 Region 2 - Port Clinton
+outdoor2024|May 31|564189|OHSAA D1 State Track & Field Championships
+outdoor2023|Apr 8|505356|Tom Fasko Relays
+outdoor2023|Apr 29|511658|Nikki Reynolds Invitational
+outdoor2023|May 5|513278|Fairless Twilight Invitational
+outdoor2023|May 17|515927|OHSAA Division 1 District - Brunswick
+outdoor2023|May 24|516137|OHSAA D1 Region 2 - Amherst Steele
+outdoor2023|Jun 2|516528|OHSAA D1 State Track & Field Championships
+outdoor2022|Mar 26|476006|Cloverleaf Early Bird Relays
+outdoor2022|Apr 9|465658|Medina Tom Fasko Relays
+outdoor2022|Apr 16|467948|Orrville Invitational
+outdoor2022|Apr 22|470024|Green Twilight Relays
+outdoor2022|Apr 26|476720|Cloverleaf Early Bird Relays
+outdoor2022|May 6|472651|Fairless Twilight Invitational
+outdoor2022|May 9|476184|Smithie Frosh/Soph Meet
+outdoor2022|May 18|474578|OHSAA D1 Northeast District - Brunswick
+outdoor2022|May 25|475254|OHSAA D1 Region 2
+outdoor2022|Jun 3|475431|OHSAA D1 State Track & Field Championships
+outdoor2021|Apr 10|424419|32nd Annual Tom Fasko Medina Relays
+outdoor2021|Apr 17|427459|Orrville Invitational
+outdoor2021|Apr 23|660931|Green Twilight Relays
+outdoor2021|May 7|434519|Fairless Twilight Invitational
+outdoor2021|May 19|436605|OHSAA D1 Northeast District - Brunswick
+outdoor2021|May 26|437701|OHSAA D1 Region 2
+outdoor2021|Jun 4|438131|OHSAA D1 State Track & Field Championships
+outdoor2019|Apr 6|376749|New London Invitational
+outdoor2019|Apr 13|373563|Loudonville - Cowen Invite
+outdoor2019|May 16|384906|OHSAA D2 Northeast District - Orrville
+outdoor2019|May 23|384326|OHSAA D2 Region 6
+outdoor2019|May 31|384459|OHSAA D2 State Track & Field Championships
+outdoor2019|Jun 1|385140|OHSAA Seated State Track & Field Championships
+outdoor2018|Apr 14|340292|Loudonville - Cowen Invite
+outdoor2018|Apr 28|345975|Wooster Nikki Reynolds Invitational
+outdoor2018|May 26|349228|OHSAA D2 Region 6
+outdoor2018|Jun 1|339039|OHSAA D2 State Championships
+outdoor2018|Jun 2|349438|OHSAA Seated State Championships
+outdoor2017|Apr 15|300870|Mansfield Mehock relays
+outdoor2017|May 10|301502|PTC League Meet
+outdoor2017|May 12|301503|PTC League Meet Finals
+outdoor2017|May 20|315814|OHSAA D2 Northeast District - Orville
+outdoor2017|May 27|316159|OHSAA D2 Region 6
+outdoor2017|Jun 2|289390|OHSAA D2 State Meet
+outdoor2016|Apr 16|263775|Mansfield/Mehock Relays
+outdoor2016|May 7|275382|Optimist Meet
+outdoor2016|May 13|271597|PTC Championship Finals
+outdoor2016|May 20|284234|OHSAA D2 Northeast District (Orrville)
+outdoor2016|May 28|284281|OHSAA D2 Region 6
+outdoor2016|Jun 3|267412|OHSAA D2 State Meet
+outdoor2015|Apr 16|245944|Ontario Relays
+outdoor2015|Apr 25|252512|Triway Invitational
+outdoor2015|May 13|251910|Akron Suburban League Championship
+outdoor2015|May 20|252048|D1 Nordonia
+outdoor2014|May 17|226294|Akron Suburban League Championships
+outdoor2014|May 23|223282|OHSAA DI NEO District Championship
+outdoor2014|May 30|214442|OHSAA DI Region 1 - Austintown-Fitch
+outdoor2014|Jun 6|214440|OHSAA D1 State Track & Field Championships
+outdoor2013|May 31|192386|Northeast D1 Regional Finals
+outdoor2013|Jun 7|192388|OHSAA D1 State Track & Field Championships
+outdoor2012|May 5|157758|Optimist Meet (32nd Annual)
+outdoor2011|Apr 16|123688|Mansfield Mehock Relays
+outdoor2011|May 7|137345|Fitch Optimist
+outdoor2011|May 18|668504|OHSAA Division 1 NE District - North Canton
+outdoor2011|Jun 3|131846|OHSAA D1 State Track & Field Championships
+outdoor2010|Apr 3|104687|Kimberly Relays
+outdoor2010|Apr 24|108390|Amherst Comet Relays
+outdoor2010|May 22|112489|OHSAA Northeast - North Canton Division I District Track
+outdoor2010|May 28|98562|OHSAA Division I Track Championships - Region 1 - Youngstown
+outdoor2010|Jun 4|111970|OHSAA D1 State Track & Field Championships
+outdoor2009|Apr 17|444526|Mansfield Mehock Relays
+outdoor2009|Apr 18|65012|Mansfield Mehock Relays
+outdoor2009|May 22|84587|NEO - North Canton District - Div 1
+outdoor2009|May 27|64743|Div. I--N.E.O. Regional
+outdoor2009|May 29|83824|Regional Finals
+outdoor2009|Jun 5|65712|OHSAA D1 State Track & Field Championships
+outdoor2008|Jun 6|60909|OHSAA D1 State Track & Field Championships
+outdoor2007|May 16|658847|OHSAA Division 1 Northeast District - North Canton
+outdoor2007|May 23|658767|OHSAA Division 1 Regional Track Meet
+outdoor2007|Jun 1|34214|OHSAA D1 State Track & Field Championships
+outdoor2006|May 17|670405|OHSAA NE District D1 - North Canton
+outdoor2006|May 27|78751|OHSAA Div. 1 Regional Meet
+outdoor2005|May 19|670398|OHSAA Northeast D1 District - North Canton
+outdoor2005|May 26|60231|OHSAA D. I Regional
+outdoor2005|Jun 3|404087|OHSAA D1 State Track & Field Championships
+indoor2026|Dec 13|626478|University of Akron Rust Buster HS Open Meet
+indoor2026|Jan 17|631604|University of Akron Rubber City HS Open Meet
+indoor2026|Jan 24|632988|Kent State University HS Meet #1
+indoor2026|Feb 1|634554|Mount Union HS Qualifier #1
+indoor2026|Feb 7|635597|Ohio State HS Qualifier # 4
+indoor2026|Feb 8|636245|Ashland Univ. Jud Logan Light Giver HS Meet
+indoor2026|Feb 21|639555|Akron Jerome Fields Open Meet
+indoor2026|Feb 21|639833|Jerome Fields HS Open
+indoor2026|Feb 22|639730|Kent State University HS Meet #3
+indoor2025|Dec 28|575968|Extreme Vault Club HS Qualifier & Open
+indoor2025|Feb 1|581150|Jerome Fields HS Open
+indoor2025|Feb 23|587896|Kent State HS Meet #5
+indoor2025|Mar 8|590643|OATCCC D2 State Indoor Championship
+indoor2024|Jan 28|533049|Mount Union HS Qualifier #1
+indoor2024|Feb 3|534447|Oberlin College HS Track & Field Meet #3
+indoor2024|Feb 11|536016|SPIRE HS Indoor Games
+indoor2024|Feb 17|537713|Akron Rubber City HS Open
+indoor2024|Mar 1|540615|OATCCC D1 Indoor State Meet
+indoor2023|Feb 18|493298|Akron Rubber City HS Open
+indoor2023|Mar 4|495934|OATCC D1 Indoor State Championships
+indoor2022|Jan 22|448554|Kent St. HS Meet #1
+indoor2022|Feb 6|451188|Ashland University HS Indoor Invitational
+indoor2022|Feb 19|452679|Akron Rubber City HS Open
+indoor2022|Mar 4|455957|OATCCC D1 Indoor State Championships
+indoor2021|Dec 29|409999|Jackets Holiday Indoor Invitational
+indoor2021|Jan 30|409935|SPIRE Ohio Championship Preview Meet
+indoor2021|Feb 15|413073|Cloverleaf Indoor Meet #1
+indoor2021|Feb 20|413240|Youngstown State Univ HS Open Meet #4
+indoor2021|Mar 6|415634|OATCCC D1 Indoor Finale
+indoor2020|Jan 11|393239|Oberlin College HS Track & Field Meet #1
+indoor2020|Feb 22|399207|Rubber City Open
+indoor2020|Mar 7|389204|OATCCC D1 Indoor State Championship
+indoor2019|Jan 27|360608|Baldwn-Wallace HS Invitational
+indoor2019|Feb 2|361521|Oberlin College HS Meet #3
+indoor2019|Feb 10|363892|Kent State University HS Meet #3
+indoor2019|Mar 2|364199|OATCCC D2/3 Indoor State Championship
+indoor2017|Feb 4|296022|Oberlin College HS Grand Prix Series

@@ -1,0 +1,10 @@
+OHSAA D1 Region 2 - Amherst Steele
+f/1/100m|Finals I 4.~11~Riley Evans~12.42a~Cloverleaf~17537508
+f/1/100m|Prelims I 5.~11~Riley Evans~13.01a~Cloverleaf~17537508
+f/1/200m|Finals I 2.~11~Riley Evans~25.53a~Cloverleaf~17537508
+f/1/200m|Prelims I 7.~11~Riley Evans~26.63a~Cloverleaf~17537508
+f/1/400m|Finals I 2.~11~Riley Evans~56.19a~Cloverleaf~17537508
+f/1/400m|Prelims I 2.~11~Riley Evans~57.53a~Cloverleaf~17537508
+f/1/4x200m|Finals R 7. 1:46.46a Cloverleaf 
+f/1/4x200m|Prelims R 7. 1:47.73a Cloverleaf 
+#SERIES {}

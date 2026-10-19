@@ -176,6 +176,7 @@ public class MeetService(
             HandTimed = meet.HandTimed,
             SeasonName = meet.Season.Name,
             MeetType = meet.MeetType,
+            OfficialResultsUrl = IsHttpUrl(meet.OfficialResultsUrl) ? meet.OfficialResultsUrl : null,
             MeetScore = scores.GetValueOrDefault(meet.Id),
             SummaryText = approvedSummary?.SummaryText,
             SummaryHtml = approvedSummary == null ? null
@@ -395,6 +396,9 @@ public class MeetService(
     private static bool IsRunningRelay(EventType eventType) => eventType == EventType.RunningRelay;
     private static bool IsJumpRelay(EventType eventType) => eventType == EventType.JumpRelay;
     private static bool IsThrowsRelay(EventType eventType) => eventType == EventType.ThrowsRelay;
+
+    private static bool IsHttpUrl(string? url) =>
+        Uri.TryCreate(url, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
 
     private static string FormatPerformance(double? timeSeconds, double? distanceInches)
     {

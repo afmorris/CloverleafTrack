@@ -1,0 +1,14 @@
+OHSAA DI NEO District Championship
+m/1/800m|Finals I 10.~12~Dakota Duncan~2:02.90a~Cloverleaf~7060343
+m/1/800m|Prelims I 7.~12~Dakota Duncan~2:01.95aPB~Cloverleaf~7060343
+m/1/1600m|Finals I 11.~11~Andrew Jarrett~4:39.31aPB~Cloverleaf~4841807
+m/1/1600m|Prelims I 9.~11~Andrew Jarrett~4:45.40a~Cloverleaf~4841807
+f/1/800m|Finals I 12.~10~Erian Hamilton~2:29.56a~Cloverleaf~5848868
+f/1/800m|Finals I 14.~9~Riley Freeland~2:32.33a~Cloverleaf~5848873
+f/1/800m|Prelims I 11.~10~Erian Hamilton~2:26.90a~Cloverleaf~5848868
+f/1/800m|Prelims I 14.~9~Riley Freeland~2:30.51a~Cloverleaf~5848873
+f/1/1600m|Finals I 10.~10~Vanessa Rivera~5:32.03aSB~Cloverleaf~7060358
+f/1/1600m|Prelims I 16.~10~Vanessa Rivera~5:42.12a~Cloverleaf~7060358
+f/1/100mh|Finals I 6.~12~Maddie Brandt~16.32a (0.6)PB~Cloverleaf~7060350
+f/1/100mh|Prelims I 6.~12~Maddie Brandt~16.69a (-3.3)~Cloverleaf~7060350
+#SERIES {}

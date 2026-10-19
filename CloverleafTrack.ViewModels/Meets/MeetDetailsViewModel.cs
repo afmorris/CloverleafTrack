@@ -16,6 +16,9 @@ public class MeetDetailsViewModel
     public string SeasonName { get; set; } = string.Empty;
     public MeetType MeetType { get; set; }
 
+    /// <summary>External official-results link (http/https only); null when none.</summary>
+    public string? OfficialResultsUrl { get; set; }
+
     public MeetScoreViewModel? MeetScore { get; set; }
 
     /// <summary>Approved AI recap, plain text. Null unless a reviewer approved it.</summary>

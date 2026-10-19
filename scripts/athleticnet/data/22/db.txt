@@ -1,0 +1,39 @@
+927|1|Pole Vault|James Reinhart|NULL|126|0
+1387|2|Long Jump|Madison Horner|NULL|183.75|0
+1572|1|Long Jump|Nick Fricke|NULL|222.5|0
+1695|1|Shot Put|Tom Wangler|NULL|576.75|0
+2340|2|Discus|Katelyn Young|NULL|1250|0
+2985|2|Pole Vault|Natalie Martz|NULL|126|0
+3160|1|Pole Vault|Sean Brown|NULL|126|0
+3259|2|Pole Vault|Maddie Brandt|NULL|114|0
+3527|2|Shot Put|Katelyn Young|NULL|380|0
+3694|1|100M|Ryan Powell|12.26|NULL|0
+3810|2|300M Hurdles|Megan Brandt|56.35|NULL|0
+3957|2|400M|Hannah Swain|61.51|NULL|0
+4033|1|3200M|Corey Grabowski|709.8|NULL|0
+4492|1|200M|Ryan Powell|25.12|NULL|0
+4630|2|100M Hurdles|Cassie Grabowski|17.44|NULL|0
+4994|2|1600M|Vanessa Rivera|332.3|NULL|0
+5009|2|3200M|Ashley Murray|668.26|NULL|0
+5274|2|1600M|Adriana Jeziorski|362.2|NULL|0
+5282|2|100M Hurdles|Maddie Brandt|16.32|NULL|0
+5582|1|100M|Diego Rivera|12.25|NULL|0
+5593|2|100M|Cassie Grabowski|13.46|NULL|0
+5816|1|3200M|Cameron Billy|673.81|NULL|0
+5818|1|1600M|Andrew Jarrett|279.31|NULL|0
+6565|1|200M|Diego Rivera|24.91|NULL|0
+6594|2|800M|Erian Hamilton|146.9|NULL|0
+7056|2|3200M|Anna Winnicki|784.2|NULL|0
+7471|2|800M|Riley Freeland|150.51|NULL|0
+7627|2|100M|Zoe Riddile|14.53|NULL|0
+7696|2|200M|Emily Meckley|30.56|NULL|0
+7713|1|800M|Dakota Duncan|121.95|NULL|0
+7747|1|800M|Eric VanMeter|131.48|NULL|0
+8465|1|1600M|Darren Egner|296.15999999999997|NULL|0
+12117|2|4x400M Relay|Riley Freeland/Kaylee Gutschow/Erian Hamilton/Hannah Swain|246.83|NULL|0
+12132|2|4x800M Relay|Riley Freeland/Erian Hamilton/Ashley Murray/Vanessa Rivera|596.23|NULL|0
+12244|2|4x100M Relay|Maddie Brandt/Megan Brandt/Cassie Grabowski/Zoe Riddile|53.46|NULL|0
+12375|2|4x200M Relay|Cassie Grabowski/Madison Horner/Emily Meckley/Zoe Riddile|116.42|NULL|0
+12453|1|4x200M Relay|Ryan Powell/Andrew Podolak/Diego Rivera/Nate Watkins|101.28|NULL|0
+13404|1|4x100M Relay|Ryan Powell/James Reinhart/Diego Rivera/Zach Witmer|47.9|NULL|0
+

@@ -1,0 +1,6 @@
+OHSAA D1 Region 2
+m/1/400m|Finals I 3.~12~Blake Wilson~50.55aPB~Cloverleaf~19369950
+m/1/400m|Prelims I 5.~12~Blake Wilson~50.74a~Cloverleaf~19369950
+f/1/400m|Finals I 2.~9~Riley Evans~58.22a~Cloverleaf~17537508
+f/1/400m|Prelims I 4.~9~Riley Evans~57.91a~Cloverleaf~17537508
+#SERIES {}

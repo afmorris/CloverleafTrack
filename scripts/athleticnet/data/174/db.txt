@@ -1,0 +1,55 @@
+14|1|Long Jump|Eli Haynes|NULL|202|0
+255|2|Long Jump|Maddie Boltz|NULL|186.25|0
+413|1|High Jump|John Manzuk|NULL|64|0
+1097|2|Shot Put|Katelyn Young|NULL|365.5|0
+1124|1|Shot Put|Nate Clingan|NULL|537.25|0
+1167|2|Shot Put|Lisa Wangler|NULL|415.75|0
+1250|1|Discus|Dylan Craig|NULL|1597|0
+1743|1|Discus|Nate Clingan|NULL|1260|0
+1835|1|High Jump|Adam Oren|NULL|68|0
+2144|2|Discus|Lisa Wangler|NULL|1461|0
+2483|1|Pole Vault|Matt Butt|NULL|126|0
+2668|1|Long Jump|John Manzuk|NULL|202.5|0
+3564|2|Discus|Katelyn Young|NULL|1393|0
+3595|1|Shot Put|Dylan Craig|NULL|536.75|0
+3796|2|200M|Maddie Boltz|28.45|NULL|0
+4287|1|1600M|Nick Bailey|313.5|NULL|0
+4561|2|100M Hurdles|Alayna Richmond|18.89|NULL|0
+4587|2|300M Hurdles|Zana Ross|48.37|NULL|0
+5119|1|800M|Nick Bailey|138.46|NULL|0
+5172|2|1600M|Sara Naples|374.12|NULL|0
+5376|2|1600M|Riley Freeland|320.24|NULL|0
+5930|1|800M|Tristan Vaughan|122.7|NULL|0
+5986|2|400M|Emma Nagel|67.36|NULL|0
+6074|2|800M|Jenna Oliver|145.57999999999998|NULL|0
+6133|1|100M|Jacob Scheck|11.57|NULL|0
+6138|2|3200M|Riley Freeland|697.78|NULL|0
+6198|2|800M|Tommie Kurtz|146.43|NULL|0
+6203|1|400M|Ryan Curtis|57.55|NULL|0
+6238|2|3200M|Bailey Freeland|761.69|NULL|0
+6254|2|200M|Sara Keener|27.9|NULL|0
+6285|1|400M|Matt Stoner|56.99|NULL|0
+6724|1|200M|Jacob Scheck|23.82|NULL|0
+7109|1|1600M|Dillon West|312.22|NULL|0
+7243|2|400M|Lexi Licursi|67.22|NULL|0
+7308|2|100M|Nyah Hansen|13.95|NULL|0
+7404|1|300M Hurdles|Bryce Betts|50.35|NULL|0
+7426|1|300M Hurdles|Rick Patton|52.36|NULL|0
+7818|1|110M Hurdles|Rick Patton|20.52|NULL|0
+8558|1|110M Hurdles|DeAnte Taylor|19.73|NULL|0
+8579|2|100M Hurdles|Zana Ross|16.35|NULL|0
+8588|1|100M|Zack Munchick|11.15|NULL|0
+8612|2|300M Hurdles|Kyra Combs|57.67|NULL|0
+8723|1|200M|Zack Munchick|23.72|NULL|0
+8779|1|3200M|Max Gucker|630.2|NULL|0
+8844|2|100M|Sara Keener|13.5|NULL|0
+8859|1|3200M|Alex Derhammer|677.76|NULL|0
+12119|1|4x200M Relay|Ryan Curtis/Zack Munchick/Adam Oren/Jacob Scheck|96.27000000000001|NULL|0
+12370|1|4x400M Relay|Adam Oren/Matt Stoner/Tristan Vaughan/Ryan Curtis|230.65|NULL|0
+12598|1|4x800M Relay|Nick Bailey/Alex Derhammer/Tristan Vaughan/Dillon West|524.19|NULL|0
+12619|2|4x800M Relay|Bailey Freeland/Riley Freeland/Tommie Kurtz/Jenna Oliver|615.79|NULL|0
+12691|2|4x400M Relay|Riley Freeland/Zana Ross/Jenna Oliver/Tommie Kurtz|252.62|NULL|0
+13123|1|4x100M Relay|John Manzuk/Zack Munchick/Adam Oren/Jacob Scheck|45.45|NULL|0
+13275|2|4x100M Relay|Kyra Combs/Nyah Hansen/Sara Keener/Sarasa Sivapatham|55.5|NULL|0
+13323|2|4x200M Relay|Sara Keener/Maddie Boltz/Jenna Oliver/Zana Ross|110.97999999999999|NULL|0
+

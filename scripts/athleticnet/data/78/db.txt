@@ -1,0 +1,63 @@
+12206|1|4x100M Relay|John Manzuk/Frank Stepp/Michael Williams/Blake Wilson|45.51|NULL|0
+12427|1|4x800M Relay|Brycen Holliday/Frank Stepp/Nick Bailey/Alex Derhammer|521.46|NULL|0
+12528|2|4x400M Relay|Maddie Boltz/Tommie Kurtz/Paige Munchick/Dana Thur|274.4|NULL|0
+12573|1|4x200M Relay|Luke Yuravak/Jake Arnold/Cade Cass/Austin Ebaugh|100.37|NULL|0
+12626|2|4x800M Relay|Bailey Freeland/Tommie Kurtz/Paige Munchick/Sophia Spencer|631.68|NULL|0
+12944|1|4x400M Relay|Nick Bailey/Brycen Holliday/Thomas Lormeau/Blake Wilson|216.26|NULL|0
+13235|2|4x100M Relay|Maddie Boltz/Nyah Hansen/Elanna Lear/Paige Munchick|54.84|NULL|0
+13313|2|4x200M Relay|Natalie Bailey/Maddie Boltz/Nyah Hansen/Dana Thur|120.6|NULL|0
+7124|2|1600M|Tommie Kurtz|347.86|NULL|0
+8820|1|1600M|Andrew Hibler|309.36|NULL|0
+6335|1|3200M|Luke Malena|667.9|NULL|0
+7512|1|100M|Michael Williams|11.78|NULL|0
+2446|1|Long Jump|Michael Williams|NULL|207.75|0
+5008|2|100M Hurdles|Elise Patton|21.17|NULL|0
+4476|2|1600M|Jenna Oliver|388.24|NULL|0
+4220|2|400M|Liv Wells|74.76|NULL|0
+4488|1|400M|Thomas Lormeau|53.65|NULL|0
+503|2|High Jump|Cydnei Miller|NULL|48|0
+2295|2|High Jump|Ashley Sigmon|NULL|54|0
+4629|1|300M Hurdles|Austin Ebaugh|44.79|NULL|0
+4141|2|800M|Bailey Freeland|154.94|NULL|0
+2920|2|Shot Put|Meagan Scheck|NULL|352.5|0
+2962|2|Discus|Meagan Scheck|NULL|1086|0
+128|1|Shot Put|Ethan Sterling|NULL|460.5|0
+2841|2|Long Jump|Arabella Polen|NULL|151.75|0
+3815|2|400M|Arabella Polen|74.98|NULL|0
+6298|2|100M|Elanna Lear|14.79|NULL|0
+8893|2|300M Hurdles|Paige Munchick|53.69|NULL|0
+2707|2|Pole Vault|Cassidy Smith|NULL|72|0
+3360|2|Seated Shot Put|Brooklynn Crist|NULL|180|0
+5763|2|Seated 100M|Brooklynn Crist|21.18|NULL|0
+7934|2|Seated 800M|Brooklynn Crist|176.71|NULL|0
+8603|2|Seated 400M|Brooklynn Crist|80.52|NULL|0
+8734|1|110M Hurdles|DeAnte Taylor|16.85|NULL|0
+4588|1|300M Hurdles|DeAnte Taylor|52.9|NULL|0
+7622|2|300M Hurdles|Natalie Bailey|57.87|NULL|0
+4325|2|100M Hurdles|Natalie Bailey|20.4|NULL|0
+6349|2|200M|Liberty Ridenour|30.68|NULL|0
+6029|2|3200M|Maria Porras|779.29|NULL|0
+4500|2|3200M|Makaela Salyer|800.72|NULL|0
+365|1|Shot Put|Jake Kemp|NULL|502.5|0
+2007|1|Discus|Jake Kemp|NULL|1316|0
+2318|1|Pole Vault|Nick Ziegler|NULL|102|0
+6753|1|400M|Nick Ziegler|57.2|NULL|0
+4197|1|100M|Blake Wilson|11.72|NULL|0
+5237|1|800M|Nick Bailey|128.18|NULL|0
+4814|1|200M|Jacob Nau|26.31|NULL|0
+2509|1|Long Jump|Jacob Nau|NULL|203|0
+4142|1|200M|Jake Arnold|25.71|NULL|0
+7596|2|100M|Nyah Hansen|13.8|NULL|0
+2972|1|Discus|John Manzuk|NULL|1506|0
+6961|2|800M|Sophia Spencer|159.61|NULL|0
+3410|2|Long Jump|Maddie Boltz|NULL|183.75|0
+3715|2|200M|Maddie Boltz|28.29|NULL|0
+3018|2|Pole Vault|Maddie Marshall|NULL|72|0
+22|2|Discus|Maddie Marshall|NULL|925|0
+2774|2|Shot Put|Maddie Marshall|NULL|267.5|0
+7393|1|1600M|Max Gucker|285.9|NULL|0
+6557|1|3200M|Max Gucker|596.53|NULL|0
+3887|1|110M Hurdles|Ray Farnham|20.84|NULL|0
+2508|1|Pole Vault|Nate Brown|NULL|126|0
+6787|1|800M|Brycen Holliday|127.67|NULL|0
+

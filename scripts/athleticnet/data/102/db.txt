@@ -1,0 +1,40 @@
+334|1|Long Jump|Chandler Laux|NULL|202|0
+653|2|Shot Put|Tori Gershom|NULL|373|0
+656|2|Long Jump|Janelle Shaffer|NULL|209|0
+1188|1|Discus|Brian Livingstone|NULL|1623|0
+1452|1|Discus|James Crawford|NULL|1553|0
+1477|1|Pole Vault|Chase Burgess|NULL|132|0
+2011|2|Long Jump|Kelani Nuckols|NULL|202.25|0
+2122|2|Shot Put|Katie Simpson|NULL|365|0
+2442|1|Shot Put|Brian Livingstone|NULL|652|0
+2469|2|High Jump|Jennifer Foster|NULL|66|0
+2495|1|Long Jump|Zach Miglich|NULL|250|0
+3422|2|Pole Vault|Jennifer Foster|NULL|144|0
+3833|1|400M|Ryan Weir|53.4|NULL|0
+3872|1|200M|Brandon Boltz|24.84|NULL|0
+4368|2|800M|Alaina Jordan|156.14|NULL|0
+4780|1|800M|CJ Martin|136.34|NULL|0
+4978|1|100M|Brandon Boltz|12.22|NULL|0
+5011|1|3200M|Josh Butt|704.38|NULL|0
+5120|1|3200M|Chris Markeson|683.5|NULL|0
+5406|1|1600M|RJ Bechtel|292.26|NULL|0
+5453|2|100M Hurdles|Jennifer Foster|15.1|NULL|0
+6121|2|300M Hurdles|Kelani Nuckols|46.82|NULL|0
+6268|2|100M|Taylor Detwiler|12.99|NULL|0
+6843|2|400M|Morgan Eyring|66.57|NULL|0
+6857|1|300M Hurdles|Clay Vondriska|41.6|NULL|0
+6865|2|100M|Katy Dean|13.91|NULL|0
+6898|1|400M|Adam Podolak|53.74|NULL|0
+7235|2|200M|Taylor Detwiler|27.7|NULL|0
+7381|1|200M|Bobby Ellis|24.62|NULL|0
+7433|1|300M Hurdles|Zach Miglich|42.68|NULL|0
+7575|1|800M|Kori Davis|127.7|NULL|0
+7686|1|110M Hurdles|Clay Vondriska|16.81|NULL|0
+7739|1|1600M|Paul Hissong|292.27|NULL|0
+7762|2|1600M|Ashley Murray|354.19|NULL|0
+8009|2|300M Hurdles|Katy Dean|52.33|NULL|0
+8104|1|110M Hurdles|Chandler Laux|18.62|NULL|0
+8545|2|200M|Janelle Shaffer|26.58|NULL|0
+8587|1|100M|Zach Miglich|11.93|NULL|0
+12643|2|4x200M Relay|Taylor Detwiler/Kelani Nuckols/Janelle Shaffer/Jenna Elswick|105.13|NULL|0
+

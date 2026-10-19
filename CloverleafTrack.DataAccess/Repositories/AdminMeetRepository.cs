@@ -128,9 +128,9 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
-            INSERT INTO Meets (Name, Date, LocationId, Environment, HandTimed, SeasonId, EntryStatus, EntryNotes, MeetType, MeetLevel, ScoringTemplateId)
+            INSERT INTO Meets (Name, Date, LocationId, Environment, HandTimed, SeasonId, EntryStatus, EntryNotes, MeetType, MeetLevel, ScoringTemplateId, OfficialResultsUrl)
             OUTPUT INSERTED.Id
-            VALUES (@Name, @Date, @LocationId, @Environment, @HandTimed, @SeasonId, @EntryStatus, @EntryNotes, @MeetType, @MeetLevel, @ScoringTemplateId)";
+            VALUES (@Name, @Date, @LocationId, @Environment, @HandTimed, @SeasonId, @EntryStatus, @EntryNotes, @MeetType, @MeetLevel, @ScoringTemplateId, @OfficialResultsUrl)";
         return await connection.ExecuteScalarAsync<int>(sql, meet);
     }
 
@@ -149,7 +149,8 @@ public class AdminMeetRepository(IDbConnectionFactory connectionFactory) : IAdmi
                 EntryNotes = @EntryNotes,
                 MeetType = @MeetType,
                 MeetLevel = @MeetLevel,
-                ScoringTemplateId = @ScoringTemplateId
+                ScoringTemplateId = @ScoringTemplateId,
+                OfficialResultsUrl = @OfficialResultsUrl
             WHERE Id = @Id";
         var rowsAffected = await connection.ExecuteAsync(sql, meet);
         return rowsAffected > 0;

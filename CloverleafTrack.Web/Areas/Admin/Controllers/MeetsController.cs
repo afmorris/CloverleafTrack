@@ -105,7 +105,8 @@ public class MeetsController(
             EntryNotes = model.EntryNotes,
             MeetType = model.MeetType,
             MeetLevel = model.MeetLevel,
-            ScoringTemplateId = model.ScoringTemplateId
+            ScoringTemplateId = model.ScoringTemplateId,
+            OfficialResultsUrl = NormalizeUrl(model.OfficialResultsUrl)
         };
 
         var id = await meetRepository.CreateAsync(meet);
@@ -144,6 +145,7 @@ public class MeetsController(
             MeetType = meet.MeetType,
             MeetLevel = meet.MeetLevel,
             ScoringTemplateId = meet.ScoringTemplateId,
+            OfficialResultsUrl = meet.OfficialResultsUrl,
             ExistingParticipants = participants,
             ParticipantSchoolIds = participants.Select(p => p.SchoolId).ToList(),
             ParticipantIds = participants.Select(p => p.Id).ToList(),
@@ -181,7 +183,8 @@ public class MeetsController(
             EntryNotes = model.EntryNotes,
             MeetType = model.MeetType,
             MeetLevel = model.MeetLevel,
-            ScoringTemplateId = model.ScoringTemplateId
+            ScoringTemplateId = model.ScoringTemplateId,
+            OfficialResultsUrl = NormalizeUrl(model.OfficialResultsUrl)
         };
 
         await meetRepository.UpdateAsync(meet);
@@ -426,5 +429,15 @@ public class MeetsController(
         }
 
         return rows;
+    }
+
+    /// <summary>Only http/https links are stored (blank becomes null) so the public page can never render a javascript: link.</summary>
+    private static string? NormalizeUrl(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url)) return null;
+        var trimmed = url.Trim();
+        return Uri.TryCreate(trimmed, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+            ? trimmed
+            : null;
     }
 }

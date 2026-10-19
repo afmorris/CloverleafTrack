@@ -1,0 +1,8 @@
+Kimberly Relays
+m/1/110mh|Finals I 8.~12~Jake Sideris~17.43a (-6.7)~Cloverleaf~1224204
+m/1/110mh|Prelims I 8.~12~Jake Sideris~16.93a (-2.3)PB~Cloverleaf~1224204
+f/1/100m|Finals I 7.~10~Taylor Detwiler~14.03a (-3.7)~Cloverleaf~1224223
+f/1/100m|Prelims I 8.~10~Taylor Detwiler~13.69a (-1.2)~Cloverleaf~1224223
+f/1/100mh|Finals I 2.~11~Megan Rybacki~17.42a~Cloverleaf~1224219
+f/1/100mh|Prelims I 3.~11~Megan Rybacki~17.15a (-3.5)~Cloverleaf~1224219
+#SERIES {}

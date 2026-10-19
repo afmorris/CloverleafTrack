@@ -1,0 +1,6 @@
+15031|1|1600M|Jon Walkup|278.98|NULL|0
+15032|2|300M Hurdles|Jenny Rupp|46.9|NULL|0
+15033|2|300M Hurdles|Heidi Santelmann|47.53|NULL|0
+15034|1|300M Hurdles|Mike Fuentes|40.56|NULL|0
+15035|2|Pole Vault|Stephanie Foster|NULL|120|0
+

@@ -1,0 +1,21 @@
+114|2|Shot Put|Katelyn Young|NULL|381.5|0
+346|2|Shot Put|Logan Stewart|NULL|336.5|0
+1301|1|Long Jump|Adam Oren|NULL|201|0
+3868|1|1600M|Estevan Ortega|321.51|NULL|0
+3886|1|200M|Zack Munchick|25.14|NULL|0
+4214|1|400M|Tristan Vaughan|56.4|NULL|0
+4575|1|400M|Matt Grissom|66.94|NULL|0
+5074|2|1600M|Tommie Kurtz|387.11|NULL|0
+5402|1|1600M|Dillon West|332.31|NULL|0
+5804|1|60M|Tyler Wilker|9.6|NULL|0
+5938|2|200M|Sara Keener|30.72|NULL|0
+6338|2|200M|Kirsten Wilson|32.15|NULL|0
+6902|2|60M|Kirsten Wilson|9.11|NULL|0
+6971|2|60M Hurdles|Zana Ross|10.2|NULL|0
+7024|2|60M|Sara Keener|8.84|NULL|0
+7749|2|800M|Ella Loth|207.32|NULL|0
+7970|1|200M|Tyler Wilker|31.8|NULL|0
+8249|2|800M|Sara Naples|167.44|NULL|0
+8671|2|800M|Emma Nagel|174.47|NULL|0
+8867|1|60M|Zack Munchick|7.42|NULL|0
+

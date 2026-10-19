@@ -91,6 +91,11 @@
             <span class="chip-place">@(Model.Environment == CloverleafTrack.Models.Enums.Environment.Indoor ? "Indoor" : "Outdoor")</span>
             @if (!string.IsNullOrEmpty(typeBadge)) { <span class="chip-rank">@typeBadge</span> }
             @if (Model.HandTimed) { <span class="chip-rank">Hand-timed</span> }
+            @if (!string.IsNullOrEmpty(Model.OfficialResultsUrl))
+            {
+                var resultsHost = new Uri(Model.OfficialResultsUrl).Host.Replace("www.", "");
+                <a href="@Model.OfficialResultsUrl" target="_blank" rel="noopener noreferrer" class="chip-place hover:underline" title="Official results on @resultsHost">Official results on @resultsHost &#8599;</a>
+            }
         </div>
         @if (Model.TeamResult != null)
         {

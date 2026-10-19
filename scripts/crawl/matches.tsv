@@ -1,0 +1,307 @@
+source	meetId	date	crawledName	dbMeetId	dbDate	dbName	score
+athleticnet	644596	2026-03-28	Cloverleaf Early Bird Relays	284	2026-03-28	2026 Cloverleaf Early Bird Relays	2.00
+athleticnet	631352	2026-04-03	Jim Hauser Pirate Relays	285	2026-04-03	2026 Jim Hauser Pirate Relays	2.00
+athleticnet	648714	2026-04-10	Fairview Warrior Relays	287	2026-04-10	2026 Fairview Warrior Relays	2.00
+athleticnet	641579	2026-04-14	Cloverleaf vs Woodridge Dual	288	2026-04-14	2026 Woodridge Dual	1.67
+athleticnet	631099	2026-04-18	Bay Rockets Invitational	289	2026-04-18	2026 Bay Rocket Invitational	1.33
+athleticnet	651598	2026-04-24	Keystone Track & Field Festival	291	2026-04-24	2026 Keystone Invitational	1.50
+athleticnet	652638	2026-05-02	Wooster HS/Nikki Reynolds Track & Field Invitational	293	2026-05-02	2026 Nikki Reynolds Invitational	1.67
+athleticnet	653339	2026-05-08	Fairless Falcon Twilight Invitational	295	2026-05-08	2026 Fairless Twilight Invitational	1.67
+athleticnet	637734	2026-05-11	Woodridge Stars of Track & Field	296	2026-05-11	2026 Stars of Track and Field	1.50
+athleticnet	637822	2026-05-14	Metro Athletic Conference Championship	297	2026-05-16	2026 Metro Athletic Conference Championships	1.00
+athleticnet	649905	2026-05-21	OHSAA D3 Districts - Woodridge	298	2026-05-23	2026 Division III District Track Meet	1.00
+athleticnet	651387	2026-05-28	OHSAA D3 Regional R9 - Austintown	299	2026-05-30	2026 Division III Regional Track Meet	1.00
+athleticnet	656920	2026-06-04	OHSAA Jesse Owens Track & Field State Championships	300	2026-06-06	2026 OHSAA Division III State Track and Field Championships	1.00
+athleticnet	660534	2025-04-25	Green Twilight Relays	247	2025-04-26	2025 Green Twilight Relays	1.40
+athleticnet	611746	2025-05-03	Nikki Reynolds Invitational	271	2025-05-03	2025 Nikki Reynolds Invitational	2.00
+athleticnet	614395	2025-05-15	Metro Athletic HS Conference Championships	276	2025-05-17	2025 Metro Athletic Conference Championships	1.00
+athleticnet	615668	2025-05-29	OHSAA D2 Region 5	277	2025-05-31	2025 Division II Regional Track Meet	1.00
+athleticnet	615793	2025-06-06	OHSAA D2 State Track & Field Championships	278	2025-06-06	2025 OHSAA Division II State Track and Field Championships	1.00
+athleticnet	551076	2024-04-06	Tom Fasko Relays	172	2024-04-06	2024 Tom Fasko Medina Relays	1.67
+athleticnet	554436	2024-04-13	Cowen Invitational	64	2024-04-13	2024 Cowen Redbird Invitational	1.50
+athleticnet	557678	2024-04-19	Green Twilight Relays	50	2024-04-19	2024 Green Twilight Relays	2.00
+athleticnet	558712	2024-04-27	Wooster Nikki Reynolds Invitational	136	2024-04-27	2024 Nikki Reynolds Invitational	1.67
+athleticnet	560701	2024-05-04	Optimist Meet				0.40
+athleticnet	563783	2024-05-22	OHSAA D1 Region 2 - Port Clinton	87	2024-05-24	2024 Division I Regional Track Meet	1.00
+athleticnet	564189	2024-05-31	OHSAA D1 State Track & Field Championships	117	2024-06-01	2024 OHSAA Division I State Track and Field Championships	1.00
+athleticnet	505356	2023-04-08	Tom Fasko Relays	86	2023-04-08	2023 Tom Fasko Medina Relays	1.67
+athleticnet	511658	2023-04-29	Nikki Reynolds Invitational	106	2023-04-29	2023 Nikki Reynolds Invitational	2.00
+athleticnet	513278	2023-05-05	Fairless Twilight Invitational	259	2023-05-05	2023 Fairless Twilight Invitational	2.00
+athleticnet	515927	2023-05-17	OHSAA Division 1 District - Brunswick	153	2023-05-19	2023 Division I District Track Meet	1.00
+athleticnet	516137	2023-05-24	OHSAA D1 Region 2 - Amherst Steele	62	2023-05-26	2023 Division I Regional Track Meet	1.00
+athleticnet	516528	2023-06-02	OHSAA D1 State Track & Field Championships	35	2023-06-03	2023 OHSAA Division I State Track and Field Championships	1.00
+athleticnet	476006	2022-03-26	Cloverleaf Early Bird Relays	124	2022-03-26	2022 Cloverleaf Early Bird Relays	2.00
+athleticnet	465658	2022-04-09	Medina Tom Fasko Relays	168	2022-04-09	2022 Tom Fasko Medina Relays	2.00
+athleticnet	467948	2022-04-16	Orrville Invitational	132	2022-04-16	2022 Orrville Invitational	2.00
+athleticnet	470024	2022-04-22	Green Twilight Relays	43	2022-04-22	2022 Green Twilight Relays	2.00
+athleticnet	476720	2022-04-26	Cloverleaf Early Bird Relays				1.00
+athleticnet	472651	2022-05-06	Fairless Twilight Invitational	225	2022-05-06	2022 Fairless Twilight Invitational	2.00
+athleticnet	476184	2022-05-09	Smithie Frosh/Soph Meet	122	2022-05-09	2022 Smithie Frosh-Soph Invitational	2.00
+athleticnet	474578	2022-05-18	OHSAA D1 Northeast District - Brunswick	255	2022-05-20	2022 Division I District Track Meet	1.00
+athleticnet	475254	2022-05-25	OHSAA D1 Region 2	230	2022-05-27	2022 Division I Regional Track Meet	1.00
+athleticnet	475431	2022-06-03	OHSAA D1 State Track & Field Championships	29	2022-06-04	2022 OHSAA Division I State Track and Field Championships	1.00
+athleticnet	424419	2021-04-10	32nd Annual Tom Fasko Medina Relays	46	2021-04-10	2021 Tom Fasko Medina Relays	1.75
+athleticnet	427459	2021-04-17	Orrville Invitational	194	2021-04-17	2021 Orrville Invitational	2.00
+athleticnet	660931	2021-04-23	Green Twilight Relays	241	2021-04-23	2021 Green Twilight Relays	2.00
+athleticnet	434519	2021-05-07	Fairless Twilight Invitational	185	2021-05-07	2021 Fairless Twilight Invitational	2.00
+athleticnet	436605	2021-05-19	OHSAA D1 Northeast District - Brunswick	54	2021-05-21	2021 Division I District Track Meet	1.00
+athleticnet	437701	2021-05-26	OHSAA D1 Region 2	10	2021-05-26	2021 Division I Regional Track Meet	1.00
+athleticnet	438131	2021-06-04	OHSAA D1 State Track & Field Championships	197	2021-06-05	2021 OHSAA Division I State Track and Field Championships	1.00
+athleticnet	376749	2019-04-06	New London Invitational				0.00
+athleticnet	373563	2019-04-13	Loudonville - Cowen Invite	78	2019-04-13	2019 Cowen Redbird Invitational	1.33
+athleticnet	384906	2019-05-16	OHSAA D2 Northeast District - Orrville	26	2019-05-16	2019 Division II District Track Meet	1.25
+athleticnet	384326	2019-05-23	OHSAA D2 Region 6	252	2019-05-23	2019 Division II Regional Track Meet	1.00
+athleticnet	384459	2019-05-31	OHSAA D2 State Track & Field Championships	28	2019-05-31	2019 OHSAA Division II State Track and Field Championships	1.00
+athleticnet	385140	2019-06-01	OHSAA Seated State Track & Field Championships	126	2019-05-31	2019 OHSAA Seated Division State Track and Field Championships	1.40
+athleticnet	340292	2018-04-14	Loudonville - Cowen Invite	125	2018-04-14	2018 Cowen Redbird Invitational	1.33
+athleticnet	345975	2018-04-28	Wooster Nikki Reynolds Invitational	127	2018-04-28	2018 Nikki Reynolds Invitational	1.67
+athleticnet	349228	2018-05-26	OHSAA D2 Region 6	256	2018-05-26	2018 Division II Regional Track Meet	1.00
+athleticnet	339039	2018-06-01	OHSAA D2 State Championships	83	2018-06-01	2018 OHSAA Division II State Track and Field Championships	1.00
+athleticnet	349438	2018-06-02	OHSAA Seated State Championships	2	2018-06-01	2018 OHSAA Seated Division State Track and Field Championships	1.40
+athleticnet	300870	2017-04-15	Mansfield Mehock relays	49	2017-04-15	2017 Mansfield Mehock Relays	2.00
+athleticnet	301502	2017-05-10	PTC League Meet	108	2017-05-10	2017 PTC Track Championships	1.50
+athleticnet	301503	2017-05-12	PTC League Meet Finals	108	2017-05-10	2017 PTC Track Championships	1.00
+athleticnet	315814	2017-05-20	OHSAA D2 Northeast District - Orville	174	2017-05-20	2017 Division II District Track Meet	1.25
+athleticnet	316159	2017-05-27	OHSAA D2 Region 6	220	2017-05-27	2017 Division II Regional Track Meet	1.00
+athleticnet	289390	2017-06-02	OHSAA D2 State Meet	187	2017-06-02	2017 OHSAA Division II State Track and Field Championships	1.00
+athleticnet	263775	2016-04-16	Mansfield/Mehock Relays	196	2016-04-16	2016 Mansfield Mehock Relays	2.00
+athleticnet	275382	2016-05-07	Optimist Meet				0.00
+athleticnet	271597	2016-05-13	PTC Championship Finals	44	2016-05-11	2016 PTC Track Championships	1.00
+athleticnet	284234	2016-05-20	OHSAA D2 Northeast District (Orrville)	264	2016-05-18	2016 Division II District Track Meet	1.00
+athleticnet	284281	2016-05-28	OHSAA D2 Region 6	91	2016-05-28	2016 Division II Regional Track Meet	1.00
+athleticnet	267412	2016-06-03	OHSAA D2 State Meet	184	2016-06-03	2016 OHSAA Division II State Track and Field Championships	1.00
+athleticnet	245944	2015-04-16	Ontario Relays	216	2015-04-16	2015 Ontario Relays	2.00
+athleticnet	252512	2015-04-25	Triway Invitational	104	2015-04-25	2015 Triway Invitational	2.00
+athleticnet	251910	2015-05-13	Akron Suburban League Championship	135	2015-05-15	2015 Suburban League Championships	1.00
+athleticnet	252048	2015-05-20	D1 Nordonia				1.00
+athleticnet	226294	2014-05-17	Akron Suburban League Championships	169	2014-05-17	2014 Suburban League Championships	1.67
+athleticnet	223282	2014-05-23	OHSAA DI NEO District Championship	22	2014-05-21	2014 Division I District Track Meet	1.00
+athleticnet	214442	2014-05-30	OHSAA DI Region 1 - Austintown-Fitch	148	2014-05-28	2014 Division I Regional Track Meet	1.00
+athleticnet	214440	2014-06-06	OHSAA D1 State Track & Field Championships	12	2014-06-06	2014 OHSAA Division I State Track and Field Championships	1.00
+athleticnet	192386	2013-05-31	Northeast D1 Regional Finals	34	2013-05-29	2013 Division I Regional Track Meet	1.00
+athleticnet	192388	2013-06-07	OHSAA D1 State Track & Field Championships	113	2013-06-07	2013 OHSAA Division I State Track and Field Championships	1.00
+athleticnet	157758	2012-05-05	Optimist Meet (32nd Annual)				0.00
+athleticnet	123688	2011-04-16	Mansfield Mehock Relays	242	2011-04-15	2011 Mansfield Mehock Relays	1.40
+athleticnet	137345	2011-05-07	Fitch Optimist				0.00
+athleticnet	668504	2011-05-18	OHSAA Division 1 NE District - North Canton	102	2011-05-18	2011 Division I District Track Meet	1.20
+athleticnet	131846	2011-06-03	OHSAA D1 State Track & Field Championships	232	2011-06-03	2011 OHSAA Division I State Track and Field Championships	1.00
+athleticnet	104687	2010-04-03	Kimberly Relays	240	2010-04-03	2010 Kimberly Relays	2.00
+athleticnet	108390	2010-04-24	Amherst Comet Relays				1.10
+athleticnet	112489	2010-05-22	OHSAA Northeast - North Canton Division I District Track				0.00
+athleticnet	98562	2010-05-28	OHSAA Division I Track Championships - Region 1 - Youngstown	192	2010-05-26	2010 Division I Regional Track Meet	1.00
+athleticnet	111970	2010-06-04	OHSAA D1 State Track & Field Championships	98	2010-06-04	2010 OHSAA Division I State Track and Field Championships	1.00
+athleticnet	444526	2009-04-17	Mansfield Mehock Relays				0.00
+athleticnet	65012	2009-04-18	Mansfield Mehock Relays				0.00
+athleticnet	84587	2009-05-22	NEO - North Canton District - Div 1				0.00
+athleticnet	64743	2009-05-27	Div. I--N.E.O. Regional	219	2009-05-27	2009 Division I Regional Track Meet	1.40
+athleticnet	83824	2009-05-29	Regional Finals	219	2009-05-27	2009 Division I Regional Track Meet	1.00
+athleticnet	65712	2009-06-05	OHSAA D1 State Track & Field Championships	8	2009-06-05	2009 OHSAA Division I State Track and Field Championships	1.00
+athleticnet	60909	2008-06-06	OHSAA D1 State Track & Field Championships	227	2008-06-06	2008 OHSAA Division I State Track and Field Championships	1.00
+athleticnet	658847	2007-05-16	OHSAA Division 1 Northeast District - North Canton	301	2007-05-18	2007 Division I District Track Meet	1.00
+athleticnet	658767	2007-05-23	OHSAA Division 1 Regional Track Meet	302	2007-05-26	2007 Division I Regional Track Meet	1.00
+athleticnet	34214	2007-06-01	OHSAA D1 State Track & Field Championships				0.00
+athleticnet	670405	2006-05-17	OHSAA NE District D1 - North Canton				0.00
+athleticnet	78751	2006-05-27	OHSAA Div. 1 Regional Meet	182	2006-05-24	2006 Division I Regional Track Meet	1.00
+athleticnet	670398	2005-05-19	OHSAA Northeast D1 District - North Canton				0.00
+athleticnet	60231	2005-05-26	OHSAA D. I Regional	9	2005-05-26	2005 Division I Regional Track Meet	1.67
+athleticnet	404087	2005-06-03	OHSAA D1 State Track & Field Championships	263	2005-06-03	2005 OHSAA Division I State Track and Field Championships	1.00
+athleticnet	626478	2025-12-13	University of Akron Rust Buster HS Open Meet				0.00
+athleticnet	631604	2026-01-17	University of Akron Rubber City HS Open Meet				0.00
+athleticnet	632988	2026-01-24	Kent State University HS Meet #1				0.00
+athleticnet	634554	2026-02-01	Mount Union HS Qualifier #1				0.65
+athleticnet	635597	2026-02-07	Ohio State HS Qualifier # 4	280	2026-02-07	2026 Ohio State High School Qualifier #4	2.00
+athleticnet	636245	2026-02-08	Ashland Univ. Jud Logan Light Giver HS Meet				0.40
+athleticnet	639555	2026-02-21	Akron Jerome Fields Open Meet	282	2026-02-21	2026 Jerome Fields HS Open	1.67
+athleticnet	639833	2026-02-21	Jerome Fields HS Open	282	2026-02-21	2026 Jerome Fields HS Open	2.00
+athleticnet	639730	2026-02-22	Kent State University HS Meet #3				0.40
+athleticnet	575968	2024-12-28	Extreme Vault Club HS Qualifier & Open	131	2024-12-28	2025 Extreme Vault Club HS Qualifier & Open	2.00
+athleticnet	581150	2025-02-01	Jerome Fields HS Open	137	2025-02-01	2025 Jerome Fields HS Open	2.00
+athleticnet	587896	2025-02-23	Kent State HS Meet #5				0.40
+athleticnet	590643	2025-03-08	OATCCC D2 State Indoor Championship	80	2025-03-08	2025 OATCCC D2 Indoor State Meet	2.00
+athleticnet	533049	2024-01-28	Mount Union HS Qualifier #1	71	2024-01-28	2024 Mount Union High School Qualifier #1	2.00
+athleticnet	534447	2024-02-03	Oberlin College HS Track & Field Meet #3	101	2024-02-03	2024 Oberlin College High School Meet #3	2.00
+athleticnet	536016	2024-02-11	SPIRE HS Indoor Games	75	2024-02-11	2024 SPIRE High School Indoor Games	2.00
+athleticnet	537713	2024-02-17	Akron Rubber City HS Open	146	2024-02-17	2024 Akron Rubber City High School Open	2.00
+athleticnet	540615	2024-03-01	OATCCC D1 Indoor State Meet	202	2024-03-01	2024 OATCCC D1 Indoor State Meet	2.00
+athleticnet	493298	2023-02-18	Akron Rubber City HS Open	191	2023-02-18	2023 Akron Rubber City HS Open	2.00
+athleticnet	495934	2023-03-04	OATCC D1 Indoor State Championships	138	2023-03-04	2023 OATCCC D1 Indoor State Meet	1.33
+athleticnet	448554	2022-01-22	Kent St. HS Meet #1	5	2022-01-22	2022 Kent State High School Meet #1	1.50
+athleticnet	451188	2022-02-06	Ashland University HS Indoor Invitational	150	2022-02-06	2022 Ashland University HS Indoor	2.00
+athleticnet	452679	2022-02-19	Akron Rubber City HS Open	166	2022-02-19	2022 Akron Rubber City HS Open	2.00
+athleticnet	455957	2022-03-04	OATCCC D1 Indoor State Championships	111	2022-03-04	2022 OATCCC D1 Indoor State Meet	2.00
+athleticnet	409999	2020-12-29	Jackets Holiday Indoor Invitational	214	2020-12-29	2021 Jackets Holiday Indoor	2.00
+athleticnet	409935	2021-01-30	SPIRE Ohio Championship Preview Meet	177	2021-01-30	2021 SPIRE Ohio Championship Preview Meet	2.00
+athleticnet	413073	2021-02-15	Cloverleaf Indoor Meet #1	206	2021-02-15	2021 Cloverleaf Indoor Meet 1	2.00
+athleticnet	413240	2021-02-20	Youngstown State Univ HS Open Meet #4	209	2021-02-20	2021 Youngstown State Open/High School Meet #4	2.00
+athleticnet	415634	2021-03-06	OATCCC D1 Indoor Finale	73	2021-03-06	2021 OATCCC D1 Indoor Finale	2.00
+athleticnet	393239	2020-01-11	Oberlin College HS Track & Field Meet #1	20	2020-01-11	2020 Oberlin College High School Meet #1	2.00
+athleticnet	399207	2020-02-22	Rubber City Open	66	2020-02-22	2020 Akron Rubber City Open	1.67
+athleticnet	389204	2020-03-07	OATCCC D1 Indoor State Championship	229	2020-03-07	2020 OATCCC D1 Indoor State Championships	2.00
+athleticnet	360608	2019-01-27	Baldwn-Wallace HS Invitational				1.00
+athleticnet	361521	2019-02-02	Oberlin College HS Meet #3	120	2019-02-02	2019 Oberlin College High School Meet #3	2.00
+athleticnet	363892	2019-02-10	Kent State University HS Meet #3	94	2019-02-10	2019 Kent State University High School Meet #3	2.00
+athleticnet	364199	2019-03-02	OATCCC D2/3 Indoor State Championship				0.00
+athleticnet	296022	2017-02-04	Oberlin College HS Grand Prix Series	32	2017-02-04	2017 Oberlin College Grand Prix Series #3	2.00
+milesplit	708380	2025-12-13	Oberlin College Track & Field Run-Jump-Throw Meet (HS/MS)				0.00
+milesplit	708654	2025-12-13	Akron Rust-Buster HS Open				0.00
+milesplit	717257	2025-12-27	Extreme Vault Club HS Qualifier & Open				0.00
+milesplit	690117	2026-01-17	Rubber City Invitational				0.00
+milesplit	690203	2026-01-24	Kent St. HS Meet #1				0.00
+milesplit	698212	2026-01-31	Heidelberg High School Open #3	279	2026-01-31	2026 Heidelberg HS Qualifier	1.50
+milesplit	690142	2026-02-01	Mount Union HS Qualifier #1				0.65
+milesplit	712470	2026-02-07	YSU High School Meet #3				1.00
+milesplit	709968	2026-02-07	Junior High State Qualifier	280	2026-02-07	2026 Ohio State High School Qualifier #4	1.33
+milesplit	712377	2026-02-07	Ohio State High School Qualifier #4	280	2026-02-07	2026 Ohio State High School Qualifier #4	2.00
+milesplit	690179	2026-02-08	Ashland University HS Light Giver Open				0.40
+milesplit	690122	2026-02-20	Ashland HS High Performance Invite				0.40
+milesplit	690133	2026-02-21	Jerome Fields HS Open	282	2026-02-21	2026 Jerome Fields HS Open	2.00
+milesplit	690155	2026-02-22	Kent St. HS Meet #3-Last Chance				0.40
+milesplit	718840	2026-03-06	2026 OATCCC D2 Indoor State Meet				0.00
+milesplit	649613	2024-12-28	Extreme Vault Club HS Qualifier & Open	131	2024-12-28	2025 Extreme Vault Club HS Qualifier & Open	2.00
+milesplit	612249	2025-02-01	Jerome Fields HS Open	137	2025-02-01	2025 Jerome Fields HS Open	2.00
+milesplit	642052	2025-02-22	Univ. of Findlay Dave's Running High School Open	41	2025-02-22	2025 University of Findlay Dave's Running High School Open	2.00
+milesplit	626029	2025-02-23	Kent St. HS Meet #5-Last Chance				0.40
+milesplit	650781	2025-03-08	2025 OATCCC D2 Indoor State Meet	80	2025-03-08	2025 OATCCC D2 Indoor State Meet	2.00
+milesplit	562494	2024-01-20	Kent St. HS Meet #3	7	2024-01-20	2024 Kent State High School Meet #3	1.50
+milesplit	562489	2024-01-28	Mount Union HS Qualifier #1	71	2024-01-28	2024 Mount Union High School Qualifier #1	2.00
+milesplit	576159	2024-02-03	Oberlin College High School Track & Field Meet	101	2024-02-03	2024 Oberlin College High School Meet #3	2.00
+milesplit	565228	2024-02-11	SPIRE HS Indoor Games 2024	75	2024-02-11	2024 SPIRE High School Indoor Games	2.00
+milesplit	562493	2024-02-17	Akron Rubber City HS Open	146	2024-02-17	2024 Akron Rubber City High School Open	2.00
+milesplit	565237	2024-03-01	2024 OATCCC D1 Indoor State Meet	202	2024-03-01	2024 OATCCC D1 Indoor State Meet	2.00
+milesplit	506352	2023-02-04	Oberlin College High School Track & Field Meet	228	2023-02-04	2023 Oberlin College High School Meet #3	2.00
+milesplit	500910	2023-02-18	Akron Rubber City HS Open	191	2023-02-18	2023 Akron Rubber City HS Open	2.00
+milesplit	450488	2021-12-12	Tiffin High School Open #1				0.00
+milesplit	454459	2022-01-08	Akron Pole Vault Convention	103	2022-01-08	2022 Akron Pole Vault Convention	2.00
+milesplit	453686	2022-01-22	Youngstown State High School Meet #2	5	2022-01-22	2022 Kent State High School Meet #1	1.00
+milesplit	452250	2022-01-22	Kent St. HS Meet #1	5	2022-01-22	2022 Kent State High School Meet #1	1.50
+milesplit	452357	2022-02-06	Ashland University HS Indoor	150	2022-02-06	2022 Ashland University HS Indoor	2.00
+milesplit	452355	2022-02-19	Akron Rubber City HS Open	166	2022-02-19	2022 Akron Rubber City HS Open	2.00
+milesplit	461662	2022-02-26	OHIAA INDOOR STATE POLE VAULT CHAMPIONSHIP	6	2022-02-26	2022 OHIAA Indoor State Pole Vault Championship	2.00
+milesplit	452354	2022-02-27	Kent St. HS Meet #3				0.40
+milesplit	462109	2022-03-04	OATCCC D1 Indoor State Meet	111	2022-03-04	2022 OATCCC D1 Indoor State Meet	2.00
+milesplit	404148	2020-12-29	Jackets Holiday Indoor	214	2020-12-29	2021 Jackets Holiday Indoor	2.00
+milesplit	403945	2021-01-30	SPIRE Ohio Championship Preview Meet	177	2021-01-30	2021 SPIRE Ohio Championship Preview Meet	2.00
+milesplit	404310	2021-02-15	Cloverleaf Indoor Meet 1	206	2021-02-15	2021 Cloverleaf Indoor Meet 1	2.00
+milesplit	404776	2021-02-20	Youngstown State Open/High School Meet	209	2021-02-20	2021 Youngstown State Open/High School Meet #4	2.00
+milesplit	403946	2021-03-06	OATCCC D1 Indoor Finale	73	2021-03-06	2021 OATCCC D1 Indoor Finale	2.00
+milesplit	375103	2020-01-11	Oberlin College High School Meet #1	20	2020-01-11	2020 Oberlin College High School Meet #1	2.00
+milesplit	375063	2020-02-22	Akron Rubber City Open	66	2020-02-22	2020 Akron Rubber City Open	2.00
+milesplit	383888	2020-02-29	Ohio Inter-Club Pole Vault Championship	224	2020-02-29	2020 Ohio Inter-Club Pole Vault Championship	2.00
+milesplit	375960	2020-03-07	OATCCC D1 Indoor State Championships	229	2020-03-07	2020 OATCCC D1 Indoor State Championships	2.00
+milesplit	340139	2019-01-27	BW High School Indoor Meet	267	2019-01-27	2019 BW High School Indoor Meet	2.00
+milesplit	336444	2019-02-02	Oberlin College High School Meet #3	120	2019-02-02	2019 Oberlin College High School Meet #3	2.00
+milesplit	335762	2019-02-03	Mount Union HS Qualifier #1	105	2019-02-03	2019 Mount Union HS Qualifier #1	2.00
+milesplit	338551	2019-02-10	Kent State University High School Meet	94	2019-02-10	2019 Kent State University High School Meet #3	2.00
+milesplit	336445	2019-02-23	Oberlin College High School Meet #4 (Last Chance)	19	2019-02-23	2019 Oberlin College High School Meet #4	1.33
+milesplit	341981	2019-03-02	OATCCC D2/3 Indoor State Championships				0.00
+milesplit	298344	2018-02-03	Oberlin College Grand Prix Series #3	15	2018-02-03	2018 Oberlin College Grand Prix Series #3	2.00
+milesplit	257685	2017-02-04	Oberlin College Grand Prix Series #3	32	2017-02-04	2017 Oberlin College Grand Prix Series #3	2.00
+milesplit	267603	2017-02-28	Conversion Time				0.00
+milesplit	738840	2026-03-28	Cloverleaf Early Bird Relays	284	2026-03-28	2026 Cloverleaf Early Bird Relays	2.00
+milesplit	712693	2026-04-03	Jim Hauser Pirate Relays	285	2026-04-03	2026 Jim Hauser Pirate Relays	2.00
+milesplit	749055	2026-04-10	Fairview Warrior Relays	287	2026-04-10	2026 Fairview Warrior Relays	2.00
+milesplit	748359	2026-04-14	Cloverleaf vs Woodridge Dual	288	2026-04-14	2026 Woodridge Dual	1.67
+milesplit	690173	2026-04-18	Bay Rockets Invitational	289	2026-04-18	2026 Bay Rocket Invitational	1.33
+milesplit	754116	2026-04-24	Keystone Track & Field Festival	291	2026-04-24	2026 Keystone Invitational	1.50
+milesplit	757741	2026-05-02	Wooster HS/Nikki Reynolds Track & Field Invitational	293	2026-05-02	2026 Nikki Reynolds Invitational	1.67
+milesplit	760322	2026-05-08	Fairless Falcon Twilight Invitational	295	2026-05-08	2026 Fairless Twilight Invitational	1.67
+milesplit	760941	2026-05-11	Stars of Track and Field	296	2026-05-11	2026 Stars of Track and Field	2.00
+milesplit	763691	2026-05-14	Metro Athletic Conference Championship	297	2026-05-16	2026 Metro Athletic Conference Championships	1.00
+milesplit	763717	2026-05-14	Metro Athletic Conference Championship	297	2026-05-16	2026 Metro Athletic Conference Championships	1.00
+milesplit	760501	2026-05-15	Metro Athletic Conference (MAC) Championship	297	2026-05-16	2026 Metro Athletic Conference Championships	1.00
+milesplit	763629	2026-05-16	OHSAA 7th & 8th Grade State Track Championships				0.00
+milesplit	765163	2026-05-21	OHSAA D3 Districts - Woodridge	298	2026-05-23	2026 Division III District Track Meet	1.00
+milesplit	766422	2026-05-28	OHSAA D3 Regional R9 - Austintown	299	2026-05-30	2026 Division III Regional Track Meet	1.00
+milesplit	750758	2026-06-04	2026 OHSAA Outdoor Championships	300	2026-06-06	2026 OHSAA Division III State Track and Field Championships	1.00
+milesplit	655975	2025-03-29	Cloverleaf Early Bird Relays	258	2025-03-29	2025 Cloverleaf Early Bird Relays	2.00
+milesplit	642009	2025-04-04	Jim Hauser Pirate Relays	72	2025-04-04	2025 Jim Hauser Pirate Relays	2.00
+milesplit	663790	2025-04-08	Streetsboro vs. Cloverleaf and Ravenna				0.00
+milesplit	675851	2025-04-12	Mary Kay Hajek Chippewa Invitational	188	2025-04-12	2025 Mary Kay Hajek Chippewa Invitational	2.00
+milesplit	647556	2025-04-12	Chippewa Invitational	188	2025-04-12	2025 Mary Kay Hajek Chippewa Invitational	1.25
+milesplit	651785	2025-04-19	Bay Rockets Invitational	147	2025-04-19	2025 Bay Rocket Invitational	1.33
+milesplit	652304	2025-04-25	Green Twilight Relays	247	2025-04-26	2025 Green Twilight Relays	1.40
+milesplit	679505	2025-05-03	Wooster HS Nikki Reynolds Invitational	271	2025-05-03	2025 Nikki Reynolds Invitational	1.67
+milesplit	686929	2025-05-09	Fairless Twilight Invitational	273	2025-05-09	2025 Fairless Twilight Invitational	2.00
+milesplit	648529	2025-05-12	Woodridge Stars of Track & Field	274	2025-05-12	2025 Stars of Track and Field	1.50
+milesplit	686244	2025-05-15	Metro Athletic Conference (MAC) Championship	276	2025-05-17	2025 Metro Athletic Conference Championships	1.00
+milesplit	679901	2025-05-22	OHSAA Division 2 District - Orrville	269	2025-05-24	2025 Division II District Track Meet	1.00
+milesplit	680244	2025-05-29	OHSAA Division 2 Region 5 - Austintown	277	2025-05-31	2025 Division II Regional Track Meet	1.00
+milesplit	679882	2025-06-06	OHSAA Division 2 State Championships	278	2025-06-06	2025 OHSAA Division II State Track and Field Championships	1.00
+milesplit	600237	2024-03-23	Cloverleaf Early Bird Relays	37	2024-03-23	2024 Cloverleaf Early Bird Relays	2.00
+milesplit	609733	2024-03-28	AB Team Import				0.00
+milesplit	582665	2024-04-06	Medina Tom Fasko Relays	172	2024-04-06	2024 Tom Fasko Medina Relays	2.00
+milesplit	610551	2024-04-13	Cowen Invitational	64	2024-04-13	2024 Cowen Redbird Invitational	1.50
+milesplit	584821	2024-04-19	Green Twilight Relays	50	2024-04-19	2024 Green Twilight Relays	2.00
+milesplit	599694	2024-04-27	Wooster HS Nikki Reynolds Invitational	136	2024-04-27	2024 Nikki Reynolds Invitational	1.67
+milesplit	597587	2024-05-03	Fairless Twilight Invitational	25	2024-05-03	2024 Fairless Twilight Invitational	2.00
+milesplit	582440	2024-05-04	43rd Optimist Meet				0.40
+milesplit	613912	2024-05-06	Woodridge Stars of Track & Field	233	2024-05-06	2024 Stars of Track and Field	1.50
+milesplit	613915	2024-05-08	Metro Athletic Conference (MAC) Championship	140	2024-05-10	2024 Metro Athletic Conference Championships	1.00
+milesplit	607578	2024-05-15	OHSAA Division 1 District - Brunswick	133	2024-05-17	2024 Division I District Track Meet	1.00
+milesplit	602433	2024-05-22	OHSAA Division 1 Region 2 - Port Clinton	87	2024-05-24	2024 Division I Regional Track Meet	1.00
+milesplit	568366	2024-05-31	OHSAA Division 1 State Championships	117	2024-06-01	2024 OHSAA Division I State Track and Field Championships	1.00
+milesplit	620513	2024-06-13	New Balance Nationals Outdoor				0.00
+milesplit	530482	2023-03-25	Cloverleaf Early Bird Relays	96	2023-03-25	2023 Cloverleaf Early Bird Relays	2.00
+milesplit	536722	2023-04-04	Ravenna HS Double Dual vs. Cloverleaf	70	2023-04-04	2023 Ravenna-Streetsboro Double Dual	1.60
+milesplit	520947	2023-04-08	Medina Tom Fasko Relays	86	2023-04-08	2023 Tom Fasko Medina Relays	2.00
+milesplit	510383	2023-04-15	Cowen Invitational	11	2023-04-15	2023 Cowen Redbird Invitational	1.50
+milesplit	540855	2023-04-21	Green Twilight Relays				0.10
+milesplit	538043	2023-04-29	Wooster HS Nikki Reynolds Invitational	106	2023-04-29	2023 Nikki Reynolds Invitational	1.67
+milesplit	545291	2023-05-05	Fairless Twilight Invitational	259	2023-05-05	2023 Fairless Twilight Invitational	2.00
+milesplit	540043	2023-05-08	Woodridge Stars of Track & Field	115	2023-05-08	2023 Stars of Track and Field	1.50
+milesplit	542137	2023-05-09	Metro Athletic Conference (MAC) Championship	57	2023-05-11	2023 Metro Athletic Conference Championships	1.00
+milesplit	544353	2023-05-17	OHSAA Division 1 District - Brunswick	153	2023-05-19	2023 Division I District Track Meet	1.00
+milesplit	537703	2023-05-24	OHSAA Division 1 Region 2 - Amherst	62	2023-05-26	2023 Division I Regional Track Meet	1.00
+milesplit	557755	2023-06-02	OHSAA Division 1 State Championships	35	2023-06-03	2023 OHSAA Division I State Track and Field Championships	1.00
+milesplit	470013	2022-03-26	Cloverleaf Early Bird Relays	124	2022-03-26	2022 Cloverleaf Early Bird Relays	2.00
+milesplit	470920	2022-04-09	Medina Tom Fasko Relays	168	2022-04-09	2022 Tom Fasko Medina Relays	2.00
+milesplit	477620	2022-04-16	Orrville High School Invitational	132	2022-04-16	2022 Orrville Invitational	2.00
+milesplit	477158	2022-04-22	Green Twilight Relays	43	2022-04-22	2022 Green Twilight Relays	2.00
+milesplit	480653	2022-04-26	Cloverleaf Early Bird Relays				1.00
+milesplit	465324	2022-05-06	Metro Athletic Conference Championship				1.00
+milesplit	484209	2022-05-06	Fairless Twilight	225	2022-05-06	2022 Fairless Twilight Invitational	2.00
+milesplit	482972	2022-05-07	Ashland Holmes County Meet				0.40
+milesplit	483092	2022-05-07	Ashland & Holmes County MS Invite				0.00
+milesplit	483356	2022-05-09	Smithie Frosh/Soph	122	2022-05-09	2022 Smithie Frosh-Soph Invitational	2.00
+milesplit	476055	2022-05-18	OHSAA Division 1 District - Brunswick	255	2022-05-20	2022 Division I District Track Meet	1.00
+milesplit	485115	2022-05-25	OHSAA Division 1 Region 2 - Findlay	230	2022-05-27	2022 Division I Regional Track Meet	1.00
+milesplit	485679	2022-06-03	OHSAA Div 1 State Track and Field Championships	29	2022-06-04	2022 OHSAA Division I State Track and Field Championships	1.00
+milesplit	420054	2021-04-10	Tom Fasko Medina Relays	46	2021-04-10	2021 Tom Fasko Medina Relays	2.00
+milesplit	422637	2021-04-17	Orrville Invitational	194	2021-04-17	2021 Orrville Invitational	2.00
+milesplit	426606	2021-05-01	Wooster Nikki Reynolds Invitational	51	2021-05-01	2021 Nikki Reynolds Invitational	1.67
+milesplit	429940	2021-05-07	2021 Fairless Twilight	185	2021-05-07	2021 Fairless Twilight Invitational	2.00
+milesplit	430306	2021-05-07	Fairless Twilight Invitational	185	2021-05-07	2021 Fairless Twilight Invitational	2.00
+milesplit	432200	2021-05-10	Smithie Frosh, Sophomore Meet	60	2021-05-10	2021 Smithie Frosh-Soph Invitational	1.50
+milesplit	431602	2021-05-15	OHSAA 7th and 8th Grade State Track & Field				0.00
+milesplit	426765	2021-05-19	OHSAA Division 1 District - Brunswick	54	2021-05-21	2021 Division I District Track Meet	1.00
+milesplit	426612	2021-05-26	Division 1 Region 2	10	2021-05-26	2021 Division I Regional Track Meet	1.00
+milesplit	435512	2021-06-04	OHSAA Division I State Track and Field	197	2021-06-05	2021 OHSAA Division I State Track and Field Championships	1.40
+milesplit	352490	2019-04-06	New London Relays				0.00
+milesplit	354269	2019-04-13	Cowen Redbird Invitational	78	2019-04-13	2019 Cowen Redbird Invitational	2.00
+milesplit	354958	2019-04-16	Ravenna v Streetsboro v Cloverleaf				0.10
+milesplit	357355	2019-04-20	Triway Invitational				0.00
+milesplit	357412	2019-04-27	Wooster Nikki Reynolds Invitational	21	2019-04-27	2019 Nikki Reynolds Invitational	1.67
+milesplit	359347	2019-05-06	Smithie Frosh/Soph Invite				0.10
+milesplit	357828	2019-05-08	Portage Trail Conference Championships	183	2019-05-08	2019 PTC Track Championships	1.00
+milesplit	357920	2019-05-16	OHSAA Division 2 District - Orrville	26	2019-05-16	2019 Division II District Track Meet	1.33
+milesplit	357890	2019-05-23	Division 2 Region 6	252	2019-05-23	2019 Division II Regional Track Meet	1.00
+milesplit	348098	2019-05-31	OHSAA State Track and Field Championships	28	2019-05-31	2019 OHSAA Division II State Track and Field Championships	1.00
+milesplit	311971	2018-04-07	New London Relays				0.00
+milesplit	314786	2018-04-14	Cowen Redbird Invitational	125	2018-04-14	2018 Cowen Redbird Invitational	2.00
+milesplit	317304	2018-04-21	Triway Invitational				0.00
+milesplit	317775	2018-04-26	Western Reserve Relays	61	2018-04-26	2018 Western Reserve Relays	2.00
+milesplit	318138	2018-04-27	Orange Relays	186	2018-04-27	2018 Orange Relays	2.00
+milesplit	308361	2018-04-28	Wooster Nikki Reynolds Invitational	127	2018-04-28	2018 Nikki Reynolds Invitational	1.67
+milesplit	320203	2018-05-09	Portage Trail Conference Championships	14	2018-05-09	2018 PTC Track Championships	1.00
+milesplit	320204	2018-05-11	Portage Trail Conference-County Division	14	2018-05-09	2018 PTC Track Championships	1.00
+milesplit	321959	2018-05-17	OHSAA Division 2 District - Orrville	160	2018-05-17	2018 Division II District Track Meet	1.33
+milesplit	322226	2018-05-24	Division 2 Region 6	256	2018-05-26	2018 Division II Regional Track Meet	1.00
+milesplit	308915	2018-06-01	OHSAA State Track and Field Championships	83	2018-06-01	2018 OHSAA Division II State Track and Field Championships	1.00
+milesplit	273003	2017-04-15	Mansfield Mehock Relays	49	2017-04-15	2017 Mansfield Mehock Relays	2.00
+milesplit	279585	2017-04-28	Orange Relays	161	2017-04-28	2017 Orange Relays	2.00
+milesplit	280388	2017-05-05	Dwight Schar Invitational				0.00
+milesplit	280389	2017-05-05	Jackson Twilight				0.00
+milesplit	281480	2017-05-10	Portage Trail Conference League Meet	108	2017-05-10	2017 PTC Track Championships	1.00
+milesplit	282278	2017-05-18	OHSAA Division 2 District - Orrville	174	2017-05-20	2017 Division II District Track Meet	1.00
+milesplit	267003	2017-05-25	Division 2 Region 6	220	2017-05-27	2017 Division II Regional Track Meet	1.00
+milesplit	267005	2017-06-02	OHSAA State Track and Field Championships	187	2017-06-02	2017 OHSAA Division II State Track and Field Championships	1.00
