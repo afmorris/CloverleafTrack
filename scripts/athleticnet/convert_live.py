@@ -40,7 +40,7 @@ ath = collections.defaultdict(list)
 for i, f, l, g in q("SELECT Id, FirstName, LastName, Gender FROM Athletes"): ath[(norm(f + ' ' + l), int(g))].append((int(i), f + ' ' + l))
 notes = []
 OVERRIDE_FIRST4 = set()   # (the Kreider sisters' 2023 Early Bird shot put row was mixed up on Live: fixed by hand in docs/imports/2023-early-bird-kreider-shot-put.sql)
-SKIP_ROWS = {('530482', 'Jayce Kreider', 'Shot Put'), ('530482', 'Karoline Kreider', 'Shot Put')}   # never regenerate from Live
+SKIP_ROWS = {('530482', 'Jayce Kreider', 'Shot Put'), ('530482', 'Karoline Kreider', 'Shot Put'), ('536722', 'Dominic Nau', 'Shot Put')}   # Nau: fixed by hand in docs/imports/2023-ravenna-nau-shot-put.sql   # never regenerate from Live
 # Ladders whose Live columns do not line up with the heights; transcribed by the owner (watching the meet / the Live page). 'XXP' = two misses then a pass;
 # a lone 'X' = the last miss that ended the competition (needs docs/migration_performance_bars_x.sql).
 MANUAL_BARS = {

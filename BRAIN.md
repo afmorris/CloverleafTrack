@@ -2415,3 +2415,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** `convert_live.py` now skips both Kreider rows at that meet (`SKIP_ROWS`) so a regeneration cannot bring the mixed row back. The Id-based files `2023-2026-live-attempts.sql` and the older Kreider block assert Jayce's old mark (290) and will refuse to run again. The other Early Bird results for the sisters (discus: Karoline 86-8, Jayce 83-9 on Live; DB 1040 and 1005) were not re-checked against a source and could be mixed up the same way.
 
 **Key files:** `docs/imports/2023-early-bird-kreider-shot-put.sql`, `scripts/athleticnet/convert_live.py`.
+
+### [C93] Dominic Nau's 2023 Ravenna Shot Put Series
+
+**What changed:** `docs/imports/2023-ravenna-nau-shot-put.sql` (applied local and live 2026-10-20): Dominic Nau's 2023 Ravenna-Streetsboro Double Dual shot put keeps the stored mark 31' 0" (372) and now has the series 26-4, 29-9, 30-5, 31-0.
+
+**Why:** MileSplit raw results and Live both say his mark was 38' 2" (series 26-4, 29-9, 30-5, 38-2) while the DB has 31' 0" ([C88]). The owner kept 31' 0" and asked for the series with the 38-2 replaced by 31-0 (this supersedes the "no series stored" note in [C89]). The conflict with the two sources is unresolved; revisit if a better source appears.
+
+**Watch out:** `convert_live.py` skips this row (`SKIP_ROWS`) so a regeneration does not restore 38-2.
+
+**Key files:** `docs/imports/2023-ravenna-nau-shot-put.sql`, `scripts/athleticnet/convert_live.py`.
