@@ -1,5 +1,5 @@
-1554|1|Pole Vault|Isaac Baltic|NULL|174|5
-4721|2|200M|Riley Evans|25.32|NULL|0
-4807|2|400M|Riley Evans|55.68|NULL|0
-7554|2|100M|Riley Evans|12.37|NULL|0
-7944|1|800M|Vova Herdman|114|NULL|0
+1554|1|Pole Vault|Isaac Baltic|NULL|174|5|0
+4721|2|200M|Riley Evans|25.32|NULL|0|0
+4807|2|400M|Riley Evans|55.68|NULL|0|0
+7554|2|100M|Riley Evans|12.37|NULL|0|0
+7944|1|800M|Vova Herdman|114|NULL|0|0

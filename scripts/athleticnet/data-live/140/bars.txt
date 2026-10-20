@@ -1,6 +1,0 @@
-2|High Jump|Abigail Reinhardt|4-0:O;4-2:O;4-4:O;4-6:O;4-8:O;4-10:XXX
-2|High Jump|Grace Goldsberry|4-0:XO;4-2:O;4-4:O;4-6:O;4-8:O;4-10:XXX
-1|High Jump|Zach Brownson|5-0:O;5-2:O;5-4:O;5-6:XXX
-1|High Jump|Logan Forbes|5-0:P;5-2:P;5-4:O;5-6:XXX
-2|Pole Vault|Payten Shetterly|6-0:P;6-6:P;7-0:P;7-8:XO;8-0:XO;8-6:O;9-0:O;9-2:O;9-6:XXX
-1|Pole Vault|Isaac Baltic|7-8:P;8-0:P;8-4:P;8-8:P;9-8:P;10-0:P;10-4:P;10-8:P;11-0:P;12-0:P;12-8:P;13-0:P;13-4:P;13-8:O;15-4:XO;15-9:XXX

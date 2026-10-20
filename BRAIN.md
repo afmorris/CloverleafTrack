@@ -2377,3 +2377,11 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 - Relay rounds are not chained yet (team labels differ between rounds).
 
 **Key files:** `scripts/athleticnet/{scan_live,convert_live,build_live_rounds}.py`, `scripts/athleticnet/live-raw/`, `scripts/athleticnet/data-live/`, `docs/imports/2023-2026-live-*.sql`, `docs/migration_performance_bars_x.sql`.
+
+### [C89] MileSplit Live Review Outcomes
+
+**What changed:** owner decisions on the held-back [C88] items. Dominic Nau 2023 Ravenna shot put stays 31' 0" (no series stored); Jayce Kreider 2023 Early Bird shot put keeps only her first four attempts; Collin Saksa 2025 Stars long jump stays 15' 8.25" although MileSplit raw results and Live both say 18' 5.25" (no series stored; revisit if a better source turns up). The "missing" Messmore / Schaefer / Johnson results were nickname mismatches (Izzy Messmore, Jake Schaefer, JJ Johnson): aliases added to `convert_live.py`, and `docs/imports/2023-2026-live-extras-attempts.sql` (4 series) plus `-extras-bars.sql` (Payten Shetterly's no-height 2024 Stars ladder, `4-0: XXX`) were generated. `build_bars_sql.py` can now attach a ladder to a no-height (NH, `ResultStatus = 2`) row.
+
+**Watch out:** the extras files are incremental: they hold only what was new after the main Live files were applied locally, so apply the main files first.
+
+**Key files:** `docs/imports/2023-2026-live-extras-{attempts,bars}.sql`, `scripts/athleticnet/convert_live.py`, `scripts/athleticnet/build_bars_sql.py`.

@@ -10,7 +10,7 @@ def q(sql):
     out = subprocess.run(['docker', 'exec', '-i', 'ctf-local-sql', '/opt/mssql-tools18/bin/sqlcmd', '-C', '-I', '-S', 'localhost', '-d', 'ctf', '-U', 'sa', '-P', 'Local#Dev1234', '-W', '-s', '|', '-h', '-1'],
                          input='SET NOCOUNT ON;' + sql, capture_output=True, text=True).stdout
     return [l.split('|') for l in out.strip().split('\n') if l.strip()]
-ALIAS = {'kierston campbell': 'kk campbell'}
+ALIAS = {'kierston campbell': 'kk campbell', 'isabella messmore': 'izzy messmore', 'jacob schaefer': 'jake schaefer', 'jamere johnson': 'jj johnson'}
 def norm(n):
     n = re.sub(r'[^a-z ]', '', re.sub(r'\s+', ' ', re.sub(r'\b\d+\b', ' ', n)).lower().strip())
     return ALIAS.get(n, n)
@@ -50,8 +50,8 @@ MANUAL_BARS = {
 for msid in ids:
     if msid not in meets: notes.append(f'{msid}: no DB meet match'); continue
     dbid = meets[msid]
-    perfs = q(f"SELECT p.Id, e.Gender, e.Name, a.FirstName+' '+a.LastName, ISNULL(CAST(p.TimeSeconds AS varchar(30)),'NULL'), ISNULL(CAST(p.DistanceInches AS varchar(30)),'NULL'), (SELECT COUNT(*) FROM PerformanceAttempts x WHERE x.PerformanceId=p.Id)+(SELECT COUNT(*) FROM PerformanceBars b WHERE b.PerformanceId=p.Id) FROM Performances p JOIN Events e ON e.Id=p.EventId JOIN Athletes a ON a.Id=p.AthleteId WHERE p.MeetId={dbid}")
-    have = {(int(g), ev, n): (int(i), d, int(c)) for i, g, ev, n, t, d, c in perfs}
+    perfs = q(f"SELECT p.Id, e.Gender, e.Name, a.FirstName+' '+a.LastName, ISNULL(CAST(p.TimeSeconds AS varchar(30)),'NULL'), ISNULL(CAST(p.DistanceInches AS varchar(30)),'NULL'), (SELECT COUNT(*) FROM PerformanceAttempts x WHERE x.PerformanceId=p.Id)+(SELECT COUNT(*) FROM PerformanceBars b WHERE b.PerformanceId=p.Id), p.ResultStatus FROM Performances p JOIN Events e ON e.Id=p.EventId JOIN Athletes a ON a.Id=p.AthleteId WHERE p.MeetId={dbid}")
+    have = {(int(g), ev, n): (int(i), d, int(c)) for i, g, ev, n, t, d, c, rs in perfs}
     os.makedirs(os.path.join(here, 'data-live', str(dbid)), exist_ok=True)
     sheets, bars = [], []
     rounds = collections.defaultdict(dict)   # (gender, event, name) -> {round: seconds}
@@ -130,6 +130,6 @@ for msid in ids:
         for (g, tev, nm), rr in sorted(rounds.items()):
             if len(rr) >= 2: f.write(f"{g}|{tev}|{nm}|" + ';'.join(f'{k}:{v}' for k, v in sorted(rr.items())) + '\n')
     with open(os.path.join(d, 'db.txt'), 'w') as f:
-        for i, g, evn, n, t, dd, cnt in perfs: f.write(f'{i}|{g}|{evn}|{n}|{t}|{dd}|{cnt}\n')
+        for i, g, evn, n, t, dd, cnt, rs in perfs: f.write(f'{i}|{g}|{evn}|{n}|{t}|{dd}|{cnt}|{rs}\n')
     print(f'{msid} -> db {dbid}: {len(sheets)} series, {len(bars)} ladders')
 for n in notes: print('NOTE', n)

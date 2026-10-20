@@ -1,6 +1,0 @@
-2|High Jump|Emily Ellebruch|4-0:O;4-2:O;4-4:O;4-6:XXO;4-8:XXX
-2|High Jump|Abigail Reinhardt|4-0:XO;4-2:O;4-4:O;4-6:XXO;4-8:XXX
-2|High Jump|Julia Reusch|4-0:O;4-2:XO;4-4:XXX
-1|High Jump|Reed Kilgore|5-0:O;5-2:O;5-4:XO;5-6:XXX
-1|High Jump|Grady Pamer|5-0:O;5-2:O;5-4:XXX
-2|Pole Vault|Payten Shetterly|6-0:P;6-6:P;7-0:P;7-6:P;8-0:XO;8-6:P;9-0:O;9-6:XXX

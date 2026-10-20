@@ -1,10 +1,10 @@
-13652|2|Shot Put|Presly McConnell|NULL|454|0
-13791|1|Discus|Clay Combs|NULL|1783|0
-13846|2|Long Jump|KK Campbell|NULL|176.5|0
-13903|2|Pole Vault|Payten Shetterly|NULL|120|0
-14190|2|200M|Sarah Kelly|27.06|NULL|0
-14240|2|3200M|Emma Hibler|757.06|NULL|0
-14242|1|800M|Ben Myers|122.45|NULL|0
-14293|2|100M Hurdles|KK Campbell|19.75|NULL|0
-14297|2|400M|Katie Wershing|62.31|NULL|0
-14332|2|100M|Sarah Kelly|12.79|NULL|0
+13652|2|Shot Put|Presly McConnell|NULL|454|6|0
+13791|1|Discus|Clay Combs|NULL|1783|6|0
+13846|2|Long Jump|KK Campbell|NULL|176.5|0|0
+13903|2|Pole Vault|Payten Shetterly|NULL|120|11|0
+14190|2|200M|Sarah Kelly|27.06|NULL|0|0
+14240|2|3200M|Emma Hibler|757.06|NULL|0|0
+14242|1|800M|Ben Myers|122.45|NULL|0|0
+14293|2|100M Hurdles|KK Campbell|19.75|NULL|0|0
+14297|2|400M|Katie Wershing|62.31|NULL|0|0
+14332|2|100M|Sarah Kelly|12.79|NULL|0|0

@@ -1,49 +1,49 @@
-79|2|Shot Put|Presly McConnell|NULL|401|0
-313|1|Pole Vault|Isaac Baltic|NULL|184|0
-526|2|Long Jump|Abigail Reinhardt|NULL|187.75|0
-542|2|Discus|Karoline Kreider|NULL|988|0
-553|2|High Jump|Grace Goldsberry|NULL|56|0
-858|1|Discus|Timmy Shores|NULL|1585|0
-974|1|Discus|Clay Combs|NULL|1546|0
-1131|1|High Jump|Zach Brownson|NULL|64|0
-1176|2|Long Jump|KK Campbell|NULL|206.75|0
-1229|2|Pole Vault|Payten Shetterly|NULL|110|0
-1494|1|Shot Put|Clay Combs|NULL|546.25|0
-1611|2|High Jump|Abigail Reinhardt|NULL|56|0
-1765|1|Long Jump|Ethan Gray|NULL|208.25|0
-1913|1|High Jump|Logan Forbes|NULL|64|0
-2254|2|Shot Put|Karoline Kreider|NULL|375.5|0
-2807|1|Long Jump|Tristin Bogucki|NULL|242|0
-3264|2|Discus|Presly McConnell|NULL|1170|0
-3732|1|400M|Ethan Gray|52.91|NULL|0
-3929|2|200M|Sarah Kelly|25.85|NULL|0
-4019|1|200M|Emmanuel Medina|23.98|NULL|0
-4032|2|3200M|Emma Hibler|737.51|NULL|0
-4240|1|110M Hurdles|Chase Young|16.26|NULL|0
-4365|2|300M Hurdles|Kiersyn Berry|50.39|NULL|0
-4375|2|100M|Sarah Kelly|12.68|NULL|0
-4876|1|100M|Isaiah Kurtz|11.57|NULL|0
-4902|1|200M|Isaiah Kurtz|23.09|NULL|0
-5076|1|110M Hurdles|Isaac Baltic|16.19|NULL|0
-5190|2|100M Hurdles|Kiersyn Berry|17.62|NULL|0
-5304|2|100M|Riley Evans|12.55|NULL|0
-5772|1|400M|Thomas Blaha|53.32|NULL|0
-5798|1|100M|Tristin Bogucki|11.64|NULL|0
-5829|1|1600M|Caleb Neville|267.55|NULL|0
-6264|2|300M Hurdles|KK Campbell|50.04|NULL|0
-6283|1|800M|Ben Myers|121.82|NULL|0
-6368|1|3200M|Caleb Neville|583.45|NULL|0
-6450|1|300M Hurdles|Gage Hankins|44.88|NULL|0
-6643|1|1600M|Gavin Forbes|281.03|NULL|0
-6913|2|100M Hurdles|KK Campbell|16.66|NULL|0
-6924|1|800M|Jackson James|124.95|NULL|0
-7019|1|300M Hurdles|Chase Young|42.45|NULL|0
-7161|2|800M|Lauren Jensch|146.27|NULL|0
-7303|2|400M|Brooklyn Cavey|63|NULL|0
-7633|2|800M|Reese Barnett|150.14|NULL|0
-7785|2|3200M|Madison Snyder|742.94|NULL|0
-7836|1|3200M|Gavin Forbes|604.63|NULL|0
-8098|2|1600M|Megan Knapp|327.31|NULL|0
-8169|2|200M|Riley Evans|25.55|NULL|0
-8397|2|400M|Riley Evans|57.69|NULL|0
-8845|2|1600M|Emma Hibler|332.64|NULL|0
+79|2|Shot Put|Presly McConnell|NULL|401|6|0
+313|1|Pole Vault|Isaac Baltic|NULL|184|16|0
+526|2|Long Jump|Abigail Reinhardt|NULL|187.75|6|0
+542|2|Discus|Karoline Kreider|NULL|988|3|0
+553|2|High Jump|Grace Goldsberry|NULL|56|6|0
+858|1|Discus|Timmy Shores|NULL|1585|6|0
+974|1|Discus|Clay Combs|NULL|1546|6|0
+1131|1|High Jump|Zach Brownson|NULL|64|4|0
+1176|2|Long Jump|KK Campbell|NULL|206.75|6|0
+1229|2|Pole Vault|Payten Shetterly|NULL|110|9|0
+1494|1|Shot Put|Clay Combs|NULL|546.25|6|0
+1611|2|High Jump|Abigail Reinhardt|NULL|56|6|0
+1765|1|Long Jump|Ethan Gray|NULL|208.25|3|0
+1913|1|High Jump|Logan Forbes|NULL|64|4|0
+2254|2|Shot Put|Karoline Kreider|NULL|375.5|6|0
+2807|1|Long Jump|Tristin Bogucki|NULL|242|6|0
+3264|2|Discus|Presly McConnell|NULL|1170|6|0
+3732|1|400M|Ethan Gray|52.91|NULL|0|0
+3929|2|200M|Sarah Kelly|25.85|NULL|0|0
+4019|1|200M|Emmanuel Medina|23.98|NULL|0|0
+4032|2|3200M|Emma Hibler|737.51|NULL|0|0
+4240|1|110M Hurdles|Chase Young|16.26|NULL|0|0
+4365|2|300M Hurdles|Kiersyn Berry|50.39|NULL|0|0
+4375|2|100M|Sarah Kelly|12.68|NULL|0|0
+4876|1|100M|Isaiah Kurtz|11.57|NULL|0|0
+4902|1|200M|Isaiah Kurtz|23.09|NULL|0|0
+5076|1|110M Hurdles|Isaac Baltic|16.19|NULL|0|0
+5190|2|100M Hurdles|Kiersyn Berry|17.62|NULL|0|0
+5304|2|100M|Riley Evans|12.55|NULL|0|0
+5772|1|400M|Thomas Blaha|53.32|NULL|0|0
+5798|1|100M|Tristin Bogucki|11.64|NULL|0|0
+5829|1|1600M|Caleb Neville|267.55|NULL|0|0
+6264|2|300M Hurdles|KK Campbell|50.04|NULL|0|0
+6283|1|800M|Ben Myers|121.82|NULL|0|0
+6368|1|3200M|Caleb Neville|583.45|NULL|0|0
+6450|1|300M Hurdles|Gage Hankins|44.88|NULL|0|0
+6643|1|1600M|Gavin Forbes|281.03|NULL|0|0
+6913|2|100M Hurdles|KK Campbell|16.66|NULL|0|0
+6924|1|800M|Jackson James|124.95|NULL|0|0
+7019|1|300M Hurdles|Chase Young|42.45|NULL|0|0
+7161|2|800M|Lauren Jensch|146.27|NULL|0|0
+7303|2|400M|Brooklyn Cavey|63|NULL|0|0
+7633|2|800M|Reese Barnett|150.14|NULL|0|0
+7785|2|3200M|Madison Snyder|742.94|NULL|0|0
+7836|1|3200M|Gavin Forbes|604.63|NULL|0|0
+8098|2|1600M|Megan Knapp|327.31|NULL|0|0
+8169|2|200M|Riley Evans|25.55|NULL|0|0
+8397|2|400M|Riley Evans|57.69|NULL|0|0
+8845|2|1600M|Emma Hibler|332.64|NULL|0|0

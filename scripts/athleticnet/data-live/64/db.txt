@@ -1,44 +1,44 @@
-65|2|Long Jump|Abigail Reinhardt|NULL|173.25|0
-204|1|Long Jump|David Hunter|NULL|171.75|0
-406|1|Shot Put|Dominic Nau|NULL|421|0
-549|1|Shot Put|Royce Zirkle|NULL|474.75|0
-765|1|Pole Vault|Isaac Baltic|NULL|165|0
-869|1|Discus|Ethan Martin|NULL|1270.5|0
-936|2|Shot Put|Amelia Ryncarz|NULL|353|0
-1151|2|High Jump|Payten Shetterly|NULL|48|0
-1366|2|High Jump|Abigail Reinhardt|NULL|48|0
-1660|2|Pole Vault|Taylor Thur|NULL|72|0
-1673|2|Long Jump|Reese Barnett|NULL|179.5|0
-1831|1|Long Jump|Ethan Gray|NULL|170.75|0
-2413|1|Discus|Royce Zirkle|NULL|1162.5|0
-2900|2|Discus|Jayce Kreider|NULL|990|0
-3140|2|Shot Put|Berkeley Craddock|NULL|294.5|0
-3774|1|300M Hurdles|Chase Young|43.38|NULL|0
-3996|2|400M|Hannah Hopek|67.22|NULL|0
-4148|1|200M|Ethan Gray|24.04|NULL|0
-4731|2|200M|Samantha Porter|29.55|NULL|0
-4791|1|1600M|Gavin Forbes|286.71|NULL|0
-5055|1|400M|Jackson James|56.84|NULL|0
-5329|1|400M|Gage Groetz|58.36|NULL|0
-5441|1|110M Hurdles|Chase Young|16.32|NULL|0
-5489|1|100M|Emmanuel Medina|11.89|NULL|0
-6340|2|800M|Nora Bammerlin|171.24|NULL|0
-6395|1|300M Hurdles|Gage Hankins|46.36|NULL|0
-6552|1|3200M|Caleb Neville|603.27|NULL|0
-6760|1|110M Hurdles|Gage Hankins|17.38|NULL|0
-6815|2|1600M|Nora Bammerlin|382.8|NULL|0
-6853|1|800M|Gavin Forbes|133.05|NULL|0
-7179|1|800M|Matthew Jenkins|133.08|NULL|0
-7224|1|3200M|Austin McNeal|704.2|NULL|0
-7291|1|200M|Gage Groetz|26.12|NULL|0
-7464|2|400M|Payten Shetterly|68.18|NULL|0
-8108|1|100M|Isaiah Kurtz|11.57|NULL|0
-8614|2|200M|Kayla Shook|27.75|NULL|0
-8660|2|800M|Kate Jarvis|183.54|NULL|0
-8835|2|100M|Kayla Shook|13.5|NULL|0
-8969|1|1600M|Noah Mion|327.13|NULL|0
-9003|2|100M|Callee Gibson|13.56|NULL|0
-9008|2|1600M|Kate Jarvis|396|NULL|0
-16619|1|High Jump|Nathan Tomes|NULL|NULL|0
-16620|1|High Jump|David Hunter|NULL|NULL|0
-16621|2|Pole Vault|Payten Shetterly|NULL|NULL|0
+65|2|Long Jump|Abigail Reinhardt|NULL|173.25|0|0
+204|1|Long Jump|David Hunter|NULL|171.75|0|0
+406|1|Shot Put|Dominic Nau|NULL|421|0|0
+549|1|Shot Put|Royce Zirkle|NULL|474.75|0|0
+765|1|Pole Vault|Isaac Baltic|NULL|165|0|0
+869|1|Discus|Ethan Martin|NULL|1270.5|0|0
+936|2|Shot Put|Amelia Ryncarz|NULL|353|0|0
+1151|2|High Jump|Payten Shetterly|NULL|48|0|0
+1366|2|High Jump|Abigail Reinhardt|NULL|48|0|0
+1660|2|Pole Vault|Taylor Thur|NULL|72|0|0
+1673|2|Long Jump|Reese Barnett|NULL|179.5|0|0
+1831|1|Long Jump|Ethan Gray|NULL|170.75|0|0
+2413|1|Discus|Royce Zirkle|NULL|1162.5|0|0
+2900|2|Discus|Jayce Kreider|NULL|990|0|0
+3140|2|Shot Put|Berkeley Craddock|NULL|294.5|0|0
+3774|1|300M Hurdles|Chase Young|43.38|NULL|0|0
+3996|2|400M|Hannah Hopek|67.22|NULL|0|0
+4148|1|200M|Ethan Gray|24.04|NULL|0|0
+4731|2|200M|Samantha Porter|29.55|NULL|0|0
+4791|1|1600M|Gavin Forbes|286.71|NULL|0|0
+5055|1|400M|Jackson James|56.84|NULL|0|0
+5329|1|400M|Gage Groetz|58.36|NULL|0|0
+5441|1|110M Hurdles|Chase Young|16.32|NULL|0|0
+5489|1|100M|Emmanuel Medina|11.89|NULL|0|0
+6340|2|800M|Nora Bammerlin|171.24|NULL|0|0
+6395|1|300M Hurdles|Gage Hankins|46.36|NULL|0|0
+6552|1|3200M|Caleb Neville|603.27|NULL|0|0
+6760|1|110M Hurdles|Gage Hankins|17.38|NULL|0|0
+6815|2|1600M|Nora Bammerlin|382.8|NULL|0|0
+6853|1|800M|Gavin Forbes|133.05|NULL|0|0
+7179|1|800M|Matthew Jenkins|133.08|NULL|0|0
+7224|1|3200M|Austin McNeal|704.2|NULL|0|0
+7291|1|200M|Gage Groetz|26.12|NULL|0|0
+7464|2|400M|Payten Shetterly|68.18|NULL|0|0
+8108|1|100M|Isaiah Kurtz|11.57|NULL|0|0
+8614|2|200M|Kayla Shook|27.75|NULL|0|0
+8660|2|800M|Kate Jarvis|183.54|NULL|0|0
+8835|2|100M|Kayla Shook|13.5|NULL|0|0
+8969|1|1600M|Noah Mion|327.13|NULL|0|0
+9003|2|100M|Callee Gibson|13.56|NULL|0|0
+9008|2|1600M|Kate Jarvis|396|NULL|0|0
+16619|1|High Jump|Nathan Tomes|NULL|NULL|0|2
+16620|1|High Jump|David Hunter|NULL|NULL|0|2
+16621|2|Pole Vault|Payten Shetterly|NULL|NULL|0|2

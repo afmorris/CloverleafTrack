@@ -1,24 +1,24 @@
-115|1|High Jump|Grady Pamer|NULL|62|0
-249|2|Pole Vault|Payten Shetterly|NULL|108|0
-884|1|Shot Put|Clay Combs|NULL|553|0
-1132|2|High Jump|Emily Ellebruch|NULL|54|0
-1321|2|Long Jump|Abigail Reinhardt|NULL|173|0
-1435|2|Discus|Amelia Ryncarz|NULL|1017|0
-1568|2|Shot Put|Presly McConnell|NULL|424.25|0
-1649|2|High Jump|Julia Reusch|NULL|50|0
-1749|1|Discus|Hunter Brooks|NULL|1426|0
-1781|2|Shot Put|Amelia Ryncarz|NULL|376.5|0
-1857|1|Shot Put|Royce Zirkle|NULL|502.5|0
-1916|1|Long Jump|Ty Kovach|NULL|214|0
-1972|1|High Jump|Reed Kilgore|NULL|64|0
-2211|1|Discus|Clay Combs|NULL|1558|0
-2231|2|Discus|Berkeley Craddock|NULL|1009|0
-2286|2|Long Jump|Tessa Bogucki|NULL|151|0
-2392|2|Shot Put|Berkeley Craddock|NULL|324|0
-2684|1|Long Jump|Elliot Jordan|NULL|208|0
-2732|2|Long Jump|Kinsey Bayer|NULL|170|0
-3157|1|Shot Put|Dominic Nau|NULL|481.25|0
-3189|1|Long Jump|Grady Pamer|NULL|209|0
-3230|2|Discus|Presly McConnell|NULL|1152|0
-3308|2|High Jump|Abigail Reinhardt|NULL|54|0
-3328|1|Discus|Jacob Atkinson|NULL|1232|0
+115|1|High Jump|Grady Pamer|NULL|62|3|0
+249|2|Pole Vault|Payten Shetterly|NULL|108|8|0
+884|1|Shot Put|Clay Combs|NULL|553|2|0
+1132|2|High Jump|Emily Ellebruch|NULL|54|5|0
+1321|2|Long Jump|Abigail Reinhardt|NULL|173|3|0
+1435|2|Discus|Amelia Ryncarz|NULL|1017|2|0
+1568|2|Shot Put|Presly McConnell|NULL|424.25|2|0
+1649|2|High Jump|Julia Reusch|NULL|50|3|0
+1749|1|Discus|Hunter Brooks|NULL|1426|2|0
+1781|2|Shot Put|Amelia Ryncarz|NULL|376.5|2|0
+1857|1|Shot Put|Royce Zirkle|NULL|502.5|2|0
+1916|1|Long Jump|Ty Kovach|NULL|214|3|0
+1972|1|High Jump|Reed Kilgore|NULL|64|4|0
+2211|1|Discus|Clay Combs|NULL|1558|2|0
+2231|2|Discus|Berkeley Craddock|NULL|1009|2|0
+2286|2|Long Jump|Tessa Bogucki|NULL|151|3|0
+2392|2|Shot Put|Berkeley Craddock|NULL|324|2|0
+2684|1|Long Jump|Elliot Jordan|NULL|208|3|0
+2732|2|Long Jump|Kinsey Bayer|NULL|170|3|0
+3157|1|Shot Put|Dominic Nau|NULL|481.25|2|0
+3189|1|Long Jump|Grady Pamer|NULL|209|3|0
+3230|2|Discus|Presly McConnell|NULL|1152|2|0
+3308|2|High Jump|Abigail Reinhardt|NULL|54|5|0
+3328|1|Discus|Jacob Atkinson|NULL|1232|2|0

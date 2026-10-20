@@ -1,48 +1,48 @@
-13651|1|Discus|Clay Combs|NULL|1917|0
-13673|2|High Jump|Kinsey Bayer|NULL|52|0
-13693|2|Discus|Jayce Kreider|NULL|1055|0
-13720|1|High Jump|Grady Pamer|NULL|68|0
-13757|1|Shot Put|Clay Combs|NULL|631.75|0
-13765|1|Long Jump|Grady Pamer|NULL|214.75|0
-13767|2|Pole Vault|Payten Shetterly|NULL|128|0
-13773|2|High Jump|Abigail Reinhardt|NULL|58|0
-13778|1|Discus|Adam Gray|NULL|1284|0
-13793|2|Shot Put|Amelia Ryncarz|NULL|392.75|0
-13802|2|Long Jump|Abigail Reinhardt|NULL|180.5|0
-13809|2|Long Jump|KK Campbell|NULL|207|0
-13821|1|Long Jump|Elliot Jordan|NULL|218.75|0
-13847|2|Shot Put|Presly McConnell|NULL|457|0
-13855|2|Discus|Presly McConnell|NULL|1251|0
-13922|1|Pole Vault|Lincoln Baltic|NULL|96|0
-14025|2|Pole Vault|Taylor Thur|NULL|90|0
-14146|1|1600M|Noah Mion|296.61|NULL|0
-14147|2|100M|Taylor Munchick|13.59|NULL|0
-14165|1|200M|Josh Powers|25.54|NULL|0
-14169|1|100M|Josh Powers|12.8|NULL|0
-14170|2|200M|Sarah Kelly|27.38|NULL|0
-14175|1|800M|Ben Myers|120.77|NULL|0
-14176|2|1600M|Kate Jarvis|374.7|NULL|0
-14182|1|200M|Elliot Jordan|25.72|NULL|0
-14191|2|300M Hurdles|Kiersyn Berry|49.32|NULL|0
-14192|1|100M|Elliot Jordan|12.64|NULL|0
-14234|2|100M Hurdles|Kiersyn Berry|17.3|NULL|0
-14239|2|800M|Emma Hibler|156.14|NULL|0
-14251|2|200M|Kayla Shook|27.53|NULL|0
-14253|1|3200M|Clay Gucker|655.96|NULL|0
-14284|2|400M|Brooklyn Cavey|63.31|NULL|0
-14287|2|800M|Samantha Porter|157.86|NULL|0
-14318|1|300M Hurdles|Nolan Thompson|47.06|NULL|0
-14341|2|3200M|Emma Hibler|733.41|NULL|0
-14350|2|100M|Sarah Kelly|13.13|NULL|0
-14354|1|3200M|Gavin Forbes|594.97|NULL|0
-14361|2|100M Hurdles|KK Campbell|16.82|NULL|0
-14369|2|300M Hurdles|Julia Reusch|52.19|NULL|0
-14381|1|1600M|Antonio Ortega|314.5|NULL|0
-14468|1|300M Hurdles|Lincoln Baltic|50.11|NULL|0
-14482|1|800M|Matthew Jenkins|128.36|NULL|0
-14542|2|400M|Katie Wershing|62.56|NULL|0
-14546|1|400M|Bryce Neill|59.31|NULL|0
-14647|2|1600M|Emma Hibler|333.22|NULL|0
-14695|2|3200M|Vanessa Monhemius|824.07|NULL|0
-14830|1|110M Hurdles|Lincoln Baltic|19.86|NULL|0
-17583|1|Shot Put|Royce Zirkle|NULL|461.5|0
+13651|1|Discus|Clay Combs|NULL|1917|0|0
+13673|2|High Jump|Kinsey Bayer|NULL|52|0|0
+13693|2|Discus|Jayce Kreider|NULL|1055|0|0
+13720|1|High Jump|Grady Pamer|NULL|68|0|0
+13757|1|Shot Put|Clay Combs|NULL|631.75|0|0
+13765|1|Long Jump|Grady Pamer|NULL|214.75|0|0
+13767|2|Pole Vault|Payten Shetterly|NULL|128|0|0
+13773|2|High Jump|Abigail Reinhardt|NULL|58|0|0
+13778|1|Discus|Adam Gray|NULL|1284|0|0
+13793|2|Shot Put|Amelia Ryncarz|NULL|392.75|0|0
+13802|2|Long Jump|Abigail Reinhardt|NULL|180.5|0|0
+13809|2|Long Jump|KK Campbell|NULL|207|0|0
+13821|1|Long Jump|Elliot Jordan|NULL|218.75|0|0
+13847|2|Shot Put|Presly McConnell|NULL|457|0|0
+13855|2|Discus|Presly McConnell|NULL|1251|0|0
+13922|1|Pole Vault|Lincoln Baltic|NULL|96|0|0
+14025|2|Pole Vault|Taylor Thur|NULL|90|0|0
+14146|1|1600M|Noah Mion|296.61|NULL|0|0
+14147|2|100M|Taylor Munchick|13.59|NULL|0|0
+14165|1|200M|Josh Powers|25.54|NULL|0|0
+14169|1|100M|Josh Powers|12.8|NULL|0|0
+14170|2|200M|Sarah Kelly|27.38|NULL|0|0
+14175|1|800M|Ben Myers|120.77|NULL|0|0
+14176|2|1600M|Kate Jarvis|374.7|NULL|0|0
+14182|1|200M|Elliot Jordan|25.72|NULL|0|0
+14191|2|300M Hurdles|Kiersyn Berry|49.32|NULL|0|0
+14192|1|100M|Elliot Jordan|12.64|NULL|0|0
+14234|2|100M Hurdles|Kiersyn Berry|17.3|NULL|0|0
+14239|2|800M|Emma Hibler|156.14|NULL|0|0
+14251|2|200M|Kayla Shook|27.53|NULL|0|0
+14253|1|3200M|Clay Gucker|655.96|NULL|0|0
+14284|2|400M|Brooklyn Cavey|63.31|NULL|0|0
+14287|2|800M|Samantha Porter|157.86|NULL|0|0
+14318|1|300M Hurdles|Nolan Thompson|47.06|NULL|0|0
+14341|2|3200M|Emma Hibler|733.41|NULL|0|0
+14350|2|100M|Sarah Kelly|13.13|NULL|0|0
+14354|1|3200M|Gavin Forbes|594.97|NULL|0|0
+14361|2|100M Hurdles|KK Campbell|16.82|NULL|0|0
+14369|2|300M Hurdles|Julia Reusch|52.19|NULL|0|0
+14381|1|1600M|Antonio Ortega|314.5|NULL|0|0
+14468|1|300M Hurdles|Lincoln Baltic|50.11|NULL|0|0
+14482|1|800M|Matthew Jenkins|128.36|NULL|0|0
+14542|2|400M|Katie Wershing|62.56|NULL|0|0
+14546|1|400M|Bryce Neill|59.31|NULL|0|0
+14647|2|1600M|Emma Hibler|333.22|NULL|0|0
+14695|2|3200M|Vanessa Monhemius|824.07|NULL|0|0
+14830|1|110M Hurdles|Lincoln Baltic|19.86|NULL|0|0
+17583|1|Shot Put|Royce Zirkle|NULL|461.5|0|0

@@ -1,18 +1,18 @@
-261|2|Discus|Karoline Kreider|NULL|1002|2
-347|2|Long Jump|Reese Barnett|NULL|164.5|3
-354|1|Long Jump|Tristin Bogucki|NULL|227|3
-534|2|Discus|Presly McConnell|NULL|1213|2
-723|2|Long Jump|Abigail Reinhardt|NULL|161|3
-1082|1|Shot Put|Will Rogalski|NULL|468.5|2
-1205|1|Shot Put|Clay Combs|NULL|519|0
-1597|2|Shot Put|Karoline Kreider|NULL|328.5|2
-1630|1|Discus|Clay Combs|NULL|1418|2
-1750|1|Shot Put|Timmy Shores|NULL|531|2
-1780|1|Discus|Will Rogalski|NULL|1305|2
-2762|2|Long Jump|KK Campbell|NULL|183|3
-2818|1|Long Jump|Isaac Smith|NULL|187.5|3
-3168|2|Shot Put|Presly McConnell|NULL|384.5|2
-3379|2|Shot Put|Jayce Kreider|NULL|283.5|2
-3427|2|Discus|Jayce Kreider|NULL|957|2
-3490|1|Long Jump|Ethan Gray|NULL|209|3
-3520|1|Discus|Timmy Shores|NULL|1389|2
+261|2|Discus|Karoline Kreider|NULL|1002|2|0
+347|2|Long Jump|Reese Barnett|NULL|164.5|3|0
+354|1|Long Jump|Tristin Bogucki|NULL|227|3|0
+534|2|Discus|Presly McConnell|NULL|1213|2|0
+723|2|Long Jump|Abigail Reinhardt|NULL|161|3|0
+1082|1|Shot Put|Will Rogalski|NULL|468.5|2|0
+1205|1|Shot Put|Clay Combs|NULL|519|0|0
+1597|2|Shot Put|Karoline Kreider|NULL|328.5|2|0
+1630|1|Discus|Clay Combs|NULL|1418|2|0
+1750|1|Shot Put|Timmy Shores|NULL|531|2|0
+1780|1|Discus|Will Rogalski|NULL|1305|2|0
+2762|2|Long Jump|KK Campbell|NULL|183|3|0
+2818|1|Long Jump|Isaac Smith|NULL|187.5|3|0
+3168|2|Shot Put|Presly McConnell|NULL|384.5|2|0
+3379|2|Shot Put|Jayce Kreider|NULL|283.5|2|0
+3427|2|Discus|Jayce Kreider|NULL|957|2|0
+3490|1|Long Jump|Ethan Gray|NULL|209|3|0
+3520|1|Discus|Timmy Shores|NULL|1389|2|0

@@ -1,19 +1,19 @@
-685|2|High Jump|Kinsey Bayer|NULL|52|0
-1044|2|High Jump|Emily Ellebruch|NULL|50|0
-1155|1|Long Jump|Ty Kovach|NULL|217.75|0
-1545|1|Shot Put|Dominic Nau|NULL|483|0
-1851|2|High Jump|Abigail Reinhardt|NULL|50|0
-1875|1|Long Jump|Elliot Jordan|NULL|212.75|0
-1888|1|Shot Put|Royce Zirkle|NULL|461|0
-1954|1|Long Jump|Grady Pamer|NULL|200.25|0
-2100|2|Discus|Presly McConnell|NULL|1157|0
-2152|2|Long Jump|Abigail Reinhardt|NULL|181.5|0
-2323|2|Long Jump|Kinsey Bayer|NULL|189.5|0
-2335|1|Shot Put|Clay Combs|NULL|619.5|0
-2343|2|Pole Vault|Payten Shetterly|NULL|114|0
-3290|2|Discus|Jayce Kreider|NULL|991|0
-3488|2|Long Jump|KK Campbell|NULL|194|0
-3491|2|Discus|Berkeley Craddock|NULL|1039|0
-4438|1|300M Hurdles|Lincoln Baltic|49.28|NULL|0
-5565|2|300M Hurdles|Julia Reusch|51.58|NULL|0
-7434|2|300M Hurdles|Kiersyn Berry|52.31|NULL|0
+685|2|High Jump|Kinsey Bayer|NULL|52|4|0
+1044|2|High Jump|Emily Ellebruch|NULL|50|3|0
+1155|1|Long Jump|Ty Kovach|NULL|217.75|4|0
+1545|1|Shot Put|Dominic Nau|NULL|483|0|0
+1851|2|High Jump|Abigail Reinhardt|NULL|50|3|0
+1875|1|Long Jump|Elliot Jordan|NULL|212.75|4|0
+1888|1|Shot Put|Royce Zirkle|NULL|461|0|0
+1954|1|Long Jump|Grady Pamer|NULL|200.25|4|0
+2100|2|Discus|Presly McConnell|NULL|1157|0|0
+2152|2|Long Jump|Abigail Reinhardt|NULL|181.5|4|0
+2323|2|Long Jump|Kinsey Bayer|NULL|189.5|4|0
+2335|1|Shot Put|Clay Combs|NULL|619.5|0|0
+2343|2|Pole Vault|Payten Shetterly|NULL|114|5|0
+3290|2|Discus|Jayce Kreider|NULL|991|0|0
+3488|2|Long Jump|KK Campbell|NULL|194|4|0
+3491|2|Discus|Berkeley Craddock|NULL|1039|0|0
+4438|1|300M Hurdles|Lincoln Baltic|49.28|NULL|0|0
+5565|2|300M Hurdles|Julia Reusch|51.58|NULL|0|0
+7434|2|300M Hurdles|Kiersyn Berry|52.31|NULL|0|0

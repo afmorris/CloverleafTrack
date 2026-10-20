@@ -1,48 +1,48 @@
-167|2|Long Jump|KK Campbell|NULL|213|0
-478|1|High Jump|Logan Forbes|NULL|68|0
-704|2|Long Jump|Abigail Reinhardt|NULL|187|0
-815|2|Discus|Presly McConnell|NULL|1140|0
-854|2|Pole Vault|Payten Shetterly|NULL|96|0
-859|1|Discus|Timmy Shores|NULL|1711|0
-952|2|High Jump|Abigail Reinhardt|NULL|54|0
-1036|2|Shot Put|Presly McConnell|NULL|417.25|0
-1093|1|Long Jump|Tristin Bogucki|NULL|237.25|0
-1276|1|High Jump|Zach Brownson|NULL|64|0
-1540|2|High Jump|Grace Goldsberry|NULL|54|0
-2322|1|Pole Vault|Isaac Baltic|NULL|181|0
-2672|1|Discus|Clay Combs|NULL|1692|0
-2773|2|Shot Put|Karoline Kreider|NULL|350.25|0
-2926|1|Shot Put|Clay Combs|NULL|550.25|0
-2930|2|Discus|Karoline Kreider|NULL|1195|0
-2989|1|Shot Put|Timmy Shores|NULL|573.25|0
-3614|2|1600M|Megan Knapp|314.92|NULL|0
-3823|1|3200M|Gavin Forbes|599.9|NULL|0
-4053|1|100M|Tristin Bogucki|11.67|NULL|0
-4136|2|400M|Riley Evans|57.27|NULL|0
-4174|1|300M Hurdles|Chase Young|42.56|NULL|0
-4189|1|110M Hurdles|Chase Young|15.77|NULL|0
-4222|2|800M|Reese Barnett|149.34|NULL|0
-4296|2|100M|Riley Evans|12.21|NULL|0
-4317|1|200M|Isaiah Kurtz|23.39|NULL|0
-4554|1|200M|Emmanuel Medina|23.68|NULL|0
-4590|1|1600M|Matthew Jenkins|320.02|NULL|0
-4603|2|1600M|Emma Hibler|319.84|NULL|0
-4745|2|3200M|Madison Snyder|751.68|NULL|0
-5052|1|1600M|Landon Southam|332.64|NULL|0
-5222|2|300M Hurdles|KK Campbell|52.16|NULL|0
-5369|2|200M|Sarah Kelly|26.57|NULL|0
-5659|1|800M|Jackson James|122.74|NULL|0
-6094|2|200M|Riley Evans|25.75|NULL|0
-6452|1|3200M|Caleb Neville|583.76|NULL|0
-6795|2|100M Hurdles|KK Campbell|16.48|NULL|0
-6985|1|400M|Ethan Gray|52.81|NULL|0
-7026|1|300M Hurdles|Gage Hankins|44.58|NULL|0
-7048|1|100M|Isaiah Kurtz|11.47|NULL|0
-7073|2|3200M|Brooke Gucker|771.58|NULL|0
-7559|2|800M|Allison Yagersz|153.11|NULL|0
-8076|2|100M|Sarah Kelly|12.31|NULL|0
-8080|2|300M Hurdles|Kiersyn Berry|52.57|NULL|0
-8656|1|400M|Thomas Blaha|54.71|NULL|0
-8681|2|400M|Brooklyn Cavey|63.67|NULL|0
-8852|2|100M Hurdles|Kiersyn Berry|17.72|NULL|0
-9079|1|800M|Ben Myers|120.49|NULL|0
+167|2|Long Jump|KK Campbell|NULL|213|0|0
+478|1|High Jump|Logan Forbes|NULL|68|0|0
+704|2|Long Jump|Abigail Reinhardt|NULL|187|0|0
+815|2|Discus|Presly McConnell|NULL|1140|0|0
+854|2|Pole Vault|Payten Shetterly|NULL|96|0|0
+859|1|Discus|Timmy Shores|NULL|1711|0|0
+952|2|High Jump|Abigail Reinhardt|NULL|54|0|0
+1036|2|Shot Put|Presly McConnell|NULL|417.25|0|0
+1093|1|Long Jump|Tristin Bogucki|NULL|237.25|0|0
+1276|1|High Jump|Zach Brownson|NULL|64|0|0
+1540|2|High Jump|Grace Goldsberry|NULL|54|0|0
+2322|1|Pole Vault|Isaac Baltic|NULL|181|0|0
+2672|1|Discus|Clay Combs|NULL|1692|0|0
+2773|2|Shot Put|Karoline Kreider|NULL|350.25|0|0
+2926|1|Shot Put|Clay Combs|NULL|550.25|0|0
+2930|2|Discus|Karoline Kreider|NULL|1195|0|0
+2989|1|Shot Put|Timmy Shores|NULL|573.25|0|0
+3614|2|1600M|Megan Knapp|314.92|NULL|0|0
+3823|1|3200M|Gavin Forbes|599.9|NULL|0|0
+4053|1|100M|Tristin Bogucki|11.67|NULL|0|0
+4136|2|400M|Riley Evans|57.27|NULL|0|0
+4174|1|300M Hurdles|Chase Young|42.56|NULL|0|0
+4189|1|110M Hurdles|Chase Young|15.77|NULL|0|0
+4222|2|800M|Reese Barnett|149.34|NULL|0|0
+4296|2|100M|Riley Evans|12.21|NULL|0|0
+4317|1|200M|Isaiah Kurtz|23.39|NULL|0|0
+4554|1|200M|Emmanuel Medina|23.68|NULL|0|0
+4590|1|1600M|Matthew Jenkins|320.02|NULL|0|0
+4603|2|1600M|Emma Hibler|319.84|NULL|0|0
+4745|2|3200M|Madison Snyder|751.68|NULL|0|0
+5052|1|1600M|Landon Southam|332.64|NULL|0|0
+5222|2|300M Hurdles|KK Campbell|52.16|NULL|0|0
+5369|2|200M|Sarah Kelly|26.57|NULL|0|0
+5659|1|800M|Jackson James|122.74|NULL|0|0
+6094|2|200M|Riley Evans|25.75|NULL|0|0
+6452|1|3200M|Caleb Neville|583.76|NULL|0|0
+6795|2|100M Hurdles|KK Campbell|16.48|NULL|0|0
+6985|1|400M|Ethan Gray|52.81|NULL|0|0
+7026|1|300M Hurdles|Gage Hankins|44.58|NULL|0|0
+7048|1|100M|Isaiah Kurtz|11.47|NULL|0|0
+7073|2|3200M|Brooke Gucker|771.58|NULL|0|0
+7559|2|800M|Allison Yagersz|153.11|NULL|0|0
+8076|2|100M|Sarah Kelly|12.31|NULL|0|0
+8080|2|300M Hurdles|Kiersyn Berry|52.57|NULL|0|0
+8656|1|400M|Thomas Blaha|54.71|NULL|0|0
+8681|2|400M|Brooklyn Cavey|63.67|NULL|0|0
+8852|2|100M Hurdles|Kiersyn Berry|17.72|NULL|0|0
+9079|1|800M|Ben Myers|120.49|NULL|0|0
