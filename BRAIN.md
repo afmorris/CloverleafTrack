@@ -2425,3 +2425,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** `convert_live.py` skips this row (`SKIP_ROWS`) so a regeneration does not restore 38-2.
 
 **Key files:** `docs/imports/2023-ravenna-nau-shot-put.sql`, `scripts/athleticnet/convert_live.py`.
+
+### [C94] OHSAA State Results (baumspage mirror): Attempt Series and a Full Comparison
+
+**What changed:** the owner pointed at the official OHSAA state results (https://www.ohsaa.org/sports/track/past-results -> one page per year -> `https://www.baumspage.com/ohsaa/tf/<year>/Results1-4.htm`, Div I / II / III / Seated; 2007-2013 use `b1/g1/bd1/gd1.htm`; 2014-2021 also have `MeetProg`/`heat`/`part` files; 1990-2000 are PDFs; 2022 and later have no Hy-Tek pages there). The pages carry the full six-attempt series under each field athlete and the high jump / pole vault ladders. `docs/imports/ohsaa-state-series.sql` adds 7 series (Katelyn Young 2016 discus + shot put and 2017 discus; Brooklynn Crist 2018 and 2021 seated shot put; Bridgette Donahue 2021; Maddie Boltz 2019 long jump). `docs/imports/2019-seated-state-shot-put-series.sql` adds Crist's and Donahue's 2019 series (16-5.75 best / 7-4.75 best). All applied local and live; each best attempt equals the stored mark.
+
+**Why:** these pages explain the earlier Seated State confusion: each row has two numbers, `Seed` then `Finals` (Crist's 100M `20.56  23.85`), and the DB had held the seeds; the athletic.net fix ([C82]) was right.
+
+**Watch out:** in these Hy-Tek pages the first mark is the seed, not a prelim. Every Cloverleaf individual and relay row on the pages we have (39 rows, 2007-2021) matches the DB except the hand-timing quirk (11:30.07 vs the DB's 11:30.7; 51.09 vs 51.9). 2022-2025 state meets, the 2001-2006 pages and the 1990-2000 PDFs were not compared. Only ~10 Cloverleaf field rows carry a series; most state rows are track.
+
+**Key files:** `docs/imports/ohsaa-state-series.sql`, `docs/imports/2019-seated-state-shot-put-series.sql`.
