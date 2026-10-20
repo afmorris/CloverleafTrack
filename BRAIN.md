@@ -2475,3 +2475,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** dual/triangular/quad meets and meets with `MeetParticipants` are skipped (places there are per-opponent). Insert-only (`NOT EXISTS` any placing): earlier files win, so Live beats MileSplit text (they disagree for 8 rows at the 2024 Metro meet). `MeetType` is unreliable (300 meets are type 1, including invitationals/state), so the scripts filter on name/participants instead. Names are matched exactly, then by fuzzy first/last name within the meet-event. Not added: the 1986 State girls 4x800 (6th, 9:32.73; no 1986 State meet in the DB) and ~200 unmatched rows (mostly relays whose times differ, athletes missing from the DB). Source dumps are in `/tmp` and not in the repo, so re-running needs the downloads again.
 
 **Key files:** `scripts/places/*`, `docs/imports/places-*.sql`.
+
+### [C99] 1986 OHSAA Class AAA State Meet and the Girls 4x800 Relay
+
+**What changed:** new meet "1986 OHSAA Class AAA State Championships" (1986-06-01 placeholder date, Ohio Stadium, season 1985-1986) with the Lodi Cloverleaf girls 4x800 relay, 6th, 9:32.73: Sue Wagner, Beth Kaniecki, Laura Foradori (existing athlete), Linda Melendez. Three new athletes (class year 1987 is a guess). Follow-up to the unplaced item in [C98].
+
+**Why:** owner asked to add the meet and result. Names read from the page image (the OCR text had the two columns interleaved).
+
+**Watch out:** the 1986 PDF's relay listing is two columns; read legs from the image, not the OCR text. Applied locally and live; no leaderboard impact beyond the new relay row.
+
+**Key files:** `docs/imports/1986-state-girls-4x800.sql`.
