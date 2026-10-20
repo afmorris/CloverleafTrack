@@ -6,7 +6,7 @@
 }
 
 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 cursor-pointer"
-    onclick="window.location='@Url.Action("Details", "Meets", new { slug = Model.Slug })'"
+    onclick="window.location = this.querySelector('a').href"
     data-filterable
     data-env="@(isOutdoor ? "outdoor" : "indoor")">
     <td class="px-4 py-3 tabular-nums w-14 flex-shrink-0">
