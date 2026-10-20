@@ -2455,3 +2455,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** Bender's graduation year is unverified (column is NOT NULL). The relay row's `SortedAthleteHash` is NULL (binary hash not computed).
 
 **Key files:** `docs/imports/ohsaa-pdf-1972-1990-extras.sql`.
+
+### [C97] Meet Page: No "#N" Chip Next to "SR"; Freeland's 1990 State Place
+
+**What changed:** `Views/Meets/Details.cshtml` (3 row templates) no longer shows the all-time `#N` chip when the row already has the `SR` chip (`AllTimeRank == 1` is both, so `#1` was redundant). Dave Freeland's 1990 State 800M now has a `MeetPlacings` row (Place 2, 0 points, no participant) so the meet page shows "2nd".
+
+**Why:** owner pointed out `SR` + `#1` was silly, and a bare `#1` on a state-meet row reads like a placing when he was 2nd (Darrell Hughes won in 1:52.12).
+
+**Watch out:** `MeetPlacings` works for any meet; only the 2026 D3 State and Early Bird have placings, so other state rows show no place. Placings imported this way carry 0 points; the season scoring page is gated by `ScoringEnabled` so it is unaffected.
+
+**Key files:** `CloverleafTrack.Web/Views/Meets/Details.cshtml`, `docs/imports/1990-state-freeland-place.sql`.
