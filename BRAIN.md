@@ -2485,3 +2485,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** the 1986 PDF's relay listing is two columns; read legs from the image, not the OCR text. Applied locally and live; no leaderboard impact beyond the new relay row.
 
 **Key files:** `docs/imports/1986-state-girls-4x800.sql`.
+
+### [C100] Team Results (Place / Field Size / Score) Backfilled for Invitationals From Hy-Tek Rankings
+
+**What changed:** 73 `MeetTeamResults` rows (MeetId, Gender, no opponent, OurScore, Place, FieldSize) for 48 non-dual meets, parsed from Hy-Tek "Men/Women - Team Rankings" blocks by `scripts/places/team_results.py`: the MileSplit texts (`/tmp/msraw`) plus the OHSAA state pages. Applied as `docs/imports/team-results-hytek.sql` (insert-only, only where the meet+gender has no row).
+
+**Why:** owner asked for team placing for invitationals, per-opponent placings and meet scores for duals.
+
+**Watch out:** the model already existed (`MeetTeamResults`, shown by `MeetService`): invitational = `OpponentMeetParticipantId NULL` + Place + FieldSize; dual = per-opponent `OurScore`/`OpponentScore`. Existing rows were NOT overwritten, and they disagree with the source for the 2025 Jim Hauser Pirate Relays (DB boys 6th / girls 7th of 8; Hy-Tek says Cloverleaf 4th both, 82.5 / 85 pts) and 2026 Jim Hauser (same 6/7): owner to check. Division-split rankings (MS/Metro/County), partial scoring (<6 events) and XC are ignored. Duals are NOT done: only 3 of the 42 dual meets have a crawled source, and per-opponent placings need the opponents' athletes too.
+
+**Key files:** `scripts/places/team_results.py`, `docs/imports/team-results-hytek.sql`.
