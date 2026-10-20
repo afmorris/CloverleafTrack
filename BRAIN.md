@@ -2343,3 +2343,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** the merge aborts if a duplicate result has a different mark or any placing, entry, leg or series. The athlete page URL slug changes with the renamed athlete (`/roster/bridgette-donahue`); the static site regenerates it. Old import SQL that references `Trevor Millbrandt` by name would no longer find him (do not re-run those files). Separate issue, not athlete duplicates: five athlete/meet/event pairs have two results rows each (Bryce Neill 2025 Ravenna 200M 27.14 and 27.00; Gordy Surrarrer 2026 Ravenna discus 838 and 990; Jackie Baker 1996 Medina County 100M 14.6 and 14.7; Nolan McNeal 2021 Black River 300H 46.2 and 46.1; Weston Miller 2026 New London long jump 156.5 twice).
 
 **Key files:** `docs/imports/merge-duplicate-athletes.sql`.
+
+### [C86] Five Double-Entered Results Fixed
+
+**What changed:** `docs/imports/duplicate-results-fixes.sql` (applied local and live 2026-10-19), owner decisions per pair. Bryce Neill 2025 Ravenna-Streetsboro 200M: kept 27.14 (MileSplit), deleted 27.00. Jackie Baker 1996 Medina County 100M: kept 14.6, deleted 14.7 (and its duplicate pre-meet entry). Nolan McNeal 2021 Black River Dual 300H: kept 46.1, deleted 46.2. Weston Miller 2026 New London long jump: identical 156.5 twice, kept the row with the meet entry. Gordy Surrarrer 2026 Ravenna discus: the 69' 10" (838) is Gordy's; the 82' 6" (990) row and its entry were re-assigned to Gunnar Surrarrer (class of 2028), who had no discus entry at that meet and throws 79'-83' elsewhere while Gordy throws 65'-75'.
+
+**Why:** found while merging duplicate athletes ([C85]): five athlete+meet+event pairs had two result rows. The Surrarrer pair was a misattribution, not a duplicate.
+
+**Watch out:** two brothers named Surrarrer compete together (Gunnar 2028, Gordy 2029) plus Tate (2015): check the first name when entering marks. The SQL looks rows up by name, meet and exact mark and aborts unless exactly four rows are deleted.
+
+**Key files:** `docs/imports/duplicate-results-fixes.sql`.
