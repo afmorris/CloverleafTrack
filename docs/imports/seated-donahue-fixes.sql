@@ -5,7 +5,7 @@ BEGIN TRANSACTION;
 UPDATE p SET DistanceInches = p.TimeSeconds, TimeSeconds = NULL
 FROM Performances p JOIN Events e ON e.Id = p.EventId
 WHERE e.Name = 'Seated Shot Put' AND p.TimeSeconds IS NOT NULL AND p.DistanceInches IS NULL AND p.ResultStatus = 0;
-IF @@ROWCOUNT <> 5 THROW 50040, 'Expected to move exactly 5 seated shot put marks', 1;
+IF @@ROWCOUNT > 5 THROW 50040, 'More than 5 seated shot put marks to move: check before running', 1;   -- local had 5, live had 2 (the rest were already correct)
 
 DECLARE @d INT = (SELECT Id FROM Athletes WHERE FirstName = 'Bridgette' AND LastName = 'Donahue');
 DECLARE @e100 INT = (SELECT Id FROM Events WHERE Name = 'Seated 100M' AND Gender = 2 AND Environment = 1);

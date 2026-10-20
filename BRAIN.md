@@ -2317,3 +2317,9 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 - Left for the owner (not changed): Brian Livingstone 2011 Suburban shot put 52' 1" vs DB 51' 1"; Mandy Fugate 2003 District 200M 29.35 vs DB 27.38; Sarah Schleich 2008 Comet Relays long jump 13' 6.75" vs DB 12' 2"; 2004 District hurdles semis (Cory Beebe 110H 15.81 / 300H 39.94, Kalyn O'Shea 300H 49.04) are faster than the DB's finals; girls 4x800 2011 Suburban 654.57 vs 654.27; girls 4x400 2010 Suburban 270.81 vs 270.18. Relays on the sheets with no leg names: NE District boys 4x400 2006 (3:39.97) and 2007 (3:48.28), 2011 District boys 4x100 45.13, boys 4x200 1:36.51, girls 4x100 52.86, girls 4x400 4:21.28.
 
 **Key files:** `scripts/crawl/compare_an_vs_db.py`, `scripts/crawl/compare_ms_vs_db.py`, `docs/imports/results-missing-baumspage.sql`, `docs/imports/athleticnet-compare-fixes.sql`.
+
+### [C83] Live Apply of [C80]-[C82] SQL
+
+**What changed:** the four staged files were applied to the live DB on 2026-10-19 (`seated-donahue-fixes`, `results-missing-baumspage`, `athleticnet-compare-fixes`, `2026-field-coventry-attempts`). The live DB is not an exact copy of the local one: it had only 2 mis-stored Seated Shot Put marks (Crist and Donahue, 2019 Triway), not 5, so the `= 5` assertion in `seated-donahue-fixes.sql` aborted the transaction and was relaxed to `> 5`. Everything else asserted cleanly (Performance Ids matched).
+
+**Watch out:** do not assume a local row count or Id also holds live; assert ranges or reference by name and date. Marks fixes for Huegel, Brown, Crist and Donahue are on live; the owner-review mark questions from [C82] are not.
