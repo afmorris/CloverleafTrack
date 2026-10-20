@@ -284,7 +284,7 @@
                                                         @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
                                                         @if (perf.IsPersonalBest) { <span class="chip-pr" title="Personal Best">PR</span> }
                                                         @if (perf.IsSeasonBest && !perf.IsPersonalBest) { <span class="chip-rank" title="Season Best">SB</span> }
-                                                        @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10)
+                                                        @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10 && !perf.IsSchoolRecord)
                                                         {
                                                             <span class="chip-rank" title="All-Time Top 10">#@perf.AllTimeRank</span>
                                                         }
@@ -387,7 +387,7 @@
                                                         @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
                                                         @if (perf.IsPersonalBest) { <span class="chip-pr" title="Personal Best">PR</span> }
                                                         @if (perf.IsSeasonBest && !perf.IsPersonalBest) { <span class="chip-rank" title="Season Best">SB</span> }
-                                                        @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10)
+                                                        @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10 && !perf.IsSchoolRecord)
                                                         {
                                                             <span class="chip-rank" title="All-Time Top 10">#@perf.AllTimeRank</span>
                                                         }
@@ -490,7 +490,7 @@
                                                     @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
                                                     @if (perf.IsPersonalBest) { <span class="chip-pr" title="Personal Best">PR</span> }
                                                     @if (perf.IsSeasonBest && !perf.IsPersonalBest) { <span class="chip-rank" title="Season Best">SB</span> }
-                                                    @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10)
+                                                    @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10 && !perf.IsSchoolRecord)
                                                     {
                                                         <span class="chip-rank" title="All-Time Top 10">#@perf.AllTimeRank</span>
                                                     }
