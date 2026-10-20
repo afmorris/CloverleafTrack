@@ -2395,3 +2395,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** never assume local Ids equal live Ids for performances created by import SQL (see [C83]); use name/meet/event/mark lookups. When generating SQL for another database, generate it from the full data (`LIVE_IGNORE_EXISTING=1 SKIP_EXISTING=1`), not from a database that already has part of it. A verification query of totals after every live apply would have caught the gap sooner.
 
 **Key files:** `scripts/athleticnet/{convert_live,build_scan_sql,build_bars_sql}.py`, `docs/imports/2023-2026-live-complete-{attempts,bars}.sql`.
+
+### [C91] Relay Prelim -> Final Chains From Live
+
+**What changed:** `scripts/athleticnet/build_live_relay_rounds.py` chains a Cloverleaf relay team's rounds from MileSplit Live (the same four legs appear under `Cloverleaf "A"` in the prelim and the final) onto the DB relay row found by meet name/date + event + gender + fastest-round time. 17 teams have two rounds on Live: 11 already had identical chains from earlier imports (compared, not replaced), and `docs/imports/2023-2026-live-relay-rounds.sql` adds the other six (2023 District boys 4x200; 2025 District boys 4x200, boys 4x400, girls 4x100, 4x200, 4x400). Applied local and live.
+
+**Why:** the owner asked to review the relay prelim chains left out of [C88]. Owner decision for the 2023 District boys 4x200: the prelim is stored as Live's 1:35.29 (95.29) although the performance mark is 1:35.28 (95.28), a 0.01 gap that is kept on purpose.
+
+**Watch out:** only A/B/C teams that appear in 2+ rounds are chained; legs are not compared with `PerformanceAthletes` (Live uses nicknames such as Kierston for the DB's KK). The 5 relay events on Live that have no DB row at the matching time were not touched.
+
+**Key files:** `scripts/athleticnet/build_live_relay_rounds.py`, `docs/imports/2023-2026-live-relay-rounds.sql`.
