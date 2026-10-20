@@ -2323,3 +2323,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **What changed:** the four staged files were applied to the live DB on 2026-10-19 (`seated-donahue-fixes`, `results-missing-baumspage`, `athleticnet-compare-fixes`, `2026-field-coventry-attempts`). The live DB is not an exact copy of the local one: it had only 2 mis-stored Seated Shot Put marks (Crist and Donahue, 2019 Triway), not 5, so the `= 5` assertion in `seated-donahue-fixes.sql` aborted the transaction and was relaxed to `> 5`. Everything else asserted cleanly (Performance Ids matched).
 
 **Watch out:** do not assume a local row count or Id also holds live; assert ranges or reference by name and date. Marks fixes for Huegel, Brown, Crist and Donahue are on live; the owner-review mark questions from [C82] are not.
+
+### [C84] Owner-Reviewed Marks From the Baumspage Comparison
+
+**What changed:** `docs/imports/baumspage-mark-reviews.sql` (applied local and live 2026-10-19), each line decided by the owner ("use the sheet"). Old values: Brian Livingstone 2011 Suburban shot put 51' 1" (613) -> 52' 1" (625); Mandy Fugate 2003 District girls 200M 27.38 -> 29.35; Sarah Schleich 2008 Comet Relays long jump 12' 2" (146) -> 13' 6.75" (162.75) (a Long Jump Relay individual mark); 2004 District hurdles, best semi with a semi -> final round chain: Cory Beebe 110H 16.65 -> 15.81 (final 16.65), Cory Beebe 300H 40.25 -> 39.94 (final 40.25), Kalyn OShea 300H 49.10 -> 49.04 (final 49.10); girls 4x800M 2011 Suburban relay 654.27 -> 654.57; girls 4x400M 2010 Suburban relay 270.18 -> 270.81.
+
+**Why:** closes the "left for the owner" list of [C82]; marks follow the official results.
+
+**Watch out:** Kalyn's last name is stored as `OShea` (no apostrophe) and Morgan has two records (`ORourke` 442 and `O'Rourke` 973); match athlete names exactly as stored. Fugate's 27.38 was possibly a prelim from a source we cannot see; revert from this log if a better source turns up. Still open: the six relays with no leg names ([C82]) and the duplicate athlete records.
+
+**Key files:** `docs/imports/baumspage-mark-reviews.sql`.
