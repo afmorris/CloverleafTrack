@@ -1,0 +1,12 @@
+1|110M Hurdles|Chase Young|F:16.68;P:16.35
+1|110M Hurdles|Isaac Baltic|F:17.32;P:16.39
+1|300M Hurdles|Chase Young|F:42.53;P:42.45
+1|800M|Hunter Stallings|F:122.08;P:133.55
+1|800M|Vova Herdman|F:115.08;P:128.52
+2|100M|Riley Evans|F:12.54;P:12.48
+2|100M|Sarah Kelly|F:13.11;P:13.01
+2|100M Hurdles|KK Campbell|F:17.3;P:16.92
+2|200M|Riley Evans|F:26.05;P:26.71
+2|400M|Riley Evans|F:57.99;P:59.01
+2|800M|Lauren Jensch|F:155.75;P:153.82
+2|800M|Reese Barnett|F:148.13;P:153.35

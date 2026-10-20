@@ -1119,5 +1119,5 @@ CREATE TABLE [dbo].[PerformanceBars] (
     CONSTRAINT [FK_PerformanceBars_Performances]
         FOREIGN KEY ([PerformanceId]) REFERENCES [dbo].[Performances]([Id]) ON DELETE CASCADE,
     CONSTRAINT [UQ_PerformanceBars_Performance_Height] UNIQUE ([PerformanceId], [HeightInches]),
-    CONSTRAINT [CK_PerformanceBars_Outcome] CHECK ([Outcome] IN ('O', 'XO', 'XXO', 'XXX', 'P', 'XP', 'XXP'))
+    CONSTRAINT [CK_PerformanceBars_Outcome] CHECK ([Outcome] IN ('O', 'XO', 'XXO', 'XXX', 'P', 'XP', 'XXP', 'X', 'XX'))
 );

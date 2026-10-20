@@ -1,0 +1,80 @@
+E|1|Girls 60 meter Hurdles Div 1|F|Place¦¦Athlete¦Year¦Team¦Time¦Note
+E|1|Girls 60 meter Hurdles Div 1|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|2|Girls 60 meter Hurdles Div 2|F|Place¦¦Athlete¦Year¦Team¦Time¦Note
+E|2|Girls 60 meter Hurdles Div 2|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|3|Boys 60 meter Hurdles Div 1|F|Place¦¦Athlete¦Year¦Team¦Time
+E|3|Boys 60 meter Hurdles Div 1|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|4|Boys 60 meter Hurdles Div 2|F|Place¦¦Athlete¦Year¦Team¦Time¦Note
+E|4|Boys 60 meter Hurdles Div 2|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|5|Girls 60 meter Dash Div 1|F|Place¦¦Athlete¦Year¦Team¦Time
+E|5|Girls 60 meter Dash Div 1|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|6|Girls 60 meter Dash Div 2|F|Place¦¦Athlete¦Year¦Team¦Time
+E|6|Girls 60 meter Dash Div 2|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|7|Boys 60 meter Dash Div 1|F|Place¦¦Athlete¦Year¦Team¦Time
+E|7|Boys 60 meter Dash Div 1|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|8|Boys 60 meter Dash Div 2|F|Place¦¦Athlete¦Year¦Team¦Time¦Note
+E|8|Boys 60 meter Dash Div 2|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|9|Girls 60 meter Dash Seated|F|Place¦Position¦¦Athlete¦Team¦Best
+E|10|Boys 60 meter Dash Seated|F|Place¦¦Athlete¦Year¦Team¦Time
+E|11|Girls 4x800 Meter Relay Div 1|F|Place¦¦Team¦Time
+E|12|Girls 4x800 Meter Relay Div 2|F|Place¦¦Team¦Time¦Note
+E|13|Boys 4x800 Meter Relay Div 1|F|Place¦¦Team¦Time
+E|14|Boys 4x800 Meter Relay Div 2|F|Place¦¦Team¦Time¦Note
+E|15|Girls 4x200 Meter Relay Div 1|F|Place¦¦Team¦Time¦Heat
+E|16|Girls 4x200 Meter Relay Div 2|F|Place¦¦Team¦Time¦Heat
+E|17|Boys 4x200 Meter Relay Div 1|F|Place¦¦Team¦Time¦Heat
+E|18|Boys 4x200 Meter Relay Div 2|F|Place¦¦Team¦Time¦Heat
+E|19|Girls 1600 meter Run Div 1|F|Place¦¦Athlete¦Year¦Team¦Time¦200¦400¦600¦800¦1000
+E|20|Girls 1600 meter Run Div 2|F|Place¦¦Athlete¦Year¦Team¦Time¦200¦400¦600¦800
+E|21|Boys 1600 meter Run Div 1|F|Place¦¦Athlete¦Year¦Team¦Time¦200¦400¦600
+E|22|Boys 1600 meter Run Div 2|F|Place¦¦Athlete¦Year¦Team¦Time
+E|23|Girls 400 meter Dash Div 1|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|24|Girls 400 meter Dash Div 2|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|25|Boys 400 meter Dash Div 1|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|26|Boys 400 meter Dash Div 2|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|27|Girls 400 meter Dash Seated|F|Place¦Position¦¦Athlete¦Team¦Best
+E|28|Boys 400 meter Dash Seated|F|Place¦¦Athlete¦Year¦Team¦Time
+E|29|Girls 800 meter Run Div 1|F|Place¦¦Athlete¦Year¦Team¦Time
+E|30|Girls 800 meter Run Div 2|F|Place¦¦Athlete¦Year¦Team¦Time
+E|31|Boys 800 meter Run Div 1|F|Place¦¦Athlete¦Year¦Team¦Time
+E|32|Boys 800 meter Run Div 2|F|Place¦¦Athlete¦Year¦Team¦Time
+E|33|Girls 200 meter Dash Div 1|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|34|Girls 200 meter Dash Div 2|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|35|Boys 200 meter Dash Div 1|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|36|Boys 200 meter Dash Div 2|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|37|Girls 3200 meter Run Div 1|F|Place¦¦Athlete¦Year¦Team¦Time
+E|38|Girls 3200 meter Run Div 2|F|Place¦¦Athlete¦Year¦Team¦Time
+E|39|Boys 3200 meter Run Div 1|F|Place¦¦Athlete¦Year¦Team¦Time
+E|40|Boys 3200 meter Run Div 2|F|Place¦¦Athlete¦Year¦Team¦Time
+E|41|Girls 4x400 Meter Relay Div 1|F|Place¦¦Team¦Time¦Heat
+E|42|Girls 4x400 Meter Relay Div 2|F|Place¦¦Team¦Time¦Heat
+E|43|Boys 4x400 Meter Relay Div 1|F|Place¦¦Team¦Time¦Heat¦Note
+E|44|Boys 4x400 Meter Relay Div 2|F|Place¦¦Team¦Time¦Heat
+E|45|Girls High Jump Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦4-8¦4-10¦5-0¦5-2¦5-3¦5-4¦5-5¦5-6
+E|46|Girls High Jump Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦4-8¦4-10¦5-0¦5-2¦5-3¦5-4¦5-5¦5-6¦5-7¦5-8¦5-9
+E|47|Boys High Jump Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦5-10¦6-0¦6-2¦6-3¦6-4¦6-5¦6-6¦6-7¦6-8¦6-9¦6-10¦7-2.50
+E|48|Boys High Jump Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦5-8¦5-10¦6-0¦6-2¦6-3¦6-4¦6-5¦6-7
+E|49|Girls Pole Vault Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦10-0¦10-6¦11-0¦11-4¦11-8¦12-0¦12-4¦12-8¦13-0
+E|50|Girls Pole Vault Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦10-0¦10-6¦11-0¦11-6¦12-0¦12-4¦12-8¦13-0¦13-4¦13-6
+E|51|Boys Pole Vault Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦12-6¦13-0¦13-6¦14-0¦14-4¦14-8¦15-0¦15-4¦15-8¦16-0
+E|52|Boys Pole Vault Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦12-6¦13-0¦13-6¦14-0¦14-4¦14-8¦15-0¦15-4¦15-8¦16-0¦16-4¦17-0¦17-8
+E|53|Girls Long Jump Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|54|Girls Long Jump Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|55|Boys Long Jump Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|56|Boys Long Jump Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|57|Girls Shot Put Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|58|Girls Shot Put Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+16||Presly McConnell|12|Cloverleaf|30-11|30-9.50|30-11|30-3.25|||
+E|59|Boys Shot Put Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|60|Boys Shot Put Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+12||Clay Combs|12|Cloverleaf|48-1|48-1|F|46-5|||
+E|61|Girls Shot Put Seated|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|62|Boys Shot Put Seated|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|63|Girls Weight Throw Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|64|Girls Weight Throw Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|65|Boys Weight Throw Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|66|Boys Weight Throw Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|67|Girls Triple Jump Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|68|Girls Triple Jump Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|69|Boys Triple Jump Div 1|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|70|Boys Triple Jump Div 2|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6

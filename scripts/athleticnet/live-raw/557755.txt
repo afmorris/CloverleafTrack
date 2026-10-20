@@ -1,0 +1,56 @@
+E|1|Girls 4x800 Meter Relay|F|Place¦¦Team¦Time
+E|2|Boys 4x800 Meter Relay|F|Place¦¦Team¦Time¦Note
+E|3|Girls 100 meter Hurdles 33"|F|Place¦¦Athlete¦Year¦Team¦Time¦Wind
+E|3|Girls 100 meter Hurdles 33"|P|Place¦¦Athlete¦Year¦Team¦Time¦Wind¦Heat
+E|4|Boys 110 meter Hurdles 39"|F|Place¦¦Athlete¦Year¦Team¦Time¦Wind
+E|4|Boys 110 meter Hurdles 39"|P|Place¦¦Athlete¦Year¦Team¦Time¦Wind¦Heat
+E|5|Girls 100 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Wind
+E|5|Girls 100 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Wind¦Heat¦Note
+18||Riley Evans|11|Cloverleaf|12.37|+0.7|1|
+E|6|Boys 100 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|6|Boys 100 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Wind¦Heat¦Note
+E|7|Girls 4x200 Meter Relay|F|Place¦¦Team¦Time
+E|7|Girls 4x200 Meter Relay|P|Place¦¦Team¦Time¦Heat
+E|8|Boys 4x200 Meter Relay|F|Place¦¦Team¦Time
+E|8|Boys 4x200 Meter Relay|P|Place¦¦Team¦Time¦Heat¦Note
+E|9|Girls 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦400¦800¦1200¦1600
+E|10|Boys 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦400¦800¦1200¦1600
+E|11|Girls 4x100 Meter Relay|F|Place¦¦Team¦Time
+E|11|Girls 4x100 Meter Relay|P|Place¦¦Team¦Time¦Heat
+E|12|Boys 4x100 Meter Relay|F|Place¦¦Team¦Time
+E|12|Boys 4x100 Meter Relay|P|Place¦¦Team¦Time¦Heat¦Note
+E|13|Girls 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+6 3 pts||Riley Evans|11|Cloverleaf|55.68
+E|13|Girls 400 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+7||Riley Evans|11|Cloverleaf|57.21 q|2
+E|14|Boys 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|14|Boys 400 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|15|Girls 300 meter Hurdles 30"|F|Place¦¦Athlete¦Year¦Team¦Time
+E|15|Girls 300 meter Hurdles 30"|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|16|Boys 300 meter Hurdles 36"|F|Place¦¦Athlete¦Year¦Team¦Time
+E|16|Boys 300 meter Hurdles 36"|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|17|Girls 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦400¦800
+E|18|Boys 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦400¦800¦Note
+9||Vova Herdman|12|Cloverleaf|1:54.00|11th - 54.95 54.95|9th 2 1:54.00 59.06|
+E|19|Girls 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Wind
+E|19|Girls 200 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Wind¦Heat
+15||Riley Evans|11|Cloverleaf|25.32|+0.9|2
+E|20|Boys 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Wind
+E|20|Boys 200 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Wind¦Heat¦Note
+E|21|Girls 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦400¦800¦1200¦1600¦2000¦2400¦2800¦3200
+E|22|Boys 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦400¦800¦1200¦1600¦2000¦2400¦2800¦3200
+E|23|Girls 4x400 Meter Relay|F|Place¦¦Team¦Time
+E|23|Girls 4x400 Meter Relay|P|Place¦¦Team¦Time¦Heat
+E|24|Boys 4x400 Meter Relay|F|Place¦¦Team¦Time
+E|24|Boys 4x400 Meter Relay|P|Place¦¦Team¦Time¦Heat
+E|25|Girls Discus Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|26|Boys Discus Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|27|Girls High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦5-0¦5-2¦5-3¦5-4¦5-5¦5-6¦5-7¦5-10
+E|28|Boys High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦6-2¦6-4¦6-5¦6-6¦6-7¦6-8¦6-9¦6-10
+E|29|Girls Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Wind¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|30|Boys Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Wind¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|31|Girls Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|32|Boys Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|33|Girls Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦10-6¦11-0¦11-6¦12-0¦12-4¦12-8¦13-0¦13-3¦13-4¦13-7.25
+E|34|Boys Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦13-0¦13-6¦14-0¦14-6¦15-0¦15-4¦15-8¦16-0¦16-4¦16-8
+13||Isaac Baltic|11|Cloverleaf|14-6|PPP|O|XXO|XXO|XXX|--|--|--|--|--

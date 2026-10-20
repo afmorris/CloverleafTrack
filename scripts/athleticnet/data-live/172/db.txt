@@ -1,0 +1,38 @@
+316|1|Shot Put|Will Rogalski|NULL|442|0
+547|2|Shot Put|Presly McConnell|NULL|380.5|0
+589|1|High Jump|Logan Forbes|NULL|66|0
+762|1|Shot Put|Timmy Shores|NULL|522.5|0
+833|1|High Jump|Zach Brownson|NULL|66|0
+1047|1|Pole Vault|Chase Young|NULL|96|0
+1156|1|Pole Vault|Isaac Baltic|NULL|174|0
+1312|2|Pole Vault|Payten Shetterly|NULL|96|0
+1340|2|Long Jump|KK Campbell|NULL|189|0
+1401|2|Discus|Jayce Kreider|NULL|952|0
+1440|1|Discus|Timmy Shores|NULL|1413|0
+1444|2|Shot Put|Amelia Ryncarz|NULL|361|0
+1531|2|Long Jump|Abigail Reinhardt|NULL|171|0
+1652|1|Discus|Will Rogalski|NULL|1106|0
+1668|2|High Jump|Payten Shetterly|NULL|51|0
+1693|1|Long Jump|Ethan Gray|NULL|209.5|0
+1910|1|Shot Put|Clay Combs|NULL|536.75|0
+1929|1|Long Jump|Tristin Bogucki|NULL|241|0
+2220|2|Long Jump|Reese Barnett|NULL|176|0
+2378|1|Long Jump|Isaac Smith|NULL|188|0
+2447|1|Discus|Clay Combs|NULL|1442|0
+2503|2|High Jump|Abigail Reinhardt|NULL|51|0
+3144|2|High Jump|Grace Goldsberry|NULL|51|0
+3146|2|Discus|Presly McConnell|NULL|994|0
+3440|2|Discus|Karoline Kreider|NULL|1158|0
+3602|2|Shot Put|Karoline Kreider|NULL|344.5|0
+3809|1|1600M|Antonio Ortega|332.84|NULL|0
+5160|2|100M Hurdles|Grace Friedhoff|19.88|NULL|0
+5173|1|100M|Gage Hankins|12.24|NULL|0
+6114|1|200M|Isaiah Kurtz|23.93|NULL|0
+6719|2|200M|Riley Evans|25.85|NULL|0
+7034|1|110M Hurdles|Chase Young|16.68|NULL|0
+7206|2|3200M|Brooke Gucker|801.51|NULL|0
+7640|1|3200M|Gavin Forbes|620.45|NULL|0
+7665|1|1600M|Noah Mion|332.48|NULL|0
+8378|2|1600M|Kate Jarvis|405.54|NULL|0
+8728|2|1600M|Nora Bammerlin|390.19|NULL|0
+8839|2|100M|Sarah Kelly|13.35|NULL|0

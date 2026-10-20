@@ -1,0 +1,14 @@
+1|1600M|Noah Mion|F:314.39;P:296.61
+1|800M|Ben Myers|F:120.77;P:127.47
+1|800M|Matthew Jenkins|F:128.36;P:129.06
+2|100M|Sarah Kelly|F:13.13;P:13.14
+2|100M|Taylor Munchick|F:13.7;P:13.59
+2|100M Hurdles|KK Campbell|F:16.91;P:16.82
+2|100M Hurdles|Kiersyn Berry|F:17.36;P:17.3
+2|200M|Kayla Shook|F:27.74;P:27.53
+2|200M|Sarah Kelly|F:27.38;P:27.44
+2|300M Hurdles|Kiersyn Berry|F:49.32;P:50.6
+2|400M|Brooklyn Cavey|F:63.31;P:64.0
+2|400M|Katie Wershing|F:62.56;P:62.78
+2|800M|Emma Hibler|F:156.14;P:157.93
+2|800M|Samantha Porter|F:157.86;P:166.43

@@ -1,0 +1,46 @@
+13644|2|Shot Put|Izzy Messmore|NULL|219|0
+13661|1|Shot Put|Preston Stark|NULL|335|0
+13687|1|Discus|Gunnar Surrarrer|NULL|1128|0
+13698|1|Shot Put|Braylon Lade|NULL|395|0
+13711|1|Long Jump|Collin Saksa|NULL|188.25|0
+13727|2|Shot Put|Berkeley Craddock|NULL|340.5|0
+13766|2|Long Jump|Katelin Yagersz|NULL|144.25|0
+13779|1|Shot Put|JJ Johnson|NULL|416|0
+13780|1|Discus|Kaiden Stone|NULL|1018|0
+13812|2|Shot Put|Delaney Ishler|NULL|318.5|0
+13826|2|Long Jump|Tessa Bogucki|NULL|159|0
+13844|1|Discus|Jacob Atkinson|NULL|1192|0
+13854|2|Discus|Delaney Ishler|NULL|936|0
+13856|1|Discus|Ethan Martin|NULL|1323|0
+13858|1|Shot Put|Jake Schaefer|NULL|420.5|0
+13885|2|Discus|Addi Reho|NULL|1133|0
+13886|1|Long Jump|Clayton Sewalish|NULL|192|0
+13901|2|Discus|Berkeley Craddock|NULL|961|0
+13916|2|Discus|Izzy Messmore|NULL|584|0
+13952|1|Discus|Jack Chonko|NULL|1154|0
+14143|1|400M|Bryce Neill|60.71|NULL|0
+14151|1|800M|Mason Clapp|146.47|NULL|0
+14257|1|200M|Jackson Murray-Garver|26.13|NULL|0
+14266|1|400M|Jackson Murray-Garver|65.67|NULL|0
+14271|1|400M|Mason Lotz|56.89|NULL|0
+14307|2|100M|Lilly Southam|16.09|NULL|0
+14314|1|1600M|Antonio Ortega|312.11|NULL|0
+14325|1|800M|Cayden Williams|149.51|NULL|0
+14327|1|200M|Clayton Sewalish|25.79|NULL|0
+14378|1|800M|Antonio Ortega|141.99|NULL|0
+14385|1|200M|Collin Saksa|27.56|NULL|0
+14391|1|200M|Jackson Morris|28.1|NULL|0
+14395|1|1600M|Aiden Mullinex|395.55|NULL|0
+14401|1|800M|Luke Evans|155.54|NULL|0
+14425|1|1600M|Matthew Wilk|352.2|NULL|0
+14460|2|100M Hurdles|Delaney Bishop|19.45|NULL|0
+14489|1|100M|Clayton Sewalish|12.51|NULL|0
+14504|1|100M|Bryce Neill|12.85|NULL|0
+14512|1|800M|Matthew Wilk|157.22|NULL|0
+14599|2|300M Hurdles|Delaney Bishop|61.39|NULL|0
+14603|2|100M|Tessa Bogucki|15.09|NULL|0
+14609|1|100M|Mason Lotz|12.05|NULL|0
+14610|1|100M|Jackson Morris|13.45|NULL|0
+14671|1|1600M|Mason Clapp|326.34|NULL|0
+14711|2|100M|Katelin Yagersz|15.65|NULL|0
+14763|1|1600M|Cayden Williams|328.17|NULL|0

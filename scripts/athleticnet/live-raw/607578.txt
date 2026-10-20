@@ -1,0 +1,125 @@
+E|1|Girls 4x800 Meter Relay|F|Place¦¦Team¦Time
+5 4 pts||Lodi Cloverleaf "A" Megan Knapp Lauren Jensch Reese Barnett Emma Hibler|9:52.18
+E|2|Boys 4x800 Meter Relay|F|Place¦¦Team¦Time
+6 3 pts||Lodi Cloverleaf "A" Ben Myers Jackson James Gavin Forbes Caleb Neville|8:10.06
+E|3|Girls 100 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+7 2 pts||Kierston Campbell|11|Lodi Cloverleaf|16.68
+E|3|Girls 100 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+5||Kierston Campbell|11|Lodi Cloverleaf|16.48|3
+13||Kiersyn Beery|9|Lodi Cloverleaf|17.72|3
+E|4|Boys 110 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+6 3 pts||Chase Young|12|Lodi Cloverleaf|15.77
+E|4|Boys 110 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+6||Chase Young|12|Lodi Cloverleaf|15.82|2
+DNS||Isaac Baltic|12|Lodi Cloverleaf|--|3
+E|5|Girls 100 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+1 10 pts||Riley Evans|12|Lodi Cloverleaf|12.21
+3 6 pts||Sarah Kelly|11|Lodi Cloverleaf|12.40
+E|5|Girls 100 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+1||Sarah Kelly|11|Lodi Cloverleaf|12.31|1
+7||Riley Evans|12|Lodi Cloverleaf|12.60|2
+E|6|Boys 100 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|6|Boys 100 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+16||Isaiah Kurtz|10|Lodi Cloverleaf|11.47|2
+21||Tristan Bogucki|11|Lodi Cloverleaf|11.67|2
+E|7|Girls 4x200 Meter Relay|F|Place¦¦Team¦Time
+1 10 pts||Lodi Cloverleaf "A" Callee Gibson Kayla Shook Sarah Kelly Riley Evans|1:43.60
+E|7|Girls 4x200 Meter Relay|P|Place¦¦Team¦Time¦Heat
+1||Lodi Cloverleaf "A" Callee Gibson Kayla Shook Sarah Kelly Riley Evans|1:45.32|1
+E|8|Boys 4x200 Meter Relay|F|Place¦¦Team¦Time
+E|8|Boys 4x200 Meter Relay|P|Place¦¦Team¦Time¦Heat
+9||Lodi Cloverleaf "A" Jeris Miller Isaiah Kurtz Ethan Gray Emmanuel Medina|1:33.37|2
+E|9|Girls 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+6 3 pts||Megan Knapp|11|Lodi Cloverleaf|5:14.92
+8 1 pts||Emma Hibler|11|Lodi Cloverleaf|5:19.84
+E|10|Boys 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+E|10|Boys 1600 meter Run|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+23||Matthew Jenkins|9|Lodi Cloverleaf|5:20.02|2
+26||Landon Southam|11|Lodi Cloverleaf|5:32.64|1
+E|11|Girls 4x100 Meter Relay|F|Place¦¦Team¦Time
+2 8 pts||Lodi Cloverleaf "A" Callee Gibson Kayla Shook Kierston Campbell Sarah Kelly|49.99
+E|11|Girls 4x100 Meter Relay|P|Place¦¦Team¦Time¦Heat
+2||Lodi Cloverleaf "A" Callee Gibson Kayla Shook Kierston Campbell Sarah Kelly|50.02|1
+E|12|Boys 4x100 Meter Relay|F|Place¦¦Team¦Time
+E|12|Boys 4x100 Meter Relay|P|Place¦¦Team¦Time¦Heat
+9||Lodi Cloverleaf "A" Jeris Miller Isaiah Kurtz Tristin Bogucki Emmanuel Medina|44.65|1
+E|13|Girls 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+1 10 pts||Riley Evans|12|Lodi Cloverleaf|57.27
+E|13|Girls 400 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+1||Riley Evans|12|Lodi Cloverleaf|58.12|4
+9||Brooklyn Cavey|11|Lodi Cloverleaf|1:03.67|4
+E|14|Boys 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|14|Boys 400 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+9||Ethan Gray|10|Lodi Cloverleaf|52.81|2
+17||Thomas Blaha|12|Lodi Cloverleaf|54.71|2
+E|15|Girls 300 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|15|Girls 300 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+13||Kierston Campbell|11|Lodi Cloverleaf|52.16|2
+14||Kiersyn Beery|9|Lodi Cloverleaf|52.57|2
+E|16|Boys 300 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|16|Boys 300 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+11||Chase Young|12|Lodi Cloverleaf|42.56|1
+16||Gage Hankins|10|Lodi Cloverleaf|44.58|1
+E|17|Girls 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+12||Reese Barnett|12|Lodi Cloverleaf|2:29.34
+15||Allison Yagersz|12|Lodi Cloverleaf|2:33.11
+E|17|Girls 800 meter Run|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+6||Allison Yagersz|12|Lodi Cloverleaf|2:33.52 q|1
+13||Reese Barnett|12|Lodi Cloverleaf|2:34.42 q|2
+E|18|Boys 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+9||Ben Myers|11|Lodi Cloverleaf|2:00.49
+14||Jackson James|10|Lodi Cloverleaf|2:02.74
+E|18|Boys 800 meter Run|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+12||Ben Myers|11|Lodi Cloverleaf|2:08.39 q|2
+16||Jackson James|10|Lodi Cloverleaf|2:08.87 q|2
+E|19|Girls 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+1 10 pts||Riley Evans|12|Lodi Cloverleaf|25.75
+4 5 pts||Sarah Kelly|11|Lodi Cloverleaf|26.58
+E|19|Girls 200 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+4||Riley Evans|12|Lodi Cloverleaf|26.25|3
+7||Sarah Kelly|11|Lodi Cloverleaf|26.57|2
+E|20|Boys 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|20|Boys 200 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+14||Isaiah Kurtz|10|Lodi Cloverleaf|23.39|1
+15||Emmanuel Medina|12|Lodi Cloverleaf|23.68|2
+E|21|Girls 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+12||Madison Snyder|12|Lodi Cloverleaf|12:31.68
+15||Brooke Gucker|12|Lodi Cloverleaf|12:51.58
+E|22|Boys 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+4 5 pts||Caleb Neville|10|Lodi Cloverleaf|9:43.76
+8 1 pts||Gavin Forbes|10|Lodi Cloverleaf|9:59.90
+E|23|Girls 4x400 Meter Relay|F|Place¦¦Team¦Time
+7 2 pts||Lodi Cloverleaf "A" Kayla Shook Hannah Hopek Brooklyn Cavey Megan Knapp|4:10.33
+E|23|Girls 4x400 Meter Relay|P|Place¦¦Team¦Time¦Heat
+8||Lodi Cloverleaf "A" Kayla Shook Hannah Hopek Brooklyn Cavey Megan Knapp|4:15.93|2
+E|24|Boys 4x400 Meter Relay|F|Place¦¦Team¦Time
+E|24|Boys 4x400 Meter Relay|P|Place¦¦Team¦Time¦Heat
+9||Lodi Cloverleaf "A" Ethan Gray Ben Myers Thomas Blaha Tristan Craddock|3:37.68|2
+E|25|Girls Discus Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+9 1 pts||Karoline Kreider|12|Lodi Cloverleaf|99-7|2
+11||Presly McConnell|11|Lodi Cloverleaf|95-0|2
+E|26|Boys Discus Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+3 6 pts||Tim Shores|12|Lodi Cloverleaf|142-7|2
+4 5 pts||Clay Combs|11|Lodi Cloverleaf|141-0|2
+E|27|Girls High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark
+18||Grace Goldsberry|12|Lodi Cloverleaf|4-6
+18||Abigail Reinhardt|9|Lodi Cloverleaf|4-6
+E|28|Boys High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark
+11||Logan Forbes|12|Lodi Cloverleaf|5-8
+17||Zach Brownson|11|Lodi Cloverleaf|5-4
+E|29|Girls Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+1 10 pts||Kierston Campbell|11|Lodi Cloverleaf|17-9|2
+13||Abigail Reinhardt|9|Lodi Cloverleaf|15-7|2
+E|30|Boys Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+10||Tristan Bogucki|11|Lodi Cloverleaf|19-9.25|2
+E|30|Boys Long Jump|P|EMPTY
+E|31|Girls Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+3 6 pts||Presly McConnell|11|Lodi Cloverleaf|34-9.25|2
+13||Karoline Kreider|12|Lodi Cloverleaf|29-2.25|2
+E|32|Boys Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+2 8 pts||Tim Shores|12|Lodi Cloverleaf|47-9.25|2
+5 4 pts||Clay Combs|11|Lodi Cloverleaf|45-10.25|2
+E|33|Girls Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark
+15||Payten Shetterly|10|Lodi Cloverleaf|8-0
+E|34|Boys Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark
+1 10 pts||Isaac Baltic|12|Lodi Cloverleaf|15-1

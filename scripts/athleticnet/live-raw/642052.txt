@@ -1,0 +1,48 @@
+E|1|Girls 60 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|1|Girls 60 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|2|Boys 60 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|2|Boys 60 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|3|Girls 60 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+8||Sarah Kelly|12|Cloverleaf|8.35
+E|3|Girls 60 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+8||Sarah Kelly|12|Cloverleaf|8.30 q|11
+33||Abigail Reinhardt|10|Cloverleaf|9.02|8
+E|4|Boys 60 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|4|Boys 60 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+47||Marzell Davis|9|Cloverleaf|8.22|2
+E|5|Girls 4x800 Meter Relay|F|Place¦¦Team¦Time
+E|6|Boys 4x800 Meter Relay|F|Place¦¦Team¦Time
+E|7|Girls 4x200 Meter Relay|F|Place¦¦Team¦Time
+E|8|Boys 4x200 Meter Relay|F|Place¦¦Team¦Time¦Heat
+E|9|Girls 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|10|Boys 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+35||Austin McNeal|11|Cloverleaf|5:09.02|3
+E|11|Girls 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|12|Boys 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+5||Ben Myers|12|Cloverleaf|53.96|3
+E|13|Girls 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|14|Boys 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|15|Girls 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+8||Sarah Kelly|12|Cloverleaf|28.32|2
+24||Abigail Reinhardt|10|Cloverleaf|32.11|3
+E|16|Boys 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+37||Marzell Davis|9|Cloverleaf|27.21|3
+43||Amir Usry|10|Cloverleaf|28.61|6
+E|17|Boys 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+E|19|Girls 4x400 Meter Relay|F|Place¦¦Team¦Time
+E|20|Boys 4x400 Meter Relay|F|Place¦¦Team¦Time¦Heat
+E|21|Girls Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+1||Presly McConnell|12|Cloverleaf|35-6|2|F|35-6|F|F|32-3|F
+E|22|Boys Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+2||Clay Combs|12|Cloverleaf|49-7|3|49-7|F|48-0|46-4|F|F
+E|23|Girls Weight Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|24|Boys Weight Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|25|Girls Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|26|Boys Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|27|Girls Triple Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|28|Boys Triple Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|29|Girls Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦6-7¦7-1¦7-7¦8-1¦8-7¦9-1¦9-7¦10-1¦10-7¦11-1¦11-7
+E|30|Boys Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦8-1¦8-7¦9-1¦9-7¦10-1¦10-7¦11-1¦11-7¦12-1¦12-7¦13-1¦13-7¦14-1¦14-7¦15-1¦15-7
+E|32|Boys High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦5-0¦5-2¦5-4¦5-6¦5-8¦5-10¦6-0¦6-2¦6-4
+E|33|Girls High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦4-0¦4-2¦4-4¦4-6¦4-8¦4-10¦5-0¦5-1¦5-3¦5-5¦5-6
+E|35|Girls 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time

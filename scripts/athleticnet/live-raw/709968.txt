@@ -1,0 +1,30 @@
+E|1|Girls 4x800 Meter Relay|F|Place¦¦Team¦Time
+E|2|Boys 4x800 Meter Relay|F|Place¦¦Team¦Time
+E|3|Girls 4x200 Meter Relay|F|Place¦¦Team¦Time
+E|4|Boys 4x200 Meter Relay|F|Place¦¦Team¦Time
+E|5|Girls 60 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|6|Boys 60 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|7|Girls 60 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|7|Girls 60 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+9||Savannah Reho|8|Cloverleaf|9.31|4
+E|8|Boys 60 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|8|Boys 60 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|9|Girls 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|10|Boys 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|15|Girls 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|16|Boys 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|17|Girls 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|18|Boys 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|19|Girls 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+7||Savannah Reho|8|Cloverleaf|32.53|2
+E|20|Boys 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|21|Girls 4x400 Meter Relay|F|Place¦¦Team¦Time
+E|22|Boys 4x400 Meter Relay|F|Place¦¦Team¦Time
+E|25|Boys High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark
+E|26|Girls High Jump|F|EMPTY
+E|27|Girls Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark
+E|28|Boys Pole Vault|F|EMPTY
+E|29|Girls Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark
+E|30|Boys Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark
+E|31|Boys Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark
+E|32|Girls Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark

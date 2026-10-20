@@ -1,0 +1,11 @@
+1|100M|Isaiah Kurtz|F:11.57;P:11.62
+1|110M Hurdles|Chase Young|F:16.26;P:16.36
+1|110M Hurdles|Isaac Baltic|F:16.19;P:16.25
+1|200M|Isaiah Kurtz|F:23.63;P:23.09
+1|300M Hurdles|Chase Young|F:42.45;P:42.58
+2|100M|Riley Evans|F:12.57;P:12.55
+2|100M|Sarah Kelly|F:12.73;P:12.68
+2|100M Hurdles|KK Campbell|F:16.66;P:16.8
+2|200M|Riley Evans|F:25.55;P:25.82
+2|200M|Sarah Kelly|F:26.42;P:25.85
+2|300M Hurdles|KK Campbell|F:50.26;P:50.04

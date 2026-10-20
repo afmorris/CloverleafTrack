@@ -1,0 +1,35 @@
+248|2|Discus|Jayce Kreider|NULL|890|0
+285|1|High Jump|Will Jerome|NULL|63|0
+402|1|Long Jump|Oakley Kemp|NULL|237|0
+416|2|High Jump|Emma Malikowski|NULL|56|0
+528|2|Shot Put|Karoline Kreider|NULL|338.5|0
+876|1|Discus|Timmy Shores|NULL|1305|0
+990|1|Long Jump|Will Jerome|NULL|229|0
+1109|2|High Jump|Grace Goldsberry|NULL|51|0
+1240|2|Shot Put|Presly McConnell|NULL|363.75|0
+1348|1|Discus|Will Rogalski|NULL|1255|0
+1481|1|Shot Put|Royce Zirkle|NULL|443|0
+1699|1|Pole Vault|Isaac Baltic|NULL|162|0
+2040|2|Discus|Presly McConnell|NULL|1033|0
+2194|1|Discus|Anthony Artwell|NULL|1043|0
+2207|2|Shot Put|Jayce Kreider|NULL|279|0
+2313|2|Discus|Karoline Kreider|NULL|1044|0
+2570|2|Long Jump|Reese Barnett|NULL|162|0
+3088|1|Shot Put|Will Rogalski|NULL|460.5|0
+3461|2|Long Jump|Emma Malikowski|NULL|182.5|0
+3474|1|Long Jump|Ethan Gray|NULL|170|0
+3482|1|Shot Put|Timmy Shores|NULL|476|0
+3545|2|Long Jump|KK Campbell|NULL|178.25|0
+3606|1|Pole Vault|Jace Peacock|NULL|108|0
+4131|2|200M|Riley Evans|25.75|NULL|0
+4367|2|1600M|Gabriella Izzo|372.52|NULL|0
+4642|2|3200M|Brooke Gucker|786.89|NULL|0
+5212|2|100M Hurdles|KK Campbell|23.67|NULL|0
+5601|1|1600M|Landon Southam|338.37|NULL|0
+6282|1|3200M|Caleb Neville|665.76|NULL|0
+6684|2|100M|Riley Evans|12.8|NULL|0
+7868|1|100M|Isaiah Kurtz|12.27|NULL|0
+7916|2|1600M|Vanessa Monhemius|361.24|NULL|0
+7954|1|1600M|Elias Rivera|328.96|NULL|0
+8777|1|200M|Yuri Himes|25.2|NULL|0
+8824|1|110M Hurdles|Isaac Baltic|17.84|NULL|0

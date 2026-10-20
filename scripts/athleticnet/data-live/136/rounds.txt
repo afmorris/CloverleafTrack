@@ -1,0 +1,6 @@
+1|100M|Isaiah Kurtz|F:11.94;P:11.78
+1|200M|Isaiah Kurtz|F:24.66;P:23.92
+2|100M|Callee Gibson|F:13.9;P:13.53
+2|100M|Sarah Kelly|F:13.22;P:13.15
+2|200M|Brooklyn Cavey|F:28.78;P:28.59
+2|200M|Kayla Shook|F:28.17;P:27.86

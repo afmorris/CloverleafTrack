@@ -1,0 +1,89 @@
+E|1|Girls 4x1600 Meter Relay|F|Place¦¦Team¦Time
+3 6 pts||Cloverleaf "A" Alyssa Stoner Madison Snyder Emma Hibler Allison Yagersz|22:59.03
+E|2|Boys 4x1600 Meter Relay|F|Place¦¦Team¦Time
+6 3 pts||Cloverleaf "A" Brett Gucker Gavin Forbes Hunter Stallings Vova Herdman|19:37.22
+E|3|Girls 800 Meter Sprint Medley Relay JV|F|Place¦¦Team¦Time¦Heat
+5||Cloverleaf "A" Leah Houk Callee Gibson Gabriella Petrocci Kayla Shook|2:04.87|2
+E|4|Boys 800 Meter Sprint Medley Relay JV|F|Place¦¦Team¦Time¦Heat
+5||Cloverleaf "A" Thomas Blaha Ethan Gray Jackson James Isaiah Kurtz|1:48.32|1
+E|5|Girls 1600 meter Run JV|F|Place¦¦Athlete¦Year¦Team¦Time
+1||Vanessa Monhemius|10|Cloverleaf|6:01.24 OH Top 1
+3||Gabriella Izzo|10|Cloverleaf|6:12.52 OH Top 10
+E|6|Boys 1600 meter Run JV|F|Place¦¦Athlete¦Year¦Team¦Time
+19||Elias Rivera|9|Cloverleaf|5:28.96 OH Top 10
+22||Landon Southam|10|Cloverleaf|5:38.37
+E|7|Girls 800 Meter Sprint Medley Relay|F|Place¦¦Team¦Time¦Heat
+2 8 pts||Cloverleaf "A" Sarah Kelly Brooklyn Cavey Leah Houk Riley Evans|1:53.32|2
+E|8|Boys 800 Meter Sprint Medley Relay|F|Place¦¦Team¦Time¦Heat
+12||Cloverleaf "A" Yuri Himes Oakley Kemp Emmanuel Medina Will Jerome|1:43.29|1
+E|9|Girls 4x800 Meter Relay|F|Place¦¦Team¦Time
+3 6 pts||Cloverleaf "A" Emma Hibler Alyssa Stoner Reese Barnett Allison Yagersz|10:16.10
+E|10|Boys 4x800 Meter Relay|F|Place¦¦Team¦Time
+4 5 pts||Cloverleaf "A" Vova Herdman Brett Gucker Ben Myers Hunter Stallings|8:34.66
+E|11|Girls 100 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+12||Kierston Campbell|10|Cloverleaf|23.67|2
+E|12|Boys 110 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+8 1 pts||Isaac Baltic|11|Cloverleaf|17.84|1
+E|13|Girls 100 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+1 10 pts||Riley Evans|11|Cloverleaf|12.80 OH Top 1|2
+E|14|Boys 100 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+14||Isaiah Kurtz|9|Cloverleaf|12.27 OH Top 25|1
+E|15|Girls 4000m Distance Medley Relay|F|Place¦¦Team¦Time
+8 1 pts||Cloverleaf "A" Brooke Gucker Addison Evans Julia Armogida Madison Snyder|14:22.49
+E|16|Boys 4000m Distance Medley Relay|F|Place¦¦Team¦Time
+9||Cloverleaf "A" Gavin Forbes Jeris Miller Ethan Vaughn Ben Myers|12:23.18
+E|17|Girls 4x100 Meter Relay|F|Place¦¦Team¦Time¦Heat
+6 3 pts||Cloverleaf "A" Sarah Kelly Kayla Shook Callee Gibson Brooklyn Cavey|53.28|2
+E|18|Boys 4x100 Meter Relay|F|Place¦¦Team¦Time¦Heat
+10||Cloverleaf "A" Yuri Himes Emmanuel Medina Ethan Gray Oakley Kemp|46.68|1
+E|19|Girls 4x100 Shuttle Hurdle Relay|F|Place¦¦Team¦Time¦Heat
+3 6 pts||Cloverleaf "A" Kierston Campbell Grace Friedhoff Grace Goldsberry Vicki Brandt|1:13.23|2
+E|20|Boys 4x110 Shuttle Hurdle Relay|F|Place¦¦Team¦Time¦Heat
+E|21|Girls 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+1 10 pts||Riley Evans|11|Cloverleaf|25.75 OH Top 1|2
+E|22|Boys 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+13||Yuri Himes|12|Cloverleaf|25.02 OH Top 25|1
+E|23|Girls 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+7 2 pts||Brooke Gucker|11|Cloverleaf|13:06.89
+E|24|Boys 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+8 1 pts||Caleb Neville|9|Cloverleaf|11:05.76
+E|25|Girls 4x400 Meter Relay|F|Place¦¦Team¦Time¦Heat
+5 4 pts||Cloverleaf "A" Reese Barnett Emma Malikowski Brooklyn Cavey Julia Armogida|4:22.89|2
+E|26|Boys 4x400 Meter Relay|F|Place¦¦Team¦Time¦Heat
+11||Cloverleaf "A" Vova Herdman Hunter Stallings Will Jerome Jackson James|3:44.83|1
+E|27|Girls High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark
+6 0.5 pts||Emma Malikowski|12|Cloverleaf|4-8
+20 0.5 pts||Grace Goldsberry|11|Cloverleaf|4-3
+NH||Paige Brownson|12|Cloverleaf|--
+E|28|Boys High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark
+16||Will Jerome|12|Cloverleaf|5-3
+NH||Emmanuel Medina|11|Cloverleaf|--
+DNS||Austin McNeal|9|Cloverleaf|--
+E|29|Girls Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark
+E|30|Boys Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark
+2 3.5 pts||Isaac Baltic|11|Cloverleaf|13-6
+13 3.5 pts||Jace Peacock|11|Cloverleaf|9-0
+E|31|Girls Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark
+6 2.67 pts||Emma Malikowski|12|Cloverleaf|15-2.50
+9 2.67 pts||Kierston Campbell|10|Cloverleaf|14-10.25
+18 2.67 pts||Reese Barnett|11|Cloverleaf|13-6
+E|32|Boys Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark
+4 1.33 pts||Oakley Kemp|12|Cloverleaf|19-9
+7 1.33 pts||Will Jerome|12|Cloverleaf|19-1
+34 1.33 pts||Ethan Gray|9|Cloverleaf|14-2
+E|33|Girls Discus Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+6 2.67 pts||Karoline Kreider|11|Cloverleaf|87-0|4
+8 2.67 pts||Presly McConnell|10|Cloverleaf|86-1|4
+15 2.67 pts||Jayce Kreider|9|Cloverleaf|74-2|4
+E|34|Boys Discus Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+18 1 pts||Tim Shores|11|Cloverleaf|108-9|2
+20 1 pts||Will Rogalski|11|Cloverleaf|104-7|2
+29 1 pts||Anthony Artwell|11|Cloverleaf|86-11|2
+E|35|Girls Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+9 0.67 pts||Presly McConnell|10|Cloverleaf|30-3.75 OH Top 1|2
+16 0.67 pts||Karoline Kreider|11|Cloverleaf|28-2.50 OH Top 1|2
+30 0.67 pts||Jayce Kreider|9|Cloverleaf|23-3 OH Top 1|2
+E|36|Boys Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+11 1.67 pts||Tim Shores|11|Cloverleaf|39-8 OH Top 10|4
+14 1.67 pts||Will Rogalski|11|Cloverleaf|38-4.50 OH Top 10|4
+20 1.67 pts||Royce Zirkle|10|Cloverleaf|36-11 OH Top 10|4

@@ -1,0 +1,23 @@
+28|1|High Jump|Logan Forbes|NULL|64|4
+82|2|Shot Put|Karoline Kreider|NULL|331|0
+94|2|Long Jump|Abigail Reinhardt|NULL|169.25|4
+100|1|Shot Put|Royce Zirkle|NULL|452|0
+127|2|Long Jump|Katelin Yagersz|NULL|134.5|4
+579|2|Shot Put|Amelia Ryncarz|NULL|372|0
+631|1|Shot Put|Clay Combs|NULL|532|0
+905|2|Discus|Jayce Kreider|NULL|952|0
+1548|1|Long Jump|Ethan Gray|NULL|213.75|4
+1669|2|Discus|Presly McConnell|NULL|1264|0
+1719|1|Shot Put|Timmy Shores|NULL|539|0
+1973|2|Shot Put|Presly McConnell|NULL|374|0
+2032|1|Pole Vault|Isaac Baltic|NULL|186|19
+2180|1|Discus|Timmy Shores|NULL|1490|0
+2386|1|Long Jump|Tristin Bogucki|NULL|245.5|4
+2485|1|Discus|Clay Combs|NULL|1613|0
+2531|2|Pole Vault|Payten Shetterly|NULL|84|4
+2675|2|High Jump|Grace Goldsberry|NULL|52|4
+2685|2|Discus|Karoline Kreider|NULL|1137|0
+3086|2|Long Jump|Grace Goldsberry|NULL|158.5|4
+3185|1|Pole Vault|Chase Young|NULL|90|3
+3219|1|Long Jump|David Hunter|NULL|187.25|4
+3442|2|High Jump|Abigail Reinhardt|NULL|50|3

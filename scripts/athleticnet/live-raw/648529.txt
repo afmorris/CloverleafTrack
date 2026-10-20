@@ -1,0 +1,64 @@
+E|3|Girls 100 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+8 1 pts||Delaney Bishop|10|Cloverleaf|19.45|2
+E|4|Boys 110 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|5|Girls 100 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+25||Tessa Bogucki|9|Cloverleaf|15.09|9|15.086
+39||Katelin Yagersz|10|Cloverleaf|15.65|3|
+E|6|Boys 100 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+16||Mason Lotz|9|Cloverleaf|12.05|5|12.045
+40||Clayton Sewalish|9|Cloverleaf|12.51|3|12.510
+49||Bryce Neill|9|Cloverleaf|12.85|3|
+E|9|Girls 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+--||Olivia Spencer|11|Cloverleaf|--|1
+E|10|Boys 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+32||Antonio Ortega|10|Cloverleaf|5:12.11|2
+49||Mason Clapp|10|Cloverleaf|5:26.34|1
+50||Cayden Williams|9|Cloverleaf|5:28.17|2
+E|13|Girls 400 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|14|Boys 400 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+15||Mason Lotz|9|Cloverleaf|56.89|6|
+42||Bryce Neill|9|Cloverleaf|1:00.71|5|
+E|15|Girls 300 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+13||Delaney Bishop|10|Cloverleaf|1:01.39|1
+E|16|Boys 300 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|17|Girls 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|18|Boys 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+24||Antonio Ortega|10|Cloverleaf|2:21.99|3
+38||Mason Clapp|10|Cloverleaf|2:26.47|2
+48||Cayden Williams|9|Cloverleaf|2:29.51|1
+E|19|Girls 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|20|Boys 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+32||Clayton Sewalish|9|Cloverleaf|25.79|3|
+35||Jackson Murray-Garver|10|Cloverleaf|26.13|3|
+E|25|Girls Discus Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3
+3 6 pts||Addison Reho|9|Cloverleaf|94-5|4|94-5|89-4|
+6 3 pts||Berkeley Craddock|11|Cloverleaf|80-1|4|76-7|80-1|
+8 1 pts||Delaney Ishler|9|Cloverleaf|78-0|3|77-0|78-0|
+40||Isabella Messmore|9|Cloverleaf|48-8|1|48-8|45-5|--
+E|26|Boys Discus Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3
+13||Ethan Martin|11|Cloverleaf|110-3|4|108-5|110-3|
+19||Jacob Atkinson|9|Cloverleaf|99-4|3|99-4|98-3|
+21||Jackson Chonko|10|Cloverleaf|96-2|2|96-2||
+24||Gunnar Surrarrer|9|Cloverleaf|94-0|3|89-8|94-0|
+33||Kaiden Stone|9|Cloverleaf|84-10|2|84-10|--|--
+E|27|Girls High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦4-0¦4-2¦4-4¦4-6¦4-8¦4-10¦5-0
+E|28|Boys High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦5-0¦5-2¦5-4¦5-6¦5-8¦5-10¦6-0¦6-1
+DNS||Nathan Tomes|11|Cloverleaf|--|--|--|--|--|--|--|--|--
+E|29|Girls Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4
+9||Tessa Bogucki|9|Cloverleaf|13-3|13-0|12-8|13-3|--
+22||Katelin Yagersz|10|Cloverleaf|12-0.25|11-8.50|F|12-0.25|11-2
+DNS||Lilly Southam|10|Cloverleaf|--|--|||
+E|30|Boys Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5
+3 6 pts||Collin Saksa|11|Cloverleaf|18-5.25|14-9.25|14-5.50|14-2.50|18-5.25|
+23||Clayton Sewalish|9|Cloverleaf|16-0|14-9|13-5.50|15-8|16-0|
+E|31|Girls Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4
+1 10 pts||Berkeley Craddock|11|Cloverleaf|28-4.50|4|28-4.50|27-5.50|27-5|
+4 5 pts||Delaney Ishler|9|Cloverleaf|26-6.50|3|24-4.50|26-6.50|26-6|
+43||Isabella Messmore|9|Cloverleaf|18-3|1|16-4.50|16-4.50|18-3|
+E|32|Boys Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5
+19||Jacob Schaefer|9|Cloverleaf|35-0.50|3|31-11.50|F|35-0.50|--|
+20||Jamere Johnson|9|Cloverleaf|34-8|3|32-6.50|34-8|32-11||
+25||Braylon Lade|10|Cloverleaf|32-11|2|32-11|30-9.50|32-8||
+46||Preston Stark|10|Cloverleaf|27-11|1|F|27-11|25-10||
+E|33|Girls Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦6-0¦6-6¦7-0¦7-6¦8-0¦8-6¦9-0¦9-6¦10-0
+E|34|Boys Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦6-0¦6-6¦7-0¦7-6¦8-0¦8-6¦9-0¦9-6¦10-0¦10-6¦11-0¦11-6¦12-0¦12-6

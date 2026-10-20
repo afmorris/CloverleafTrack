@@ -1,0 +1,11 @@
+741|1|Shot Put|Clay Combs|NULL|573.25|0
+1740|2|Shot Put|Presly McConnell|NULL|365|0
+2958|2|Pole Vault|Payten Shetterly|NULL|115|0
+3265|1|Shot Put|Preston Stark|NULL|310.75|0
+5349|2|60M|Abigail Reinhardt|9.16|NULL|0
+5448|1|1600M|Austin McNeal|305.46|NULL|0
+6826|1|60M|Isaiah Kurtz|7.57|NULL|0
+7764|1|60M|Grady Pamer|8.43|NULL|0
+7877|1|400M|Ben Myers|55.2|NULL|0
+8675|1|60M|Marzell Davis|8.3|NULL|0
+8737|2|60M|Sarah Kelly|8.27|NULL|0
