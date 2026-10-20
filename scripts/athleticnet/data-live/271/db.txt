@@ -1,43 +1,43 @@
-13635|1|Shot Put|Clay Combs|NULL|605|0
-13660|1|Long Jump|Elliot Jordan|NULL|223.25|0
-13674|2|Discus|Jayce Kreider|NULL|1044|0
-13676|1|Shot Put|Royce Zirkle|NULL|459.75|0
-13694|1|Long Jump|Ty Kovach|NULL|191.5|0
-13706|2|Long Jump|KK Campbell|NULL|187|0
-13786|2|Shot Put|Amelia Ryncarz|NULL|352|0
-13789|2|Long Jump|Abigail Reinhardt|NULL|169|0
-13823|2|High Jump|Kinsey Bayer|NULL|52|0
-13832|1|Discus|Clay Combs|NULL|1884|0
-13849|2|Shot Put|Presly McConnell|NULL|439.75|0
-13870|2|Discus|Presly McConnell|NULL|1274|0
-13893|1|Discus|Adam Gray|NULL|1420|0
-13908|2|High Jump|Abigail Reinhardt|NULL|54|0
-14163|1|800M|Ben Myers|129.62|NULL|0
-14187|1|400M|Reed Kilgore|55.95|NULL|0
-14213|1|200M|Ty Kovach|25.64|NULL|0
-14214|2|300M Hurdles|Julia Reusch|51.58|NULL|0
-14228|1|300M Hurdles|Lincoln Baltic|49.96|NULL|0
-14255|1|800M|Matthew Jenkins|130.17|NULL|0
-14256|1|100M|Isaac Smith|11.99|NULL|0
-14279|2|3200M|Vanessa Monhemius|826.97|NULL|0
-14283|2|100M|Sarah Kelly|12.95|NULL|0
-14286|1|1600M|Noah Mion|303.66|NULL|0
-14301|2|800M|Addi Reho|194.46|NULL|0
-14319|1|3200M|Clay Gucker|659.87|NULL|0
-14326|2|100M Hurdles|KK Campbell|17.38|NULL|0
-14357|2|3200M|Emma Hibler|721.65|NULL|0
-14388|1|3200M|Gavin Forbes|643.62|NULL|0
-14402|2|400M|Brooklyn Cavey|66.07|NULL|0
-14427|2|200M|Kinsey Bayer|29.4|NULL|0
-14431|2|200M|Kayla Shook|27.55|NULL|0
-14445|2|800M|Kate Jarvis|183.4|NULL|0
-14458|2|100M Hurdles|Kiersyn Berry|17.54|NULL|0
-14470|1|100M|Nathan Tomes|13.3|NULL|0
-14493|2|400M|Samantha Porter|66.97|NULL|0
-14502|2|100M|Kayla Shook|13.34|NULL|0
-14566|2|1600M|Emma Hibler|333.63|NULL|0
-14581|1|300M Hurdles|Nolan Thompson|47.06|NULL|0
-14660|1|1600M|Gavin Forbes|293.38|NULL|0
-14697|1|110M Hurdles|Lincoln Baltic|19.84|NULL|0
-14710|1|200M|Josh Powers|25.97|NULL|0
-14800|1|110M Hurdles|Nolan Thompson|20.43|NULL|0
+13635|1|Shot Put|Clay Combs|NULL|605|0|0
+13660|1|Long Jump|Elliot Jordan|NULL|223.25|0|0
+13674|2|Discus|Jayce Kreider|NULL|1044|0|0
+13676|1|Shot Put|Royce Zirkle|NULL|459.75|0|0
+13694|1|Long Jump|Ty Kovach|NULL|191.5|0|0
+13706|2|Long Jump|KK Campbell|NULL|187|0|0
+13786|2|Shot Put|Amelia Ryncarz|NULL|352|0|0
+13789|2|Long Jump|Abigail Reinhardt|NULL|169|0|0
+13823|2|High Jump|Kinsey Bayer|NULL|52|0|0
+13832|1|Discus|Clay Combs|NULL|1884|0|0
+13849|2|Shot Put|Presly McConnell|NULL|439.75|0|0
+13870|2|Discus|Presly McConnell|NULL|1274|0|0
+13893|1|Discus|Adam Gray|NULL|1420|0|0
+13908|2|High Jump|Abigail Reinhardt|NULL|54|0|0
+14163|1|800M|Ben Myers|129.62|NULL|0|0
+14187|1|400M|Reed Kilgore|55.95|NULL|0|0
+14213|1|200M|Ty Kovach|25.64|NULL|0|0
+14214|2|300M Hurdles|Julia Reusch|51.58|NULL|0|0
+14228|1|300M Hurdles|Lincoln Baltic|49.96|NULL|0|0
+14255|1|800M|Matthew Jenkins|130.17|NULL|0|0
+14256|1|100M|Isaac Smith|11.99|NULL|0|0
+14279|2|3200M|Vanessa Monhemius|826.97|NULL|0|0
+14283|2|100M|Sarah Kelly|12.95|NULL|0|0
+14286|1|1600M|Noah Mion|303.66|NULL|0|0
+14301|2|800M|Addi Reho|194.46|NULL|0|0
+14319|1|3200M|Clay Gucker|659.87|NULL|0|0
+14326|2|100M Hurdles|KK Campbell|17.38|NULL|0|0
+14357|2|3200M|Emma Hibler|721.65|NULL|0|0
+14388|1|3200M|Gavin Forbes|643.62|NULL|0|0
+14402|2|400M|Brooklyn Cavey|66.07|NULL|0|0
+14427|2|200M|Kinsey Bayer|29.4|NULL|0|0
+14431|2|200M|Kayla Shook|27.55|NULL|0|0
+14445|2|800M|Kate Jarvis|183.4|NULL|0|0
+14458|2|100M Hurdles|Kiersyn Berry|17.54|NULL|0|0
+14470|1|100M|Nathan Tomes|13.3|NULL|0|0
+14493|2|400M|Samantha Porter|66.97|NULL|0|0
+14502|2|100M|Kayla Shook|13.34|NULL|0|0
+14566|2|1600M|Emma Hibler|333.63|NULL|0|0
+14581|1|300M Hurdles|Nolan Thompson|47.06|NULL|0|0
+14660|1|1600M|Gavin Forbes|293.38|NULL|0|0
+14697|1|110M Hurdles|Lincoln Baltic|19.84|NULL|0|0
+14710|1|200M|Josh Powers|25.97|NULL|0|0
+14800|1|110M Hurdles|Nolan Thompson|20.43|NULL|0|0

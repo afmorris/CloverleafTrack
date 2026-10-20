@@ -1,3 +1,3 @@
-551|1|Pole Vault|Isaac Baltic|NULL|188|8
-5611|2|100M|Riley Evans|12.2|NULL|0
-8632|2|400M|Riley Evans|55.56|NULL|0
+551|1|Pole Vault|Isaac Baltic|NULL|188|8|0
+5611|2|100M|Riley Evans|12.2|NULL|0|0
+8632|2|400M|Riley Evans|55.56|NULL|0|0

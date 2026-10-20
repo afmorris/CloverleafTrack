@@ -1,4 +1,4 @@
-2568|2|Shot Put|Presly McConnell|NULL|395|6
-2789|1|Shot Put|Royce Zirkle|NULL|430|3
-3816|2|60M Hurdles|Vicki Brandt|10.96|NULL|0
-7199|1|60M Hurdles|Chase Young|9.41|NULL|0
+2568|2|Shot Put|Presly McConnell|NULL|395|6|0
+2789|1|Shot Put|Royce Zirkle|NULL|430|3|0
+3816|2|60M Hurdles|Vicki Brandt|10.96|NULL|0|0
+7199|1|60M Hurdles|Chase Young|9.41|NULL|0|0

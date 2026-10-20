@@ -1,14 +1,14 @@
-15047|1|60M|Bryce Neill|7.83|NULL|0
-15048|1|60M|Grady Pamer|7.87|NULL|0
-15049|1|400M|Jackson Murray-Garver|62.76|NULL|0
-15050|1|1600M|Caleb Neville|289.48|NULL|0
-15051|1|1600M|Gavin Forbes|300.1|NULL|0
-15052|1|1600M|Matthew Wilk|353.23|NULL|0
-15054|1|High Jump|Grady Pamer|NULL|66|0
-15055|1|Shot Put|Braylon Lade|NULL|378|0
-15056|1|Shot Put|Preston Stark|NULL|319.75|0
-15057|1|Shot Put|Trent Amheiser|NULL|379.5|0
-15058|2|60M|Abigail Reinhardt|9.01|NULL|0
-15059|2|60M|Julia Reusch|9.18|NULL|0
-15060|2|400M|Julia Reusch|69.49|NULL|0
-15061|2|High Jump|Abigail Reinhardt|NULL|58|0
+15047|1|60M|Bryce Neill|7.83|NULL|0|0
+15048|1|60M|Grady Pamer|7.87|NULL|0|0
+15049|1|400M|Jackson Murray-Garver|62.76|NULL|0|0
+15050|1|1600M|Caleb Neville|289.48|NULL|0|0
+15051|1|1600M|Gavin Forbes|300.1|NULL|0|0
+15052|1|1600M|Matthew Wilk|353.23|NULL|0|0
+15054|1|High Jump|Grady Pamer|NULL|66|5|0
+15055|1|Shot Put|Braylon Lade|NULL|378|4|0
+15056|1|Shot Put|Preston Stark|NULL|319.75|4|0
+15057|1|Shot Put|Trent Amheiser|NULL|379.5|4|0
+15058|2|60M|Abigail Reinhardt|9.01|NULL|0|0
+15059|2|60M|Julia Reusch|9.18|NULL|0|0
+15060|2|400M|Julia Reusch|69.49|NULL|0|0
+15061|2|High Jump|Abigail Reinhardt|NULL|58|7|0

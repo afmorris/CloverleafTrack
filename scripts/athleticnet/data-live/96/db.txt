@@ -1,21 +1,21 @@
-69|1|Long Jump|Oakley Kemp|NULL|228.25|3
-174|1|Shot Put|Royce Zirkle|NULL|452|2
-274|2|Shot Put|Presly McConnell|NULL|373.5|2
-340|1|Shot Put|Will Rogalski|NULL|483|2
-857|1|Pole Vault|Isaac Baltic|NULL|144|6
-865|1|Discus|Clay Combs|NULL|1324|0
-893|2|Shot Put|Jayce Kreider|NULL|290|4
-989|1|Shot Put|Clay Combs|NULL|512.25|2
-1204|2|Long Jump|Reese Barnett|NULL|168|3
-1650|2|Long Jump|Emma Malikowski|NULL|175.25|3
-1704|2|Discus|Jayce Kreider|NULL|1005|2
-1922|1|Discus|Anthony Artwell|NULL|1077|0
-1947|1|Long Jump|Robert Brode|NULL|172.75|3
-2002|1|Pole Vault|Jace Peacock|NULL|108|6
-2110|2|High Jump|Emma Malikowski|NULL|54|0
-2674|2|High Jump|Grace Goldsberry|NULL|48|0
-2923|2|Long Jump|KK Campbell|NULL|170.5|3
-3198|2|Shot Put|Karoline Kreider|NULL|311|0
-3281|2|Discus|Karoline Kreider|NULL|1040|2
-3414|2|Discus|Presly McConnell|NULL|911|2
-3493|1|Long Jump|David Hunter|NULL|160|3
+69|1|Long Jump|Oakley Kemp|NULL|228.25|3|0
+174|1|Shot Put|Royce Zirkle|NULL|452|2|0
+274|2|Shot Put|Presly McConnell|NULL|373.5|2|0
+340|1|Shot Put|Will Rogalski|NULL|483|2|0
+857|1|Pole Vault|Isaac Baltic|NULL|144|6|0
+865|1|Discus|Clay Combs|NULL|1324|0|0
+893|2|Shot Put|Jayce Kreider|NULL|290|4|0
+989|1|Shot Put|Clay Combs|NULL|512.25|2|0
+1204|2|Long Jump|Reese Barnett|NULL|168|3|0
+1650|2|Long Jump|Emma Malikowski|NULL|175.25|3|0
+1704|2|Discus|Jayce Kreider|NULL|1005|2|0
+1922|1|Discus|Anthony Artwell|NULL|1077|0|0
+1947|1|Long Jump|Robert Brode|NULL|172.75|3|0
+2002|1|Pole Vault|Jace Peacock|NULL|108|6|0
+2110|2|High Jump|Emma Malikowski|NULL|54|0|0
+2674|2|High Jump|Grace Goldsberry|NULL|48|0|0
+2923|2|Long Jump|KK Campbell|NULL|170.5|3|0
+3198|2|Shot Put|Karoline Kreider|NULL|311|0|0
+3281|2|Discus|Karoline Kreider|NULL|1040|2|0
+3414|2|Discus|Presly McConnell|NULL|911|2|0
+3493|1|Long Jump|David Hunter|NULL|160|3|0

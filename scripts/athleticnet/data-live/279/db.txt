@@ -1,9 +1,9 @@
-15037|1|60M|Grady Pamer|8.29|NULL|0
-15038|1|60M|Bryce Neill|8.33|NULL|0
-15039|1|1600M|Matthew Wilk|360.03|NULL|0
-15040|1|Shot Put|Braylon Lade|NULL|410.25|0
-15041|1|Shot Put|Preston Stark|NULL|314|0
-15042|2|60M|Taylor Munchick|8.85|NULL|0
-15043|2|60M|Abigail Reinhardt|8.94|NULL|0
-15044|2|60M|Adriana Akers|8.85|NULL|0
-15045|2|60M|Julia Reusch|9.21|NULL|0
+15037|1|60M|Grady Pamer|8.29|NULL|0|0
+15038|1|60M|Bryce Neill|8.33|NULL|0|0
+15039|1|1600M|Matthew Wilk|360.03|NULL|0|0
+15040|1|Shot Put|Braylon Lade|NULL|410.25|0|0
+15041|1|Shot Put|Preston Stark|NULL|314|0|0
+15042|2|60M|Taylor Munchick|8.85|NULL|0|0
+15043|2|60M|Abigail Reinhardt|8.94|NULL|0|0
+15044|2|60M|Adriana Akers|8.85|NULL|0|0
+15045|2|60M|Julia Reusch|9.21|NULL|0|0

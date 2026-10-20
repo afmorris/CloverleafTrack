@@ -1,2 +1,2 @@
-2119|2|Pole Vault|Payten Shetterly|NULL|102|2
-2692|1|Pole Vault|Isaac Baltic|NULL|174|12
+2119|2|Pole Vault|Payten Shetterly|NULL|102|2|0
+2692|1|Pole Vault|Isaac Baltic|NULL|174|12|0
