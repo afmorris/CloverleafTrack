@@ -1,0 +1,11 @@
+2|Discus|Presly McConnell|90-3;93-7;F;F;92-4;97-6
+2|Discus|Karoline Kreider|F;82-4;F;;;
+1|Discus|Timmy Shores|F;122-10;F;127-8;126-9;132-1
+1|Discus|Clay Combs|128-6;128-10;F;125-0;112-10;F
+2|Long Jump|KK Campbell|16-4.25;16-1;17-2.75;15-10.25;16-5.75;F
+2|Long Jump|Abigail Reinhardt|15-7.75;15-7.5;14-5.75;14-2.25;14-2.75;12-7
+1|Long Jump|Tristin Bogucki|19-9;18-11;19-7;19-9.5;19-11;20-2
+1|Long Jump|Ethan Gray|F;17-4.25;F;;;
+2|Shot Put|Presly McConnell|33-5;32-0;F;32-3.25;31-11.5;33-1.5
+2|Shot Put|Karoline Kreider|29-6;30-6;29-11.5;28-4.25;30-8;31-3.5
+1|Shot Put|Clay Combs|45-6.25;44-9.25;F;42-10.5;44-2.5;43-5

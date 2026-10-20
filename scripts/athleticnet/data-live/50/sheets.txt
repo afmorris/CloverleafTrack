@@ -1,0 +1,11 @@
+2|Discus|Presly McConnell|105-4
+2|Discus|Karoline Kreider|94-9
+2|Discus|Jayce Kreider|79-4
+1|Discus|Clay Combs|134-5
+1|Discus|Timmy Shores|124-2
+2|Shot Put|Presly McConnell|31-2
+2|Shot Put|Amelia Ryncarz|31-0
+2|Shot Put|Karoline Kreider|27-7
+1|Shot Put|Timmy Shores|44-11
+1|Shot Put|Clay Combs|44-4
+1|Shot Put|Royce Zirkle|37-8

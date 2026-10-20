@@ -1,0 +1,43 @@
+E|1|Girls 60 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|1|Girls 60 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|2|Boys 60 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|2|Boys 60 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|3|Girls 60 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|3|Girls 60 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+14||Vicki Brandt|11|Cloverleaf|10.96|3
+DNS||Grace Friedhoff|9|Cloverleaf|--|1
+E|4|Boys 60 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|4|Boys 60 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+13||Chase Young|11|Cloverleaf|9.41|6|
+E|5|Girls 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|6|Boys 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|7|Girls 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|8|Boys 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|9|Girls 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|10|Boys 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|11|Girls 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|12|Boys 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|13|Girls 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|14|Boys 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|15|Girls 4x100 Meter Relay|F|Place¦¦Team¦Time¦Heat
+E|16|Boys 4x100 Meter Relay|F|Place¦¦Team¦Time¦Heat
+E|17|Girls 4x200 Meter Relay|F|Place¦¦Team¦Time¦Heat
+E|18|Boys 4x200 Meter Relay|F|Place¦¦Team¦Time¦Heat
+E|19|Girls 4x400 Meter Relay|F|Place¦¦Team¦Time¦Heat
+E|20|Boys 4x400 Meter Relay|F|Place¦¦Team¦Time¦Heat
+E|21|Girls 4x800 Meter Relay|F|Place¦¦Team¦Time
+E|22|Boys 4x800 Meter Relay|F|Place¦¦Team¦Time
+E|23|Girls High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦3-8¦3-10¦4-0¦4-2¦4-4¦4-6¦4-8¦4-10¦5-0¦5-2¦5-4
+E|24|Boys High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦4-8¦4-10¦5-0¦5-2¦5-4¦5-6¦5-8¦5-10¦6-1¦6-2¦6-3
+E|25|Girls Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|26|Boys Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|27|Girls Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦5-6¦6-0¦6-6¦7-0¦7-6¦8-0¦8-6¦9-0¦9-6¦10-0¦10-6¦11-0¦11-6¦12-0¦12-6¦13-0¦Note
+E|28|Boys Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦7-0¦8-0¦8-6¦9-0¦9-6¦10-0¦10-6¦11-0¦11-6¦12-0¦12-6¦13-0¦13-6¦14-0¦14-6¦15-0¦15-4¦15-8¦16-0¦16-4.75
+E|29|Girls Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+7||Presly McConnell|10|Cloverleaf|32-11|3|29-9|31-0|32-11|32-7|31-1|31-8
+E|30|Boys Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+15||Royce Zirkle|10|Cloverleaf|35-10|2|34-6|35-10|F|||
+E|31|Girls Weight Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|32|Boys Weight Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|33|Girls Triple Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|34|Boys Triple Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6

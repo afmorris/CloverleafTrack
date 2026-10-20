@@ -1,0 +1,49 @@
+E|1|Boys 60 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|1|Boys 60 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|2|Girls 60 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|2|Girls 60 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|3|Boys 60 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|3|Boys 60 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+37||Bryce Neil|10|Cloverleaf|7.83|10|7.828
+41||Grady Pamer|10|Cloverleaf|7.87|9|7.866
+E|4|Girls 60 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|4|Girls 60 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+38||Abigail Reinhardt|11|Cloverleaf|9.01|7|
+43||Julia Reusch|10|Cloverleaf|9.18|7|
+E|5|Boys 4x800 Meter Relay|F|Place¦¦Team¦Time¦Heat¦Note
+E|6|Girls 4x800 Meter Relay|F|Place¦¦Team¦Time
+E|7|Boys 4x200 Meter Relay|F|Place¦¦Team¦Time¦Heat¦Note
+17||Cloverleaf "A" Bryce Neil Grady Pamer Gavin Forbes Caleb Neville|1:42.99|6|1:42.983
+E|8|Girls 4x200 Meter Relay|F|Place¦¦Team¦Time¦Heat
+E|9|Boys 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+11||Caleb Neville|12|Cloverleaf|4:49.48|3
+20||Gavin Forbes|12|Cloverleaf|5:00.10|3
+38||Matthew Wilk|10|Cloverleaf|5:53.23|3
+E|10|Girls 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|11|Boys 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+46||Jackson Murray-Garver|11|Cloverleaf|1:02.76|8|
+E|12|Girls 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+21||Julia Reusch|10|Cloverleaf|1:09.49|3|
+E|13|Boys 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|14|Girls 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|15|Boys 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|16|Girls 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat¦Note
+E|17|Boys 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|18|Girls 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+E|19|Boys 4x400 Meter Relay|F|Place¦¦Team¦Time¦Heat
+E|20|Girls 4x400 Meter Relay|F|Place¦¦Team¦Time¦Heat
+E|21|Boys High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦5-0¦5-2¦5-4¦5-6¦5-8¦5-10¦6-0¦6-2¦6-4¦6-6¦6-8¦6-10¦7-1¦7-2.50
+10||Grady Pamer|10|Cloverleaf|5-6|O|O|O|O|XXX|--|--|--|--|--|--|--|--|--
+E|22|Girls High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦4-0¦4-2¦4-4¦4-6¦4-8¦4-10¦5-0¦5-2¦5-3.50
+6||Abigail Reinhardt|11|Cloverleaf|4-10|O|O|O|XO|XO|XXO|XXX|--|--
+E|23|Boys Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦10-0¦10-6¦11-0¦11-6¦12-0¦12-6¦13-0¦13-6¦14-0¦14-6¦15-0¦15-6
+E|24|Girls Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦7-0¦7-6¦8-0¦8-6¦9-0¦9-6¦10-0¦10-6¦11-0¦11-6¦12-0
+E|25|Boys Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4
+E|26|Girls Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4
+E|27|Boys Triple Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4
+E|28|Girls Triple Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4
+E|29|Boys Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4
+29||Trenton Amheiser|10|Cloverleaf|31-7.50|1|26-11|31-7.50|F|26-8.50
+30||Braylon Lade|11|Cloverleaf|31-6|1|28-7.50|31-2.75|31-6|30-2
+35||Preston Stark|11|Cloverleaf|26-7.75|1|26-2.75|25-9.25|26-7.75|24-9.75
+E|30|Girls Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4

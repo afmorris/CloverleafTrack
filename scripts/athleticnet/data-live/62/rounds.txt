@@ -1,0 +1,3 @@
+2|100M|Riley Evans|F:12.42;P:13.01
+2|200M|Riley Evans|F:25.53;P:26.63
+2|400M|Riley Evans|F:56.19;P:57.53

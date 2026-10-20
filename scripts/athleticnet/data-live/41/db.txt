@@ -1,0 +1,12 @@
+555|1|Shot Put|Clay Combs|NULL|595|0
+2056|2|Shot Put|Presly McConnell|NULL|426|0
+4213|2|200M|Abigail Reinhardt|32.11|NULL|0
+5140|1|60M|Marzell Davis|8.22|NULL|0
+5577|1|200M|Amir Usry|28.61|NULL|0
+6128|2|60M|Sarah Kelly|8.3|NULL|0
+6389|1|60M|Amir Usry|8.68|NULL|0
+6577|1|400M|Ben Myers|53.96|NULL|0
+6993|1|1600M|Austin McNeal|309.02|NULL|0
+7920|2|60M|Abigail Reinhardt|9.02|NULL|0
+8936|1|200M|Marzell Davis|27.21|NULL|0
+9076|2|200M|Sarah Kelly|28.32|NULL|0

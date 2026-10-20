@@ -1,0 +1,49 @@
+13623|1|Shot Put|Clay Combs|NULL|614.25|0
+13626|1|Long Jump|Grady Pamer|NULL|202.75|0
+13631|1|High Jump|Grady Pamer|NULL|63|0
+13638|1|Long Jump|Elliot Jordan|NULL|229|0
+13642|2|Long Jump|KK Campbell|NULL|196.5|0
+13657|2|Pole Vault|Payten Shetterly|NULL|123|0
+13696|1|Discus|Clay Combs|NULL|1903|0
+13709|2|High Jump|Abigail Reinhardt|NULL|56|0
+13714|2|Shot Put|Presly McConnell|NULL|450.75|0
+13750|2|Pole Vault|Taylor Thur|NULL|90|0
+13756|1|Shot Put|Royce Zirkle|NULL|469.5|0
+13774|1|Pole Vault|Lincoln Baltic|NULL|90|0
+13775|2|Long Jump|Abigail Reinhardt|NULL|188.5|0
+13839|2|Shot Put|Amelia Ryncarz|NULL|392.75|0
+13866|1|Discus|Adam Gray|NULL|1407|0
+13905|2|Discus|Presly McConnell|NULL|1274|0
+13926|2|Discus|Jayce Kreider|NULL|1126|0
+13937|2|High Jump|Kinsey Bayer|NULL|54|0
+14145|2|1600M|Kate Jarvis|376.7|NULL|0
+14155|2|1600M|Emma Hibler|331.29|NULL|0
+14172|1|300M Hurdles|Lincoln Baltic|47.81|NULL|0
+14183|2|3200M|Vanessa Monhemius|808.05|NULL|0
+14196|2|3200M|Emma Hibler|750.69|NULL|0
+14202|2|300M Hurdles|Julia Reusch|51.55|NULL|0
+14235|1|300M Hurdles|Nolan Thompson|45.21|NULL|0
+14243|2|400M|Brooklyn Cavey|61.82|NULL|0
+14261|1|200M|Josh Powers|24.66|NULL|0
+14272|2|800M|Samantha Porter|160.24|NULL|0
+14295|2|100M|Sarah Kelly|12.57|NULL|0
+14309|1|3200M|Gavin Forbes|613.39|NULL|0
+14328|1|110M Hurdles|Lincoln Baltic|19.54|NULL|0
+14371|1|800M|Ben Myers|119.95|NULL|0
+14375|2|400M|Katie Wershing|61.32|NULL|0
+14400|2|200M|Sarah Kelly|26.22|NULL|0
+14407|2|300M Hurdles|Kiersyn Berry|49.16|NULL|0
+14436|1|100M|Josh Powers|12.2|NULL|0
+14457|1|800M|Matthew Jenkins|133.35|NULL|0
+14467|1|200M|Mason Lotz|25.63|NULL|0
+14476|1|3200M|Clay Gucker|652.15|NULL|0
+14488|1|1600M|Gavin Forbes|281.1|NULL|0
+14505|2|800M|Emma Hibler|146.75|NULL|0
+14511|2|200M|Kayla Shook|26.47|NULL|0
+14602|2|100M|Taylor Munchick|13.12|NULL|0
+14623|2|100M Hurdles|KK Campbell|16.73|NULL|0
+14624|1|400M|Isaac Smith|52.79|NULL|0
+14686|2|100M Hurdles|Kiersyn Berry|17.19|NULL|0
+14690|1|100M|Isaac Smith|11.72|NULL|0
+14702|1|1600M|Matthew Jenkins|304.63|NULL|0
+17582|1|400M|Reed Kilgore|53.48|NULL|0

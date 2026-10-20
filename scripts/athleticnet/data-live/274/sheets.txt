@@ -1,0 +1,16 @@
+2|Discus|Addi Reho|94-5;89-4;
+2|Discus|Berkeley Craddock|76-7;80-1;
+2|Discus|Delaney Ishler|77-0;78-0;
+1|Discus|Ethan Martin|108-5;110-3;
+1|Discus|Jacob Atkinson|99-4;98-3;
+1|Discus|Jack Chonko|96-2;;
+1|Discus|Gunnar Surrarrer|89-8;94-0;
+1|Discus|Kaiden Stone|84-10;;
+2|Long Jump|Tessa Bogucki|13-0;12-8;13-3;
+2|Long Jump|Katelin Yagersz|11-8.5;F;12-0.25;11-2
+1|Long Jump|Collin Saksa|14-9.25;14-5.5;14-2.5;18-5.25;
+1|Long Jump|Clayton Sewalish|14-9;13-5.5;15-8;16-0;
+2|Shot Put|Berkeley Craddock|28-4.5;27-5.5;27-5;
+2|Shot Put|Delaney Ishler|24-4.5;26-6.5;26-6;
+1|Shot Put|Braylon Lade|32-11;30-9.5;32-8;;
+1|Shot Put|Preston Stark|F;27-11;25-10;;

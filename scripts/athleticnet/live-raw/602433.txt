@@ -1,0 +1,74 @@
+E|1|Girls 4x800 Meter Relay|F|Place¦¦Team¦Time
+E|2|Boys 4x800 Meter Relay|F|Place¦¦Team¦Time
+E|3|Girls 100 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|3|Girls 100 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|4|Boys 110 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|4|Boys 110 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|5|Girls 100 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+4 5 pts||Riley Evans|12|Cloverleaf|12.25 OH Top 50
+E|5|Girls 100 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+7||Riley Evans|12|Cloverleaf|12.78 q|2
+10||Sarah Kelly|11|Cloverleaf|12.90|1
+E|6|Boys 100 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|6|Boys 100 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|7|Girls 4x200 Meter Relay|F|Place¦¦Team¦Time
+2 8 pts||Cloverleaf "A" Callee Gibson Kayla Shook Sarah Kelly Riley Evans|1:42.75
+E|7|Girls 4x200 Meter Relay|P|Place¦¦Team¦Time¦Heat
+5||Cloverleaf "A" Callee Gibson Kayla Shook Sarah Kelly Riley Evans|1:44.61 q|2
+E|8|Boys 4x200 Meter Relay|F|Place¦¦Team¦Time
+E|8|Boys 4x200 Meter Relay|P|Place¦¦Team¦Time¦Heat
+E|9|Girls 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+E|10|Boys 1600 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+E|11|Girls 4x100 Meter Relay|F|Place¦¦Team¦Time
+E|11|Girls 4x100 Meter Relay|P|Place¦¦Team¦Time¦Heat
+9||Cloverleaf "A" Callee Gibson Kayla Shook Kierston Campbell Sarah Kelly|50.19|1
+E|12|Boys 4x100 Meter Relay|F|Place¦¦Team¦Time
+E|12|Boys 4x100 Meter Relay|P|Place¦¦Team¦Time¦Heat
+E|13|Girls 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+1 10 pts||Riley Evans|12|Cloverleaf|56.44 OH Top 10
+E|13|Girls 400 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+3||Riley Evans|12|Cloverleaf|57.88 Q|2
+E|14|Boys 400 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|14|Boys 400 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|15|Girls 300 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|15|Girls 300 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|16|Boys 300 meter Hurdles|F|Place¦¦Athlete¦Year¦Team¦Time
+E|16|Boys 300 meter Hurdles|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|17|Girls 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+E|18|Boys 800 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+E|19|Girls 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|19|Girls 200 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+9||Riley Evans|12|Cloverleaf|26.47|1
+14||Sarah Kelly|11|Cloverleaf|26.98|2
+E|20|Boys 200 meter Dash|F|Place¦¦Athlete¦Year¦Team¦Time
+E|20|Boys 200 meter Dash|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+E|21|Girls 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+E|22|Boys 3200 meter Run|F|Place¦¦Athlete¦Year¦Team¦Time
+10||Caleb Neville|10|Cloverleaf|9:45.85
+E|23|Girls 4x400 Meter Relay|F|Place¦¦Team¦Time
+E|23|Girls 4x400 Meter Relay|P|Place¦¦Team¦Time¦Heat
+E|24|Boys 4x400 Meter Relay|F|Place¦¦Team¦Time
+E|24|Boys 4x400 Meter Relay|P|Place¦¦Team¦Time¦Heat
+E|25|Girls Discus Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|25|Girls Discus Throw|P|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+E|26|Boys Discus Throw|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|26|Boys Discus Throw|P|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+12||Tim Shores|12|Cloverleaf|129-7|1
+16||Clay Combs|11|Cloverleaf|113-4|1
+E|27|Girls Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|27|Girls Shot Put|P|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3
+10||Presly McConnell|11|Cloverleaf|34-0|1|||
+E|28|Boys Shot Put|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+6 3 pts||Tim Shores|12|Cloverleaf|50-8.75|46-6.50|46-2.75|50-8.75|47-11.25|F|47-6.50
+E|28|Boys Shot Put|P|Place¦¦Athlete¦Year¦Team¦Mark¦Flight
+5||Tim Shores|12|Cloverleaf|50-8.75 q|2
+E|29|Girls High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦4-8¦4-10¦5-0¦5-1¦5-2¦5-3
+E|30|Boys High Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦5-6¦5-8¦5-10¦6-0¦6-1¦6-2¦6-3¦6-4¦6-5¦6-6¦6-7¦6-8
+E|31|Girls Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦9-0¦9-6¦10-0¦10-4¦10-8¦11-0¦11-4¦11-8¦12-0¦12-4
+E|32|Boys Pole Vault|F|Place¦¦Athlete¦Year¦Team¦Mark¦11-6¦12-0¦12-6¦13-0¦13-4¦13-8¦14-0¦14-4¦14-8¦15-0¦15-9¦16-3¦Note
+1 10 pts||Isaac Baltic|12|Cloverleaf|15-9 * OH Top 10|PP|PPP|PPP|PPP|PPP|O|PPP|PPP|XXO|--|XXO|XXX|
+E|33|Girls Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|33|Girls Long Jump|P|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+14||Kierston Campbell|11|Cloverleaf|15-11|2|F|15-10|15-11|--||
+E|34|Boys Long Jump|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+E|34|Boys Long Jump|P|Place¦¦Athlete¦Year¦Team¦Mark¦Flight

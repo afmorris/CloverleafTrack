@@ -1,0 +1,121 @@
+E|1|Girls 4x800 Meter Relay Varsity|F|Place¦¦Team¦Time
+3 6 pts||Cloverleaf "A" Katie Wershing Samantha Porter Emma Hibler Julia Reusch|10:31.21
+E|2|Boys 4x800 Meter Relay Varsity|F|Place¦¦Team¦Time
+3 6 pts||Cloverleaf "A" Matthew Jenkins Gavin Forbes Reed Kilgore Ben Myers|8:25.69
+E|3|Girls 100 meter Hurdles Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+3 6 pts||Kierston Campbell|12|Cloverleaf|16.73
+6 3 pts||Kiersyn Berry|10|Cloverleaf|17.19
+E|3|Girls 100 meter Hurdles Varsity|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+4||Kierston Campbell|12|Cloverleaf|16.89 q|1
+5||Kiersyn Berry|10|Cloverleaf|17.31 q|1
+E|4|Boys 110 meter Hurdles Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+E|4|Boys 110 meter Hurdles Varsity|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+11||Lincoln Baltic|9|Cloverleaf|19.54|1
+E|5|Girls 100 meter Dash Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+1 10 pts||Sarah Kelly|12|Cloverleaf|12.72
+8 1 pts||Taylor Munchick|9|Cloverleaf|13.34
+E|5|Girls 100 meter Dash Varsity|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+1||Sarah Kelly|12|Cloverleaf|12.57 Q|1
+6||Taylor Munchick|9|Cloverleaf|13.12 q|2
+E|6|Boys 100 meter Dash Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+E|6|Boys 100 meter Dash Varsity|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+10||Isaac Smith|10|Cloverleaf|11.72|2
+13||Josh Powers|9|Cloverleaf|12.20|2
+E|7|Girls 4x200 Meter Relay Varsity|F|Place¦¦Team¦Time
+1 10 pts||Cloverleaf "A" Brooklyn Cavey Kayla Shook Taylor Munchick Sarah Kelly|1:46.37
+E|8|Boys 4x200 Meter Relay Varsity|F|Place¦¦Team¦Time
+5 4 pts||Cloverleaf "A" Ethan Gray Reed Kilgore Ben Myers Isaac Smith|1:34.46
+E|9|Girls 1600 meter Run Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+3 6 pts||Emma Hibler|12|Cloverleaf|5:31.29
+9||Kate Jarvis|10|Cloverleaf|6:16.70
+E|10|Boys 1600 meter Run Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+5 4 pts||Gavin Forbes|11|Cloverleaf|4:41.10
+10||Matthew Jenkins|10|Cloverleaf|5:04.63
+E|11|Girls 4x100 Meter Relay Varsity|F|Place¦¦Team¦Time
+1 10 pts||Cloverleaf "A" Kierston Campbell Kayla Shook Taylor Munchick Sarah Kelly|50.69
+E|12|Boys 4x100 Meter Relay Varsity|F|Place¦¦Team¦Time
+6 3 pts||Cloverleaf "A" Grady Pamer Josh Powers Mason Lotz Elliot Jordan|48.40
+E|13|Girls 400 meter Run Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+5 4 pts||Brooklyn Cavey|12|Cloverleaf|1:01.82
+8 1 pts||Katie Wershing|9|Cloverleaf|1:03.38
+E|13|Girls 400 meter Run Varsity|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+5||Katie Wershing|9|Cloverleaf|1:01.32 q|2
+7||Brooklyn Cavey|12|Cloverleaf|1:02.72 q|1
+E|14|Boys 400 meter Run Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+5 4 pts||Isaac Smith|10|Cloverleaf|53.19
+E|14|Boys 400 meter Run Varsity|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+4||Isaac Smith|10|Cloverleaf|52.79 q|1
+9||Reed Kilgore|10|Cloverleaf|53.48|2
+E|15|Girls 300 meter Hurdles Varsity|F|Place¦¦Athlete¦Year¦Team¦Time¦Note
+3 6 pts||Kiersyn Berry|10|Cloverleaf|49.16|
+6 3 pts||Julia Reusch|9|Cloverleaf|51.55|
+E|15|Girls 300 meter Hurdles Varsity|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+3||Kiersyn Berry|10|Cloverleaf|50.69 q|2
+7||Julia Reusch|9|Cloverleaf|51.58 q|2
+E|16|Boys 300 meter Hurdles Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+8 1 pts||Nolan Thompson|9|Cloverleaf|46.10
+E|16|Boys 300 meter Hurdles Varsity|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+8||Nolan Thompson|9|Cloverleaf|45.21 q|1
+10||Lincoln Baltic|9|Cloverleaf|47.81|1
+E|17|Girls 800 meter Run Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+3 6 pts||Emma Hibler|12|Cloverleaf|2:26.75
+9||Samantha Porter|10|Cloverleaf|2:40.24
+E|18|Boys 800 meter Run Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+3 6 pts||Ben Myers|12|Cloverleaf|1:59.95
+11||Matthew Jenkins|10|Cloverleaf|2:13.35
+E|19|Girls 200 meter Dash Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+3 6 pts||Sarah Kelly|12|Cloverleaf|26.29
+4 5 pts||Kayla Shook|11|Cloverleaf|26.47
+E|19|Girls 200 meter Dash Varsity|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+2||Sarah Kelly|12|Cloverleaf|26.22 Q|2
+5||Kayla Shook|11|Cloverleaf|26.93 q|1
+E|20|Boys 200 meter Dash Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+E|20|Boys 200 meter Dash Varsity|P|Place¦¦Athlete¦Year¦Team¦Time¦Heat
+11||Josh Powers|9|Cloverleaf|24.66|1
+13||Mason Lotz|9|Cloverleaf|25.63|2
+E|21|Girls 3200 meter Run Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+3 6 pts||Emma Hibler|12|Cloverleaf|12:30.69
+7 2 pts||Vanessa Monhemius|12|Cloverleaf|13:28.05
+E|22|Boys 3200 meter Run Varsity|F|Place¦¦Athlete¦Year¦Team¦Time
+5 4 pts||Gavin Forbes|11|Cloverleaf|10:13.39
+7 2 pts||Clay Gucker|9|Cloverleaf|10:52.15
+E|23|Girls 4x400 Meter Relay Varsity|F|Place¦¦Team¦Time
+1 10 pts||Cloverleaf "A" Katie Wershing Samantha Porter Kayla Shook Brooklyn Cavey|4:03.99 M
+E|24|Boys 4x400 Meter Relay Varsity|F|Place¦¦Team¦Time
+3 6 pts||Cloverleaf "A" Ethan Gray Reed Kilgore Isaac Smith Ben Myers|3:31.44
+E|25|Girls Discus Throw Varsity|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+4 5 pts||Presly McConnell|12|Cloverleaf|106-2|2|106-2|90-5|100-10|95-10|99-5|91-3
+8 1 pts||Jayce Kreider|11|Cloverleaf|93-10|1|93-10|F|91-6|||
+E|26|Boys Discus Throw Varsity|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+1 10 pts||Clay Combs|12|Cloverleaf|158-7|2|142-1|150-11|154-11|144-5|148-5|158-7
+9||Adam Gray|10|Cloverleaf|117-3|1|96-5|110-5|116-11|F|108-1|117-3
+E|27|Girls High Jump Varsity|F|Place¦¦Athlete¦Year¦Team¦Mark¦4-0¦4-3¦4-6¦4-8¦4-10¦5-0¦5-1¦5-2
+6 2.5 pts||Abigail Reinhardt|10|Cloverleaf|4-8|P|O|O|O|XXX|--|--|--
+9||Kinsey Bayer|10|Cloverleaf|4-6|P|O|XXO|XXX|--|--|--|--
+E|28|Boys High Jump Varsity|F|Place¦¦Athlete¦Year¦Team¦Mark¦5-0¦5-3¦5-6¦5-8¦5-10¦6-0¦6-1¦6-2¦6-3¦6-4
+11||Grady Pamer|9|Cloverleaf|5-3|XO|O|XXX|--|--|--|--|--|--|--
+E|29|Girls Long Jump Varsity|F|Place¦¦Athlete¦Year¦Team¦Mark¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+3 6 pts||Kierston Campbell|12|Cloverleaf|16-4.50|16-3|15-5.75|16-0.50|15-10|16-1.75|16-4.50
+4 5 pts||Abigail Reinhardt|10|Cloverleaf|15-8.50|15-0|15-0|14-3|15-5|15-4|15-8.50
+E|30|Boys Long Jump Varsity|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+8 1 pts||Elliot Jordan|9|Cloverleaf|19-1|1|17-9.75|18-9.75|18-7|19-1|18-6.75|F
+12||Grady Pamer|9|Cloverleaf|16-10.75|1|16-1.50|10-3.50|16-10.75|||
+E|31|Girls Shot Put Varsity|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+1 10 pts||Presly McConnell|12|Cloverleaf|37-6.75|2|37-6.75|37-5.50|37-3|35-9.75|37-0.75|37-3.50
+4 5 pts||Amelia Ryncarz|10|Cloverleaf|32-8.75|2|30-10|32-8.75|31-10.25|31-2.50|32-1|31-0
+E|32|Boys Shot Put Varsity|F|Place¦¦Athlete¦Year¦Team¦Mark¦Flight¦Attempt 1¦Attempt 2¦Attempt 3¦Attempt 4¦Attempt 5¦Attempt 6
+3 6 pts||Clay Combs|12|Cloverleaf|51-2.25|2|46-9.50|48-9|F|47-9|48-8|51-2.25
+10||Royce Zirkle|12|Cloverleaf|39-1.50|2|37-4.50|39-1.50|38-5.75|||
+E|33|Girls Pole Vault Varsity|F|Place¦¦Athlete¦Year¦Team¦Mark¦6-0¦6-6¦7-0¦7-6¦8-0¦8-6¦9-0¦9-6¦9-8¦10-3¦10-6
+1 10 pts||Payten Shetterly|11|Cloverleaf|10-3 M|P|P|P|P|P|P|O|P|O|O|XXX
+4 5 pts||Taylor Thur|10|Cloverleaf|7-6|P|O|O|XXO|XXX|--|--|--|--|--|--
+E|34|Boys Pole Vault Varsity|F|Place¦¦Athlete¦Year¦Team¦Mark¦7-0¦7-6¦8-0¦8-6¦9-0¦9-8¦10-0¦10-6¦11-0
+4 5 pts||Lincoln Baltic|9|Cloverleaf|7-6|O|O|XXX|--|--|--|--|--|--
+E|35|Girls 100 meter Dash Seated|F|EMPTY
+E|36|Boys 100 meter Dash Seated|F|EMPTY
+E|37|Girls 400 meter Run Seated|F|EMPTY
+E|38|Boys 400 meter Run Seated|F|EMPTY
+E|39|Girls 800 meter Run Seated|F|EMPTY
+E|40|Boys 800 meter Run Seated|F|EMPTY
+E|41|Girls Shot Put Seated|F|EMPTY
+E|42|Boys Shot Put Seated|F|EMPTY

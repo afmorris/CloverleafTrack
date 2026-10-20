@@ -1,0 +1,11 @@
+1|110M Hurdles|Chase Young|F:15.77;P:15.82
+1|800M|Ben Myers|F:120.49;P:128.39
+1|800M|Jackson James|F:122.74;P:128.87
+2|100M|Riley Evans|F:12.21;P:12.6
+2|100M|Sarah Kelly|F:12.4;P:12.31
+2|100M Hurdles|KK Campbell|F:16.68;P:16.48
+2|200M|Riley Evans|F:25.75;P:26.25
+2|200M|Sarah Kelly|F:26.58;P:26.57
+2|400M|Riley Evans|F:57.27;P:58.12
+2|800M|Allison Yagersz|F:153.11;P:153.52
+2|800M|Reese Barnett|F:149.34;P:154.42000000000002
