@@ -616,6 +616,7 @@ Curated traps that still apply. Full context for each lives in `BRAIN.md` under 
 - Chart.js in hidden panels: lazy-initialize on first open (0×0 canvas otherwise). `RawValue` goes to the chart as-is; the axis uses `reverse: !isField`, don't negate. [C15, C24]
 - Tailwind: new classes only exist after rebuilding `wwwroot/css/site.css` (`pnpm run dev` / build). Stale `site.css` silently drops new classes. [C16, C24, C29]
 - Don't hand-author sort buttons/carets — `sortable-tables.js` generates them from `data-sort-col`. [C29]
+- Never put a server-rendered URL (`@Url.Action`) inside inline JS (`onclick="window.location='...'"`): the static export's link conversion rewrites `href`s to `.html` but not strings inside scripts, so the click 404s on the live site. Read the row's own `<a>` `href` instead (see `_MeetListItem.cshtml`). [C87]
 - Mobile table→card layouts use flexbox on `<tr>`, never CSS Grid. For layout verification trust CDP-measured `getBoundingClientRect()` over `chrome --headless --screenshot`. [C42]
 - Explicit abbreviation maps, not `[..2]` slicing (`Junior`→`Ju` bug). Unit tests don't catch visual/label bugs on charts. [C40, C41]
 

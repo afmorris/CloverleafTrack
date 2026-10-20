@@ -2353,3 +2353,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** two brothers named Surrarrer compete together (Gunnar 2028, Gordy 2029) plus Tate (2015): check the first name when entering marks. The SQL looks rows up by name, meet and exact mark and aborts unless exactly four rows are deleted.
 
 **Key files:** `docs/imports/duplicate-results-fixes.sql`.
+
+### [C87] Meet Row Click Did Not Load the .html Page on the Live Site
+
+**What changed:** `Views/Shared/_MeetListItem.cshtml`: the `<tr>` click handler was `onclick="window.location='@Url.Action(...)'"` and is now `onclick="window.location = this.querySelector('a').href"`.
+
+**Why:** the public site is a static export. The export script converts links to `.html` in markup (`href`) but cannot rewrite a URL inside inline JavaScript, so clicking the row (not the name link) went to the extension-less route, which does not exist on the static host. The `<a>` inside the row has `onclick="event.stopPropagation()"` so a click on the link itself is unaffected.
+
+**Watch out:** the same trap applies to any future inline JS that navigates to a server-rendered URL. The leaderboard scope/depth controls build URLs from `data-base-url` with a query string; that is a server round-trip and is separate from this.
+
+**Key files:** `CloverleafTrack.Web/Views/Shared/_MeetListItem.cshtml`.
