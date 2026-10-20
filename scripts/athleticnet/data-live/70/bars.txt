@@ -1,0 +1,6 @@
+2|High Jump|Emma Malikowski|4-0:O;4-2:O;4-4:O;4-6:O;4-8:O;4-10:XXX
+2|High Jump|Grace Goldsberry|4-0:O;4-2:O;4-4:XO;4-6:XO;4-8:XXX
+2|High Jump|Paige Brownson|4-0:O;4-2:XXO;4-4:O;4-6:XXX
+1|High Jump|Emmanuel Medina|4-8:O;4-10:O;5-0:O;5-2:O;5-4:O;5-6:XXX
+1|High Jump|Will Jerome|4-8:O;4-10:XO;5-0:O;5-2:XXX
+1|High Jump|Austin McNeal|4-8:XXO;4-10:XXX

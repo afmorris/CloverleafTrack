@@ -94,7 +94,7 @@ for msid in ids:
             if mark not in ('--', '') : notes.append(f'{msid}/{dbid}: no DB result for {who} {evname} ({"Boys" if gender == 1 else "Girls"}) mark {mark}')
             continue
         pid, dist, haveser, nm = row
-        if haveser: continue
+        if haveser and not os.environ.get('LIVE_IGNORE_EXISTING'): continue
         if evname in VERT and (msid, nm, evname) in MANUAL_BARS:
             bars.append(f'{gender}|{evname}|{nm}|{MANUAL_BARS[(msid, nm, evname)]}'); continue
         if evname in VERT:
@@ -126,6 +126,8 @@ for msid in ids:
     d = os.path.join(here, 'data-live', str(dbid))
     with open(os.path.join(d, 'sheets.txt'), 'w') as f: f.write('\n'.join(sheets) + ('\n' if sheets else ''))
     with open(os.path.join(d, 'bars.txt'), 'w') as f: f.write('\n'.join(bars) + ('\n' if bars else ''))
+    mrow = q(f"SELECT Name, CONVERT(varchar(10), Date, 120) FROM Meets WHERE Id={dbid}")[0]
+    with open(os.path.join(d, 'meta.txt'), 'w') as f: f.write(f'{mrow[0]}|{mrow[1]}\n')
     with open(os.path.join(d, 'rounds.txt'), 'w') as f:
         for (g, tev, nm), rr in sorted(rounds.items()):
             if len(rr) >= 2: f.write(f"{g}|{tev}|{nm}|" + ';'.join(f'{k}:{v}' for k, v in sorted(rr.items())) + '\n')

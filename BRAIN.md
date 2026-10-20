@@ -2385,3 +2385,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** the extras files are incremental: they hold only what was new after the main Live files were applied locally, so apply the main files first.
 
 **Key files:** `docs/imports/2023-2026-live-extras-{attempts,bars}.sql`, `scripts/athleticnet/convert_live.py`, `scripts/athleticnet/build_bars_sql.py`.
+
+### [C90] Live Apply: Id-Independent Attempt/Bar SQL
+
+**What changed:** the Live attempt/ladder SQL is applied to live (2026-10-20). Applying the first generated files showed the databases do not share Performance Ids for rows created by import SQL (John Artwell's 2023 Ravenna shot put is 17586 locally, 17247 live; Payten Shetterly's no-height row is 16648 vs 16590), so the Id-asserting form aborted. `build_scan_sql.py` / `build_bars_sql.py` now have `SKIP_EXISTING=1` mode: each block looks the performance up by athlete name + meet name/date + event + exact mark (`SET @pid = ...`) and inserts only when it exists and has no series/ladder yet; no match means a silent skip. `convert_live.py` writes `data-live/<db>/meta.txt` (meet name/date) for this, and `LIVE_IGNORE_EXISTING=1` makes it build blocks for performances that already have series locally. Complete files: `docs/imports/2023-2026-live-complete-attempts.sql` (183 series) and `-complete-bars.sql` (48 ladders), applied after the earlier (Id-based) `2023-2026-live-attempts.sql`, `-bars.sql`, `-rounds.sql` and `-extras-*` files. Live and local now hold the same totals: 1,782 attempts, 364 bars, 687 rounds.
+
+**Why:** an intermediate batch had been applied locally before the final files were generated, and the generator skips performances that already have series, so live was missing those batches; a count of X/XX bars on live (0) caught it.
+
+**Watch out:** never assume local Ids equal live Ids for performances created by import SQL (see [C83]); use name/meet/event/mark lookups. When generating SQL for another database, generate it from the full data (`LIVE_IGNORE_EXISTING=1 SKIP_EXISTING=1`), not from a database that already has part of it. A verification query of totals after every live apply would have caught the gap sooner.
+
+**Key files:** `scripts/athleticnet/{convert_live,build_scan_sql,build_bars_sql}.py`, `docs/imports/2023-2026-live-complete-{attempts,bars}.sql`.

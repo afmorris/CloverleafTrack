@@ -46,9 +46,11 @@ BEGIN TRANSACTION;
 -- ===== DB meet 233 =====
 
 -- Payten Shetterly High Jump (F) no height: 4-0 XXX
-IF NOT EXISTS (SELECT 1 FROM Performances WHERE Id=16648 AND MeetId=233 AND ResultStatus=2) THROW 50003, 'Not a no-height row: performance 16648', 1;
-DELETE FROM PerformanceBars WHERE PerformanceId=16648;
-INSERT INTO PerformanceBars (PerformanceId, HeightInches, Outcome) VALUES (16648, 48.0, 'XXX');
+DECLARE @nh INT = (SELECT p.Id FROM Performances p JOIN Athletes a ON a.Id = p.AthleteId JOIN Meets m ON m.Id = p.MeetId JOIN Events e ON e.Id = p.EventId
+ WHERE a.FirstName = N'Payten' AND a.LastName = N'Shetterly' AND m.Name = N'2024 Stars of Track and Field' AND e.Name = N'High Jump' AND p.ResultStatus = 2);   -- Ids of NH rows differ between databases
+IF @nh IS NULL THROW 50003, 'No-height row not found', 1;
+DELETE FROM PerformanceBars WHERE PerformanceId = @nh;
+INSERT INTO PerformanceBars (PerformanceId, HeightInches, Outcome) VALUES (@nh, 48.0, 'XXX');
 
 -- ===== DB meet 247 =====
 

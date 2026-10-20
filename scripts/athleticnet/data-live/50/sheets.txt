@@ -1,3 +1,9 @@
+2|Long Jump|Abigail Reinhardt|14-1.25;F;13-8.75;F
+2|Long Jump|Grace Goldsberry|13-2.5;12-2.5;12-5.75;11-8.5
+2|Long Jump|Katelin Yagersz|11-1.5;11-2.5;10-10.75;10-7.75
+1|Long Jump|Tristin Bogucki|F;20-5.5;20-2.5;19-5.5
+1|Long Jump|Ethan Gray|F;17-4.5;17-9.75;F
+1|Long Jump|David Hunter|15-1.5;15-5.5;15-7.25;15-3
 2|Discus|Presly McConnell|105-4
 2|Discus|Karoline Kreider|94-9
 2|Discus|Jayce Kreider|79-4
