@@ -2445,3 +2445,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** yards are stored as meters (1962 precedent). OCR garbles marks (1973 HJ read as noise; the scan says 6' 2"); verify against the page image. Not added: Chrislip 1972 180-yd low hurdles 23.0 (no such event) and the 1990 girls 4x800 (Kim/Cathy Ocheltree/"Favna" Bender/Tracey Malarkey, 9:31.10, Bender not in DB). Only the winner's time is printed in 1960, so Heffelfinger's 3rd in the 100 has no mark.
 
 **Key files:** `docs/imports/ohsaa-2001-2008-fixes.sql`, `docs/imports/ohsaa-pdf-1960-1991-fixes.sql`.
+
+### [C96] Follow-up to [C95]: 180M Low Hurdles Event and the 1990 Girls 4x800
+
+**What changed:** new boys outdoor event `180M Low Hurdles` (`BOYS_OUTDOOR_180M_LOW_HURDLES`, yards stored as meters, SortOrder 105) with Scott Chrislip's 1972 State 5th-place 23.0; new athlete Favna Bender (spelled that way in the printed 1990 results; class year 1991 is a guess) and the 1990 State girls 4x800 relay 9:31.10 (Kim Malarkey, Cathy Ocheltree, Favna Bender, Tracey Malarkey).
+
+**Why:** the owner asked to add both items skipped in [C95]. Applied locally and live.
+
+**Watch out:** Bender's graduation year is unverified (column is NOT NULL). The relay row's `SortedAthleteHash` is NULL (binary hash not computed).
+
+**Key files:** `docs/imports/ohsaa-pdf-1972-1990-extras.sql`.
