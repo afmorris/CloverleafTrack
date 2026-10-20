@@ -42,3 +42,87 @@ HURDLE_SHORT|3|Ellebruch|CLO|17.6|1
 3200M|2|E Kunkler|SPR|14:13|3
 3200M|3|Fallow|CLO|14:32|1
 4x400M Relay|1|Cloverleaf|CLO|4:19.3|5
+@2021-04-13|1|WOO|56|72
+4x800M Relay|1|Woodridge|WOO|8:22|5
+4x800M Relay|2|Cloverleaf|CLO|8:48.4|0
+HURDLE_SHORT|1|Corey|WOO|16.5|5
+HURDLE_SHORT|2|Tafini|WOO|17.4|3
+HURDLE_SHORT|3|Ricciello|WOO|18.0|1
+100M|1|Wilson|CLO|11.2|5
+100M|2|Williams|CLO|11.3|3
+100M|3|Fritz|WOO|11.6|1
+4x200M Relay|1|Cloverleaf|CLO|1:36.0|5
+1600M|1|Champa|WOO|4:38.3|5
+1600M|2|Dutt|WOO|4:40.1|3
+1600M|3|Lauck|WOO|4:40.5|1
+4x100M Relay|1|Cloverleaf|CLO|45.0|5
+400M|1|Elkurd|WOO|52.8|5
+400M|2|Hibler|CLO|52.9|3
+400M|3|Cass|CLO|54.7|1
+300M Hurdles|1|Tafini|WOO|43.0|5
+300M Hurdles|2|Carey|WOO|43.8|3
+300M Hurdles|3|Mollohan|CLO|44.8|1
+800M|1|Hibbs|WOO|2:03.6|5
+800M|2|Lauck|WOO|2:05.2|3
+800M|3|Hardman|CLO|2:06.2|1
+200M|1|Wilson|CLO|23.4|5
+200M|2|Vircuak|CLO|24.0|3
+200M|3|DeFrange|WOO|24.1|1
+3200M|1|Champa|WOO|10:09|5
+3200M|2|Dutt|WOO|10:13|3
+3200M|3|Malena|CLO|10:25|1
+4x400M Relay|1|Cloverleaf|CLO|3:38|5
+High Jump|1|Hamilton|CLO|5' 10"|5
+High Jump|2|DeFrange|WOO|5' 8"|3
+High Jump|3|Howard|WOO|5' 3"|1
+Long Jump|1|Williams|CLO|18' 7.25"|5
+Long Jump|2|Nau|CLO|18' 6.25"|3
+Long Jump|3|Hamilton|CLO|18' 6"|1
+Shot Put|1|Mayer|WOO|42' 9"|5
+Shot Put|2|Yuravak|CLO|42' 8.25"|3
+Shot Put|3|Newsome|WOO|39' 7.5"|1
+Discus|1|Regal|WOO|145' 4"|5
+Discus|2|Mayer|WOO|143' 10"|3
+Discus|3|Kott|CLO|131' 8"|1
+@2021-04-13|2|WOO|77|51
+4x800M Relay|1|Woodridge|WOO|10:25|5
+4x800M Relay|2|Cloverleaf|CLO|11:01|0
+HURDLE_SHORT|1|Rorrer|WOO|16.0|5
+HURDLE_SHORT|2|Bailey|CLO|18.3|3
+HURDLE_SHORT|3|Sigmon|CLO|18.3|1
+100M|1|Evans|CLO|12.8|5
+100M|2|Romano|CLO|12.9|3
+100M|3|Best|WOO|13.6|1
+4x200M Relay|1|Cloverleaf|CLO|1:47.7|5
+1600M|1|Reaman|WOO|5:14.8|5
+1600M|2|Stoner|CLO|5:19.4|3
+1600M|3|Willet|WOO|5:38.9|1
+4x100M Relay|1|Cloverleaf|CLO|52.2|5
+400M|1|Evans|CLO|60.5|5
+400M|2|Best|WOO|61.5|3
+400M|3|Munchick|CLO|64.2|1
+300M Hurdles|1|Rorrer|WOO|48.2|5
+300M Hurdles|2|Karlo|WOO|50.8|3
+300M Hurdles|3|Bailey|CLO|52.2|1
+800M|1|Reaman|WOO|2:24.1|5
+800M|2|Stoner|CLO|2:26.7|3
+800M|3|Zeiger|WOO|2:33.1|1
+200M|1|Romano|CLO|26.6|5
+200M|2|Munchick|CLO|27.2|3
+200M|3|Malikowski|CLO|28.0|1
+3200M|1|Willet|WOO|12:33|5
+3200M|2|Porras|CLO|12:49|3
+3200M|3|Bakuhn|WOO|13:22|1
+4x400M Relay|1|Cloverleaf|CLO|4:18.5|5
+High Jump|1|Sigmon|CLO|4' 10"|5
+High Jump|2|Stekelenburg|WOO|4' 8"|3
+High Jump|3|Brown|CLO|4' 6"|1
+Long Jump|1|Malikowski|CLO|15' 0.25"|5
+Long Jump|2|Duve|WOO|14' 10.25"|3
+Long Jump|3|Sigmon|CLO|14' 8.75"|1
+Shot Put|1|Harvey|CLO|27' 11.75"|5
+Shot Put|2|Kreider|CLO|25' 3.75"|3
+Shot Put|3|Swartz|WOO|24' 4.75"|1
+Discus|1|Harvey|CLO|87' 6"|5
+Discus|2|Swartz|WOO|81' 6"|3
+Discus|3|Mayer|WOO|75' 3"|1

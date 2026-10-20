@@ -1,0 +1,329 @@
+1|4x800M Relay|C||8:36.2|0
+1|4x800M Relay|N||9:15.8|0
+1|4x800M Relay|C||9:54.3|0
+2|4x800M Relay|S||11:05.2|0
+2|4x800M Relay|C||11:16.7|0
+2|4x800M Relay|N||11:21.5|0
+1|4x200M Relay|C||1:36.8|0
+1|4x200M Relay|N||1:41.6|0
+1|4x200M Relay|S||1:51.5|0
+2|4x200M Relay|C||1:49.2|0
+2|4x200M Relay|S||2:00.7|0
+2|4x200M Relay|N||2:02.3|0
+1|4x100M Relay|N||44.7|0
+1|4x100M Relay|C||47.3|0
+2|4x100M Relay|C||51.8|0
+2|4x100M Relay|C||57.7|0
+2|4x100M Relay|N||59.2|0
+1|4x400M Relay|N||3:38.1|0
+1|4x400M Relay|C||3:38.4|0
+1|4x400M Relay|N||4:01.7|0
+1|4x400M Relay|C||4:03.2|0
+1|4x400M Relay|S||4:08.5|0
+1|4x400M Relay|C||4:30.5|0
+1|4x400M Relay|S||4:35.5|0
+2|4x400M Relay|C||4:19.3|0
+2|4x400M Relay|N||4:36.9|0
+2|4x400M Relay|S||4:40.5|0
+2|4x400M Relay|N||4:52.9|0
+1|110M Hurdles|C|Baltic|19.34|0
+1|110M Hurdles|C|Pamer|19.81|0
+1|110M Hurdles|N|Wilhelm|20.85|0
+2|100M Hurdles|C|Berry|16.99|0
+2|100M Hurdles|C|Campbell|17.00|0
+2|100M Hurdles|C|Ellebruch|17.60|0
+2|100M Hurdles|C|Reusch|18.30|0
+2|100M Hurdles|S|Chouiry|20.33|0
+1|300M Hurdles|C|Baltic|48.9|0
+1|300M Hurdles|N|Wilhelm|53.2|0
+2|300M Hurdles|C|Berry|50.3|0
+2|300M Hurdles|C|Reusch|51.0|0
+2|300M Hurdles|C|Ellebruch|53.9|0
+2|300M Hurdles|N|Peters|55.7|0
+2|300M Hurdles|S|Swiger|59.6|0
+2|100M|C|Bogucki|14.87|0
+2|100M|C|Thur|15.02|0
+2|100M|S|Wilson|15.53|0
+2|100M|C|Yagerz|15.82|0
+2|100M|C|Southam|16.22|0
+2|100M|N|Bonacorsi|16.48|0
+2|100M|N|Champer|15.07|0
+2|100M|S|Chouiry|15.43|0
+2|100M|N|Kamp|15.44|0
+2|100M|N|Toth|15.78|0
+2|100M|C|Cavey|13.28|0
+2|100M|C|Munchick|13.44|0
+2|100M|C|Berry|13.56|0
+2|100M|C|Kelly|12.69|0
+2|100M|C|Shook|13.11|0
+2|100M|S|Swiger|13.88|0
+2|100M|N|Kolar|14.32|0
+2|100M|S|Walberg|14.89|0
+2|100M|N|Lim|14.95|0
+1|100M|C|Powers|12.28|0
+1|100M|C|Sewalish|12.73|0
+1|100M|N|Widdle|12.75|0
+1|100M|C|Saksa|13.01|0
+1|100M|C|Porter|13.18|0
+1|100M|S|Davis|13.51|0
+1|100M|N|Pierce|12.42|0
+1|100M|C|Neill|12.57|0
+1|100M|N|Hoffman|12.71|0
+1|100M|N|Willhelm|12.98|0
+1|100M|S|Sabolek|13.05|0
+1|100M|C|Morris|13.18|0
+1|100M|N|Noearenas-Martinez|11.92|0
+1|100M|C|Kovach|12.09|0
+1|100M|C|Goetz|12.93|0
+1|100M|C|Murray-Garver|13.00|0
+1|100M|N|Penny|13.06|0
+1|100M|C|Usry|13.73|0
+1|100M|N|Beverly|11.15|0
+1|100M|C|Gray|11.94|0
+1|100M|N|Mills|12.33|0
+1|100M|C|Tomes|12.45|0
+1|100M|S|Carr|12.57|0
+1|100M|S|Spunie|13.15|0
+2|200M|C|Beyr|28.5|0
+2|200M|C|Reinhardt|29.4|0
+2|200M|C|Shetterly|29.45|0
+2|200M|C|Campbell|29.6|0
+2|200M|S|Chouiry|32.5|0
+2|200M|N|Toth|32.9|0
+2|200M|S|Walberg|31.5|0
+2|200M|C|Thur|32.6|0
+2|200M|C|Yagerz|34.17|0
+2|200M|C|Southam|34.65|0
+2|200M|N|Bonacorsi|35.95|0
+2|200M|C|Kelly|26.6|0
+2|200M|C|Munchick|27.6|0
+2|200M|N|Vickory|27.8|0
+2|200M|S|Swiger|29.6|0
+2|200M|S|Hileman|30.5|0
+2|200M|N|Kamp|32.4|0
+1|200M|C|Powers|25.68|0
+1|200M|C|Sewalish|26.4|0
+1|200M|C|Neill|26.46|0
+1|200M|C|Saksa|27.53|0
+1|200M|C|Murray-Garver|27.55|0
+1|200M|N|Penny|27.77|0
+1|200M|C|Usry|28.29|0
+1|200M|C|Morrison|28.58|0
+1|200M|N|Beverly|22.66|0
+1|200M|N|Brown|24.4|0
+1|200M|C|Kovach|25.1|0
+1|200M|N|Hernandez-Martinez|25.25|0
+1|200M|C|Tomes|25.86|0
+1|200M|C|Lotz|26.26|0
+1|200M|N|Weddle|27.12|0
+2|400M|S|Moon|1:09.1|0
+2|400M|S|Kunkler|1:11.0|0
+2|400M|S|Woods|1:15.0|0
+2|400M|C|Wershing|1:02.9|0
+2|400M|N|Champer|1:04.7|0
+2|400M|N|Vickery|1:05.2|0
+2|400M|C|Porter|1:06.4|0
+2|400M|S|Curry|1:08.1|0
+2|400M|S|Hileman|1:08.7|0
+1|400M|C|Goetz|59.14|0
+1|400M|N|Weddle|59.15|0
+1|400M|C|Porter|60.45|0
+1|400M|C|Murray-Garver|62.4|0
+1|400M|C|Usry|62.9|0
+1|400M|C|Morris|66.7|0
+1|400M|S|Hernandez|73|0
+1|400M|C|James|53.7|0
+1|400M|C|Kilgore|54.8|0
+1|400M|N|Emberling|56.6|0
+1|400M|S|Lininger|58.9|0
+1|400M|N|Hrubik|62.9|0
+1|400M|S|Davis|69.4|0
+2|800M|C|Hibler|2:39.6|0
+2|800M|S|N Kunkler|2:44.2|0
+2|800M|N|Smolinski|2:52.9|0
+2|800M|C|Rehoe|2:57.1|0
+2|800M|S|Akers|3:00.3|0
+2|800M|S|Bell|3:00.9|0
+2|800M|C|Jarvis|3:02.7|0
+2|800M|N|Jovanovic|3:03.6|0
+1|800M|C|Myers|2:03|0
+1|800M|C|Jenkins|2:03.3|0
+1|800M|N|Tarry|2:14.9|0
+1|800M|S|Souza|2:16.8|0
+1|800M|N|Hrubik|2:24.1|0
+1|800M|N|Hoddinger|2:24.5|0
+1|800M|N|Letsko|2:31.3|0
+1|800M|S|Herndon|2:38.7|0
+1|800M|C|Evans|2:40.2|0
+1|800M|C|Wilk|2:44.9|0
+1|800M|N|Childers|2:48.9|0
+1|800M|C|Mullinex|2:53.4|0
+1|800M|N|Renaldo|3:13.8|0
+1|800M|N|Advaughn|3:13.9|0
+1|800M|N|Plybonner|3:22.5|0
+1|800M|N|Williams|3:43.4|0
+2|1600M|C|Hibler|5:45.9|0
+2|1600M|S|N Kunkler|6:07.9|0
+2|1600M|S|E Kunkler|6:17.7|0
+2|1600M|C|Monhemius|6:25.1|0
+2|1600M|C|Fallow|6:33.7|0
+2|1600M|C|Jarvis|6:40.2|0
+2|1600M|S|Bell|6:43.8|0
+2|1600M|N|Jovanovic|6:54.5|0
+2|1600M|N|Speck|7:01.9|0
+2|1600M|C|Spencer|7:19.5|0
+1|1600M|C|Forbes|4:46.2|0
+1|1600M|S|Souza|4:46.7|0
+1|1600M|C|Jenkins|4:54|0
+1|1600M|C|McNeil|5:14|0
+1|1600M|C|Gucker|5:16|0
+1|1600M|N|Hogasko|5:21|0
+1|1600M|C|Ortega|5:24|0
+1|1600M|N|Flohr|5:44|0
+1|1600M|N|Childers|6:09|0
+1|1600M|C|Wilk|6:12|0
+1|1600M|N|Adlon|6:30|0
+1|1600M|S|Hernandez|6:42|0
+1|1600M|N|Renaldo|7:21|0
+1|1600M|C|Mahoney|7:25|0
+1|1600M|N|Klibben|7:25|0
+1|1600M|N|Williams|8:47|0
+1|3200M|C|Forbes|10:41.4|0
+1|3200M|S|Souza|10:55.6|0
+1|3200M|C|Gucker|11:14.1|0
+1|3200M|C|Mion|11:18.1|0
+1|3200M|N|Neidlinger|11:44.9|0
+1|3200M|C|Clapp|11:57.5|0
+1|3200M|S|Wasil|11:58.2|0
+1|3200M|N|Flohr|12:24.5|0
+1|3200M|N|Lutski|12:24.6|0
+2|3200M|C|Monhemius|13:42|0
+2|3200M|S|E Kunkler|14:13|0
+2|3200M|C|Fallow|14:32|0
+2|3200M|N|Ross|15:01|0
+2|3200M|N|Speck|15:59|0
+2|3200M|C|Spencer|16:18|0
+2|Shot Put|C|Mlckovsky|13-11|0
+2|Shot Put|C|Messmore|17-0|0
+2|Shot Put|N|Rexroad|17-1|0
+2|Shot Put|C|Naftzger|25-3|0
+2|Shot Put|S|McDonald|19-3|0
+2|Shot Put|N|Pennell|19-0|0
+2|Shot Put|C|Ishler|26-9|0
+2|Shot Put|S|Wilson|21-8|0
+2|Shot Put|C|Kreider|26-10|0
+2|Shot Put|C|Craddock|28-2.5|0
+2|Shot Put|S|Walters|26-7|0
+2|Shot Put|N|Brown|30-5|0
+2|Shot Put|C|Ryncarz|32-9|0
+2|Shot Put|S|Headley|28-7|0
+2|Shot Put|N|Emerson|32-9.5|0
+2|Shot Put|C|McConnell|38-7|0
+1|Shot Put|C|Surrarrer|26-7|0
+1|Shot Put|C|Stark|28-5|0
+1|Shot Put|C|Thorne|26-11|0
+1|Shot Put|C|Montgomery|28-6|0
+1|Shot Put|C|Stone|27-10.5|0
+1|Shot Put|C|Lade|30-2|0
+1|Shot Put|S|Funk|22-10.25|0
+1|Shot Put|N|Staubs|24-3|0
+1|Shot Put|C|Atkinson|32-2|0
+1|Shot Put|C|Schaefer|33-5|0
+1|Shot Put|C|Wittman|34-6.5|0
+1|Shot Put|N|Majorana|17-6.25|0
+1|Shot Put|N|Plybon|22-6|0
+1|Shot Put|C|Gray|35-2.5|0
+1|Shot Put|C|Chonko|35-0.75|0
+1|Shot Put|C|Brooks|34-4|0
+1|Shot Put|N|Cupac|14-10|0
+1|Shot Put|N|Pierce|29-5.5|0
+1|Shot Put|C|Johnson|33-6|0
+1|Shot Put|C|Martin|36-6|0
+1|Shot Put|N|Lambert|33-3|0
+1|Shot Put|N|Griffin|36-10.5|0
+1|Shot Put|C|Nau|40-7|0
+1|Shot Put|N|Hitti|40-10|0
+1|Shot Put|N|Higgins|38-8|0
+1|Shot Put|C|Zirkle|39-2|0
+1|Shot Put|N|Becker|41-3|0
+1|Shot Put|C|Combs|51-1.5|0
+1|Shot Put|S|Herndon|32-4|0
+1|Shot Put|N|Johnson|33-4.5|0
+2|Discus|C|Mlckovsky|30-10|0
+2|Discus|C|Messmore|50-8|0
+2|Discus|S|Warford|51-9|0
+2|Discus|N|Rexroad|50-8|0
+2|Discus|C|Naftzger|57-6|0
+2|Discus|S|Wilson|58-6|0
+2|Discus|N|Pennell|45-10|0
+2|Discus|C|Ishler|76-9|0
+2|Discus|S|McDonald|58-7|0
+2|Discus|S|Swiger|90-8|0
+2|Discus|C|Reho|89-11|0
+2|Discus|C|Craddock|92-9|0
+2|Discus|S|Walters|73-5|0
+2|Discus|N|Brown|76-5|0
+2|Discus|C|Kreider|90-1|0
+2|Discus|N|Emerson|64-1|0
+2|Discus|C|Ryncarz|82-1|0
+2|Discus|S|Headley|82-7|0
+2|Discus|N|Hallett|100-8|0
+2|Discus|C|McConnell|108-7|0
+1|Discus|C|Schaefer|73-2|0
+1|Discus|C|Stark|80-4|0
+1|Discus|C|Montgomery|67-9|0
+1|Discus|C|Thorne|69-8|0
+1|Discus|C|Lade|72-3|0
+1|Discus|C|Surrarrer|86-6|0
+1|Discus|S|Funk|46-5|0
+1|Discus|N|Staubs|42-0|0
+1|Discus|C|Stone|74-10|0
+1|Discus|C|Nau|81-0|0
+1|Discus|C|Zirkle|94-10|0
+1|Discus|S|Herndon|99-5|0
+1|Discus|N|Cupac|32-0|0
+1|Discus|C|Chonko|95-6|0
+1|Discus|C|Wittman|94-0|0
+1|Discus|C|Martin|112-8|0
+1|Discus|N|Majorana|36-4|0
+1|Discus|N|Pierce|60-2|0
+1|Discus|C|Johnson|79-8|0
+1|Discus|C|Atkinson|105-10|0
+1|Discus|N|Johnson|71-7|0
+1|Discus|N|Plybon|64-0|0
+1|Discus|C|Brooks|116-7|0
+1|Discus|N|Lambert|84-6|0
+1|Discus|C|Gray|117-7|0
+1|Discus|N|Becker|100-3|0
+1|Discus|C|Combs|142-5|0
+1|Discus|N|Higgins|116-7|0
+1|Discus|N|Hitti|104-7|0
+1|Long Jump|C|Kovach|18-6.5|0
+1|Long Jump|C|Jordan|17-11.75|0
+1|Long Jump|C|Pamer|17-6|0
+1|Long Jump|C|Saksa|17-1.75|0
+1|Long Jump|C|Sewallish|16-9|0
+1|Long Jump|C|Morris|15-3.5|0
+1|Long Jump|N|Gabriel|19-1.5|0
+1|Long Jump|N|Johnson|16-10|0
+1|Long Jump|N|Penny|14-10|0
+1|Long Jump|S|Lingerer|14-4.5|0
+1|Long Jump|S|Sabolek|15-7.75|0
+1|Long Jump|S|Davis|13-2.75|0
+2|Long Jump|C|Reinhardt|16-2.5|0
+2|Long Jump|C|Bayer|15-8.25|0
+2|Long Jump|C|Southam|11-1|0
+2|Long Jump|C|Yagerz|11-3|0
+2|Long Jump|C|Bogucki|13-10.75|0
+2|Long Jump|N|Peters|13-7.5|0
+2|Long Jump|N|Kolar|13-2.75|0
+2|Long Jump|S|Chouvery|12-9|0
+2|Long Jump|S|Gaspar|14-6.25|0
+2|Long Jump|C|Campbell|16-2.5|0
+1|High Jump|C|Pamer|5-2|0
+1|High Jump|N|Gabriel|5-10|0
+1|High Jump|C|Kilgore|5-2|0
+2|High Jump|N|Latham|4-0|0
+2|High Jump|C|Ellebruch|4-4|0
+2|High Jump|C|Reinhardt|4-8|0
+2|High Jump|C|Bayer|4-8|0

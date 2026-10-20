@@ -8,7 +8,7 @@ from sheets_parse import load
 from places_lib import q, esc, norm
 D = '/Users/tony/Downloads/'
 OPPNAME = {'COV': 'Coventry', 'FLD': 'Field', 'WOO': 'Woodridge', 'NOR': 'Norton', 'SPR': 'Springfield', 'NLO': 'New London'}
-MEETNAME = {'2025-04-22': '2025 Norton-Springfield Double Dual', '2024-04-23': '2024 Field-Coventry Double Dual', '2023-04-11': '2023 Woodridge Dual', '2025-04-15': '2025 Woodridge Dual'}
+MEETNAME = {'2021-04-13': '2021 Woodridge Dual', '2025-04-22': '2025 Norton-Springfield Double Dual', '2024-04-23': '2024 Field-Coventry Double Dual', '2023-04-11': '2023 Woodridge Dual', '2025-04-15': '2025 Woodridge Dual'}
 rows, totals = load(D + 'Cloverleaf Track Meet Score Sheet - 2024 Double Dual Coventry Field.xlsx',
                     {'CLO COV Girls': ('2024-04-23', 'COV'), 'CLO COV Boys': ('2024-04-23', 'COV'), 'CLO FLD Girls': ('2024-04-23', 'FLD'), 'CLO FLD Boys': ('2024-04-23', 'FLD')})
 r2, t2 = load(D + 'Cloverleaf Track Meet Score Sheet - Woodridge.xlsx', {'Girls Meet': ('2023-04-11', 'WOO'), 'Boys Meet': ('2023-04-11', 'WOO')})

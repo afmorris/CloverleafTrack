@@ -1,0 +1,170 @@
+1|4x800M Relay|C||8:38|0
+1|4x800M Relay|S||9:07|0
+1|4x800M Relay|C||9:43|0
+1|4x200M Relay|C||1:35.20|0
+1|4x200M Relay|N||1:41.62|0
+1|4x200M Relay|C||1:41.75|0
+1|4x100M Relay|C||46.00|0
+1|4x100M Relay|C||48.56|0
+1|4x100M Relay|N||50.50|0
+1|4x400M Relay|N||3:42|0
+1|4x400M Relay|S||3:46|0
+1|4x400M Relay|C||3:52|0
+1|110M Hurdles|C|Young|16.02|0
+1|110M Hurdles|C|Baltic|16.64|0
+1|110M Hurdles|C|Brownson|18.38|0
+1|110M Hurdles|N|Simpson|19.04|0
+1|110M Hurdles|C|Price|19.49|0
+1|110M Hurdles|C|B Young|19.7|0
+1|110M Hurdles|N|Vargo|20.4|0
+1|100M|C|Kurtz|11.4|0
+1|100M|C|Miller|11.68|0
+1|100M|C|Medina|11.7|0
+1|100M|N|Florez-Martinez|12.19|0
+1|100M|C|Young|12.23|0
+1|100M|N|Patterson|12.3|0
+1|100M|C|Blaha|12.39|0
+1|100M|C|Turconi|12.42|0
+1|100M|C|Groetz|12.52|0
+1|100M|C|Craddock|12.6|0
+1|100M|C|Randall|12.65|0
+1|100M|C|McMillan|12.78|0
+1|100M|C|Price|12.85|0
+1|100M|C|Saksa|13.3|0
+1|100M|C|Tomes|13.03|0
+1|100M|C|Morrissey|13.1|0
+1|100M|C|Pena|13.22|0
+1|100M|C|Perman|13.5|0
+1|100M|S|Mills|14.0|0
+1|100M|C|Kerr|14.5|0
+1|1600M|N|Ehler|4:28|0
+1|1600M|C|Neville|4:33|0
+1|1600M|S|Carney|4:38|0
+1|1600M|C|Forbes|4:49|0
+1|1600M|S|Souza|4:56|0
+1|1600M|S|Glass|4:58|0
+1|1600M|N|Supple|5:17|0
+1|1600M|C|Southam|5:26|0
+1|1600M|S|Gillmore|5:33|0
+1|1600M|N|Flohr|5:39|0
+1|1600M|S|Lawrence|6:04|0
+1|1600M|C|Mullinex|6:20|0
+1|1600M|N|Plybon|7:13|0
+1|1600M|N|Plybon A|8:05|0
+1|1600M|N|Little|8:50|0
+1|400M|C|Gray|52.4|0
+1|400M|C|Craddock|54.9|0
+1|400M|N|Emmerling|55.4|0
+1|400M|S|Gaspar|56.4|0
+1|400M|C|Groetz|57.42|0
+1|400M|S|Imminger|57.47|0
+1|400M|N|Williams|57.56|0
+1|400M|S|Hernandez|1:49.16|0
+1|300M Hurdles|C|Young|42.5|0
+1|300M Hurdles|N|Simpson|44.2|0
+1|300M Hurdles|S|Win|47.1|0
+1|300M Hurdles|C|B Young|49.01|0
+1|300M Hurdles|C|Price|49.8|0
+1|300M Hurdles|N|Vargo|51.04|0
+1|300M Hurdles|C|Kerr|57.6|0
+1|800M|C|Myers|2:10.1|0
+1|800M|N|Supple|2:12.7|0
+1|800M|S|Souza|2:13.75|0
+1|800M|C|Jenkins|2:13.8|0
+1|800M|S|J Souza|2:20.4|0
+1|800M|C|Ortega|2:27|0
+1|800M|C|Southam|2:28|0
+1|800M|C|Bohner|2:42|0
+1|800M|C|Bullis|2:42.8|0
+1|800M|C|Perman|2:44|0
+1|800M|S|Lawrence|2:49|0
+1|800M|C|Mullinex|2:57|0
+1|800M|N|Daugh|5:36|0
+1|800M|N|Brady|5:49|0
+1|200M|N|Florez-Martinez|24.7|0
+1|200M|N|Patterson|25.0|0
+1|200M|C|Kurtz|23.33|0
+1|200M|C|Medina|23.6|0
+1|200M|C|Miller|24.36|0
+1|200M|N|Junior|27.1|0
+1|200M|C|Smith|25.0|0
+1|200M|C|James|25.1|0
+1|200M|C|Craddock|25.38|0
+1|200M|C|Turconi|25.6|0
+1|200M|N|Mills|25.7|0
+1|200M|C|McMillan|25.7|0
+1|200M|C|Randall|25.96|0
+1|200M|C|Young|26.4|0
+1|200M|C|Pena|26.6|0
+1|200M|C|Morrissey|27|0
+1|200M|C|Saksa|27.3|0
+1|3200M|N|Ehler|15:51.21|0
+1|3200M|S|Carney|16:15.23|0
+1|3200M|S|Glass|11:17|0
+1|3200M|C|Neville|12:00.99|0
+1|3200M|C|Forbes|12:01|0
+1|3200M|N|Flohr|12:14.43|0
+1|3200M|S|Dillimore|12:15.45|0
+1|3200M|C|Mion|12:56.28|0
+1|3200M|C|McNeal|12:56.69|0
+1|3200M|S|Lawrence|13:44|0
+1|3200M|C|Clapp|14:23|0
+1|3200M|N|Carter|14:03|0
+1|Long Jump|C|Bogucki|20-8|0
+1|Long Jump|N|Gabriel|19-8|0
+1|Long Jump|C|Gray|17-2.5|0
+1|Long Jump|N|Schnering|16-2.5|0
+1|Long Jump|N|Vargo|15-2|0
+1|Long Jump|C|Saksa|14-9.5|0
+1|Long Jump|N|Simpson|14-6|0
+1|Long Jump|C|Hunter|15-9|0
+1|High Jump|N|Schnering|6-0|0
+1|High Jump|N|Gabriel|6-0|0
+1|High Jump|C|Forbes|5-6|0
+1|High Jump|C|Brownson|5-0|0
+1|High Jump|C|Tomes|4-10|0
+1|Shot Put|C|Combs|42-10|0
+1|Shot Put|C|Zirkle|41-1|0
+1|Shot Put|C|Shores|40-1|0
+1|Shot Put|N|Griffin T|35-11|0
+1|Shot Put|N|Becker|35-1|0
+1|Shot Put|N|Higgins|34-1|0
+1|Shot Put|S|Herndon|32-2|0
+1|Shot Put|S|Bucksar|27-3.5|0
+1|Shot Put|S|Win|29-6|0
+1|Shot Put|N|Essex|33-2|0
+1|Shot Put|C|McNeal|32-11|0
+1|Shot Put|C|Brooks|35-1|0
+1|Shot Put|C|Nau|35-3|0
+1|Shot Put|C|Rogalski|34-7|0
+1|Shot Put|C|Forbes|38-9|0
+1|Shot Put|C|Artwell|30-6|0
+1|Shot Put|C|Chonko|29-5|0
+1|Shot Put|C|Martin|29-6|0
+1|Shot Put|C|Wittman|27-8|0
+1|Shot Put|C|Montgomery|24-5.5|0
+1|Shot Put|C|Stark|26-4.5|0
+1|Shot Put|N|Bloom|27-5.5|0
+1|Shot Put|N|Plybon|24-0|0
+1|Shot Put|S|Gaspar|29-7|0
+1|Discus|C|Combs|129-9|0
+1|Discus|C|Artwell|111-3|0
+1|Discus|C|Rogalski|105-10|0
+1|Discus|C|Shores|102-3.5|0
+1|Discus|C|Brooks|91-4|0
+1|Discus|S|Bucksar|96-1|0
+1|Discus|C|Forbes|100-3|0
+1|Discus|C|McNeal|95-2|0
+1|Discus|C|Martin|94-0|0
+1|Discus|C|Wittman|90-0|0
+1|Discus|N|Becker|75-2.5|0
+1|Discus|N|Higgins|78-3.5|0
+1|Discus|N|Griffin|77-6.5|0
+1|Discus|N|Essex|73-3|0
+1|Discus|N|Bloom|62-1.5|0
+1|Discus|C|Nau|77-2.5|0
+1|Discus|C|Chonko|65-11|0
+1|Discus|C|Stark|54-8|0
+1|Discus|C|Montgomery|48-3|0
+1|Discus|N|Plybon|48-9|0
+1|Discus|C|Zirkle|93-3|0
