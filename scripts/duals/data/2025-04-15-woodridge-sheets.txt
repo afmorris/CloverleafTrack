@@ -1,0 +1,59 @@
+1|Shot Put|Collin Bohley|15-5.5;15-9;15-4;16-8.5
+1|Shot Put|Braylon Lade|28-3;27-3
+1|Shot Put|Blake Thorne|27-5;27-1
+1|Shot Put|Gunnar Surrarrer|26-8;25-0.5
+1|Shot Put|Isaac Montgomery|27-7;25-8.5
+1|Shot Put|Kaiden Stone|27-11.5;26-9.5
+1|Shot Put|Preston Stark|F;26-9
+1|Shot Put|Dylan Wittman|31-11;32-9
+1|Shot Put|Jacob Atkinson|30-10;30-5.5
+1|Shot Put|Jake Schaefer|31-8.5;32-9
+1|Shot Put|Hunter Brooks|34-6;33-1
+1|Shot Put|Adam Gray|33-9;33-3
+1|Shot Put|Ethan Martin|37-5;37-3.5
+1|Shot Put|JJ Johnson|F;37-2
+1|Shot Put|Jack Chonko|32-11;34-3.5
+1|Shot Put|Dominic Nau|39-1;40-3;40-2.5
+1|Shot Put|Royce Zirkle|37-3.5;37-3;40-10.5
+1|Shot Put|Clay Combs|46-5;45-7
+2|Discus|Issy Mickovsky|24-5;26-3
+2|Discus|Izzy Messmore|44-2.5;41-8.5
+2|Discus|Anna Naftzger|54-3;52-11.5
+2|Discus|Delaney Ishler|61-6;47-2.5
+2|Discus|Addi Reho|64-11.75;65-3
+2|Discus|Amelia Ryncarz|75-10;F
+2|Discus|Berkeley Craddock|57-7;67-4
+2|Discus|Jayce Kreider|F;F
+2|Discus|Presly McConnell|89-7;95-4
+2|Shot Put|Issy Mickovsky|12-9;13-9.5
+2|Shot Put|Izzy Messmore|17-3;17-1
+2|Shot Put|Anna Naftzger|22-7.5;22-6
+2|Shot Put|Delaney Ishler|24-2;25-4
+2|Shot Put|Jayce Kreider|23-7;25-0
+2|Shot Put|Berkeley Craddock|28-0;24-8.5
+2|Shot Put|Amelia Ryncarz|29-7.5;27-10.5
+2|Shot Put|Presly McConnell|36-11;36-9
+1|Discus|Blake Thorne|63-3;67-11
+1|Discus|Braylon Lade|61-10;69-6
+1|Discus|Gunnar Surrarrer|74-0;F
+1|Discus|Isaac Montgomery|62-4;67-5
+1|Discus|Jake Schaefer|56-1;61-1
+1|Discus|Preston Stark|66-2;55-10
+1|Discus|Kaiden Stone|74-3;73-5
+1|Discus|Dominic Nau|84-6;82-11
+1|Discus|Royce Zirkle|79-9;86-3
+1|Discus|Dylan Wittman|91-8;F
+1|Discus|Ethan Martin|87-5;99-10
+1|Discus|Jacob Atkinson|F;105-3
+1|Discus|Adam Gray|112-1;114-4
+1|Discus|Hunter Brooks|105-9;108-8
+1|Long Jump|Ethan Gray|16-9.5;17-2;17-5;F
+1|Long Jump|Elliot Jordan|17-1.5;F;17-0;16-4
+1|Long Jump|Grady Pamer|16-9.75;16-9.25;16-7.75;17-4.5
+1|Long Jump|Collin Saksa|14-3;14-10.25;14-1.75;14-9.25
+1|Long Jump|Clayton Sewallish|15-11.5;14-2;16-2;15-4
+2|Long Jump|Abigail Reinhardt|14-5;F;14-9.75;14-2.5
+2|Long Jump|Kinsey Bayer|14-9.25;15-9;14-11;14-4.75
+2|Long Jump|Lilly Southam|8-9.75;9-5.5;9-4;9-3.5
+2|Long Jump|Katelin Yagersz|F;12-2.75;12-6.75;12-8
+2|Long Jump|Tessa Bogucki|F;12-11;12-8.5;12-4

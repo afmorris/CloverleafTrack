@@ -1,0 +1,343 @@
+# 2025-04-15 Cloverleaf vs Woodridge (DB '2025 Woodridge Dual'); format: g|event|school(C/W)|name|mark   (transcribed from scan_ggucker_2025-04-15; places are computed by rank among both teams)
+1|4x800M Relay|W||8:18.5
+1|4x800M Relay|C||8:22.5
+1|4x800M Relay|W||10:03.9
+1|4x800M Relay|C||10:43
+2|4x800M Relay|W||11:10.5
+2|4x800M Relay|W||11:37.4
+2|4x800M Relay|C||12:36.1
+2|100M Hurdles|W|Howell|17.34
+2|100M Hurdles|C|Berry|17.76
+2|100M Hurdles|W|Schlupe|19.08
+2|100M Hurdles|W|Filebruch|19.21
+2|100M Hurdles|C|Bishop|20.21
+2|100M Hurdles|W|Zaboy|20.65
+1|110M Hurdles|W|Hons|15.43
+1|110M Hurdles|W|Berry|18.42
+1|110M Hurdles|C|Baltic|19.10
+1|110M Hurdles|W|Buesch|19.78
+1|110M Hurdles|C|Pamer|20.04
+2|100M|W|Wydeman|14.69
+2|100M|C|Thur|15.17
+2|100M|W|Miller|15.42
+2|100M|W|Sainchuri|15.59
+2|100M|W|Tyler|15.86
+2|100M|W|Tyler|15.96
+2|100M|C|Yagersz|16.22
+2|100M|C|Southam|16.36
+2|100M|C|Kelly|12.82
+2|100M|C|Shook|13.38
+2|100M|C|Munchick|13.39
+2|100M|W|Canty|13.48
+2|100M|C|Porter|13.68
+2|100M|W|Shelton|14.16
+2|100M|W|Barnes|14.35
+1|4x200M Relay|C||1:35.8
+1|4x200M Relay|W||1:37.1
+1|4x200M Relay|W||1:45.2
+1|4x200M Relay|W||1:59.3
+2|4x200M Relay|C||1:55.8
+2|4x200M Relay|W||DQ
+2|4x200M Relay|C||2:01.8
+2|4x200M Relay|W||2:08.2
+2|4x200M Relay|W||2:21.1
+1|1600M|W|Griffith|4:40.5
+1|1600M|W|Griffith|4:50
+1|1600M|W|Brock|4:51.3
+1|1600M|W|White|4:51.7
+1|1600M|W|Ritrowski|5:03.7
+1|1600M|C|McNeal|5:10.7
+1|1600M|W|Singer|5:13.96
+1|1600M|C|Mion|5:17.2
+1|1600M|W|Testin|5:21.3
+1|1600M|W|Farrington|5:24.8
+1|1600M|C|Gucker|5:30.6
+1|1600M|C|Clapp|5:32.9
+1|1600M|C|Williams|5:35.8
+1|1600M|W|Su|5:37.3
+1|1600M|W|Hogsett|5:45.6
+1|1600M|W|Audie|5:49.8
+1|1600M|C|Evans|6:07.8
+1|1600M|C|Wilk|6:10.8
+1|1600M|C|Mahoney|6:55.8
+2|1600M|W|Boone|5:20.6
+2|1600M|W|Mullen|5:36.5
+2|1600M|C|Hibler|5:42
+2|1600M|W|Singer|5:43.8
+2|1600M|W|Hovey|6:20.3
+2|1600M|W|Hovey|6:21.1
+2|1600M|C|Fallow|6:43.3
+2|1600M|W|Jansen|6:47.7
+2|1600M|W|Glanville|6:54.5
+2|1600M|W|Orr|6:57.7
+2|1600M|C|Spencer|7:33.4
+1|4x100M Relay|C||48.5
+1|4x100M Relay|W||46.6
+1|4x100M Relay|W||55.9
+1|4x100M Relay|W||63.2
+2|4x100M Relay|C||52.75
+2|4x100M Relay|C||59.35
+2|4x100M Relay|W||53.31
+2|4x100M Relay|W||60.61
+2|4x100M Relay|W||68.98
+1|400M|W|Regec|59.93
+1|400M|W|Adams|61.2
+1|400M|W|Robbins|62.3
+1|400M|C|Murray|63.07
+1|400M|C|Porter|63.4
+1|400M|C|Morris|67.4
+1|400M|W|Michalak|67.74
+1|400M|C|James|55.65
+1|400M|W|Lorenz|58.88
+1|400M|W|Laczo|59.23
+1|400M|C|Lotz|59.52
+1|400M|C|Goetz|59.75
+1|400M|C|Usry|65.75
+2|400M|W|Perry|1:03.95
+2|400M|C|Wershing|1:05.92
+2|400M|C|Cavey|1:07.9
+2|400M|C|Shetterly|1:08.72
+2|400M|W|Singer|1:09.46
+2|400M|C|Bayer|1:14.09
+2|400M|W|Haywood|1:15.03
+2|300M Hurdles|W|Howell|50.82
+2|300M Hurdles|C|Berry|54.4
+2|300M Hurdles|W|McFarland|55.57
+2|300M Hurdles|C|Ellebruch|56.94
+2|300M Hurdles|C|Bishop|58.47
+2|300M Hurdles|W|Schlupe|59.54
+2|300M Hurdles|C|Riley|59.97
+1|300M Hurdles|W|Hans|39.94
+1|300M Hurdles|W|Berry|43.74
+1|300M Hurdles|C|Smith|44.53
+1|300M Hurdles|W|Walker|46.64
+1|300M Hurdles|W|Bush|48.73
+1|300M Hurdles|C|Baltic|50.0
+1|800M|W|Griffiths|2:03.3
+1|800M|W|McAllister|2:03.6
+1|800M|W|Sloan|2:04.7
+1|800M|C|Myers|2:07.7
+1|800M|C|Jenkins|2:09.3
+1|800M|W|McAllister|2:13.8
+1|800M|W|Singer|2:20.7
+1|800M|W|Farrington|2:26.9
+1|800M|C|Ortega|2:28
+1|800M|C|Williams|2:35
+1|800M|W|Wojciechowski|2:38.7
+1|800M|C|Bullis|2:49.3
+1|800M|C|Wilk|2:53.1
+1|800M|C|Mullinex|2:58.9
+1|800M|C|Mahoney|3:37.7
+2|800M|W|Boone|2:21.1
+2|800M|W|Stanford|2:35.2
+2|800M|C|Hibler|2:44.6
+2|800M|W|Adame|2:46.4
+2|800M|C|Fallow|2:53.2
+2|800M|W|McMonigle|2:56.0
+2|800M|W|Hovey|2:56.5
+2|800M|W|Hovey|2:58.2
+2|800M|W|Glanville|3:02.5
+2|800M|C|Jarvis|3:03
+2|800M|W|Janson|3:09.3
+2|800M|W|Orr|3:23
+2|800M|C|Spencer|3:24.7
+1|100M|W|Smith|13.23
+1|100M|W|Karimura|13.46
+1|100M|C|Saksa|14.03
+1|100M|W|Marshona|14.40
+1|100M|C|Powers|12.65
+1|100M|W|Deberry|12.77
+1|100M|W|Laczo|12.97
+1|100M|W|Regec|13.02
+1|100M|C|Murray-Garver|13.07
+1|100M|C|Neill|13.16
+1|100M|C|Bullis|13.87
+1|100M|W|Jones|12.49
+1|100M|W|Hume|13.08
+1|100M|C|Sewalish|13.39
+1|100M|C|Porter|13.43
+1|100M|C|Morris|13.69
+1|100M|C|Usry|13.93
+1|100M|C|Smith|11.82
+1|100M|W|Cross|11.91
+1|100M|W|Stall|11.92
+1|100M|W|Walker|12.05
+1|100M|W|Denson|12.07
+1|100M|C|Lotz|12.47
+1|100M|C|Davis|12.80
+1|100M|C|Goetz|13.04
+2|200M|W|Wydaman|31.23
+2|200M|W|Tyler|34.49
+2|200M|W|Tyler|34.76
+2|200M|W|Sinchuri|34.86
+2|200M|W|Hinkelman|35.23
+2|200M|C|Yagersz|35.63
+2|200M|C|Southam|36.74
+2|200M|C|Wershing|28.85
+2|200M|W|Zaboy|30.51
+2|200M|C|Reinhart|30.65
+2|200M|W|Shelton|30.76
+2|200M|W|Barnes|30.78
+2|200M|W|Haywood|32.58
+2|200M|C|Thur|33.86
+2|200M|C|Kelly|27.7
+2|200M|W|Perry|28.39
+2|200M|C|Munchick|28.62
+2|200M|C|Porter|29.07
+2|200M|W|Canty|29.28
+2|200M|W|Lorenz|29.50
+1|200M|C|Powers|26.12
+1|200M|C|Davis|26.92
+1|200M|C|Neil|27.25
+1|200M|C|Sewalish|27.45
+1|200M|C|Saksa|28.28
+1|200M|C|Morris|29.38
+1|200M|W|Marshanie|31.02
+1|200M|C|Usry|33.58
+1|200M|W|Denson|25.48
+1|200M|C|Jordan|26.55
+1|200M|W|Hume|27.15
+1|200M|W|Regec|27.16
+1|200M|C|Lotz|27.38
+1|200M|W|Laczo|27.92
+1|200M|C|Goetz|28.42
+1|200M|C|Murray-Garver|29.08
+1|3200M|W|Griffiths|10:30.4
+1|3200M|W|White|10:30.9
+1|3200M|W|LeBay|10:32.6
+1|3200M|W|Brock|10:36.4
+1|3200M|W|Pitrowski|10:55
+1|3200M|C|McNeal|11:23
+1|3200M|W|Teston|11:25.3
+1|3200M|C|Mion|11:27
+1|3200M|C|Gucker|11:32.8
+1|3200M|C|Clapp|12:03
+1|3200M|W|Hogsett|12:34
+1|3200M|W|Ayala|12:38
+2|3200M|W|Mullen|12:04.03
+2|3200M|C|Hibler|12:04.34
+2|3200M|W|Singer|12:13.5
+2|3200M|W|Wuscher|12:35
+2|3200M|W|Willkinson|13:31
+2|3200M|C|Monhemius|13:36
+1|Shot Put|C|Combs|46-5
+1|Shot Put|C|Zirkle|40-10.5
+1|Shot Put|C|Nau|40-3
+1|Shot Put|W|Ray|39-3.5
+1|Shot Put|W|Christenson|38-8.5
+1|Shot Put|W|Adams|35-10.5
+1|Shot Put|C|Chonko|34-3.5
+1|Shot Put|W|Hogan|33-10.5
+1|Shot Put|W|Callier|31-11.5
+1|Shot Put|W|Petrowsky|30-1
+1|Shot Put|W|Seward|29-6.5
+1|Shot Put|W|Tyshon|27-4.5
+1|Shot Put|W|Mcotta|20-8.5
+2|Shot Put|C|McConnell|36-11
+2|Shot Put|W|Jo|30-2
+2|Shot Put|C|Ryncarz|29-7.5
+2|Shot Put|W|Emily|28-6.5
+2|Shot Put|C|Craddock|28-0
+2|Shot Put|C|Kreider|25-0
+2|Shot Put|C|Ishler|25-4
+2|Shot Put|W|Gia|24-5
+2|Shot Put|W|Carmyn|22-8.5
+2|Shot Put|C|Naftzger|22-7.5
+2|Shot Put|W|Katie|22-6.5
+2|Shot Put|W|Eva|22-4
+2|Shot Put|W|Mary|21-11
+2|Shot Put|W|Peyton|18-5
+2|Shot Put|W|Isabella|18-0.5
+2|Shot Put|W|Veronica|17-8
+2|Shot Put|C|Messmore|17-3
+2|Discus|W|Mayer|99-1
+2|Discus|C|McConnell|95-4
+2|Discus|C|Ryncarz|75-10
+2|Discus|W|Regec|75-8
+2|Discus|W|Volsard|73-2
+2|Discus|W|Thomson|67-1
+2|Discus|C|Craddock|67-4
+2|Discus|W|Parker|66-10
+2|Discus|W|Ludwig|63-1
+2|Discus|C|Reho|65-3
+2|Discus|C|Ishler|61-6
+2|Discus|C|Naftzger|54-3
+2|Discus|W|Trotta|51-7
+2|Discus|W|Marino|45-4
+2|Discus|C|Messmore|44-2.5
+2|Discus|W|Card|43-1
+2|Discus|W|Slawter|42-4
+2|Discus|W|Thomson|43-0
+2|Discus|C|Mickovsky|26-3
+1|Discus|C|Combs|134-0
+1|Discus|W|Christensen|115-3
+1|Discus|C|Gray|114-4
+1|Discus|C|Brooks|108-8
+1|Discus|C|Atkinson|105-3
+1|Discus|W|Adams|105-3
+1|Discus|C|Johnson|101-6
+1|Discus|C|Martin|99-10
+1|Discus|W|Hogan|95-7
+1|Discus|W|Covelli|95-4
+1|Discus|C|Wittman|91-2
+1|Discus|C|Chonko|86-5
+1|Discus|C|Zirkle|86-3
+1|Discus|W|Madee|84-6
+1|Discus|C|Nau|82-11
+1|Discus|W|Petrowski|76-9
+1|Discus|C|Stone|74-3
+1|Discus|C|Surrarrer|74-0
+1|Discus|W|Slate|57-9
+1|Discus|W|Moncada|56-11
+1|Discus|C|Lade|69-6
+1|Discus|C|Montgomery|67-5
+1|Discus|C|Thorne|67-11
+1|Discus|C|Stark|66-2
+1|Discus|C|Schaefer|61-1
+1|Long Jump|W|Tyree|19-1
+1|Long Jump|W|Lorenz|17-8.75
+1|Long Jump|C|Gray|17-5
+1|Long Jump|C|Pamer|17-4.5
+1|Long Jump|C|Jordan|17-1.5
+1|Long Jump|C|Sewallish|16-2
+1|Long Jump|W|Smith|16-1
+1|Long Jump|W|Michalak|15-10.25
+1|Long Jump|C|Saksa|14-10.25
+1|Long Jump|C|Morris|14-7
+1|Long Jump|W|Almestica|12-2.75
+2|Long Jump|C|Bayer|15-9
+2|Long Jump|W|Howell|15-7
+2|Long Jump|C|Reinhardt|14-9.75
+2|Long Jump|W|Peterson|13-9.5
+2|Long Jump|W|Fritz|13-8.75
+2|Long Jump|W|Smith|13-2
+2|Long Jump|C|Yagersz|12-8
+2|Long Jump|C|Bogucki|12-11
+2|Long Jump|C|Southam|9-5.5
+1|4x400M Relay|C||3:34.6
+1|4x400M Relay|W||3:39.4
+1|4x400M Relay|C||3:52.2
+2|4x400M Relay|W||4:26.7
+2|4x400M Relay|C||4:28.1
+2|4x400M Relay|C||5:00.3
+2|High Jump|W|Peterson|4-10
+2|High Jump|W|Howell|4-8
+2|High Jump|C|Bayer|4-6|1
+2|High Jump|W|Smith|4-6|2
+2|High Jump|C|Ellebruch|4-6|2
+2|High Jump|W|Smith|4-3|1
+2|Pole Vault|C|Shetterly|8-0
+2|Pole Vault|C|Thur|7-0
+2|Pole Vault|W|Izzy|7-0
+2|Pole Vault|W|Regan|7-0
+2|Pole Vault|W|Aspen|6-0
+1|High Jump|W|Tyree|5-10
+1|High Jump|C|Kilgore|5-2|1
+1|High Jump|W|Beusch|5-2|2
+1|High Jump|C|Pamer|5-0|1
+1|High Jump|W|Smith|5-0|1
+1|High Jump|C|Tomes|5-0|2
+1|Pole Vault|W|Kai|8-6
+1|Pole Vault|W|Nathan|7-6
+1|Pole Vault|W|Andrew|7-0|1
+1|Pole Vault|C|Baltic|7-0|2
