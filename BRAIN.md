@@ -2435,3 +2435,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** in these Hy-Tek pages the first mark is the seed, not a prelim. Every Cloverleaf individual and relay row on the pages we have (39 rows, 2007-2021) matches the DB except the hand-timing quirk (11:30.07 vs the DB's 11:30.7; 51.09 vs 51.9). 2022-2025 state meets, the 2001-2006 pages and the 1990-2000 PDFs were not compared. Only ~10 Cloverleaf field rows carry a series; most state rows are track.
 
 **Key files:** `docs/imports/ohsaa-state-series.sql`, `docs/imports/2019-seated-state-shot-put-series.sql`.
+
+### [C95] OHSAA State Results 2001-2008 and Scanned PDFs (1960-1991)
+
+**What changed:** the 2001-2008 OHSAA pages (`ohsaa.org/sports/tf/<year>/resultslnk.htm` framesets -> per-division pages) and the 1912-2000 PDFs (`/Portals/0/Sports/Track-Field/pastresults/{boys,girls}/`; only 1998-2000 have text layers, the rest were OCR'd with macOS Vision) were compared with the DB. `ohsaa-2001-2008-fixes.sql`: Hutson 267.5 -> 4:27.05 (owner), Beebe prelim 38.92 -> final 38.68 chain, new "2001 OHSAA Division I State Track and Field Championships" (2001-06-01) with Andy Bittner 3200M 9:51.18. `ohsaa-pdf-1960-1991-fixes.sql`: Charles Massie 1994 800M 1:54.60, Scott Murphy 1982 800M 1:55.62, new athlete Scott Chrislip (class of 1973) HJ 6'4" (1972) and 6'2" (1973), Bill Heffelfinger 1960 220 in 22.4, Kim Malarkey 1600M 5:18.10 (1990) and 5:04.92 (1991); new meets/seasons for 1960 Class A, 1972, 1973 and 1982 State (dates are June 1 placeholders; the PDFs print none).
+
+**Why:** the early state meets were stubs. Both files are Id-independent (lookups by name) and re-runnable. Applied locally and live.
+
+**Watch out:** yards are stored as meters (1962 precedent). OCR garbles marks (1973 HJ read as noise; the scan says 6' 2"); verify against the page image. Not added: Chrislip 1972 180-yd low hurdles 23.0 (no such event) and the 1990 girls 4x800 (Kim/Cathy Ocheltree/"Favna" Bender/Tracey Malarkey, 9:31.10, Bender not in DB). Only the winner's time is printed in 1960, so Heffelfinger's 3rd in the 100 has no mark.
+
+**Key files:** `docs/imports/ohsaa-2001-2008-fixes.sql`, `docs/imports/ohsaa-pdf-1960-1991-fixes.sql`.
