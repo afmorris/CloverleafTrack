@@ -2405,3 +2405,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** only A/B/C teams that appear in 2+ rounds are chained; legs are not compared with `PerformanceAthletes` (Live uses nicknames such as Kierston for the DB's KK). The 5 relay events on Live that have no DB row at the matching time were not touched.
 
 **Key files:** `scripts/athleticnet/build_live_relay_rounds.py`, `docs/imports/2023-2026-live-relay-rounds.sql`.
+
+### [C92] 2023 Early Bird Girls Shot Put: The Kreider Sisters Were Mixed Up on Live
+
+**What changed:** `docs/imports/2023-early-bird-kreider-shot-put.sql` (applied local and live 2026-10-20). Owner's correction from watching the meet: Jayce Kreider threw 22-9, 21-6.5, 20-11.5 (mark 24' 2" -> **22' 9"**, 290 -> 273) and Karoline Kreider threw 24-2, 25-11, 27-2.5 (mark 25' 11" -> **27' 2.5"**, 311 -> 326.5). Attempt series replaced for both (Jayce had the contaminated four 24-2, 22-9, 21-6.5, 20-11.5 from [C88]/[C89]; Karoline had none).
+
+**Why:** MileSplit Live's row for Jayce held attempts from both sisters (it listed 24-2 / 22-9 / 21-6.5 / 20-11.5 / 25-11 / 27-2.5), and the official mark column (24-2 for Jayce, 25-11 for Karoline) was wrong for both. [C89] had kept Jayce's first four attempts; that was wrong too.
+
+**Watch out:** `convert_live.py` now skips both Kreider rows at that meet (`SKIP_ROWS`) so a regeneration cannot bring the mixed row back. The Id-based files `2023-2026-live-attempts.sql` and the older Kreider block assert Jayce's old mark (290) and will refuse to run again. The other Early Bird results for the sisters (discus: Karoline 86-8, Jayce 83-9 on Live; DB 1040 and 1005) were not re-checked against a source and could be mixed up the same way.
+
+**Key files:** `docs/imports/2023-early-bird-kreider-shot-put.sql`, `scripts/athleticnet/convert_live.py`.

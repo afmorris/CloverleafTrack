@@ -39,7 +39,8 @@ ids = sys.argv[2:] or [f[:-4] for f in sorted(os.listdir(live_dir)) if f.endswit
 ath = collections.defaultdict(list)
 for i, f, l, g in q("SELECT Id, FirstName, LastName, Gender FROM Athletes"): ath[(norm(f + ' ' + l), int(g))].append((int(i), f + ' ' + l))
 notes = []
-OVERRIDE_FIRST4 = {('530482', 'Jayce Kreider', 'Shot Put')}
+OVERRIDE_FIRST4 = set()   # (the Kreider sisters' 2023 Early Bird shot put row was mixed up on Live: fixed by hand in docs/imports/2023-early-bird-kreider-shot-put.sql)
+SKIP_ROWS = {('530482', 'Jayce Kreider', 'Shot Put'), ('530482', 'Karoline Kreider', 'Shot Put')}   # never regenerate from Live
 # Ladders whose Live columns do not line up with the heights; transcribed by the owner (watching the meet / the Live page). 'XXP' = two misses then a pass;
 # a lone 'X' = the last miss that ended the competition (needs docs/migration_performance_bars_x.sql).
 MANUAL_BARS = {
@@ -94,6 +95,7 @@ for msid in ids:
             if mark not in ('--', '') : notes.append(f'{msid}/{dbid}: no DB result for {who} {evname} ({"Boys" if gender == 1 else "Girls"}) mark {mark}')
             continue
         pid, dist, haveser, nm = row
+        if (msid, nm, evname) in SKIP_ROWS: continue
         if haveser and not os.environ.get('LIVE_IGNORE_EXISTING'): continue
         if evname in VERT and (msid, nm, evname) in MANUAL_BARS:
             bars.append(f'{gender}|{evname}|{nm}|{MANUAL_BARS[(msid, nm, evname)]}'); continue
