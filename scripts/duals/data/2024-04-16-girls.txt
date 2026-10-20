@@ -1,0 +1,177 @@
+2|4x800M Relay|C||10:41|0
+2|4x800M Relay|S||10:44|0
+2|4x800M Relay|N||11:59|0
+2|4x800M Relay|N||13:15|0
+2|4x200M Relay|C||1:50.47|0
+2|4x200M Relay|N||1:55.19|0
+2|4x200M Relay|S||1:56.02|0
+2|4x200M Relay|C||2:04.78|0
+2|4x100M Relay|C||51.68|0
+2|4x100M Relay|N||54.53|0
+2|4x100M Relay|C||54.93|0
+2|4x400M Relay|C||4:22|0
+2|4x400M Relay|C||4:29|0
+2|4x400M Relay|N||4:33|0
+2|4x400M Relay|S||4:37|0
+2|100M Hurdles|N|Easterling|16.0|0
+2|100M Hurdles|C|Campbell|17.28|0
+2|100M Hurdles|N|Peters|18.6|0
+2|100M Hurdles|C|Berry|18.71|0
+2|100M Hurdles|N|Carter|19.6|0
+2|100M Hurdles|C|Goldsberry|19.27|0
+2|100M|C|Evans|12.7|0
+2|100M|C|Kelly|12.71|0
+2|100M|N|Hewitt|13.3|0
+2|100M|N|Prentiss|13.9|0
+2|100M|C|Berry|13.6|0
+2|100M|C|Cavey|13.76|0
+2|100M|C|Shetterly|14.4|0
+2|100M|C|Porter|14.41|0
+2|100M|C|Hopek|14.42|0
+2|100M|C|Petrocci|14.66|0
+2|100M|S|Walberg|14.66|0
+2|100M|N|Lalonde|15.02|0
+2|100M|N|Tosh|15.2|0
+2|100M|N|Oppong|15.3|0
+2|100M|C|Thur|15.39|0
+2|100M|N|Crawford|15.40|0
+2|100M|N|King|15.5|0
+2|100M|C|Beers|15.6|0
+2|100M|N|Kayes|15.67|0
+2|100M|C|Southam|16.1|0
+2|100M|C|Yagers|16.23|0
+2|100M|S|Bry|17.48|0
+2|200M|C|Evans|26.27|0
+2|200M|N|Hewitt|26.87|0
+2|200M|C|Kelly|27.1|0
+2|200M|N|Vickery|28.2|0
+2|200M|N|Prentiss|29.2|0
+2|200M|C|Porter|29.4|0
+2|200M|C|Barnet|30.1|0
+2|200M|C|Reinhardt|30.2|0
+2|200M|N|Champer|30.4|0
+2|200M|C|Petrocci|31.07|0
+2|200M|S|Walberg|31.12|0
+2|200M|S|Woods|31.3|0
+2|200M|N|Touth|32|0
+2|200M|N|Lalonde|32.8|0
+2|200M|C|Thur|32.7|0
+2|200M|C|Beers|32.9|0
+2|200M|N|Oppong|33.0|0
+2|200M|N|King|33.3|0
+2|200M|N|Keys|34.4|0
+2|200M|C|Yagers|35.2|0
+2|200M|C|Southam|36.01|0
+2|400M|C|Evans|60.24|0
+2|400M|C|Shetterly|66.42|0
+2|400M|N|Vickery|68.06|0
+2|400M|S|Gaspar|70.13|0
+2|400M|N|Champer|70.33|0
+2|400M|C|Hopek|1:06.1|0
+2|400M|C|Cavey|1:06.7|0
+2|400M|S|Hileman|1:08.5|0
+2|400M|C|Bohan|74.6|0
+2|400M|N|Nutter|81.6|0
+2|400M|C|Southam|83.1|0
+2|300M Hurdles|C|Campbell|50.9|0
+2|300M Hurdles|C|Berry|52.88|0
+2|300M Hurdles|N|Peters|54.1|0
+2|300M Hurdles|N|Carter|58.4|0
+2|300M Hurdles|C|Goldsberry|1:01.94|0
+2|800M|S|Kunkler|2:39.3|0
+2|800M|C|Yagers|2:39.8|0
+2|800M|S|Akers|2:46.5|0
+2|800M|S|Davis|2:48.05|0
+2|800M|S|Kunkler|2:48.4|0
+2|800M|S|Snyder|2:48.7|0
+2|800M|C|Bammerlin|2:50.8|0
+2|800M|N|Bennett|2:52.5|0
+2|800M|C|Monhemius|2:53.0|0
+2|800M|N|Smolinska|2:54|0
+2|800M|C|Izzo|2:55|0
+2|800M|C|Jarvis|3:01|0
+2|800M|S|Bell|4:14|0
+2|1600M|C|Knapp|5:39|0
+2|1600M|C|Yagers|5:48|0
+2|1600M|S|Kunkler|5:55|0
+2|1600M|S|Snyder|5:57|0
+2|1600M|C|Gucker|6:02|0
+2|1600M|S|Frient|6:05|0
+2|1600M|S|Kunkler|6:09|0
+2|1600M|C|Monhemius|6:10|0
+2|1600M|S|Rowley|6:16.17|0
+2|1600M|N|Bennett|6:16.9|0
+2|1600M|S|Davis|6:19|0
+2|1600M|C|Bammerlin|6:28|0
+2|1600M|N|Latham|7:06|0
+2|1600M|S|Mileland|7:09|0
+2|1600M|N|Rutherford|8:46|0
+2|1600M|N|Gray|9:17|0
+2|3200M|C|Hibler|13:26|0
+2|3200M|C|Knapp|13:26.1|0
+2|3200M|S|Frient|13:31|0
+2|3200M|S|Rowley|13:48|0
+2|3200M|C|Jensen|14:42|0
+2|3200M|N|Latham|16:15|0
+2|3200M|C|Milbrandt|16:19|0
+2|3200M|N|Green|18:11|0
+2|Long Jump|C|KK Campbell|16-0.25|0
+2|Long Jump|N|Easterling|15-7|0
+2|Long Jump|C|Reinhardt|15-5|0
+2|Long Jump|C|Barnett|15-0.75|0
+2|Long Jump|N|Green|14-2.25|0
+2|Long Jump|C|Goldsberry|13-3.75|0
+2|Long Jump|N|Hastings|12-6|0
+2|Long Jump|S|Davis|12-8|0
+2|Long Jump|S|Friend|12-0.75|0
+2|Long Jump|C|Yagers|11-8.75|0
+2|High Jump|N|Easterling|4-8|0
+2|High Jump|C|Goldsberry|4-4|0
+2|High Jump|C|Reinhardt|4-4|0
+2|High Jump|S|Hileman|4-0|0
+2|Shot Put|N|Hallett|45-2.5|0
+2|Shot Put|C|McConnell|31-5|0
+2|Shot Put|C|Ryncarz|30-10.5|0
+2|Shot Put|C|Kreider|28-1|0
+2|Shot Put|N|Emerson|27-11|0
+2|Shot Put|N|Brown|26-3.5|0
+2|Shot Put|S|Walsh|26-2|0
+2|Shot Put|N|Becca Hallett|26-1.5|0
+2|Shot Put|C|Kott|26-7|0
+2|Shot Put|C|Craddock|27-1|0
+2|Shot Put|C|Naftzger|25-3|0
+2|Shot Put|C|Jayce Kreider|23-2|0
+2|Shot Put|S|Headley|22-5.5|0
+2|Shot Put|C|Kehoe|22-5|0
+2|Shot Put|C|Izzo|22-8|0
+2|Shot Put|C|Bell|21-4|0
+2|Shot Put|N|Swinehart|20-9|0
+2|Shot Put|S|Bey|19-9|0
+2|Shot Put|N|Street|19-10|0
+2|Shot Put|N|Pennell|18-6.5|0
+2|Shot Put|N|Dye|18-7|0
+2|Shot Put|N|Van Tol|16-11|0
+2|Shot Put|N|Rexroad|13-8|0
+2|Shot Put|N|Bornstine|13-3.5|0
+2|Discus|N|Hallett|138-3|0
+2|Discus|C|Karoline Kreider|100-4|0
+2|Discus|C|McConnell|100-2.5|0
+2|Discus|N|Becca Hallett|95-3.5|0
+2|Discus|C|Ryncarz|82-1.5|0
+2|Discus|C|Jayce Kreider|70-9|0
+2|Discus|C|Craddock|71-3|0
+2|Discus|N|Emerson|69-5|0
+2|Discus|N|Swinehart|67-9.5|0
+2|Discus|S|Walsh|66-4|0
+2|Discus|C|Kott|66-3.5|0
+2|Discus|C|Naftzger|62-8.5|0
+2|Discus|S|Headley|59-4|0
+2|Discus|C|Kehoe|58-10|0
+2|Discus|N|Brown|59-2|0
+2|Discus|C|Bell|48-4.5|0
+2|Discus|N|Van Tol|45-1|0
+2|Discus|N|Street|44-2|0
+2|Discus|N|Rexroad|41-11|0
+2|Discus|N|Pennell|38-10|0
+2|Discus|N|Dye|40-4|0
+2|Discus|N|Bornstine|33-5|0

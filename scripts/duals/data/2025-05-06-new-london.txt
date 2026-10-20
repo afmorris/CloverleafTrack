@@ -1,0 +1,126 @@
+1|4x100M Relay|C||48.0|0
+2|4x100M Relay|C||51.4|0
+1|4x200M Relay|C||1:36.2|0
+2|4x200M Relay|C||1:53.9|0
+1|4x800M Relay|C||9:19.9|0
+1|4x800M Relay|N||10:40.9|0
+2|4x800M Relay|C||12:33.6|0
+1|110M Hurdles|N|McMaster|19.35|0
+1|110M Hurdles|C|Baltic|19.66|0
+1|110M Hurdles|C|Pamer|19.82|0
+2|100M Hurdles|N|Smith|15.68|0
+2|100M Hurdles|C|Campbell|17.07|0
+2|100M Hurdles|C|Berry|17.54|0
+2|100M Hurdles|N|Waugaman|19.16|0
+2|100M Hurdles|C|Bishop|20.01|0
+1|300M Hurdles|C|Thompson|46.4|0
+1|300M Hurdles|C|Baltic|48.1|0
+1|300M Hurdles|N|McMaster|48.7|0
+1|300M Hurdles|N|Geist|51.4|0
+2|300M Hurdles|N|Smith|46.7|0
+2|300M Hurdles|C|Reusch|52.3|0
+2|300M Hurdles|C|Bishop|57.9|0
+2|300M Hurdles|N|Waugaman|60.1|0
+1|400M|C|Porter|59.2|0
+1|400M|N|Byron|60.7|0
+1|400M|N|Mitterling|62.2|0
+1|400M|N|Wright|67.6|0
+1|400M|C|Jenkins|53.7|0
+1|400M|N|Carothers|55.2|0
+1|400M|N|Twining|56.6|0
+1|400M|N|Chandley|57.2|0
+1|400M|C|Lotz|58.6|0
+1|400M|C|Goetz|60.2|0
+2|400M|C|Shetterly|66.1|0
+2|400M|N|Crockett|69.9|0
+2|400M|N|Phillips|72.6|0
+2|400M|N|DeLong|89.9|0
+1|200M|C|Sewalish|26.22|0
+1|200M|N|Mitterling|27.21|0
+1|200M|N|Byron|27.34|0
+1|200M|C|Porter|27.51|0
+1|200M|C|Morris|28.04|0
+1|200M|C|Saksa|28.25|0
+1|200M|N|Bracken|28.84|0
+1|200M|N|Wright|30.33|0
+1|200M|C|Powers|25.0|0
+1|200M|C|Jordan|25.53|0
+1|200M|N|Carothers|25.62|0
+1|200M|C|Davis|26.15|0
+1|200M|N|Chandley|26.25|0
+1|200M|C|Neill|26.4|0
+1|200M|N|Coduse|28.62|0
+2|200M|C|Cavey|28.32|0
+2|200M|N|Smith|28.98|0
+2|200M|C|Porter|29.68|0
+2|200M|N|Waugaman|30.66|0
+2|200M|C|Bogucki|33.32|0
+2|200M|C|Thur|33.64|0
+2|200M|C|Southam|35.0|0
+2|200M|N|DeLong|39.32|0
+1|100M|N|Twining|12.58|0
+1|100M|C|Neill|12.68|0
+1|100M|N|Carothers|12.78|0
+1|100M|C|Sewalish|12.85|0
+1|100M|C|Goetz|12.95|0
+1|100M|C|Morris|13.25|0
+1|100M|C|Porter|13.28|0
+1|100M|C|Saksa|13.43|0
+1|100M|C|Lotz|12.28|0
+1|100M|C|Powers|12.46|0
+1|100M|C|Davis|12.98|0
+1|100M|N|Mitterling|13.03|0
+1|100M|C|Tomes|13.08|0
+1|100M|N|Clouse|13.18|0
+1|100M|N|Byron|13.5|0
+2|100M|C|Kelly|13.03|0
+2|100M|C|Wershing|13.84|0
+2|100M|N|Phillips|15.03|0
+2|100M|C|Bogucki|15.18|0
+2|100M|C|Thur|15.34|0
+2|100M|C|Yagerz|16.1|0
+2|100M|N|Da Casdo|16.23|0
+2|100M|C|Southam|16.24|0
+1|800M|C|Myers|2:03.5|0
+1|800M|C|Kilgore|2:09.7|0
+1|800M|N|Twining|2:19.3|0
+1|800M|C|Mion|2:21|0
+1|800M|C|Williams|2:29.9|0
+1|800M|N|Landis|2:39.2|0
+1|800M|C|Wilk|2:40.5|0
+1|800M|C|Evans|2:48.2|0
+1|800M|C|Mullinex|2:56.7|0
+2|800M|N|Crockett|2:58.2|0
+2|800M|C|Reho|3:03.9|0
+2|800M|N|Da Casdo|3:04.6|0
+2|800M|N|Willis|3:10.9|0
+1|1600M|C|Forbes|4:57.2|0
+1|1600M|C|Gucker|5:18|0
+1|1600M|C|Ortega|5:22.3|0
+1|1600M|N|Landis|5:35.7|0
+1|1600M|C|Evans|5:53.9|0
+2|1600M|C|Hibler|5:26.5|0
+2|1600M|N|Willis|7:34|0
+1|Long Jump|C|Kovach|19-8.75|0
+1|Long Jump|C|Jordan|18-11|0
+1|Long Jump|C|Pamer|18-2|0
+1|Long Jump|C|Saksa|16-3.25|0
+1|Long Jump|C|Sewalish|16-5.25|0
+1|Long Jump|C|Smith|17-5|0
+1|Long Jump|N|McMaster|17-0.5|0
+2|Long Jump|C|Reinhardt|16-0.5|0
+2|Long Jump|C|Bogucki|14-1.25|0
+2|Long Jump|C|Yagerz|12-9.25|0
+2|Long Jump|C|Southam|10-4|0
+1|High Jump|C|Pamer|5-0|1
+1|High Jump|C|Kilgore|5-0|1
+2|High Jump|C|Reinhardt|4-8|1
+2|High Jump|N|Crockett|4-6|2
+1|Pole Vault|N|Bracken|11-0|0
+1|Pole Vault|N|Landis|10-0|0
+1|Pole Vault|N|Clouse|9-0|0
+1|Pole Vault|N|Twining|9-0|0
+1|Pole Vault|C|Baltic|8-0|0
+2|Pole Vault|C|Shetterly|10-0|0
+2|Pole Vault|N|Waugaman|6-0|0
+2|Pole Vault|C|Thur|6-0|0

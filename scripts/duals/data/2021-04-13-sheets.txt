@@ -1,0 +1,35 @@
+1|Shot Put|Tommy Sword|34-5;32-8;32-5.5;30-9.5
+1|Shot Put|Michael Ribnikar|34-0;28-0;F;32-0
+1|Shot Put|Will Rogalski|F;F;30-3;32-11
+1|Shot Put|Emilio Rivera|29-8.5;F;33-1;31-8
+1|Shot Put|Will Hall|30-5.5;30-6.5;31-10.5;32-3.5
+1|Shot Put|Kemp Wilson|26-8.5;28-1;28-11;29-6.5
+1|Shot Put|Elian Zayed|26-7.5;27-2.5;31-2.5;28-8
+1|Shot Put|Logan Campbell|26-3;26-4;28-4;28-3
+1|Shot Put|Cooper Straub|F;24-8;25-0
+2|Shot Put|Kaylee Tabor|17-5.5;18-9;18-2.5;18-4.5
+2|Shot Put|Kayleigh Ethington|17-3.25;16-9.25;15-10.75;F
+2|Shot Put|Natasha Messmore|21-6.25;20-8.75;20-7.25;22-0.5
+2|Shot Put|Karoline Kreider|22-10.5;20-2;25-3.75;F
+2|Shot Put|DeLayna Harvey|27-8.5;27-11.75;25-10.25;22-10.5
+2|Discus|Kaylee Tabor|39-8;F;45-1;F
+2|Discus|Natasha Messmore|60-6;F;51-11;F
+2|Discus|Madison Vasel|50-7;50-2;56-1;53-9
+2|Discus|Kayleigh Ethington|53-3;54-3;58-5;F
+2|Discus|Karoline Kreider|F;F;71-8;74-1
+2|Discus|DeLayna Harvey|87-6;85-4;80-4;F
+1|Long Jump|Dylan Bresnahan|14-2.75;13-5.75;13-7.75;14-4.25
+1|Long Jump|Tony Brilla|12-5.5;13-3.5;12-11.5;F
+1|Long Jump|Tristan Craddock|13-10;14-7.5;14-3.25;14-5.5
+1|Long Jump|Philly Hamilton|16-7.75;18-6;F;F
+1|Long Jump|Hayden Jarvis|F;14-6;15-0.25;14-7.75
+1|Long Jump|Oakley Kemp|F;15-7.75;F;16-9.75
+1|Long Jump|Peyton McConnell|15-3.75;16-2.5;16-3.25;16-4.25
+1|Long Jump|Jeris Miller|14-1;15-0.75;14-7;14-3.75
+1|Long Jump|Jacob Nau|17-5;F;F;18-6.25
+1|Long Jump|Michael Williams|17-6.75;18-7.25;17-10.5;18-7.25
+2|Long Jump|Laurell Brown|14-1;F;14-5.5;F
+2|Long Jump|Emma Malikowski|F;F;F;15-0.25
+2|Long Jump|Ashley Sigmon|13-7;13-11.5;14-8.75;14-8.75
+2|Long Jump|Meghan Cavey|11-3;13-9.25;13-8;13-9.75
+2|Long Jump|Julia Armogida|F;13-4;13-8.5;13-9
