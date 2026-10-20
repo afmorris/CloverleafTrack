@@ -1,0 +1,37 @@
+1|1600M|Austin McNeal|310.0|310.7
+1|1600M|Noah Mion|317.0|317.2
+1|1600M|Clay Gucker|330.0|330.6
+1|1600M|Mason Clapp|332.0|332.9
+1|1600M|Cayden Williams|335.0|335.8
+1|1600M|Luke Evans|367.0|367.8
+1|1600M|Matthew Wilk|370.0|370.8
+1|1600M|Kyle Mahoney|415.0|415.8
+1|300M Hurdles|Lincoln Baltic|50.0|50.0
+1|3200M|Austin McNeal|683.0|683.0
+1|3200M|Noah Mion|687.0|687.0
+1|3200M|Clay Gucker|692.0|692.8
+1|3200M|Mason Clapp|723.0|723.0
+1|4x200M Relay| |95.0|95.8
+1|4x400M Relay| |214.0|214.6
+1|4x800M Relay| |502.0|502.5
+1|4x800M Relay| |643.0|643.0
+1|800M|Ben Myers|127.0|127.7
+1|800M|Matthew Jenkins|129.0|129.3
+1|800M|Antonio Ortega|148.0|148.0
+1|800M|Cayden Williams|155.0|155.0
+1|800M|Chayton Bullis|169.0|169.3
+1|800M|Matthew Wilk|173.0|173.1
+1|800M|Aiden Mullinex|178.0|178.9
+1|800M|Kyle Mahoney|217.0|217.7
+2|1600M|Emma Hibler|342.0|342.0
+2|1600M|Addison Fallow|403.0|403.3
+2|1600M|Olivia Spencer|453.0|453.4
+2|3200M|Emma Hibler|724.0|724.34
+2|3200M|Vanessa Monhemius|816.0|816.0
+2|400M|Kinsey Bayer|74.0|74.09
+2|4x400M Relay| |268.0|268.1
+2|4x400M Relay| |300.0|300.3
+2|4x800M Relay| |756.0|756.1
+2|800M|Emma Hibler|164.0|164.6
+2|800M|Addison Fallow|173.0|173.2
+2|800M|Kate Jarvis|183.0|183.0

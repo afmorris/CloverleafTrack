@@ -1,0 +1,44 @@
+# Score sheets read from text PDFs. Header: @meetDate|gender|oppCode|CLO score|opp score ; rows: event|place|name|team|mark|pts
+@2025-04-22|2|SPR|118|18
+Pole Vault|1|Shetterly|CLO|8' 6"|5
+Pole Vault|2|Thur|CLO|7' 6"|3
+High Jump|1|Reinhardt|CLO|4' 8"|5
+High Jump|2|Bayer|CLO|4' 8"|3
+High Jump|3|Ellebruch|CLO|4' 4"|1
+Long Jump|1|Campbell|CLO|16' 2.5"|5
+Long Jump|2|Reinhardt|CLO|16' 2.5"|3
+Long Jump|3|Bayer|CLO|15' 8.25"|1
+Shot Put|1|McConnell|CLO|38' 7"|5
+Shot Put|2|Ryncarz|CLO|32' 9"|3
+Shot Put|3|Headley|SPR|28' 7"|1
+Discus|1|McConnell|CLO|108' 7"|5
+Discus|2|Craddock|CLO|92' 9"|3
+Discus|3|Swiger|SPR|90' 8"|1
+4x800M Relay|1|Springfield|SPR|11:05.2|5
+HURDLE_SHORT|1|Berry|CLO|16.99|5
+HURDLE_SHORT|2|Campbell|CLO|17.00|3
+HURDLE_SHORT|3|Ellebruch|CLO|17.6|1
+100M|1|Kelly|CLO|12.69|5
+100M|2|Shook|CLO|13.11|3
+100M|3|Cavey|CLO|13.28|1
+4x200M Relay|1|Cloverleaf|CLO|1:49.2|5
+1600M|1|Hibler|CLO|5:45.9|5
+1600M|2|N Kunkler|SPR|6:07.9|3
+1600M|3|E Kunkler|SPR|6:17.7|1
+4x100M Relay|1|Cloverleaf|CLO|51.8|5
+400M|1|Wershing|CLO|1:02.9|5
+400M|2|Porter|CLO|1:06.4|3
+400M|3|Curry|SPR|1:08.1|1
+300M Hurdles|1|Berry|CLO|50.3|5
+300M Hurdles|2|Reusch|CLO|51.0|3
+300M Hurdles|3|Ellebruch|CLO|53.9|1
+800M|1|Hibler|CLO|2:39.6|5
+800M|2|N Kunkler|SPR|2:44.2|3
+800M|3|Rehoe|CLO|2:57.1|1
+200M|1|Kelly|CLO|26.6|5
+200M|2|Munchick|CLO|27.6|3
+200M|3|Beyr|CLO|28.5|1
+3200M|1|Monhemius|CLO|13:42|5
+3200M|2|E Kunkler|SPR|14:13|3
+3200M|3|Fallow|CLO|14:32|1
+4x400M Relay|1|Cloverleaf|CLO|4:19.3|5
