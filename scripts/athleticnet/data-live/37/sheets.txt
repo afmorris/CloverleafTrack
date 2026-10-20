@@ -1,1 +1,18 @@
+2|Long Jump|KK Campbell|15-3;14-11.5;14-8;
+2|Long Jump|Reese Barnett|F;13-8.5;13-4;
+2|Long Jump|Abigail Reinhardt|10-9.5;12-11.5;13-5;
+1|Long Jump|Tristin Bogucki|18-11;18-8;17-3;
+1|Long Jump|Ethan Gray|F;F;17-5;
+1|Long Jump|Isaac Smith|15-3;15-7.5;15-3.5;
+1|Shot Put|Timmy Shores|44-3;43-7.5;;
 1|Shot Put|Clay Combs|;43-3;;
+1|Shot Put|Will Rogalski|39-0.5;38-5;;
+2|Shot Put|Presly McConnell|31-11.5;32-0.5;;
+2|Shot Put|Karoline Kreider|27-4.5;27-4.5;;
+2|Shot Put|Jayce Kreider|23-7.5;22-8;;
+2|Discus|Presly McConnell|97-4;101-1;
+2|Discus|Karoline Kreider|F;83-6;
+2|Discus|Jayce Kreider|77-3;79-9;
+1|Discus|Clay Combs|118-2;111-11;;;
+1|Discus|Timmy Shores|115-9;111-11;;;
+1|Discus|Will Rogalski|93-5;108-9;;;

@@ -1,22 +1,22 @@
-13644|2|Shot Put|Izzy Messmore|NULL|219|0|0
+13644|2|Shot Put|Izzy Messmore|NULL|219|3|0
 13661|1|Shot Put|Preston Stark|NULL|335|3|0
 13687|1|Discus|Gunnar Surrarrer|NULL|1128|2|0
 13698|1|Shot Put|Braylon Lade|NULL|395|3|0
 13711|1|Long Jump|Collin Saksa|NULL|188.25|0|0
 13727|2|Shot Put|Berkeley Craddock|NULL|340.5|3|0
 13766|2|Long Jump|Katelin Yagersz|NULL|144.25|4|0
-13779|1|Shot Put|JJ Johnson|NULL|416|0|0
+13779|1|Shot Put|JJ Johnson|NULL|416|3|0
 13780|1|Discus|Kaiden Stone|NULL|1018|0|0
 13812|2|Shot Put|Delaney Ishler|NULL|318.5|3|0
 13826|2|Long Jump|Tessa Bogucki|NULL|159|3|0
 13844|1|Discus|Jacob Atkinson|NULL|1192|2|0
 13854|2|Discus|Delaney Ishler|NULL|936|2|0
 13856|1|Discus|Ethan Martin|NULL|1323|2|0
-13858|1|Shot Put|Jake Schaefer|NULL|420.5|0|0
+13858|1|Shot Put|Jake Schaefer|NULL|420.5|3|0
 13885|2|Discus|Addi Reho|NULL|1133|2|0
 13886|1|Long Jump|Clayton Sewalish|NULL|192|4|0
 13901|2|Discus|Berkeley Craddock|NULL|961|2|0
-13916|2|Discus|Izzy Messmore|NULL|584|0|0
+13916|2|Discus|Izzy Messmore|NULL|584|2|0
 13952|1|Discus|Jack Chonko|NULL|1154|0|0
 14143|1|400M|Bryce Neill|60.71|NULL|0|0
 14151|1|800M|Mason Clapp|146.47|NULL|0|0
