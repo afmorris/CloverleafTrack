@@ -28,7 +28,7 @@ for (mid, g, sch), o in sorted(ours.items()):
     placed = scored_ind[(mid, g, sch)]
     pv = {e for e in ind if evname.get(e) == 'Pole Vault'}
     missing = [evname.get(e, e) for e in (ind - pv) - placed]
-    possible = 9 * len((ind - pv) & placed) + 9 * len(pv & placed) + 5 * len(rel)
+    possible = 9 * len(ind - pv) + 9 * len(pv & placed) + 5 * len(rel)   # every held event awards its points; no placing = 0 for us
     # full = every non-PV individual event with a Cloverleaf performance has a placing for this opponent, and the relays are all placed
     full_ok = not missing and rel <= relplaced_by[(mid, g, sch)]
     if pv - placed: full_ok = False; missing = ['Pole Vault (scored or not? no placings)']
@@ -38,7 +38,7 @@ for (mid, g, sch), o in sorted(ours.items()):
         if abs(oa - o) > 0.02 or abs(ob - opp) > 0.02:
             bad += 1; print(f"  MISMATCH vs official {names[mid][0]} g{g} {sch}: official {oa:g}-{ob:g}, computed {o:g}-{opp:g} (possible {possible})")
         continue
-    if not full_ok:
+    if False and not full_ok:   # owner: score every meet that has placings (a missing placing means 0 points)
         print(f"  SKIP (placings incomplete: {missing or 'relays'}) {names[mid][0]} g{g} vs {sch}"); continue
     n += 1; mn, md = names[mid]
     print(f"  {mn} {'Boys' if g == 1 else 'Girls'} vs {sch}: CLO {o:g} - {opp:g} (possible {possible})")

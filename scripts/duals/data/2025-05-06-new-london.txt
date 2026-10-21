@@ -124,3 +124,67 @@
 2|Pole Vault|C|Shetterly|10-0|0
 2|Pole Vault|N|Waugaman|6-0|0
 2|Pole Vault|C|Thur|6-0|0
+1|Shot Put|C|Gunnar Surrarrer|25-3|0
+1|Shot Put|C|Kaiden Stone|26-6|0
+1|Shot Put|C|Preston Stark|28-1|0
+1|Shot Put|C|Braylon Lade|30-10|0
+1|Shot Put|C|Jacob Atkinson|33-1|0
+1|Shot Put|C|Jake Schaefer|33-7|0
+1|Shot Put|C|Jack Chonko|35-0|0
+1|Shot Put|C|Adam Gray|35-7|0
+1|Shot Put|C|Ethan Martin|37-3|0
+1|Shot Put|C|JJ Johnson|36-10|0
+1|Shot Put|C|Dominic Nau|39-3|0
+1|Shot Put|C|Dylan Wittman|33-3|0
+1|Shot Put|C|Hunter Brooks|33-6|0
+1|Shot Put|C|Royce Zirkle|38-6|0
+1|Shot Put|C|Clay Combs|52-0|0
+1|Shot Put|N|Blanton|21-8|0
+1|Shot Put|N|Weisman|29-2|0
+1|Shot Put|N|Koch|30-5|0
+1|Shot Put|N|Stehley|32-11|0
+1|Shot Put|N|Chandley|37-6|0
+1|Shot Put|N|Brownell|33-6|0
+1|Discus|C|Jake Schaefer|73-3|0
+1|Discus|C|Preston Stark|55-0|0
+1|Discus|C|Braylon Lade|73-0|0
+1|Discus|C|Kaiden Stone|78-11|0
+1|Discus|C|Jack Chonko|102-6|0
+1|Discus|C|Dominic Nau|89-9|0
+1|Discus|C|Gunnar Surrarrer|97-5|0
+1|Discus|C|JJ Johnson|101-1|0
+1|Discus|C|Ethan Martin|103-8|0
+1|Discus|C|Adam Gray|100-5|0
+1|Discus|C|Dylan Wittman|102-1|0
+1|Discus|C|Royce Zirkle|99-11|0
+1|Discus|C|Hunter Brooks|102-3|0
+1|Discus|C|Clay Combs|147-7|0
+1|Discus|N|Stehley|46-2|0
+1|Discus|N|Blanton|49-5|0
+1|Discus|N|Weisman|67-5|0
+1|Discus|N|Koch|82-9|0
+1|Discus|N|Bracken|101-9|0
+1|Discus|N|Chandley|106-7|0
+1|Discus|N|Brownell|101-1|0
+2|Shot Put|C|Izzy Messmore|16-1|0
+2|Shot Put|C|Anna Naftzger|23-4|0
+2|Shot Put|C|Delaney Ishler|26-2|0
+2|Shot Put|C|Jayce Kreider|27-0|0
+2|Shot Put|C|Berkeley Craddock|27-9|0
+2|Shot Put|C|Amelia Ryncarz|30-4|0
+2|Shot Put|C|Presly McConnell|38-9|0
+2|Shot Put|N|Wallace|25-0|0
+2|Shot Put|N|Pawley|37-9.5|0
+2|Shot Put|N|Davidson|24-9|0
+2|Shot Put|N|Rowland|33-8|0
+2|Discus|C|Izzy Messmore|45-10|0
+2|Discus|C|Anna Naftzger|55-0|0
+2|Discus|C|Delaney Ishler|75-6|0
+2|Discus|C|Amelia Ryncarz|84-7|0
+2|Discus|C|Berkeley Craddock|79-10|0
+2|Discus|C|Addison Reho|86-7|0
+2|Discus|C|Jayce Kreider|88-3|0
+2|Discus|C|Presly McConnell|102-5|0
+2|Discus|N|Wallace|53-9|0
+2|Discus|N|Pawley|106-2|0
+2|Discus|N|Davidson|89-11|0

@@ -2674,3 +2674,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** these are COMPUTED, not the scorer's totals. Checked against the 15 official rows: matches exactly where placings are complete except ties (1 point) and pole vault (whether it was scored) — 2025 Springfield girls official 118-18 vs computed 109-19 because PV was scored but has no placings. Skipped meets (placings incomplete, e.g. 2026 Ravenna boys, Field girls vs Field, 2025 New London boys, 2025 Norton girls PV): they need placings for the missing events first. `MeetTeamResults` rows that already exist (official totals) are never overwritten.
 
 **Key files:** `scripts/places/dual_scores.py`, `docs/imports/dual-computed-team-scores.sql`.
+
+### [C114] New London Throws With the Sheets' Places, Norton-Springfield Girls Pole Vault, and Scores for Every Meet With Placings
+
+**What changed:** (1) The 2025-05-06 New London sheets DO carry a Place column (overall places of both teams, circled for scorers); I had only transcribed our attempts and missed New London's throwers and the places. All four throw events (boys/girls shot put and discus) now include New London's marks, so `dual_ranker.py` re-created the per-opponent placings (122; `docs/imports/dual-2025-05-06-new-london-v3.sql`). (2) The 2025-04-22 vertical-jump form shows women's pole vault Shetterly (8'6", place 5 pts) and Thur (7'6", 3 pts) with no Norton or Springfield vaulters: pole vault placings added (`...norton-springfield-v3.sql`, 334 placings; girls vs Springfield now computes 118-18 minus 1, vs official 118-18). (3) `dual_scores.py` no longer skips meets with "incomplete" placings: per the owner, a missing placing means the athlete did not score; `possible` = 9 per individual event with a Cloverleaf performance (pole vault only if it has placings, since it is sometimes unscored) + 5 per relay; 10 more `MeetTeamResults` rows inserted (`docs/imports/dual-computed-team-scores-2.sql`).
+
+**Why:** owner: sheets show top-3 places (only top 3 score in a dual); score every meet that has placings; Springfield had no vaulters.
+
+**Watch out:** I wrongly called the 2026 "no placing" cases suspicious; the 2026 admin flow stores scorers only, so absence = 0 points (lost relays included). Remaining differences vs official totals: 2025 New London girls official 88-43, computed 79-44 (an event or two missing from the transcribed data), 2021 Woodridge boys 56-72 vs 47-81, 2024 Springfield/Norton girls and 2025 Springfield girls off by 1-2 points (ties). Official rows are never overwritten.
+
+**Key files:** `scripts/duals/data/2025-05-06-new-london.txt`, `scripts/places/dual_scores.py`, `docs/imports/*-v3.sql`.
