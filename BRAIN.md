@@ -2664,3 +2664,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** the sheet-derived imports (2021-2025) already scored relays 5-0. Relay B-team entries (second Cloverleaf relay in the same event) have no placing rows in the 2021 Woodridge dual: only the best team per event was matched; they are not scored anyway.
 
 **Key files:** `CloverleafTrack.DataAccess/Repositories/AdminMeetPlacingRepository.cs`, `docs/imports/dual-relay-points-5-0.sql`.
+
+### [C113] Dual Team Scores Computed From Per-Opponent Placings
+
+**What changed:** `scripts/places/dual_scores.py` computes a team score for each dual/double-dual meet, gender and opponent from the stored per-opponent placings: ours = sum of Cloverleaf `FullPoints` (a relay is one row whose FullPoints is the team's 5; SplitPoints is the per-member share), possible = 9 per scored individual event + 5 per relay, opponent = possible - ours (valid when every scoring place was filled, true for the official sheets' "137 possible, 128 without pole vault"). It inserts a `MeetTeamResults` row only where none exists and only when the placings are complete: every non-pole-vault individual event with a Cloverleaf performance has a placing for that opponent, every relay is placed, and pole vault is either placed or absent. 19 rows inserted (2019/2023 Ravenna-Streetsboro, 2024 Norton-Springfield boys + girls vs Springfield, 2025 Norton-Springfield boys, 2026 Ravenna girls vs Ravenna, Norton-Springfield girls vs Springfield, Field-Coventry boys vs Coventry and girls vs Coventry, New London). `docs/imports/dual-computed-team-scores.sql`.
+
+**Why:** owner: add scores to dual meets whose placings are complete.
+
+**Watch out:** these are COMPUTED, not the scorer's totals. Checked against the 15 official rows: matches exactly where placings are complete except ties (1 point) and pole vault (whether it was scored) — 2025 Springfield girls official 118-18 vs computed 109-19 because PV was scored but has no placings. Skipped meets (placings incomplete, e.g. 2026 Ravenna boys, Field girls vs Field, 2025 New London boys, 2025 Norton girls PV): they need placings for the missing events first. `MeetTeamResults` rows that already exist (official totals) are never overwritten.
+
+**Key files:** `scripts/places/dual_scores.py`, `docs/imports/dual-computed-team-scores.sql`.
