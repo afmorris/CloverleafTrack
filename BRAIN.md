@@ -2628,3 +2628,11 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** Isaac Baltic's pole vault mark was changed from 7'6" (90) to 7'0" (84) because the sheet ladder shows 7'6 XXX (sheet wins over the DB, per the owner's standing rule). Ribnikar's third discus attempt was read as "989-9" and entered as 98-9 (typo for 98'9"; not his best). Every series' best attempt equals the stored mark (verified by `build_scan_sql.py`'s assertion): 11/11 discus and 10/10 shot put matched. Goldsberry and Kott's 5' XXX (no height) have no DB rows and were not added. Still unread: 2021 relay legs.
 
 **Key files:** `docs/imports/dual-2021-04-13-owner-read-*.sql`, `scripts/duals/data/2021-04-13-{sheets,bars}.txt`.
+
+### [C109] 2021 Woodridge Dual: Baltic Corrected Back to 7'6", Goldsberry and Kott No-Mark Pole Vault Rows
+
+**What changed:** supersedes the Baltic part of [C108]. The owner had mistyped: Isaac Baltic cleared 7'6" (O) and missed 8' three times, so his pole vault mark is 7'6" (90) again, ladder 7' O, 7'6 O, 8' XXX (the 7' O is assumed from the earlier reading). Grace Goldsberry and Avery Kott now have girls pole vault rows with `ResultStatus` 1 (NM, as the owner asked) and the ladder 5' XXX. `docs/imports/dual-2021-04-13-baltic-and-nm-pv.sql`. The owner also confirmed Ribnikar's "989-9" discus attempt is a typo for 98-9 (already entered that way).
+
+**Watch out:** the owner called these "NM" (status 1); a pole vault with no cleared height would normally be NH (status 2). Both render as a muted pill with the bar ladder; change the status to 2 if the label should read NH.
+
+**Key files:** `docs/imports/dual-2021-04-13-baltic-and-nm-pv.sql`.
