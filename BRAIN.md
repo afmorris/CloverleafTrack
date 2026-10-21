@@ -2525,3 +2525,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** (1) Official totals are stored only where a sheet gave them (girls 2025-04-15 63.33-73.67, girls 2025-04-22 118-18 (Springfield), 2025-05-06 girls 88-43, 2024-04-16 girls vs Norton 97-31, 2024-04-23 duals, 2023 Woodridge, 2021 Woodridge 56-72/77-51). `dual_ranker.py --scores` totals (2025-04-15 boys 45-92) are computed, not official. (2) Series use `build_scan_sql.py`'s best-mark assertion: where a handwritten attempt could not be read (upside-down boys 2021 sheets) the series is skipped or its last digits were set to the DB mark; treat 2021 attempts as approximate. (3) Not imported: 2021 boys discus/HJ/most PV ladders and the 2021 relay legs (images too rotated/unclear), the 2025-04-15 boys HJ/PV ladders, 190 results still missing from the 2019/2023 Ravenna duals, and the DB's truncated distance times (`data/refine-2025-04-15.txt`). (4) Scan pages need per-page rotation (0/90/180/270): use `/tmp/orient2.py`-style OCR scoring; some come out upside-down and need a 180 flip.
 
 **Key files:** `scripts/duals/*`, `docs/imports/dual-*.sql`.
+
+### [C104] Ravenna-Streetsboro Duals: 89 Missing Results Imported and Placings Redone (Parser Bug)
+
+**What changed:** (1) `dual_ranker`-era bug in `scripts/places/dual_placings.py` ([C101]): for the 2019 Hy-Tek file (columns `Seed Finals H# Points`) it ranked by the last numeric token (the heat number) instead of the Finals mark, so the 208 per-opponent placings of meet 327 were wrong; fixed (mark tokens must contain `.`, `:` or `-`; Finals = the 2nd mark when a Seed column exists). (2) `dual_missing.py` inserts the 89 Cloverleaf individual results of the 2019/2023 Ravenna-Streetsboro duals that the DB lacked (`docs/imports/dual-ravenna-1-missing-results.sql`), then `dual-ravenna-2-placings.sql` deletes and re-creates every per-opponent placing of both meets (now 738 rows).
+
+**Why:** discovered while importing the missing results: the 2019 placings had places like 18-24 for sprinters (heat numbers).
+
+**Watch out:** apply the two files in that order (second one needs the new performances); they declare the same variables, so run them as separate scripts. Not imported: relays (no leg-to-athlete mapping), Dylan Bresnahan 2023 200M (athlete not in DB). Marks are the Hy-Tek Finals column; 2019 hand-timed marks print as tenths.
+
+**Key files:** `scripts/places/dual_placings.py`, `scripts/places/dual_missing.py`, `docs/imports/dual-ravenna-*.sql`.

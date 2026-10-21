@@ -8,7 +8,7 @@ def q(sql):
                          input='SET NOCOUNT ON;' + sql, capture_output=True, text=True).stdout
     return [l.split('|') for l in out.strip().split('\n') if l.strip()]
 esc = lambda s: s.replace("'", "''")
-ALIAS = {'cassy maxwell': 'cassandra maxwell', 'kierston campbell': 'kk campbell', 'isabella messmore': 'izzy messmore', 'jacob schaefer': 'jake schaefer', 'jamere johnson': 'jj johnson'}
+ALIAS = {'addison evans': 'addie evans', 'tim shores': 'timmy shores', 'cassy maxwell': 'cassandra maxwell', 'kierston campbell': 'kk campbell', 'isabella messmore': 'izzy messmore', 'jacob schaefer': 'jake schaefer', 'jamere johnson': 'jj johnson'}
 def norm(n):
     if ',' in n: l, _, f = n.partition(','); n = f.strip() + ' ' + l.strip()
     n = re.sub(r'[^a-z ]', '', re.sub(r'\s+', ' ', n.replace("'", '').replace('.', '')).lower().strip())

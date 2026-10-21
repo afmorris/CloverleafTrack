@@ -35,9 +35,10 @@ def parse(path):
         r = re.match(r'^\s*(?:\d+|--)\s+(?:(?P<name>[A-Za-z][^\d]*?)\s+(?P<yr>\d{1,2})\s+)?(?P<school>[A-Za-z][A-Za-z.\' &-]*?)\s{2,}(?P<rest>.+)$', l)
         if not r: continue
         sc = school(r.group('school'))
-        toks = [t for t in r.group('rest').split() if mark(t)[0]]
+        toks = [t for t in r.group('rest').split() if mark(t)[0] and re.search(r'[.:-]', t)]
         if not sc or not toks: continue
-        k, v = mark(toks[-1] if len(toks) > 1 and re.search(r'Seed', l) is None and False else toks[0]) if False else mark(toks[-1] if 'Seed' in ''.join(open(path).read()[:3000]) else toks[0])
+        hasseed = 'Seed' in open(path).read()[:3000]
+        k, v = mark(toks[1] if hasseed and len(toks) >= 2 else toks[0])
         out[ev].append((sc, (r.group('name') or '').strip(), k, v))
     return out
 tmpl = {int(p): float(pts) for p, pts in q("SELECT tp.Place, tp.Points FROM ScoringTemplatePlaces tp JOIN ScoringTemplates t ON t.Id=tp.ScoringTemplateId WHERE t.Name LIKE 'Dual Meet%'")}
