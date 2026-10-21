@@ -2571,3 +2571,20 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** the sheet values are a human reading of handwriting; ranks/percentiles may shift slightly (leaderboards rebuilt). The other dual meets may have the same truncation (not checked).
 
 **Key files:** `docs/imports/dual-2025-04-15-time-refinements.sql`, `scripts/duals/data/refine-2025-04-15.txt`.
+
+### [C106] More Time Refinements, OHSAA State Team Results, and the State PDF Sweep
+
+**What changed:** (1) `docs/imports/dual-2024-04-16-time-refinements.sql`: 7 whole-second times in the 2024-04-16 Norton-Springfield dual replaced with the scorer sheets' tenths/hundredths. Old values:
+- Caleb Neville Boys 3200M: 720 -> 720.99
+- Noah Mion Boys 3200M: 776 -> 776.28
+- Austin McNeal Boys 3200M: 776 -> 776.69
+- Ben Myers Boys 800M: 130 -> 130.1
+- Matthew Jenkins Boys 800M: 133 -> 133.8
+- Chayton Bullis Boys 800M: 162 -> 162.8
+- Megan Knapp Girls 3200M: 806 -> 806.1(2) `docs/imports/ohsaa-state-team-results-1973-1995.sql`: 9 `MeetTeamResults` rows (Lodi Cloverleaf's team place/points at the State meet) read from the OCR'd PDFs: 1973 boys 29th (no score), 1982 boys 48th 1, 1986 girls 52nd 1, 1990 girls 36th 3, 1991 boys 11th 10 and girls 38th 2, 1992 boys 14th 10, 1993 boys 5th 26, 1995 boys 30th 6. Field size not recorded. Skipped as unreadable: 1960, 1972, 1990 boys (rank digit lost in OCR), 1994 boys. (3) A fresh sweep of all 103 OCR'd state PDFs for Lodi/Cloverleaf (incl. OCR variants) found nothing beyond what [C95]/[C96]/[C99] already imported.
+
+**Why:** owner asked to continue the next pass in order (truncated times, then more PDFs, then relay legs).
+
+**Watch out:** whole-second times in the other dual meets (2021-2023 duals have about 100 per year) have no tenths source on disk, so they stay as they are; they are whole seconds because the scorer wrote them that way, not an import truncation. The only relays still short of four named legs are three with 3 legs (2017 Orange DMR, 2022 Woodridge 4x200, 2023 New London 4x200) and have no source.
+
+**Key files:** `docs/imports/dual-2024-04-16-time-refinements.sql`, `docs/imports/ohsaa-state-team-results-1973-1995.sql`.
