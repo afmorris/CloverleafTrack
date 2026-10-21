@@ -2692,3 +2692,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** a scored event without times on the sheet (3200, 4x400 relay at the 2025 New London dual) cannot be imported as a result; ask for the times if they exist elsewhere. Boys 2025 New London has no official total (computed 97-25).
 
 **Key files:** `scripts/duals/data/textsheets.txt`, `docs/imports/dual-2025-05-06-new-london-v4.sql`.
+
+### [C116] Final One-by-One Mark Review (Dual Meets) and a Correction of My Earlier "Sheet Wins" Pass
+
+**What changed:** `docs/imports/dual-mark-review-final.sql` (+ `dual-mark-review-series-{68,226,275}.sql`). Owner decisions: Jayce Kreider 2024-04-16 discus 70'9" -> 78'9" (the sheet's 2nd attempt, 6th place); Allison Yagersz 800 2:39.3 -> 2:39.8; Vanessa Monhemius 800 2:53.5 -> 2:53.0; Mallory Bohan 400 76.66 -> 76.6; Luke Evans 2025-05-06 800 2:45.2 -> 2:48.2; kept the DB for Monhemius 1600 (6:16) and Southam 400 (85.1).
+
+**Correction of [C107]:** six of its 15 "sheet wins" changes were wrong and are reverted, because I had changed marks to the best of my own transcription of the ATTEMPTS, but the sheets' "Best" column differs from the attempts I read: Blake Thorne shot 323 -> 317.5 (26'5.5"), Jack Chonko shot (2025-04-22) 421.75 -> 420.75 (35'0.75"), Presly McConnell discus (2025-05-06) 1231 -> 1229 (102'5"), Maclaine Bell discus 583.5 -> 580.5 (48'4.5"), Reese Barnett LJ 183.25 -> 180.75 (15'0.75": the form writes "15 | 3/4" for feet | inches), Ethan Martin shot 355 -> 354 (the sheet's Best column says 29'6" although the second attempt reads 29'7"; the series is stored as 29'6", 29'6" and is approximate). Series of all those throws were deleted and re-imported with the corrected attempts.
+
+**Watch out:** the rest of [C107]'s changes (Spencer 800, Messmore discus, Sewalish/Usry 200, Murray-Garver 400, Jensch, James, Evans 2023, Ellebruch HJ 4'4") came from the xlsx score sheets or my reading of scans and were NOT re-verified against Best columns in this pass; the 2025 Norton-Springfield Chonko attempts and the Mahoney 1600 (sheet 7:25 vs DB 7:22, struck-through digit) are also unverified. Rule going forward: for field events the sheet's Best column is the mark, not my reading of the attempts.
+
+**Key files:** `docs/imports/dual-mark-review-*.sql`.
