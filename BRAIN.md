@@ -2636,3 +2636,11 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** the owner called these "NM" (status 1); a pole vault with no cleared height would normally be NH (status 2). Both render as a muted pill with the bar ladder; change the status to 2 if the label should read NH.
 
 **Key files:** `docs/imports/dual-2021-04-13-baltic-and-nm-pv.sql`.
+
+### [C110] 2021 Woodridge Dual PV: Baltic Started at 7'6", Goldsberry and Kott Are NH
+
+**What changed:** supersedes the ladder/status parts of [C108]/[C109]. The pole vaulters started at 7'6", so Isaac Baltic's ladder is 7'6 O, 8' XXX (no 7' bar; mark stays 7'6"). Grace Goldsberry and Avery Kott are no-height (`ResultStatus` 2, NH), ladder 5' XXX. `docs/imports/dual-2021-04-13-baltic-nh-fix.sql`.
+
+**Why:** owner corrections.
+
+**Key files:** `docs/imports/dual-2021-04-13-baltic-nh-fix.sql`.
