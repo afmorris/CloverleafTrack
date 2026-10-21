@@ -38,6 +38,7 @@ for i, (code, sch) in enumerate(opps.items()):
     lines.append(f"IF NOT EXISTS (SELECT 1 FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'{sch}' AND mp.Deleted=0) INSERT INTO MeetParticipants (MeetId, SchoolId, Gender, SortOrder) SELECT @m, Id, NULL, {i} FROM Schools WHERE Name=N'{sch}';")
 totals = collections.defaultdict(lambda: [0.0, 0.0]); n = 0; seen_events = collections.defaultdict(set)
 for (g, ev), rs in sorted(groups.items(), key=lambda x: str(x[0])):
+    if ev.startswith('Seated'): continue   # seated events never count toward team scores
     isrelay = ev.startswith('4x') or 'Medley' in ev
     for code, sch in opps.items():
         pool = [r for r in rs if r['sc'] in ('C', code) and r['v'] is not None]

@@ -119,8 +119,9 @@ public class AdminMeetPlacingRepository(IDbConnectionFactory connectionFactory) 
     public async Task<decimal> GetTemplatePointsAsync(int meetId, int eventId, int place)
     {
         using var connection = connectionFactory.CreateConnection();
+        // Seated (wheelchair) events never score for the team: always 0 points, whatever the template says.
         const string sql = @"
-            SELECT ISNULL(
+            SELECT CASE WHEN EXISTS (SELECT 1 FROM Events ev WHERE ev.Id = @EventId AND ev.Name LIKE 'Seated%') THEN 0 ELSE ISNULL(
                 (SELECT stp.Points
                  FROM ScoringTemplatePlaces stp
                  WHERE stp.ScoringTemplateId = COALESCE(
@@ -130,7 +131,7 @@ public class AdminMeetPlacingRepository(IDbConnectionFactory connectionFactory) 
                      (SELECT m.ScoringTemplateId FROM Meets m WHERE m.Id = @MeetId)
                  )
                  AND stp.Place = @Place),
-            0)";
+            0) END";
         return await connection.ExecuteScalarAsync<decimal>(sql,
             new { MeetId = meetId, EventId = eventId, Place = place });
     }

@@ -58,7 +58,7 @@ for mid, path in MEETS.items():
         lines.append(f"IF NOT EXISTS (SELECT 1 FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'{opp}' AND mp.Deleted=0) INSERT INTO MeetParticipants (MeetId, SchoolId, Gender, SortOrder) SELECT @m, Id, NULL, {i} FROM Schools WHERE Name=N'{opp}';")
     res = parse(path)
     for (g, en), rows in sorted(res.items(), key=lambda x: str(x[0])):
-        if g is None: continue
+        if g is None or en.startswith('Seated'): continue   # seated events never count toward team scores
         us = [r for r in rows if r[0] == 'Cloverleaf']
         if not us: continue
         isr = en.startswith('4x'); isrun = rows[0][2] == 'run'

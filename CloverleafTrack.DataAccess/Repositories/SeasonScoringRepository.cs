@@ -40,6 +40,7 @@ public class SeasonScoringRepository(IDbConnectionFactory connectionFactory) : I
             LEFT  JOIN MeetParticipants mpart ON mpart.Id = mp.MeetParticipantId AND mpart.Deleted = 0
             LEFT  JOIN Schools sc             ON sc.Id   = mpart.SchoolId        AND sc.Deleted = 0
             WHERE s.Id = @SeasonId
+              AND e.Name NOT LIKE 'Seated%'   -- seated events never count toward team scoring
               AND p.AthleteId IS NOT NULL
 
             UNION ALL
@@ -75,6 +76,7 @@ public class SeasonScoringRepository(IDbConnectionFactory connectionFactory) : I
             LEFT  JOIN MeetParticipants mpart  ON mpart.Id = mp.MeetParticipantId AND mpart.Deleted = 0
             LEFT  JOIN Schools sc              ON sc.Id   = mpart.SchoolId        AND sc.Deleted = 0
             WHERE s.Id = @SeasonId
+              AND e.Name NOT LIKE 'Seated%'   -- seated events never count toward team scoring
               AND p.AthleteId IS NULL
 
             ORDER BY MeetDate, EventId, AthleteLastName, AthleteFirstName";
