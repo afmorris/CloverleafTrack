@@ -2535,3 +2535,39 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** apply the two files in that order (second one needs the new performances); they declare the same variables, so run them as separate scripts. Not imported: relays (no leg-to-athlete mapping), Dylan Bresnahan 2023 200M (athlete not in DB). Marks are the Hy-Tek Finals column; 2019 hand-timed marks print as tenths.
 
 **Key files:** `scripts/places/dual_placings.py`, `scripts/places/dual_missing.py`, `docs/imports/dual-ravenna-*.sql`.
+
+### [C105] 2025 Woodridge Dual: Truncated Times Replaced With the Scorer Sheet's Values
+
+**What changed:** 27 times in the 2025-04-15 Woodridge dual (21 individual, 6 relay) were whole-second values (e.g. 5:30.0) and were replaced with the scorer sheet's tenths (5:30.6), read from `scan_ggucker_2025-04-15`. `docs/imports/dual-2025-04-15-time-refinements.sql` (matches on the old time; re-runnable). Old values:
+- Austin McNeal Boys 1600M: 310 -> 310.7
+- Noah Mion Boys 1600M: 317 -> 317.2
+- Clay Gucker Boys 1600M: 330 -> 330.6
+- Mason Clapp Boys 1600M: 332 -> 332.9
+- Cayden Williams Boys 1600M: 335 -> 335.8
+- Luke Evans Boys 1600M: 367 -> 367.8
+- Matthew Wilk Boys 1600M: 370 -> 370.8
+- Kyle Mahoney Boys 1600M: 415 -> 415.8
+- Clay Gucker Boys 3200M: 692 -> 692.8
+- relay Boys 4x200M Relay: 95 -> 95.8
+- relay Boys 4x400M Relay: 214 -> 214.6
+- relay Boys 4x800M Relay: 502 -> 502.5
+- Ben Myers Boys 800M: 127 -> 127.7
+- Matthew Jenkins Boys 800M: 129 -> 129.3
+- Chayton Bullis Boys 800M: 169 -> 169.3
+- Matthew Wilk Boys 800M: 173 -> 173.1
+- Aiden Mullinex Boys 800M: 178 -> 178.9
+- Kyle Mahoney Boys 800M: 217 -> 217.7
+- Addison Fallow Girls 1600M: 403 -> 403.3
+- Olivia Spencer Girls 1600M: 453 -> 453.4
+- Emma Hibler Girls 3200M: 724 -> 724.34
+- Kinsey Bayer Girls 400M: 74 -> 74.09
+- relay Girls 4x400M Relay: 268 -> 268.1
+- relay Girls 4x400M Relay: 300 -> 300.3
+- relay Girls 4x800M Relay: 756 -> 756.1
+- Emma Hibler Girls 800M: 164 -> 164.6
+- Addison Fallow Girls 800M: 173 -> 173.2
+**Why:** the DB values were truncated; the owner approved taking the sheet values.
+
+**Watch out:** the sheet values are a human reading of handwriting; ranks/percentiles may shift slightly (leaderboards rebuilt). The other dual meets may have the same truncation (not checked).
+
+**Key files:** `docs/imports/dual-2025-04-15-time-refinements.sql`, `scripts/duals/data/refine-2025-04-15.txt`.
