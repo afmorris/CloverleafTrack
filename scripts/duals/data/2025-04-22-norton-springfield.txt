@@ -74,7 +74,7 @@
 1|100M|C|Morris|13.18|0
 1|100M|N|Noearenas-Martinez|11.92|0
 1|100M|C|Kovach|12.09|0
-1|100M|C|Goetz|12.93|0
+1|100M|C|Groetz|12.93|0
 1|100M|C|Murray-Garver|13.00|0
 1|100M|N|Penny|13.06|0
 1|100M|C|Usry|13.73|0
@@ -125,7 +125,7 @@
 2|400M|C|Porter|1:06.4|0
 2|400M|S|Curry|1:08.1|0
 2|400M|S|Hileman|1:08.7|0
-1|400M|C|Goetz|59.14|0
+1|400M|C|Groetz|59.14|0
 1|400M|N|Weddle|59.15|0
 1|400M|C|Porter|60.45|0
 1|400M|C|Murray-Garver|62.4|0

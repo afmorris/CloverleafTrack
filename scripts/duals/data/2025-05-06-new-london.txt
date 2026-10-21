@@ -30,7 +30,7 @@
 1|400M|N|Twining|56.6|0
 1|400M|N|Chandley|57.2|0
 1|400M|C|Lotz|58.6|0
-1|400M|C|Goetz|60.2|0
+1|400M|C|Groetz|60.2|0
 2|400M|C|Shetterly|66.1|0
 2|400M|N|Crockett|69.9|0
 2|400M|N|Phillips|72.6|0
@@ -62,7 +62,7 @@
 1|100M|C|Neill|12.68|0
 1|100M|N|Carothers|12.78|0
 1|100M|C|Sewalish|12.85|0
-1|100M|C|Goetz|12.95|0
+1|100M|C|Groetz|12.95|0
 1|100M|C|Morris|13.25|0
 1|100M|C|Porter|13.28|0
 1|100M|C|Saksa|13.43|0

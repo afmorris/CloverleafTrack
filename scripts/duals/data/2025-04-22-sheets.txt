@@ -19,7 +19,7 @@
 2|Shot Put|Presly McConnell|F;38-7;F;38-0
 1|Shot Put|Gunnar Surrarrer|26-7;25-9.5
 1|Shot Put|Preston Stark|27-10;28-5
-1|Shot Put|Blake Thorne|26-5.5;26-1.5
+1|Shot Put|Blake Thorne|26-5.5;26-11
 1|Shot Put|Isaac Montgomery|28-1;28-6
 1|Shot Put|Kaiden Stone|27-10;27-10.5
 1|Shot Put|Braylon Lade|29-7;30-2
@@ -27,7 +27,7 @@
 1|Shot Put|Jake Schaefer|33-5;32-11.25
 1|Shot Put|Dylan Wittman|32-10.5;34-6.5
 1|Shot Put|Adam Gray|35-2.5;34-5.75
-1|Shot Put|Jack Chonko|35-0;35-0.75
+1|Shot Put|Jack Chonko|35-0;35-1.75
 1|Shot Put|Hunter Brooks|34-4;34-1
 1|Shot Put|JJ Johnson|33-6;F
 1|Shot Put|Ethan Martin|36-6;34-10
