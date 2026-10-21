@@ -2654,3 +2654,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** no existing data needed fixing: every current `MeetPlacings` row on a seated event already has 0 points (checked locally). Placings (place badges) for seated athletes still display; only points/totals ignore them. `MeetTeamResults` rows are typed/imported values, so the rule applies when computing them, not when reading them. Any new place that sums points must add the `NOT LIKE 'Seated%'` filter.
 
 **Key files:** `CloverleafTrack.DataAccess/Repositories/AdminMeetPlacingRepository.cs`, `SeasonScoringRepository.cs`.
+
+### [C112] Dual-Meet Relays Score 5-0
+
+**What changed:** in dual and double-dual meets only the winning relay scores (5; Split 1.25); 2nd/3rd relays earn 0 (the score sheets say "3 points - 0 relay"). `AdminMeetPlacingRepository.GetTemplatePointsAsync` now returns 0 for relay events with Place > 1 when the resolved template is the built-in "Dual Meet%" template (invitational templates are untouched: relays still score places there). `scripts/places/dual_placings.py` does the same. `docs/imports/dual-relay-points-5-0.sql` fixed 25 relay placings from the 2019/2023 Ravenna-Streetsboro import that had 3/1 points for 2nd/3rd (local and live).
+
+**Why:** owner: "it should be 5-0" (a screenshot of the 2021 Woodridge meet page showed relay placings).
+
+**Watch out:** the sheet-derived imports (2021-2025) already scored relays 5-0. Relay B-team entries (second Cloverleaf relay in the same event) have no placing rows in the 2021 Woodridge dual: only the best team per event was matched; they are not scored anyway.
+
+**Key files:** `CloverleafTrack.DataAccess/Repositories/AdminMeetPlacingRepository.cs`, `docs/imports/dual-relay-points-5-0.sql`.
