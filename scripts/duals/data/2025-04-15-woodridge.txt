@@ -91,7 +91,7 @@
 1|400M|W|Lorenz|58.88
 1|400M|W|Laczo|59.23
 1|400M|C|Lotz|59.52
-1|400M|C|Goetz|59.75
+1|400M|C|Groetz|59.75
 1|400M|C|Usry|65.75
 2|400M|W|Perry|1:03.95
 2|400M|C|Wershing|1:05.92
@@ -165,7 +165,7 @@
 1|100M|W|Denson|12.07
 1|100M|C|Lotz|12.47
 1|100M|C|Davis|12.80
-1|100M|C|Goetz|13.04
+1|100M|C|Groetz|13.04
 2|200M|W|Wydaman|31.23
 2|200M|W|Tyler|34.49
 2|200M|W|Tyler|34.76
@@ -200,7 +200,7 @@
 1|200M|W|Regec|27.16
 1|200M|C|Lotz|27.38
 1|200M|W|Laczo|27.92
-1|200M|C|Goetz|28.42
+1|200M|C|Groetz|28.42
 1|200M|C|Murray-Garver|29.08
 1|3200M|W|Griffiths|10:30.4
 1|3200M|W|White|10:30.9

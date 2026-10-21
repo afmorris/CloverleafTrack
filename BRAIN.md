@@ -2588,3 +2588,33 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** whole-second times in the other dual meets (2021-2023 duals have about 100 per year) have no tenths source on disk, so they stay as they are; they are whole seconds because the scorer wrote them that way, not an import truncation. The only relays still short of four named legs are three with 3 legs (2017 Orange DMR, 2022 Woodridge 4x200, 2023 New London 4x200) and have no source.
 
 **Key files:** `docs/imports/dual-2024-04-16-time-refinements.sql`, `docs/imports/ohsaa-state-team-results-1973-1995.sql`.
+
+### [C107] Dual-Meet Sheets Win Over the DB Marks; Missing Results; Groetz Alias
+
+**What changed:** owner decisions after [C103]: "Goetz" on the sheets is Gage Groetz (already in the DB; the placings that had skipped him were re-generated), and where a scorer sheet and the DB disagree the sheet wins. `docs/imports/dual-sheet-marks-and-missing.sql` added 5 results (Brooklyn Cavey 400 1:07.9, Ethan Gray LJ 17'5", Issy Mlckovsky discus 26'3", Kinsey Bayer 200 28.5, Grady Pamer 110H 19.81) and changed 15 marks. Old values:
+- added Brooklyn Cavey 400M 67.9
+- added Ethan Gray Long Jump 209
+- added Issy Mlckovsky Discus 315
+- added Kinsey Bayer 200M 28.5
+- added Grady Pamer 110M Hurdles 19.81
+- Lauren Jensch 800M: 157.5 -> 147.5
+- Jackson James 800M: 130.6 -> 136.6
+- Riley Evans 100M: 12.54 -> 12.3
+- Olivia Spencer 800M: 214 -> 204.7
+- Izzy Messmore Discus: 500.5 -> 530.5
+- Clayton Sewalish 200M: 27.65 -> 27.45
+- Amir Usry 200M: 32.58 -> 33.58
+- Emily Ellebruch High Jump: 54 -> 52
+- Jackson Murray-Garver 400M: 62.9 -> 62.4
+- Blake Thorne Shot Put: 317.5 -> 323
+- Jack Chonko Shot Put: 420.75 -> 421.75
+- Maclaine Bell Discus: 580.5 -> 583.5
+- Reese Barnett Long Jump: 180.75 -> 183.25
+- Ethan Martin Shot Put: 354 -> 355
+- Presly McConnell Discus: 1229 -> 1231Then `dual-*-v2.sql` deleted and rebuilt the per-opponent placings of the three 2025 meets and `dual-sheet-marks-delete-series.sql` + `dual-*-series2.sql` re-imported 6 attempt series whose best mark was corrected.
+
+**Why:** owner: trust the sheet over the DB marks.
+
+**Watch out:** Jayce Kreider's 2024-04-16 discus (sheet 78'9" vs DB 70'9") was NOT changed: the digit is ambiguous in the scan. 2021 Woodridge sheet-vs-DB differences (Brilla/Jarvis LJ) were left alone (upside-down handwriting). The 2021 boys discus/shot attempts, most 2021 pole vault ladders and the 2021 relay legs are still unread; the owner was shown the three images.
+
+**Key files:** `docs/imports/dual-sheet-marks-and-missing.sql`, `docs/imports/dual-*-v2.sql`, `docs/imports/dual-*-series2.sql`.
