@@ -74,7 +74,7 @@ for mid, path in MEETS.items():
                     hit = [c for c in cand if c[1] and norm(c[1]) == norm(re.sub(r'^(.+?),\s*(.+)$', r'\2 \1', u[1]))]
                     if not hit: hit = [c for c in cand if c[1] and fuzzy(norm(re.sub(r'^(.+?),\s*(.+)$', r'\2 \1', u[1])), c)]
                 if len(hit) != 1: notes.append(f"{'AMBIG' if hit else 'NO MATCH'} {mn} {en} g{g} {u[1] or u[3]} vs {opp}"); continue
-                pts = tmpl.get(place, 0.0); n += 1
+                pts = (0.0 if isr and place > 1 else tmpl.get(place, 0.0)); n += 1
                 nm = hit[0][1]
                 if isr: where = f"AthleteId IS NULL AND e.Gender={g} AND e.Name=N'{en}' AND ABS(p.TimeSeconds-{hit[0][2]})<0.06"
                 else: where = f"a.FirstName+N' '+a.LastName=N'{esc(nm)}' AND e.Gender={g} AND e.Name=N'{en}'"

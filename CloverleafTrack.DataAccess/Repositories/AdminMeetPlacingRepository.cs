@@ -120,18 +120,18 @@ public class AdminMeetPlacingRepository(IDbConnectionFactory connectionFactory) 
     {
         using var connection = connectionFactory.CreateConnection();
         // Seated (wheelchair) events never score for the team: always 0 points, whatever the template says.
+        // Dual-meet relays score 5-0: only the winning relay gets points (template place 1); 2nd/3rd earn nothing.
         const string sql = @"
-            SELECT CASE WHEN EXISTS (SELECT 1 FROM Events ev WHERE ev.Id = @EventId AND ev.Name LIKE 'Seated%') THEN 0 ELSE ISNULL(
-                (SELECT stp.Points
-                 FROM ScoringTemplatePlaces stp
-                 WHERE stp.ScoringTemplateId = COALESCE(
-                     (SELECT eo.ScoringTemplateId
-                      FROM MeetEventScoringOverrides eo
-                      WHERE eo.MeetId = @MeetId AND eo.EventId = @EventId),
-                     (SELECT m.ScoringTemplateId FROM Meets m WHERE m.Id = @MeetId)
-                 )
-                 AND stp.Place = @Place),
-            0) END";
+            DECLARE @TemplateId INT = COALESCE(
+                (SELECT eo.ScoringTemplateId FROM MeetEventScoringOverrides eo WHERE eo.MeetId = @MeetId AND eo.EventId = @EventId),
+                (SELECT m.ScoringTemplateId FROM Meets m WHERE m.Id = @MeetId));
+            SELECT CASE
+                WHEN EXISTS (SELECT 1 FROM Events ev WHERE ev.Id = @EventId AND ev.Name LIKE 'Seated%') THEN 0
+                WHEN @Place > 1
+                     AND EXISTS (SELECT 1 FROM Events ev WHERE ev.Id = @EventId AND (ev.Name LIKE '%Relay%' OR ev.EventType IN (2, 3, 4, 5)))
+                     AND EXISTS (SELECT 1 FROM ScoringTemplates st WHERE st.Id = @TemplateId AND st.Name LIKE 'Dual Meet%') THEN 0
+                ELSE ISNULL((SELECT stp.Points FROM ScoringTemplatePlaces stp WHERE stp.ScoringTemplateId = @TemplateId AND stp.Place = @Place), 0)
+            END";
         return await connection.ExecuteScalarAsync<decimal>(sql,
             new { MeetId = meetId, EventId = eventId, Place = place });
     }
