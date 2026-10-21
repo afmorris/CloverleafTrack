@@ -2684,3 +2684,11 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** I wrongly called the 2026 "no placing" cases suspicious; the 2026 admin flow stores scorers only, so absence = 0 points (lost relays included). Remaining differences vs official totals: 2025 New London girls official 88-43, computed 79-44 (an event or two missing from the transcribed data), 2021 Woodridge boys 56-72 vs 47-81, 2024 Springfield/Norton girls and 2025 Springfield girls off by 1-2 points (ties). Official rows are never overwritten.
 
 **Key files:** `scripts/duals/data/2025-05-06-new-london.txt`, `scripts/places/dual_scores.py`, `docs/imports/*-v3.sql`.
+
+### [C115] Checked Computed Dual Scores Against the Sheets: 2021 Woodridge Boys and 2025 New London Girls
+
+**What changed:** the owner asked to compare the two meets whose computed score disagreed with the official sheet. Per-event comparison against the scorer sheets: (1) 2021 Woodridge boys (official 56-72): three Cloverleaf scorers were missing placings only because my transcription mis-spelled names/times (Herdman 800 3rd -> "Hardman", Yuravak 200 2nd -> "Vircuak", 4x400 relay time 3:38 vs the DB's 3:35.9); fixed in `scripts/duals/data/textsheets.txt` and re-imported (`docs/imports/dual-sheets-2023-2025.sql`, insert-only); the computed score now equals the official one (and the girls too). (2) 2025 New London girls (official 88-43): the sheet scores the 3200 (Spencer 1st, 5) and the 4x400 relay (CLO 1st, 5) but the sheet gives no times for them, so the DB has no result rows for those two events and no placings can be created: that is the 10-point difference (computed 78-43 vs 88-43). The sheet's pole vault is Shetterly 1st, Waugaman (NL) 2nd, Thur 3rd (placings redone: `dual-2025-05-06-new-london-v4.sql`). Official totals stand. Springfield/Norton girls differences are tie handling (owner agrees).
+
+**Watch out:** a scored event without times on the sheet (3200, 4x400 relay at the 2025 New London dual) cannot be imported as a result; ask for the times if they exist elsewhere. Boys 2025 New London has no official total (computed 97-25).
+
+**Key files:** `scripts/duals/data/textsheets.txt`, `docs/imports/dual-2025-05-06-new-london-v4.sql`.
