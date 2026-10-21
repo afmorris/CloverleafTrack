@@ -2702,3 +2702,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** the rest of [C107]'s changes (Spencer 800, Messmore discus, Sewalish/Usry 200, Murray-Garver 400, Jensch, James, Evans 2023, Ellebruch HJ 4'4") came from the xlsx score sheets or my reading of scans and were NOT re-verified against Best columns in this pass; the 2025 Norton-Springfield Chonko attempts and the Mahoney 1600 (sheet 7:25 vs DB 7:22, struck-through digit) are also unverified. Rule going forward: for field events the sheet's Best column is the mark, not my reading of the attempts.
 
 **Key files:** `docs/imports/dual-mark-review-*.sql`.
+
+### [C117] Last Unsure Marks Checked With the Owner
+
+**What changed:** `docs/imports/dual-mark-review-final-2.sql`: Olivia Spencer 2025-04-15 girls 800 204.7 -> 214.7 (3:34.7; the original DB had 3:34 truncated and my "3:24.7" was a misreading); Clayton Sewalish 200 27.45 -> 27.65 and Amir Usry 200 33.58 -> 32.58 (back to the original DB values; my sheet reading was wrong). Confirmed as already correct: Izzy Messmore discus 44'2.5", Mahoney 2025-04-22 1600 stays 7:22.
+
+**Why:** owner reviewed the images one by one. Everything flagged unverified in [C116] is now settled except the xlsx-sourced marks (Jensch, J. James, R. Evans 2023, Ellebruch), which came from the scorers' own spreadsheets, and were left as they are.
+
+**Watch out:** I sent the owner the wrong page for the 200 first; scan page numbers change between orientation passes, so identify a page by its content (event heading) when quoting it.
+
+**Key files:** `docs/imports/dual-mark-review-final-2.sql`.
