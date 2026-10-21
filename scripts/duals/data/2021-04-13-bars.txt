@@ -1,2 +1,3 @@
-2|Pole Vault|McKenna Tabor|5-0:XO;5-6:O;6-0:P;6-6:XXX
-2|Pole Vault|Cassidy Smith|7-0:O;7-6:XXO;8-0:XO;8-6:O;9-0:XXX
+2|Pole Vault|McKenna Tabor|5-0:XO;5-6:O;6-0:XXX
+2|Pole Vault|Cassidy Smith|5-0:P;5-6:P;6-0:P;6-6:P;7-0:O;7-6:XXO;8-0:XO;8-6:O;9-0:XXX
+1|Pole Vault|Isaac Baltic|7-0:O;7-6:XXX

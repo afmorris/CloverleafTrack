@@ -1,0 +1,17 @@
+-- 2021 Woodridge Dual: owner-read attempts replace my earlier approximate boys shot put series; Isaac Baltic's PV mark follows the sheet (7'0", DB had 7'6"). Old value in BRAIN.md [C108]. Id-independent.
+SET QUOTED_IDENTIFIER ON;
+SET XACT_ABORT ON;
+BEGIN TRANSACTION;
+DELETE pa FROM PerformanceAttempts pa JOIN Performances p ON p.Id=pa.PerformanceId JOIN Athletes a ON a.Id=p.AthleteId JOIN Meets m ON m.Id=p.MeetId JOIN Events e ON e.Id=p.EventId WHERE m.Name=N'2021 Woodridge Dual' AND a.FirstName+N' '+a.LastName=N'Logan Campbell' AND e.Gender=1 AND e.Name=N'Shot Put';
+DELETE pa FROM PerformanceAttempts pa JOIN Performances p ON p.Id=pa.PerformanceId JOIN Athletes a ON a.Id=p.AthleteId JOIN Meets m ON m.Id=p.MeetId JOIN Events e ON e.Id=p.EventId WHERE m.Name=N'2021 Woodridge Dual' AND a.FirstName+N' '+a.LastName=N'Elian Zayed' AND e.Gender=1 AND e.Name=N'Shot Put';
+DELETE pa FROM PerformanceAttempts pa JOIN Performances p ON p.Id=pa.PerformanceId JOIN Athletes a ON a.Id=p.AthleteId JOIN Meets m ON m.Id=p.MeetId JOIN Events e ON e.Id=p.EventId WHERE m.Name=N'2021 Woodridge Dual' AND a.FirstName+N' '+a.LastName=N'Kemp Wilson' AND e.Gender=1 AND e.Name=N'Shot Put';
+DELETE pa FROM PerformanceAttempts pa JOIN Performances p ON p.Id=pa.PerformanceId JOIN Athletes a ON a.Id=p.AthleteId JOIN Meets m ON m.Id=p.MeetId JOIN Events e ON e.Id=p.EventId WHERE m.Name=N'2021 Woodridge Dual' AND a.FirstName+N' '+a.LastName=N'Will Hall' AND e.Gender=1 AND e.Name=N'Shot Put';
+DELETE pa FROM PerformanceAttempts pa JOIN Performances p ON p.Id=pa.PerformanceId JOIN Athletes a ON a.Id=p.AthleteId JOIN Meets m ON m.Id=p.MeetId JOIN Events e ON e.Id=p.EventId WHERE m.Name=N'2021 Woodridge Dual' AND a.FirstName+N' '+a.LastName=N'Emilio Rivera' AND e.Gender=1 AND e.Name=N'Shot Put';
+DELETE pa FROM PerformanceAttempts pa JOIN Performances p ON p.Id=pa.PerformanceId JOIN Athletes a ON a.Id=p.AthleteId JOIN Meets m ON m.Id=p.MeetId JOIN Events e ON e.Id=p.EventId WHERE m.Name=N'2021 Woodridge Dual' AND a.FirstName+N' '+a.LastName=N'Will Rogalski' AND e.Gender=1 AND e.Name=N'Shot Put';
+DELETE pa FROM PerformanceAttempts pa JOIN Performances p ON p.Id=pa.PerformanceId JOIN Athletes a ON a.Id=p.AthleteId JOIN Meets m ON m.Id=p.MeetId JOIN Events e ON e.Id=p.EventId WHERE m.Name=N'2021 Woodridge Dual' AND a.FirstName+N' '+a.LastName=N'Michael Ribnikar' AND e.Gender=1 AND e.Name=N'Shot Put';
+DELETE pa FROM PerformanceAttempts pa JOIN Performances p ON p.Id=pa.PerformanceId JOIN Athletes a ON a.Id=p.AthleteId JOIN Meets m ON m.Id=p.MeetId JOIN Events e ON e.Id=p.EventId WHERE m.Name=N'2021 Woodridge Dual' AND a.FirstName+N' '+a.LastName=N'Tommy Sword' AND e.Gender=1 AND e.Name=N'Shot Put';
+UPDATE p SET p.DistanceInches=84 FROM Performances p JOIN Athletes a ON a.Id=p.AthleteId JOIN Meets m ON m.Id=p.MeetId JOIN Events e ON e.Id=p.EventId WHERE m.Name=N'2021 Woodridge Dual' AND a.FirstName+N' '+a.LastName=N'Isaac Baltic' AND e.Gender=1 AND e.Name=N'Pole Vault' AND ABS(p.DistanceInches-90)<0.006;
+DELETE pb FROM PerformanceBars pb JOIN Performances p ON p.Id=pb.PerformanceId JOIN Athletes a ON a.Id=p.AthleteId JOIN Meets m ON m.Id=p.MeetId WHERE m.Name=N'2021 Woodridge Dual' AND a.FirstName+N' '+a.LastName=N'McKenna Tabor';
+DELETE pb FROM PerformanceBars pb JOIN Performances p ON p.Id=pb.PerformanceId JOIN Athletes a ON a.Id=p.AthleteId JOIN Meets m ON m.Id=p.MeetId WHERE m.Name=N'2021 Woodridge Dual' AND a.FirstName+N' '+a.LastName=N'Cassidy Smith';
+COMMIT TRANSACTION;
+EXEC sp_RebuildLeaderboards;
