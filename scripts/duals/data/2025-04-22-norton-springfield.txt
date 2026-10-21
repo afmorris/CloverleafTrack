@@ -327,3 +327,5 @@
 2|High Jump|C|Ellebruch|4-4|0
 2|High Jump|C|Reinhardt|4-8|0
 2|High Jump|C|Bayer|4-8|0
+2|Pole Vault|C|Payten Shetterly|8-6|0
+2|Pole Vault|C|Taylor Thur|7-6|0
