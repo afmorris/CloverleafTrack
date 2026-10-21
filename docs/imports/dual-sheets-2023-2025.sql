@@ -771,6 +771,10 @@ IF @pid IS NOT NULL AND @mp IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MeetPlacin
 SET @pid = (SELECT TOP 1 p.Id FROM Performances p JOIN Athletes a ON a.Id=p.AthleteId JOIN Events e ON e.Id=p.EventId WHERE p.MeetId=@m AND a.FirstName=N'Katie' AND a.LastName=N'Wershing' AND e.Gender=2 AND e.Name=N'400M');
 SET @mp = (SELECT TOP 1 mp.Id FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'Woodridge' AND mp.Deleted=0);
 IF @pid IS NOT NULL AND @mp IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MeetPlacings WHERE PerformanceId=@pid AND MeetParticipantId=@mp) INSERT INTO MeetPlacings (MeetId, PerformanceId, MeetParticipantId, Place, FullPoints, SplitPoints) VALUES (@m, @pid, @mp, 2, 3.0, 3.0);
+-- WOO Girls 400M: place 3 Brooklyn Cavey 1:07.9
+SET @pid = (SELECT TOP 1 p.Id FROM Performances p JOIN Athletes a ON a.Id=p.AthleteId JOIN Events e ON e.Id=p.EventId WHERE p.MeetId=@m AND a.FirstName=N'Brooklyn' AND a.LastName=N'Cavey' AND e.Gender=2 AND e.Name=N'400M');
+SET @mp = (SELECT TOP 1 mp.Id FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'Woodridge' AND mp.Deleted=0);
+IF @pid IS NOT NULL AND @mp IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MeetPlacings WHERE PerformanceId=@pid AND MeetParticipantId=@mp) INSERT INTO MeetPlacings (MeetId, PerformanceId, MeetParticipantId, Place, FullPoints, SplitPoints) VALUES (@m, @pid, @mp, 3, 1.0, 1.0);
 -- WOO Girls 300M Hurdles: place 2 Kiersyn Berry 54.4
 SET @pid = (SELECT TOP 1 p.Id FROM Performances p JOIN Athletes a ON a.Id=p.AthleteId JOIN Events e ON e.Id=p.EventId WHERE p.MeetId=@m AND a.FirstName=N'Kiersyn' AND a.LastName=N'Berry' AND e.Gender=2 AND e.Name=N'300M Hurdles');
 SET @mp = (SELECT TOP 1 mp.Id FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'Woodridge' AND mp.Deleted=0);
@@ -971,14 +975,26 @@ IF @pid IS NOT NULL AND @mp IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MeetPlacin
 SET @pid = (SELECT TOP 1 p.Id FROM Performances p JOIN Athletes a ON a.Id=p.AthleteId JOIN Events e ON e.Id=p.EventId WHERE p.MeetId=@m AND a.FirstName=N'Zach' AND a.LastName=N'Mollohan' AND e.Gender=1 AND e.Name=N'300M Hurdles');
 SET @mp = (SELECT TOP 1 mp.Id FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'Woodridge' AND mp.Deleted=0);
 IF @pid IS NOT NULL AND @mp IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MeetPlacings WHERE PerformanceId=@pid AND MeetParticipantId=@mp) INSERT INTO MeetPlacings (MeetId, PerformanceId, MeetParticipantId, Place, FullPoints, SplitPoints) VALUES (@m, @pid, @mp, 3, 1.0, 1.0);
+-- WOO Boys 800M: place 3 Vova Herdman 2:06.2
+SET @pid = (SELECT TOP 1 p.Id FROM Performances p JOIN Athletes a ON a.Id=p.AthleteId JOIN Events e ON e.Id=p.EventId WHERE p.MeetId=@m AND a.FirstName=N'Vova' AND a.LastName=N'Herdman' AND e.Gender=1 AND e.Name=N'800M');
+SET @mp = (SELECT TOP 1 mp.Id FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'Woodridge' AND mp.Deleted=0);
+IF @pid IS NOT NULL AND @mp IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MeetPlacings WHERE PerformanceId=@pid AND MeetParticipantId=@mp) INSERT INTO MeetPlacings (MeetId, PerformanceId, MeetParticipantId, Place, FullPoints, SplitPoints) VALUES (@m, @pid, @mp, 3, 1.0, 1.0);
 -- WOO Boys 200M: place 1 Blake Wilson 23.4
 SET @pid = (SELECT TOP 1 p.Id FROM Performances p JOIN Athletes a ON a.Id=p.AthleteId JOIN Events e ON e.Id=p.EventId WHERE p.MeetId=@m AND a.FirstName=N'Blake' AND a.LastName=N'Wilson' AND e.Gender=1 AND e.Name=N'200M');
 SET @mp = (SELECT TOP 1 mp.Id FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'Woodridge' AND mp.Deleted=0);
 IF @pid IS NOT NULL AND @mp IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MeetPlacings WHERE PerformanceId=@pid AND MeetParticipantId=@mp) INSERT INTO MeetPlacings (MeetId, PerformanceId, MeetParticipantId, Place, FullPoints, SplitPoints) VALUES (@m, @pid, @mp, 1, 5.0, 5.0);
+-- WOO Boys 200M: place 2 Luke Yuravak 24.0
+SET @pid = (SELECT TOP 1 p.Id FROM Performances p JOIN Athletes a ON a.Id=p.AthleteId JOIN Events e ON e.Id=p.EventId WHERE p.MeetId=@m AND a.FirstName=N'Luke' AND a.LastName=N'Yuravak' AND e.Gender=1 AND e.Name=N'200M');
+SET @mp = (SELECT TOP 1 mp.Id FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'Woodridge' AND mp.Deleted=0);
+IF @pid IS NOT NULL AND @mp IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MeetPlacings WHERE PerformanceId=@pid AND MeetParticipantId=@mp) INSERT INTO MeetPlacings (MeetId, PerformanceId, MeetParticipantId, Place, FullPoints, SplitPoints) VALUES (@m, @pid, @mp, 2, 3.0, 3.0);
 -- WOO Boys 3200M: place 3 Luke Malena 10:25
 SET @pid = (SELECT TOP 1 p.Id FROM Performances p JOIN Athletes a ON a.Id=p.AthleteId JOIN Events e ON e.Id=p.EventId WHERE p.MeetId=@m AND a.FirstName=N'Luke' AND a.LastName=N'Malena' AND e.Gender=1 AND e.Name=N'3200M');
 SET @mp = (SELECT TOP 1 mp.Id FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'Woodridge' AND mp.Deleted=0);
 IF @pid IS NOT NULL AND @mp IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MeetPlacings WHERE PerformanceId=@pid AND MeetParticipantId=@mp) INSERT INTO MeetPlacings (MeetId, PerformanceId, MeetParticipantId, Place, FullPoints, SplitPoints) VALUES (@m, @pid, @mp, 3, 1.0, 1.0);
+-- WOO Boys 4x400M Relay: place 1 3:35.9
+SET @pid = (SELECT TOP 1 p.Id FROM Performances p JOIN Events e ON e.Id=p.EventId WHERE p.MeetId=@m AND p.AthleteId IS NULL AND e.Gender=1 AND e.Name=N'4x400M Relay' AND ABS(p.TimeSeconds-215.9)<0.006);
+SET @mp = (SELECT TOP 1 mp.Id FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'Woodridge' AND mp.Deleted=0);
+IF @pid IS NOT NULL AND @mp IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MeetPlacings WHERE PerformanceId=@pid AND MeetParticipantId=@mp) INSERT INTO MeetPlacings (MeetId, PerformanceId, MeetParticipantId, Place, FullPoints, SplitPoints) VALUES (@m, @pid, @mp, 1, 5.0, 1.25);
 -- WOO Boys High Jump: place 1 Philly Hamilton 5' 10"
 SET @pid = (SELECT TOP 1 p.Id FROM Performances p JOIN Athletes a ON a.Id=p.AthleteId JOIN Events e ON e.Id=p.EventId WHERE p.MeetId=@m AND a.FirstName=N'Philly' AND a.LastName=N'Hamilton' AND e.Gender=1 AND e.Name=N'High Jump');
 SET @mp = (SELECT TOP 1 mp.Id FROM MeetParticipants mp JOIN Schools s ON s.Id=mp.SchoolId WHERE mp.MeetId=@m AND s.Name=N'Woodridge' AND mp.Deleted=0);
@@ -1106,18 +1122,7 @@ IF @mp IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MeetTeamResults WHERE MeetId=@m
 
 COMMIT TRANSACTION;
 
--- 262 placings
--- REVIEW: MARK DIFFERS 2024-04-23 g2 800M place 3 Lauren Jensch: sheet 2:27.5 (147.5) vs DB 157.5
--- REVIEW: MARK DIFFERS 2024-04-23 g1 800M place 2 Jackson James: sheet 2:16.6 (136.6) vs DB 130.6
--- REVIEW: MARK DIFFERS 2024-04-23 g1 800M place 3 Jackson James: sheet 2:16.6 (136.6) vs DB 130.6
--- REVIEW: MARK DIFFERS 2023-04-11 g2 100M place 1 Riley Evans: sheet 12.3 (12.3) vs DB 12.54
+-- 266 placings
 -- REVIEW: NO DB ROW 2025-04-15 g2 Pole Vault place 2 Taylor  (opp WOO)
--- REVIEW: NO DB ROW 2025-04-15 g2 400M place 3 Cavey 1:07.9 (opp WOO)
--- REVIEW: MARK DIFFERS 2025-04-15 g2 800M place 3 Emma Hibler: sheet 2:44.6 (164.6) vs DB 164.0
--- REVIEW: MARK DIFFERS 2025-04-15 g2 3200M place 2 Emma Hibler: sheet 12:04.34 (724.34) vs DB 724.0
--- REVIEW: MARK DIFFERS 2025-04-22 g2 High Jump place 3 Emily Ellebruch: sheet 4' 4" (52.0) vs DB 54.0
 -- REVIEW: NO DB ROW 2025-04-22 g2 200M place 3 Beyr 28.5 (opp SPR)
--- REVIEW: NO DB ROW 2021-04-13 g1 800M place 3 Hardman 2:06.2 (opp WOO)
--- REVIEW: NO DB ROW 2021-04-13 g1 200M place 2 Vircuak 24.0 (opp WOO)
--- REVIEW: NO DB ROW 2021-04-13 g1 4x400M Relay place 1 relay 3:38 (opp WOO)
 -- REVIEW: MARK DIFFERS 2021-04-13 g2 3200M place 2 Maria Porras: sheet 12:49 (769.0) vs DB 769.7

@@ -64,14 +64,14 @@ HURDLE_SHORT|3|Ricciello|WOO|18.0|1
 300M Hurdles|3|Mollohan|CLO|44.8|1
 800M|1|Hibbs|WOO|2:03.6|5
 800M|2|Lauck|WOO|2:05.2|3
-800M|3|Hardman|CLO|2:06.2|1
+800M|3|Herdman|CLO|2:06.2|1
 200M|1|Wilson|CLO|23.4|5
-200M|2|Vircuak|CLO|24.0|3
+200M|2|Yuravak|CLO|24.0|3
 200M|3|DeFrange|WOO|24.1|1
 3200M|1|Champa|WOO|10:09|5
 3200M|2|Dutt|WOO|10:13|3
 3200M|3|Malena|CLO|10:25|1
-4x400M Relay|1|Cloverleaf|CLO|3:38|5
+4x400M Relay|1|Cloverleaf|CLO|3:35.9|5
 High Jump|1|Hamilton|CLO|5' 10"|5
 High Jump|2|DeFrange|WOO|5' 8"|3
 High Jump|3|Howard|WOO|5' 3"|1
