@@ -2644,3 +2644,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Why:** owner corrections.
 
 **Key files:** `docs/imports/dual-2021-04-13-baltic-nh-fix.sql`.
+
+### [C111] Seated Events Never Count Toward Team Scores
+
+**What changed:** owner rule: "don't include seated results in team scores, ever". `AdminMeetPlacingRepository.GetTemplatePointsAsync` now returns 0 for any event whose name starts with `Seated`; `SeasonScoringRepository.GetScoringDataForSeasonAsync` excludes seated events from both UNION branches (season scoring page); the dual-meet scripts (`scripts/duals/dual_ranker.py`, `scripts/places/dual_placings.py`) skip seated events, so they add no points to computed totals. CLAUDE.md gains a gotcha.
+
+**Why:** seated athletes compete in separate events and their points must not feed team totals.
+
+**Watch out:** no existing data needed fixing: every current `MeetPlacings` row on a seated event already has 0 points (checked locally). Placings (place badges) for seated athletes still display; only points/totals ignore them. `MeetTeamResults` rows are typed/imported values, so the rule applies when computing them, not when reading them. Any new place that sums points must add the `NOT LIKE 'Seated%'` filter.
+
+**Key files:** `CloverleafTrack.DataAccess/Repositories/AdminMeetPlacingRepository.cs`, `SeasonScoringRepository.cs`.
