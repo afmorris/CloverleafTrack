@@ -2618,3 +2618,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** Jayce Kreider's 2024-04-16 discus (sheet 78'9" vs DB 70'9") was NOT changed: the digit is ambiguous in the scan. 2021 Woodridge sheet-vs-DB differences (Brilla/Jarvis LJ) were left alone (upside-down handwriting). The 2021 boys discus/shot attempts, most 2021 pole vault ladders and the 2021 relay legs are still unread; the owner was shown the three images.
 
 **Key files:** `docs/imports/dual-sheet-marks-and-missing.sql`, `docs/imports/dual-*-v2.sql`, `docs/imports/dual-*-series2.sql`.
+
+### [C108] 2021 Woodridge Dual: Owner-Read Boys Shot/Discus Series and Pole Vault Ladders
+
+**What changed:** the owner read the three rotated scans of the 2021-04-13 Woodridge dual. Imported: boys discus series (11 athletes), boys shot put series (10 athletes, replacing my earlier approximate readings; Greer and Yuravak are new), and pole vault ladders for McKenna Tabor (5' XO, 5'6 O, 6' XXX), Cassidy Smith (P P P P at 5-6.5, then 7' O, 7'6 XXO, 8' XO, 8'6 O, 9' XXX) and Isaac Baltic (7' O, 7'6 XXX). `docs/imports/dual-2021-04-13-owner-read-{pre,series,bars}.sql` (apply in that order).
+
+**Why:** OCR/my reading of the upside-down 2021 boys sheets was unreliable.
+
+**Watch out:** Isaac Baltic's pole vault mark was changed from 7'6" (90) to 7'0" (84) because the sheet ladder shows 7'6 XXX (sheet wins over the DB, per the owner's standing rule). Ribnikar's third discus attempt was read as "989-9" and entered as 98-9 (typo for 98'9"; not his best). Every series' best attempt equals the stored mark (verified by `build_scan_sql.py`'s assertion): 11/11 discus and 10/10 shot put matched. Goldsberry and Kott's 5' XXX (no height) have no DB rows and were not added. Still unread: 2021 relay legs.
+
+**Key files:** `docs/imports/dual-2021-04-13-owner-read-*.sql`, `scripts/duals/data/2021-04-13-{sheets,bars}.txt`.
