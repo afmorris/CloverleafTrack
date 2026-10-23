@@ -13,8 +13,13 @@ public class MeetPerformanceViewModel
     public ResultStatus ResultStatus { get; set; }
     public bool HasMark => ResultStatus == ResultStatus.Mark;
     public string ResultDescription => ResultStatus.Description();
+    /// <summary>PR at the time it was run (BRAIN.md [C118]) — stays true after the athlete runs faster later.</summary>
     public bool IsPersonalBest { get; set; }
+    /// <summary>Formatted best earlier mark when <see cref="IsPersonalBest"/> and it was not a debut; null otherwise.</summary>
+    public string? PreviousBest { get; set; }
     public bool IsSchoolRecord { get; set; }
+    /// <summary>Broke the school record when it was set but is no longer the record (a current record has <see cref="IsSchoolRecord"/>).</summary>
+    public bool WasSchoolRecord { get; set; }
     public bool IsSeasonBest { get; set; }
     public int? AllTimeRank { get; set; }
 

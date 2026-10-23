@@ -282,7 +282,8 @@
                                                 <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                     <div class="flex items-center justify-end gap-1 flex-wrap">
                                                         @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
-                                                        @if (perf.IsPersonalBest) { <span class="chip-pr" title="Personal Best">PR</span> }
+                                                        else if (perf.WasSchoolRecord) { <span class="chip-sr" style="opacity:0.55" title="Broke the school record when it was set">SR</span> }
+                                                        @if (perf.IsPersonalBest) { <span class="chip-pr" title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
                                                         @if (perf.IsSeasonBest && !perf.IsPersonalBest) { <span class="chip-rank" title="Season Best">SB</span> }
                                                         @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10 && !perf.IsSchoolRecord)
                                                         {
@@ -385,7 +386,8 @@
                                                 <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                     <div class="flex items-center justify-end gap-1 flex-wrap">
                                                         @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
-                                                        @if (perf.IsPersonalBest) { <span class="chip-pr" title="Personal Best">PR</span> }
+                                                        else if (perf.WasSchoolRecord) { <span class="chip-sr" style="opacity:0.55" title="Broke the school record when it was set">SR</span> }
+                                                        @if (perf.IsPersonalBest) { <span class="chip-pr" title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
                                                         @if (perf.IsSeasonBest && !perf.IsPersonalBest) { <span class="chip-rank" title="Season Best">SB</span> }
                                                         @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10 && !perf.IsSchoolRecord)
                                                         {
@@ -488,7 +490,8 @@
                                             <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                 <div class="flex items-center justify-end gap-1 flex-wrap">
                                                     @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
-                                                    @if (perf.IsPersonalBest) { <span class="chip-pr" title="Personal Best">PR</span> }
+                                                        else if (perf.WasSchoolRecord) { <span class="chip-sr" style="opacity:0.55" title="Broke the school record when it was set">SR</span> }
+                                                    @if (perf.IsPersonalBest) { <span class="chip-pr" title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
                                                     @if (perf.IsSeasonBest && !perf.IsPersonalBest) { <span class="chip-rank" title="Season Best">SB</span> }
                                                     @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10 && !perf.IsSchoolRecord)
                                                     {

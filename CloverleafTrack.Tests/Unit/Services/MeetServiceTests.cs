@@ -58,7 +58,9 @@ public class MeetServiceTests
         bool pr = false,
         bool sr = false,
         int? allTimeRank = null,
-        string athleteName = "Jane Doe") => new()
+        string athleteName = "Jane Doe",
+        double? previousBest = null,
+        bool srAtTime = false) => new()
     {
         PerformanceId = eventId,
         EventId = eventId,
@@ -70,6 +72,9 @@ public class MeetServiceTests
         TimeSeconds = timeSeconds,
         DistanceInches = distanceInches,
         PersonalBest = pr,
+        PRAtTime = pr,
+        PreviousBest = previousBest,
+        SRAtTime = srAtTime,
         SchoolRecord = sr,
         AllTimeRank = allTimeRank,
         AthleteName = athleteName
@@ -137,6 +142,48 @@ public class MeetServiceTests
         var result = await _service.GetMeetDetailsAsync("spring-invitational");
 
         result!.TotalPRs.Should().Be(2);
+    }
+
+    [Fact]
+    public async Task GetMeetDetailsAsync_PRAtTime_ShowsPreviousBest_AndDebutHasNone()
+    {
+        var meet = BuildMeet();
+        var performances = new List<MeetPerformanceDto>
+        {
+            BuildPerf(1, "100m", Gender.Male, timeSeconds: 11.5, pr: true, previousBest: 11.9),
+            BuildPerf(2, "Long Jump", Gender.Male, EventCategory.Jumps, EventType.Field, timeSeconds: null, distanceInches: 200, pr: true, previousBest: 190),
+            BuildPerf(3, "200m", Gender.Male, pr: true),
+        };
+        SetupMeetDetails(meet, performances);
+
+        var result = await _service.GetMeetDetailsAsync("spring-invitational");
+
+        var all = result!.BoysEvents.SelectMany(g => g.Performances).ToList();
+        all.Should().OnlyContain(p => p.IsPersonalBest);
+        all.Select(p => p.PreviousBest).Should().BeEquivalentTo(new string?[] { "11.90", "15' 10\"", null });
+    }
+
+    [Fact]
+    public async Task GetMeetDetailsAsync_SRAtTime_IsWasSchoolRecordOnlyWhenNoLongerTheRecord()
+    {
+        var meet = BuildMeet();
+        var performances = new List<MeetPerformanceDto>
+        {
+            BuildPerf(1, "100m", Gender.Male, srAtTime: true, allTimeRank: 3),   // broke the record then, beaten since
+            BuildPerf(2, "200m", Gender.Male, srAtTime: true, allTimeRank: 1),   // still the record
+            BuildPerf(3, "400m", Gender.Male, allTimeRank: 4),
+        };
+        SetupMeetDetails(meet, performances);
+
+        var result = await _service.GetMeetDetailsAsync("spring-invitational");
+
+        var byEvent = result!.BoysEvents.ToDictionary(g => g.EventName, g => g.Performances.Single());
+        byEvent["100m"].WasSchoolRecord.Should().BeTrue();
+        byEvent["100m"].IsSchoolRecord.Should().BeFalse();
+        byEvent["200m"].IsSchoolRecord.Should().BeTrue();
+        byEvent["200m"].WasSchoolRecord.Should().BeFalse();
+        byEvent["400m"].WasSchoolRecord.Should().BeFalse();
+        result.TotalSchoolRecords.Should().Be(2);
     }
 
     [Fact]

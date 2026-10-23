@@ -14,8 +14,8 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
         const string sql = """
                            SELECT
                                 m.*,
-                                COUNT(CASE WHEN p.PersonalBest = 1 THEN 1 END) AS PRCount,
-                                (SELECT COUNT(*) FROM Performances p2 INNER JOIN Leaderboards lb ON lb.PerformanceId = p2.Id AND lb.Rank = 1 WHERE p2.MeetId = m.Id) AS SchoolRecordCount,
+                                COUNT(CASE WHEN p.PRAtTime = 1 THEN 1 END) AS PRCount,
+                                (SELECT COUNT(*) FROM Performances p2 WHERE p2.MeetId = m.Id AND p2.SRAtTime = 1) AS SchoolRecordCount,
                                 l.*
                            FROM
                                 Meets m
@@ -116,6 +116,9 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    p.TimeSeconds,
                                    p.DistanceInches,
                                    p.PersonalBest,
+                                   p.PRAtTime,
+                                   p.PreviousBest,
+                                   p.SRAtTime,
                                    p.SchoolRecord,
                                    p.SeasonBest,
                                    p.ResultStatus,
@@ -158,8 +161,8 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
                                    m.SeasonId,
                                    m.EntryStatus,
                                    m.MeetType,
-                                   COUNT(CASE WHEN p.PersonalBest = 1 THEN 1 END) AS PRCount,
-                                   (SELECT COUNT(*) FROM Performances p2 INNER JOIN Leaderboards lb ON lb.PerformanceId = p2.Id AND lb.Rank = 1 WHERE p2.MeetId = m.Id) AS SchoolRecordCount,
+                                   COUNT(CASE WHEN p.PRAtTime = 1 THEN 1 END) AS PRCount,
+                                   (SELECT COUNT(*) FROM Performances p2 WHERE p2.MeetId = m.Id AND p2.SRAtTime = 1) AS SchoolRecordCount,
                                    l.Id,
                                    l.Name,
                                    l.City,

@@ -127,6 +127,9 @@ ORDER BY a.LastName, a.FirstName;
                                     p.TimeSeconds,
                                     p.DistanceInches,
                                     p.PersonalBest,
+                                    p.PRAtTime,
+                                    p.PreviousBest,
+                                    p.SRAtTime,
                                     p.SchoolRecord,
                                     p.SeasonBest,
                                     (SELECT MIN(lb.Rank)
@@ -168,6 +171,9 @@ ORDER BY a.LastName, a.FirstName;
                                     p.TimeSeconds,
                                     p.DistanceInches,
                                     p.PersonalBest,
+                                    p.PRAtTime,
+                                    p.PreviousBest,
+                                    p.SRAtTime,
                                     p.SchoolRecord,
                                     p.SeasonBest,
                                     (SELECT MIN(lb.Rank)

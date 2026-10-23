@@ -18,7 +18,7 @@ public class PerformanceRepository(IDbConnectionFactory connectionFactory) : IPe
                            WHERE
                                 m.Id = p.MeetId AND
                                 m.SeasonId = @SeasonId AND
-                                p.PersonalBest = 1
+                                p.PRAtTime = 1
                            """;
         return await connection.ExecuteScalarAsync<int>(sql, new { SeasonId = seasonId });
     }
@@ -35,7 +35,7 @@ public class PerformanceRepository(IDbConnectionFactory connectionFactory) : IPe
                            WHERE
                                 m.Id = p.MeetId AND
                                 m.SeasonId = @SeasonId AND
-                                p.PersonalBest = 1
+                                p.PRAtTime = 1
                            """;
         return await connection.ExecuteScalarAsync<int>(sql, new { SeasonId = seasonId });
     }
@@ -49,9 +49,9 @@ public class PerformanceRepository(IDbConnectionFactory connectionFactory) : IPe
                             FROM
                                  Performances p
                                  INNER JOIN Meets m ON m.Id = p.MeetId
-                                 INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id AND lb.Rank = 1
                             WHERE
-                                 m.SeasonId = @SeasonId
+                                 m.SeasonId = @SeasonId AND
+                                 p.SRAtTime = 1
                             """;
          return await connection.ExecuteScalarAsync<int>(sql, new { SeasonId = seasonId });
     }

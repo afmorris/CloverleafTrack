@@ -39,7 +39,7 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
             MeetsEntered = season.Meets.Count(m => m.EntryStatus == MeetEntryStatus.Entered),
             TotalPRs = season.Meets
                 .SelectMany(m => m.Performances)
-                .Count(p => p.PersonalBest),
+                .Count(p => p.PRAtTime),
             IndoorSchoolRecords = season.Meets
                 .Where(m => m.Environment == Environment.Indoor)
                 .SelectMany(m => m.Performances)

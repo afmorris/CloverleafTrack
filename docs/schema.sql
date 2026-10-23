@@ -169,6 +169,9 @@ CREATE TABLE [dbo].[Performances] (
     [SeasonBest]        BIT        DEFAULT ((0)) NOT NULL,
     [PersonalBest]      BIT        DEFAULT ((0)) NOT NULL,
     [ResultStatus]      TINYINT    DEFAULT ((0)) NOT NULL,  -- 0 Mark, 1 NM, 2 NH, 3 DNF, 4 DQ (see migration_performance_result_status.sql)
+    [PRAtTime]          BIT        DEFAULT ((0)) NOT NULL,  -- beat all EARLIER marks by this athlete in this event (or debut); never reset by a later PR (see migration_record_history.sql)
+    [PreviousBest]      FLOAT (53) NULL,                    -- athlete's best earlier mark when PRAtTime = 1 (NULL on a debut)
+    [SRAtTime]          BIT        DEFAULT ((0)) NOT NULL,  -- beat all earlier marks by anyone in this event (relays included)
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Performances_Athletes] FOREIGN KEY ([AthleteId]) REFERENCES [dbo].[Athletes] ([Id]),
     CONSTRAINT [FK_Performances_Meets]    FOREIGN KEY ([MeetId])    REFERENCES [dbo].[Meets]    ([Id]),
@@ -619,6 +622,9 @@ BEGIN
             CASE WHEN EventMarkCount >= 10 THEN Q3Value ELSE NULL END,
             EventMarkCount
         FROM AllEventStats;
+
+        -- Step 13: PRAtTime / PreviousBest / SRAtTime (definition in migration_record_history.sql)
+        EXEC dbo.sp_RebuildRecordHistory;
 
         COMMIT TRANSACTION;
         PRINT 'Leaderboards rebuild completed successfully.';
@@ -1121,3 +1127,89 @@ CREATE TABLE [dbo].[PerformanceBars] (
     CONSTRAINT [UQ_PerformanceBars_Performance_Height] UNIQUE ([PerformanceId], [HeightInches]),
     CONSTRAINT [CK_PerformanceBars_Outcome] CHECK ([Outcome] IN ('O', 'XO', 'XXO', 'XXX', 'P', 'XP', 'XXP', 'X', 'XX'))
 );
+
+
+-- ============================================================
+-- SCHEMA ADDITIONS: PR / school record at the time (BRAIN.md [C118])
+-- Called by sp_RebuildLeaderboards (Step 13). Columns are declared on Performances above.
+-- ============================================================
+CREATE OR ALTER PROCEDURE [dbo].[sp_RebuildRecordHistory]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Performances
+    SET PRAtTime = 0, PreviousBest = NULL, SRAtTime = 0
+    WHERE PRAtTime = 1 OR PreviousBest IS NOT NULL OR SRAtTime = 1;
+
+    -- Score: higher is always better (field = inches, running = negated seconds), so one MAX() window covers both.
+    -- Order: day, meet time, round the mark was run in (prelim before final; no round rows = final), then best mark first, then Id. The frame excludes the current row, so PrevScore = best mark strictly before it.
+    WITH Marks AS (
+        SELECT
+            p.Id,
+            p.AthleteId,
+            p.EventId,
+            CAST(m.Date AS DATE) AS MeetDay,
+            m.Date AS MeetDate,
+            COALESCE((SELECT TOP 1 r.[Round] FROM PerformanceRounds r WHERE r.PerformanceId = p.Id AND r.TimeSeconds = p.TimeSeconds ORDER BY r.[Round]), 3) AS RoundSeq,
+            CAST(CASE WHEN e.EventType IN (0, 2, 4, 5) THEN 1 ELSE 0 END AS BIT) AS IsField,
+            CASE WHEN e.EventType IN (0, 2, 4, 5) THEN p.DistanceInches ELSE -p.TimeSeconds END AS Score
+        FROM Performances p
+        INNER JOIN Events e ON e.Id = p.EventId
+        INNER JOIN Meets m ON m.Id = p.MeetId
+        WHERE p.ResultStatus = 0
+          AND p.AthleteId IS NOT NULL
+          AND (p.DistanceInches IS NOT NULL OR p.TimeSeconds IS NOT NULL)
+    ),
+    Prior AS (
+        SELECT
+            Id, Score, IsField,
+            MAX(Score) OVER (
+                PARTITION BY AthleteId, EventId
+                ORDER BY MeetDay, MeetDate, RoundSeq, Score DESC, Id
+                ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+            ) AS PrevScore
+        FROM Marks
+    )
+    UPDATE p
+    SET p.PRAtTime = 1,
+        p.PreviousBest = CASE WHEN pr.PrevScore IS NULL THEN NULL
+                              WHEN pr.IsField = 1 THEN pr.PrevScore
+                              ELSE -pr.PrevScore END
+    FROM Performances p
+    INNER JOIN Prior pr ON pr.Id = p.Id
+    WHERE pr.PrevScore IS NULL OR pr.Score > pr.PrevScore;
+
+    -- School record at the time: same idea over the whole event population (relay rows have AthleteId NULL and are included).
+    -- The event's first mark has no PrevScore and IS flagged: per the database it was the school record when set.
+    WITH EventMarks AS (
+        SELECT
+            p.Id,
+            p.EventId,
+            CAST(m.Date AS DATE) AS MeetDay,
+            m.Date AS MeetDate,
+            COALESCE((SELECT TOP 1 r.[Round] FROM PerformanceRounds r WHERE r.PerformanceId = p.Id AND r.TimeSeconds = p.TimeSeconds ORDER BY r.[Round]), 3) AS RoundSeq,
+            CASE WHEN e.EventType IN (0, 2, 4, 5) THEN p.DistanceInches ELSE -p.TimeSeconds END AS Score
+        FROM Performances p
+        INNER JOIN Events e ON e.Id = p.EventId
+        INNER JOIN Meets m ON m.Id = p.MeetId
+        WHERE p.ResultStatus = 0
+          AND (p.DistanceInches IS NOT NULL OR p.TimeSeconds IS NOT NULL)
+    ),
+    EventPrior AS (
+        SELECT
+            Id, Score,
+            MAX(Score) OVER (
+                PARTITION BY EventId
+                ORDER BY MeetDay, MeetDate, RoundSeq, Score DESC, Id
+                ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+            ) AS PrevScore
+        FROM EventMarks
+    )
+    UPDATE p
+    SET p.SRAtTime = 1
+    FROM Performances p
+    INNER JOIN EventPrior ep ON ep.Id = p.Id
+    WHERE ep.PrevScore IS NULL OR ep.Score > ep.PrevScore;
+END;
+GO
