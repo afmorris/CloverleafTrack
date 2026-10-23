@@ -52,6 +52,7 @@
         </div>
     </div>
     <div>
+        <a asp-controller="MeetImport" asp-action="Index" asp-route-meetId="@Model.MeetId" class="btn btn-success btn-large">Import file</a>
         <a asp-action="AddEntry" asp-route-meetId="@Model.MeetId" class="btn btn-primary btn-large">+ Add Entry</a>
     </div>
 </div>

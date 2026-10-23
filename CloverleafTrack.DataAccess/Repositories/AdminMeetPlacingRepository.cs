@@ -10,20 +10,23 @@ public class AdminMeetPlacingRepository(IDbConnectionFactory connectionFactory) 
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
-            SELECT mp.*, mpart.*
+            SELECT mp.*, mpart.*, sc.*
             FROM MeetPlacings mp
             LEFT JOIN MeetParticipants mpart ON mpart.Id = mp.MeetParticipantId AND mpart.Deleted = 0
+            LEFT JOIN Schools sc ON sc.Id = mpart.SchoolId
             WHERE mp.MeetId = @MeetId";
 
-        var results = await connection.QueryAsync<MeetPlacing, MeetParticipant, MeetPlacing>(
+        // MeetParticipant.SchoolName reads School.Name, so the school has to be joined or every "vs. {opponent}" label is blank.
+        var results = await connection.QueryAsync<MeetPlacing, MeetParticipant, School, MeetPlacing>(
             sql,
-            (placing, participant) =>
+            (placing, participant, school) =>
             {
+                if (participant != null) participant.School = school!;
                 placing.MeetParticipant = participant;
                 return placing;
             },
             new { MeetId = meetId },
-            splitOn: "Id");
+            splitOn: "Id,Id");
 
         return results.ToList();
     }
@@ -32,20 +35,22 @@ public class AdminMeetPlacingRepository(IDbConnectionFactory connectionFactory) 
     {
         using var connection = connectionFactory.CreateConnection();
         const string sql = @"
-            SELECT mp.*, mpart.*
+            SELECT mp.*, mpart.*, sc.*
             FROM MeetPlacings mp
             LEFT JOIN MeetParticipants mpart ON mpart.Id = mp.MeetParticipantId AND mpart.Deleted = 0
+            LEFT JOIN Schools sc ON sc.Id = mpart.SchoolId
             WHERE mp.Id = @Id";
 
-        var results = await connection.QueryAsync<MeetPlacing, MeetParticipant, MeetPlacing>(
+        var results = await connection.QueryAsync<MeetPlacing, MeetParticipant, School, MeetPlacing>(
             sql,
-            (placing, participant) =>
+            (placing, participant, school) =>
             {
+                if (participant != null) participant.School = school!;
                 placing.MeetParticipant = participant;
                 return placing;
             },
             new { Id = id },
-            splitOn: "Id");
+            splitOn: "Id,Id");
 
         return results.FirstOrDefault();
     }
