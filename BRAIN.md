@@ -2744,3 +2744,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** never pass an unbounded id list to Dapper `IN @list`. The other `IN @...` callers (rounds/attempts/bars lookups by performance, summaries by athlete/meet, event ids) take per-athlete or per-meet lists and are well under the cap. The Index still loads all ~14,000 performances unpaged (a ~17 MB page); that is a separate usability problem.
 
 **Key files:** `DataAccess/Repositories/AdminPerformanceRepository.cs`.
+
+### [C121] Admin Performances: Season / Meet / Search Filters and a 500-Row Cap
+
+**What changed:** `/Admin/Performances` takes `seasonId`, `meetId`, `search` (athlete, relay member or event) and `all`. With no filter on first visit it shows the current season; the filter form always sends `all=true`, so "All seasons" really is all. Results are newest-first and capped at 500 (the repository returns `limit + 1` rows so the page can say it was cut off). A chosen meet overrides the season filter. New `PerformancesIndexViewModel`; `GetAllWithDetailsAsync(seasonId, meetId, search, limit)` builds its WHERE clause from the supplied filters only.
+
+**Why:** the unfiltered page was ~14,000 rows / 17 MB ([C120]). This is step 1 of streamlining the admin flows (meet workspace, entry grid and a staged import of AI-prepared results come next); the owner does not want AI inside the site, only a review screen for output prepared in chat.
+
+**Watch out:** the current season alone exceeds 500 rows, so the default view is the latest 500 of it; pick a meet to see one meet in full. The relay-names aggregate still runs event-wide (one cheap query), not just for the loaded rows.
+
+**Key files:** `AdminPerformanceRepository.cs`, `PerformancesController.cs`, `Views/Performances/Index.cshtml`, `ViewModels/Admin/Performances/PerformancesIndexViewModel.cs`.
