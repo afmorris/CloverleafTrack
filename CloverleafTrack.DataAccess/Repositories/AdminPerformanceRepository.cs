@@ -36,13 +36,22 @@ public class AdminPerformanceRepository(IDbConnectionFactory connectionFactory) 
         return performances.FirstOrDefault();
     }
 
-    public async Task<List<Performance>> GetAllWithDetailsAsync()
+    public async Task<List<Performance>> GetAllWithDetailsAsync(int? seasonId = null, int? meetId = null, string? search = null, int limit = 500)
     {
         using var connection = connectionFactory.CreateConnection();
-        
-        // First get all performances with their basic details
-        const string sql = @"
-            SELECT
+
+        var filters = new List<string>();
+        if (seasonId.HasValue) filters.Add("m.SeasonId = @SeasonId");
+        if (meetId.HasValue) filters.Add("p.MeetId = @MeetId");
+        if (!string.IsNullOrWhiteSpace(search))
+            filters.Add(@"(e.Name LIKE @Search OR a.FirstName + ' ' + a.LastName LIKE @Search OR a.LastName + ', ' + a.FirstName LIKE @Search
+                           OR EXISTS (SELECT 1 FROM PerformanceAthletes pa2 INNER JOIN Athletes a2 ON a2.Id = pa2.AthleteId
+                                      WHERE pa2.PerformanceId = p.Id AND a2.FirstName + ' ' + a2.LastName LIKE @Search))");
+        var where = filters.Count > 0 ? "WHERE " + string.Join(" AND ", filters) : "";
+
+        // First get the matching performances with their basic details
+        var sql = $@"
+            SELECT TOP (@Take)
                 p.*,
                 (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) AS AllTimeRank,
                 a.*,
@@ -56,7 +65,8 @@ public class AdminPerformanceRepository(IDbConnectionFactory connectionFactory) 
             INNER JOIN Meets m ON m.Id = p.MeetId
             INNER JOIN Locations l ON l.Id = m.LocationId
             INNER JOIN Seasons s ON s.Id = m.SeasonId
-            ORDER BY m.Date DESC, e.SortOrder";
+            {where}
+            ORDER BY m.Date DESC, e.SortOrder, p.Id";
         
         var performanceDict = new Dictionary<int, Performance>();
         
@@ -76,6 +86,7 @@ public class AdminPerformanceRepository(IDbConnectionFactory connectionFactory) 
                 }
                 return existingPerformance;
             },
+            new { SeasonId = seasonId, MeetId = meetId, Search = $"%{search?.Trim()}%", Take = limit + 1 },
             splitOn: "Id,Id,Id,Id,Id");
         
         // Now get relay athletes for performances that don't have an AthleteId
@@ -93,7 +104,8 @@ public class AdminPerformanceRepository(IDbConnectionFactory connectionFactory) 
                 GROUP BY pa.PerformanceId";
             
             // Not `IN @PerformanceIds`: Dapper expands a list into one parameter per id and SQL Server caps a request at
-            // 2100 parameters, which the relay count passed (BRAIN.md [C120]).
+            // 2100 parameters, which the relay count passed (BRAIN.md [C120]). The aggregate is event-wide, so only the
+            // rows already loaded are looked at below.
             var relayData = await connection.QueryAsync<(int PerformanceId, string RelayAthletes)>(relayAthletesSql);
             
             foreach (var relay in relayData)

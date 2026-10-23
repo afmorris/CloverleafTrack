@@ -5,7 +5,8 @@ namespace CloverleafTrack.DataAccess.Interfaces;
 public interface IAdminPerformanceRepository
 {
     Task<Performance?> GetByIdAsync(int id);
-    Task<List<Performance>> GetAllWithDetailsAsync();
+    /// <summary>Filtered list for the admin Performances page. Returns at most <paramref name="limit"/> + 1 rows so the caller can tell the list was cut off.</summary>
+    Task<List<Performance>> GetAllWithDetailsAsync(int? seasonId = null, int? meetId = null, string? search = null, int limit = 500);
     Task<int> CreateAsync(Performance performance);
     Task<bool> UpdateAsync(Performance performance);
     Task<bool> DeleteAsync(int id);

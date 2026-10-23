@@ -13,16 +13,41 @@ public class PerformancesController(
     IAdminPerformanceRepository performanceRepository,
     IAdminMeetRepository meetRepository,
     IAdminEventRepository eventRepository,
-    IAdminAthleteRepository athleteRepository) : Controller
+    IAdminAthleteRepository athleteRepository,
+    IAdminSeasonRepository seasonRepository) : Controller
 {
     private const string SessionKeyMeetId = "PerformanceEntry_MeetId";
     private const string SessionKeyEventId = "PerformanceEntry_EventId";
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? seasonId, int? meetId, string? search, bool all = false)
     {
-        var performances = await performanceRepository.GetAllWithDetailsAsync();
-        return View(performances);
+        const int limit = 500;
+        var seasons = await seasonRepository.GetAllAsync();
+
+        // No filter at all (first visit) = the current season; the full table is ~14,000 rows. ?all=true opts in.
+        if (!seasonId.HasValue && !meetId.HasValue && string.IsNullOrWhiteSpace(search) && !all)
+            seasonId = (await seasonRepository.GetCurrentSeasonAsync())?.Id;
+
+        var meets = seasonId.HasValue
+            ? await meetRepository.GetFilteredAsync(null, seasonId, null, null)
+            : await meetRepository.GetAllAsync();
+
+        // A chosen meet overrides the season filter so a stale season can't hide it.
+        var performances = await performanceRepository.GetAllWithDetailsAsync(meetId.HasValue ? null : seasonId, meetId, search, limit);
+        var truncated = performances.Count > limit;
+
+        return View(new PerformancesIndexViewModel
+        {
+            Performances = performances.Take(limit).ToList(),
+            Truncated = truncated,
+            Limit = limit,
+            SeasonId = seasonId,
+            MeetId = meetId,
+            Search = search,
+            Seasons = seasons.OrderByDescending(s => s.StartDate).Select(s => (s.Id, s.Name)).ToList(),
+            Meets = meets.OrderByDescending(m => m.Date).Select(m => (m.Id, m.Name, m.Date)).ToList()
+        });
     }
 
     [HttpGet]
