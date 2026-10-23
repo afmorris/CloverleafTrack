@@ -392,7 +392,7 @@ public class AthleteServiceTests
         var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
         var performances = new List<AthletePerformanceDto>
         {
-            new() { PerformanceId = 1, EventId = 1, EventName = "Discus", EventType = EventType.Field, DistanceInches = 900, PersonalBest = true,
+            new() { PerformanceId = 1, EventId = 1, EventName = "Discus", EventType = EventType.Field, DistanceInches = 900, PersonalBest = true, PRAtTime = true,
                     MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
                     SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1), Environment = Environment.Outdoor },
         };
@@ -518,13 +518,54 @@ public class AthleteServiceTests
     }
 
     [Fact]
+    public async Task GetAthleteDetailsAsync_SupersededPR_KeepsItsCredit_ButPRTableUsesCurrentBest()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
+        var performances = new List<AthletePerformanceDto>
+        {
+            // debut, later beaten: PRAtTime stays set though PersonalBest was cleared by the later mark
+            new() { PerformanceId = 1, EventId = 1, EventName = "100m", EventType = EventType.Running, TimeSeconds = 12.5, PRAtTime = true, PreviousBest = null,
+                    SRAtTime = false, MeetName = "Opener", MeetDate = new DateTime(2024, 3, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1), Environment = Environment.Outdoor },
+            // improved on 12.5, itself beaten later
+            new() { PerformanceId = 2, EventId = 1, EventName = "100m", EventType = EventType.Running, TimeSeconds = 12.0, PRAtTime = true, PreviousBest = 12.5,
+                    MeetName = "Mid", MeetDate = new DateTime(2024, 4, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1), Environment = Environment.Outdoor },
+            // current best; broke the school record when set, since passed
+            new() { PerformanceId = 3, EventId = 1, EventName = "100m", EventType = EventType.Running, TimeSeconds = 11.5, PersonalBest = true, PRAtTime = true, PreviousBest = 12.0,
+                    SRAtTime = true, AllTimeRank = 4, MeetName = "Finale", MeetDate = new DateTime(2024, 5, 1),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1), Environment = Environment.Outdoor },
+            // slower than the best, not a PR
+            new() { PerformanceId = 4, EventId = 1, EventName = "100m", EventType = EventType.Running, TimeSeconds = 11.8,
+                    MeetName = "After", MeetDate = new DateTime(2024, 5, 8),
+                    SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1), Environment = Environment.Outdoor },
+        };
+        mockRepo.Setup(r => r.GetBySlugWithBasicInfoAsync("jane-doe")).ReturnsAsync(athlete);
+        mockRepo.Setup(r => r.GetAllPerformancesForAthleteAsync(1)).ReturnsAsync(performances);
+
+        var result = await new AthleteService(mockRepo.Object).GetAthleteDetailsAsync("jane-doe", 2024);
+
+        result!.TotalPRs.Should().Be(3, "every mark that beat an earlier one counts, not just the surviving best");
+        var season = result.Seasons.Single();
+        season.PRCount.Should().Be(3);
+        season.SchoolRecordCount.Should().Be(1);
+        result.PersonalRecords.Single().Performance.Should().Be("11.50");
+        var rows = season.EventGroups.Single().Performances.OrderBy(p => p.Date).ToList();
+        rows.Select(p => p.IsPersonalBest).Should().Equal(true, true, true, false);
+        rows.Select(p => p.PreviousBest).Should().Equal(null, "12.50", "12.00", null);
+        rows[2].WasSchoolRecord.Should().BeTrue();
+        rows[2].IsSchoolRecord.Should().BeFalse();
+    }
+
+    [Fact]
     public async Task GetAthleteDetailsAsync_TotalPRs_CountsOnlyIndividualPerformances()
     {
         var mockRepo = new Mock<IAthleteRepository>();
         var athlete = new Athlete { Id = 1, FirstName = "Jane", LastName = "Doe", GraduationYear = 2025, Gender = Gender.Female };
         var performances = new List<AthletePerformanceDto>
         {
-            new() { EventId = 1, EventName = "100m", TimeSeconds = 11.5, PersonalBest = true,
+            new() { EventId = 1, EventName = "100m", TimeSeconds = 11.5, PersonalBest = true, PRAtTime = true,
                     MeetName = "Spring Meet", MeetDate = new DateTime(2024, 3, 1),
                     SeasonName = "2023-2024", SeasonStartDate = new DateTime(2024, 1, 1),
                     Environment = Environment.Outdoor, RelayAthletes = null },

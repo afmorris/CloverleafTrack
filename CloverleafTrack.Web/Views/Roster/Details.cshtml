@@ -297,7 +297,7 @@
                                             {
                                                 <span class="chip-pr">PR</span>
                                             }
-                                            @if (eg.Performances.Any(p => p.IsSchoolRecord))
+                                            @if (eg.Performances.Any(p => p.IsSchoolRecord || p.WasSchoolRecord))
                                             {
                                                 <span class="chip-sr">SR</span>
                                             }
@@ -334,7 +334,8 @@
                                                     <div class="flex items-center gap-1.5 flex-wrap">
                                                         @if (perf.HasMark) { <span class="mark font-bold text-gray-900 dark:text-gray-100">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
                                                         @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
-                                                        @if (perf.IsPersonalBest) { <span class="chip-pr">PR</span> }
+                                                        else if (perf.WasSchoolRecord) { <span class="chip-sr" style="opacity:0.55" title="Broke the school record when it was set">SR</span> }
+                                                        @if (perf.IsPersonalBest) { <span class="chip-pr" title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
                                                         @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10)
                                                         {
                                                             <span class="chip-rank">#@perf.AllTimeRank</span>

@@ -187,8 +187,8 @@ public class MeetService(
 
             // Stats
             TotalPerformances = performances.Count(p => p.ResultStatus == ResultStatus.Mark),
-            TotalPRs = performances.Count(p => p.PersonalBest),
-            TotalSchoolRecords = performances.Count(p => p.AllTimeRank == 1),
+            TotalPRs = performances.Count(p => p.PRAtTime),
+            TotalSchoolRecords = performances.Count(p => p.SRAtTime || p.AllTimeRank == 1),
             UniqueAthletes = uniqueAthletes,
             TopTenAllTimeCount = mappedPerformances.Count(p => p.AllTimeRank is <= 10),
             SeasonBestCount = mappedPerformances.Count(p => p.IsSeasonBest),
@@ -344,6 +344,10 @@ public class MeetService(
         _ => false
     };
 
+    /// <summary>The athlete's best mark before this PR, formatted for the event type; null on a debut (nothing earlier).</summary>
+    internal static string? FormatPreviousBest(double? previousBest, bool isField) =>
+        previousBest.HasValue ? (isField ? FormatPerformance(null, previousBest) : FormatPerformance(previousBest, null)) : null;
+
     private static MeetPerformanceViewModel BuildPerformanceViewModel(
         MeetPerformanceDto p,
         Dictionary<int, List<MeetPlacing>> placingLookup,
@@ -361,8 +365,10 @@ public class MeetService(
                 ? FormatPerformance(p.TimeSeconds, p.DistanceInches)
                 : p.ResultStatus.Abbreviation(),
             ResultStatus = p.ResultStatus,
-            IsPersonalBest = p.PersonalBest,
+            IsPersonalBest = p.PRAtTime,
+            PreviousBest = p.PRAtTime ? FormatPreviousBest(p.PreviousBest, IsFieldEventType(p.EventType)) : null,
             IsSchoolRecord = p.AllTimeRank == 1,
+            WasSchoolRecord = p.SRAtTime && p.AllTimeRank != 1,
             IsSeasonBest = p.SeasonBest,
             AllTimeRank = p.AllTimeRank,
             AttemptSeries = attemptLookup.GetValueOrDefault(p.PerformanceId) ?? new PerformanceAttemptSeriesViewModel(),

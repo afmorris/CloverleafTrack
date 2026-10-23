@@ -24,7 +24,7 @@ public class MeetSummaryTests
                 EventName = "100m",
                 Performances = new()
                 {
-                    new MeetPerformanceViewModel { AthleteName = "Sam Runner", AthleteSlug = "sam-runner", Performance = "11.20", IsPersonalBest = true, IsSchoolRecord = true, AllTimeRank = 1 },
+                    new MeetPerformanceViewModel { AthleteName = "Sam Runner", AthleteSlug = "sam-runner", Performance = "11.20", IsPersonalBest = true, PreviousBest = "11.40", IsSchoolRecord = true, AllTimeRank = 1 },
                     new MeetPerformanceViewModel { AthleteName = "A|~|B|~|C|~|D", AthleteSlug = null, Performance = "44.10", IsPersonalBest = relayPb, AllTimeRank = 14 }
                 }
             }

@@ -129,7 +129,7 @@ public static class MeetSummaryPrompt
                     [isRelay ? "relayTeam" : "athlete"] = isRelay ? p.AthleteName.Split("|~|") : p.AthleteName,
                     ["mark"] = p.HasMark ? p.Performance : null,
                     ["result"] = p.HasMark ? null : p.ResultStatus.Phrase(),
-                    ["pr"] = !isRelay && p.IsPersonalBest ? true : null,
+                    ["pr"] = !isRelay && p.IsPersonalBest && p.PreviousBest != null ? true : null, // PR at the time, improving on an earlier mark; a debut is not a "personal best" worth narrating
                     ["sr"] = p.IsSchoolRecord ? true : null,
                     ["seasonBest"] = p.IsSeasonBest ? true : null,
                     ["allTimeRank"] = p.AllTimeRank is <= 10 ? p.AllTimeRank : null,

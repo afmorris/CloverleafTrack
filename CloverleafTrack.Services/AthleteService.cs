@@ -494,8 +494,8 @@ public class AthleteService(
             .Select(seasonGroup => new SeasonPerformanceViewModel
             {
                 SeasonName = seasonGroup.Key.SeasonName,
-                PRCount = seasonGroup.Count(p => p.PersonalBest),
-                SchoolRecordCount = seasonGroup.Count(p => p.AllTimeRank == 1),
+                PRCount = seasonGroup.Count(p => p.PRAtTime),
+                SchoolRecordCount = seasonGroup.Count(p => p.SRAtTime || p.AllTimeRank == 1),
                 EventGroups = seasonGroup
                     .GroupBy(p => new { p.EventId, p.EventName, p.EventCategorySortOrder, p.EventSortOrder, p.Environment })
                     .OrderBy(eg => eg.Key.EventCategorySortOrder)
@@ -532,8 +532,10 @@ public class AthleteService(
                                     ResultStatus = p.ResultStatus,
                                     Date = p.MeetDate,
                                     MeetName = p.MeetName,
-                                    IsPersonalBest = p.PersonalBest,
+                                    IsPersonalBest = p.PRAtTime,
+                                    PreviousBest = p.PRAtTime ? MeetService.FormatPreviousBest(p.PreviousBest, isFieldEvent) : null,
                                     IsSchoolRecord = p.AllTimeRank == 1,
+                                    WasSchoolRecord = p.SRAtTime && p.AllTimeRank != 1,
                                     IsSeasonBest = p.SeasonBest,
                                     AllTimeRank = p.AllTimeRank,
                                     RawValue = p.DistanceInches ?? p.TimeSeconds,
@@ -573,7 +575,7 @@ public class AthleteService(
                 AllTimeRank = topFieldEvent.AllTimeRank,
                 Environment = topFieldEvent.Environment
             } : null,
-            TotalPRs = performances.Count(p => p.PersonalBest && p.RelayAthletes == null),
+            TotalPRs = performances.Count(p => p.PRAtTime && p.RelayAthletes == null),
             TotalSchoolRecords = performances
                     .Where(p => p.AllTimeRank == 1)
                     .Select(p => p.EventId)

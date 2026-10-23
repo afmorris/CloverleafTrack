@@ -15,6 +15,9 @@ public class AthletePerformanceDto
     public double? TimeSeconds { get; set; }
     public double? DistanceInches { get; set; }
     public bool PersonalBest { get; set; }
+    public bool PRAtTime { get; set; }
+    public double? PreviousBest { get; set; }
+    public bool SRAtTime { get; set; }
     public bool SchoolRecord { get; set; }
     public bool SeasonBest { get; set; }
     /// <summary>Only non-Mark values come from <c>GetNoMarkResultsForAthleteAsync</c>; the main performance query returns marks only.</summary>

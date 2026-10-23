@@ -17,6 +17,9 @@ public class MeetPerformanceDto
     public double? TimeSeconds { get; set; }
     public double? DistanceInches { get; set; }
     public bool PersonalBest { get; set; }
+    public bool PRAtTime { get; set; }
+    public double? PreviousBest { get; set; }
+    public bool SRAtTime { get; set; }
     public bool SchoolRecord { get; set; }
     public bool SeasonBest { get; set; }
     public ResultStatus ResultStatus { get; set; }

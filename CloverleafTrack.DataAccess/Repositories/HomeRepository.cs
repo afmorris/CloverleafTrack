@@ -16,12 +16,11 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                            SELECT 
                                (SELECT COUNT(*) FROM Performances p
                                 INNER JOIN Meets m ON m.Id = p.MeetId
-                                WHERE m.SeasonId = @SeasonId AND p.PersonalBest = 1) AS TotalPRsThisSeason,
+                                WHERE m.SeasonId = @SeasonId AND p.PRAtTime = 1) AS TotalPRsThisSeason,
                                
                                (SELECT COUNT(*) FROM Performances p
                                 INNER JOIN Meets m ON m.Id = p.MeetId
-                                INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id AND lb.Rank = 1
-                                WHERE m.SeasonId = @SeasonId) AS SchoolRecordsBroken,
+                                WHERE m.SeasonId = @SeasonId AND p.SRAtTime = 1) AS SchoolRecordsBroken,
                                
                                (SELECT COUNT(*) FROM Athletes WHERE IsActive = 1) AS ActiveAthletes,
                                
@@ -63,11 +62,10 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                                (SELECT COUNT(*)
                                 FROM Performances p
                                 WHERE p.MeetId = lm.Id
-                                  AND p.PersonalBest = 1) AS TotalPRs,
-                               (SELECT COUNT(DISTINCT p.Id)
+                                  AND p.PRAtTime = 1) AS TotalPRs,
+                               (SELECT COUNT(*)
                                 FROM Performances p
-                                INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id AND lb.Rank = 1
-                                WHERE p.MeetId = lm.Id) AS TotalSchoolRecords,
+                                WHERE p.MeetId = lm.Id AND p.SRAtTime = 1) AS TotalSchoolRecords,
                                (SELECT COUNT(DISTINCT p.Id)
                                 FROM Performances p
                                 INNER JOIN Leaderboards lb ON lb.PerformanceId = p.Id AND lb.Rank <= 10
@@ -137,7 +135,7 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                                      a.LastName AS AthleteLastName,
                                      m.Name AS MeetName,
                                      m.Date,
-                                     p.PersonalBest AS IsPersonalBest,
+                                     p.PRAtTime AS IsPersonalBest,
                                      CASE WHEN (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) = 1 THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsSchoolRecord
                                  FROM Performances p
                                  INNER JOIN Events e ON e.Id = p.EventId
@@ -149,7 +147,7 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                                    AND p.ResultStatus = 0
                                  ORDER BY
                                      CASE WHEN (SELECT MIN(lb.Rank) FROM Leaderboards lb WHERE lb.PerformanceId = p.Id) = 1 THEN 0 ELSE 1 END,
-                                     p.PersonalBest DESC,
+                                     p.PRAtTime DESC,
                                      m.Date DESC
                                  """;
 
@@ -171,7 +169,7 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                                          a.LastName AS AthleteLastName,
                                          m.Name AS MeetName,
                                          m.Date,
-                                         p.PersonalBest AS IsPersonalBest,
+                                         p.PRAtTime AS IsPersonalBest,
                                          CAST(1 AS BIT) AS IsSchoolRecord
                                      FROM Performances p
                                      INNER JOIN Events e ON e.Id = p.EventId
@@ -265,7 +263,7 @@ public class HomeRepository(IDbConnectionFactory connectionFactory) : IHomeRepos
                            INNER JOIN Events e ON e.Id = p.EventId
                            INNER JOIN Meets m ON m.Id = p.MeetId
                            WHERE m.SeasonId = @SeasonId 
-                             AND p.PersonalBest = 1
+                             AND p.PRAtTime = 1
                              AND e.Environment = @Environment
                            GROUP BY a.Id, a.FirstName, a.LastName, a.GraduationYear
                            ORDER BY PRCount DESC

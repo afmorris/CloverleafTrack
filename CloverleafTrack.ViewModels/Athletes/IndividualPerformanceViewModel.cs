@@ -12,8 +12,13 @@ public class IndividualPerformanceViewModel
     public string ResultDescription => ResultStatus.Description();
     public DateTime Date { get; set; }
     public string MeetName { get; set; } = string.Empty;
+    /// <summary>PR at the time it was run (BRAIN.md [C118]) — stays true after the athlete improves later.</summary>
     public bool IsPersonalBest { get; set; }
+    /// <summary>Formatted best earlier mark when <see cref="IsPersonalBest"/> and it was not a debut; null otherwise.</summary>
+    public string? PreviousBest { get; set; }
     public bool IsSchoolRecord { get; set; }
+    /// <summary>Broke the school record when it was set but is no longer the record.</summary>
+    public bool WasSchoolRecord { get; set; }
     public bool IsSeasonBest { get; set; }
     public int? AllTimeRank { get; set; }
     /// <summary>Raw numeric value for charting: TimeSeconds for running events, DistanceInches for field events.</summary>
