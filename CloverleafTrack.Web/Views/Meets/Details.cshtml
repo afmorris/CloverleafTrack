@@ -237,7 +237,7 @@
                                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                         @foreach (var perf in eventGroup.Performances)
                                         {
-                                            var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsPersonalBest ? "row-pr" : "");
+                                            var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsCurrentPersonalBest ? "row-pr" : "");
                                             <tr class="@rowClass hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                                                 <td class="px-2 sm:px-4 py-2 align-middle" data-sort="@perf.AthleteName">
                                                     @if (IsRelay(perf.AthleteName))
@@ -277,13 +277,13 @@
                                                     @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                                 </td>
                                                 <td class="px-2 sm:px-4 py-2 text-right whitespace-nowrap align-middle" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
-                                                    @if (perf.HasMark) { <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
+                                                    @if (perf.HasMark) { <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsCurrentPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
                                                 </td>
                                                 <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                     <div class="flex items-center justify-end gap-1 flex-wrap">
                                                         @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
                                                         else if (perf.WasSchoolRecord) { <span class="chip-sr" style="opacity:0.55" title="Broke the school record when it was set">SR</span> }
-                                                        @if (perf.IsPersonalBest) { <span class="chip-pr" title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
+                                                        @if (perf.IsPersonalBest) { <span class="chip-pr" @(perf.IsCurrentPersonalBest ? "" : Html.Raw("style=\"opacity:0.55\"")) title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
                                                         @if (perf.IsSeasonBest && !perf.IsPersonalBest) { <span class="chip-rank" title="Season Best">SB</span> }
                                                         @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10 && !perf.IsSchoolRecord)
                                                         {
@@ -341,7 +341,7 @@
                                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                         @foreach (var perf in eventGroup.Performances)
                                         {
-                                            var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsPersonalBest ? "row-pr" : "");
+                                            var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsCurrentPersonalBest ? "row-pr" : "");
                                             <tr class="@rowClass hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                                                 <td class="px-2 sm:px-4 py-2 align-middle" data-sort="@perf.AthleteName">
                                                     @if (IsRelay(perf.AthleteName))
@@ -381,13 +381,13 @@
                                                     @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                                 </td>
                                                 <td class="px-2 sm:px-4 py-2 text-right whitespace-nowrap align-middle" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
-                                                    @if (perf.HasMark) { <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
+                                                    @if (perf.HasMark) { <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsCurrentPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
                                                 </td>
                                                 <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                     <div class="flex items-center justify-end gap-1 flex-wrap">
                                                         @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
                                                         else if (perf.WasSchoolRecord) { <span class="chip-sr" style="opacity:0.55" title="Broke the school record when it was set">SR</span> }
-                                                        @if (perf.IsPersonalBest) { <span class="chip-pr" title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
+                                                        @if (perf.IsPersonalBest) { <span class="chip-pr" @(perf.IsCurrentPersonalBest ? "" : Html.Raw("style=\"opacity:0.55\"")) title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
                                                         @if (perf.IsSeasonBest && !perf.IsPersonalBest) { <span class="chip-rank" title="Season Best">SB</span> }
                                                         @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10 && !perf.IsSchoolRecord)
                                                         {
@@ -445,7 +445,7 @@
                                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                     @foreach (var perf in eventGroup.Performances)
                                     {
-                                        var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsPersonalBest ? "row-pr" : "");
+                                        var rowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsCurrentPersonalBest ? "row-pr" : "");
                                         <tr class="@rowClass hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                                             <td class="px-2 sm:px-4 py-2 align-middle" data-sort="@perf.AthleteName">
                                                 @if (IsRelay(perf.AthleteName))
@@ -485,13 +485,13 @@
                                                 @await Html.PartialAsync("_RoundStrip", perf.RoundSeries, new ViewDataDictionary(ViewData) { { "Left", true } })
                                             </td>
                                             <td class="px-2 sm:px-4 py-2 text-right whitespace-nowrap align-middle" data-sort="@(perf.RawValue?.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) ?? "")">
-                                                @if (perf.HasMark) { <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
+                                                @if (perf.HasMark) { <span class="mark font-semibold @(perf.IsSchoolRecord ? "text-sr" : (perf.IsCurrentPersonalBest ? "text-pr" : "text-gray-900 dark:text-white"))">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
                                             </td>
                                             <td class="px-2 sm:px-4 py-2 text-right align-middle">
                                                 <div class="flex items-center justify-end gap-1 flex-wrap">
                                                     @if (perf.IsSchoolRecord) { <span class="chip-sr" title="School Record">SR</span> }
                                                         else if (perf.WasSchoolRecord) { <span class="chip-sr" style="opacity:0.55" title="Broke the school record when it was set">SR</span> }
-                                                    @if (perf.IsPersonalBest) { <span class="chip-pr" title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
+                                                    @if (perf.IsPersonalBest) { <span class="chip-pr" @(perf.IsCurrentPersonalBest ? "" : Html.Raw("style=\"opacity:0.55\"")) title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
                                                     @if (perf.IsSeasonBest && !perf.IsPersonalBest) { <span class="chip-rank" title="Season Best">SB</span> }
                                                     @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10 && !perf.IsSchoolRecord)
                                                     {

@@ -533,6 +533,7 @@ public class AthleteService(
                                     Date = p.MeetDate,
                                     MeetName = p.MeetName,
                                     IsPersonalBest = p.PRAtTime,
+                                    IsCurrentPersonalBest = p.PersonalBest,
                                     PreviousBest = p.PRAtTime ? MeetService.FormatPreviousBest(p.PreviousBest, isFieldEvent) : null,
                                     IsSchoolRecord = p.AllTimeRank == 1,
                                     WasSchoolRecord = p.SRAtTime && p.AllTimeRank != 1,

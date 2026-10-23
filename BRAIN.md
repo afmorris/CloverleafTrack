@@ -2728,3 +2728,11 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Applied live 2026-10-23:** migration run on `svp01sql01`/`ctf`, then `EXEC sp_RebuildLeaderboards` (first full end-to-end run of the proc since [C31]; 13,975 marks -> 5,759 `PRAtTime` (2,392 debuts), 412 `SRAtTime`). Checks: every `Leaderboards` rank 1 has `SRAtTime`; no `PreviousBest` is worse than its mark; the 86 current `PersonalBest` rows without `PRAtTime` are all exact ties with an earlier mark (ties are not PRs).
 
 **Key files:** `docs/migration_record_history.sql`, `docs/schema.sql`, `Models/Performance.cs`, `DataAccess/{Meet,Athlete,Home,Performance}Repository.cs`, `Services/{Meet,Athlete,Season}Service.cs`, `Services/MeetSummaryPrompt.cs`, `Views/Meets/Details.cshtml`, `Views/Roster/Details.cshtml`, tests in `MeetServiceTests` / `AthleteServiceTests`.
+
+### [C119] Faded PR Chip for Superseded PRs
+
+**What changed:** the PR chip is full strength only while the mark is still the athlete's best; a PR-at-the-time ([C118]) that was later beaten renders at `opacity:0.55`, the same treatment as a broken school record. New `IsCurrentPersonalBest` (= the current `PersonalBest` flag) on `MeetPerformanceViewModel` and `IndividualPerformanceViewModel`. The `row-pr` / `text-pr` tint also follows the current best only, matching the SR row tint. On the athlete season accordion the summary chip is faded unless some mark in that event's season is still the current best.
+
+**Watch out:** `PersonalBest` is current-best per athlete and event, so a tied best keeps both marks full. Opacity is an inline style (no Tailwind rebuild needed).
+
+**Key files:** `Views/Meets/Details.cshtml`, `Views/Roster/Details.cshtml`, `Services/{Meet,Athlete}Service.cs`.

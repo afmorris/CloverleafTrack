@@ -366,6 +366,7 @@ public class MeetService(
                 : p.ResultStatus.Abbreviation(),
             ResultStatus = p.ResultStatus,
             IsPersonalBest = p.PRAtTime,
+            IsCurrentPersonalBest = p.PersonalBest,
             PreviousBest = p.PRAtTime ? FormatPreviousBest(p.PreviousBest, IsFieldEventType(p.EventType)) : null,
             IsSchoolRecord = p.AllTimeRank == 1,
             WasSchoolRecord = p.SRAtTime && p.AllTimeRank != 1,
