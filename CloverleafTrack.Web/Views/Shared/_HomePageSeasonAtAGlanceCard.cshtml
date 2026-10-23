@@ -18,3 +18,9 @@
         <span class="metric-label">Meets</span>
     </div>
 </div>
+@if (!string.IsNullOrEmpty(Model.CurrentSeasonName))
+{
+    <p class="mb-6 text-sm">
+        <a href="/seasons/@Model.CurrentSeasonName/wrap" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">See the @Model.CurrentSeasonName season wrap →</a>
+    </p>
+}

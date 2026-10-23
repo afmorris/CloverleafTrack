@@ -5,6 +5,9 @@ using CloverleafTrack.Services;
 using CloverleafTrack.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Season wrap poster PDF (QuestPDF). Community license: free for individuals, non-profits and organisations under $1M annual revenue.
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDistributedMemoryCache();
@@ -32,6 +35,7 @@ builder.Services.AddScoped<IHomeRepository, HomeRepository>();
 builder.Services.AddScoped<IScoringTemplateRepository, ScoringTemplateRepository>();
 builder.Services.AddScoped<IMeetPlacingRepository, MeetPlacingRepository>();
 builder.Services.AddScoped<ISeasonScoringRepository, SeasonScoringRepository>();
+builder.Services.AddScoped<ISeasonWrapRepository, SeasonWrapRepository>();
 builder.Services.AddScoped<IPerformanceAttemptRepository, PerformanceAttemptRepository>();
 builder.Services.AddScoped<IPerformanceRoundRepository, PerformanceRoundRepository>();
 builder.Services.AddScoped<IPerformanceBarRepository, PerformanceBarRepository>();
@@ -42,6 +46,7 @@ builder.Services.AddScoped<IMeetService, MeetService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<IScoringService, ScoringService>();
+builder.Services.AddScoped<ISeasonWrapService, SeasonWrapService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
 
 builder.Services.AddScoped<IAdminAthleteRepository, AdminAthleteRepository>();

@@ -6,6 +6,8 @@ namespace CloverleafTrack.ViewModels.Home;
 public class HomePageViewModel
 {
     // Season at a Glance
+    /// <summary>Name of the current season, e.g. "2025-2026"; links to its season wrap.</summary>
+    public string CurrentSeasonName { get; set; } = string.Empty;
     public int TotalPRsThisSeason { get; set; }
     public int SchoolRecordsBroken { get; set; }
     public int ActiveAthletes { get; set; }

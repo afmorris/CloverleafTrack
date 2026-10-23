@@ -177,7 +177,7 @@ Slug generation uses the `Slugify` NuGet package (`SlugHelper`). `Meet.Slug` is 
 | Controller | Route | Purpose |
 |---|---|---|
 | `HomeController` | `/` | Homepage stats, highlights, upcoming meets |
-| `SeasonsController` | `/seasons` | Season list, season detail, and season scoring (`/seasons/{name}/scoring`) |
+| `SeasonsController` | `/seasons` | Season list, season detail, season scoring (`/seasons/{name}/scoring`), and season wrap (`/seasons/{name}/wrap` page + `/seasons/{name}/wrap.pdf` one-page poster; linked from the home page season strip so the static export includes them — BRAIN.md [C123]) |
 | `MeetsController` | `/meets` | Meet list + meet detail page |
 | `RosterController` | `/roster` | Active + former athlete list |
 | `AthletesController` | `/athletes/{slug}` | Athlete career detail — NOTE: route is `/roster/{slug}` via `RosterController`, not `AthletesController` |
@@ -613,6 +613,8 @@ Curated traps that still apply. Full context for each lives in `BRAIN.md` under 
 - JSON-LD builders must stay `Dictionary<string, object?>` — `@type`/`@context` can't be C# identifiers. `robots.txt` hard-codes the production domain. [C30]
 
 **Razor & frontend**
+- SVG `<text>` inside a Razor code block (`@for`/`@foreach`) is parsed as Razor's `<text>` tag (RZ1023): write it as `@:<text ...>...</text>`. [C123]
+- No Node/pnpm on the dev machine: `site.css` may not be rebuildable; check a new view's classes exist in `site.css` or use inline styles. [C123]
 - `ScopeValue`-style values interpolated into inline JS must be rebuilt from validated parts, never echoed from the query string (Razor `@` encoding is HTML-safe, not JS-string-safe). [C33]
 - Inline `<script>` that touches `window.CtfFilters` must wait for `DOMContentLoaded` (`filters.js` is `defer`). Layout overrides of `window.applyFilters` must load after `filters.js`. [C17, C33, C42]
 - Razor: don't nest `@{ }` inside an open code block (RZ1010); don't put tag helpers inside a local `void` function (CS4033) — use an outer `@foreach`. [C22, C38]

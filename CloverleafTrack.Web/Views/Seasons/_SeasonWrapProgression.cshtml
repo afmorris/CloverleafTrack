@@ -1,0 +1,55 @@
+@using CloverleafTrack.ViewModels.Seasons
+@model SeasonWrapViewModel
+@{
+    // Server-rendered SVG (no client-side chart code): bars = PRs per meet, line = average percentile of the meet's marks.
+    var pts = Model.Progression;
+    const double W = 720, H = 240, left = 36, right = 36, top = 16, bottom = 56;
+    var plotW = W - left - right;
+    var plotH = H - top - bottom;
+    var maxPrs = Math.Max(1, pts.Max(p => p.PRs));
+    var slot = plotW / pts.Count;
+    var barW = Math.Min(40, slot * 0.6);
+    double X(int i) => left + slot * i + slot / 2;
+    double YBar(int v) => top + plotH - plotH * v / maxPrs;
+    double YPct(double v) => top + plotH - plotH * v / 100;
+    var line = string.Join(" ", pts.Select((p, i) => p.AveragePercentile > 0 ? $"{X(i):0.#},{YPct(p.AveragePercentile):0.#}" : null).Where(x => x != null));
+}
+<section class="mb-12">
+    <h2 class="text-2xl font-bold mb-2 text-gray-900 dark:text-white">Season progression</h2>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+        <span class="inline-block w-3 h-3 rounded-sm align-middle" style="background:#a855f7"></span> PRs at each meet
+        <span class="inline-block w-3 h-0.5 align-middle" style="background:#f59e0b; margin-left:0.75rem"></span> average percentile of the marks (right axis, 100 = best ever)
+    </p>
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 overflow-x-auto">
+        <svg viewBox="0 0 @W @H" class="w-full text-gray-500 dark:text-gray-400" style="min-width:560px" role="img" aria-label="PRs and average percentile by meet">
+            @foreach (var tick in new[] { 0, 25, 50, 75, 100 })
+            {
+                var y = YPct(tick);
+                <line x1="@left" x2="@(W - right)" y1="@y.ToString("0.#")" y2="@y.ToString("0.#")" stroke="currentColor" stroke-opacity="0.2" stroke-width="1" />
+                @:<text x="@(W - right + 6)" y="@((y + 4).ToString("0.#"))" fill="currentColor" font-size="11">@tick</text>
+            }
+            <text x="@(left - 6)" y="@(top + 4)" text-anchor="end" fill="currentColor" font-size="11">@maxPrs</text>
+            <text x="@(left - 6)" y="@(top + plotH + 4)" text-anchor="end" fill="currentColor" font-size="11">0</text>
+            @for (var i = 0; i < pts.Count; i++)
+            {
+                var p = pts[i];
+                var y = YBar(p.PRs);
+                <rect x="@((X(i) - barW / 2).ToString("0.#"))" y="@y.ToString("0.#")" width="@barW.ToString("0.#")" height="@((top + plotH - y).ToString("0.#"))" rx="2" fill="#a855f7">
+                    <title>@p.Name, @p.Date.ToString("MMM d"): @p.PRs PRs@(p.SchoolRecords > 0 ? $", {p.SchoolRecords} school record{(p.SchoolRecords == 1 ? "" : "s")}" : ""), @p.Results marks@(p.AveragePercentile > 0 ? $", average percentile {p.AveragePercentile:0.#}" : "")</title>
+                </rect>
+                @:<text x="@X(i).ToString("0.#")" y="@(top + plotH + 14)" text-anchor="middle" fill="currentColor" font-size="10">@p.Date.ToString("M/d")</text>
+            }
+            @if (line.Contains(' '))
+            {
+                <polyline points="@line" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linejoin="round" />
+            }
+            @for (var i = 0; i < pts.Count; i++)
+            {
+                if (pts[i].AveragePercentile > 0)
+                {
+                    <circle cx="@X(i).ToString("0.#")" cy="@YPct(pts[i].AveragePercentile).ToString("0.#")" r="3.5" fill="#f59e0b" />
+                }
+            }
+        </svg>
+    </div>
+</section>
