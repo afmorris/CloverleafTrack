@@ -6,6 +6,18 @@ namespace CloverleafTrack.DataAccess.Repositories;
 
 public class SeasonWrapRepository(IDbConnectionFactory connectionFactory) : ISeasonWrapRepository
 {
+    public async Task<List<int>> GetSeasonIdsWithMarksAsync()
+    {
+        using var connection = connectionFactory.CreateConnection();
+        const string sql = """
+                           SELECT DISTINCT m.SeasonId
+                           FROM Performances p
+                           INNER JOIN Meets m ON m.Id = p.MeetId
+                           WHERE p.ResultStatus = 0
+                           """;
+        return (await connection.QueryAsync<int>(sql)).ToList();
+    }
+
     public async Task<List<SeasonWrapMarkDto>> GetMarksAsync(int seasonId)
     {
         using var connection = connectionFactory.CreateConnection();

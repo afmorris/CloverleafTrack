@@ -11,36 +11,19 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
     public async Task<List<Meet>> GetMeetsForSeasonAsync(int seasonId)
     {
         using  var connection = connectionFactory.CreateConnection();
+        // Counts are subqueries, not COUNT + GROUP BY: m.* with a hand-written GROUP BY list broke every time a column was added to Meets
+        // (MeetLevel, OfficialResultsUrl), which made every /seasons/{name} page return a 500 (BRAIN.md [C125]).
         const string sql = """
                            SELECT
                                 m.*,
-                                COUNT(CASE WHEN p.PRAtTime = 1 THEN 1 END) AS PRCount,
+                                (SELECT COUNT(*) FROM Performances p WHERE p.MeetId = m.Id AND p.PRAtTime = 1) AS PRCount,
                                 (SELECT COUNT(*) FROM Performances p2 WHERE p2.MeetId = m.Id AND p2.SRAtTime = 1) AS SchoolRecordCount,
                                 l.*
                            FROM
                                 Meets m
                                 INNER JOIN Locations l ON m.LocationId = l.Id
-                                LEFT JOIN Performances p ON p.MeetId = m.Id
                            WHERE
                                 m.SeasonId = @SeasonId
-                           GROUP BY
-                                m.Id,
-                                m.Name,
-                                m.Date,
-                                m.Environment,
-                                m.HandTimed,
-                                m.LocationId,
-                                m.SeasonId,
-                                m.EntryStatus,
-                                m.EntryNotes,
-                                m.MeetType,
-                                m.ScoringTemplateId,
-                                l.Id,
-                                l.Name,
-                                l.City,
-                                l.State,
-                                l.ZipCode,
-                                l.Country
                            ORDER BY
                                 m.Date
                            """;

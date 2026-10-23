@@ -91,12 +91,14 @@ public class SeasonSummaryTests
         var season = new Season { Id = 7, Name = "2025-2026", StartDate = new DateTime(2025, 12, 1), EndDate = new DateTime(2026, 6, 30) };
         var seasons = new Mock<ISeasonRepository>();
         seasons.Setup(r => r.GetByNameAsync("2025-2026")).ReturnsAsync(season);
+        seasons.Setup(r => r.GetAllAsync()).ReturnsAsync(new List<Season> { season });
         var wrapRepo = new Mock<ISeasonWrapRepository>();
         wrapRepo.Setup(r => r.GetMarksAsync(7)).ReturnsAsync(new List<SeasonWrapMarkDto>
         {
             new() { PerformanceId = 1, AthleteId = 1, AthleteFirstName = "A", AthleteLastName = "B", EventId = 1, EventName = "100M", EventType = EventType.Running,
                     TimeSeconds = 12, MeetId = 1, MeetName = "M", MeetDate = new DateTime(2026, 4, 8) }
         });
+        wrapRepo.Setup(r => r.GetSeasonIdsWithMarksAsync()).ReturnsAsync(new List<int> { 7 });
         wrapRepo.Setup(r => r.GetPriorBestsAsync(7, It.IsAny<DateTime>())).ReturnsAsync(new List<SeasonWrapPriorBestDto>());
         wrapRepo.Setup(r => r.GetTeamResultsAsync(7)).ReturnsAsync(new List<SeasonWrapTeamResultDto>());
         var meets = new Mock<IMeetService>();

@@ -16,6 +16,16 @@ public class SeasonWrapViewModel
     public DateTime? ThroughDate { get; set; }
     public bool HasData => Meets > 0;
 
+    /// <summary>
+    /// Seasons before 2020-21 only have scoring performances recorded (not full results), so counts are partial and PR-based
+    /// sections (PRs, most PRs, biggest jumps, progression) are left out. Same cut-off as MeetScore.
+    /// </summary>
+    public bool IsPartialData { get; set; }
+
+    /// <summary>Neighbouring seasons that have a wrap (older / newer), for the previous / next links; null at either end.</summary>
+    public string? PreviousSeasonName { get; set; }
+    public string? NextSeasonName { get; set; }
+
     // Headline numbers
     public int Meets { get; set; }
     public int Results { get; set; }
