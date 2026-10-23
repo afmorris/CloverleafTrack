@@ -1215,3 +1215,20 @@ BEGIN
     WHERE ep.PrevScore IS NULL OR ep.Score > ep.PrevScore;
 END;
 GO
+
+-- ============================================================
+-- SCHEMA ADDITIONS — AI Season Summaries (see docs/migration_season_summaries.sql)
+-- ============================================================
+CREATE TABLE [dbo].[SeasonSummaries] (
+    [Id]          INT            IDENTITY (1, 1) NOT NULL,
+    [SeasonId]    INT            NOT NULL,
+    [SummaryText] NVARCHAR (MAX) NOT NULL,
+    [InputHash]   VARCHAR (64)   NOT NULL,
+    [Model]       VARCHAR (64)   NOT NULL,
+    [Status]      SMALLINT       NOT NULL,   -- 1 = Draft, 2 = Approved (SummaryStatus enum)
+    [GeneratedAt] DATETIME2 (7)  NOT NULL CONSTRAINT [DF_SeasonSummaries_GeneratedAt] DEFAULT (GETUTCDATE()),
+    [ReviewedAt]  DATETIME2 (7)  NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_SeasonSummaries_Seasons] FOREIGN KEY ([SeasonId]) REFERENCES [dbo].[Seasons] ([Id]),
+    CONSTRAINT [UQ_SeasonSummaries_SeasonId] UNIQUE NONCLUSTERED ([SeasonId])
+);
