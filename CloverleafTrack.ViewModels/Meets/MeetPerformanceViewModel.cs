@@ -15,6 +15,8 @@ public class MeetPerformanceViewModel
     public string ResultDescription => ResultStatus.Description();
     /// <summary>PR at the time it was run (BRAIN.md [C118]) — stays true after the athlete runs faster later.</summary>
     public bool IsPersonalBest { get; set; }
+    /// <summary>Still the athlete's best in the event (the current <c>PersonalBest</c> flag). A PR at the time that is not current renders faded.</summary>
+    public bool IsCurrentPersonalBest { get; set; }
     /// <summary>Formatted best earlier mark when <see cref="IsPersonalBest"/> and it was not a debut; null otherwise.</summary>
     public string? PreviousBest { get; set; }
     public bool IsSchoolRecord { get; set; }

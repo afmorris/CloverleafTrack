@@ -553,6 +553,7 @@ public class AthleteServiceTests
         result.PersonalRecords.Single().Performance.Should().Be("11.50");
         var rows = season.EventGroups.Single().Performances.OrderBy(p => p.Date).ToList();
         rows.Select(p => p.IsPersonalBest).Should().Equal(true, true, true, false);
+        rows.Select(p => p.IsCurrentPersonalBest).Should().Equal(false, false, true, false);
         rows.Select(p => p.PreviousBest).Should().Equal(null, "12.50", "12.00", null);
         rows[2].WasSchoolRecord.Should().BeTrue();
         rows[2].IsSchoolRecord.Should().BeFalse();

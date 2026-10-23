@@ -295,7 +295,7 @@
                                             <span class="mark text-sm @summaryText">@eg.PersonalRecordPerformance</span>
                                             @if (eg.Performances.Any(p => p.IsPersonalBest))
                                             {
-                                                <span class="chip-pr">PR</span>
+                                                <span class="chip-pr" @(eg.Performances.Any(p => p.IsCurrentPersonalBest) ? "" : Html.Raw("style=\"opacity:0.55\""))>PR</span>
                                             }
                                             @if (eg.Performances.Any(p => p.IsSchoolRecord || p.WasSchoolRecord))
                                             {
@@ -327,7 +327,7 @@
                                                     ? eg.PersonalRecordRawValue.Value - perf.RawValue.Value
                                                     : perf.RawValue.Value - eg.PersonalRecordRawValue.Value;
                                             }
-                                            var tRowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsPersonalBest ? "row-pr" : "");
+                                            var tRowClass = perf.IsSchoolRecord ? "row-sr" : (perf.IsCurrentPersonalBest ? "row-pr" : "");
 
                                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 @tRowClass">
                                                 <td class="px-4 py-2.5">
@@ -335,7 +335,7 @@
                                                         @if (perf.HasMark) { <span class="mark font-bold text-gray-900 dark:text-gray-100">@perf.Performance</span> } else { <span class="chip-nomark" title="@perf.ResultDescription">@perf.Performance</span> }
                                                         @if (perf.IsSchoolRecord) { <span class="chip-sr">SR</span> }
                                                         else if (perf.WasSchoolRecord) { <span class="chip-sr" style="opacity:0.55" title="Broke the school record when it was set">SR</span> }
-                                                        @if (perf.IsPersonalBest) { <span class="chip-pr" title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
+                                                        @if (perf.IsPersonalBest) { <span class="chip-pr" @(perf.IsCurrentPersonalBest ? "" : Html.Raw("style=\"opacity:0.55\"")) title="@(perf.PreviousBest != null ? $"Personal best when set (previous best {perf.PreviousBest})" : "First recorded mark in this event")">PR</span> }
                                                         @if (perf.AllTimeRank.HasValue && perf.AllTimeRank <= 10)
                                                         {
                                                             <span class="chip-rank">#@perf.AllTimeRank</span>
