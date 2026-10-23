@@ -598,6 +598,7 @@ Curated traps that still apply. Full context for each lives in `BRAIN.md` under 
 
 **Data & SQL**
 - `AllTimeRank` and `Percentile` on `Performance` are C#-only properties, `null` unless the query adds the `Leaderboards` / `PerformancePercentiles` subquery or join. In Dapper multi-mapping the subquery column must sit **after `p.*` and before the next model's `Id` split column**, or it maps to the wrong type. `null` does not mean "no data". [C22, C24, C31]
+- Never combine `m.*` with a hand-written `GROUP BY` column list on `Meets` (or any table that gains columns): adding `MeetLevel` / `OfficialResultsUrl` silently broke every season page with a 500. Use subqueries for counts. [C124]
 - `p.SchoolRecord`, and relay `PersonalBest`, are stale/unreliable — use `AllTimeRank == 1` and best-per-event. `sp_RebuildLeaderboards` fully truncates and rebuilds `Leaderboards`, `PerformancePercentiles`, `EventStatistics`; never update them incrementally. [C8, C9, C17, C19, C31]
 - `AthleteRepository` UNION ALL: both branches must select `SeasonStartDate` (outer ORDER BY needs it). [C7]
 - `SaveAttemptSeriesAsync` is delete-then-insert for the whole series — never pass a partial series. `IsFieldEventType` (controller) intentionally differs from the JS/Razor `isFieldEvent` toggle (excludes `FieldRelay`). [C32]
@@ -608,7 +609,7 @@ Curated traps that still apply. Full context for each lives in `BRAIN.md` under 
 - T-SQL changes (SP, schema) have historically not been run against a real SQL Server in the dev sandbox — verify manually. [C31, C32]
 
 **Routing, SEO & static export**
-- Public site is a static export (`ctf` script, not live ASP.NET). Absolute URLs come only from `SeoUrls` (`ISeoUrlBuilder`), never `Request.Host`. Anything not linked from HTML (`/sitemap.xml`, `/img/hero-home.jpg`, `/favicon.ico`) is not exported unless the export script requests it. Season pages are intentionally excluded from the public export. [C44]
+- Public site is a static export (`ctf` script, not live ASP.NET). Absolute URLs come only from `SeoUrls` (`ISeoUrlBuilder`), never `Request.Host`. Anything not linked from HTML (`/sitemap.xml`, `/img/hero-home.jpg`, `/favicon.ico`) is not exported unless the export script requests it. Season pages (`/seasons`, `/seasons/{name}`, wraps) are public and in the export since [C124] (the nav links to them; this reverses the [C44] exclusion). [C44, C124]
 - An action with an explicit `[HttpGet("...")]` no longer matches the conventional route; legacy redirects are separate actions. `/leaderboard` → `/events`. [C28]
 - JSON-LD builders must stay `Dictionary<string, object?>` — `@type`/`@context` can't be C# identifiers. `robots.txt` hard-codes the production domain. [C30]
 

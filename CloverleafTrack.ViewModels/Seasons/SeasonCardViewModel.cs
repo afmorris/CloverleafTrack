@@ -14,6 +14,8 @@ public class SeasonCardViewModel
     public int MeetsEntered { get; set; }
     public int TotalPRs { get; set; }  // NEW - for stats cards
     public bool IsCurrentSeason { get; set; }  // NEW - to highlight current season
+    /// <summary>The season has recorded results, so its season wrap (/seasons/{name}/wrap) has something to show.</summary>
+    public bool HasWrap { get; set; }
 
     public List<MeetSummaryViewModel> Meets { get; set; } = new();
 

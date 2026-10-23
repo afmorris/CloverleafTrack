@@ -35,6 +35,10 @@
         </a>
         <div class="flex flex-wrap items-center gap-4">
             <h1 class="text-4xl font-bold text-gray-900 dark:text-white">@Model.Name Season</h1>
+            <a href="/seasons/@Model.Name/wrap"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold transition-colors">
+                Season Wrap
+            </a>
             @if (Model.ScoringEnabled)
             {
                 <a asp-controller="Seasons" asp-action="Scoring" asp-route-name="@Model.Name"

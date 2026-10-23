@@ -35,6 +35,7 @@ public class SeasonService(ISeasonRepository seasonRepository, IPerformanceRepos
             Status = season.Status,
             Notes = season.Notes,
             IsCurrentSeason = season.IsCurrentSeason,
+            HasWrap = season.Meets.Any(m => m.Performances.Count > 0),
             TotalMeets = season.Meets.Count,
             MeetsEntered = season.Meets.Count(m => m.EntryStatus == MeetEntryStatus.Entered),
             TotalPRs = season.Meets

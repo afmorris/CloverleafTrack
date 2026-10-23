@@ -51,6 +51,26 @@ public class SeasonWrapCalculatorTests
     }
 
     [Fact]
+    public void Seasons_before_the_complete_data_era_leave_out_pr_based_sections()
+    {
+        var old = new Season { Id = 2, Name = "2015-2016", StartDate = new DateTime(2015, 12, 1), EndDate = new DateTime(2016, 6, 30) };
+        var marks = new List<SeasonWrapMarkDto>
+        {
+            Run("Ann", "Lee", 12.0, pr: true, prev: 12.5, pct: 80, date: "2016-04-01"),
+            Run("Bo", "Kim", 12.4, pr: true, prev: 12.6, pct: 70, date: "2016-04-08", meetId: 2, meet: "Meet B"),
+        };
+
+        var vm = SeasonWrapCalculator.Build(old, marks, new List<SeasonWrapPriorBestDto>(), new List<SeasonWrapTeamResultDto>(), new Dictionary<int, MeetScoreViewModel>(), null);
+
+        vm.IsPartialData.Should().BeTrue();
+        vm.Breakouts.Should().BeEmpty();
+        vm.Improvements.Should().BeEmpty();
+        vm.Progression.Should().BeEmpty();
+        vm.Standouts.Should().NotBeEmpty("percentile standouts still work on partial data");
+        Build(marks).IsPartialData.Should().BeFalse("2025-26 is in the complete era");
+    }
+
+    [Fact]
     public void Headline_counts_use_the_at_the_time_flags_and_count_athletes_once()
     {
         var vm = Build(new()

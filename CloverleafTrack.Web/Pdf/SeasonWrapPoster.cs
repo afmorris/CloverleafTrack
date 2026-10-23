@@ -54,7 +54,8 @@ public static class SeasonWrapPoster
                     {
                         Tile(row, "MEETS", vm.Meets.ToString());
                         Tile(row, "ATHLETES", vm.AthletesCompeted.ToString());
-                        Tile(row, "PRS", vm.PRs.ToString());
+                        if (vm.IsPartialData) Tile(row, "MARKS RECORDED", vm.Results.ToString());
+                        else Tile(row, "PRS", vm.PRs.ToString());
                         Tile(row, "SCHOOL RECORDS SET", vm.SchoolRecordsSet.ToString());
                     });
 

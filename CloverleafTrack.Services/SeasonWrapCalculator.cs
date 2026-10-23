@@ -36,7 +36,8 @@ public static class SeasonWrapCalculator
             InProgress = season.IsCurrentSeason,
             ThroughDate = marks.Count == 0 ? null : marks.Max(m => m.MeetDate),
             ScoringEnabled = season.ScoringEnabled,
-            SeniorClassYear = season.EndDate.Year
+            SeniorClassYear = season.EndDate.Year,
+            IsPartialData = !MeetScoreCalculator.IsCompleteEra(season.StartDate)
         };
         if (marks.Count == 0) return vm;
 
@@ -54,8 +55,11 @@ public static class SeasonWrapCalculator
         vm.SchoolRecordsSet = vm.SchoolRecords.Count;
         vm.BestMeets = BestMeets(marks, meetScores);
         vm.Standouts = Standouts(individual);
-        vm.Breakouts = Breakouts(individual);
-        vm.Improvements = Improvements(individual, priorBests);
+        if (!vm.IsPartialData)
+        {
+            vm.Breakouts = Breakouts(individual);
+            vm.Improvements = Improvements(individual, priorBests);
+        }
         vm.Seniors = Seniors(individual, season.EndDate.Year);
         vm.DualRecord = DualRecord(teamResults);
         if (scoring != null)
@@ -63,7 +67,7 @@ public static class SeasonWrapCalculator
             vm.BoysLeaders = Leaders(scoring.Boys);
             vm.GirlsLeaders = Leaders(scoring.Girls);
         }
-        vm.Progression = Progression(marks);
+        vm.Progression = vm.IsPartialData ? new List<WrapMeetPoint>() : Progression(marks);
         return vm;
     }
 

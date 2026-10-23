@@ -4,6 +4,9 @@ namespace CloverleafTrack.DataAccess.Interfaces;
 
 public interface ISeasonWrapRepository
 {
+    /// <summary>Ids of seasons that have at least one recorded mark.</summary>
+    Task<List<int>> GetSeasonIdsWithMarksAsync();
+
     /// <summary>Every recorded mark (individual and relay, no-mark rows excluded) at meets in the season.</summary>
     Task<List<SeasonWrapMarkDto>> GetMarksAsync(int seasonId);
 
