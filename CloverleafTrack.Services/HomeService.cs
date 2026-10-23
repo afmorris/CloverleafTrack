@@ -25,7 +25,7 @@ public class HomeService(
             throw new InvalidOperationException("No current season found.");
         }
 
-        var viewModel = new HomePageViewModel();
+        var viewModel = new HomePageViewModel { CurrentSeasonName = currentSeason.Name };
 
         // Get season stats
         var stats = await homeRepository.GetHomePageStatsAsync(currentSeason.Id);

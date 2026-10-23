@@ -1,0 +1,339 @@
+@using CloverleafTrack.ViewModels.Shared
+@using CloverleafTrack.ViewModels.Seasons
+@using CloverleafTrack.Models.Enums
+@model SeasonWrapViewModel
+
+@{
+    ViewBag.Title = $"{Model.Name} Season Wrap";
+
+    var seoDescription = Model.HasData
+        ? CloverleafTrack.Web.Utilities.SeoHelper.Truncate(
+            $"{Model.Name} season wrap — Cloverleaf Track & Field. {Model.Meets} meets, {Model.PRs} PRs from {Model.AthletesWithPRs} athletes, {Model.SchoolRecordsSet} school records set{(Model.InProgress ? " so far" : "")}.")
+        : $"{Model.Name} season wrap — Cloverleaf Track & Field.";
+
+    ViewData["Seo"] = new SeoMetadataViewModel
+    {
+        Description = seoDescription,
+        Breadcrumbs = new List<SeoBreadcrumbViewModel>
+        {
+            new() { Name = "Home", Path = "/" },
+            new() { Name = $"{Model.Name} Season Wrap", Path = Context.Request.Path.Value ?? "/" }
+        }
+    };
+
+    string Gen(Gender g) => g == Gender.Male ? "boys" : g == Gender.Female ? "girls" : "mixed";
+    var card = "bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700";
+    var h2 = "text-2xl font-bold mb-4 text-gray-900 dark:text-white";
+    var link = "text-blue-600 dark:text-blue-400 hover:underline";
+    string AthleteLink(WrapPerson p) => $"/roster/{p.Slug}";
+}
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6" style="padding-bottom:4rem">
+
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="text-sm font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-400 mb-1">Season wrap</div>
+        <div class="flex flex-wrap items-center gap-4">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white">@Model.Name</h1>
+            @if (Model.HasData)
+            {
+                <a href="@Model.PdfUrl"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-600 hover:bg-orange-700 text-white text-sm font-semibold transition-colors">
+                    Download the poster (PDF)
+                </a>
+            }
+        </div>
+        @if (Model.HasData)
+        {
+            <p class="mt-2 text-gray-600 dark:text-gray-400">
+                @if (Model.InProgress)
+                {
+                    <span>The season so far, through @Model.ThroughDate!.Value.ToString("MMMM d, yyyy").</span>
+                }
+                else
+                {
+                    <span>@Model.StartDate.ToString("MMMM yyyy") – @Model.EndDate.ToString("MMMM yyyy").</span>
+                }
+            </p>
+        }
+    </div>
+
+    @if (!Model.HasData)
+    {
+        <div class="@card p-8 text-gray-600 dark:text-gray-400">No results have been recorded for this season yet.</div>
+    }
+    else
+    {
+        @if (!string.IsNullOrWhiteSpace(Model.SummaryText))
+        {
+            <section class="mb-10">
+                <div class="@card p-6" style="border-left:4px solid #f59e0b">
+                    <h2 class="text-sm font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-400 mb-2">The season in words</h2>
+                    <div class="space-y-3 text-gray-800 dark:text-gray-200 leading-relaxed">
+                        @foreach (var para in Model.SummaryText.Split("\n\n", StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            <p>@para</p>
+                        }
+                    </div>
+                </div>
+            </section>
+        }
+
+        <!-- Headline numbers -->
+        <section class="mb-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                @{
+                    var tiles = new (string Label, int Value, string Border, string Text)[]
+                    {
+                        ("Meets", Model.Meets, "border-gray-200 dark:border-gray-700", "text-gray-900 dark:text-white"),
+                        ("Athletes", Model.AthletesCompeted, "border-blue-200 dark:border-blue-700/30", "text-blue-900 dark:text-blue-100"),
+                        ("PRs", Model.PRs, "border-purple-200 dark:border-purple-700/30", "text-purple-900 dark:text-purple-100"),
+                        ("School records set", Model.SchoolRecordsSet, "border-yellow-200 dark:border-yellow-700/30", "text-yellow-900 dark:text-yellow-100"),
+                    };
+                }
+                @foreach (var t in tiles)
+                {
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border @t.Border">
+                        <div class="text-sm mb-2 font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">@t.Label</div>
+                        <div class="text-4xl font-bold @t.Text">@t.Value</div>
+                    </div>
+                }
+            </div>
+            <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                @Model.Results marks recorded, @Model.AthletesWithPRs athletes with a PR, @Model.TopTenMarks marks in the all-time top 10@(Model.SchoolRecordBreaks > Model.SchoolRecordsSet ? ", " + Model.SchoolRecordBreaks + " record-breaking marks" : "").
+            </p>
+        </section>
+
+        <!-- School records -->
+        @if (Model.SchoolRecords.Any())
+        {
+            <section class="mb-12">
+                <h2 class="@h2">School records set</h2>
+                <div class="@card overflow-hidden">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                <th class="px-4 py-2 text-left font-medium">Event</th>
+                                <th class="px-4 py-2 text-left font-medium">Mark</th>
+                                <th class="px-4 py-2 text-left font-medium">Athlete(s)</th>
+                                <th class="px-4 py-2 text-left font-medium hidden sm:table-cell">Meet</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                            @foreach (var r in Model.SchoolRecords)
+                            {
+                                <tr>
+                                    <td class="px-4 py-2.5 text-gray-900 dark:text-white">@r.EventLabel</td>
+                                    <td class="px-4 py-2.5">
+                                        <span class="mark font-bold text-gray-900 dark:text-gray-100">@r.Mark</span>
+                                        @if (r.TimesBroken > 1) { <span class="text-xs text-gray-500 dark:text-gray-400">(broken @r.TimesBroken times)</span> }
+                                        @if (!r.StillRecord) { <span class="text-xs text-gray-500 dark:text-gray-400">(since passed)</span> }
+                                    </td>
+                                    <td class="px-4 py-2.5">
+                                        @for (var i = 0; i < r.Holders.Count; i++)
+                                        {
+                                            if (i > 0) { <span> / </span> }
+                                            <a href="@AthleteLink(r.Holders[i])" class="@link">@r.Holders[i].Name</a>
+                                        }
+                                    </td>
+                                    <td class="px-4 py-2.5 hidden sm:table-cell"><a href="/meets/@r.MeetSlug" class="@link">@r.MeetName</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        }
+
+        <!-- Athlete spotlights -->
+        @if (Model.Standouts.Any() || Model.Breakouts.Any() || Model.Improvements.Any())
+        {
+            <section class="mb-12">
+                <h2 class="@h2">Athlete spotlights</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    @if (Model.Standouts.Any())
+                    {
+                        <div class="@card p-5">
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Best marks</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Highest percentile of the season, one per athlete.</p>
+                            <ol class="space-y-3 text-sm">
+                                @foreach (var s in Model.Standouts)
+                                {
+                                    <li>
+                                        <a href="@AthleteLink(s.Athlete)" class="@link font-medium">@s.Athlete.Name</a>
+                                        <div class="text-gray-700 dark:text-gray-300">@s.EventLabel · <span class="mark font-semibold">@s.Mark</span></div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">@s.Percentile percentile@(s.AllTimeRank is <= 10 ? $" · #{s.AllTimeRank} all-time" : "")</div>
+                                    </li>
+                                }
+                            </ol>
+                        </div>
+                    }
+                    @if (Model.Breakouts.Any())
+                    {
+                        <div class="@card p-5">
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Most PRs</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Marks that beat the athlete's earlier best.</p>
+                            <ol class="space-y-3 text-sm">
+                                @foreach (var b in Model.Breakouts)
+                                {
+                                    <li>
+                                        <a href="@AthleteLink(b.Athlete)" class="@link font-medium">@b.Athlete.Name</a>
+                                        <span class="text-gray-700 dark:text-gray-300"> · @b.PRs PR@(b.PRs == 1 ? "" : "s") in @b.Events event@(b.Events == 1 ? "" : "s")</span>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">Biggest: @b.Highlight</div>
+                                    </li>
+                                }
+                            </ol>
+                        </div>
+                    }
+                    @if (Model.Improvements.Any())
+                    {
+                        <div class="@card p-5">
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Biggest jumps</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Season best against the best before this season.</p>
+                            <ol class="space-y-3 text-sm">
+                                @foreach (var i in Model.Improvements)
+                                {
+                                    <li>
+                                        <a href="@AthleteLink(i.Athlete)" class="@link font-medium">@i.Athlete.Name</a>
+                                        <span class="text-gray-700 dark:text-gray-300"> · @i.EventLabel</span>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400"><span class="mark">@i.Before</span> → <span class="mark">@i.After</span> (@i.Change)</div>
+                                    </li>
+                                }
+                            </ol>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+
+        <!-- Best meets -->
+        @if (Model.BestMeets.Any())
+        {
+            <section class="mb-12">
+                <h2 class="@h2">Best meets</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    @foreach (var m in Model.BestMeets)
+                    {
+                        <a href="/meets/@m.Slug" class="@card p-5 block">
+                            <div class="text-3xl font-bold text-gray-900 dark:text-white">@m.Score.ToString("0.#")</div>
+                            <div class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">MeetScore</div>
+                            <div class="font-medium text-blue-600 dark:text-blue-400">@m.Name</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400">@m.Date.ToString("MMM d") · @m.PRs PRs</div>
+                        </a>
+                    }
+                </div>
+            </section>
+        }
+
+        <!-- Team -->
+        @if (Model.DualRecord != null || Model.BoysLeaders.Any() || Model.GirlsLeaders.Any())
+        {
+            <section class="mb-12">
+                <h2 class="@h2">The team</h2>
+                @if (Model.DualRecord != null)
+                {
+                    var d = Model.DualRecord;
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="@card p-5">
+                            <div class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">Boys dual record</div>
+                            <div class="text-4xl font-bold text-gray-900 dark:text-white">@(d.Boys.Any ? d.Boys.Text : "–")</div>
+                        </div>
+                        <div class="@card p-5">
+                            <div class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">Girls dual record</div>
+                            <div class="text-4xl font-bold text-gray-900 dark:text-white">@(d.Girls.Any ? d.Girls.Text : "–")</div>
+                        </div>
+                    </div>
+                    <div class="@card overflow-hidden mb-6">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                    <th class="px-4 py-2 text-left font-medium">Date</th>
+                                    <th class="px-4 py-2 text-left font-medium">Opponent</th>
+                                    <th class="px-4 py-2 text-left font-medium">Boys</th>
+                                    <th class="px-4 py-2 text-left font-medium">Girls</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                                @foreach (var row in d.Duals)
+                                {
+                                    <tr>
+                                        <td class="px-4 py-2.5 text-gray-700 dark:text-gray-300">@row.Date.ToString("MMM d")</td>
+                                        <td class="px-4 py-2.5"><a href="/meets/@row.MeetSlug" class="@link">@(string.IsNullOrEmpty(row.Opponent) ? row.MeetName : row.Opponent)</a></td>
+                                        <td class="px-4 py-2.5 mark @(row.Boys.StartsWith("W") ? "text-green-700 dark:text-green-400" : "text-gray-700 dark:text-gray-300")">@row.Boys</td>
+                                        <td class="px-4 py-2.5 mark @(row.Girls.StartsWith("W") ? "text-green-700 dark:text-green-400" : "text-gray-700 dark:text-gray-300")">@row.Girls</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                @if (Model.BoysLeaders.Any() || Model.GirlsLeaders.Any())
+                {
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Scoring leaders</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Dual and invitational team points; relay points are split among the members. <a href="/seasons/@Model.Name/scoring" class="@link">Full scoring</a></p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach (var (title, leaders) in new[] { ("Boys", Model.BoysLeaders), ("Girls", Model.GirlsLeaders) })
+                        {
+                            if (!leaders.Any()) { continue; }
+                            <div class="@card p-5">
+                                <div class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400 mb-2">@title</div>
+                                <ol class="space-y-2 text-sm">
+                                    @foreach (var l in leaders)
+                                    {
+                                        <li class="flex justify-between gap-4">
+                                            <a href="@AthleteLink(l.Athlete)" class="@link">@l.Athlete.Name</a>
+                                            <span class="mark font-semibold text-gray-900 dark:text-gray-100">@l.Points.ToString("0.##") pts</span>
+                                        </li>
+                                    }
+                                </ol>
+                            </div>
+                        }
+                    </div>
+                }
+            </section>
+        }
+
+        <!-- Progression -->
+        @if (Model.Progression.Count > 1)
+        {
+            @await Html.PartialAsync("_SeasonWrapProgression", Model)
+        }
+
+        <!-- Seniors -->
+        @if (Model.Seniors.Any())
+        {
+            <section class="mb-12">
+                <h2 class="@h2">Class of @Model.SeniorClassYear</h2>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Seniors who competed this season, with each one's best mark by percentile.</p>
+                <div class="@card overflow-hidden">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                <th class="px-4 py-2 text-left font-medium">Athlete</th>
+                                <th class="px-4 py-2 text-left font-medium">Best</th>
+                                <th class="px-4 py-2 text-right font-medium hidden sm:table-cell">Events</th>
+                                <th class="px-4 py-2 text-right font-medium">PRs</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                            @foreach (var s in Model.Seniors)
+                            {
+                                <tr>
+                                    <td class="px-4 py-2.5"><a href="@AthleteLink(s.Athlete)" class="@link">@s.Athlete.Name</a></td>
+                                    <td class="px-4 py-2.5 text-gray-700 dark:text-gray-300">@s.BestEventLabel · <span class="mark font-semibold">@s.BestMark</span></td>
+                                    <td class="px-4 py-2.5 text-right text-gray-700 dark:text-gray-300 hidden sm:table-cell">@s.Events</td>
+                                    <td class="px-4 py-2.5 text-right text-gray-700 dark:text-gray-300">@s.PRs</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        }
+
+        <p class="text-xs text-gray-500 dark:text-gray-400">
+            PRs and school records are counted as they happened: a PR later beaten still counts, and an athlete's first recorded mark in an event counts as a PR.
+            "Most PRs" and "Biggest jumps" only count marks that beat an earlier mark.
+        </p>
+    }
+</div>

@@ -1,9 +1,11 @@
 using CloverleafTrack.Services.Interfaces;
+using CloverleafTrack.Web.Pdf;
+using CloverleafTrack.Web.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloverleafTrack.Web.Controllers;
 
-public class SeasonsController(ISeasonService seasonService, IScoringService scoringService) : Controller
+public class SeasonsController(ISeasonService seasonService, IScoringService scoringService, ISeasonWrapService wrapService, ISeoUrlBuilder seoUrls) : Controller
 {
     public async Task<IActionResult> Index()
     {
@@ -44,5 +46,31 @@ public class SeasonsController(ISeasonService seasonService, IScoringService sco
         }
 
         return View(vm);
+    }
+
+    /// <summary>Season wrap: team highlights, athlete spotlights, scoring and progression, computed live from the season's data (BRAIN.md [C123]).</summary>
+    [HttpGet("/seasons/{name}/wrap")]
+    public async Task<IActionResult> Wrap(string name)
+    {
+        var vm = await wrapService.GetSeasonWrapAsync(name);
+        if (vm == null)
+        {
+            return NotFound();
+        }
+
+        return View(vm);
+    }
+
+    /// <summary>The wrap as a one-page poster PDF (linked from the wrap page, so the static export picks it up).</summary>
+    [HttpGet("/seasons/{name}/wrap.pdf")]
+    public async Task<IActionResult> WrapPdf(string name)
+    {
+        var vm = await wrapService.GetSeasonWrapAsync(name);
+        if (vm == null || !vm.HasData)
+        {
+            return NotFound();
+        }
+
+        return File(SeasonWrapPoster.Generate(vm, seoUrls.BaseUrl), "application/pdf");
     }
 }
