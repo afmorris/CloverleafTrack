@@ -79,6 +79,7 @@
                             <div class="action-links">
                                 <a asp-action="Edit" asp-route-id="@meet.Id">Edit</a>
                                 <a asp-controller="MeetEntries" asp-action="Index" asp-route-meetId="@meet.Id">Entries</a>
+                                <a asp-controller="MeetImport" asp-action="Index" asp-route-meetId="@meet.Id">Import</a>
                                 <form asp-action="Delete" asp-route-id="@meet.Id" method="post" style="display: inline;"
                                       onsubmit="return confirm('Delete @meet.Name?');">
                                     <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer; font-size: 13px; padding: 0;">Delete</button>

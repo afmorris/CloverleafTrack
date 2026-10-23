@@ -1,0 +1,174 @@
+@using CloverleafTrack.Web.Import
+@model MeetImportReviewViewModel
+@{
+    ViewData["Title"] = $"Review import — {Model.MeetName}";
+    var plan = Model.Plan;
+    string StateLabel(ImportRowState s) => s switch
+    {
+        ImportRowState.New => "New",
+        ImportRowState.AddsPlacings => "Adds places",
+        ImportRowState.AlreadyThere => "Already there",
+        ImportRowState.Differs => "Differs",
+        _ => "Needs attention"
+    };
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    .header h1 { font-size: 22px; margin: 0 0 4px; }
+    .header .sub { font-size: 13px; color: #666; }
+    .summary { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .pill { padding: 5px 12px; border-radius: 14px; font-size: 13px; font-weight: 600; }
+    .pill-new { background: #d4edda; color: #155724; }
+    .pill-adds { background: #d1ecf1; color: #0c5460; }
+    .pill-there { background: #e9ecef; color: #495057; }
+    .pill-differs { background: #fff3cd; color: #856404; }
+    .pill-problem { background: #f8d7da; color: #721c24; }
+    .banner { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+    .meta { background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 6px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #444; }
+    .table-container { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th { padding: 10px 12px; text-align: left; font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; background: #f8f9fa; border-bottom: 2px solid #e0e0e0; white-space: nowrap; }
+    td { padding: 10px 12px; font-size: 14px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+    tr.r-problem { background: #fff5f5; }
+    tr.r-there td { color: #888; }
+    tr.r-differs { background: #fffbea; }
+    .mark { font-variant-numeric: tabular-nums; font-weight: 600; }
+    .was { font-size: 12px; color: #856404; }
+    .issue { font-size: 12px; color: #b02a37; margin-top: 3px; }
+    .warn { font-size: 12px; color: #856404; margin-top: 3px; }
+    .muted { color: #888; font-size: 12px; }
+    .kind { font-size: 11px; text-transform: uppercase; color: #888; }
+    select.pick { padding: 4px 6px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; margin-top: 4px; max-width: 260px; }
+    .actions { position: sticky; bottom: 0; background: white; padding: 14px 20px; margin-top: 16px; border-radius: 8px; box-shadow: 0 -2px 8px rgba(0,0,0,0.08); display: flex; gap: 12px; align-items: center; }
+    .btn-primary { background: #28a745; color: white; border: none; padding: 10px 22px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .btn-link { color: #0066cc; font-size: 14px; text-decoration: none; }
+    .tick-all { font-size: 13px; color: #555; margin-left: auto; }
+</style>
+
+<div class="header">
+    <div>
+        <h1>Review import — @Model.MeetName</h1>
+        <div class="sub">@Model.MeetDate.ToString("MMMM d, yyyy") · nothing is saved until you apply</div>
+    </div>
+    <a asp-action="Index" asp-route-meetId="@Model.MeetId" class="btn-link">← Change file</a>
+</div>
+
+@foreach (var p in plan.FileProblems)
+{
+    <div class="banner">@p</div>
+}
+
+@if (!string.IsNullOrWhiteSpace(plan.Source) || !string.IsNullOrWhiteSpace(plan.Notes))
+{
+    <div class="meta">
+        @if (!string.IsNullOrWhiteSpace(plan.Source)) { <div><strong>Source:</strong> @plan.Source</div> }
+        @if (!string.IsNullOrWhiteSpace(plan.Notes)) { <div><strong>Notes:</strong> @plan.Notes</div> }
+    </div>
+}
+
+<div class="summary">
+    <span class="pill pill-new">@plan.Count(ImportRowState.New) new</span>
+    @if (plan.Count(ImportRowState.AddsPlacings) > 0) { <span class="pill pill-adds">@plan.Count(ImportRowState.AddsPlacings) add places</span> }
+    @if (plan.Count(ImportRowState.Differs) > 0) { <span class="pill pill-differs">@plan.Count(ImportRowState.Differs) differ from stored</span> }
+    @if (plan.Count(ImportRowState.AlreadyThere) > 0) { <span class="pill pill-there">@plan.Count(ImportRowState.AlreadyThere) already there</span> }
+    @if (plan.Count(ImportRowState.Problem) > 0) { <span class="pill pill-problem">@plan.Count(ImportRowState.Problem) need attention</span> }
+</div>
+
+<form asp-action="Apply" asp-route-meetId="@Model.MeetId" method="post" id="reviewForm">
+    <textarea name="json" hidden>@Model.Json</textarea>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="tickAll" title="Tick or untick every applicable row"></th>
+                    <th>Event</th>
+                    <th>Athlete(s)</th>
+                    <th>Mark</th>
+                    <th>Places</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ var i = 0; }
+                @foreach (var row in plan.Rows)
+                {
+                    var cls = row.State switch
+                    {
+                        ImportRowState.Problem => "r-problem",
+                        ImportRowState.AlreadyThere => "r-there",
+                        ImportRowState.Differs => "r-differs",
+                        _ => ""
+                    };
+                    var checkedNow = Model.Included.Contains(row.Index) && row.CanApply;
+                    <tr class="@cls">
+                        <td>
+                            <input type="hidden" name="rows[@i].Index" value="@row.Index">
+                            @if (row.CanApply)
+                            {
+                                <input type="checkbox" class="row-tick" name="rows[@i].Include" value="true" checked="@checkedNow">
+                            }
+                        </td>
+                        <td>
+                            @row.EventLabel
+                            <div class="kind">@(row.Kind == ImportRowKind.Entry ? "Entry only" : "Result")</div>
+                        </td>
+                        <td>
+                            @row.AthleteDisplay
+                            @if (row.MatchesEntry && row.Kind == ImportRowKind.Result) { <div class="muted">matches a pre-meet entry</div> }
+                            @if (!row.IsRelay && row.Candidates.Count > 0)
+                            {
+                                var chosen = Model.AthleteOverrides.TryGetValue(row.Index, out var c) ? c : (int?)null;
+                                <div>
+                                    <select class="pick" name="rows[@i].AthleteId" onchange="document.getElementById('reviewForm').action='@Url.Action("Review", new { meetId = Model.MeetId })'; document.getElementById('reviewForm').submit();">
+                                        <option value="">@(row.State == ImportRowState.Problem ? "Pick the athlete…" : "Not this athlete?")</option>
+                                        @foreach (var cand in row.Candidates)
+                                        {
+                                            <option value="@cand.Id" selected="@(chosen == cand.Id)">@cand.Name (@cand.GraduationYear)</option>
+                                        }
+                                    </select>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            @if (row.Kind == ImportRowKind.Result)
+                            {
+                                <span class="mark">@row.MarkText</span>
+                                @if (row.ExistingMarkText != null && row.State == ImportRowState.Differs)
+                                {
+                                    <div class="was">stored: @row.ExistingMarkText</div>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @foreach (var p in row.Placings)
+                            {
+                                <div>@p.Place@(p.OpponentLabel == "Overall" ? "" : " " + p.OpponentLabel)</div>
+                            }
+                        </td>
+                        <td>
+                            <strong>@StateLabel(row.State)</strong>
+                            @if (row.State == ImportRowState.Differs) { <div class="muted">ticking replaces the stored value</div> }
+                            @foreach (var pr in row.Problems) { <div class="issue">@pr</div> }
+                            @foreach (var w in row.Warnings) { <div class="warn">⚠ @w</div> }
+                            @if (!string.IsNullOrWhiteSpace(row.Note)) { <div class="muted">@row.Note</div> }
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="actions">
+        <button type="submit" class="btn-primary">Apply ticked rows</button>
+        <span class="muted">Results, places, team points and pre-meet entries are written together; leaderboards rebuild once at the end.</span>
+    </div>
+</form>
+
+<script>
+    document.getElementById('tickAll')?.addEventListener('change', function () {
+        document.querySelectorAll('.row-tick').forEach(function (c) { c.checked = this.checked; }, this);
+    });
+</script>

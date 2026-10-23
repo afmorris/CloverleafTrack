@@ -1129,6 +1129,8 @@ CREATE TABLE [dbo].[PerformanceBars] (
 );
 
 
+GO
+
 -- ============================================================
 -- SCHEMA ADDITIONS: PR / school record at the time (BRAIN.md [C118])
 -- Called by sp_RebuildLeaderboards (Step 13). Columns are declared on Performances above.
