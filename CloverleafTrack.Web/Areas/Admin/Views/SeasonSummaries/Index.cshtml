@@ -1,0 +1,82 @@
+@model SeasonSummariesIndexViewModel
+@using CloverleafTrack.ViewModels.Admin.SeasonSummaries
+@using CloverleafTrack.Models.Enums
+@{
+    ViewData["Title"] = "Season Summaries";
+}
+
+<style>
+    .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .btn { background: #0066cc; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-block; }
+    .btn-green { background: #28a745; }
+    .btn-gray { background: #6c757d; }
+    .btn-red { background: #dc3545; }
+    .card { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 16px; padding: 18px 20px; }
+    .card-top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+    .meta { font-size: 12px; color: #777; margin-top: 3px; }
+    .links a { color: #0066cc; text-decoration: none; font-size: 13px; }
+    .summary { font-size: 15px; line-height: 1.55; background: #f8f9fa; border-left: 3px solid #0066cc; padding: 12px 14px; border-radius: 4px; margin: 10px 0; white-space: pre-line; }
+    .summary.approved { border-left-color: #28a745; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-left: 6px; }
+    .badge-draft { background: #fff3cd; color: #856404; }
+    .badge-approved { background: #e8f5e9; color: #388e3c; }
+    .badge-none { background: #f5f5f5; color: #757575; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .actions form { display: inline; }
+    details summary { cursor: pointer; font-size: 13px; color: #0066cc; }
+    details textarea { width: 100%; min-height: 200px; margin: 8px 0; padding: 8px; font: inherit; font-size: 14px; }
+</style>
+
+<div class="header">
+    <h1>Season Summaries</h1>
+    <div class="meta">The optional "season in words" on each season wrap page. Written in chat (skill <code>generate-season-summary</code>); only Approved text shows publicly.</div>
+</div>
+
+@foreach (var row in Model.Rows)
+{
+    var approved = row.Status == SummaryStatus.Approved;
+    <div class="card" id="season-@row.SeasonId">
+        <div class="card-top">
+            <div>
+                <h3>
+                    @row.SeasonName
+                    @if (approved) { <span class="badge badge-approved">Approved</span> }
+                    else if (row.Status == SummaryStatus.Draft) { <span class="badge badge-draft">Draft</span> }
+                    else { <span class="badge badge-none">No summary</span> }
+                </h3>
+                @if (row.GeneratedAt.HasValue)
+                {
+                    <div class="meta">generated @row.GeneratedAt.Value.ToString("MMM d h:mm tt") UTC by @row.Model</div>
+                }
+            </div>
+            <div class="links"><a href="@row.WrapUrl" target="_blank">Public season wrap ↗</a></div>
+        </div>
+
+        @if (row.SummaryId.HasValue)
+        {
+            <div class="summary @(approved ? "approved" : "")">@row.SummaryText</div>
+            <div class="actions">
+                <form asp-action="Approve" method="post">
+                    <input type="hidden" name="id" value="@row.SummaryId" /><input type="hidden" name="approved" value="@(approved ? "false" : "true")" />
+                    <button class="btn @(approved ? "btn-gray" : "btn-green")">@(approved ? "Unapprove" : "Approve")</button>
+                </form>
+                <form asp-action="Delete" method="post" onsubmit="return confirm('Delete this summary?');">
+                    <input type="hidden" name="id" value="@row.SummaryId" />
+                    <button class="btn btn-red">Delete</button>
+                </form>
+            </div>
+            <details style="margin-top:10px;">
+                <summary>Edit text</summary>
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" name="id" value="@row.SummaryId" />
+                    <textarea name="text">@row.SummaryText</textarea>
+                    <button class="btn">Save (returns to Draft)</button>
+                </form>
+            </details>
+        }
+        else
+        {
+            <div class="meta">No summary yet. Ask Claude in chat to write one.</div>
+        }
+    </div>
+}

@@ -74,6 +74,8 @@ builder.Services.AddHttpClient<ISummaryTextGenerator, ClaudeSummaryTextGenerator
 builder.Services.AddScoped<IMeetSummaryService, MeetSummaryService>();
 builder.Services.AddScoped<IMeetSummaryLinkService, MeetSummaryLinkService>();
 builder.Services.AddScoped<IAthleteSummaryRepository, AthleteSummaryRepository>();
+builder.Services.AddScoped<ISeasonSummaryRepository, SeasonSummaryRepository>();
+builder.Services.AddScoped<ISeasonSummaryService, SeasonSummaryService>();
 builder.Services.AddScoped<IAthleteSummaryService, AthleteSummaryService>();
 builder.Services.AddScoped<IAthleteSummaryLinker, AthleteSummaryLinker>();
 builder.Services.AddScoped<IAthleteSummaryLinkService, AthleteSummaryLinkService>();

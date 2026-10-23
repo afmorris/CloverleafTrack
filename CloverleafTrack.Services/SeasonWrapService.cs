@@ -8,7 +8,8 @@ public class SeasonWrapService(
     ISeasonRepository seasonRepository,
     ISeasonWrapRepository wrapRepository,
     IMeetService meetService,
-    IScoringService scoringService) : ISeasonWrapService
+    IScoringService scoringService,
+    ISeasonSummaryRepository summaryRepository) : ISeasonWrapService
 {
     public async Task<SeasonWrapViewModel?> GetSeasonWrapAsync(string seasonName)
     {
@@ -33,6 +34,7 @@ public class SeasonWrapService(
         var vm = SeasonWrapCalculator.Build(season, marks, priors, teamResults, meetScores, scoring);
         vm.PreviousSeasonName = previous;
         vm.NextSeasonName = next;
+        vm.SummaryText = await summaryRepository.GetApprovedTextAsync(season.Id);
         return vm;
     }
 

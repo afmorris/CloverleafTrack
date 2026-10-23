@@ -27,7 +27,7 @@ public class SeasonWrapServiceTests
 
         var meets = new Mock<IMeetService>();
         meets.Setup(m => m.GetMeetScoresAsync()).ReturnsAsync(new Dictionary<int, MeetScoreViewModel>());
-        return new SeasonWrapService(seasonRepo.Object, wrapRepo.Object, meets.Object, Mock.Of<IScoringService>());
+        return new SeasonWrapService(seasonRepo.Object, wrapRepo.Object, meets.Object, Mock.Of<IScoringService>(), Mock.Of<ISeasonSummaryRepository>());
     }
 
     [Fact]

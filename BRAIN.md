@@ -2779,7 +2779,19 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 
 **Key files:** `Services/SeasonWrapCalculator.cs`, `Services/SeasonWrapService.cs`, `DataAccess/Repositories/SeasonWrapRepository.cs`, `Web/Pdf/SeasonWrapPoster.cs`, `Views/Seasons/Wrap.cshtml` + `_SeasonWrapProgression.cshtml`, `SeasonsController.Wrap/WrapPdf`, `Tests/Unit/Services/SeasonWrapCalculatorTests.cs`.
 
-### [C124] Seasons Back in the Public Site: Nav Item, Wrap Links, Previous/Next, and a Broken Season Page Fixed
+### [C124] Season summary ("the season in words" on the season wrap)
+
+**What changed:** optional written recap on `/seasons/{name}/wrap` ([C123]'s `SummaryText` slot). New `SeasonSummaries` table (`docs/migration_season_summaries.sql`: SeasonId UNIQUE, SummaryText, InputHash, Model, Status Draft/Approved via `SummaryStatus`, GeneratedAt, ReviewedAt), `SeasonSummaryRepository`, `SeasonSummaryPrompt` (system prompt, `Version`, `BuildFactSheet(SeasonWrapViewModel)`), `SeasonSummaryService` (fact sheet + `SaveManualDraftAsync`), admin `/Admin/SeasonSummaries` (list seasons with status; edit, approve, unapprove, delete; `List`/`FactSheet`/`Import` JSON endpoints), skill `.claude/skills/generate-season-summary` (Opus subagent writer, `season_summary.py` validator/importer). `SeasonWrapService` now loads the Approved text only (`GetApprovedTextAsync`).
+
+**Why:** same owner rules as meet recaps ([C50]/[C51]) and athlete summaries ([C52]): AI never runs inside the site; text is written in chat, imported as Draft, approved by the owner; only Approved renders publicly.
+
+**Rules worth knowing:** the fact sheet is names, marks and counts only (no slugs) plus a `notes` list of data rules (a first-ever mark counts as a PR in the headline `personalRecords`; `improvedMarks`/`biggestJumps` are genuine improvements; `stillRecord` false = since broken; seated events never score). `Import` returns 409 for an Approved season unless `overwrite=true` (overwriting resets to Draft and pulls the text off the public wrap); the skill asks the owner first. The validator flags any name, mark or number not in the fact sheet.
+
+**Watch out:** the migration must be applied to `ctf` before deploy or the wrap page (which now queries `SeasonSummaries`) errors. Approving does not re-export the static site: run the `ctf` export for the text to appear publicly. Bump `SeasonSummaryPrompt.Version` when the prompt or fact-sheet shape changes. Text is not linkified (unlike meet recaps); paragraphs split on a blank line. The poster PDF does not include the summary. Nothing detects staleness when results change after writing.
+
+**Key files:** `Models/SeasonSummary.cs`, `DataAccess/Repositories/SeasonSummaryRepository.cs`, `Services/SeasonSummaryPrompt.cs`, `Services/SeasonSummaryService.cs`, `Services/SeasonWrapService.cs`, `Web/Areas/Admin/Controllers/SeasonSummariesController.cs`, `Areas/Admin/Views/SeasonSummaries/Index.cshtml`, `.claude/skills/generate-season-summary/*`, `Tests/Unit/Services/SeasonSummaryTests.cs`.
+
+### [C125] Seasons Back in the Public Site: Nav Item, Wrap Links, Previous/Next, and a Broken Season Page Fixed
 
 **What changed:** the owner wanted past season wraps easy to reach ("Meets replaced the Seasons page completely"), so the seasons pages are public again, **superseding the [C44] rule that season pages are not part of the public export**. A **Seasons** item sits in the main navigation (desktop and the mobile tab bar) and leads to `/seasons` (current season card, recent seasons, the full list), where every season that has results links to its wrap ("Season Wrap →" on the current/previous cards, "Season wrap →" on the old-season rows) and the season detail page has a "Season Wrap" button. The wrap page has "← All seasons" and previous/next season links that skip seasons without results (`SeasonWrapViewModel.PreviousSeasonName/NextSeasonName`, `ISeasonWrapRepository.GetSeasonIdsWithMarksAsync`). `SeasonCardViewModel.HasWrap` = the season has results. Every season with data has a wrap (50 seasons back to 1959-60).
 

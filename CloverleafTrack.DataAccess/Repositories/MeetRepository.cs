@@ -12,7 +12,7 @@ public class MeetRepository(IDbConnectionFactory connectionFactory) : IMeetRepos
     {
         using  var connection = connectionFactory.CreateConnection();
         // Counts are subqueries, not COUNT + GROUP BY: m.* with a hand-written GROUP BY list broke every time a column was added to Meets
-        // (MeetLevel, OfficialResultsUrl), which made every /seasons/{name} page return a 500 (BRAIN.md [C124]).
+        // (MeetLevel, OfficialResultsUrl), which made every /seasons/{name} page return a 500 (BRAIN.md [C125]).
         const string sql = """
                            SELECT
                                 m.*,
