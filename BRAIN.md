@@ -2736,3 +2736,11 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** `PersonalBest` is current-best per athlete and event, so a tied best keeps both marks full. Opacity is an inline style (no Tailwind rebuild needed).
 
 **Key files:** `Views/Meets/Details.cshtml`, `Views/Roster/Details.cshtml`, `Services/{Meet,Athlete}Service.cs`.
+
+### [C120] Admin Performances Index Failed: 2100-Parameter Limit
+
+**What changed:** `AdminPerformanceRepository.GetAllWithDetailsAsync` fetched relay team names with `WHERE pa.PerformanceId IN @PerformanceIds`, passing every relay performance id. Dapper expands a list into one SQL parameter per element and SQL Server rejects a request over 2,100 parameters; once relay performances passed that count the page returned a 500 ("The incoming request has too many parameters"). The query now selects relay performances with a subquery (`IN (SELECT Id FROM Performances WHERE AthleteId IS NULL)`), no parameters.
+
+**Watch out:** never pass an unbounded id list to Dapper `IN @list`. The other `IN @...` callers (rounds/attempts/bars lookups by performance, summaries by athlete/meet, event ids) take per-athlete or per-meet lists and are well under the cap. The Index still loads all ~14,000 performances unpaged (a ~17 MB page); that is a separate usability problem.
+
+**Key files:** `DataAccess/Repositories/AdminPerformanceRepository.cs`.

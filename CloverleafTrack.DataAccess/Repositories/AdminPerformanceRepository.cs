@@ -89,12 +89,12 @@ public class AdminPerformanceRepository(IDbConnectionFactory connectionFactory) 
                     STRING_AGG(CONCAT(a.LastName, ', ', a.FirstName), '; ') as RelayAthletes
                 FROM PerformanceAthletes pa
                 INNER JOIN Athletes a ON a.Id = pa.AthleteId
-                WHERE pa.PerformanceId IN @PerformanceIds
+                WHERE pa.PerformanceId IN (SELECT Id FROM Performances WHERE AthleteId IS NULL)
                 GROUP BY pa.PerformanceId";
             
-            var relayData = await connection.QueryAsync<(int PerformanceId, string RelayAthletes)>(
-                relayAthletesSql,
-                new { PerformanceIds = relayPerformances.Select(p => p.Id).ToList() });
+            // Not `IN @PerformanceIds`: Dapper expands a list into one parameter per id and SQL Server caps a request at
+            // 2100 parameters, which the relay count passed (BRAIN.md [C120]).
+            var relayData = await connection.QueryAsync<(int PerformanceId, string RelayAthletes)>(relayAthletesSql);
             
             foreach (var relay in relayData)
             {
