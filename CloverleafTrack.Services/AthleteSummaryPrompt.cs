@@ -79,7 +79,7 @@ public static class AthleteSummaryPrompt
                         ["class"] = first.ClassAtTime
                     },
                     ["best"] = c.CareerBestFormatted,
-                    ["improvement"] = c.CareerImprovementFormatted
+                    ["improvement"] = c.CareerImprovementFormatted == null ? null : $"{c.CareerImprovementFormatted} ({(c.IsFieldEvent ? "farther" : "faster")})"
                 };
             }).ToList(),
             ["seasons"] = seasonsChronological.Select(s => new Dictionary<string, object?>

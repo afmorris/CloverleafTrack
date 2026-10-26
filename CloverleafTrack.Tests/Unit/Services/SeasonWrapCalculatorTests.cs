@@ -137,8 +137,8 @@ public class SeasonWrapCalculatorTests
             });
 
         vm.Improvements.Select(i => i.Athlete.Name).Should().Equal("Gus Ray", "Ann Lee");   // 14.3% then 7.7%; "New Kid" has no prior
-        vm.Improvements[0].Change.Should().Be("5' 0\" farther");
-        vm.Improvements[1].Change.Should().Be("1.00s faster");
+        vm.Improvements[0].Change.Should().Be("+5' 0\"");
+        vm.Improvements[1].Change.Should().Be("-1.00s");
         vm.Improvements[1].Before.Should().Be("13.00");
     }
 

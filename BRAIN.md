@@ -2836,3 +2836,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** `CareerImprovementFormatted` still has the "+ means better" meaning and is still used by the career chart stat row and the athlete summary fact sheet (where the field is named `improvement`); that is intentional, do not change it without bumping `AthleteSummaryPrompt.Version`. Any new surface that shows a change next to two marks should use `FormatChange`.
 
 **Key files:** `Services/AthleteWrapCalculator.cs`, `Tests/Unit/Services/AthleteWrapCalculatorTests.cs`.
+
+### [C129] Every time/mark change is signed by its direction on the number line
+
+**What changed:** owner rule: a "change" is the new mark minus the old mark, so a faster (smaller) time is **negative** and a longer jump or throw is **positive**, everywhere it is shown. Updated: the career chart "Improvement" stat (`AthleteService.FormatDelta`, now `-3.40s` for running), the home page "Biggest improvement" (`HomeService.FormatImprovement`, `-0.50s` / `+1' 0"`), the season wrap "Biggest jumps" (`SeasonWrapCalculator`, replaces "1.00s faster" / "5' 0" farther" with `-1.00s` / `+5' 0"`), and the athlete page's "gap to PR" column (a field mark shorter than the PR is now `-`, a running mark slower than the PR stays `+`). Already correct and unchanged: leaderboard record progression (`-0.43s` / `+2' 6.25"`), `PerformanceFormatHelper` ("-0.50s faster", "+1' 0" farther"), the athlete wrap ([C128]). **Supersedes the [C128] note** that the chart string stays "+ means better".
+
+**Fact sheets:** the athlete and season summary fact sheets still describe the same change, now with the direction spelled out so a writer cannot misread the sign: `"improvement": "-3.40s (faster)"`, `"change": "+5' 0\" (farther)"`. Prompt rules and `Version` were not changed; existing approved recaps are unaffected.
+
+**Watch out:** the chart's "off record" gap stays an unsigned distance (it is a gap to a target, not a change). Any new surface that shows a change between two marks must use this convention (see `AthleteWrapCalculator.FormatChange`, `FormatDelta`).
+
+**Key files:** `Services/AthleteService.cs`, `HomeService.cs`, `SeasonWrapCalculator.cs`, `AthleteSummaryPrompt.cs`, `SeasonSummaryPrompt.cs`, `Views/Roster/Details.cshtml`, `Tests/Unit/Services/SeasonWrapCalculatorTests.cs`.
