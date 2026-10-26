@@ -758,7 +758,9 @@ public class AthleteService(
     /// <summary>Formats an unsigned magnitude delta with an explicit sign — "+2' 6.25&quot;"/"-0.43s" for an improvement, "2' 6.25&quot;"/"0.43s" (no sign) for a gap-to-record.</summary>
     private static string FormatDelta(double delta, bool isField, bool improvement)
     {
-        var sign = improvement ? "+" : "";
+        // Improvement is signed by the direction of the mark on the number line: a longer jump is "+", a faster (smaller) time is "-".
+        // The off-record gap is a bare distance. BRAIN.md [C129].
+        var sign = !improvement ? "" : isField ? "+" : "-";
         if (isField)
         {
             var feet = (int)(delta / 12);

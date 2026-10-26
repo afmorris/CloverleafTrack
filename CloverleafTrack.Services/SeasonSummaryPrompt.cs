@@ -86,7 +86,7 @@ public static class SeasonSummaryPrompt
             }).ToList(),
             ["biggestJumps"] = wrap.Improvements.Select(i => new Dictionary<string, object?>
             {
-                ["athlete"] = i.Athlete.Name, ["event"] = i.EventLabel, ["before"] = i.Before, ["after"] = i.After, ["change"] = i.Change
+                ["athlete"] = i.Athlete.Name, ["event"] = i.EventLabel, ["before"] = i.Before, ["after"] = i.After, ["change"] = $"{i.Change} ({(i.Change.StartsWith('+') ? "farther" : "faster")})"
             }).ToList(),
             ["seniors"] = wrap.Seniors.Select(s => new Dictionary<string, object?>
             {

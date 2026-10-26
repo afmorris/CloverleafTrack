@@ -209,7 +209,7 @@ public static class SeasonWrapCalculator
                 EventLabel = EventLabel(best),
                 Before = Format(field ? null : before, field ? before : null),
                 After = Mark(best),
-                Change = field ? $"{Format(null, diff)} farther" : $"{diff:0.00}s faster",
+                Change = field ? $"+{Format(null, diff)}" : $"-{diff:0.00}s",
                 Percent = Math.Round(percent, 1)
             }));
         }

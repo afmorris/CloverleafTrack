@@ -371,7 +371,7 @@
                                                 <td class="px-4 py-2.5 text-right tabular-nums">
                                                     @if (gap.HasValue && gap.Value > 0.001)
                                                     {
-                                                        <span class="text-xs text-gray-400 dark:text-gray-500">+@FormatImprovement(gap.Value, eg.IsFieldEvent)</span>
+                                                        <span class="text-xs text-gray-400 dark:text-gray-500">@(eg.IsFieldEvent ? "-" : "+")@FormatImprovement(gap.Value, eg.IsFieldEvent)</span>
                                                     }
                                                 </td>
                                             </tr>

@@ -381,15 +381,16 @@ public class HomeService(
     {
         // For time events, improvement is negative (faster)
         // For field events, improvement is positive (farther)
+        // Signed by the direction of the mark on the number line: faster (smaller) times are "-", longer distances "+". BRAIN.md [C129].
         if (improvementAmount < 0)
         {
-            return $"{Math.Abs(improvementAmount):0.00}s";
+            return $"-{Math.Abs(improvementAmount):0.00}s";
         }
         else
         {
             var feet = Math.Floor(improvementAmount / 12);
             var remaining = improvementAmount % 12;
-            return $"{feet:0}' {remaining:0.##}\"";
+            return $"+{feet:0}' {remaining:0.##}\"";
         }
     }
 
