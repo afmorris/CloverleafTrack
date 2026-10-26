@@ -180,7 +180,7 @@ Slug generation uses the `Slugify` NuGet package (`SlugHelper`). `Meet.Slug` is 
 | `SeasonsController` | `/seasons` | Season list, season detail, season scoring (`/seasons/{name}/scoring`), and season wrap (`/seasons/{name}/wrap` page + `/seasons/{name}/wrap.pdf` one-page poster; linked from the home page season strip so the static export includes them — BRAIN.md [C123]) |
 | `MeetsController` | `/meets` | Meet list + meet detail page |
 | `RosterController` | `/roster` | Active + former athlete list |
-| `AthletesController` | `/athletes/{slug}` | Athlete career detail — NOTE: route is `/roster/{slug}` via `RosterController`, not `AthletesController` |
+| `AthletesController` | `/athletes/{slug}` | Athlete career detail — NOTE: route is `/roster/{slug}` via `RosterController`, not `AthletesController`. `RosterController` also serves the athlete career wrap (`/roster/{slug}/wrap` page + `/roster/{slug}/wrap.pdf` poster, linked from the athlete page so the static export includes them — BRAIN.md [C126]) |
 | `LeaderboardController` | `/events` (legacy `/leaderboard` 301-redirects here — see BRAIN.md "Events IA") | All-time top 10 lists |
 
 ### Admin area (Areas/Admin/)
@@ -632,6 +632,7 @@ Curated traps that still apply. Full context for each lives in `BRAIN.md` under 
 - **Seated (wheelchair) events never score for the team**: `GetTemplatePointsAsync` returns 0 for `Events.Name LIKE 'Seated%'`, `SeasonScoringRepository` excludes them, and the dual-meet import scripts skip them. Any new team-score/points code must exclude them too. [C111]
 
 **Services & tests**
+- Athlete wrap ([C126]) is a reshape of `AthleteDetailsViewModel` (no SQL of its own): anything it shows must stay consistent with the athlete page. Its PR count excludes first-ever marks (`PreviousBest != null`), unlike the season wrap's headline. [C126]
 - Any query that loads `MeetParticipant` must join `Schools` or `SchoolName` is blank (it reads `School.Name`). Bulk writes must not call the per-row repository methods (each rebuilds leaderboards, ~3 s): use `IAdminMeetImportRepository`-style transactions and rebuild once. `docs/schema.sql` is not one runnable batch (no `GO` before most procs). [C122]
 - `PRAtTime`/`SRAtTime` need `docs/migration_record_history.sql` applied before deploy; pre-2021 counts are inflated because an athlete's first mark in the DB counts as a PR even when earlier results are missing. [C118]
 - `PersonalBest` is current-best only, so it exists mainly for 2025-26; PR counts/chips now come from `PRAtTime` ([C118]) and cover all seasons (inflated before 2021, see above). `AthleteSummaryPrompt` still omits PR counts; revisit before quoting them. School records (`AllTimeRank == 1`) are reliable. [C52, C118]
