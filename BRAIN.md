@@ -2846,3 +2846,15 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** the chart's "off record" gap stays an unsigned distance (it is a gap to a target, not a change). Any new surface that shows a change between two marks must use this convention (see `AthleteWrapCalculator.FormatChange`, `FormatDelta`).
 
 **Key files:** `Services/AthleteService.cs`, `HomeService.cs`, `SeasonWrapCalculator.cs`, `AthleteSummaryPrompt.cs`, `SeasonSummaryPrompt.cs`, `Views/Roster/Details.cshtml`, `Tests/Unit/Services/SeasonWrapCalculatorTests.cs`.
+
+### [C130] Roster "Top Event": individual events first, shared by the active and former lists
+
+**What changed:** one selector, `AthleteService.PickTopEvent`, now chooses the Top Event for both the Active list and the Former Athletes list: individual events before relays, then highest percentile, then outdoor before indoor, then structural `SortOrder`; falls back to the first event when no percentile exists. New `EventParticipationViewModel.IsRelay` and `DisplayName` (indoor events show "(indoor)", since "1600M" exists in both environments); both lists render `DisplayName`.
+
+**Why:** the Former Athletes list never got the [C37] percentile fix: it still used `EventsInCategory.FirstOrDefault()` (first by `SortOrder`), so Caleb Neville, with the school-record 3200M, showed the indoor 4x200M relay. The Active list had the percentile rule but let a relay win on percentile alone: relay events have few marks (indoor 4x200M has 3), and a team mark says little about the athlete.
+
+**Rules worth knowing:** an athlete with only relays still shows their best relay. Event page and athlete-detail hero stats are unchanged (the hero already excludes relays). The former list now also fills `Percentile`/`IsFieldEvent` from the athlete's best mark per event.
+
+**Watch out:** the selector uses percentile only; an individual event with a one-off mark in a tiny population can still post an extreme percentile. If that shows up, require `EventMarkCount >= 10` (the `EventStatistics` value) before trusting percentile, as MeetScore does.
+
+**Key files:** `Services/AthleteService.cs`, `ViewModels/EventParticipationViewModel.cs`, `Views/Shared/_FormerAthleteYearGroupSection.cshtml`, `_RosterActiveAthletesList.cshtml`, `Tests/Unit/Services/AthleteServiceTests.cs`.

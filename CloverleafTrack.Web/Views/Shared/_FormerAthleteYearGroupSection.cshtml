@@ -38,7 +38,7 @@
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                         @foreach (var athlete in genderAthletes)
                         {
-                            var topEvent = athlete.EventsInCategory.FirstOrDefault();
+                            var topEvent = athlete.TopEvent;
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                                 <td class="px-4 py-2.5" data-sort="@athlete.FullName">
                                     <a asp-controller="Roster" asp-action="Details" asp-route-slug="@athlete.AthleteSlug"
@@ -46,7 +46,7 @@
                                         @athlete.FullName
                                     </a>
                                 </td>
-                                <td class="px-4 py-2.5 text-gray-600 dark:text-gray-400 truncate max-w-[160px] hidden md:table-cell" data-sort="@(topEvent?.Name ?? "")">@(topEvent?.Name ?? "")</td>
+                                <td class="px-4 py-2.5 text-gray-600 dark:text-gray-400 truncate max-w-[160px] hidden md:table-cell" data-sort="@(topEvent?.DisplayName ?? "")">@(topEvent?.DisplayName ?? "")</td>
                                 <td class="px-4 py-2.5 text-right">
                                     @if (topEvent != null)
                                     {

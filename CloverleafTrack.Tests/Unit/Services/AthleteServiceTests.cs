@@ -1156,4 +1156,60 @@ public class AthleteServiceTests
         // Later (better) season sits visually higher — smaller pixelY — for a field event.
         trend[1].PixelY.Should().BeLessThan(trend[0].PixelY);
     }
+
+    private static AthleteEventParticipation Perf(bool active, int eventId, string name, EventType type, EventCategory cat, Environment env, int sort, byte? pct, double? time = null, double? dist = null) => new()
+    {
+        Athlete = new Athlete { Id = 1, FirstName = "Caleb", LastName = "Runner", IsActive = active, GraduationYear = 2026 },
+        Event = new Event { Id = eventId, Name = name, EventType = type, EventCategory = cat, Environment = env, SortOrder = sort },
+        Performance = new Performance { TimeSeconds = time ?? (dist == null ? 100 : null), DistanceInches = dist, Percentile = pct },
+        SeasonStartDate = new DateTime(2025, 8, 1), SeasonName = "2025-2026"
+    };
+
+    [Fact]
+    public async Task FormerAthletes_TopEvent_IsBestIndividualEvent_NotAFirstSortedRelay()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        mockRepo.Setup(r => r.GetAllWithPerformancesAsync()).ReturnsAsync(new List<AthleteEventParticipation>
+        {
+            Perf(false, 1, "4x200M Relay", EventType.RunningRelay, EventCategory.Relays, Environment.Indoor, 1, 100),
+            Perf(false, 2, "1600M", EventType.Running, EventCategory.Distance, Environment.Outdoor, 5, 99),
+            Perf(false, 3, "3200M", EventType.Running, EventCategory.Distance, Environment.Outdoor, 6, 100),
+        });
+
+        var top = (await new AthleteService(mockRepo.Object).GetFormerAthletesGroupedByGraduationYearAsync())[2026].Single().TopEvent;
+
+        top!.Name.Should().Be("3200M");
+    }
+
+    [Fact]
+    public async Task ActiveAthletes_TopEvent_RelayOnlyAthleteStillGetsTheirBestRelay()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        mockRepo.Setup(r => r.GetAllWithPerformancesAsync()).ReturnsAsync(new List<AthleteEventParticipation>
+        {
+            Perf(true, 1, "4x100M Relay", EventType.RunningRelay, EventCategory.Relays, Environment.Outdoor, 1, 60),
+            Perf(true, 2, "4x400M Relay", EventType.RunningRelay, EventCategory.Relays, Environment.Outdoor, 2, 80),
+        });
+
+        var top = (await new AthleteService(mockRepo.Object).GetFlatActiveAthletesAsync(2026)).Single().TopEvent;
+
+        top!.Name.Should().Be("4x400M Relay");
+    }
+
+    [Fact]
+    public async Task ActiveAthletes_TopEvent_PercentileTieGoesToOutdoorAndIndoorIsLabelled()
+    {
+        var mockRepo = new Mock<IAthleteRepository>();
+        mockRepo.Setup(r => r.GetAllWithPerformancesAsync()).ReturnsAsync(new List<AthleteEventParticipation>
+        {
+            Perf(true, 1, "1600M", EventType.Running, EventCategory.Distance, Environment.Indoor, 1, 95),
+            Perf(true, 2, "1600M", EventType.Running, EventCategory.Distance, Environment.Outdoor, 2, 95),
+        });
+
+        var top = (await new AthleteService(mockRepo.Object).GetFlatActiveAthletesAsync(2026)).Single().TopEvent;
+
+        top!.Environment.Should().Be(Environment.Outdoor);
+        top.DisplayName.Should().Be("1600M");
+        new EventParticipationViewModel { Name = "1600M", Environment = Environment.Indoor }.DisplayName.Should().Be("1600M (indoor)");
+    }
 }
