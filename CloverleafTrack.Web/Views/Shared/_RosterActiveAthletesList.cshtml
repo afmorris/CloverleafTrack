@@ -71,7 +71,7 @@
                                         data-class="@ClassFilterValue(athlete.Class)"
                                         data-csv-class="@athlete.Class"
                                         data-csv-gender="@(gender == CloverleafTrack.Models.Enums.Gender.Male ? "Boys" : "Girls")"
-                                        data-csv-event="@(topEvent?.Name ?? "")"
+                                        data-csv-event="@(topEvent?.DisplayName ?? "")"
                                         data-csv-mark="@(topEvent?.PersonalRecord ?? "")"
                                         data-csv-pct="@(pct.HasValue ? $"{pct}th" : "")">
                                         <td class="col-name px-4 py-2.5" data-sort="@athlete.FullName">
@@ -82,12 +82,12 @@
                                             </a>
                                             <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">@athlete.Class</div>
                                         </td>
-                                        <td class="col-event px-4 py-2.5 text-gray-600 dark:text-gray-400 truncate max-w-[160px] hidden md:table-cell" data-sort="@(topEvent?.Name ?? "")">@(topEvent?.Name ?? "")</td>
+                                        <td class="col-event px-4 py-2.5 text-gray-600 dark:text-gray-400 truncate max-w-[160px] hidden md:table-cell" data-sort="@(topEvent?.DisplayName ?? "")">@(topEvent?.DisplayName ?? "")</td>
                                         <td class="col-mark px-4 py-2.5 pct-tint-td" style="@(fill != null ? $"background-color:{fill}38;box-shadow:inset 3px 0 0 0 {fill}" : "")">
                                             @if (topEvent != null)
                                             {
                                                 <span class="mark font-semibold @(ink == null ? "text-gray-900 dark:text-white" : "")" style="@(ink != null ? $"color:{ink}" : "")">@topEvent.PersonalRecord</span>
-                                                <div class="text-[11px] text-gray-500 dark:text-gray-400 md:hidden">@topEvent.Name</div>
+                                                <div class="text-[11px] text-gray-500 dark:text-gray-400 md:hidden">@topEvent.DisplayName</div>
                                             }
                                         </td>
                                         <td class="col-pct px-4 py-2.5" data-sort="@(pct?.ToString() ?? "")">

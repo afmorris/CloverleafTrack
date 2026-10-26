@@ -185,7 +185,8 @@ public class AthleteService(
                             SortOrder = ev.SortOrder,
                             PersonalRecord = best != null ? FormatPerformance(best.Performance.TimeSeconds, best.Performance.DistanceInches) : "N/A",
                             Percentile = best?.Performance.Percentile,
-                            IsFieldEvent = isFieldEvent
+                            IsFieldEvent = isFieldEvent,
+                            IsRelay = IsRelayEvent(ev)
                         };
                     })
                     .OrderBy(e => e.SortOrder)
@@ -200,8 +201,7 @@ public class AthleteService(
                 // Top Event = best event by percentile, not simply the first by SortOrder —
                 // see BRAIN.md [C36]/#48, the same tiebreak logic used for the athlete detail
                 // hero stats, generalized here across all categories instead of sprint/field only.
-                var topEvent = events.Where(e => e.Percentile.HasValue).OrderByDescending(e => e.Percentile).FirstOrDefault()
-                    ?? events.FirstOrDefault();
+                var topEvent = PickTopEvent(events);
 
                 var seasonTrend = topEvent != null
                     ? BuildSeasonTrend(bestBySeasonEvent.Where(x => x.AthleteId == first.Athlete.Id && x.EventId == topEvent.Id), topEvent.IsFieldEvent)
@@ -223,6 +223,24 @@ public class AthleteService(
             .OrderBy(a => a.FullName)
             .ToList();
     }
+
+    /// <summary>
+    /// The athlete's Top Event for the roster lists: individual events before relays (a relay mark is the team's, and a relay
+    /// with few marks in its history can post an extreme percentile), then highest percentile, then outdoor before indoor, then
+    /// structural sort order. Falls back to the first event when nothing has percentile data. BRAIN.md [C130].
+    /// </summary>
+    internal static EventParticipationViewModel? PickTopEvent(IReadOnlyCollection<EventParticipationViewModel> events)
+    {
+        var pool = events.Any(e => !e.IsRelay) ? events.Where(e => !e.IsRelay).ToList() : events.ToList();
+        return pool.Where(e => e.Percentile.HasValue)
+                   .OrderByDescending(e => e.Percentile)
+                   .ThenBy(e => e.Environment == Environment.Indoor ? 1 : 0)
+                   .ThenBy(e => e.SortOrder)
+                   .FirstOrDefault()
+               ?? pool.OrderBy(e => e.SortOrder).FirstOrDefault();
+    }
+
+    private static bool IsRelayEvent(Event ev) => ev.EventType is EventType.RunningRelay or EventType.FieldRelay or EventType.JumpRelay or EventType.ThrowsRelay;
 
     private static AthleteEventParticipation? BestPerformance(IEnumerable<AthleteEventParticipation> group, Event ev) =>
         IsDistanceBasedEvent(ev)
@@ -326,7 +344,10 @@ public class AthleteService(
                                     Name = ev.Name,
                                     Environment = ev.Environment,
                                     SortOrder = ev.SortOrder,
-                                    PersonalRecord = pr
+                                    PersonalRecord = pr,
+                                    Percentile = BestPerformance(eventGroup, ev)?.Performance.Percentile,
+                                    IsFieldEvent = IsDistanceBasedEvent(ev),
+                                    IsRelay = IsRelayEvent(ev)
                                 };
                             })
                             .OrderBy(e => e.SortOrder)
@@ -339,7 +360,8 @@ public class AthleteService(
                             Class = $"Class of {first.Athlete.GraduationYear}",
                             EventsInCategory = eventGroups,
                             Gender = first.Athlete.Gender,
-                            GraduationYear = first.Athlete.GraduationYear
+                            GraduationYear = first.Athlete.GraduationYear,
+                            TopEvent = PickTopEvent(eventGroups)
                         };
                     })
                     .OrderBy(a => a.FullName)
