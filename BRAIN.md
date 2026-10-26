@@ -2816,3 +2816,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** the static export gains ~2 files per athlete with results (page + PDF, roughly 900 athletes), so the `ctf` crawl takes longer; check crawl time after the first export. A wrap exists for every athlete slug with a details page, including active athletes (their wrap is "so far"). The link in `Details.cshtml` rebuilds the slug with `SlugHelper` ("First-Last"), the same rule as `AthleteRepository.GetBySlugWithBasicInfoAsync`.
 
 **Key files:** `Services/AthleteWrapCalculator.cs`, `Services/AthleteWrapService.cs`, `ViewModels/Athletes/AthleteWrapViewModel.cs`, `Web/Pdf/AthleteWrapPoster.cs`, `Views/Roster/Wrap.cshtml`, `RosterController.Wrap/WrapPdf`, `Tests/Unit/Services/AthleteWrapCalculatorTests.cs`.
+
+### [C127] Athlete hero metric strip: size the grid to its cells
+
+**What changed:** on `/roster/{slug}` the hero strip (`.metric-strip`, a fixed `grid-cols-4`) is now sized to its real cell count with an inline `grid-template-columns:repeat(N,minmax(0,1fr))` (2 fixed cells for PRs/Records plus one per top sprint/field event). The mark values are `white-space:nowrap` with a `clamp()` font size so "128' 8"" no longer wraps onto two lines on a phone.
+
+**Why:** an athlete with only one top event (e.g. a thrower like Jacob Atkinson, Discus only) has 3 cells, which left an empty fourth column and an empty bordered box at the right of the bar.
+
+**Watch out:** inline styles on purpose: no Node/pnpm here, so `site.css` can't be rebuilt. The other users of `.metric-strip` (home season card, latest-meet card, meet details) still assume 4 cells; check their cell counts if they ever render fewer. The Personal Bests table below still wraps marks like `37' 10"` onto two lines at phone width (not changed).
+
+**Key files:** `Views/Roster/Details.cshtml`.
