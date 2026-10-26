@@ -2826,3 +2826,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** inline styles on purpose: no Node/pnpm here, so `site.css` can't be rebuilt. The other users of `.metric-strip` (home season card, latest-meet card, meet details) still assume 4 cells; check their cell counts if they ever render fewer. The Personal Bests table below still wraps marks like `37' 10"` onto two lines at phone width (not changed).
 
 **Key files:** `Views/Roster/Details.cshtml`.
+
+### [C128] Athlete wrap: show the change in the mark, signed by direction
+
+**What changed:** the "Change" in the wrap's Biggest improvements (page and poster) is now computed from the raw first and best marks by `AthleteWrapCalculator.FormatChange`: a faster time shows as `-3.40s` (or `-1:05.50`), a longer jump or throw as `+2' 1"`. It no longer reuses `CareerChartViewModel.CareerImprovementFormatted`.
+
+**Why:** that chart string reads "+3.40s" for a time that got 3.40s *faster* (it is labelled "Improvement" on the chart). Next to First and Best columns on the wrap it read as a slower time (reported on Ethan Gray's 400M).
+
+**Watch out:** `CareerImprovementFormatted` still has the "+ means better" meaning and is still used by the career chart stat row and the athlete summary fact sheet (where the field is named `improvement`); that is intentional, do not change it without bumping `AthleteSummaryPrompt.Version`. Any new surface that shows a change next to two marks should use `FormatChange`.
+
+**Key files:** `Services/AthleteWrapCalculator.cs`, `Tests/Unit/Services/AthleteWrapCalculatorTests.cs`.
