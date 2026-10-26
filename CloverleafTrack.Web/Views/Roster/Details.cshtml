@@ -61,11 +61,12 @@
             </div>
         }
         <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-            <div class="metric-strip">
+            @* metric-strip is a fixed 4-column grid; an athlete with one top event has 3 cells, so size the grid to the cells (site.css can't be rebuilt here, hence inline). BRAIN.md [C127] *@
+            <div class="metric-strip" style="grid-template-columns:repeat(@(2 + (Model.TopSprintEvent != null ? 1 : 0) + (Model.TopFieldEvent != null ? 1 : 0)),minmax(0,1fr))">
                 @if (Model.TopSprintEvent != null)
                 {
                     <div class="metric-cell">
-                        <span class="metric-value mark">@Model.TopSprintEvent.Performance</span>
+                        <span class="metric-value mark" style="white-space:nowrap;font-size:clamp(1.05rem,5.2vw,1.5rem)">@Model.TopSprintEvent.Performance</span>
                         <span class="metric-label">@Model.TopSprintEvent.EventName</span>
                         @if (Model.TopSprintEvent.AllTimeRank == 1)
                         {
@@ -80,7 +81,7 @@
                 @if (Model.TopFieldEvent != null)
                 {
                     <div class="metric-cell">
-                        <span class="metric-value mark">@Model.TopFieldEvent.Performance</span>
+                        <span class="metric-value mark" style="white-space:nowrap;font-size:clamp(1.05rem,5.2vw,1.5rem)">@Model.TopFieldEvent.Performance</span>
                         <span class="metric-label">@Model.TopFieldEvent.EventName</span>
                         @if (Model.TopFieldEvent.AllTimeRank == 1)
                         {
@@ -93,11 +94,11 @@
                     </div>
                 }
                 <div class="metric-cell">
-                    <span class="metric-value text-pr">@Model.TotalPRs</span>
+                    <span class="metric-value text-pr" style="font-size:clamp(1.05rem,5.2vw,1.5rem)">@Model.TotalPRs</span>
                     <span class="metric-label">PRs</span>
                 </div>
                 <div class="metric-cell">
-                    <span class="metric-value text-sr">@Model.TotalSchoolRecords</span>
+                    <span class="metric-value text-sr" style="font-size:clamp(1.05rem,5.2vw,1.5rem)">@Model.TotalSchoolRecords</span>
                     <span class="metric-label">Records</span>
                 </div>
             </div>
