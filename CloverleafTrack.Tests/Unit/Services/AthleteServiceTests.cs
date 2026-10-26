@@ -1182,7 +1182,7 @@ public class AthleteServiceTests
     }
 
     [Fact]
-    public async Task ActiveAthletes_TopEvent_RelayOnlyAthleteStillGetsTheirBestRelay()
+    public async Task ActiveAthletes_TopEvent_RelayOnlyAthleteHasNoTopEvent()
     {
         var mockRepo = new Mock<IAthleteRepository>();
         mockRepo.Setup(r => r.GetAllWithPerformancesAsync()).ReturnsAsync(new List<AthleteEventParticipation>
@@ -1193,7 +1193,7 @@ public class AthleteServiceTests
 
         var top = (await new AthleteService(mockRepo.Object).GetFlatActiveAthletesAsync(2026)).Single().TopEvent;
 
-        top!.Name.Should().Be("4x400M Relay");
+        top.Should().BeNull();
     }
 
     [Fact]

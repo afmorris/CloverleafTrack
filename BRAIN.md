@@ -2858,3 +2858,11 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** the selector uses percentile only; an individual event with a one-off mark in a tiny population can still post an extreme percentile. If that shows up, require `EventMarkCount >= 10` (the `EventStatistics` value) before trusting percentile, as MeetScore does.
 
 **Key files:** `Services/AthleteService.cs`, `ViewModels/EventParticipationViewModel.cs`, `Views/Shared/_FormerAthleteYearGroupSection.cshtml`, `_RosterActiveAthletesList.cshtml`, `Tests/Unit/Services/AthleteServiceTests.cs`.
+
+### [C131] Roster Top Event is never a relay
+
+**What changed:** supersedes the relay fallback in [C130]. `AthleteService.PickTopEvent` now excludes relays outright, so an athlete with only relay results has **no** Top Event on the Active or Former lists (blank event / mark cells, no percentile tint, no sparkline). Owner decision (scope chosen: roster lists only).
+
+**Not changed:** athlete detail pages, event pages, meet pages, athlete wraps and records still show relays; relay-only athletes still appear in the roster sections via `GetRosterCategory`.
+
+**Key files:** `Services/AthleteService.cs`, `Tests/Unit/Services/AthleteServiceTests.cs`.

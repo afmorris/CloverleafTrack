@@ -225,13 +225,14 @@ public class AthleteService(
     }
 
     /// <summary>
-    /// The athlete's Top Event for the roster lists: individual events before relays (a relay mark is the team's, and a relay
-    /// with few marks in its history can post an extreme percentile), then highest percentile, then outdoor before indoor, then
-    /// structural sort order. Falls back to the first event when nothing has percentile data. BRAIN.md [C130].
+    /// The athlete's Top Event for the roster lists: never a relay (a relay mark is the team's, and a relay with few marks in its
+    /// history can post an extreme percentile), so a relay-only athlete has none. Among individual events: highest percentile, then
+    /// outdoor before indoor, then structural sort order; falls back to the first event when nothing has percentile data.
+    /// BRAIN.md [C130], [C131].
     /// </summary>
     internal static EventParticipationViewModel? PickTopEvent(IReadOnlyCollection<EventParticipationViewModel> events)
     {
-        var pool = events.Any(e => !e.IsRelay) ? events.Where(e => !e.IsRelay).ToList() : events.ToList();
+        var pool = events.Where(e => !e.IsRelay).ToList();
         return pool.Where(e => e.Percentile.HasValue)
                    .OrderByDescending(e => e.Percentile)
                    .ThenBy(e => e.Environment == Environment.Indoor ? 1 : 0)
