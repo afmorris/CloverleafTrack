@@ -78,7 +78,6 @@ public static class AthleteWrapCalculator
         List<EventPerformanceGroupViewModel> groups,
         List<(SeasonPerformanceViewModel Season, EventPerformanceGroupViewModel Group, IndividualPerformanceViewModel Perf)> all)
     {
-        var changeByEvent = d.CareerCharts.ToDictionary(c => (c.EventId, c.Environment), c => c.CareerImprovementFormatted);
         var result = new List<AthleteWrapImprovement>();
 
         foreach (var byEvent in groups.GroupBy(g => (g.EventId, g.Environment)))
@@ -96,19 +95,36 @@ public static class AthleteWrapCalculator
             var gain = isField ? best.Perf.RawValue!.Value - first.Perf.RawValue!.Value : first.Perf.RawValue!.Value - best.Perf.RawValue!.Value;
             if (gain <= 0 || first.Perf.RawValue.Value <= 0) continue;
 
-            changeByEvent.TryGetValue((byEvent.Key.EventId, byEvent.Key.Environment), out var change);
             result.Add(new AthleteWrapImprovement
             {
                 EventLabel = Label(byEvent.First().EventName, byEvent.Key.Environment),
                 First = first.Perf.Performance,
                 Best = best.Perf.Performance,
-                Change = change ?? string.Empty,
+                Change = FormatChange(gain, isField),
                 Percent = gain / first.Perf.RawValue.Value * 100,
                 Performances = marks.Count
             });
         }
 
         return result.OrderByDescending(i => i.Percent).Take(MaxImprovements).ToList();
+    }
+
+    /// <summary>
+    /// Change in the mark itself, signed by direction: a faster time is "-3.40s" (the time went down), a longer throw or jump is
+    /// "+2' 1"". The career chart's own "improvement" string is unsigned in meaning ("+3.40s" = 3.40s faster) and reads as a slower
+    /// time on a wrap, so it is not reused. BRAIN.md [C128].
+    /// </summary>
+    public static string FormatChange(double gain, bool isField)
+    {
+        if (isField)
+        {
+            var feet = (int)(gain / 12);
+            var inches = gain % 12;
+            return feet > 0 ? $"+{feet}' {inches:0.##}\"" : $"+{inches:0.##}\"";
+        }
+
+        var ts = TimeSpan.FromSeconds(gain);
+        return ts.TotalMinutes >= 1 ? $"-{ts:m\\:ss\\.ff}" : $"-{gain:0.00}s";
     }
 
     /// <summary>Outdoor is the default; indoor events are marked so "800M" never means two things.</summary>

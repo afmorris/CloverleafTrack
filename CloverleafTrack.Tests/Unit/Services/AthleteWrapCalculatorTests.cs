@@ -71,6 +71,18 @@ public class AthleteWrapCalculatorTests
         vm.Improvements.Select(i => i.EventLabel).Should().ContainInOrder("Long Jump", "400M");
         vm.Improvements[0].First.Should().Be("15' 0\"");
         vm.Improvements[0].Best.Should().Be("18' 0\"");
+        vm.Improvements[0].Change.Should().Be("+3' 0\"");   // longer is up
+        vm.Improvements[1].Change.Should().Be("-3.00s");     // faster time is down, never "+"
+    }
+
+    [Theory]
+    [InlineData(3.4, false, "-3.40s")]
+    [InlineData(65.5, false, "-1:05.50")]
+    [InlineData(6, true, "+6\"")]
+    [InlineData(26.25, true, "+2' 2.25\"")]
+    public void FormatChange_is_signed_by_direction_of_the_mark(double gain, bool isField, string expected)
+    {
+        AthleteWrapCalculator.FormatChange(gain, isField).Should().Be(expected);
     }
 
     [Fact]
