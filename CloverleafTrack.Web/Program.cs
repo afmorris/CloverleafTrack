@@ -47,6 +47,7 @@ builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<IScoringService, ScoringService>();
 builder.Services.AddScoped<ISeasonWrapService, SeasonWrapService>();
+builder.Services.AddScoped<IAthleteWrapService, AthleteWrapService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
 
 builder.Services.AddScoped<IAdminAthleteRepository, AdminAthleteRepository>();
