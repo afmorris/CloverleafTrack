@@ -73,7 +73,7 @@
                                         data-csv-gender="@(gender == CloverleafTrack.Models.Enums.Gender.Male ? "Boys" : "Girls")"
                                         data-csv-event="@(topEvent?.DisplayName ?? "")"
                                         data-csv-mark="@(topEvent?.PersonalRecord ?? "")"
-                                        data-csv-pct="@(pct.HasValue ? $"{pct}th" : "")">
+                                        data-csv-pct="@(pct.HasValue ? $"{pct}{PercentileHelper.OrdinalSuffix(pct.Value)}" : "")">
                                         <td class="col-name px-4 py-2.5" data-sort="@athlete.FullName">
                                             <a href="@Url.Action("Details", "Roster", new { slug = athlete.AthleteSlug })"
                                                class="flex items-center gap-1.5 font-medium text-gray-900 dark:text-white hover:text-ctf-darkaccent dark:hover:text-ctf-accent">
@@ -98,7 +98,7 @@
                                                         <div class="pct-bar-fill" style="width:@(pct)%;background:@fill"></div>
                                                         <div class="pct-bar-median-tick"></div>
                                                     </div>
-                                                    <span class="text-xs font-semibold tabular-nums flex-shrink-0" style="color:@ink">@(pct)<sup>th</sup></span>
+                                                    <span class="text-xs font-semibold tabular-nums flex-shrink-0" style="color:@ink">@(pct)<sup>@(PercentileHelper.OrdinalSuffix(pct!.Value))</sup></span>
                                                 </div>
                                             }
                                             else

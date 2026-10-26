@@ -76,6 +76,6 @@
 @functions {
     static string GetOrdinal(int n) => n switch
     {
-        1 => "1st", 2 => "2nd", 3 => "3rd", _ => $"{n}th"
+        1 => "1st", 2 => "2nd", 3 => "3rd", _ => $"{n}{CloverleafTrack.Web.Utilities.PercentileHelper.OrdinalSuffix(n)}"
     };
 }

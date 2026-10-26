@@ -105,7 +105,7 @@
                     </div>
                     <div>
                         <div class="text-xs text-gray-500 dark:text-gray-400">Percentile</div>
-                        <div class="font-semibold text-gray-900 dark:text-white">@(chart.BestPercentile.HasValue ? $"{chart.BestPercentile}th" : "—")</div>
+                        <div class="font-semibold text-gray-900 dark:text-white">@(chart.BestPercentile.HasValue ? $"{chart.BestPercentile}{CloverleafTrack.Web.Utilities.PercentileHelper.OrdinalSuffix(chart.BestPercentile.Value)}" : "—")</div>
                     </div>
                     <div>
                         <div class="text-xs text-gray-500 dark:text-gray-400">Off the Record</div>

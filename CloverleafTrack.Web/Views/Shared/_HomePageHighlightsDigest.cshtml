@@ -42,7 +42,7 @@
                                         }
                                         @if (h.BestPlace.HasValue)
                                         {
-                                            var placeLabel = h.BestPlace switch { 1 => "1st", 2 => "2nd", 3 => "3rd", var n => $"{n}th" };
+                                            var placeLabel = h.BestPlace switch { 1 => "1st", 2 => "2nd", 3 => "3rd", var n => $"{n}{CloverleafTrack.Web.Utilities.PercentileHelper.OrdinalSuffix(n.GetValueOrDefault())}" };
                                             <span class="chip-place">@placeLabel@(h.PlaceContext != null ? $" vs. {h.PlaceContext}" : "")</span>
                                         }
                                     </div>
