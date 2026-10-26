@@ -2866,3 +2866,11 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Not changed:** athlete detail pages, event pages, meet pages, athlete wraps and records still show relays; relay-only athletes still appear in the roster sections via `GetRosterCategory`.
 
 **Key files:** `Services/AthleteService.cs`, `Tests/Unit/Services/AthleteServiceTests.cs`.
+
+### [C132] Ordinal suffixes come from `PercentileHelper.OrdinalSuffix`, never a hard-coded "th"
+
+**What changed:** the roster list percentile (`<sup>`) and its CSV export, the career chart "Best percentile" stat, the home-page highlights place label, and the admin scoring-template place labels all hard-coded `th`, so a 1st percentile read "1th" and 21 read "21th". They now use `PercentileHelper.OrdinalSuffix` (already used by `_PercentileRankCells` and unit-tested: 11/12/13 are "th", 21 is "st"). Checked on the rendered roster: 1st, 22nd, 23rd, 51st, 91st, 12th, 13th.
+
+**Watch out:** any new place or percentile label must use the helper. `Seasons/Scoring.cshtml` has its own local `OrdinalSuffix` function that is correct; it can be switched to the helper if it is ever touched.
+
+**Key files:** `Views/Shared/_RosterActiveAthletesList.cshtml`, `_CareerProgressionSection.cshtml`, `_HomePageHighlightsDigest.cshtml`, `Areas/Admin/Views/ScoringTemplates/{Index,Edit,Create}.cshtml`.
