@@ -3,7 +3,7 @@
 import { api, el, markDirty, params, fill } from "./app.js";
 import { addDays, daysBetween, formatRange, formatShort, isIsoDate, today } from "./dates.js";
 import {
-  PHASE_KINDS, isChampionshipMeet, phaseForDate, phaseKind, phaseProblems, suggestPhases, weeksOf
+  PHASE_KINDS, defaultFirstPractice, isChampionshipMeet, labelWeeks, phaseForDate, phaseKind, phaseProblems, suggestPhases
 } from "./season.js";
 
 const root = document.getElementById("content");
@@ -26,7 +26,12 @@ async function showList() {
   const d = defaultSeason(seasons);
   const name = el("input", { id: "new-name", value: d.name, maxlength: 120 });
   const start = el("input", { id: "new-start", type: "date", value: d.startDate });
-  const end = el("input", { id: "new-end", type: "date", value: d.endDate });
+  const first = el("input", { id: "new-first", type: "date", value: defaultFirstPractice(d.endDate) });
+  let firstTouched = false;
+  first.addEventListener("input", () => { firstTouched = true; });
+  const end = el("input", { id: "new-end", type: "date", value: d.endDate, oninput: () => {
+    if (!firstTouched && isIsoDate(end.value)) first.value = defaultFirstPractice(end.value);
+  } });
   const suggest = el("input", { id: "new-suggest", type: "checkbox", checked: true, style: "width:auto" });
   const msg = el("span", { class: "status", role: "status" });
 
@@ -35,11 +40,12 @@ async function showList() {
     let phases = [];
     if (suggest.checked) {
       const m = await api(`/meets?from=${start.value}&to=${end.value}`);
-      phases = suggestPhases(start.value, end.value, m);
+      phases = suggestPhases(start.value, end.value, m, isIsoDate(first.value) ? first.value : null);
     }
     try {
       const r = await api("/season-plans", { method: "POST", body: JSON.stringify({
-        name: name.value, startDate: start.value, endDate: end.value, phases }) });
+        name: name.value, startDate: start.value, endDate: end.value,
+        firstPractice: isIsoDate(first.value) ? first.value : null, phases }) });
       location.href = `/season?id=${r.id}`;
     } catch (e) { msg.textContent = e.message; msg.className = "status error"; }
   }
@@ -55,7 +61,9 @@ async function showList() {
       el("div", { class: "grid" },
         el("div", {}, el("label", { for: "new-name" }, "Name"), name),
         el("div", {}, el("label", { for: "new-start" }, "Start"), start),
-        el("div", {}, el("label", { for: "new-end" }, "End"), end)),
+        el("div", {}, el("label", { for: "new-end" }, "End"), end),
+        el("div", {}, el("label", { for: "new-first" }, "First practice"), first)),
+      el("p", { class: "hint" }, "Before the first practice is off-season (winter lifting): its own phase, outside the season's week count. Leave it blank for none."),
       el("div", { class: "row sub" }, suggest, el("label", { for: "new-suggest", style: "margin:0;font-weight:500" },
         "Start with suggested phases from the meet schedule")),
       el("div", { class: "row sub" }, el("button", { type: "button", onclick: create }, "Create season plan"), msg)));
@@ -136,13 +144,14 @@ function weeksTable() {
   const now = today();
   return el("div", { style: "overflow-x:auto" }, el("table", {},
     el("thead", {}, el("tr", {}, ["Week", "Dates", "Phase", "Volume", "Intensity", "Meets", "Practices"].map((h) => el("th", {}, h)))),
-    el("tbody", {}, weeksOf(plan.startDate, plan.endDate).map((w) => {
+    el("tbody", {}, labelWeeks(plan.startDate, plan.endDate, plan.firstPractice).map((w) => {
       const ph = phaseForDate(plan.phases, w.start < plan.startDate ? plan.startDate : w.start)
         ?? phaseForDate(plan.phases, w.end);
       const wm = meets.filter((m) => m.date >= w.start && m.date <= w.end);
       const count = practices.filter((p) => p.date >= w.start && p.date <= w.end).length;
-      return el("tr", { class: now >= w.start && now <= w.end ? "current-week" : "" },
-        el("td", {}, w.index),
+      const cls = [now >= w.start && now <= w.end ? "current-week" : "", w.offseason ? "offseason" : ""].filter(Boolean).join(" ");
+      return el("tr", { class: cls },
+        el("td", { style: "white-space:nowrap" }, w.label),
         el("td", {}, el("a", { href: `/practice?week=${w.start}` }, formatRange(w.start, w.end))),
         el("td", {}, ph ? el("span", { class: "phase-pill", style: `--phase:${phaseKind(ph.kind).color}` }, ph.name) : el("span", { class: "empty" }, "—")),
         el("td", {}, ph ? meter(ph.volume, "volume") : null),
@@ -173,7 +182,9 @@ function renderPlan() {
       el("div", { class: "grid" },
         el("div", {}, el("label", { for: "p-name" }, "Name"), el("input", { id: "p-name", value: plan.name, maxlength: 120, oninput: setPlan("name") })),
         el("div", {}, el("label", { for: "p-start" }, "Start"), el("input", { id: "p-start", type: "date", value: plan.startDate, oninput: setPlan("startDate"), onchange: reload })),
-        el("div", {}, el("label", { for: "p-end" }, "End"), el("input", { id: "p-end", type: "date", value: plan.endDate, oninput: setPlan("endDate"), onchange: reload }))),
+        el("div", {}, el("label", { for: "p-end" }, "End"), el("input", { id: "p-end", type: "date", value: plan.endDate, oninput: setPlan("endDate"), onchange: reload })),
+        el("div", {}, el("label", { for: "p-first" }, "First practice"), el("input", { id: "p-first", type: "date", value: plan.firstPractice ?? "",
+          oninput: (e) => { plan.firstPractice = e.target.value || null; changed(); } }))),
       el("div", { class: "sub" }, el("label", { for: "p-notes" }, "Notes"),
         el("textarea", { id: "p-notes", maxlength: 4000, oninput: setPlan("notes") }, plan.notes ?? ""))),
     el("section", { class: "card" },
@@ -186,7 +197,7 @@ function renderPlan() {
       el("div", { class: "page-head" }, el("h2", {}, "Phases"),
         el("button", { type: "button", class: "secondary", onclick: async () => {
           if (plan.phases.length && !confirm("Replace all phases with a suggestion from the meet schedule?")) return;
-          plan.phases = suggestPhases(plan.startDate, plan.endDate, meets); markDirty(true); renderPlan();
+          plan.phases = suggestPhases(plan.startDate, plan.endDate, meets, plan.firstPractice); markDirty(true); renderPlan();
         } }, "Suggest from meets")),
       plan.phases.length ? plan.phases.map(phaseRow) : el("p", { class: "empty" }, "No phases yet."),
       el("button", { type: "button", class: "secondary", onclick: () => {

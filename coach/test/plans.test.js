@@ -3,7 +3,9 @@ import { addDays, daysBetween, formatDay, isIsoDate, weekStart } from "../public
 import {
   blocksFromTemplate, formatMinutes, mergeTemplateBlocks, moveBlock, newBlock, practiceLength, resultCount, totalMinutes
 } from "../public/js/practice.js";
-import { isChampionshipMeet, phaseForDate, phaseProblems, suggestPhases, weeksOf } from "../public/js/season.js";
+import {
+  defaultFirstPractice, isChampionshipMeet, labelWeeks, phaseForDate, phaseProblems, suggestPhases, weeksOf
+} from "../public/js/season.js";
 
 describe("dates", () => {
   it("validates real calendar dates only", () => {
@@ -151,4 +153,33 @@ describe("season phases", () => {
     expect(phaseProblems(p, "2027-01-04", "2027-06-06")).toEqual([]);
   });
   it("uses one phase for a very short plan", () => expect(suggestPhases("2027-03-01", "2027-03-05", [])).toHaveLength(1));
+
+  it("puts winter lifting before the first practice and builds the cycles from it", () => {
+    const meets = [
+      { name: "2027 Kent State HS Meet #1", date: "2027-01-23", environment: 2 },
+      { name: "2027 Cloverleaf Early Bird Relays", date: "2027-03-27", environment: 1 },
+      { name: "2027 Division III District Track Meet", date: "2027-05-22", environment: 1 },
+      { name: "2027 OHSAA Division III State Track and Field Championships", date: "2027-06-05", environment: 1 }
+    ];
+    const p = suggestPhases("2026-12-01", "2027-06-30", meets, "2027-02-22");
+    expect(p.map((x) => [x.kind, x.startDate])).toEqual([
+      ["offseason", "2026-12-01"], ["general", "2027-02-22"], ["specific", "2027-03-09"], ["competition", "2027-03-22"],
+      ["championship", "2027-05-17"], ["transition", "2027-06-06"]]);
+    expect(p[0]).toMatchObject({ name: "Winter lifting", endDate: "2027-02-21" });
+    expect(phaseProblems(p, "2026-12-01", "2027-06-30")).toEqual([]);
+  });
+  it("ignores a first practice outside the plan", () => {
+    expect(suggestPhases("2027-02-22", "2027-06-30", [], "2027-02-22")[0].kind).toBe("general");
+    expect(suggestPhases("2027-02-22", "2027-06-30", [], "2027-08-01")[0].kind).toBe("general");
+  });
+  it("defaults the first practice to the Monday of the last week of February", () => {
+    expect(defaultFirstPractice("2027-06-30")).toBe("2027-02-22");
+    expect(defaultFirstPractice("2028-06-30")).toBe("2028-02-28");
+  });
+  it("numbers off-season weeks apart from season weeks", () => {
+    const w = labelWeeks("2027-02-01", "2027-03-14", "2027-02-24");
+    expect(w.map((x) => x.label)).toEqual(["Off 1", "Off 2", "Off 3", "1", "2", "3"]);
+    expect(w[3]).toMatchObject({ start: "2027-02-22", offseason: false });
+    expect(labelWeeks("2027-02-01", "2027-02-14", null).map((x) => x.label)).toEqual(["1", "2"]);
+  });
 });

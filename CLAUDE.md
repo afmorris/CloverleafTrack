@@ -77,10 +77,13 @@ reads `Cf-Access-Authenticated-User-Email`. Deployed by `.github/workflows/coach
 - **Template library** (`/templates`, `/templates/edit`): same block model. 12 built-in templates are seeded by
   `migrations/0002_plans.sql` and are read-only (copy to edit). `migrations/0003_throws_templates.sql` adds 16
   editable throws templates for 2026-27 (BRAIN.md [C136]), named by the throws program's phase labels (M0-M4,
-  "(any phase)") so they sort in season order. Adding a template to a plan merges its groups in and
+  "(any phase)") so they sort in season order. `0004_winter_lifting.sql` adds five "Throws (winter): ..." off-season
+  lifting templates with their own block cycle ([C137]). Adding a template to a plan merges its groups in and
   shares an existing warm-up / cool-down instead of repeating it (`mergeTemplateBlocks`).
-- **Season plan** (`/season`, `?id=`): named date range with phases (general prep, specific prep, competition,
-  championship, transition; volume and intensity 1-5, focus). Timeline bar with meet ticks, week-by-week table with
+- **Season plan** (`/season`, `?id=`): named date range with an optional first practice and phases (off-season,
+  general prep, specific prep, competition, championship, transition; volume and intensity 1-5, focus). Before the
+  first practice is off-season ("Winter lifting"), its own phase and week count ("Off 1", ...); season weeks count
+  from 1 at the first practice (`labelWeeks`, BRAIN.md [C137]). Timeline bar with meet ticks, week-by-week table with
   meets and practice counts per week. "Suggest from meets" builds phases from the snapshot meet schedule
   (`suggestPhases`). Phases may not overlap or leave the plan's dates (`phaseProblems`, enforced by the API).
 - Blocks and groups are stored as JSON columns (`blocks_json`, `groups_json`); the API validates every write in
