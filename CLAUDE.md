@@ -75,7 +75,9 @@ reads `Cf-Access-Authenticated-User-Email`. Deployed by `.github/workflows/coach
   grid also shows that week's meets and season phase. Practice length = the longest group's time, not the sum,
   because groups train side by side (`practiceLength`).
 - **Template library** (`/templates`, `/templates/edit`): same block model. 12 built-in templates are seeded by
-  `migrations/0002_plans.sql` and are read-only (copy to edit). Adding a template to a plan merges its groups in and
+  `migrations/0002_plans.sql` and are read-only (copy to edit). `migrations/0003_throws_templates.sql` adds 16
+  editable throws templates for 2026-27 (BRAIN.md [C136]), named by the throws program's phase labels (M0-M4,
+  "(any phase)") so they sort in season order. Adding a template to a plan merges its groups in and
   shares an existing warm-up / cool-down instead of repeating it (`mergeTemplateBlocks`).
 - **Season plan** (`/season`, `?id=`): named date range with phases (general prep, specific prep, competition,
   championship, transition; volume and intensity 1-5, focus). Timeline bar with meet ticks, week-by-week table with
