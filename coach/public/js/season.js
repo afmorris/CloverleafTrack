@@ -125,3 +125,22 @@ export function suggestPhases(start, end, meets, firstPractice = null) {
   if (last && last.endDate < end) push("transition", addDays(last.endDate, 1), end, 1, 1, "Rest and recovery");
   return phases;
 }
+
+/**
+ * Week-by-week summary of a season plan for the summary page: each Monday-start week with its label ("Off 3", "7"),
+ * phase, meets, and the days that have practice plans or meets. Weeks with nothing in them are kept so gaps (winter
+ * break) show. plans and meets are any objects with a `date`.
+ */
+export function summarizeWeeks(plan, practices, meets) {
+  return labelWeeks(plan.startDate, plan.endDate, plan.firstPractice).map((w) => {
+    const inWeek = (x) => x.date >= w.start && x.date <= w.end && x.date >= plan.startDate && x.date <= plan.endDate;
+    const wp = (practices ?? []).filter(inWeek).sort((a, b) => a.date.localeCompare(b.date) || (a.id ?? 0) - (b.id ?? 0));
+    const wm = (meets ?? []).filter(inWeek);
+    const dates = [...new Set([...wp, ...wm].map((x) => x.date))].sort();
+    const phase = phaseForDate(plan.phases, w.start < plan.startDate ? plan.startDate : w.start) ?? phaseForDate(plan.phases, w.end);
+    return {
+      ...w, phase, meets: wm, practiceCount: wp.length,
+      days: dates.map((date) => ({ date, plans: wp.filter((p) => p.date === date), meets: wm.filter((m) => m.date === date) }))
+    };
+  });
+}

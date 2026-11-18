@@ -209,7 +209,8 @@ function renderPlan() {
         markDirty(true); renderPlan();
       } }, "Add phase"),
       el("ul", { id: "problems", class: "problems", "aria-live": "polite" })),
-    el("section", { class: "card" }, el("h2", {}, "Week by week"), el("div", { id: "weeks" })),
+    el("section", { class: "card" }, el("div", { class: "page-head" }, el("h2", {}, "Week by week"),
+      el("a", { class: "no-print", href: `/practice/summary?plan=${plan.id}` }, "Practice summary")), el("div", { id: "weeks" })),
     el("section", { class: "card no-print" }, el("div", { class: "row" },
       el("button", { type: "button", onclick: save }, "Save"),
       el("button", { type: "button", class: "secondary", onclick: () => window.print() }, "Print"),

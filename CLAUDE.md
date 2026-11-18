@@ -86,6 +86,8 @@ reads `Cf-Access-Authenticated-User-Email`. Deployed by `.github/workflows/coach
   from 1 at the first practice (`labelWeeks`, BRAIN.md [C137]). Timeline bar with meet ticks, week-by-week table with
   meets and practice counts per week. "Suggest from meets" builds phases from the snapshot meet schedule
   (`suggestPhases`). Phases may not overlap or leave the plan's dates (`phaseProblems`, enforced by the API).
+- **Practice summary** (`/practice/summary?plan=N`): a season plan's practices week by week, one row per practice
+  (time read from the start of the notes by `planTime`, length, blocks), with phases and meets; printable (BRAIN.md [C138]).
 - Blocks and groups are stored as JSON columns (`blocks_json`, `groups_json`); the API validates every write in
   `src/validate.ts`. Logic shared by the browser, the Worker, and vitest lives in plain ES modules in
   `coach/public/js/` (`pace.js`, `dates.js`, `practice.js`, `season.js`); page scripts are `*-page.js` /
