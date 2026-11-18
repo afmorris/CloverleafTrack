@@ -2934,3 +2934,18 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** Access must exist before the first deploy; the Worker trusts the Access email header ([C133]).
 
 **Key files:** `coach/README.md`, `coach/scripts/push-snapshot.sh`.
+
+### [C136] Cloverleaf Coach: 2026-27 throws templates from three seasons of the throws program
+
+**What changed:** `coach/migrations/0003_throws_templates.sql` adds 16 editable (`built_in = 0`, `created_by = 'Cloverleaf throws 2026-27'`) throws templates. They are built from Tony's 2023-24, 2024-25, and 2025-26 throws calendars (spreadsheets with M0-M4 mesocycle tabs; each day has throws warm-up, boys/girls or shot/discus throwing, lifting, mobility, and core columns). Names carry the calendars' own phase labels so the library sorts in season order: M0 intro week (Strike/Flight School technique days), M1 general prep (shot + lower-power lift, discus + upper lift, deload), M2 specific prep (shot/discus volume with heavy/light implement contrast, power-clean waves), M3 competition (day-after-meet heavy day, speed + technique day), M4 championship (sharpen/taper), and "(any phase)" days (testing, speed + plyo, hips/shoulders/med ball, pre-meet, recovery + class choice, throw-a-thon/mock meet).
+
+**Why these changes to the old program** (review done in chat on 2026-11-18):
+- **Results showed a peaking problem.** In the local DB, throwers still competing in May set their season best in May only 35-49% of the time; their best May mark averaged 0.1-3.4% below their pre-May best, and at league/district/regional/state they averaged 95-98% of their season best (2022-23 through 2025-26). The calendars match: 2024-25 is written only through about April 25, and 2025-26 has six filled days, with the later tabs copied from 2024-25 with stale dates. The M4 template and the last-hard-session rule (4-5 days out) address this.
+- **No written load progression:** sets and reps were static for weeks (e.g. bench 4 x 6, 2 x 15 from February to April) with no load targets. The templates add RPE targets and a week-3 deload.
+- **High in-season accessory volume** (4 x 15 skull crushers, 6 x 12 rows in April 2024-25): the in-season templates use low reps and high intent instead.
+- **Nothing measured** in practice: testing and throw-a-thon templates use measured-attempt blocks so marks are recorded.
+- **Kept:** the daily dynamic warm-up and plyos (2024-25 onward), the 2025-26 speed day (10m accelerations, 30m flys), Olympic-lift derivatives, unilateral and rotational work, shoulder prehab, class-choice days, the pre-meet protocol, mock meet/throw-a-thon, and the weekly video analysis from 2023-24 (dropped later, restored here).
+
+**Watch out:** the peaking numbers are small samples (about 8 athlete-events per season at championship meets) and confounded by weather and cohort. Treat them as a reason to plan May, not as proof. The implement weights in the contrast blocks (boys 14/10 lb, girls 10 lb/3 kg) assume equipment the program may not have. Editing the generator isn't possible from the repo: the SQL is the source, generated once from a scratch script.
+
+**Key files:** `coach/migrations/0003_throws_templates.sql`, `CLAUDE.md` (Cloverleaf Coach section).
