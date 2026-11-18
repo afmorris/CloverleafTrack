@@ -204,3 +204,21 @@ td .chip { margin: 0 .25rem .25rem 0; display: inline-block; }
 #weeks td:nth-child(2) { white-space: nowrap; }
 input[type="date"] { min-width: 0; }
 tr.offseason td:first-child { color: var(--muted); }
+/* Practice summary (BRAIN.md [C138]) */
+.summary-week { margin-bottom: 1.1rem; break-inside: avoid; }
+.summary-week-head { display: flex; flex-wrap: wrap; gap: .4rem .9rem; align-items: baseline; border-bottom: 2px solid var(--border); padding-bottom: .25rem; }
+.summary-week-head h2 { font-size: 1.05rem; margin: 0; }
+.summary-week.empty-week .summary-week-head { border-bottom-width: 1px; opacity: .7; }
+.summary-table td { padding: .35rem .5rem; font-size: .9rem; }
+.summary-table .day-cell { white-space: nowrap; width: 7.5rem; font-weight: 600; }
+.summary-table .time-cell { white-space: nowrap; color: var(--muted); width: 9rem; }
+.summary-table .blocks-line { font-size: .78rem; color: var(--muted); margin-top: .15rem; }
+.muted { color: var(--muted); font-size: .85rem; }
+@media (max-width: 640px) {
+  .summary-table .time-cell { display: none; }
+  .summary-table .day-cell { width: auto; }
+}
+@media print {
+  .summary-table td { font-size: 9pt; padding: .15rem .3rem; }
+  .summary-table .blocks-line { font-size: 8pt; }
+}

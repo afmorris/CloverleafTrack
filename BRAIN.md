@@ -2959,3 +2959,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Key files:** `coach/public/js/season.js` (`PHASE_KINDS`, `suggestPhases`, `labelWeeks`, `defaultFirstPractice`), `coach/public/js/season-page.js`, `coach/src/plans.ts` (`cleanSeason` validates first practice inside the plan), `coach/migrations/0004_winter_lifting.sql`, `coach/test/plans.test.js`.
 
 **Watch out:** `first_practice` is NULL on plans made before this change; everything behaves as before for them (no off-season weeks, numbering from the plan start). It is not tied to phases: moving it doesn't move the off-season phase until "Suggest from meets" is run again. The winter templates' generator lives only in the session scratchpad; the SQL file is the source of truth.
+
+### [C138] Cloverleaf Coach: practice summary page (season at a glance)
+
+**What changed:** New page `/practice/summary?plan=N[&group=][&blocks=0]` (`coach/public/practice/summary.html`, `coach/public/js/summary-page.js`). It shows a season plan's practice plans week by week: week label ("Off 3" or "Week 7", from `labelWeeks`), dates, phase, plan count and total time per week, then one row per practice with day, title (links to the editor), time, length, and a one-line block list (toggle). Meets with no matching "Meet: ..." plan show as chips on their day. Filter by event group; prints compactly. Linked from the practice week toolbar ("Season summary") and the season plan's week-by-week card ("Practice summary"). Pure helpers: `summarizeWeeks(plan, practices, meets)` in `season.js`, `planTime(notes)` in `practice.js`.
+
+**Why:** Tony wanted a day/week summary to review the 107 generated throws plans without opening each week.
+
+**Key files:** `coach/public/js/summary-page.js`, `coach/public/js/season.js`, `coach/public/js/practice.js`, `coach/public/css/app.css`, `coach/test/plans.test.js`.
+
+**Watch out:** practice plans have no time field. `planTime` reads a time only if the notes *start* with one ("3:00-5:15 PM, ..." or "Morning, about ..."); plans written by hand show a blank time. If a time field is ever added, switch the summary to it. Weekly totals add every plan's length, including "Meet:" entries.

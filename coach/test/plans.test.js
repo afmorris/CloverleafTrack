@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { addDays, daysBetween, formatDay, isIsoDate, weekStart } from "../public/js/dates.js";
 import {
-  blocksFromTemplate, formatMinutes, mergeTemplateBlocks, moveBlock, newBlock, practiceLength, resultCount, totalMinutes
+  blocksFromTemplate, formatMinutes, mergeTemplateBlocks, moveBlock, newBlock, practiceLength, resultCount, totalMinutes, planTime
 } from "../public/js/practice.js";
 import {
-  defaultFirstPractice, isChampionshipMeet, labelWeeks, phaseForDate, phaseProblems, suggestPhases, weeksOf
+  defaultFirstPractice, isChampionshipMeet, labelWeeks, phaseForDate, phaseProblems, suggestPhases, summarizeWeeks, weeksOf
 } from "../public/js/season.js";
 
 describe("dates", () => {
@@ -183,3 +183,29 @@ describe("season phases", () => {
     expect(labelWeeks("2027-02-01", "2027-02-14", null).map((x) => x.label)).toEqual(["1", "2"]);
   });
 });
+
+describe("practice summary", () => {
+  it("reads the practice time from the start of a plan's notes", () => {
+    expect(planTime("3:00-5:15 PM, rings + HS lifting room. Season week 3.")).toBe("3:00-5:15 PM");
+    expect(planTime("9:00-11:00 AM (no school), rings")).toBe("9:00-11:00 AM");
+    expect(planTime("Morning, about 9:00-11:00 AM (school is out), rings")).toBe("Morning, about 9:00-11:00 AM");
+    expect(planTime("Districts at TBD. 3:00 PM start")).toBe("");
+    expect(planTime(null)).toBe("");
+  });
+  it("groups plans and meets by labelled week and keeps empty weeks", () => {
+    const plan = { startDate: "2027-02-01", endDate: "2027-03-07", firstPractice: "2027-02-22",
+      phases: [{ kind: "offseason", name: "Winter", startDate: "2027-02-01", endDate: "2027-02-21" },
+               { kind: "general", name: "M0", startDate: "2027-02-22", endDate: "2027-03-07" }] };
+    const practices = [{ id: 2, date: "2027-02-23" }, { id: 1, date: "2027-02-02" }, { id: 3, date: "2027-02-23" }, { id: 9, date: "2027-04-01" }];
+    const meets = [{ name: "Indoor", date: "2027-02-06" }];
+    const w = summarizeWeeks(plan, practices, meets);
+    expect(w.map((x) => x.label)).toEqual(["Off 1", "Off 2", "Off 3", "1", "2"]);
+    expect(w[0].days.map((d) => d.date)).toEqual(["2027-02-02", "2027-02-06"]);
+    expect(w[0].phase.name).toBe("Winter");
+    expect(w[1].days).toEqual([]);
+    expect(w[3].days[0].plans.map((p) => p.id)).toEqual([2, 3]);
+    expect(w[3].phase.name).toBe("M0");
+    expect(w.reduce((s, x) => s + x.practiceCount, 0)).toBe(3);
+  });
+});
+

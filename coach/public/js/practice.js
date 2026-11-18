@@ -97,3 +97,13 @@ export function moveBlock(blocks, i, dir) {
 export function resultCount(blocks) {
   return (blocks ?? []).reduce((n, b) => n + (b.results?.filter((r) => r.mark)?.length ?? 0), 0);
 }
+
+/**
+ * The practice time written at the start of a plan's notes ("3:00-5:15 PM, rings ..." or "Morning, about 9:00-11:00
+ * AM ..."), or "" when the notes don't start with one. Plans have no time field; the summary page shows this.
+ */
+export function planTime(notes) {
+  const first = String(notes ?? "").split(/\n/)[0];
+  const m = first.match(/^(\d{1,2}:\d{2}\s*(?:AM|PM)?\s*[-–]\s*\d{1,2}:\d{2}\s*(?:AM|PM)?|Morning(?:, about [^,(]+)?)/i);
+  return m ? m[1].trim() : "";
+}
