@@ -42,10 +42,49 @@ CloverleafTrack.sln
 ├── CloverleafTrack.Models/       # Domain model classes + all enums
 ├── CloverleafTrack.ViewModels/   # ViewModels scoped to each feature area
 ├── CloverleafTrack.Infrastructure/  # (placeholder, currently empty)
-└── CloverleafTrack.Tests/        # xUnit unit tests (Unit/Services/ and Unit/Utilities/)
+├── CloverleafTrack.Tests/        # xUnit unit tests (Unit/Services/ and Unit/Utilities/)
+└── coach/                        # Cloverleaf Coach: separate Cloudflare Worker + D1 site (TypeScript), see below
 ```
 
 Frontend: **Tailwind CSS v4** (config at `tailwind.config.js` / `postcss.config.js`, npm/pnpm managed).
+
+---
+
+## Cloverleaf Coach (coach/)
+
+The interactive coaching tools at **coach.cloverleaftrack.com** are a separate app: a Cloudflare Worker (Hono,
+TypeScript) serving static pages from `coach/public` and a JSON API under `/api/*`, with a D1 (SQLite) database.
+It shares no code with the .NET solution. Sign-in is Cloudflare Access in front of the hostname; the Worker only
+reads `Cf-Access-Authenticated-User-Email`. Deployed by `.github/workflows/coach-deploy.yml`. Setup and local dev:
+`coach/README.md`. Design: BRAIN.md [C133].
+
+- **Data flows one way, home → Cloudflare.** `GET /Admin/CoachSnapshot` (`CoachSnapshotController` →
+  `ICoachSnapshotRepository`) returns active athletes, individual events, seasons, each athlete's best mark per event
+  per season (marks only), and the last two seasons' meets. `coach/scripts/push-snapshot.sh` POSTs it nightly to
+  `/api/snapshot` (bearer token `SNAPSHOT_TOKEN`), which replaces the D1 snapshot tables in one batch.
+- **Snapshot tables are read-only copies**; coach-owned tables (`workouts`, later plans) refer to snapshot ids with
+  no foreign keys, because the snapshot is emptied and refilled each load.
+- **Goal-pace builder** (`/pace`, `?workout=N` opens a saved one): pick an athlete's running event (PR / latest
+  season best) or type a goal, add sets (reps × distance @ effort %, rest), get even-pace rep targets and splits,
+  save/print. Math in `coach/public/js/pace.js`. Effort % is a share of goal *speed*: target = goal × (rep / race) ÷
+  (effort / 100).
+- **Practice plans** (`/practice?week=` week grid, `/practice/edit?id= | ?date=&template=` editor): a plan has a date,
+  title, event groups (sprints, hurdles, distance, jumps, throws), notes, and an ordered list of **blocks** (kind,
+  title, minutes, groups, details; a `workout` block may link a goal-pace workout; a `measured` block has attempts and
+  recorded marks per athlete). Several plans per day are allowed. Copy to another date drops recorded marks. The week
+  grid also shows that week's meets and season phase. Practice length = the longest group's time, not the sum,
+  because groups train side by side (`practiceLength`).
+- **Template library** (`/templates`, `/templates/edit`): same block model. 12 built-in templates are seeded by
+  `migrations/0002_plans.sql` and are read-only (copy to edit). Adding a template to a plan merges its groups in and
+  shares an existing warm-up / cool-down instead of repeating it (`mergeTemplateBlocks`).
+- **Season plan** (`/season`, `?id=`): named date range with phases (general prep, specific prep, competition,
+  championship, transition; volume and intensity 1-5, focus). Timeline bar with meet ticks, week-by-week table with
+  meets and practice counts per week. "Suggest from meets" builds phases from the snapshot meet schedule
+  (`suggestPhases`). Phases may not overlap or leave the plan's dates (`phaseProblems`, enforced by the API).
+- Blocks and groups are stored as JSON columns (`blocks_json`, `groups_json`); the API validates every write in
+  `src/validate.ts`. Logic shared by the browser, the Worker, and vitest lives in plain ES modules in
+  `coach/public/js/` (`pace.js`, `dates.js`, `practice.js`, `season.js`); page scripts are `*-page.js` /
+  `practice-week.js` / `editor-page.js` (one editor for plans and templates, by `body[data-mode]`).
 
 ---
 
@@ -640,6 +679,13 @@ Curated traps that still apply. Full context for each lives in `BRAIN.md` under 
 - `LeaderboardService` needs `ISeasonRepository` in test setup; `MeetService` needs `IMeetPlacingRepository` mocked to return an empty list (not null) or `GroupBy` NREs. [C25, C33]
 - `GetCurrentSeasonAsync()` returns a year, not an Id. `SeasonProgressViewModel.PercentComplete` truncates by design. [C13, C14]
 - `MeetScore` PRs are date-derived and differ from `Meet.PRCount` (flag-based) by design; percentiles drift as the all-time population grows. [C45]
+
+**Cloverleaf Coach (coach/)**
+- The Worker trusts the Access email header, so it must only be reachable through the Access-protected custom domain: keep `workers_dev` and `preview_urls` false in `coach/wrangler.jsonc`. `/api/snapshot` is bypassed in Access and guarded by its bearer token instead. [C133]
+- Run Node/wrangler in Docker with `node:22-bookworm`, not `-slim` (no CA certificates, so workerd won't start). D1 statements take at most 100 bound parameters; `snapshot.ts` chunks inserts. Changes shown between two marks follow [C129] there too (`formatChange`). [C133]
+- Adding a field to the snapshot means changing `CoachSnapshotController`, `src/snapshot.ts`, and a new D1 migration together; bump `version` on both sides if the shape changes incompatibly. [C133]
+- Coach pages render with `el()` / `fill()` from `coach/public/js/app.js`; never pass a possibly-null child to the DOM's own `replaceChildren` (it prints "null"). Dates are `YYYY-MM-DD` strings handled in UTC by `dates.js`; don't use `new Date("YYYY-MM-DD")` math in local time. [C134]
+- `isChampionshipMeet` must not match bare "state": Kent State and Ohio State host regular indoor meets. Phase suggestions start competition at the first **outdoor** meet and championship at the first post-season meet in the last six weeks. [C134]
 
 **Build & deploy**
 - Docker `ARG`s are not inherited across stages; redeclare per stage. The footer no longer shows a build SHA ([C46]); `BuildMetadataHelper` and the `SourceRevisionId` csproj properties are unused leftovers. [C34, C46]

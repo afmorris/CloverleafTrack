@@ -1,0 +1,68 @@
+-- Practice plans, the template library, and season plans. BRAIN.md [C134].
+-- Blocks are stored as JSON arrays: [{ kind, title, minutes, groups[], details, workoutId, attempts, results[] }].
+-- workoutId points at workouts.id (a goal-pace workout); results[] holds measured-attempt marks
+-- [{ athleteId, mark }] with athleteId from the snapshot (no foreign keys, see 0001_init.sql).
+
+CREATE TABLE practice_templates (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  description TEXT,
+  groups_json TEXT NOT NULL,        -- event groups: sprints, hurdles, distance, jumps, throws
+  blocks_json TEXT NOT NULL,
+  built_in INTEGER NOT NULL DEFAULT 0,  -- built-in templates can be copied but not edited or deleted
+  created_by TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+CREATE TABLE practice_plans (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  date TEXT NOT NULL,               -- YYYY-MM-DD; several plans per day are allowed (e.g. one per group)
+  title TEXT NOT NULL,
+  groups_json TEXT NOT NULL,
+  blocks_json TEXT NOT NULL,
+  notes TEXT,
+  created_by TEXT NOT NULL,
+  updated_by TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+CREATE INDEX ix_practice_plans_date ON practice_plans (date);
+
+CREATE TABLE season_plans (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  start_date TEXT NOT NULL,
+  end_date TEXT NOT NULL,
+  notes TEXT,
+  created_by TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+CREATE TABLE season_phases (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  season_plan_id INTEGER NOT NULL REFERENCES season_plans (id) ON DELETE CASCADE,
+  kind TEXT NOT NULL,               -- general, specific, competition, championship, transition
+  name TEXT NOT NULL,
+  start_date TEXT NOT NULL,
+  end_date TEXT NOT NULL,
+  volume INTEGER NOT NULL,          -- 1 (low) to 5 (high)
+  intensity INTEGER NOT NULL,       -- 1 (low) to 5 (high)
+  focus TEXT
+);
+CREATE INDEX ix_season_phases_plan ON season_phases (season_plan_id, start_date);
+
+INSERT INTO practice_templates (name, description, groups_json, blocks_json, built_in, created_by) VALUES
+  ('Acceleration day', 'Short, fast starts with full recovery. Good early in the week.', '["sprints"]', '[{"kind": "warmup", "title": "Dynamic warm-up", "minutes": 20, "groups": ["sprints"], "details": "Jog 800m, leg swings, A-skips, B-skips, carioca, 2 x 60m build-ups.", "workoutId": null, "attempts": null, "results": []}, {"kind": "drills", "title": "Acceleration drills", "minutes": 15, "groups": ["sprints"], "details": "Wall drives 3 x 10, falling starts 4 x 15m, push-up starts 3 x 15m.", "workoutId": null, "attempts": null, "results": []}, {"kind": "workout", "title": "Accelerations", "minutes": 25, "groups": ["sprints"], "details": "6 x 20m from a 3-point start, then 4 x 30m. Walk back; 2-3 min between reps.", "workoutId": null, "attempts": null, "results": []}, {"kind": "strength", "title": "Power", "minutes": 20, "groups": ["sprints"], "details": "Overhead med-ball throws 3 x 5, standing long jumps 3 x 3, bounding 3 x 30m.", "workoutId": null, "attempts": null, "results": []}, {"kind": "cooldown", "title": "Cool-down", "minutes": 10, "groups": ["sprints"], "details": "Easy jog 400-800m and static stretching.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in'),
+  ('Block starts', 'Block setup and first steps, timed to 20m and 40m.', '["sprints", "hurdles"]', '[{"kind": "warmup", "title": "Dynamic warm-up", "minutes": 20, "groups": ["sprints", "hurdles"], "details": "Jog 800m, leg swings, A-skips, B-skips, carioca, 2 x 60m build-ups.", "workoutId": null, "attempts": null, "results": []}, {"kind": "drills", "title": "Block setup", "minutes": 10, "groups": ["sprints", "hurdles"], "details": "Set blocks, practice set-position holds and first two steps.", "workoutId": null, "attempts": null, "results": []}, {"kind": "workout", "title": "Starts", "minutes": 30, "groups": ["sprints", "hurdles"], "details": "8 x block start to 20m, then 4 x to 40m on a starter''s command. Full walk-back recovery.", "workoutId": null, "attempts": null, "results": []}, {"kind": "cooldown", "title": "Cool-down", "minutes": 10, "groups": ["sprints", "hurdles"], "details": "Easy jog 400-800m and static stretching.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in'),
+  ('Speed endurance', 'Longer sprints near race pace. Link a goal-pace workout for targets.', '["sprints"]', '[{"kind": "warmup", "title": "Dynamic warm-up", "minutes": 20, "groups": ["sprints"], "details": "Jog 800m, leg swings, A-skips, B-skips, carioca, 2 x 60m build-ups.", "workoutId": null, "attempts": null, "results": []}, {"kind": "drills", "title": "Sprint drills", "minutes": 10, "groups": ["sprints"], "details": "A-runs, straight-leg bounds, 2 x 60m strides.", "workoutId": null, "attempts": null, "results": []}, {"kind": "workout", "title": "Speed endurance", "minutes": 30, "groups": ["sprints"], "details": "3 x 150m at 90-95%, 6-8 min rest. Hold form through the finish.", "workoutId": null, "attempts": null, "results": []}, {"kind": "cooldown", "title": "Cool-down", "minutes": 15, "groups": ["sprints"], "details": "Easy jog 400-800m and static stretching.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in'),
+  ('Hurdle rhythm', 'Lead and trail leg work, then rhythm over shortened spacing.', '["hurdles"]', '[{"kind": "warmup", "title": "Dynamic warm-up", "minutes": 20, "groups": ["hurdles"], "details": "Jog 800m, leg swings, A-skips, B-skips, carioca, 2 x 60m build-ups.", "workoutId": null, "attempts": null, "results": []}, {"kind": "drills", "title": "Hurdle drills", "minutes": 20, "groups": ["hurdles"], "details": "Lead-leg and trail-leg walkovers, one-step drill over 5 low hurdles.", "workoutId": null, "attempts": null, "results": []}, {"kind": "workout", "title": "Rhythm", "minutes": 25, "groups": ["hurdles"], "details": "6 x 3 hurdles from blocks at reduced spacing, then 3 x 5 hurdles at race spacing.", "workoutId": null, "attempts": null, "results": []}, {"kind": "cooldown", "title": "Cool-down", "minutes": 10, "groups": ["hurdles"], "details": "Easy jog 400-800m and static stretching.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in'),
+  ('Tempo run', 'Sustained, comfortably hard running.', '["distance"]', '[{"kind": "warmup", "title": "Easy jog and drills", "minutes": 15, "groups": ["distance"], "details": "10 min easy, then drills and 2 strides.", "workoutId": null, "attempts": null, "results": []}, {"kind": "workout", "title": "Tempo", "minutes": 30, "groups": ["distance"], "details": "20 min continuous at tempo effort (comfortably hard, could speak in short phrases).", "workoutId": null, "attempts": null, "results": []}, {"kind": "cooldown", "title": "Cool-down and strides", "minutes": 15, "groups": ["distance"], "details": "10 min easy, then 4 x 100m relaxed strides.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in'),
+  ('Intervals', 'Repeats at race effort with short jog recovery.', '["distance"]', '[{"kind": "warmup", "title": "Easy jog and drills", "minutes": 20, "groups": ["distance"], "details": "15 min easy, drills, 3 strides.", "workoutId": null, "attempts": null, "results": []}, {"kind": "workout", "title": "Intervals", "minutes": 35, "groups": ["distance"], "details": "6 x 800m at goal 1600m effort, 2 min jog between. Use a goal-pace workout for splits.", "workoutId": null, "attempts": null, "results": []}, {"kind": "cooldown", "title": "Cool-down", "minutes": 15, "groups": ["distance"], "details": "Easy jog 400-800m and static stretching.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in'),
+  ('Easy day', 'Recovery run and core.', '["distance"]', '[{"kind": "workout", "title": "Easy run", "minutes": 45, "groups": ["distance"], "details": "35-45 min conversational pace.", "workoutId": null, "attempts": null, "results": []}, {"kind": "strength", "title": "Core circuit", "minutes": 15, "groups": ["distance"], "details": "Planks, side planks, bird-dogs, glute bridges: 3 rounds.", "workoutId": null, "attempts": null, "results": []}, {"kind": "cooldown", "title": "Cool-down", "minutes": 10, "groups": ["distance"], "details": "Easy jog 400-800m and static stretching.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in'),
+  ('Horizontal jumps: measured jumps', 'Approach work, then full-approach jumps measured.', '["jumps"]', '[{"kind": "warmup", "title": "Dynamic warm-up", "minutes": 20, "groups": ["jumps"], "details": "Jog 800m, leg swings, A-skips, B-skips, carioca, 2 x 60m build-ups.", "workoutId": null, "attempts": null, "results": []}, {"kind": "drills", "title": "Jump drills", "minutes": 15, "groups": ["jumps"], "details": "Bounding, pop-ups from a short approach, penultimate-step drill.", "workoutId": null, "attempts": null, "results": []}, {"kind": "workout", "title": "Approach runs", "minutes": 20, "groups": ["jumps"], "details": "Run-throughs on the runway; set and check marks.", "workoutId": null, "attempts": null, "results": []}, {"kind": "measured", "title": "Full-approach jumps", "minutes": 30, "groups": ["jumps"], "details": "Measure every legal jump.", "workoutId": null, "attempts": 6, "results": []}, {"kind": "cooldown", "title": "Cool-down", "minutes": 10, "groups": ["jumps"], "details": "Easy jog 400-800m and static stretching.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in'),
+  ('High jump', 'Curve work and a bar progression.', '["jumps"]', '[{"kind": "warmup", "title": "Dynamic warm-up", "minutes": 20, "groups": ["jumps"], "details": "Jog 800m, leg swings, A-skips, B-skips, carioca, 2 x 60m build-ups.", "workoutId": null, "attempts": null, "results": []}, {"kind": "drills", "title": "Curve and takeoff", "minutes": 15, "groups": ["jumps"], "details": "J-curve runs, circle runs, scissors over a low bar.", "workoutId": null, "attempts": null, "results": []}, {"kind": "measured", "title": "Bar progression", "minutes": 30, "groups": ["jumps"], "details": "Start 6 in. below PR; raise 2 in. after each clearance. Record best clearance.", "workoutId": null, "attempts": 6, "results": []}, {"kind": "cooldown", "title": "Cool-down", "minutes": 10, "groups": ["jumps"], "details": "Easy jog 400-800m and static stretching.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in'),
+  ('Shot put: measured throws', 'Technique, then full throws measured.', '["throws"]', '[{"kind": "warmup", "title": "Dynamic warm-up", "minutes": 15, "groups": ["throws"], "details": "Jog 800m, leg swings, A-skips, B-skips, carioca, 2 x 60m build-ups.", "workoutId": null, "attempts": null, "results": []}, {"kind": "drills", "title": "Technique", "minutes": 20, "groups": ["throws"], "details": "Standing throws, half-turn or glide drills, 10 reps each.", "workoutId": null, "attempts": null, "results": []}, {"kind": "measured", "title": "Full throws", "minutes": 30, "groups": ["throws"], "details": "Measure every fair throw.", "workoutId": null, "attempts": 6, "results": []}, {"kind": "strength", "title": "Strength", "minutes": 20, "groups": ["throws"], "details": "Hang cleans 4 x 3, med-ball scoop throws 3 x 5.", "workoutId": null, "attempts": null, "results": []}, {"kind": "cooldown", "title": "Cool-down", "minutes": 5, "groups": ["throws"], "details": "Easy jog 400-800m and static stretching.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in'),
+  ('Discus technique', 'Standing throws and wheel work.', '["throws"]', '[{"kind": "warmup", "title": "Dynamic warm-up", "minutes": 15, "groups": ["throws"], "details": "Jog 800m, leg swings, A-skips, B-skips, carioca, 2 x 60m build-ups.", "workoutId": null, "attempts": null, "results": []}, {"kind": "drills", "title": "Discus drills", "minutes": 25, "groups": ["throws"], "details": "Standing throws, South African drill, wheel drill.", "workoutId": null, "attempts": null, "results": []}, {"kind": "measured", "title": "Full throws", "minutes": 25, "groups": ["throws"], "details": "Measure every fair throw.", "workoutId": null, "attempts": 6, "results": []}, {"kind": "cooldown", "title": "Cool-down", "minutes": 5, "groups": ["throws"], "details": "Easy jog 400-800m and static stretching.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in'),
+  ('Pre-meet day', 'Short and sharp the day before a meet.', '["sprints", "hurdles", "distance", "jumps", "throws"]', '[{"kind": "warmup", "title": "Dynamic warm-up", "minutes": 20, "groups": ["sprints", "hurdles", "distance", "jumps", "throws"], "details": "Jog 800m, leg swings, A-skips, B-skips, carioca, 2 x 60m build-ups.", "workoutId": null, "attempts": null, "results": []}, {"kind": "drills", "title": "Event touch-ups", "minutes": 15, "groups": ["sprints", "hurdles", "distance", "jumps", "throws"], "details": "Sprinters and hurdlers: 2-3 block starts. Jumpers: 2 run-throughs. Throwers: a few easy throws. Distance: 4 strides.", "workoutId": null, "attempts": null, "results": []}, {"kind": "cooldown", "title": "Cool-down", "minutes": 10, "groups": ["sprints", "hurdles", "distance", "jumps", "throws"], "details": "Easy jog 400-800m and static stretching.", "workoutId": null, "attempts": null, "results": []}]', 1, 'built-in');

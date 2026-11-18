@@ -2874,3 +2874,63 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Watch out:** any new place or percentile label must use the helper. `Seasons/Scoring.cshtml` has its own local `OrdinalSuffix` function that is correct; it can be switched to the helper if it is ever touched.
 
 **Key files:** `Views/Shared/_RosterActiveAthletesList.cshtml`, `_CareerProgressionSection.cshtml`, `_HomePageHighlightsDigest.cshtml`, `Areas/Admin/Views/ScoringTemplates/{Index,Edit,Create}.cshtml`.
+
+### [C133] Cloverleaf Coach: a separate Cloudflare Worker + D1 site for coaching tools
+
+**What changed:** new `coach/` app for **coach.cloverleaftrack.com**, modeled on the planning side of tools like WinLabs Track OS (season plan, practice plans, goal-pace workouts) but built for Cloverleaf only. First tool: the goal-pace builder (`/pace`). Stack: Cloudflare Worker (Hono, TypeScript) with static assets from `coach/public`, D1 for data, Cloudflare Access for sign-in, GitHub Actions deploy (`.github/workflows/coach-deploy.yml`). On the .NET side, one read-only endpoint, `GET /Admin/CoachSnapshot` (`CoachSnapshotController`, `ICoachSnapshotRepository`), feeds it.
+
+**Why a separate site:** owner decision. The public site is a static export with no production database, so nothing interactive can live there, and the admin area has no login and isn't reachable off the home network. A Cloudflare-native subsite gets a real login (Access) and storage (D1) without exposing the home SQL Server. cloverleaftrack.com DNS was already on Cloudflare.
+
+**Data flow (one way):** `coach/scripts/push-snapshot.sh` (meant to run after `~/ctf` on svp01docker01) fetches the snapshot from the internal app and POSTs it to `/api/snapshot` with a bearer token; the Worker validates it (refuses an empty roster rather than wiping data) and replaces the snapshot tables in one `DB.batch` transaction. Snapshot = active athletes (`IsActive = 1`), individual events (EventType 0/1), all seasons, each athlete's best mark per event per season (`ResultStatus = 0`, relays excluded), and the last two seasons' meets. About 95 KB today. Coach-owned tables (`workouts`) reference snapshot ids without foreign keys because the snapshot is emptied on each load.
+
+**Pace math:** effort % is a share of goal speed, so target = goal × (rep / race distance) ÷ (effort / 100); 24.00 for 200m at 90% gives 26.67. Splits are even pace, every 100m up to 400m, 200m up to 1000m, else 400m. Goal vs PR is shown as a signed change per [C129]. All of it lives in `coach/public/js/pace.js`, a plain ES module imported by the page, the Worker (event distances from names like "2K Steeple Chase"), and vitest.
+
+**Watch out:**
+- The Worker trusts `Cf-Access-Authenticated-User-Email`, so `workers_dev` and `preview_urls` are off: only the Access-protected custom domain may reach it. `/api/snapshot` needs an Access **Bypass** rule (or an Access service token, which the push script supports) and relies on `SNAPSHOT_TOKEN`.
+- No Node on the dev Mac: run npm/wrangler in Docker with `node:22-bookworm`; the `-slim` image lacks CA certificates and workerd fails with "No CA certificates were loaded". `node_modules` installed that way contains Linux binaries.
+- macOS bash 3.2 + `set -u` errors on an empty array; the push script uses `${arr[@]+"${arr[@]}"}`.
+- D1 caps bound parameters at 100 per statement; inserts are chunked.
+- The deploy job skips itself until the GitHub secrets and the real D1 `database_id` are set (one-time steps in `coach/README.md`).
+- `IsActive` is stale for some graduates (e.g. class of 2026 athletes still show), so they appear in the coach athlete list until the flag is cleared.
+
+**Verified:** 50 vitest tests and `tsc --noEmit` pass; locally (`wrangler dev` in Docker, local D1) the snapshot from `ctf-web-local` loaded 81 athletes / 69 events / 440 season bests; the page picked an athlete's 400M PR, computed targets (55.50 goal → 30.83 per 200 at 90%), saved, reopened and deleted a workout, and fits a 375px screen. Not yet deployed to Cloudflare.
+
+**Key files:** `coach/` (`src/index.ts`, `src/snapshot.ts`, `public/js/pace.js`, `public/js/pace-page.js`, `migrations/0001_init.sql`, `scripts/push-snapshot.sh`, `README.md`), `.github/workflows/coach-deploy.yml`, `CloverleafTrack.Web/Areas/Admin/Controllers/CoachSnapshotController.cs`, `CloverleafTrack.DataAccess/Repositories/CoachSnapshotRepository.cs`, `CloverleafTrack.DataAccess/Dtos/Coach/CoachSnapshotDtos.cs`.
+
+### [C134] Cloverleaf Coach: practice plans, template library, and season plan
+
+**What changed:** the three planning tools from [C133]'s roadmap are now working in `coach/`:
+- **Practice plans** (`/practice` week grid, `/practice/edit`): dated plans made of ordered blocks (kind, title, minutes, event groups, details). A `workout` block can link a saved goal-pace workout (`/pace?workout=N` opens it); a `measured` block holds attempts and per-athlete marks (free text, athletes from the snapshot). Copy to another date, print, save as template. The week grid shows each day's plans, meets (post-season meets highlighted), and the season phase.
+- **Template library** (`/templates`): 12 built-in, original templates across sprints, hurdles, distance, jumps, and throws, seeded by `migrations/0002_plans.sql`; built-ins are read-only (the API refuses edits/deletes with `built_in = 1`), so coaches copy them. Custom templates use the same editor (`editor-page.js`, `body[data-mode]`).
+- **Season plan** (`/season`): phases (general, specific, competition, championship, transition) with volume and intensity 1-5, a proportional timeline with meet ticks and a today line, and a week-by-week table linking to each practice week with meets and practice counts. "Suggest from meets" builds a starting set of phases from the snapshot schedule.
+
+**Design decisions:**
+- **Practice length is the longest group's time**, not the sum of blocks (`practiceLength`): sprinters and throwers train at the same time, so summing showed 2h 40m for a 1h 40m practice.
+- **Merging a template into a plan shares the warm-up and cool-down** (`mergeTemplateBlocks`): its groups join the existing block, minutes take the larger value, and the cool-down stays last. Without it, a combined sprints + throws practice got two warm-ups and two cool-downs.
+- **Phase suggestion rules** came from last season's real schedule: (1) `isChampionshipMeet` matches district, regional, conference, championships, OHSAA, and "State Track/Championships/Meet", but not bare "state", because "Kent State HS Meet #1" and "Ohio State High School Qualifier #4" are regular January/February indoor meets and had started the championship phase in January; (2) competition starts the week of the first **outdoor** meet, so December-February indoor meets fall in prep; (3) championship starts with the first championship meet within 42 days of the last meet. For 2025-26 that gives general Dec 1, specific Feb 1, competition Mar 23, championship May 11, transition Jun 7.
+- Blocks and groups are JSON columns; every write is validated in `src/validate.ts` (kinds, groups, minutes 0-240, attempts 1-20, at most 30 blocks; phases may not overlap or leave the plan's dates, using the same `phaseProblems` the page shows live). Season plan + phases are written in one `DB.batch` (new plan's phases use `(SELECT MAX(id) FROM season_plans)` inside that transaction).
+- Shared nav: pages contain an empty `<header class="site-header" data-page>` that `app.js` fills.
+
+**Watch out:**
+- `Element.replaceChildren(null)` inserts the text "null"; the print view showed it. All pages now use `fill()` from `app.js`, which drops null/false. Use `el()`/`fill()`, not raw `replaceChildren`, for content that can be conditional.
+- Snapshot meets only cover the last two seasons in the home DB. A season plan for a year whose meets aren't entered on cloverleaftrack.com yet shows no meets and suggests phases by a fixed split; enter the schedule in admin first.
+- Recorded marks in measured blocks are free text tied to snapshot athlete ids; they never flow back to the results database.
+- During local testing the browser kept a stale `app.css` from `wrangler dev`; force-reload CSS when checking layout changes.
+
+**Verified:** 87 vitest tests and `tsc --noEmit` pass. Against local D1 with the real snapshot: API create/update/copy/delete for plans, templates, and season plans, including the validation errors and built-in protection; in the browser, a season plan for 2025-26 from suggested phases, the live overlap warning, the week table; a sprints + throws plan from two templates (one shared warm-up/cool-down, 1h 40m), a recorded shot put mark, copy to Thursday, print view, a linked goal-pace workout opening `/pace?workout=2` with correct targets; template copy/edit/delete and the read-only built-in view; no horizontal scroll at 375px on the editor, week, and season pages. Not deployed.
+
+**Key files:** `coach/migrations/0002_plans.sql`, `coach/src/plans.ts`, `coach/src/validate.ts`, `coach/public/js/{dates,practice,season,app,editor-page,practice-week,templates-page,season-page}.js`, `coach/public/{practice,templates,season}.html`, `coach/public/{practice,templates}/edit.html`, `coach/test/{plans.test.js,validate.test.ts}`.
+
+### [C135] Cloverleaf Coach: first-deploy setup details
+
+**What changed:** the first-deploy steps in `coach/README.md` now match what was actually set up, and `coach/scripts/push-snapshot.sh` defaults its source to `http://localhost:8081/Admin/CoachSnapshot` instead of `https://ctf.morriscloud.com/...`.
+
+**Why / what was learned while setting it up:**
+- **API token `cloverleaf-coach-deploy`** is a custom token, not the "Edit Cloudflare Workers" template: the template scopes Workers Routes to all zones and brings Pages, KV, R2, CI, Agents, and Containers write access across the account, which would let a leaked deploy token touch the Morris Wiki's Pages project and other domains. Final set: account Workers Scripts Edit, D1 Edit, Account Settings Read, Workers Tail Read, Workers Observability Edit; zone (cloverleaftrack.com only) Workers Routes Edit, DNS Edit, Zone Read. The custom-token page offers no User → Memberships / User Details permissions; wrangler doesn't need them when `CLOUDFLARE_ACCOUNT_ID` is set.
+- **1Password:** `op read "op://..."` references reject parentheses, and the item is titled `Cloudflare token (coach.cloverleaftrack.com deploy)`. Read it with `op item get '<title>' --vault Home --fields credential --reveal` (and `--fields 'account id'`).
+- **Snapshot source:** the push runs on svp01docker01, where the container answers on `localhost:8081`; reading it there avoids the reverse proxy and doesn't depend on `ctf.morriscloud.com` exposing `/Admin`. Cron runs it at 03:15, after the 02:30 image deploy; it doesn't read the `ctf` export, so it doesn't wait for `ctf`.
+- **Access** for the wiki is managed by OpenTofu in `homelab-infrastructure/terraform/cloudflare`; the coach site's Access apps follow the names in the README. The Worker's custom domain owns the `coach` DNS record, so it must not be added to `dns_cloverleaftrack_com.tf`.
+
+**Watch out:** Access must exist before the first deploy; the Worker trusts the Access email header ([C133]).
+
+**Key files:** `coach/README.md`, `coach/scripts/push-snapshot.sh`.
