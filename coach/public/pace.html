@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal Pace Builder</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header class="site-header" data-page="pace"></header>
+<main>
+  <h1>Goal pace builder</h1>
+  <p class="lede">Pick an athlete's event or type a goal, then build the reps. Targets assume even pace: 90% effort means 90% of goal speed.</p>
+
+  <section class="card" aria-labelledby="goal-h">
+    <h2 id="goal-h">Goal</h2>
+    <div class="segmented no-print" role="group" aria-label="Start from">
+      <button type="button" id="mode-athlete" aria-pressed="true">From an athlete</button>
+      <button type="button" id="mode-goal" aria-pressed="false">From a goal time</button>
+    </div>
+
+    <div id="athlete-fields" class="grid">
+      <div>
+        <label for="athlete">Athlete</label>
+        <select id="athlete"><option value="">Loading…</option></select>
+      </div>
+      <div>
+        <label for="event">Event</label>
+        <select id="event" disabled><option value="">Pick an athlete first</option></select>
+      </div>
+    </div>
+    <div id="marks" class="chips" aria-live="polite"></div>
+
+    <div class="grid" style="margin-top:1rem">
+      <div id="distance-field" hidden>
+        <label for="distance">Race distance (m)</label>
+        <input id="distance" type="number" inputmode="numeric" min="1" step="1" value="400" list="distances">
+        <datalist id="distances">
+          <option value="60"><option value="100"><option value="200"><option value="300"><option value="400">
+          <option value="800"><option value="1600"><option value="3200">
+        </datalist>
+      </div>
+      <div>
+        <label for="goal">Goal time</label>
+        <input id="goal" inputmode="decimal" placeholder="e.g. 58.50 or 2:15.00" autocomplete="off">
+        <div class="hint" id="goal-hint"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="race-h">
+    <h2 id="race-h">Race splits at goal pace</h2>
+    <div id="race-splits"><p class="empty">Enter a goal time.</p></div>
+  </section>
+
+  <section class="card" aria-labelledby="sets-h">
+    <h2 id="sets-h">Workout</h2>
+    <div id="sets"></div>
+    <button type="button" class="secondary no-print" id="add-set">Add a set</button>
+  </section>
+
+  <section class="card" aria-labelledby="targets-h">
+    <h2 id="targets-h">Targets</h2>
+    <div id="targets"><p class="empty">Enter a goal time.</p></div>
+    <div class="grid no-print" style="margin-top:1rem">
+      <div>
+        <label for="title">Workout name</label>
+        <input id="title" maxlength="200" placeholder="e.g. Tuesday 400 group">
+      </div>
+      <div>
+        <label for="notes">Notes</label>
+        <input id="notes" maxlength="2000" placeholder="Optional">
+      </div>
+    </div>
+    <div class="row no-print" style="margin-top:.8rem">
+      <button type="button" id="save">Save workout</button>
+      <button type="button" class="secondary" onclick="window.print()">Print</button>
+      <span class="status" id="save-status" role="status"></span>
+    </div>
+  </section>
+
+  <section class="card no-print" aria-labelledby="saved-h">
+    <h2 id="saved-h">Saved workouts</h2>
+    <div id="saved"><p class="empty">Loading…</p></div>
+  </section>
+</main>
+<footer class="site-footer"><span id="snapshot-status"></span></footer>
+<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/pace-page.js"></script>
+</body>
+</html>

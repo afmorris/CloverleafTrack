@@ -39,6 +39,7 @@ builder.Services.AddScoped<ISeasonWrapRepository, SeasonWrapRepository>();
 builder.Services.AddScoped<IPerformanceAttemptRepository, PerformanceAttemptRepository>();
 builder.Services.AddScoped<IPerformanceRoundRepository, PerformanceRoundRepository>();
 builder.Services.AddScoped<IPerformanceBarRepository, PerformanceBarRepository>();
+builder.Services.AddScoped<ICoachSnapshotRepository, CoachSnapshotRepository>();
 
 builder.Services.AddScoped<IAthleteService, AthleteService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();
