@@ -190,7 +190,8 @@ const phaseCols = `kind, name, start_date AS startDate, end_date AS endDate, vol
 
 plans.get("/season-plans", async (c) => {
   const { results } = await c.env.DB.prepare(
-    `SELECT id, name, start_date AS startDate, end_date AS endDate, notes, updated_at AS updatedAt
+    `SELECT id, name, start_date AS startDate, end_date AS endDate, first_practice AS firstPractice, notes,
+            updated_at AS updatedAt
      FROM season_plans ORDER BY start_date DESC`).all();
   const { results: phases } = await c.env.DB.prepare(
     `SELECT season_plan_id AS planId, ${phaseCols} FROM season_phases ORDER BY start_date`).all();
@@ -201,7 +202,8 @@ plans.get("/season-plans/:id", async (c) => {
   const id = idParam(c);
   if (!id) return bad(c, "bad id");
   const plan = await c.env.DB.prepare(
-    `SELECT id, name, start_date AS startDate, end_date AS endDate, notes, updated_at AS updatedAt
+    `SELECT id, name, start_date AS startDate, end_date AS endDate, first_practice AS firstPractice, notes,
+            updated_at AS updatedAt
      FROM season_plans WHERE id = ?`).bind(id).first();
   if (!plan) return c.json({ error: "not found" }, 404);
   const { results } = await c.env.DB.prepare(
@@ -215,9 +217,16 @@ function cleanSeason(b: Record<string, unknown>) {
   const start = cleanDate(b.startDate, "Start"), end = cleanDate(b.endDate, "End");
   if (start.error || end.error) return { error: start.error ?? end.error! };
   if (end.value! < start.value!) return { error: "The season ends before it starts." };
+  let firstPractice: string | null = null;
+  if (b.firstPractice) {
+    const fp = cleanDate(b.firstPractice, "First practice");
+    if (fp.error) return { error: fp.error };
+    if (fp.value! < start.value! || fp.value! > end.value!) return { error: "First practice must fall inside the season plan." };
+    firstPractice = fp.value!;
+  }
   const phases = cleanPhases(b.phases ?? [], start.value!, end.value!);
   if (phases.error) return { error: phases.error };
-  return { name, startDate: start.value!, endDate: end.value!, notes: cleanText(b.notes, 4000) || null, phases: phases.value! };
+  return { name, startDate: start.value!, endDate: end.value!, firstPractice, notes: cleanText(b.notes, 4000) || null, phases: phases.value! };
 }
 
 /** Phase inserts for a plan. planId null means "the plan inserted earlier in this same batch". */
@@ -240,8 +249,8 @@ plans.post("/season-plans", async (c) => {
   const db = c.env.DB;
   // One batch = one transaction, so MAX(id) is the plan inserted by the first statement.
   const res = await db.batch([
-    db.prepare(`INSERT INTO season_plans (name, start_date, end_date, notes, created_by) VALUES (?, ?, ?, ?, ?)`)
-      .bind(s.name, s.startDate, s.endDate, s.notes, userEmail(c.req.raw)),
+    db.prepare(`INSERT INTO season_plans (name, start_date, end_date, first_practice, notes, created_by)
+      VALUES (?, ?, ?, ?, ?, ?)`).bind(s.name, s.startDate, s.endDate, s.firstPractice, s.notes, userEmail(c.req.raw)),
     ...insertPhases(db, null, s.phases),
     db.prepare("SELECT MAX(id) AS id FROM season_plans")
   ]);
@@ -259,8 +268,8 @@ plans.put("/season-plans/:id", async (c) => {
   if (!exists) return c.json({ error: "not found" }, 404);
   const db = c.env.DB;
   await db.batch([
-    db.prepare("UPDATE season_plans SET name = ?, start_date = ?, end_date = ?, notes = ?, updated_at = ? WHERE id = ?")
-      .bind(s.name, s.startDate, s.endDate, s.notes, now(), id),
+    db.prepare(`UPDATE season_plans SET name = ?, start_date = ?, end_date = ?, first_practice = ?, notes = ?, updated_at = ?
+      WHERE id = ?`).bind(s.name, s.startDate, s.endDate, s.firstPractice, s.notes, now(), id),
     db.prepare("DELETE FROM season_phases WHERE season_plan_id = ?").bind(id),
     ...insertPhases(db, id, s.phases)
   ]);

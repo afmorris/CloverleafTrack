@@ -3,6 +3,7 @@
 import { addDays, daysBetween, weekStart } from "./dates.js";
 
 export const PHASE_KINDS = [
+  { id: "offseason", label: "Off-season", color: "#2f8f9d" },
   { id: "general", label: "General prep", color: "#5b8def" },
   { id: "specific", label: "Specific prep", color: "#8b6fd8" },
   { id: "competition", label: "Competition", color: "#3b7f2e" },
@@ -45,6 +46,14 @@ export function phaseProblems(phases, planStart, planEnd) {
   return out;
 }
 
+/**
+ * Default first practice: the Monday of the last week of February in the season's spring (Ohio spring sports start
+ * then). Before it is off-season (winter lifting), which runs its own cycle, outside the season's week count.
+ */
+export function defaultFirstPractice(endDate) {
+  return weekStart(`${endDate.slice(0, 4)}-02-28`);
+}
+
 /** Monday-start weeks covering start..end: [{ start, end, index }]. */
 export function weeksOf(start, end) {
   const out = [];
@@ -53,13 +62,33 @@ export function weeksOf(start, end) {
 }
 
 /**
+ * Weeks labelled for the week-by-week table. With a first practice, weeks before its week are off-season ("Off 1",
+ * "Off 2", ...) and season weeks count from 1 at the first practice, so winter lifting doesn't shift the numbering.
+ */
+export function labelWeeks(start, end, firstPractice) {
+  const weeks = weeksOf(start, end);
+  const first = firstPractice && firstPractice > start && firstPractice <= end ? weekStart(firstPractice) : null;
+  const before = first ? weeks.filter((w) => w.start < first).length : 0;
+  return weeks.map((w, i) => ({ ...w, offseason: i < before, label: i < before ? `Off ${i + 1}` : String(i + 1 - before) }));
+}
+
+/**
  * A starting set of phases for a season, from the meet schedule:
  *   general prep, then specific prep, then competition from the week of the first outdoor meet (indoor meets count
  *   as prep; with no outdoor meets, the first meet), then championship from the week of the first championship meet
  *   in the last six weeks, then transition after the last meet.
  * Without meets it splits the season 30/25/35/10. Coaches edit the result; nothing depends on this exact split.
+ * With a first practice inside the plan, everything before it is one off-season phase (winter lifting) and the
+ * cycles above are built from the first practice on; meets before it (indoor) don't shape them.
  */
-export function suggestPhases(start, end, meets) {
+export function suggestPhases(start, end, meets, firstPractice = null) {
+  if (firstPractice && firstPractice > start && firstPractice <= end) {
+    return [
+      { kind: "offseason", name: "Winter lifting", startDate: start, endDate: addDays(firstPractice, -1), volume: 3, intensity: 3,
+        focus: "Strength base and lifting technique, on its own cycle before the season starts" },
+      ...suggestPhases(firstPractice, end, meets)
+    ];
+  }
   const inSeason = (meets ?? []).filter((m) => m.date >= start && m.date <= end).sort((a, b) => a.date.localeCompare(b.date));
   const total = daysBetween(start, end) + 1;
   if (total < 14) return [{ kind: "competition", name: "Competition", startDate: start, endDate: end, volume: 3, intensity: 3, focus: "" }];
