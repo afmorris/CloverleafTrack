@@ -30,6 +30,7 @@ async function load() {
   $("week-title").textContent = `Week of ${formatRange(monday, sunday)}`;
   document.title = `Practice: ${formatRange(monday, sunday)}`;
   $("jump").value = monday;
+  $("athlete-link").href = `/practice/athletes?week=${monday}`;
   const box = $("week");
   let practices, meets, seasonPlans;
   try {
