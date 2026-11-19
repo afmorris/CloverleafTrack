@@ -222,3 +222,24 @@ tr.offseason td:first-child { color: var(--muted); }
   .summary-table td { font-size: 9pt; padding: .15rem .3rem; }
   .summary-table .blocks-line { font-size: 8pt; }
 }
+/* Athlete week handout (BRAIN.md [C139]) */
+.handout { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.25rem; margin-top: 1rem; }
+.handout h1 { font-size: 1.3rem; margin: 0; }
+.handout-context { color: var(--muted); margin: .15rem 0 .6rem; }
+.handout-message { white-space: pre-wrap; background: var(--surface-2); border-left: 3px solid var(--accent); padding: .5rem .75rem; margin: .6rem 0; }
+.handout-focus { margin: .6rem 0; }
+.handout-day { border-top: 1px solid var(--border); padding-top: .6rem; margin-top: .7rem; break-inside: avoid; }
+.handout-day h2 { font-size: 1rem; margin: 0 0 .35rem; }
+.handout-title { margin: .2rem 0; }
+.handout-title span { color: var(--muted); }
+.handout ol { margin: .2rem 0 .5rem; padding-left: 1.3rem; }
+.handout li { margin: .2rem 0; font-size: .92rem; }
+.handout-details { color: var(--muted); font-size: .85rem; white-space: pre-line; }
+.handout-meet { background: #fdf0d8; color: #5a3804; border-radius: 8px; padding: .45rem .65rem; margin: .3rem 0; }
+.handout-meet p { margin: .2rem 0 0; font-size: .88rem; }
+@media print {
+  .handout { border: 0; padding: 0; margin: 0; background: #fff; color: #000; }
+  .handout-context, .handout-title span, .handout-details { color: #333; }
+  .handout li { font-size: 9.5pt; }
+  .handout-details { font-size: 8.5pt; }
+}

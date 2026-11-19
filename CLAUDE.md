@@ -88,6 +88,9 @@ reads `Cf-Access-Authenticated-User-Email`. Deployed by `.github/workflows/coach
   (`suggestPhases`). Phases may not overlap or leave the plan's dates (`phaseProblems`, enforced by the API).
 - **Practice summary** (`/practice/summary?plan=N`): a season plan's practices week by week, one row per practice
   (time read from the start of the notes by `planTime`, length, blocks), with phases and meets; printable (BRAIN.md [C138]).
+- **Athlete week** (`/practice/athletes?week=`): one week rewritten for athletes (time, place, weekly focus, blocks,
+  meet logistics; no coach notes or marks), copied into an Apptegy message or printed to PDF. Athletes never sign in
+  to Coach; Apptegy is how they see plans (BRAIN.md [C139]).
 - Blocks and groups are stored as JSON columns (`blocks_json`, `groups_json`); the API validates every write in
   `src/validate.ts`. Logic shared by the browser, the Worker, and vitest lives in plain ES modules in
   `coach/public/js/` (`pace.js`, `dates.js`, `practice.js`, `season.js`); page scripts are `*-page.js` /

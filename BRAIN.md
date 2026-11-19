@@ -2969,3 +2969,13 @@ Caught via a real dev-server run against a copy of the production data (80 real 
 **Key files:** `coach/public/js/summary-page.js`, `coach/public/js/season.js`, `coach/public/js/practice.js`, `coach/public/css/app.css`, `coach/test/plans.test.js`.
 
 **Watch out:** practice plans have no time field. `planTime` reads a time only if the notes *start* with one ("3:00-5:15 PM, ..." or "Morning, about ..."); plans written by hand show a blank time. If a time field is ever added, switch the summary to it. Weekly totals add every plan's length, including "Meet:" entries.
+
+### [C139] Cloverleaf Coach: athlete week handout for Apptegy
+
+**What changed:** New page `/practice/athletes?week=YYYY-MM-DD[&group=][&details=0]` (`coach/public/practice/athletes.html`, `coach/public/js/athletes-page.js`, pure helpers in `coach/public/js/handout.js`). It rewrites one practice week for athletes: heading with the season week and phase, an optional message (saved per week and group in the browser's localStorage only), the weekly focus, then each day's practices (title, time, place, blocks with optional details) and meets (the first paragraph of a "Meet: ..." plan: place, start, departure). "Copy for Apptegy" puts plain text on the clipboard (Clipboard API, then `execCommand("copy")`, then a selected textarea the coach copies by hand); "Print / save as PDF" prints the handout only. Linked from the practice week toolbar ("Athlete version") and each week on the practice summary.
+
+**Why:** Tony wants athletes to see practice plans through Apptegy, the school's existing messaging app, rather than giving athletes logins to Coach (which has no roles: any signed-in user can edit everything). Every student has a school Google account, but that isn't needed for this route.
+
+**Key files:** `coach/public/js/handout.js` (`buildHandout`, `handoutText`, `planPlace`, `weekFocus`), `coach/public/js/athletes-page.js`, `coach/test/handout.test.js`, `coach/public/css/app.css`.
+
+**Watch out:** the handout deliberately drops plan notes except the time/place first line, the "Focus this week:" paragraph, and a meet plan's first paragraph; recorded marks are never included. Block details are shown as written, so coach-only logistics typed into a block's details reach athletes (turn off "Block details" for those weeks). Time and place are parsed from the start of the notes (`planTime`/`planPlace`, [C138]); add real fields if hand-written plans need them. There is no Apptegy API integration; posting is manual.

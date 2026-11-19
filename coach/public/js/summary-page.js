@@ -41,6 +41,7 @@ function weekSection(w) {
   const head = el("div", { class: "summary-week-head" },
     el("h2", {}, w.offseason ? w.label : `Week ${w.label}`),
     el("span", { class: "muted" }, formatRange(w.start, w.end)),
+    w.practiceCount ? el("a", { class: "muted no-print", href: `/practice/athletes?week=${w.start}${group ? `&group=${group}` : ""}` }, "Athlete version") : null,
     pill(w.phase),
     el("span", { class: "muted" }, w.practiceCount ? `${w.practiceCount} ${w.practiceCount === 1 ? "plan" : "plans"} · ${formatMinutes(total)}` : "No plans"));
   if (!w.days.length) return el("section", { class: "summary-week empty-week" }, head);
